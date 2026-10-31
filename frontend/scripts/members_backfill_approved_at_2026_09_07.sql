@@ -1,0 +1,100 @@
+-- =============================================================================
+-- members.approved_at backfill                                     2026-09-07
+-- STATUS: APPLIED 2026-09-07 via Supabase MCP (migration
+--         `members_backfill_approved_at_2026_09_07`). 1280 rows updated.
+--
+--   VERIFICATION (run live immediately after apply):
+--     select status, count(*) n, count(approved_at) has_approved,
+--            count(*) filter (where approved_at is null) still_null,
+--            count(*) filter (where now()-approved_at < interval '2 days') inside_2d,
+--            count(*) filter (where approved_at < created_at) impossible
+--       from public.members group by status;
+--
+--       status            | n    | has_approved | still_null | inside_2d | impossible
+--       active            | 1317 | 1317         | 0          | 0         | 0
+--       pending_approval  |   54 |    0         | 54         | 0         | 0
+--       rejected          |    4 |    0         |  4         | 0         | 0
+--
+--     select count(*) filter (where approved_at =  created_at) backfilled,
+--            count(*) filter (where approved_at <> created_at) preexisting,
+--            min(now()::date - approved_at::date) filter (where approved_at =  created_at) min_days_backfilled,
+--            min(now()::date - approved_at::date) filter (where approved_at <> created_at) min_days_preexisting
+--       from public.members where status='active';
+--
+--       backfilled | preexisting | min_days_backfilled | min_days_preexisting
+--             1280 |          37 |                  49 |                    5
+--
+--   Reading: every active row now has a value; the 37 pre-existing values were
+--   left untouched (none was overwritten); no backfilled row is younger than 49
+--   days, so none lands inside the 2-day or 7-day recency gates; and no row has
+--   approved_at earlier than created_at. pending/rejected untouched as intended.
+-- =============================================================================
+--
+-- WHAT
+--   Set members.approved_at = members.created_at for status='active' rows where
+--   approved_at IS NULL. Backfill of NULLs only. No existing value is touched,
+--   no row is deleted, no other column is written.
+--
+-- WHY
+--   1358 of 1375 member rows had approved_at NULL (1279 of 1317 active ones).
+--   lib/gridRecipes.ts derives `daysSinceApproved` from it; new Date(null) is
+--   NaN, so BOTH G01 ("brand new", daysSinceApproved <= 7) and G19 ("never
+--   attended", daysSinceApproved > 7) were unsatisfiable for essentially every
+--   member, collapsing the home greeting block to the G38 floor.
+--
+-- WHY created_at IS THE ONLY DEFENSIBLE PROXY
+--   Every other candidate was evaluated live and rejected:
+--     - last_login          only 10 of 1317 active rows are non-null.
+--     - updated_at          non-null everywhere, but on the 38 rows that DO
+--                           have a real approved_at, ZERO have updated_at
+--                           within 60s of it. It tracks later profile edits,
+--                           not approval. Rejected.
+--     - member_activity     0 rows database-wide (owner's measurement confirmed).
+--     - community_audit_logs 11354 rows, but only ONE 'member_approved' event
+--                           ever. 9723 are cron post publishes. No approval
+--                           trail exists to reconstruct from.
+--     - pending_/rejected_member_approvals  cover non-active rows only.
+--
+--   created_at is non-null on all 1317 active rows. It is not the true approval
+--   instant, and this file does not pretend otherwise:
+--     - 1085 of 1317 active rows were BULK-INSERTED in six batch-seconds
+--       (2026-06-22 05:05:22 / 05:09:45 / 05:11:36 / 05:12:50 -> 1085 rows;
+--        2026-07-20 05:43:11 / 05:43:22 -> 191 rows). For those, created_at is
+--       the import timestamp, not the member's real join date.
+--     - On the 38 organically-created rows that carry a real approved_at, the
+--       approval lag over created_at ranges 0 -> 48 days, median ~3.3 days.
+--
+--   It is chosen because the ERROR IS SAFE IN THE DIRECTION THAT MATTERS.
+--   Every consumer of approved_at is a short recency gate:
+--       gridRecipes G01           daysSinceApproved <= 7
+--       profileService.getNewThisWeek  approved_at >= now() - 7 days
+--       OpeningsStrip.WINDOW_MS   2 days
+--   The most recent created_at among the backfilled rows is 2026-08-12, i.e.
+--   26 days before this migration. So NO backfilled row can fall inside any of
+--   those windows: nobody is mislabelled "brand new", nobody is injected into
+--   the "new this week" rail, nobody gets the first-48h openings strip. What the
+--   backfill actually restores is the G19 branch (> 7 days), which is the
+--   correct branch for all of them, and which is dead today purely because the
+--   column is NULL.
+--
+-- WHAT THIS DELIBERATELY DOES NOT DO
+--   - Does not touch pending_approval (54) or rejected (4) rows. approved_at on
+--     a non-approved member would be a factual lie, and G01/G19 only run for
+--     signed-in active members anyway.
+--   - Does not touch the 38 rows that already have a value.
+--   - Does not write approved_by. We know WHEN (approximately); we do not know
+--     WHO, and inventing an approver would corrupt an accountability column.
+--
+-- GRANTS: none needed. This adds no column. approved_at already carries
+--   SELECT + UPDATE for `authenticated` (verified against
+--   information_schema.column_privileges). Note that public.members has NO
+--   table-level SELECT/INSERT/UPDATE -- only DELETE/REFERENCES/TRIGGER/TRUNCATE
+--   -- because of the 2026-07-29 PII lockdown, so any FUTURE column added to
+--   this table starts with zero privileges and needs explicit grants.
+-- =============================================================================
+
+update public.members
+   set approved_at = created_at
+ where status = 'active'
+   and approved_at is null
+   and created_at is not null;

@@ -1,0 +1,126 @@
+/* Shared two-column auth layout (Login + Register) - see AuthShell.tsx
+   for why Pending/Rejected/Callback don't use this. Generalized from the
+   pre-Phase-2 .login-root / .reg-root rules (Phase 1.3 extraction). */
+
+.authshell-root {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+
+.authshell-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  /* 2026-09-10: was `2px solid var(--ink)`. This is the one shared auth shell
+     (register + callback), and the 2px ink edge survives only on .btn-primary
+     and .sticker. /login was rebuilt onto hairlines, so this kept the two
+     halves of the funnel visibly different. */
+  border-right: var(--hair-2);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.authshell-right {
+  padding: clamp(40px, 6vw, 72px) clamp(24px, 5vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 0;
+  padding-bottom: max(clamp(40px, 6vw, 72px), env(safe-area-inset-bottom));
+}
+
+/* Mobile animated strip - hidden on desktop (the split-panel layout already
+   shows the full left panel there). Omitted entirely by pages that don't
+   pass `mobileTop` (e.g. Register uses a small logo instead). */
+.authshell-mobile-strip {
+  display: none;
+}
+
+/* ── Shared error slot - shakes in on appearance ──────────────────────────
+   changelog/11-system-states.md §11.4. The slot now owns ONLY position and
+   the shake; the card inside it is `components/ErrorState.tsx` (tinted well
+   at .16, `--danger` glyph, ink text, a real retry). What was here before -
+   a `2px dashed var(--tomato)` box at .08 with a rotated `!` stamp and a
+   dismiss × - broke 00.12/11.3's "delete every dashed border" and had no
+   retry, and it was a second copy of a primitive that already existed. */
+.authshell-error-slot {
+  margin-bottom: 20px;
+  animation: authshell-shakein 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .authshell-error-slot { animation: none; }
+}
+@keyframes authshell-shakein {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* ── Shared spinner ── */
+.authshell-spinner {
+  width: 32px; height: 32px;
+  border: 2.5px solid var(--line-2);
+  border-top-color: var(--welfare);
+  border-radius: 50%;
+  animation: authshell-spin 0.8s linear infinite;
+}
+.authshell-spinner-sm {
+  width: 16px; height: 16px;
+  border-width: 2px;
+  flex-shrink: 0;
+}
+@keyframes authshell-spin { to { transform: rotate(360deg); } }
+
+/* Disabled / pending buttons inside the shell - dimmed, no pointer */
+.authshell-root .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── MOBILE - single column, form-first ── */
+@media (max-width: 640px) {
+  .authshell-root {
+    grid-template-columns: 1fr;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .authshell-left { display: none; }
+
+  .authshell-mobile-strip {
+    display: block;
+    min-height: clamp(180px, 34vh, 260px);
+    flex-shrink: 0;
+  }
+
+  .authshell-right {
+    min-height: 0;
+    flex: 1;
+    padding: 32px 24px max(32px, env(safe-area-inset-bottom));
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+}
+
+/* Comfortable touch height for auth inputs.
+   font-size 16px is load-bearing: anything smaller makes iOS Safari auto-zoom
+   the viewport on focus.
+   Moved here from LoginPage.css — it is scoped to .authshell-root, so it has
+   always styled RegisterPage/AuthCallbackPage too, but it only applied when
+   LoginPage's stylesheet happened to be in the loaded bundle. Login no longer
+   uses AuthShell, so leaving it there would have silently shrunk the register
+   form's inputs and reintroduced the iOS zoom. */
+.authshell-root .input {
+  height: 50px;
+  font-size: 16px;
+}

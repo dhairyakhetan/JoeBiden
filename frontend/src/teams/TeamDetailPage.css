@@ -1,0 +1,349 @@
+/* Team detail — redesigned against `feed/PostPage.css` (changelog
+   03-post-detail-and-compose.md) so `/teams/:uuid` and `/post/:uuid` read as
+   one product. Used only by TeamDetailPage.tsx.
+
+   WHAT WAS TAKEN FROM POST DETAIL, VERBATIM IN STRUCTURE:
+   · the white-pill header-capsule row above the grid (`.pp-header-row`
+     / `.pp-hcap`), at BOTH breakpoints — replaces the old split affordance
+     (a desktop-only `← back to teams` button plus a second, differently
+     styled back link buried inside the mobile hero).
+   · the outer/inner sticky split (`.post-media-outer` / `.post-media-pane`).
+     `.td-id-outer` is the flex item that stretches to column 2's height;
+     `.td-id-pane` inside it is what actually sticks. PostPage.css records
+     why this is a flexbox sticky sidebar and not a CSS Grid row-span — the
+     grid version distributes a tall sidebar's shortfall across the spanned
+     rows and opens a dead gap. The same failure mode applies here (a
+     1-member team's identity card is far taller than its Members panel), so
+     the same solution is used.
+   · the phone fusion: two adjacent siblings become ONE card by matching half
+     radii (flat inner edge, no doubled border), no wrapper element.
+     `.td-id-pane` + `.td-tabs-wrap` here, exactly as `.post-media-pane` +
+     `.post-content-col` there.
+   · the photo slot at `--r-inner` inside a `--r-outer` card, 4/3 on phone
+     (`.post-media-photo`) — the crest occupies the slot the post's photo
+     occupies, so both pages have the same silhouette.
+   · `.pp-chip` (cream pill, mono micro-label + value) for the meta row.
+   · `.pp-related-h` for a section head; `.pp-notfound` for not-found.
+   · the reduced-motion block: transitions off, `:active` transform off.
+
+   WHAT HAD TO BE INVENTED (post detail has no equivalent):
+   · `.td-crest` — a team has no photo. Zero of the eight live teams have a
+     logo and exactly one has a banner, so the department-hue monogram block
+     IS the primary state, not a fallback; the banner is the variant that
+     replaces it.
+   · `.td-tabs` — post detail has no tabs. Built from `.pp-comments-sort`'s
+     vocabulary (cream well, white active chip carrying `--lift-1`) scaled up
+     to a 44px row, rather than importing the global `.tab` ink pill, which
+     is a different (louder) object than anything on post detail.
+   · `.td-more-*` — the "more in this category" rail. `.pp-related` is a
+     column of full cards; a team suggestion is one line, so it is a row of
+     `--r-inner` tiles instead. Same head, same spacing rhythm.
+
+   Text on a department hue goes through `isDarkDepartmentFill()` in
+   `lib/departments.ts` — never re-derived here or in the TSX. */
+
+.td-page-root { width: 100%; }
+
+/* ── Header capsule row — .pp-header-row / .pp-hcap ──────────────────────── */
+.td-header-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  max-width: var(--frame-max); margin: 0 auto;
+  padding: 14px var(--page-px) 0;
+}
+.td-hcap {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  min-height: 44px; padding: 0 15px;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  color: var(--ink); text-decoration: none; cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.12s var(--ease-out), background 0.14s;
+}
+.td-hcap:hover { background: var(--bg); color: var(--ink); }
+.td-hcap:active { transform: scale(0.96); }
+/* Not a control — the kind label. Same capsule, no affordance. */
+.td-hcap--static {
+  cursor: default; background: var(--bg); border-color: transparent;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+}
+.td-hcap--static:hover { background: var(--bg); }
+.td-header-spacer { flex: 1 1 auto; min-width: 0; }
+
+/* ── Shell ────────────────────────────────────────────────────────────────
+   Phone: one column; identity pane and tab strip fuse into ONE card.
+   Desktop: flexbox sticky sidebar (see the header note). */
+.td-shell {
+  max-width: var(--frame-max); margin: 0 auto;
+  padding: 14px var(--page-px) 64px;
+}
+.td-id-outer { margin-bottom: 0; }
+.td-id-pane {
+  background: var(--card); border: var(--hair-2); border-bottom: none;
+  border-radius: var(--r-outer) var(--r-outer) 0 0;
+  padding: var(--pad-card) var(--pad-card) 0;
+}
+.td-col { display: contents; }
+
+/* ── Crest — the hue block that stands in for a post's photo ──────────────
+   32 (card) − 10 (--pad-card) = 22. */
+.td-crest {
+  position: relative; overflow: hidden;
+  border-radius: var(--r-inner);
+  aspect-ratio: 4 / 3;
+  /* 4/3 is the post-photo ratio, but this pane is full-width up to 979px:
+     at 768 an uncapped 4/3 crest measured 700px tall and pushed the team's
+     name below the fold. Capped, so the crest never owns more than half a
+     tablet viewport. */
+  max-height: min(52vh, 360px);
+  display: grid; place-items: center;
+}
+.td-crest-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.td-crest-mark {
+  position: absolute; right: -8px; top: -14px;
+  font-size: 132px; line-height: 1; opacity: 0.16;
+  pointer-events: none; user-select: none;
+}
+/* Full-opacity ink (or paper on an ink-family fill) — never an alpha, and
+   never an accent used as `color`. 66px is far above the 24px large-text
+   threshold, but it clears 4.5:1 anyway on every one of the eight hues. */
+.td-crest-mono {
+  position: relative;
+  font-family: var(--display); font-weight: 800; font-size: clamp(56px, 14vw, 92px);
+  letter-spacing: -0.04em; line-height: 1; text-transform: uppercase;
+}
+.td-crest-logo {
+  position: relative; width: 96px; height: 96px; border-radius: var(--r-pill);
+  object-fit: cover; background: var(--card);
+}
+
+/* ── Identity body ────────────────────────────────────────────────────────
+   The 8px inset matches .pp-head / .pp-body, so the crest's 22 and the
+   text's left edge line up the way the post photo and post title do. */
+.td-id-body { padding: 14px 8px var(--pad-card); }
+.td-name {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(30px, 5.4vw, 40px); line-height: 0.96; letter-spacing: -0.04em;
+  color: var(--ink); margin: 0; text-wrap: balance;
+}
+.td-metarow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.td-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 32px; padding: 0 12px; border: none;
+  border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--eina); font-size: 12.5px; font-weight: 700; color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.td-chip i {
+  font-style: normal; font-family: var(--mono); font-size: 9px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+}
+/* A chip that is really a control gets the 44px floor, not 32px. */
+.td-chip--btn { min-height: 44px; cursor: pointer; transition: background 0.14s, transform 0.12s var(--ease-out); }
+.td-chip--btn:hover { background: var(--bg-3); }
+.td-chip--btn:active { transform: scale(0.96); }
+
+.td-desc {
+  margin: 14px 0 0;
+  font: 400 15px/1.6 var(--eina); color: var(--ink-2); text-wrap: pretty;
+}
+.td-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.td-skill {
+  display: inline-flex; align-items: center; min-height: 28px; padding: 0 11px;
+  border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--ink-3);
+}
+
+.td-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.td-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 44px; padding: 0 18px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: var(--ink); color: var(--paper);
+  font-family: var(--eina); font-weight: 800; font-size: 13px; text-decoration: none;
+  transition: transform 0.12s var(--ease-out), opacity 0.15s;
+}
+.td-cta:active:not(:disabled) { transform: scale(0.96); }
+.td-cta:disabled { opacity: 0.5; cursor: default; }
+.td-cta--ghost {
+  background: var(--bg); color: var(--ink);
+  transition: background 0.14s, transform 0.12s var(--ease-out);
+}
+.td-cta--ghost:hover:not(:disabled) { background: var(--bg-3); }
+/* "just followed" pop - same asymmetry as LikeButton's burst and PostPage's
+   .pp-hcap--pop: fires on follow only, never on unfollow. A keyframe, not an
+   inline transform, so it never fights .td-cta:active's own scale(0.96). */
+.td-cta--pop { animation: tdFollowPop 0.3s var(--ease-out); }
+@keyframes tdFollowPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* The pending-request row: a cream well, .pp-status-well's shape. */
+.td-pending {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 18px; padding: 10px 10px 10px 14px;
+  background: color-mix(in srgb, var(--lemon) 18%, var(--bg));
+  border-radius: var(--r-inner);
+}
+.td-pending-text { font-family: var(--eina); font-size: 13px; font-weight: 600; color: var(--ink-2); }
+
+/* ── Tab strip ────────────────────────────────────────────────────────────
+   Phone: the fused card's bottom half (flat top edge, no top border; the
+   card's single --lift-1 is carried from down here, as PostPage does). */
+.td-tabs-wrap {
+  background: var(--card); border: var(--hair-2); border-top: none;
+  border-radius: 0 0 var(--r-outer) var(--r-outer);
+  padding: 6px var(--pad-card) var(--pad-card);
+  box-shadow: var(--lift-1);
+  margin-bottom: 14px;
+}
+.td-tabs {
+  display: flex; gap: 2px; padding: 4px;
+  background: var(--bg); border-radius: var(--r-pill);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.td-tabs::-webkit-scrollbar { display: none; }
+.td-tab {
+  flex: none; display: inline-flex; align-items: center; gap: 7px;
+  min-height: 44px; padding: 0 15px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: transparent; color: var(--ink-2);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  white-space: nowrap;
+  transition: background 0.14s, color 0.14s;
+}
+.td-tab:hover[aria-selected="false"] { color: var(--ink); }
+.td-tab[aria-selected="true"] {
+  background: var(--card); color: var(--ink); font-weight: 800;
+  box-shadow: var(--lift-1);
+}
+.td-tab-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: var(--r-pill); background: var(--bg-3); color: var(--ink-2);
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.td-tab[aria-selected="true"] .td-tab-count { background: var(--ink); color: var(--paper); }
+/* Fade the overflowing edge on a narrow screen — the affordance the old
+   .team-tabs-scroll rule carried, kept. */
+@media (max-width: 640px) {
+  .td-tabs {
+    mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+  }
+}
+
+.td-panel { display: flex; flex-direction: column; gap: 14px; }
+.td-panel:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; border-radius: var(--r-outer); }
+
+/* Tab bodies (teams/detail/*Tab.tsx) size their own stat grid; these two
+   rules moved across from the old inline <style> block unchanged. */
+@media (max-width: 600px) {
+  .team-detail-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 400px) {
+  .team-detail-stats-grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 640px) {
+  .team-detail-stats-grid .card { padding: 14px 12px !important; }
+}
+@media (max-width: 480px) {
+  .opening-footer-row { flex-direction: column !important; align-items: flex-start !important; }
+}
+
+/* ── Section head — .pp-related-h ─────────────────────────────────────────── */
+.td-sec-h {
+  /* Eina01, not var(--display): NeutralFace is caps-only, so
+     `text-transform: lowercase` on it had nothing to render. Matches the same
+     fix in PostPage.css (.pp-related-h), which this rule was copied from. */
+  font-family: var(--eina); font-weight: 800; font-size: 19px; color: var(--ink);
+  margin: 0 0 14px 6px; text-transform: lowercase;
+}
+.td-more { margin-top: 20px; }
+.td-more-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.td-more-item {
+  display: flex; align-items: center; gap: 12px; min-width: 190px;
+  min-height: 44px; padding: 8px 16px 8px 8px;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-inner);
+  text-decoration: none; color: var(--ink);
+  transition: background 0.14s, box-shadow 0.18s var(--ease-out);
+}
+.td-more-item:hover { background: var(--bg); box-shadow: var(--lift-1); color: var(--ink); }
+.td-more-crest {
+  flex: none; width: 42px; height: 42px; border-radius: var(--r-pill);
+  display: grid; place-items: center; overflow: hidden;
+  font-family: var(--display); font-weight: 800; font-size: 14px; text-transform: uppercase;
+}
+.td-more-crest img { width: 100%; height: 100%; object-fit: cover; }
+.td-more-name {
+  font-family: var(--eina); font-weight: 700; font-size: 14px; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;
+}
+.td-more-count { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-top: 2px; }
+
+/* ── Desktop — 980px, the breakpoint post detail switches at ─────────────── */
+@media (min-width: 980px) {
+  .td-shell { display: flex; align-items: flex-start; gap: 14px; }
+  .td-id-outer { flex: 0.88 1 0%; min-width: 0; align-self: stretch; }
+  .td-id-pane {
+    border: var(--hair-2); border-radius: var(--r-outer);
+    padding: var(--pad-card); box-shadow: var(--lift-1);
+    position: sticky; top: calc(var(--nav-h) + 14px);
+  }
+  .td-crest { aspect-ratio: 16 / 11; max-height: none; }
+  .td-crest-mono { font-size: 78px; }
+  .td-col { display: flex; flex-direction: column; gap: 14px; flex: 1.12 1 0%; min-width: 0; }
+  .td-tabs-wrap {
+    border: var(--hair-2); border-radius: var(--r-outer);
+    padding: var(--pad-card); margin-bottom: 0;
+  }
+}
+
+/* ── States ───────────────────────────────────────────────────────────────
+   Not-found / setup: .pp-notfound's container. */
+.td-notfound {
+  background: var(--card); border-radius: var(--r-outer);
+  max-width: 600px; margin: 24px auto;
+  padding: clamp(44px, 8vw, 80px) 24px; text-align: center;
+}
+.td-notfound code {
+  font-family: var(--code); font-size: 13px;
+  background: var(--bg); padding: 2px 6px; border-radius: var(--r-tight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .td-hcap, .td-tab, .td-cta, .td-chip--btn, .td-more-item { transition: none; }
+  .td-hcap:active, .td-cta:active, .td-chip--btn:active { transform: none; }
+  .td-cta--pop { animation: none; }
+}
+
+/* ── Sub-department links on a department's About tab ────────────────────────
+   Added 2026-09-18. These sit on a member-facing page, so they take the PUBLIC
+   design language (2px ink border, hard offset shadow on hover), not the HoD
+   desk's hairline chrome. The 44px floor is explicit because the row's height
+   otherwise comes from its text. */
+.tdt-subteam-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  background: var(--card);
+  text-decoration: none;
+  transition: transform 0.14s var(--ease-out), box-shadow 0.14s var(--ease-out);
+}
+.tdt-subteam-link:hover,
+.tdt-subteam-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--lift-3);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tdt-subteam-link:hover,
+  .tdt-subteam-link:focus-visible { transform: none; }
+}

@@ -1,0 +1,375 @@
+/* Paradox 2026 — scoped globals & utilities. Everything is under `.paradox-root`
+   so AquaTerra pages are not affected. Tokens (--bg, --ink, --c1..c4) are also
+   declared in main index.css `@theme` so Tailwind utilities (bg-bg, text-ink, etc.)
+   continue to resolve. The pseudo-element overlays and base font/colour are
+   scoped here. Fonts at /paradox/fonts/. */
+
+@font-face {
+  font-family: 'StretchPro';
+  /* woff2 (69KB), converted from the original 195KB .otf — this was the only
+     face in the project still shipping as raw OpenType. */
+  src: url('/paradox/fonts/StretchPro.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.paradox-root {
+  /* Paradox palette */
+  --bg:       #FBF5E6;
+  --ink:      #181818;
+  --c1:       #FF4338;
+  --c2:       #FFD23F;
+  --c3:       #B79CED;
+  --c4:       #B79CED;
+  --border-w: 1.5px;
+  --ease-spring: var(--ease-pop);
+  --ease-out:    var(--ease-out);
+
+  /* Override AquaTerra's design-system custom properties so any rule that
+     resolves `var(--display)`, `var(--f)`, `var(--sans)`, `var(--mono)` etc.
+     paints with Paradox typography — including AquaTerra's own !important
+     selectors that target `h1, h2, ...` globally. */
+  --f:         'Bricolage Grotesque', system-ui, sans-serif;
+  --sans:      'Bricolage Grotesque', system-ui, sans-serif;
+  --display:   'Boldonse', 'Bricolage Grotesque', system-ui, sans-serif;
+  --f-display: 'Boldonse', 'Bricolage Grotesque', system-ui, sans-serif;
+  --f-serif:   'Boldonse', 'Bricolage Grotesque', system-ui, sans-serif;
+  --mono:      'JetBrains Mono', ui-monospace, monospace;
+  --fm:        'JetBrains Mono', ui-monospace, monospace;
+  --f-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  position: relative;
+  /* 100dvh follows the iOS dynamic viewport (URL bar collapse). 100vh leaves
+     a gap when Safari's chrome shrinks. */
+  min-height: 100dvh;
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif !important;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  /* Suppress iOS blue tap overlay on every interactive descendant */
+  -webkit-tap-highlight-color: transparent;
+  /* Tabular numerals on any dynamically updating figure */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Suppress iOS tap highlight inside paradox without affecting AquaTerra */
+.paradox-root a,
+.paradox-root button,
+.paradox-root [role="button"],
+.paradox-root [role="link"],
+.paradox-root summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* AquaTerra's design system applies `img { outline: rgba(0,0,0,0.1) solid 1px }`
+   globally. On paradox's cream background it reads as a dirty grey edge around
+   every logo, mascot, and decorative PNG. Cancel it here; photos that want a
+   hairline can opt-in with `.px-photo`. */
+.paradox-root img {
+  outline: none !important;
+}
+.paradox-root img.px-photo {
+  outline: 1px solid rgba(0, 0, 0, 0.1) !important;
+  outline-offset: -1px;
+}
+
+.paradox-root,
+.paradox-root * { box-sizing: border-box; }
+
+.paradox-root h1,
+.paradox-root h2,
+.paradox-root h3,
+.paradox-root h4,
+.paradox-root h5,
+.paradox-root h6 {
+  font-family: 'Boldonse', 'Bricolage Grotesque', sans-serif !important;
+  text-wrap: balance;
+  color: inherit;
+}
+.paradox-root p { text-wrap: pretty; }
+
+/* Scoped overrides for Tailwind font utilities — AquaTerra has !important
+   rules on button/input elements that otherwise win. */
+.paradox-root .font-display,
+.paradox-root [class*=" font-display"],
+.paradox-root [class^="font-display"] {
+  font-family: 'Boldonse', 'Bricolage Grotesque', sans-serif !important;
+}
+.paradox-root .font-mono,
+.paradox-root [class*=" font-mono"],
+.paradox-root [class^="font-mono"] {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+}
+.paradox-root .font-body,
+.paradox-root [class*=" font-body"],
+.paradox-root [class^="font-body"] {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif !important;
+}
+.paradox-root .font-hand,
+.paradox-root [class*=" font-hand"],
+.paradox-root [class^="font-hand"] {
+  font-family: 'Caveat', cursive !important;
+}
+
+/* Buttons, inputs, textareas inside paradox should inherit paradox typography
+   (AquaTerra applies !important on these globally). */
+.paradox-root button,
+.paradox-root input,
+.paradox-root textarea,
+.paradox-root select {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+}
+
+.paradox-root a[href],
+.paradox-root [role="link"],
+.paradox-root button,
+.paradox-root [role="button"] { cursor: pointer; }
+
+.paradox-root ::selection { background: var(--c2); color: var(--ink); }
+
+.paradox-root :focus-visible {
+  outline: 2.5px solid var(--c1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.paradox-root .btn-pill:focus-visible { border-radius: 999px; }
+
+@media (max-width: 640px) {
+  /* iOS HIG minimum tap target — applies to controls but not link runs in body copy */
+  .paradox-root button,
+  .paradox-root a:not(.in-prose):not([data-no-tap]) { min-height: 44px; }
+}
+
+/* Tactile feedback — scale on press for all interactive surfaces inside paradox.
+   `transform` is the only property that animates so transitions don't drag color/bg. */
+.paradox-root button,
+.paradox-root a,
+.paradox-root [role="button"] {
+  transition-property: transform, box-shadow, background-color, color, opacity;
+  transition-duration: 120ms;
+  transition-timing-function: var(--ease-out);
+}
+.paradox-root button:active:not(:disabled),
+.paradox-root a:active,
+.paradox-root [role="button"]:active {
+  transform: scale(0.96);
+}
+/* Skip scale on pill buttons that already define their own active state */
+.paradox-root .btn-pill:active { transform: scale(0.96) !important; }
+
+.paradox-root [data-tabular],
+.paradox-root .tabular-nums { font-variant-numeric: tabular-nums; }
+
+.paradox-root [data-horizontal-scroll] { overscroll-behavior-x: contain; }
+
+/* Dot halftone — scoped to paradox area only */
+.paradox-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, var(--ink) 1.2px, transparent 1.4px);
+  background-size: 14px 14px;
+  opacity: 0.05;
+}
+
+/* Paper grain — scoped to paradox area only */
+.paradox-root::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.38;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='grain'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='300' height='300' filter='url(%23grain)' opacity='1'/></svg>");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paradox-root::after { opacity: 0.18; }
+}
+
+/* Ensure content sits above ::before but below ::after grain overlay clicks */
+.paradox-root > * { position: relative; z-index: 1; }
+
+/* ─── Ink-block shadows ─── */
+.paradox-root .shadow-ink     { box-shadow: 4px 4px 0 var(--ink); }
+.paradox-root .shadow-ink-sm  { box-shadow: 2px 2px 0 var(--ink); }
+.paradox-root .shadow-ink-lg  { box-shadow: 6px 6px 0 var(--ink); }
+.paradox-root .shadow-ink-c1  { box-shadow: 4px 4px 0 var(--c1); }
+.paradox-root .shadow-ink-c2  { box-shadow: 4px 4px 0 var(--c2); }
+.paradox-root .shadow-ink-c3  { box-shadow: 4px 4px 0 var(--c3); }
+
+/* Text helpers */
+.paradox-root .text-balance { text-wrap: balance; }
+.paradox-root .text-pretty  { text-wrap: pretty; }
+.paradox-root .no-scrollbar::-webkit-scrollbar { display: none; }
+.paradox-root .no-scrollbar { scrollbar-width: none; }
+.paradox-root .text-stroke-ink { -webkit-text-stroke: 1.5px var(--ink); color: transparent; }
+.paradox-root .tabular { font-variant-numeric: tabular-nums; }
+
+/* ─── Pill button system ─── */
+.paradox-root .btn-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 24px; min-height: 48px;
+  border: var(--border-w) solid var(--ink);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600; font-size: 16px;
+  border-radius: 999px;
+  transition-property: transform, box-shadow, background-color, color, opacity;
+  transition-duration: 0.15s;
+  transition-timing-function: var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.paradox-root .btn-pill:active { transform: scale(0.96) !important; }
+.paradox-root .btn-pill-primary {
+  background: var(--ink); color: var(--bg);
+  box-shadow: 4px 4px 0 var(--c1);
+  position: relative; overflow: hidden;
+}
+.paradox-root .btn-pill-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+  border-radius: inherit;
+}
+.paradox-root .btn-pill-primary:hover::after { transform: translateX(100%); }
+.paradox-root .btn-pill-primary:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--c1); }
+.paradox-root .btn-pill-primary:active { transform: translate(1px, 1px) !important; box-shadow: 2px 2px 0 var(--c1) !important; }
+.paradox-root .btn-pill-ghost { background: transparent; color: var(--ink); }
+.paradox-root .btn-pill-ghost:hover { background: var(--ink); color: var(--bg); }
+.paradox-root .btn-pill-c1 { background: var(--c1); color: var(--bg); box-shadow: 4px 4px 0 var(--ink); border-color: var(--bg); }
+.paradox-root .btn-pill-c1:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+.paradox-root .btn-pill-c1:active { transform: translate(1px, 1px) !important; box-shadow: 2px 2px 0 var(--ink) !important; }
+
+/* ─── Kicker labels ─── */
+.paradox-root .kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; opacity: 0.6;
+  line-height: 1.4; margin: 0;
+}
+
+/* ─── Cards ─── */
+.paradox-root .card-interactive {
+  transition-property: transform, box-shadow;
+  transition-duration: 0.18s;
+  transition-timing-function: var(--ease-out);
+}
+.paradox-root .card-interactive:hover { transform: translateY(-3px); }
+.paradox-root .card-interactive:active { transform: translateY(0) scale(0.98); }
+
+.paradox-root .paradox-sticker-field { display: none !important; }
+.paradox-root .sticker { filter: drop-shadow(3px 3px 0 var(--ink)); }
+
+/* ─── Admin overrides ─── */
+.paradox-root .admin-input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  color: var(--bg);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  transition-property: border-color, box-shadow;
+  transition-duration: 0.15s;
+}
+.paradox-root .admin-input:focus {
+  outline: none;
+  border-color: var(--c2);
+  box-shadow: 0 0 0 3px rgba(255,210,63,0.15);
+}
+.paradox-root .admin-input::placeholder { opacity: 0.3; }
+.paradox-root .admin-row {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+  padding: 12px 14px;
+  transition-property: background-color;
+  transition-duration: 0.12s;
+}
+.paradox-root .admin-row:hover { background: rgba(255,255,255,0.06); }
+.paradox-root .admin-heading {
+  font-family: 'Boldonse', sans-serif;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--bg);
+  margin-bottom: 16px;
+}
+.paradox-root .admin-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ─── Toast keyframes ─── */
+@keyframes paradox-toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes paradox-toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(6px) scale(0.97); }
+}
+.paradox-root .toast-enter { animation: paradox-toast-in 0.28s var(--ease-spring) forwards; }
+.paradox-root .toast-exit  { animation: paradox-toast-out 0.2s var(--ease-out) forwards; }
+
+/* ─── Grain helper for individual cards ─── */
+.paradox-root .grain { position: relative; }
+.paradox-root .grain::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.07; mix-blend-mode: multiply; z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .paradox-root .kicker { font-size: 10px; letter-spacing: 0.14em; opacity: 0.7; }
+  .paradox-root .event-card-mobile { transform: none !important; }
+}
+
+.paradox-root .shimmer-hover { position: relative; overflow: hidden; }
+.paradox-root .shimmer-hover::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+}
+.paradox-root .shimmer-hover:hover::after { transform: translateX(100%); }
+
+.paradox-root .hero-title-wrap { perspective: 800px; }
+.paradox-root .marquee-pause-hover:hover { animation-play-state: paused !important; }
+
+@keyframes paradox-wiggle-once {
+  0%   { transform: translateY(0) rotate(0deg); }
+  25%  { transform: translateY(-4px) rotate(-2deg); }
+  75%  { transform: translateY(-4px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+@keyframes paradox-border-draw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}

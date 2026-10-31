@@ -1,0 +1,36 @@
+-- ============================================================================
+-- STATUS: APPLIED 2026-07-24 via Supabase MCP (project hzowuwffjqtgszecngpe).
+-- Migrations: post_feed_view_add_scheduled_for_2026_07
+--         and post_feed_view_restore_security_invoker_2026_07
+--
+-- WHAT: adds p.scheduled_for to post_feed_view so the HoD desk (ContentManager)
+-- can show when a scheduled post will publish. See scheduled_posts_2026_07.sql.
+--
+-- ⚠️  TRAP — READ BEFORE EVER TOUCHING THIS VIEW ⚠️
+-- `CREATE OR REPLACE VIEW` RESETS the view's reloptions, which silently drops
+-- `security_invoker = on`. Without that setting the view runs with its OWNER's
+-- permissions, so the "Public can view published posts" RLS policy is no longer
+-- applied to the querying user — and anon can read unpublished / pending_review
+-- / scheduled post bodies straight out of the view.
+--
+-- This has now bitten the project THREE times:
+--   1. post_feed_view_security_invoker_2026_07.sql (original fix)
+--   2. security_hardening_2026_07.sql:61 ("three later CREATE OR REPLACE VIEW…")
+--   3. this change (adding scheduled_for) — caught by the Supabase security
+--      advisor (security_definer_view ERROR) and re-fixed below.
+--
+-- => ANY future `CREATE OR REPLACE VIEW public.post_feed_view` MUST be followed
+--    by the ALTER VIEW at the bottom of this file, in the same migration.
+--
+-- Verified after applying: inserted one 'scheduled' + one 'pending_review' post
+-- in a rolled-back transaction and queried the view as the `anon` role →
+-- anon_sees_unpublished = 0, anon_sees_published = 555. (An earlier check that
+-- ran while every post happened to be 'published' was vacuous and passed
+-- despite the view being mis-configured — always test with real unpublished
+-- rows present.)
+-- ============================================================================
+
+-- The full view body lives in the applied migration; the operative addition was
+-- `p.scheduled_for` in the select list. The security-critical line is this one:
+
+alter view public.post_feed_view set (security_invoker = on);

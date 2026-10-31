@@ -1,0 +1,107 @@
+/* ── HiStrip — the "kids saying hi" reel, as a strip of 35mm film ────────────
+   Redesign note: v1 was a band of 9:16 tiles. At its 108px height each tile was
+   only ~61px wide, so the faces were unreadable — it registered as a smear of
+   colour rather than kids waving. This version uses SQUARE frames in a taller
+   strip, so a frame is as wide as the strip is tall (~126px on desktop) and you
+   can actually see who's waving.
+
+   The strip is dressed as real film: black base, sprocket perforations running
+   along both edges, and thin gutters between frames. That's on-system with the
+   scrapbook/analog language and reads as a deliberate object rather than a
+   generic carousel.
+
+   Source is ONE 2560×320 video (8 frames stitched side by side), so the whole
+   reel is a single decoder and the motion is a plain CSS transform. */
+
+.hi-strip {
+  --hi-h: 96px;              /* mobile */
+  --sprocket: 11px;          /* perforation gutter, top and bottom */
+  position: relative;
+  height: var(--hi-h);
+  width: 100%;
+  overflow: hidden;
+  background: #0B0B0C;       /* film base */
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-3);
+}
+
+@media (min-width: 900px) {
+  .hi-strip { --hi-h: 150px; --sprocket: 14px; }
+}
+
+/* Perforations. Light rounded blocks punched along both edges of the base;
+   `background-clip: content-box` keeps them clear of the rounded corners. */
+.hi-strip::before,
+.hi-strip::after {
+  content: '';
+  position: absolute; left: 0; right: 0;
+  height: var(--sprocket);
+  z-index: 3;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--bg, #F4EFE0) 0 11px,
+    transparent 11px 26px
+  );
+  background-size: auto calc(var(--sprocket) - 6px);
+  background-repeat: repeat-x;
+  background-position: center;
+  pointer-events: none;
+}
+.hi-strip::before { top: 0; }
+.hi-strip::after  { bottom: 0; }
+
+/* The frames sit between the two perforation gutters. */
+.hi-strip-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  padding-block: var(--sprocket);
+  box-sizing: border-box;
+  will-change: transform;
+  /* Slow ambient drift — it's wallpaper, not a ticker. */
+  animation: hi-strip-pan 50s linear infinite;
+}
+
+/* Two copies sit side by side; -50% lands copy #2 exactly where #1 began. */
+@keyframes hi-strip-pan {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.hi-strip-track > video,
+.hi-strip-track > img {
+  height: 100%;
+  width: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Reduced motion: hold the reel still. The photos are the point; the pan isn't. */
+.hi-strip-track.is-still { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hi-strip-track { animation: none; }
+}
+
+/* ── Placements ─────────────────────────────────────────────────────────────
+   Both slots carry `.container`, so width and gutter come from the shared
+   content frame and the reel lines up with the footer card and every page's
+   cards. (A radius only reads if the corners are on screen, so this is inset
+   rather than bleeding to 100vw.) */
+
+/* The footer's `.aq-footer-hi` slot is DELETED, not restyled: the footer's
+   section 1 is now the hi BUBBLES (AQFooter.tsx / styles/footer.css
+   `.aq-orbit`), eight circular canvas windows onto the same single decoded
+   reel, so the footer no longer mounts a HiStrip at all. HomeRoute.tsx is
+   now the component's only consumer. Left in place these two rules would be
+   dead CSS shipped with every HiStrip mount. */
+
+/* Home header: `main` already pads by --nav-h to clear the fixed nav. */
+.hi-strip-header-slot {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 14px;
+  margin-bottom: 10px;
+}

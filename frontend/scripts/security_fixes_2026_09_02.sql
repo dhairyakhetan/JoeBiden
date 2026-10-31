@@ -1,0 +1,168 @@
+-- ============================================================================
+-- ✅ ALL APPLIED live 2026-09-02 via the Supabase MCP connector.
+--
+-- Applied as four migrations, in this order:
+--   1. preauth_use_verified_jwt_email_2026_09_02
+--   2. members_email_write_lockdown_2026_09_02
+--   3. index_unindexed_fks_2026_09_02
+--   4. document_security_definer_views_2026_09_02
+--
+-- This file is the paper trail, NOT the source of truth — the live database
+-- is. `CLAUDE.md` records this project being burned twice by assuming a
+-- checked-in .sql had run (job_applications, the members PII lockdown), and it
+-- happened a third time on 2026-09-02 (yearbook_entries). Verify live before
+-- trusting anything here.
+-- ============================================================================
+
+
+-- ── 1. PRIVILEGE ESCALATION: self-promotion to team lead ───────────────────
+--
+-- THE CHAIN (all four links verified live before the fix):
+--   a. `authenticated` held TABLE-level UPDATE on members, which covers every
+--      column including `email`.
+--   b. The members UPDATE policy allows a member to update their own row
+--      (`auth_uid = auth.uid()`), and members_guard_privileged_cols() guards
+--      only role/status/is_active/approved_by/approved_at — NOT email.
+--   c. claim_member_preauth() is SECURITY DEFINER, callable by any signed-in
+--      member, and matched member_preauth on `members.email` — the column the
+--      member had just been allowed to write.
+--   d. On a match whose intended_position matched '%hod%' or '%manager%', it
+--      inserted a team_members row with role='lead'.
+--
+-- So a signed-in member could set their own email to a known leadership
+-- pre-auth address (85 such rows, seeded from the HR sheets, so the addresses
+-- are real colleagues' and easy to guess), call the RPC, and become lead of a
+-- team they were never invited to. Being SECURITY DEFINER, the RPC bypassed
+-- the director/team-lead-only RLS on team_members that otherwise makes
+-- self-assignment impossible — the exact guarantee AuthContext.fetchMember's
+-- comment relies on ("team_members INSERT is director/team-lead-only by RLS,
+-- so a member can't self-assign").
+--
+-- FIX, three layers:
+--   i.   claim_member_preauth() now matches on auth.jwt() ->> 'email' — the
+--        verified Google OAuth identity, which the user cannot write — and
+--        refuses outright if the token carries no email claim rather than
+--        falling back to the writable column.
+--   ii.  members.email is no longer writable by any client role (below).
+--   iii. profileService.updateProfile() no longer accepts an email field.
+--
+-- See the migration bodies for the full function definition.
+
+
+-- ── 2. members write grants ────────────────────────────────────────────────
+--
+-- IMPORTANT GOTCHA, and the reason a first attempt silently did nothing:
+-- a column-level REVOKE cannot claw back a TABLE-level grant. `authenticated`
+-- and `anon` both held table-level INSERT and UPDATE on members, which covers
+-- all columns, so `revoke update (email) on members from authenticated` was a
+-- no-op. (The earlier PII SELECT lockdown got this right — it revoked table
+-- SELECT and granted column SELECT back on the safe columns. Same shape here.)
+--
+--   revoke insert, update on public.members from authenticated;
+--   revoke insert, update on public.members from anon;
+--   -- then grant column UPDATE back on every column EXCEPT:
+--   --   email, auth_uid, google_id, member_id, uuid, created_at
+--   -- generated dynamically from information_schema so a newly added column
+--   -- cannot be silently missed.
+--
+-- INSERT is revoked outright: no client code inserts into members. Signup runs
+-- through ensure_member() / handle_new_user(), both SECURITY DEFINER, which
+-- keep owner rights and are unaffected. DELETE is untouched (already gated to
+-- is_super_admin() by RLS, used by the director desk).
+--
+-- `anon` now has NO write privilege on members at all.
+--
+-- ✅ RESOLVED — `UPDATE (email)` is now REVOKED again, correctly this time.
+-- The history below is kept because the ordering lesson is the useful part.
+--
+-- Sequence: revoked -> broke production -> restored within minutes -> frontend
+-- deployed (merge b76fb69, 2026-09-02) -> revoked again and verified:
+--   select grantee, privilege_type from information_schema.column_privileges
+--    where table_name='members' and column_name='email'
+--      and grantee in ('authenticated','anon');
+--   -- returns ZERO rows: no SELECT, no INSERT, no UPDATE.
+--
+-- ── the original note, kept for the lesson ──
+-- ⚠️ WAS PARTIALLY ROLLED BACK, SAME DAY — `UPDATE (email)` was GRANTED back
+-- TO `authenticated` for a few hours. Read this before touching the order of
+-- operations in a future migration.
+--
+-- Revoking it broke production immediately: the frontend deployed on `main`
+-- still sends `email` in updateProfile's payload (EditProfilePage.tsx:108 on
+-- main), so every profile save started failing with "permission denied for
+-- column email". The frontend fix (profileService no longer accepts an email
+-- field; EditProfilePage locks the input) is on feature/hr-ops-automation and
+-- had not shipped. The grant was restored within minutes.
+--
+-- This is the DB-migration equivalent of the drift CLAUDE.md keeps warning
+-- about, in the opposite direction: applying a migration whose matching code
+-- has NOT yet deployed is just as breaking as shipping code whose migration
+-- has not run. Order matters — deploy the frontend FIRST, then revoke.
+--
+-- The escalation is still closed regardless: it was closed by migration 1
+-- (claim_member_preauth matching on the verified auth.jwt() email). This
+-- revoke is defence-in-depth against email drift, not the escalation fix.
+--
+-- ✅ DONE 2026-09-02, after the deploy:
+--   revoke update (email) on public.members from authenticated;
+-- Verified: zero rows for email/authenticated across SELECT, INSERT, UPDATE.
+--
+-- VERIFY:
+--   select grantee, privilege_type from information_schema.table_privileges
+--    where table_name='members' and grantee in ('authenticated','anon');
+--   -- expect: DELETE (+ REFERENCES/TRIGGER/TRUNCATE), NO insert/update
+--   select grantee, column_name, privilege_type
+--     from information_schema.column_privileges
+--    where table_name='members' and column_name in ('email','phone')
+--      and grantee in ('authenticated','anon');
+--   -- expect: phone UPDATE/INSERT for authenticated only; email NOTHING
+
+
+-- ── 3. Unindexed foreign keys (11) ─────────────────────────────────────────
+--
+-- Postgres indexes a PK or UNIQUE constraint automatically but NOT a foreign
+-- key. All 11 FKs in this schema lacked a covering index. Every one is on a
+-- join the HoD desk and the member surfaces are about to lean on much harder
+-- (the Excel-grade tables, /member/:uuid's contribution record, and the
+-- drive -> attendance -> points chain). An unindexed FK also makes the
+-- referenced side's DELETE/UPDATE scan the child table.
+--
+-- Indexed: members.school_id, director_categories.assigned_by,
+-- post_approvals.approved_by, teams.created_by,
+-- arcade_trivia_questions.created_by, welfare_projects.drive_lead_member_id,
+-- job_applications.applicant_id, points_ledger.related_drive_id,
+-- points_ledger.created_by, sop_templates.updated_by,
+-- member_preauth.claimed_by_member_id.
+-- (yearbook_entries.invited_by was indexed with that table on the same day.)
+--
+-- VERIFY — expect 0:
+--   select count(*) from pg_constraint c
+--    where c.connamespace='public'::regnamespace and c.contype='f'
+--      and not exists (select 1 from pg_index i where i.indrelid=c.conrelid
+--        and (i.indkey::int2[])[0:array_length(c.conkey,1)-1] @> c.conkey);
+
+
+-- ── 4. The three SECURITY DEFINER views are CORRECT. Do not "fix" them. ────
+--
+-- Supabase's linter reports member_directory_view, pending_member_approvals
+-- and rejected_member_approvals as ERROR / security_definer_view. In this
+-- schema that is a FALSE POSITIVE, and flipping them to security_invoker=true
+-- would break the HoD desk outright.
+--
+-- They run security_invoker=false BY DESIGN: `authenticated` has no
+-- column-level SELECT on members.email/phone, so under the caller's own rights
+-- these views would return nothing for anybody, director or not. The elevated
+-- privilege is the mechanism that lets a director read the directory at all.
+--
+-- What makes that safe is that each view carries its OWN authorization in its
+-- body — `WHERE ... (is_director() OR is_super_admin())` — so a non-director
+-- selecting from them gets zero rows. The privilege is elevated; the access
+-- decision is not delegated to the caller.
+--
+-- If you edit one of these views, that predicate MUST survive the edit.
+-- Dropping it turns each into a readable export of every member's email and
+-- phone number — precisely the exposure the column lockdown exists to close.
+--
+-- This reasoning is now also attached to each view via COMMENT ON VIEW, so it
+-- travels with the object rather than living only in this file.
+-- ============================================================================

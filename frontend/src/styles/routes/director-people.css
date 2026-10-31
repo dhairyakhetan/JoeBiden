@@ -1,0 +1,681 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   HoD desk · people surfaces (MemberDirectory / TeamManagement /
+   CategoryManagement) - stage 3B.
+
+   Deliberately a desk-local file rather than an addition to
+   styles/routes/director.css: only these three tabs import it, so it can't
+   collide with the shared responsive system other desks depend on.
+
+   Design rule, same as the rest of the desk (Sept-2026 "rounded minimalism":
+   soft hairline borders, --hod-radius concentric corners, --lift shadows - no
+   hard ink borders or offset shadows). Anything rotated here is a sticker, a
+   swatch or a photo - never a name, an email, or a count.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Card grids. Base column rule only; `.admin .adm-grid`'s tablet rule
+   (2 cols) and phone rule (1fr !important) both out-specify this, so the
+   responsive contract from director.css still wins. ── */
+.mdir-grid { grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); }
+.cat-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+
+/* ── Member card ── */
+.admin .mdir-card { padding: 16px; height: 100%; }
+.admin .mdir-card-top { display: flex; align-items: flex-start; gap: 14px; }
+.admin .mdir-ident { flex: 1; min-width: 0; }
+.admin .mdir-name {
+  font-family: var(--display); font-weight: 800; font-size: 14px;
+  color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin .mdir-line {
+  /* Carries proper nouns and identifiers - "Class 11 · Test School",
+     "joined Jan 2026 · @test_member". --mono is NeutralFace and caps-only, so
+     these would render SHOUTED and the handle would become @TEST_MEMBER.
+     --code keeps real lowercase, and keeps the tabular figures the join dates
+     below depend on. */
+  font-family: var(--code); font-size: 10.5px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin .mdir-admin {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 2px dashed var(--line-2);
+}
+.admin .mdir-select {
+  /* --code, not --mono: a <select> shows a DATA value, not a label. Two
+     reasons it cannot take the caps-only NeutralFace. Role names carry
+     meaningful mixed case ("HoD" is not "HOD"), and NeutralFace caps are
+     wider than JetBrains Mono at the same size, so "Member" stopped
+     fitting this flex-shrunk box and clipped to "ME". */
+  flex: 1; min-width: 0;
+  font-family: var(--code); font-size: 10px; font-weight: 700;
+  padding: 6px 8px; border-radius: var(--hod-radius-sm);
+  border: 1.5px solid var(--line-2); background: var(--bg-2); color: var(--ink);
+  outline: none;
+}
+.admin .mdir-select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Item 4.4's "teams" trigger. Deliberately the same visual weight and the
+   same box as `.mdir-select` beside it - it is the third control in an
+   existing row, not a new emphasis - but `flex: none` so it stays at its own
+   width and the role select keeps the flexible space. */
+.admin .mdir-teamsbtn {
+  flex: none;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 6px 10px; border-radius: var(--hod-radius-sm);
+  border: 1.5px solid var(--line-2); background: var(--bg-2); color: var(--ink);
+  cursor: pointer; outline: none;
+  transition: background 0.12s, border-color 0.12s;
+}
+.admin .mdir-teamsbtn:hover { background: var(--card); border-color: var(--ink-3); }
+
+/* Item 5.2 - the tap that contacts now sit behind. Same box as the two
+   controls above so the card's bottom edge reads as one row of affordances
+   rather than three unrelated widgets, and 44px tall because it replaced
+   content that met the floor. */
+.admin .mdir-contacts-toggle {
+  align-self: flex-start;
+  min-height: 44px; padding: 6px 12px;
+  margin-top: 10px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--hod-radius-sm);
+  border: 1.5px solid var(--line-2); background: var(--bg-2); color: var(--ink-2);
+  cursor: pointer; outline: none;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.admin .mdir-contacts-toggle:hover { background: var(--card); border-color: var(--ink-3); color: var(--ink); }
+/* Inside the expanded row it is a quiet "hide", not a second primary action. */
+.admin .mdir-contactrow .mdir-contacts-toggle {
+  margin-top: 0; margin-left: auto; border-color: transparent; background: transparent;
+}
+
+/* ── Sort control (toolbar right slot) ── */
+.admin .adm-sort {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+}
+.admin .adm-sort select {
+  font-family: var(--code); font-size: 11px; font-weight: 700;
+  padding: 6px 10px; border-radius: var(--hod-radius-sm);
+  border: 1.5px solid var(--line-2); background: var(--bg-2);
+  color: var(--ink); cursor: pointer; outline: none;
+}
+
+/* ── Category sticker chip - CHROME. Rotation is fine here: it's a label on
+   a swatch, and the readable payload (the HoD names beneath it) never
+   rotates. `--cc` carries the category hue. ── */
+.admin .cat-sticker {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 5px 11px; border-radius: 999px;
+  color: #0A0A0A;
+  background: var(--cc, var(--accent));
+  border: 2px solid var(--ink);
+  box-shadow: var(--lift-1);   /* was 2px 2px 0 0 var(--ink) - retired on the desk */
+  transform: rotate(-1.5deg);
+}
+.admin .cat-sticker:nth-child(even) { transform: rotate(1.5deg); }
+.admin .cat-sticker-x {
+  background: none; border: none; color: inherit; cursor: pointer;
+  font-size: 12px; line-height: 1; padding: 0; margin: 0;
+  min-width: 24px; min-height: 24px;
+}
+.admin .cat-sticker-x:disabled { opacity: 0.35; cursor: wait; }
+
+/* A pickable (not yet assigned) category - outlined, unfilled, no rotation
+   so the assign tray reads as a control strip rather than a sticker sheet. */
+.admin .cat-pick {
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 7px 12px; border-radius: 999px;
+  background: transparent; color: var(--cc, var(--accent));
+  border: 2px solid var(--cc, var(--accent));
+  cursor: pointer; min-height: 34px;
+}
+.admin .cat-pick:disabled { opacity: 0.45; cursor: wait; }
+
+/* ── Category overview card ── */
+.admin .cat-card {
+  border: var(--hod-border-w) solid var(--hod-border);
+  border-left: 6px solid var(--cc, var(--accent));
+  border-radius: var(--hod-radius-sm);
+  padding: 12px 14px; background: var(--hod-surface-1);
+}
+.admin .cat-card-head {
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  /* WCAG AA: raw category tokens fail as small text on the near-white desk
+     surface (measured 1.56:1 for labs, 2.54:1 for events vs 4.5:1 required).
+     Same 55%-black text darkening used by `.stamp` - hue still reads as the
+     category, contrast clears AA. */
+  color: color-mix(in srgb, var(--cc, var(--accent)) 45%, black);
+  margin-bottom: 10px;
+}
+.admin .cat-hod { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.admin .cat-hod-name {
+  font-family: var(--display); font-weight: 700; font-size: 12px; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin .cat-none {
+  font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--ink-3);
+}
+
+/* ── HoD assignment row (CategoryManagement) ── */
+.admin .cat-row {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 18px; border-bottom: 1px solid var(--line);
+}
+.admin .cat-row:last-child { border-bottom: none; }
+.admin .cat-row-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.admin .cat-tray {
+  background: var(--bg-2); border: var(--hair-2);   /* was 2px dashed - 00.12 */
+  border-radius: var(--hod-radius-sm); padding: 12px 14px;
+}
+.admin .cat-tray-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 8px;
+}
+
+/* ── Small avatar used inside the two people surfaces ── */
+.admin .people-av {
+  border-radius: 999px; overflow: hidden; flex: none;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 900; color: #0A0A0A;
+}
+.admin .people-av img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Desktop spreadsheet view (≥860px). The card grid above stays the
+   mobile/tablet truth; at desktop widths a real HR desk wants to scan many
+   rows at once - names, WhatsApp numbers, class, role - the way a sheet
+   would show them, not one card at a time. Sortable column headers reuse
+   the existing `sortBy` state (name/newest/oldest/role), so this isn't a
+   second data model, just a second projection of the same rows. ── */
+.admin .mdir-table-wrap {
+  border: var(--hair-2);
+  border-radius: var(--hod-radius-sm);
+  overflow: auto;
+  max-height: calc(100vh - 320px);
+  margin-bottom: 16px;
+}
+.admin .mdir-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+/* Redesign 06.1: this sheet header predates the desk's soft-chrome reset -
+   it still carried a solid ink bar (white-on-black) and a hard border, the
+   exact "brutalist" language every other table on the desk already dropped.
+   A muted surface + hairline rule reads as a header without it. */
+.admin .mdir-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--hod-surface-2); color: var(--hod-ink-2);
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  text-align: left; padding: 10px 12px; white-space: nowrap;
+  border-bottom: var(--hair-2);
+}
+.admin .mdir-table th button {
+  background: none; border: none; color: inherit; font: inherit;
+  text-transform: inherit; letter-spacing: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+  /* The sort control is this desk's primary scan affordance. It was 20px
+     high - below DESIGN.md §2's absolute 32px floor and well below the
+     desk's documented 40px desktop floor (06 invariant 7). The header cell's
+     own 10px vertical padding is subtracted from the button's box so the
+     row height does not grow. */
+  padding: 0 2px; margin: -10px 0;
+  min-height: 40px; opacity: 0.85;
+}
+.admin .mdir-table th button:hover,
+.admin .mdir-table th button.is-active { opacity: 1; }
+.admin .mdir-table tbody tr { border-bottom: 1px solid var(--line-2); }
+.admin .mdir-table tbody tr:last-child { border-bottom: none; }
+.admin .mdir-table tbody tr:hover { background: var(--bg-2); }
+.admin .mdir-table td {
+  padding: 8px 12px; vertical-align: middle;
+  font-family: var(--eina); color: var(--ink);
+}
+.admin .mdir-table td.mono {
+  font-family: var(--code); font-size: 11.5px; color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.admin .mdir-td-name {
+  display: flex; align-items: center; gap: 10px; min-width: 180px;
+  font-family: var(--display); font-weight: 800; font-size: 13px;
+}
+.admin .mdir-td-name .people-av { width: 26px; height: 26px; font-size: 10px; flex-shrink: 0; }
+.admin .mdir-td-phone { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.admin .mdir-copybtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  /* 26x26 was below DESIGN.md §2's 32px absolute floor with no justification
+     comment. 40px matches the desk's documented desktop floor (06 inv. 7). */
+  width: 40px; height: 40px; border-radius: var(--r-pill);
+  border: 1px solid transparent; background: transparent; color: var(--ink-3);
+  cursor: pointer; flex-shrink: 0; transition: background 0.12s, color 0.12s, transform 0.1s;
+}
+/* Quiet until the row is looked at: 40px hit area kept, the 40px ring is not drawn. */
+.admin .mdir-table tbody tr:hover .mdir-copybtn { background: var(--bg-2); }
+.admin .mdir-copybtn:hover { background: var(--ink); color: var(--bg); }
+.admin .mdir-copybtn:active { transform: scale(0.9); }
+.admin .mdir-copybtn.is-copied { background: var(--welfare); color: #0A0A0A; border-color: var(--welfare); }
+.admin .mdir-td-actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; white-space: nowrap; }
+/* Deleted/rejected rows sort last and read as archived, not just dimmed -
+   dimming alone reads as "loading" or "disabled," not "gone." */
+.admin .mdir-table tr.is-inactive { opacity: 0.55; }
+.admin .mdir-table tr.is-inactive .mdir-td-name { text-decoration: line-through; text-decoration-color: var(--line-2); }
+
+/* The table itself is JS-conditionally rendered (useIsDesktopTable), not
+   just CSS-hidden, so a phone never downloads/mounts 7 columns' worth of
+   markup it can't show. The grid is always mounted; only hide it here.
+
+   REDESIGN 2026-09, section 13: 860px -> 1025px, matching DESKTOP_TABLE_MQ in
+   MemberDirectory.tsx. These two MUST name the same width. At 860 here and
+   1025 there, a 900px tablet would hide the card grid while the table refused
+   to mount, and the desk would render nothing at all. */
+@media (min-width: 1025px) {
+  .admin .mdir-grid-wrap { display: none; }
+}
+
+/* ── Phone: nothing tappable under 44px, nothing readable rotated. ── */
+@media (max-width: 600px) {
+  .admin .cat-sticker,
+  .admin .cat-sticker:nth-child(even) { transform: none; }
+  .admin .cat-sticker-x { min-width: 44px; min-height: 44px; margin: -10px -10px -10px 0; }
+  .admin .cat-pick { min-height: 44px; }
+  .admin .mdir-select { min-height: 44px; }
+  /* The 44px tap floor the 2026-09-11 density pass restored. A control added
+     to this row later must carry it too, or the pass silently regresses -
+     which is exactly how the copy button lost its target the first time. */
+  .admin .mdir-teamsbtn { min-height: 44px; }
+  /* Was `width: 100%`, which forced the sort onto a row of its own and made
+     the members toolbar three stacked rows (search 44 + pills 46 + sort 44,
+     146px measured at 375x812). It is now shrink-to-fit with a sensible floor,
+     so the toolbar's flex-wrap decides: on a 375px phone it still takes its
+     own row - the select has to stay readable, and there is no honest way to
+     fit "Role (leadership first)" beside a search box at that width - but on
+     anything from ~520px up it rides beside the search and the toolbar is two
+     rows instead of three. */
+  .admin .adm-sort { width: auto; flex: 1 1 210px; min-width: 0; justify-content: flex-start; }
+  /* 11px in a <select> is under iOS Safari's 16px floor: tapping it zoomed the
+     whole desk in, and iOS never zooms back out. The same fix the rest of this
+     desk's form controls already carry. */
+  .admin .adm-sort select { flex: 1 1 0; min-width: 0; min-height: 44px; font-size: 16px; }
+  /* Same story, same fix: .mdir-select is the per-row role picker and sits at
+     10px, which is further under iOS Safari's 16px floor than the sort select
+     was. Tapping it zooms the whole desk in and iOS never zooms back out, so a
+     leader changing one member's role loses the layout for the rest of the
+     session. Audit 2026-09-17, responsiveness P2. */
+  .admin .mdir-select { min-height: 44px; font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin .cat-sticker,
+  .admin .cat-sticker:nth-child(even) { transform: none; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION 13 · MEMBER RECORDS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── The audit note ───────────────────────────────────────────────────────
+   Sits between the toolbar and the rows, where a leader reads it before the
+   first reveal rather than after. Not a toast, not a modal: it is a standing
+   condition of the desk, so it is standing text. */
+.admin .mdir-audit-note {
+  display: block;
+  margin: 0 0 14px;
+  padding: 11px 14px;
+  border: var(--hair-2);   /* was 2px dashed var(--line-2) - 00.12 */
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+  font-family: var(--eina);
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.admin .mdir-audit-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  margin-right: 8px;
+  padding: 0 9px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  /* Mono label on a saturated fill: solid ink, never an alpha. */
+  color: #0A0A0A;
+  /* Fixed height + 999px radius, so nowrap is mandatory. */
+  white-space: nowrap;
+  vertical-align: 2px;
+}
+.admin .mdir-audit-note a {
+  color: var(--ink);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+/* ── The masked contact control ───────────────────────────────────────────
+   One rule set for both projections. The mask is never itself a button: the
+   thing you press is labelled "reveal", so there is no invisible affordance
+   the way the volunteer desk's row number was. */
+.admin .mdir-contact {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 7px;
+  min-width: 0;
+}
+.admin .mdir-contact-mask {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  /* The mask is a fixed-width stand-in; it must not wrap or the row jumps
+     height the moment a value is revealed. */
+  white-space: nowrap;
+}
+.admin .mdir-contact-value {
+  /* An address, a number and a handle are identifiers: the glyphs ARE the content. They were set in --mono
+     (NeutralFace, caps-only), which turned every email into AARUSHIGUPTAG@GMAIL.COM. --code is the token for this. */
+  font-family: var(--code); text-transform: none; letter-spacing: 0;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  /* The row shrinks: the value is the flexible child, the buttons are not. */
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin .mdir-contact-none {
+  font-size: 11px;
+  /* 2026-09-10, from the walkthrough: "that table, not on file, you should be
+     red." A missing contact is a gap in the record a leader has to chase, not
+     a neutral piece of metadata, so it reads as one. --tomato-ink is the
+     danger hue's text partner: 6.7:1 on the desk's light ground, where plain
+     --tomato would be a fill colour used as text. */
+  color: var(--tomato-ink);
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* A permission, not a gap in the record: neutral, so a desk where every contact is hidden does not read as a wall of red. */
+.admin .mdir-contact-none.is-hidden { color: var(--ink-3); font-weight: 600; }
+
+/* The reveal button. Deliberately a word, not an eye icon: an icon would make
+   it look like a display toggle, and this is a write. */
+.admin .mdir-revealbtn {
+  padding: 0 10px;
+  height: 26px;
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--r-pill);
+  background: var(--bg-2);
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+}
+.admin .mdir-revealbtn:hover { background: var(--ink); color: var(--bg); }
+/* The re-mask control. A revealed value had no way back to hidden - this
+   puts the value back behind the mask (client-side only, no new access-log
+   row: the reveal itself is already recorded, and hiding it again isn't a
+   second look at anything). Ghost, not filled, so it never competes with
+   `reveal`'s weight for attention on a row that is already open. */
+.admin .mdir-hidebtn {
+  padding: 0 10px;
+  height: 26px;
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink-3);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.admin .mdir-hidebtn:hover { border-color: var(--ink-3); color: var(--ink); }
+.admin .mdir-contact-btn { flex: 0 0 auto; }
+.admin .mdir-contact-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* ── Phone card: the contact block below the identity link ───────────────── */
+.admin .mdir-contactrow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px dashed var(--line-2);
+}
+.admin .mdir-contact-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ── Desktop sheet: sticky name column and row striping ───────────────────
+   Both sticky cells need an EXPLICIT background or they render transparent
+   over the rows scrolling underneath them. The striping is therefore composited
+   into an opaque colour rather than layered as an alpha, so the sticky cell and
+   the scrolling cells of the same row agree. */
+.admin .mdir-table tbody tr:nth-child(odd) td {
+  background: color-mix(in srgb, var(--ink) 2.5%, var(--card));
+}
+.admin .mdir-table tbody tr:nth-child(even) td {
+  background: var(--card);
+}
+.admin .mdir-table tbody tr:hover td { background: var(--bg-2); }
+
+.admin .mdir-table thead th:first-child,
+.admin .mdir-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  border-right: var(--hair-2);
+}
+.admin .mdir-table tbody td:first-child { z-index: 2; }
+/* The header's own sticky corner outranks both, or the name header slides
+   under the first data cell on a diagonal scroll. Same muted surface as the
+   rest of the header row, not a solid ink corner. */
+.admin .mdir-table thead th:first-child { z-index: 3; background: var(--hod-surface-2); }
+
+/* ── Phone: nothing tappable under 44px ─────────────────────────────────── */
+@media (max-width: 600px) {
+  .admin .mdir-revealbtn,
+  .admin .mdir-hidebtn,
+  .admin .mdir-contact-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .admin .mdir-contactrow { gap: 6px 10px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION 23.1 · CATEGORY MANAGEMENT
+   ──────────────────────────────────────────────────────────────────────────
+   None of the three desks in section 23 is a queue. This one decides who may
+   moderate what, so its outbound facts - who holds a scope, and which scope
+   has nobody - are the payload, not decoration.
+
+   Hues stay the `--c-*` custom properties the file already reads. The drifted
+   `DEPT_COLORS` hex map in lib/supabase.ts and `uiHelpers.CAT_COLORS` are both
+   deliberately NOT used here.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The chip keeps its whole-chip 1.5deg tilt and gains nothing else: no
+   per-label transform, no skew, no second rotation on the remove button. The
+   chip holds a control that removes a moderation scope, so the tilt stays at
+   the "taped on" end of chrome rather than becoming type you have to aim at,
+   and the two rules further down this file already flatten it entirely at
+   <= 600px and under prefers-reduced-motion. */
+.admin .cat-sticker {
+  min-height: 30px;
+  padding: 0 5px 0 11px;
+  white-space: nowrap;
+  /* Sticker keyline: paper ring, then ink ring. The one poster device the
+     desk borrows, and only on a stamp. The extra `2px 2px 0 0 var(--ink)`
+     hard offset this used to carry was the retired brutalist shadow the
+     comment on the earlier `.cat-sticker` rule (above) already says is
+     gone from the desk - keyline alone is the sticker's whole treatment. */
+  box-shadow: var(--keyline);
+}
+.admin .cat-sticker-x {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 30px; min-height: 30px;
+  border-radius: 999px;
+}
+.admin .cat-sticker-x:hover:not(:disabled) { background: rgba(10,10,10,.12); }
+
+/* The pick pill carries the same 9px swatch the filter pills do, so a
+   category is recognisable before it is read. */
+.admin .cat-pick {
+  display: inline-flex; align-items: center;
+  min-height: 38px; white-space: nowrap;
+}
+.admin .cat-pick .adm-swatch { border-color: currentColor; }
+
+/* ── The orphaned category ───────────────────────────────────────────────
+   A category with no HoD means posts in it have nobody to review them. That
+   is the single fact the overview panel exists to surface, and it shipped as
+   quiet grey italic text. It is a danger-bordered card now. Nothing about the
+   data changed; only whether you can see it from across the room. */
+.admin .cat-card.is-orphaned {
+  border-color: var(--danger);
+  border-left-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 7%, var(--card));
+}
+.admin .cat-card.is-orphaned .cat-none {
+  font-family: var(--mono); font-style: normal; font-weight: 700;
+  font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--danger);
+}
+
+/* Two columns at 390px, three from 1025px. `.admin .adm-grid`'s own phone
+   rule forces a single column with !important, so the two-column phone
+   layout has to be restated at the same weight. */
+@media (max-width: 600px) {
+  .admin .cat-grid { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .admin .cat-card { padding: 10px 11px; }
+  .admin .cat-hod-name { font-size: 11px; }
+}
+@media (min-width: 1025px) {
+  .admin .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ━━━ MEMBERS DESK · the phone pass (2026-09-11) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Reported in the walkthrough as "honestly very horrible... painful to look
+   at". Measured at 375x812 before touching it:
+
+     · 443px of chrome before the first member - 55% of the first screen spent
+       on a title, a search field, a filter row, a sort row and a policy note
+     · each card 273px, so barely one and a bit fit on screen
+     · the filter row scrolls (overflow-x: auto, scrollbar-width: none) but
+       gives NO visual cue, so "leads" and "members" simply looked missing
+
+   Nothing here removes a control or a word. The audit note in particular stays
+   in full: its own comment in MemberDirectory.tsx says dropping it would make
+   the audit "read as bureaucracy instead of as the enforcement of a written
+   promise", and that is right. It just stops costing a fifth of the screen. */
+@media (max-width: 600px) {
+  /* The four desk-wide declarations that used to sit here -
+     `.admin .adm-toolbar`, `.admin .adm-search`, `.admin .adm-header` and
+     `.admin .adm-header-label` - have MOVED to styles/routes/director.css.
+
+     They were written with `.admin`-scoped selectors, i.e. meant for all 19
+     desks, but this file is imported by only five of them (AccountApprovals,
+     CategoryManagement, MemberDirectory, MemberOfMonth, TeamManagement). Vite
+     emits it as its own chunk, so the other fourteen desks got the compaction
+     only AFTER the visitor had touched one of those five in the same session -
+     the same route rendering at two different densities depending on
+     navigation history, and never compact on a cold load, which is the normal
+     case because the nav sheet is how people arrive. director.css is imported
+     by adminKit.tsx, which every desk loads.
+
+     The filter-row scroll fade that also sat here was a straight duplicate of
+     the rule director.css already carries, so it is simply gone.
+
+     What stays below is genuinely people-desk: .mdir-*, .cat-*, .people-*. */
+
+  /* The policy note: same words, same link, less room. */
+  .admin .mdir-audit-note {
+    margin-bottom: 10px;
+    padding: 9px 11px;
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  /* The card. 16px of padding on a 343px-wide card is desktop spacing on a
+     phone; 13 keeps the shell reading as a card without the air. */
+  .admin .mdir-card { padding: 13px; }
+  .admin .mdir-card-top { gap: 11px; }
+
+  /* Was a 2px dashed rule between the identity and the contacts, repeated
+     again before the admin row: two dashed lines inside a 273px card is most
+     of the visual noise in it. One hairline each, same separation, far less
+     shouting. */
+  .admin .mdir-contactrow {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: var(--hair-2);
+    gap: 4px 10px;
+  }
+  .admin .mdir-admin { margin-top: 8px; padding-top: 8px; border-top: var(--hair-2); }
+
+  /* The copy control keeps its 44px HIT area - that floor is not negotiable -
+     but the painted circle comes down to 34px. A 44px disc beside an 11.5px
+     address made the button the loudest thing in the row, and it is the
+     secondary action. Padding carries the difference, so the target is
+     unchanged. */
+  /* The BUTTON stays 44x44 - that is the tap floor and it is not negotiable.
+     Only the painted disc comes down to 36, drawn on a pseudo-element inset
+     4px, so the target and the graphic are decoupled.
+
+     Written this way after getting it wrong once: the first attempt used
+     `margin: 5px` around a 34px button, which looks identical and is not.
+     Margin sits OUTSIDE the element's box and receives no pointer events, so
+     that version quietly cut the real target from 44px to 34px. The probe
+     caught it; the lesson is that shrinking a control visually must never be
+     done by shrinking the control. */
+  .admin .mdir-copybtn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+  }
+  .admin .mdir-copybtn::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: var(--r-pill);
+    border: 1.5px solid var(--line-2);
+    background: var(--bg-2);
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .admin .mdir-copybtn > * { position: relative; z-index: 1; }
+  .admin .mdir-copybtn:hover { background: transparent; color: var(--bg); }
+  .admin .mdir-copybtn:hover::before { background: var(--ink); }
+  .admin .mdir-copybtn.is-copied { background: transparent; color: #0A0A0A; }
+  .admin .mdir-copybtn.is-copied::before { background: var(--welfare); border-color: var(--welfare); }
+}

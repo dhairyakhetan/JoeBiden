@@ -1,0 +1,10 @@
+/* Rules owned by components/v6Shared.tsx that cannot live in styles/v6.css
+   (shared, high-collision). Currently one: the marquee pause mechanism.
+
+   WCAG 2.2.2 (Pause, Stop, Hide) - `.marquee-track` runs `marquee 30s linear
+   infinite` from the moment it mounts and never stops. `.marquee` carries no
+   links of its own, so `:focus-within` can only fire when a caller puts one
+   inside; both selectors are declared so either route pauses it. Both are more
+   specific than `.marquee-track`, so load order does not matter. */
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track { animation-play-state: paused; }

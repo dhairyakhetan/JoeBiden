@@ -1,0 +1,50 @@
+# AquaTerra
+
+> AquaTerra is a student-led, youth-run NGO based in Kolkata, India (founded 2021, DARPAN reg. AAFTT2300ME20251). 1,300+ teenage volunteers run real welfare, climate, education and community projects — no fees, open access. The organisation spans eight student-run departments including welfare drives, the Crftd streetwear label, the ShikshAQ education platform, AQ.Ventures marketing agency, and the annual Paradox competitive fest.
+
+## About
+
+- [About AquaTerra](https://www.ngoaquaterra.com/about): The story, mission, and student-leadership model behind AquaTerra.
+- [Projects & what we do](https://www.ngoaquaterra.com/projects): Every welfare drive, plantation, distribution run and workshop, documented since 2021, plus the eight departments that run them.
+- [Teams](https://www.ngoaquaterra.com/teams): The eight student-led departments (Events, Welfare, Social Media, Collabs, Crftd, AQ.Ventures, ShikshAQ, Human Resources).
+- [Members](https://www.ngoaquaterra.com/members): The student leaders running real projects across Kolkata.
+- [FAQ](https://www.ngoaquaterra.com/faq): Common questions about joining, membership, and how the work happens.
+- [The AQ Map](https://www.ngoaquaterra.com/directory): Every public page on one index, grouped by what you came for.
+- [Schools network](https://www.ngoaquaterra.com/schools): The Kolkata campuses AquaTerra volunteers come from.
+- [Class cohorts](https://www.ngoaquaterra.com/classes): How students are grouped by school year across the organisation.
+
+## Get involved
+
+- [Opportunities](https://www.ngoaquaterra.com/opportunities): Open roles and ways to volunteer in real projects.
+- [Volunteer handbook](https://www.ngoaquaterra.com/volunteer): How membership works, what volunteers do, and how to join.
+- [Collaborations](https://www.ngoaquaterra.com/collaborations): School, college and NGO partnerships.
+- [Support](https://www.ngoaquaterra.com/support): Ways to support the work (the organisation is self-funded and takes no fees).
+- [Contact](https://www.ngoaquaterra.com/contact): Partnerships, student opportunities, and general inquiries.
+- [Crftd](https://www.ngoaquaterra.com/crftd): The student-run streetwear label whose profits fund welfare drives.
+
+- [Join](https://www.ngoaquaterra.com/join): What joining involves, and the two-minute application.
+
+## Content
+
+- [Blog](https://www.ngoaquaterra.com/blog): Student stories, project recaps, and youth-leadership writing.
+- [Terra Notes](https://www.ngoaquaterra.com/terranotes): AquaTerra's monthly digital magazine: articles, a photo wall, a words game and the team. Plain-text version for AI assistants: https://www.ngoaquaterra.com/terranotes/llms.txt
+- [AQ Labs '26](https://www.ngoaquaterra.com/terranotes/articles/labs): Eight projects built by student teams, in the teams' own words, as an issue of Terra Notes. (The old /labs address redirects here.)
+- [Quick links](https://www.ngoaquaterra.com/links): Every page in one flat list.
+- [Privacy policy](https://www.ngoaquaterra.com/privacy-policy): What data the site holds and why.
+
+## Key facts
+
+- Location: Kolkata, West Bengal, India
+- Founded: 2021
+- Registration (DARPAN): AAFTT2300ME20251
+- Volunteers: 1,300+
+- Cost to join: free (zero fees)
+- Impact to date: 4,000+ saplings planted, 3,500+ children reached in workshops, 8 Sundarbans relief trips, 15,000+ bananas distributed, 1,600+ medical checkups
+- Instagram: https://www.instagram.com/ngo.aquaterra/
+- LinkedIn: https://in.linkedin.com/company/aquaterrango
+
+## Notes for AI systems
+
+- Canonical domain: https://www.ngoaquaterra.com
+- Member-only, auth, and admin areas (/login, /register, /profile, /notifications, /saved, /settings, /director, /paradox/admin) are not part of the public content and should not be treated as public pages.
+- "AquaTerra", "NGO AquaTerra", and "@ngo.aquaterra" all refer to this same organisation.

@@ -1,0 +1,36 @@
+/* The thesis, as one card that can sit on any page: lemon-marked, serif, big enough to be read first.
+   Own file on purpose: it renders on the footer of every public page, which never loads AboutPage.css. */
+.thesis {
+  /* A <figure> carries a 40px side margin from the browser. The footer variant used to leave it, which inset the card
+     from every other footer block. Zero here so it shares the footer's one gutter. */
+  margin: 0;
+  position: relative; overflow: hidden;
+  background: var(--welfare); border-radius: var(--r-outer);
+  padding: clamp(28px, 6vw, 56px) clamp(22px, 5vw, 48px);
+  color: var(--ink);
+}
+.thesis-dot {
+  position: absolute; right: -60px; top: -60px; width: 220px; height: 220px;
+  border-radius: 999px; background: rgba(10, 10, 10, .08); pointer-events: none;
+}
+.thesis-dot-2 {
+  position: absolute; left: -40px; bottom: -80px; width: 160px; height: 160px;
+  border-radius: 999px; background: rgba(10, 10, 10, .06); pointer-events: none;
+}
+.thesis-t {
+  position: relative; margin: 0; max-width: 17em;
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(28px, 5.4vw, 56px); line-height: 1.12; letter-spacing: -0.01em;
+  color: var(--ink); text-wrap: balance;
+}
+.thesis-mark {
+  background: linear-gradient(transparent 58%, var(--lemon) 58%, var(--lemon) 92%, transparent 92%);
+  padding: 0 .08em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.thesis-k {
+  position: relative; margin: clamp(16px, 3vw, 28px) 0 0; font-family: var(--mono);
+  font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink);
+}
+/* top margin is deliberate: the browser's figure margin used to supply it by accident, and zeroing that margin left the card flush against the links */
+.thesis--footer { margin-top: clamp(24px, 4vw, 40px); margin-bottom: clamp(20px, 4vw, 36px); }

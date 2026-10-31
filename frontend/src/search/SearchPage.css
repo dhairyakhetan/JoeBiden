@@ -1,0 +1,473 @@
+/* ━━━ SEARCH — redesign 08 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   "The empty state IS the design" (08.1): an ink hero (headline, field, the
+   five-category disc browse OR the active-filter summary once there is a
+   query) sits above a normal --bg results area, mirroring the same
+   dark-hero/cream-body split feed/SavedPostsPage.tsx already uses.
+
+   Radii on this file are the 08 scope: 999 / 32 / 22 / 14
+   (--r-pill / --r-outer / --r-inner / --r-tight) - never --r-card/--r-md,
+   which belong to the older, still-live scale used elsewhere in the app.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.aqs-scale-wrap {
+  /* transform-origin set inline per useSheetPageStyle(); this class only
+     carries what never changes with detent. */
+  width: 100%;
+}
+
+.aqs-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  padding: clamp(28px, 5vw, 56px) var(--page-px, 24px) clamp(28px, 5vw, 44px);
+  /* 2026-09-12: was edge-to-edge (full-bleed ink), which read as a
+     different app bolted onto the cream nav above it - every other card
+     surface in the app (feed, results below, popovers) sits inset with a
+     rounded corner, so the hero now does too, margin matching --page-px. */
+  margin: 14px var(--page-px, 24px) 0;
+  border-radius: var(--r-outer);
+  background-image: radial-gradient(rgba(244, 239, 224, 0.09) 1px, transparent 1px);
+  /* 22px matches --r-inner, so the grid sits on the system's own scale. */
+  background-size: 22px 22px;
+}
+
+.aqs-eyebrow {
+  display: inline-flex;
+  color: rgba(244, 239, 224, 0.55);
+}
+
+.aqs-headline {
+  margin: 14px 0 0;
+  font-family: var(--display);
+  font-weight: 900;
+  /* 2026-09-12: was clamp(34px, 5.2vw, 62px) - oversized next to every other
+     page's h1 scale (feed/profile headers top out well under 48px), and it
+     crowded the inset hero's new rounded corners at the top of the viewport. */
+  font-size: clamp(26px, 4vw, 46px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-wrap: balance;
+}
+.aqs-headline em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--welfare-ink);
+}
+
+.aqs-sub {
+  margin: 10px 0 0;
+  font-family: var(--eina);
+  font-size: 14px;
+  color: rgba(244, 239, 224, 0.55);
+}
+
+/* ── The field ─────────────────────────────────────────────────────────── */
+
+.aqs-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  max-width: 640px;
+  background: var(--paper);
+  border-radius: var(--r-pill);
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.5);
+}
+
+.aqs-field-icon {
+  flex-shrink: 0;
+  display: flex;
+  color: var(--ink-3);
+}
+
+.aqs-field input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  /* 16px minimum suppresses iOS Safari's focus-zoom; 17 clears it with room. */
+  font-size: 17px;
+  font-family: var(--sans);
+  color: var(--ink);
+  padding: 8px 0;
+}
+.aqs-field input::placeholder { color: var(--ink-3); }
+
+.aqs-field-submit {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out);
+}
+.aqs-field-submit:hover { transform: scale(1.05); }
+.aqs-field-submit:active { transform: scale(0.96); }
+
+.aqs-field-clear {
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line-2);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+
+/* ── The disc browse surface (no query) ───────────────────────────────── */
+
+.aqs-discs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 28px 16px;
+  max-width: 720px;
+  margin-top: clamp(36px, 7vw, 56px);
+  padding-bottom: 8px;
+}
+
+.aqs-disc-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aqs-disc {
+  width: 150px;
+  height: 150px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--r-pill);
+  border: var(--hair-inv);
+  cursor: pointer;
+  /* 2026-09-12: a flat color fill with no border/shadow read as an unstyled
+     placeholder against the hero's textured ink ground - the hairline-inv
+     edge and a soft lift give it the same "finished object" weight every
+     other interactive shape in the app carries (chips, pills, cards).
+     2026-09-13: still read as unfinished with nothing but a flat hue on it
+     ("solids look bad") - a top-left highlight/bottom shade gives the disc
+     actual form instead of a paint swatch, and the icon below carries the
+     rest of the "designed object" weight. */
+  background-image: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.16) 88%);
+  background-blend-mode: overlay, normal;
+  box-shadow: 0 10px 26px -12px rgba(0, 0, 0, 0.55), inset 0 -10px 18px -12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Overlap rule: the label pill below reserves its own space via negative
+     margin, not absolute positioning over text - the disc itself has no
+     text on it, so there is nothing for the pill to collide with. */
+  margin-bottom: -16px;
+}
+.aqs-disc:hover { transform: scale(1.04); }
+.aqs-disc:active { transform: scale(0.97); }
+
+.aqs-disc-icon {
+  width: 40%;
+  height: 40%;
+  color: var(--ink);
+  opacity: 0.82;
+  stroke-width: 1.6;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.35));
+}
+
+.aqs-disc-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  /* 2026-09-10: 2px ink -> hairline. Not a .btn-primary or a .sticker. */
+  border: var(--hair-3);
+  background: var(--bg-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+}
+.aqs-disc-wrap[data-selected="true"] .aqs-disc-label {
+  background: var(--paper);
+  box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.4);
+}
+
+.aqs-disc-sticker {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  z-index: 1;
+}
+
+/* ── The filter summary (once a query/category is active) ────────────── */
+
+.aqs-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.aqs-filters-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  /* 2026-09-10: 1.5px is a weight the token set does not contain. This is a
+     paper edge on an ink ground, which is exactly what --hair-inv is for. */
+  border: var(--hair-inv);
+  background: rgba(244, 239, 224, 0.08);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  cursor: pointer;
+}
+.aqs-filters-pill:hover { background: rgba(244, 239, 224, 0.14); }
+
+.aqs-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(244, 239, 224, 0.6);
+}
+
+/* Desktop popover, opened from the "3 filters" pill. */
+.aqs-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 40;
+  width: min(360px, 86vw);
+  padding: var(--pad-card);
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  box-shadow: var(--lift-4);
+  color: var(--ink);
+}
+.aqs-popover-group + .aqs-popover-group { margin-top: 14px; }
+.aqs-popover-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  color: var(--ink-3);
+}
+.aqs-popover-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── Results ───────────────────────────────────────────────────────────── */
+
+.aqs-results {
+  background: var(--bg);
+  padding: clamp(24px, 4vw, 36px) var(--page-px, 24px) clamp(56px, 8vw, 88px);
+}
+
+.aqs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── The result card, "one card, five kinds" (08.2) ───────────────────── */
+
+.src-card {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: var(--pad-card);
+  border-radius: var(--r-outer);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.src-media {
+  width: 96px;
+  height: 72px;
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.src-media--photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.src-media--ground {
+  background: rgba(10, 10, 10, 0.14);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--ink);
+}
+.src-media--ground svg { width: 26px; height: 26px; }
+
+.src-body { min-width: 0; }
+
+.src-lockup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  /* 2026-09-10 FIX: was rgba(10,10,10,0.7) with a comment claiming 5.9:1 on
+     welfare. That figure is not reachable - SOLID ink on welfare is 4.55:1
+     (tokens.css --on-welfare), and compositing ink down to 70% can only lower
+     it; measured, this was ~3.27:1 at 8.5px, a clear AA failure. tokens.css
+     states the rule outright: "Solid values only ... an alpha is never allowed
+     here", citing rgba(10,10,10,.6) on welfare at 2.79:1. */
+  color: var(--ink);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.src-arrow { flex-shrink: 0; }
+
+.src-title {
+  margin-top: 3px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.08;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: balance;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.src-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.src-card mark {
+  background: rgba(10, 10, 10, 0.14);
+  /* 6px, matching DESIGN.md §1's documented inline mention-mark exception: a
+     search-highlight <mark> is the same kind of object - a tint behind running
+     text, not a UI corner - and the structural scale does not apply to it. */
+  border-radius: 6px;
+  padding: 1px 4px;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Loading skeleton at the real card geometry. */
+.src-card-skel {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: var(--pad-card);
+  border-radius: var(--r-outer);
+  background: var(--card);
+  border: var(--hair);
+}
+
+/* ── The well: no-results / error (cream-on-ink, matching the hero) ──── */
+
+.aqs-well {
+  max-width: 560px;
+  margin: 24px auto 0;
+  padding: clamp(32px, 6vw, 48px) 24px;
+  border-radius: var(--r-inner);
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+}
+.aqs-well-title {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(24px, 4.5vw, 32px);
+  text-transform: uppercase;
+  color: var(--paper);
+  margin: 0 0 8px;
+}
+.aqs-well-hint {
+  font-family: var(--eina);
+  font-size: 14px;
+  color: rgba(244, 239, 224, 0.65);
+  margin: 0 0 20px;
+}
+.aqs-well-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.aqs-well-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid rgba(244, 239, 224, 0.4);
+  background: transparent;
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.aqs-well-btn:hover { background: rgba(244, 239, 224, 0.1); }
+
+@media (max-width: 1024px) {
+  .aqs-desktop-only { display: none !important; }
+}
+@media (min-width: 1025px) {
+  .aqs-mobile-only { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aqs-field-submit,
+  .src-card,
+  .aqs-disc { transition: none !important; }
+}

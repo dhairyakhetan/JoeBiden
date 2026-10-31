@@ -1,0 +1,367 @@
+/* AQ Labs gallery (the "labs" article, src/articles/labs/LabsPage.jsx), from the AQ Labs design (two artboards: phone,
+   one chapter at a time off a bookshelf; desktop, one long scroll). It keeps the team's own look: their fonts
+   (Neutral Face, Eina, JetBrains Mono, with Instrument Serif and Caveat), their palette, rounded cards and pills.
+   Everything is scoped to .labs; class names must not match any in src/styles/ (hence .lbtn, .lb-*).
+   .labs-web = the 1440px artboard, .labs-phone = 390px.
+   Motion: two endless loops (the Cirqle orbit, .spin: transform only; web's drifting prints: translate only), stopped
+   by reduced motion, .tn-lite, .off-screen and html[data-tn-nav] (and their :host twins) at the bottom; the rest are hover / one-off transitions. */
+@font-face{font-family:'Neutral Face';src:url('/fonts/neutral-face.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Neutral Face';src:url('/fonts/neutral-face-bold.woff2') format('woff2');font-weight:700 900;font-display:swap}
+@font-face{font-family:'Eina';src:url('/fonts/eina-regular.woff2') format('woff2');font-weight:400 500;font-display:swap}
+@font-face{font-family:'Eina';src:url('/fonts/eina-semibold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+
+.labs{position:relative;margin:0 auto;overflow:clip;background:#111111;color:#111111}
+/* the gallery's resets, under the site header only (:where keeps them as weak as web.css's `.web a`, which they beat
+   by coming later: main.jsx imports this file last) */
+.labs :where(main,.lb-tabs,.psheet){font-family:'Eina',system-ui,sans-serif;font-weight:400;line-height:normal}
+.labs :where(main,.lb-tabs,.psheet) :where(*,*::before,*::after){box-sizing:border-box}
+.labs :where(main,.psheet) img{display:block}
+.labs :where(main,.psheet) :is(p,h1,h2,h3,figure){margin:0}
+.labs :where(main,.lb-tabs,.psheet) a{color:inherit;text-decoration:none}
+.labs :where(main,.psheet) button{font:inherit;color:inherit}
+.labs .m{font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:700;text-transform:uppercase;letter-spacing:.14em}
+.labs .d{font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.04em;line-height:.86}
+.labs .s{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.labs .lead{font-size:18px;line-height:1.6}
+.labs .rule-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+/* buttons: white, ink border, hard shadow (--sh: cream on dark chapters); press drops into it, hover (web) lifts */
+.labs .lbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:6px;border:2.5px solid #111111;background:#FFFFFF;color:#111111;box-shadow:4px 4px 0 var(--sh,#111111);transition:transform .12s,box-shadow .12s;font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer}
+.labs .lbtn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--sh,#111111)}
+.labs-web .lbtn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--sh,#111111)}
+.labs-web .lbtn:hover:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--sh,#111111)}
+.labs-phone .lbtn{padding:0 22px}
+.labs .row2{display:flex;gap:10px}
+.labs .row2 .lbtn{flex:1 1 0;min-width:0;padding:0 12px}
+.labs .iconbtn{width:44px;height:44px;border-radius:999px;border:2px solid #111111;background:transparent;display:flex;align-items:center;justify-content:center;padding:0;color:#111111;cursor:pointer;flex:none}
+
+/* ===== the tab strip under the site header: one folder tab per chapter ===== */
+.labs .lb-tabs{position:relative;z-index:40;display:flex;align-items:flex-end;background:#F3EEE4;border-bottom:2px solid #111111}
+.labs-web .lb-tabs{position:sticky;top:80px;height:54px;padding-left:20px}
+.labs-phone .lb-tabs{height:52px;gap:4px;padding:0 8px}
+.labs .tab{position:relative;display:flex;flex-direction:column;justify-content:center;gap:2px;color:#111111;cursor:pointer;border:2px solid #111111;border-bottom:none}
+.labs .tab .n{font-family:'JetBrains Mono',monospace;font-weight:700;line-height:1}
+.labs .tab .t{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;line-height:1.1}
+/* web: a row of folder tabs; the one on screen fills with its colour and glows */
+.labs-web .tab{flex:none;height:38px;padding:0 15px;margin-right:-2px;background:#EDE6D0;border-radius:12px 12px 0 0;transition:height .3s cubic-bezier(.2,.9,.25,1),background-color .4s ease,color .4s ease,box-shadow .4s ease}
+.labs-web .tab .n{font-size:9px;letter-spacing:.14em;color:#5A5A55}
+.labs-web .tab:hover{background:#E2D9BD}
+.labs-web .tab.on{height:44px;background:var(--c);color:var(--tc);z-index:3;box-shadow:0 -6px 18px -6px var(--c)}
+.labs-web .tab.on .n{color:var(--tc);opacity:.7}
+/* phone: eight numbered tabs share the width; the open chapter's grows to show its name */
+.labs-phone .tab{flex:1 1 0;min-width:0;height:38px;overflow:hidden;align-items:center;background:#EDE6D0;border-radius:10px 10px 0 0;box-shadow:inset 0 5px 0 var(--c);transition:flex-grow .28s cubic-bezier(.2,.9,.25,1),height .22s ease,background-color .22s ease,box-shadow .22s ease}
+.labs-phone .tab .n{font-size:11px;letter-spacing:.06em;margin-top:3px}
+.labs-phone .tab .t{max-height:0;opacity:0;transition:opacity .15s ease,max-height .22s ease}
+.labs-phone .tab.on{flex-grow:4.2;height:44px;padding:0 8px;gap:3px;background:var(--c);color:var(--tc);box-shadow:none}
+.labs-phone .tab.on .n{margin-top:0;font-size:9px;letter-spacing:.14em;opacity:.75}
+.labs-phone .tab.on .t{max-height:16px;opacity:1;transition:opacity .18s ease .1s,max-height .22s ease}
+
+/* in-page search (phone, inside the "all projects" sheet). Matches are
+   highlighted in place (CSS Custom Highlight API) */
+.labs .psheet input{flex:1;min-width:0;height:44px;padding:0 16px;border:2px solid #111111;border-radius:999px;background:#FFFFFF;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;color:#111111;outline:none}
+.labs .psheet input:focus-visible{box-shadow:0 0 0 3px #3DA9FC}
+::highlight(labs-find){background-color:#FFC700;color:#111111}
+::highlight(labs-find-now){background-color:#FF4D2E;color:#FFFFFF}
+.labs .flash{outline:3px solid #FF4D2E;outline-offset:4px}
+
+/* ===== the intro: prints, "AQ Labs", the bookshelf ===== */
+.labs .lb-intro{position:relative;display:flex;flex-direction:column;align-items:center;color:#F3EEE4}
+.labs-web .lb-intro{padding:54px 0 70px;background:radial-gradient(ellipse 55% 50% at 50% 26%,rgba(27,138,90,.32),rgba(17,17,17,0) 70%),#111111}
+.labs-phone .lb-intro{padding:30px 20px 40px;background:radial-gradient(ellipse 120% 55% at 50% 22%,rgba(27,138,90,.34),rgba(17,17,17,0) 70%),#111111}
+.labs .print{position:absolute;margin:0;background:#FBF8F1}
+.labs .print img{width:100%;object-fit:cover}
+.labs .print span{position:absolute;left:0;right:0;text-align:center;font-family:'Caveat',cursive;font-weight:600;line-height:1;color:#2A2A28}
+.labs-web .print{padding:8px 8px 30px;box-shadow:0 18px 34px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.4);transition:transform .4s cubic-bezier(.2,.9,.25,1),box-shadow .4s ease}
+.labs-web .print span{bottom:4px;font-size:19px}
+.labs-web .print:hover{transform:rotate(0deg) scale(1.08) !important;z-index:5;box-shadow:0 24px 44px rgba(0,0,0,.6)}
+/* web: the prints drift about a little, each on its own path and pace (translate only, so they keep their tilt) */
+.labs-web .print{animation:lbDrift 9s ease-in-out infinite alternate}
+.labs-web .print:nth-child(2){animation-name:lbDrift2;animation-duration:11s;animation-delay:-3s}
+.labs-web .print:nth-child(3){animation-duration:10s;animation-delay:-6s;animation-direction:alternate-reverse}
+.labs-web .print:nth-child(4){animation-name:lbDrift2;animation-duration:8.5s;animation-delay:-2s}
+.labs-web .print:nth-child(5){animation-duration:12s;animation-delay:-8s}
+.labs-web .print:nth-child(6){animation-name:lbDrift2;animation-duration:9.5s;animation-delay:-5s;animation-direction:alternate-reverse}
+@keyframes lbDrift{0%{translate:0 0}33%{translate:6px -9px}66%{translate:-5px -4px}100%{translate:3px 7px}}
+@keyframes lbDrift2{0%{translate:0 0}40%{translate:-7px -6px}75%{translate:5px -10px}100%{translate:-3px 5px}}
+.labs-phone .print{padding:6px 6px 22px;box-shadow:0 14px 26px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.4)}
+.labs-phone .print span{bottom:2px;font-size:15px}
+.labs .showpill{position:relative;border:1.5px solid #1B8A5A;border-radius:999px;color:#5FD39E}
+.labs .lb-title{position:relative;display:flex;align-items:baseline;line-height:.9}
+.labs .lb-or{position:relative;display:flex;align-items:center;gap:12px;width:100%}
+.labs .lb-or i{flex-grow:1;height:1px;background:#34332F}
+
+/* the bookshelf, in real 3D: each book is a spine (.sp: lit and shaded like a rounded hardcover, ribs, rules, glyph,
+   title, a library tag) with its top (.ft, the pages between the covers), sides (.fl .fr) and back (.fb) folded back
+   into the page. --d = how deep the books are, --lift / --pop = how far a pulled book rises and comes forward.
+   Each book sits in a slot (the link: its whole column, which never moves, so hovering holds the book out steadily).
+   Each slot is its own 3D scene, flattened into one layer (perspective from the shelf's viewpoint: --ox, set by
+   LabsPage.jsx), so books never have their faces sorted against each other; a pulled book simply lies on top. */
+.labs .shelf{position:relative;background:linear-gradient(180deg,#2B2925,#1C1B18);box-shadow:0 40px 70px rgba(0,0,0,.55)}
+.labs-web .shelf{margin-top:24px;width:900px;padding:14px 14px 0;border-radius:8px 8px 0 0}
+.labs-phone .shelf{margin-top:18px;width:350px;padding:10px 10px 0;border-radius:6px 6px 0 0;box-shadow:0 30px 50px rgba(0,0,0,.5)}
+.labs .stage{position:relative;overflow:hidden;background:linear-gradient(180deg,#070706 0,#171614 100%);box-shadow:inset 0 16px 22px -10px rgba(0,0,0,.85)}
+.labs-web .stage{height:430px}
+.labs-phone .stage{height:300px}
+.labs .brow{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;gap:6px;perspective-origin:50% -55%}
+.labs-web .brow,.labs-web .bslot{perspective:1250px}
+.labs-phone .brow,.labs-phone .bslot{perspective:760px}
+.labs-web .brow{--d:132px;--lift:-62px;--pop:150px}
+.labs-phone .brow{--d:92px}
+.labs .floor{position:absolute;left:-60px;right:-60px;bottom:0;height:calc(var(--d) + 30px);transform-origin:50% 100%;transform:rotateX(90deg);background:linear-gradient(0deg,#4B463D 0,#34312B 40%,#1C1B18 100%)}
+.labs .plank{position:relative;background:linear-gradient(180deg,#524C42 0,#3A362F 3px,#221F1B 100%);border-radius:0 0 3px 3px;box-shadow:0 16px 26px rgba(0,0,0,.6)}
+.labs-web .plank{height:25px}
+.labs-phone .plank{height:20px}
+.labs .bslot{position:relative;flex:none;height:100%;display:flex;align-items:flex-end;perspective-origin:var(--ox) -55%;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.labs .book{position:relative;display:block;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.9,.25,1);color:var(--tc);pointer-events:none}
+.labs-web .bslot:hover,.labs-web .bslot:focus-visible{z-index:5}
+.labs-web .bslot:hover .book,.labs-web .bslot:focus-visible .book{transform:translateZ(var(--pop)) translateY(var(--lift))}
+.labs-web .bslot:hover .sp,.labs-web .bslot:focus-visible .sp{box-shadow:-18px 22px 34px rgba(0,0,0,.65)}
+/* (the book itself ignores the pointer: only its slot takes it, as a pulled book overhangs its neighbours' slots) */
+.labs .bslot:focus-visible .sp{outline:3px solid #3DA9FC;outline-offset:3px}
+/* pressed: the book sinks back into the shelf and darkens a touch (phone: .pressed, held briefly before the chapter
+   opens; web: while the mouse button is down on a pulled-out book) */
+.labs .bslot:active .book,.labs .bslot.pressed .book{transition-duration:.09s}
+.labs-phone .bslot:active .book,.labs-phone .bslot.pressed .book{transform:translateZ(-12px) translateY(4px) scale(.96)}
+.labs-web .bslot:hover:active .book{transform:translateZ(calc(var(--pop) * .45)) translateY(calc(var(--lift) * .35)) scale(.97)}
+.labs .bslot:active .sp::after,.labs .bslot.pressed .sp::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.16);pointer-events:none}
+.labs .book :is(.ft,.fl,.fr,.fb){position:absolute;display:block}
+.labs .book .ft{left:0;top:0;width:100%;height:var(--d);transform-origin:50% 0;transform:translateZ(calc(var(--d) * -1)) rotateX(90deg)}
+.labs-web .book .ft{border-radius:0 0 5px 5px/0 0 10px 10px;background:linear-gradient(0deg,var(--c) 0 5px,transparent 5px),linear-gradient(0deg,transparent 5px,#8C2F24 5px 7px,#F3E6C6 7px 8px,transparent 8px),linear-gradient(90deg,var(--c) 0 4px,transparent 4px calc(100% - 4px),var(--c) calc(100% - 4px)),linear-gradient(0deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.45)),repeating-linear-gradient(90deg,#F7EFDB 0 1.3px,#D3C6A2 1.3px 2.5px)}
+.labs-phone .book .ft{border-radius:0 0 4px 4px/0 0 8px 8px;background:linear-gradient(0deg,var(--c) 0 4px,transparent 4px),linear-gradient(0deg,transparent 4px,#8C2F24 4px 6px,#F3E6C6 6px 7px,transparent 7px),linear-gradient(90deg,var(--c) 0 3px,transparent 3px calc(100% - 3px),var(--c) calc(100% - 3px)),linear-gradient(0deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.45)),repeating-linear-gradient(90deg,#F7EFDB 0 1.3px,#D3C6A2 1.3px 2.5px)}
+.labs .book :is(.fl,.fr){top:0;width:var(--d);height:100%;backface-visibility:hidden}
+.labs .book .fr{left:100%;transform-origin:0 50%;transform:rotateY(90deg);border-radius:0 3px 3px 0;background:linear-gradient(90deg,rgba(0,0,0,.3) 0 2px,transparent 2px 11px,rgba(0,0,0,.35) 11px 13px,rgba(255,255,255,.1) 13px 14px,transparent 14px),linear-gradient(90deg,rgba(0,0,0,.34),rgba(0,0,0,.6)),var(--c)}
+.labs .book .fl{left:calc(var(--d) * -1);transform-origin:100% 50%;transform:rotateY(-90deg);border-radius:3px 0 0 3px;background:linear-gradient(270deg,rgba(0,0,0,.25) 0 2px,transparent 2px 11px,rgba(0,0,0,.3) 11px 13px,rgba(255,255,255,.14) 13px 14px,transparent 14px),linear-gradient(270deg,rgba(255,255,255,.06),rgba(0,0,0,.28)),repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,rgba(0,0,0,.03) 1px 2px),var(--c)}
+.labs .book .fb{left:0;top:0;width:100%;height:100%;transform:translateZ(calc(var(--d) * -1))}
+.labs-web .book .fb{background:linear-gradient(90deg,var(--c) 0 4px,transparent 4px calc(100% - 4px),var(--c) calc(100% - 4px)),repeating-linear-gradient(90deg,#EFE6CF 0 1.3px,#CFC29E 1.3px 2.5px)}
+.labs-phone .book .fb{background:linear-gradient(90deg,var(--c) 0 3px,transparent 3px calc(100% - 3px),var(--c) calc(100% - 3px)),repeating-linear-gradient(90deg,#EFE6CF 0 1.3px,#CFC29E 1.3px 2.5px)}
+.labs .book .sp{position:absolute;inset:0;display:block;overflow:hidden;transition:box-shadow .5s}
+.labs-web .book .sp{border-radius:4px 4px 2px 2px;background:linear-gradient(90deg,transparent 8px,rgba(0,0,0,.3) 8px 10px,rgba(255,255,255,.2) 10px 11px,transparent 11px calc(100% - 11px),rgba(255,255,255,.12) calc(100% - 11px) calc(100% - 10px),rgba(0,0,0,.3) calc(100% - 10px) calc(100% - 8px),transparent calc(100% - 8px)),linear-gradient(90deg,rgba(0,0,0,.5) 0,rgba(0,0,0,.14) 4%,rgba(255,255,255,.36) 17%,rgba(255,255,255,.1) 36%,rgba(0,0,0,0) 55%,rgba(0,0,0,.2) 82%,rgba(0,0,0,.55) 100%),repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,rgba(0,0,0,.035) 1px 2px),var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.2),inset 0 -6px 0 rgba(0,0,0,.3)}
+.labs-phone .book .sp{border-radius:3px 3px 2px 2px;background:linear-gradient(90deg,transparent 6px,rgba(0,0,0,.3) 6px 7.5px,rgba(255,255,255,.2) 7.5px 8.5px,transparent 8.5px calc(100% - 8.5px),rgba(255,255,255,.12) calc(100% - 8.5px) calc(100% - 7.5px),rgba(0,0,0,.3) calc(100% - 7.5px) calc(100% - 6px),transparent calc(100% - 6px)),linear-gradient(90deg,rgba(0,0,0,.5) 0,rgba(0,0,0,.14) 4%,rgba(255,255,255,.36) 17%,rgba(255,255,255,.1) 36%,rgba(0,0,0,0) 55%,rgba(0,0,0,.2) 82%,rgba(0,0,0,.55) 100%),repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,rgba(0,0,0,.035) 1px 2px),var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.2),inset 0 -5px 0 rgba(0,0,0,.3)}
+.labs .book .rib{position:absolute;left:-1px;right:-1px;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.08) 45%,rgba(0,0,0,.42)),linear-gradient(90deg,rgba(0,0,0,.4),transparent 22%,transparent 72%,rgba(0,0,0,.45)),var(--c)}
+.labs-web .book .rib{height:8px;border-radius:4px;box-shadow:0 2px 3px rgba(0,0,0,.28)}
+.labs-phone .book .rib{height:6px;border-radius:3px;box-shadow:0 2px 2px rgba(0,0,0,.28)}
+.labs .book .rule{position:absolute;border-top:solid currentColor;opacity:.5}
+.labs-web .book .rule{left:13px;right:13px;border-top-width:2px}
+.labs-phone .book .rule{left:10px;right:10px;border-top-width:1.5px}
+.labs .book .lab{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg)}
+.labs-web .book .lab{top:66px;bottom:66px}
+.labs-phone .book .lab{top:50px;bottom:50px}
+.labs .book .ti{font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.9;text-align:center;white-space:nowrap}
+.labs .book .gl{position:absolute;left:0;right:0;text-align:center;line-height:1}
+.labs-web .book .gl{top:34px;font-size:17px}
+.labs-phone .book .gl{top:27px;font-size:13px}
+
+/* ===== chapters ===== */
+.labs .chap{position:relative}
+.labs-web .chap{padding:110px;display:flex;flex-direction:column;scroll-margin-top:54px}
+/* phone: a chapter opens with its colour wiping up off the screen, then its pieces rise in */
+.labs-phone .chap{min-height:calc(100vh - 116px)}
+.labs-phone .chap[hidden]{display:none}
+.labs-phone .chap::before{content:"";position:fixed;left:0;right:0;top:0;bottom:0;z-index:60;background:var(--c);pointer-events:none;animation:lbWipe .34s cubic-bezier(.7,0,.25,1) both}
+.labs-phone .chap > section > *,.labs-phone .chap > .lb-more{animation:lbRise .34s cubic-bezier(.2,.9,.25,1) both}
+.labs-phone .chap > section > :nth-child(1){animation-delay:.16s}
+.labs-phone .chap > section > :nth-child(2){animation-delay:.19s}
+.labs-phone .chap > section > :nth-child(3){animation-delay:.22s}
+.labs-phone .chap > section > :nth-child(4){animation-delay:.25s}
+.labs-phone .chap > section > :nth-child(5){animation-delay:.28s}
+.labs-phone .chap > section > :nth-child(n+6){animation-delay:.3s}
+.labs-phone .chap > .lb-more{animation-delay:.32s}
+@keyframes lbWipe{from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes lbRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.labs-phone .chap > section{display:flex;flex-direction:column;padding:40px 20px 56px}
+.labs-phone .chap > section.bleed{padding-left:0;padding-right:0}
+.labs-phone .pad{padding:0 20px;display:flex;flex-direction:column}
+/* web: each chapter's pieces rise in the first time it comes into view */
+.labs-web .rv > *{opacity:0;transform:translateY(24px);transition:opacity .42s cubic-bezier(.2,.9,.25,1),transform .42s cubic-bezier(.2,.9,.25,1)}
+.labs-web .rv.in > *{opacity:1;transform:none}
+.labs-web .rv.in > :nth-child(2){transition-delay:.06s}
+.labs-web .rv.in > :nth-child(3){transition-delay:.12s}
+.labs-web .rv.in > :nth-child(n+4){transition-delay:.18s}
+.labs .grid2{display:grid}
+/* pictures: web hover pops them out of their frame */
+.labs-web .zoom > img,.labs-web .browser img,.labs-web .sheet img{transition:transform .5s cubic-bezier(.2,.9,.25,1),filter .5s ease}
+.labs-web .zoom:hover > img,.labs-web .browser:hover img,.labs-web .sheet:hover img{transform:scale(1.06);filter:saturate(1.12) brightness(1.04)}
+.labs-web :is(.browser,.sheet,.lift){transition:transform .3s cubic-bezier(.2,.9,.25,1),box-shadow .3s ease}
+.labs-web :is(.browser,.sheet,.lift):hover{transform:translate(-4px,-4px);box-shadow:6px 6px 0 var(--sh,#111111)}
+
+.labs .still{position:relative;overflow:hidden;margin:0}
+.labs .still img{width:100%;height:100%;object-fit:cover}
+.labs .still-no{position:absolute;left:8px;top:8px;padding:3px 6px;border-radius:3px;background:rgba(17,17,17,.72);color:#F3EEE4;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;letter-spacing:.14em}
+.labs-web .still-no{left:10px;top:10px;padding:3px 7px;font-size:10px}
+.labs .browser{display:block;border:2px solid #111111;border-radius:14px;overflow:hidden;background:#FFFFFF}
+.labs .bb{display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;background:#EDE6D0;border-bottom:2px solid #111111}
+.labs-web .bb{gap:7px;height:34px;padding:0 12px}
+.labs .bb i{width:9px;height:9px;border-radius:50%;border:1.5px solid #111111;flex:none}
+.labs-web .bb i{width:10px;height:10px}
+.labs .url{flex:1;min-width:0;margin-left:6px;height:20px;border-radius:999px;background:#F3EEE4;border:1.5px solid rgba(17,17,17,.25);display:flex;align-items:center;padding:0 10px;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:10px;color:#2A2A28;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.labs-web .url{max-width:360px;margin-left:8px;height:22px;padding:0 12px;font-size:11px}
+.labs .stat{border:2px solid #111111;background:#FFFFFF;display:flex;flex-direction:column;justify-content:space-between}
+.labs .stat .n{font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;letter-spacing:-.04em;line-height:.9}
+.labs-web .stat{padding:18px 18px 16px;border-radius:14px;min-height:132px}
+.labs-web .stat .n{font-size:46px}
+.labs-web .stat .l{font-size:15px;line-height:1.2}
+.labs-phone .stat{padding:14px 14px 12px;border-radius:12px;min-height:104px}
+.labs-phone .stat .n{font-size:34px}
+.labs-phone .stat .l{font-size:13.5px;line-height:1.2}
+.labs .node{flex:none;width:30px;height:30px;border-radius:50%;background:#0E0E10;border:2px solid #FF4D8C;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;color:#FF6FA3}
+.labs .step{position:relative;display:flex;flex-direction:column}
+.labs-web .step{gap:14px}
+.labs-phone .step{padding-left:44px;gap:10px}
+.labs-phone .step .node{position:absolute;left:0;top:-2px;width:26px;height:26px;font-size:9.5px}
+.labs .cap{font-size:15.5px;line-height:1.45;color:#D2CCBE}
+.labs-phone .cap{font-size:15px}
+.labs .lvl{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.labs .lvl .dot{border-radius:50%;border:2px solid #111111;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.06em}
+.labs .lvl .w{font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.labs-web .lvl{gap:10px;width:110px}
+.labs-web .lvl .dot{width:62px;height:62px;font-size:12px}
+.labs-web .lvl .w{font-size:20px}
+.labs-phone .lvl{gap:8px;width:92px}
+.labs-phone .lvl .dot{width:54px;height:54px;font-size:11px}
+.labs-phone .lvl .w{font-size:17px}
+/* Cirqle: rent → lend → repeat, turning slowly round the poster */
+.labs .cq{position:relative}
+.labs .cq .spin{position:absolute;inset:0;animation:lbSpin 36s linear infinite}
+.labs .cq .spin .onode{animation:lbSpin 36s linear infinite reverse}
+@keyframes lbSpin{to{transform:rotate(360deg)}}
+.labs .onode{position:absolute;border-radius:50%;border:2px solid #111111;display:flex;align-items:center;justify-content:center;font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em}
+.labs-web .onode{width:112px;height:112px;margin:-56px 0 0 -56px;font-size:22px;box-shadow:4px 4px 0 #111111}
+.labs-phone .onode{width:84px;height:84px;margin:-42px 0 0 -42px;font-size:17px;box-shadow:3px 3px 0 #111111}
+.labs .oarrow{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;display:block}
+.labs .oarrow svg{display:block}
+.labs .bar{display:flex;flex-direction:column}
+.labs .bar-h{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+.labs .btrack{border:2px solid #F3EEE4;border-radius:3px;overflow:hidden}
+.labs .bfill{height:100%;background:#7E5BFF}
+.labs-web .bar{gap:8px}
+.labs-web .bar-h{font-size:11px}
+.labs-web .btrack{height:16px}
+.labs-phone .bar{gap:7px}
+.labs-phone .bar-h{font-size:10.5px}
+.labs-phone .btrack{height:14px}
+.labs .chip{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap}
+.labs-web .chip{font-size:10.5px}
+.labs-phone .chip{font-size:10px}
+.labs .chip::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.labs .sheet{border-radius:16px;overflow:hidden;background:#F4F4F2;border:1px solid #2A3040;margin:0}
+.labs .sheet img{width:100%;object-fit:cover;object-position:50% 0}
+.labs .sheet figcaption{display:flex;flex-direction:column;background:#12151C;border-top:1px solid #2A3040}
+.labs-web .sheet img{height:230px}
+.labs-web .sheet figcaption{padding:14px 16px 16px;gap:5px}
+.labs-phone .sheet{flex:none;width:290px;border-radius:14px}
+.labs-phone .sheet img{height:190px}
+.labs-phone .sheet figcaption{padding:12px 14px 14px;gap:4px}
+.labs .sheets{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none;padding:0 20px}
+.labs .sheets::-webkit-scrollbar{display:none}
+.labs .sheets .sheet{scroll-snap-align:start}
+.labs .sdots{display:flex;justify-content:center;gap:6px}
+.labs .sdots i{width:6px;height:6px;border-radius:3px;background:#3A4256;transition:width .2s ease,background-color .2s ease}
+.labs .sdots i.on{width:18px;background:#6FD7FF}
+/* The Human Manual: a fanned hand of suits; hover (web) or tap a zone to pull one up */
+.labs .hand{position:relative}
+.labs .hcard{position:absolute;display:flex;flex-direction:column;border:2px solid #111111;background:#FBF8F1;transform-origin:50% 170%;transform:var(--t);transition:transform .55s cubic-bezier(.22,.8,.3,1),box-shadow .55s ease;pointer-events:none}
+.labs .hcard .g{line-height:1}
+.labs .hcard .k{margin-top:auto;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.16em;color:#5A5A55}
+.labs .hcard .nm{font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.95;color:#111111}
+.labs .hcard .sb{font-family:'Instrument Serif',Georgia,serif;font-style:italic;line-height:1.1;color:#2A2A28}
+.labs-web .hcard{left:200px;top:40px;width:190px;height:268px;padding:18px 18px 20px;border-radius:18px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.labs-web .hcard .g{font-size:34px}
+.labs-web .hcard .k{font-size:10px}
+.labs-web .hcard .nm{margin-top:8px;font-size:23px}
+.labs-web .hcard .sb{margin-top:8px;font-size:18px}
+.labs-phone .hcard{left:105px;top:36px;width:140px;height:198px;padding:14px 14px 16px;border-radius:14px;box-shadow:0 10px 26px rgba(0,0,0,.45)}
+.labs-phone .hcard .g{font-size:26px}
+.labs-phone .hcard .k{font-size:9px}
+.labs-phone .hcard .nm{margin-top:6px;font-size:17px}
+.labs-phone .hcard .sb{margin-top:6px;font-size:14px}
+.labs .hcard.up{transform:var(--t) translateY(-46px);box-shadow:0 30px 50px rgba(0,0,0,.6);z-index:5}
+.labs .hz{position:absolute;top:0;bottom:0;z-index:10;padding:0;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.labs .hz:focus-visible{outline:2px dashed #FF7FB0;outline-offset:-6px}
+.labs-web .hz1:hover ~ .hc1,.labs-web .hz2:hover ~ .hc2,.labs-web .hz3:hover ~ .hc3,.labs-web .hz4:hover ~ .hc4,.labs-web .hz5:hover ~ .hc5,
+.labs .hz1:focus-visible ~ .hc1,.labs .hz2:focus-visible ~ .hc2,.labs .hz3:focus-visible ~ .hc3,.labs .hz4:focus-visible ~ .hc4,.labs .hz5:focus-visible ~ .hc5{transform:var(--t) translateY(-46px);box-shadow:0 30px 50px rgba(0,0,0,.6);z-index:5}
+
+/* phone: "view all projects" at the foot of each chapter, and the sheet it opens */
+.labs .lb-more{padding:8px 20px 64px}
+.labs .more{display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:0 16px;border:2.5px solid #111111;border-radius:8px;background:#00E5A0;color:#111111;box-shadow:5px 5px 0 #111111,5px 5px 0 2.5px var(--sh,#111111);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.labs .more:active{transform:translate(4px,4px);box-shadow:1px 1px 0 #111111,1px 1px 0 2.5px var(--sh,#111111)}
+.labs .more .lbl{flex-grow:1;text-align:left}
+.labs .more .stack{flex:none;display:flex;align-items:flex-end;gap:2px;height:24px}
+.labs .more .stack i{display:block;width:6px;border:1.5px solid #111111;border-radius:1px}
+.labs .more .up{flex:none;width:32px;height:32px;border-radius:50%;background:#111111;color:#00E5A0;display:flex;align-items:center;justify-content:center}
+.labs .sheet-bg{position:fixed;inset:0;z-index:80;border:0;padding:0;background:rgba(8,8,9,.66);cursor:pointer;animation:lbFadeIn .2s ease both}
+.labs .sheet-bg.out{animation:lbFadeOut .18s ease both}
+.labs .psheet{position:fixed;left:0;right:0;bottom:0;z-index:90;max-width:390px;margin:0 auto;max-height:86vh;overflow-y:auto;overscroll-behavior:contain;padding:10px 12px 22px;background:#F3EEE4;border:2.5px solid #111111;border-bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -18px 40px rgba(0,0,0,.45);animation:lbSheetIn .28s cubic-bezier(.2,.9,.25,1) both}
+.labs .psheet.out{animation:lbSheetOut .18s cubic-bezier(.5,0,.9,.4) both}
+.labs .psheet .pick{animation:lbPickIn .26s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(.06s + var(--k,0) * .02s)}
+@keyframes lbSheetIn{from{transform:translateY(100%)}to{transform:none}}
+@keyframes lbSheetOut{from{transform:none}to{transform:translateY(100%)}}
+@keyframes lbFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes lbFadeOut{from{opacity:1}to{opacity:0}}
+@keyframes lbPickIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.labs .pick{display:flex;align-items:center;gap:14px;width:100%;min-height:58px;padding:0 14px 0 8px;border-radius:12px;border:2px solid transparent;background:transparent;color:#111111;text-align:left;cursor:pointer}
+.labs .pick.here{border-color:#111111;background:#FFFFFF}
+.labs .pick .sw{flex:none;width:42px;height:42px;border-radius:8px;border:2px solid #111111;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px}
+.labs .pick .nm{flex-grow:1;font-family:'Neutral Face',system-ui,sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.labs .pick .ct{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#5A5A55;white-space:nowrap}
+.labs .pick.here .ct,.labs .pick .ct.found{color:#111111}
+.labs .pick[disabled]{opacity:.4;cursor:default}
+
+/* ===== stopping the motion ===== */
+html[data-tn-nav] .labs :is(.cq .spin,.cq .onode,.print),:host([data-tn-nav]) .labs :is(.cq .spin,.cq .onode,.print){animation-play-state:paused}
+html.tn-lite .labs :is(.cq .spin,.cq .onode,.print),:host(.tn-lite) .labs :is(.cq .spin,.cq .onode,.print){animation:none}
+@media (prefers-reduced-motion: reduce){
+  .labs :is(.cq .spin,.cq .onode,.print){animation:none}
+  .labs :is(.tab,.tab .t,.book,.book .sp,.lbtn,.print,.browser,.sheet,.lift,.hcard,.zoom > img,.browser img,.sheet img){transition:none !important}
+  .labs-web .rv > *{opacity:1;transform:none;transition:none}
+  .labs-phone .chap::before{display:none}
+  .labs-phone .chap > section > *,.labs-phone .chap > .lb-more,.labs .psheet,.labs .psheet.out,.labs .sheet-bg,.labs .sheet-bg.out,.labs .psheet .pick{animation:none}
+}
+
+/* ===== the chapter tabs: a floating glass pill (as on AQ's website) ===== */
+.labs .lb-tabs{box-sizing:border-box;border-bottom:0;align-items:center;gap:2px;background:rgba(243,238,228,.74);border:1px solid rgba(255,255,255,.6);border-radius:999px;-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.6);overflow-x:auto;scrollbar-width:none}
+.labs .lb-tabs::-webkit-scrollbar{display:none}
+.labs-web .lb-tabs{position:sticky;top:88px;z-index:40;width:max-content;max-width:calc(100% - 32px);height:52px;padding:5px;margin:14px auto}
+.labs-web .chap{scroll-margin-top:0;padding-top:150px}
+.labs-phone .lb-tabs{position:relative;height:48px;padding:4px;margin:8px;gap:2px}
+.labs .tab{border:0;box-shadow:none}
+.labs-web .tab{height:40px;padding:0 14px;margin:0;border-radius:999px;background:transparent}
+.labs-web .tab:hover{background:rgba(255,255,255,.5)}
+.labs-web .tab.on{height:40px;background:var(--c);color:var(--tc);box-shadow:0 4px 14px -4px var(--c)}
+.labs-phone .tab{height:40px;border-radius:999px;background:transparent;box-shadow:none}
+.labs-phone .tab.on{height:40px;background:var(--c);color:var(--tc)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.labs .lb-tabs{background:rgba(243,238,228,.94)}}
+
+/* ===== opening: the gallery arrives (one-shot, on the page's first draw; no motion with reduced motion) =====
+   The polaroids fade in, then the badge, title, line, button and "or pull a book" rise one after another, the books
+   pop up onto the shelf from left to right, and the chapter tabs drop in from above. Animates translate / scale /
+   opacity (not transform), so the elements keep their own tilts and hover moves. */
+@media (prefers-reduced-motion: no-preference){
+.labs .lb-intro > :first-child{animation:lbPrintsIn 1s cubic-bezier(.2,.9,.25,1) both}
+.labs .lb-intro > :not(:first-child){animation:lbUp .7s cubic-bezier(.2,.9,.25,1) both}
+.labs .lb-intro > :nth-child(2){animation-delay:.12s}
+.labs .lb-intro > :nth-child(3){animation-delay:.2s}
+.labs .lb-intro > :nth-child(4){animation-delay:.3s}
+.labs .lb-intro > :nth-child(5){animation-delay:.38s}
+.labs .lb-intro > :nth-child(6){animation-delay:.46s}
+.labs .lb-intro > :nth-child(7){animation-delay:.5s}
+.labs .lb-intro > :nth-child(8){animation-delay:.9s}
+.labs .brow .bslot{animation:lbBookUp .55s cubic-bezier(.3,1.4,.5,1) both}
+.labs .brow .bslot:nth-of-type(1){animation-delay:.6s}.labs .brow .bslot:nth-of-type(2){animation-delay:.66s}
+.labs .brow .bslot:nth-of-type(3){animation-delay:.72s}.labs .brow .bslot:nth-of-type(4){animation-delay:.78s}
+.labs .brow .bslot:nth-of-type(5){animation-delay:.84s}.labs .brow .bslot:nth-of-type(6){animation-delay:.9s}
+.labs .brow .bslot:nth-of-type(7){animation-delay:.96s}.labs .brow .bslot:nth-of-type(8){animation-delay:1.02s}
+.labs .lb-tabs{animation:lbTabsIn .6s cubic-bezier(.2,.9,.25,1) .15s both}
+}
+@keyframes lbPrintsIn{from{opacity:0;scale:1.06}}
+@keyframes lbUp{from{opacity:0;translate:0 22px}}
+@keyframes lbBookUp{from{opacity:0;translate:0 40px}}
+@keyframes lbTabsIn{from{opacity:0;translate:0 -18px}}
+
+/* ===== AQ's look ([data-tn-aq]: inside AQ's website, and the own site's preview of it; src/host.js AQ_LOOK) =====
+   AQ's own nav floats over the top of the page, so the gallery runs full width, its header slot is gone and the pill
+   sits under AQ's nav. The intro keeps its 134px offset so the polaroids sit where they were designed to. */
+:host([data-tn-aq]) .labs > header.site-header,html[data-tn-aq] .labs > header.site-header{display:none !important}
+:host([data-tn-aq]) .labs-web .lb-intro,html[data-tn-aq] .labs-web .lb-intro{margin-top:134px}
+:host([data-tn-aq]) .labs-web .lb-tabs,html[data-tn-aq] .labs-web .lb-tabs{top:78px;margin:0 auto -52px}
+:host([data-tn-aq]) .labs-phone,html[data-tn-aq] .labs-phone{padding-top:72px}
+:host([data-tn-aq]) .labs-phone .lb-tabs,html[data-tn-aq] .labs-phone .lb-tabs{margin:0 8px 8px}

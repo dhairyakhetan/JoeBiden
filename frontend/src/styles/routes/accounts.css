@@ -1,0 +1,460 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   /accounts — Open Books. Public/front-end route (PublicLayout, no
+   ProtectedRoute), so it reads the live front-end idiom: hairline borders
+   (--hair-2) + soft lifts (--lift-1/2/3) on cards/rows/bars, with the hard
+   ink-border + hard-offset motif reserved for .btn-primary/.sticker only —
+   see BlogCard's own comment in BlogListPage.tsx ("hairline + lift, not an
+   ink border + hard offset (00.6)") and .card's definition in v6.css. This
+   is the CURRENT public surface, not the "hard 2px ink borders everywhere"
+   description CLAUDE.md's architecture section still carries — verified
+   against the real .card/.btn-primary/.chip rules rather than the doc.
+
+   Every figure on this page uses --code (JetBrains Mono) with tabular-nums —
+   digit columns that must align, per CLAUDE.md's typography rules. Body
+   copy is --eina; headings are --display; the one italic word in the H1 is
+   --serif. Motion-light: nothing here animates beyond the shared
+   prefers-reduced-motion-respecting hover states already on .card/.btn. */
+
+.acc-page { padding-bottom: clamp(40px, 6vw, 72px); }
+
+.acc-section {
+  padding-block: clamp(36px, 6vw, 56px);
+  border-bottom: 1px solid var(--hair, rgba(10,10,10,0.08));
+}
+.acc-section:last-of-type { border-bottom: 0; }
+
+.acc-kicker {
+  font-family: var(--code);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.acc-h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  font-size: clamp(24px, 4vw, 34px);
+  color: var(--ink);
+  margin: 8px 0 0;
+}
+
+.acc-note {
+  color: var(--ink-2);
+  font-family: var(--eina);
+  max-width: 66ch;
+  margin: 14px 0 0;
+  line-height: 1.6;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+.acc-header {
+  padding-block: clamp(40px, 7vw, 64px) clamp(28px, 4vw, 40px);
+}
+.acc-h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(38px, 8vw, 68px);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 10px 0 0;
+}
+.acc-h1 em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--welfare-ink);
+}
+.acc-lede {
+  font-family: var(--eina);
+  font-size: clamp(16px, 2.2vw, 19px);
+  color: var(--ink-2);
+  max-width: 62ch;
+  line-height: 1.6;
+  margin: 20px 0 0;
+}
+.acc-asof {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.acc-chip {
+  font-family: var(--code);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: var(--hair-2);
+  border-radius: var(--r-pill);
+  padding: 6px 12px;
+  background: var(--card);
+  color: var(--ink-2);
+}
+
+/* ── Tiles (money in / out) ───────────────────────────────────────────── */
+.acc-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 26px;
+}
+@media (max-width: 640px) { .acc-tiles { grid-template-columns: 1fr; } }
+.acc-tile {
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+  padding: 22px 20px;
+}
+.acc-tile .acc-tile-v {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: clamp(24px, 4.4vw, 34px);
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+  line-height: 1.05;
+}
+.acc-tile.in .acc-tile-v { color: var(--welfare-ink); }
+.acc-tile.out .acc-tile-v { color: var(--tomato-ink); }
+.acc-tile .acc-tile-sub {
+  font-family: var(--eina);
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ── Rows (position, assets) ──────────────────────────────────────────── */
+.acc-rows {
+  margin-top: 24px;
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+  overflow: hidden;
+}
+.acc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--hair, rgba(10,10,10,0.08));
+}
+.acc-row:last-child { border-bottom: 0; }
+.acc-row.total { background: var(--bg-2); }
+.acc-row .acc-lbl {
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+.acc-row .acc-exp {
+  display: block;
+  font-weight: 400;
+  font-family: var(--eina);
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 3px;
+  max-width: 52ch;
+  line-height: 1.5;
+}
+.acc-row .acc-amt {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.acc-row .acc-amt.neg { color: var(--tomato-ink); }
+.acc-row.total .acc-amt { font-size: 18px; }
+
+.acc-tiles.tight .acc-row,
+.acc-rows.tight .acc-row { padding: 13px 20px; }
+.acc-rows.tight { margin-top: 16px; }
+.acc-rows.tight .acc-amt { font-size: 15px; }
+
+/* ── Bars (expenses / income) ─────────────────────────────────────────── */
+.acc-bars {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.acc-bar {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+  padding: 15px 18px;
+}
+.acc-bar .acc-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--bg-2);
+  z-index: 0;
+}
+.acc-bar.out .acc-bar-fill { background: color-mix(in srgb, var(--tomato) 14%, transparent); }
+.acc-bar.in .acc-bar-fill { background: color-mix(in srgb, var(--welfare) 18%, transparent); }
+.acc-bar .acc-bar-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.acc-bar .acc-bar-nm {
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+.acc-bar .acc-bar-pc {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.acc-bar .acc-bar-am {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 15.5px;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.acc-bar .acc-bar-desc {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 0;
+  font-family: var(--eina);
+  font-size: 13px;
+  color: var(--ink-2);
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.acc-bar .acc-bar-tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.acc-otag {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--hair, rgba(10,10,10,0.14));
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  color: var(--ink-2);
+  background: var(--bg);
+}
+
+/* ── Comment affordance ("suggest a saving") ─────────────────────────── */
+.acc-callout {
+  margin-top: 22px;
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+  padding: 20px 22px;
+}
+.acc-callout p { margin: 0; font-family: var(--eina); font-size: 15px; color: var(--ink-2); max-width: 68ch; line-height: 1.6; }
+.acc-callout strong { color: var(--ink); }
+.acc-callout .acc-fine {
+  margin-top: 9px;
+  font-family: var(--code);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.acc-cmt { position: relative; z-index: 1; margin-top: 12px; }
+.acc-cbtn {
+  font-family: var(--code);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: var(--hair-2);
+  background: var(--bg);
+  color: var(--ink);
+  padding: 7px 12px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  min-height: 32px;
+}
+.acc-cbtn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.acc-cform { margin-top: 11px; display: flex; flex-direction: column; gap: 9px; max-width: 56ch; }
+.acc-clabel { font-family: var(--eina); font-size: 13px; font-weight: 700; color: var(--ink); }
+.acc-cform textarea {
+  font-family: var(--eina);
+  font-size: 14px;
+  padding: 10px 12px;
+  border: var(--hair-2);
+  border-radius: var(--r-tight);
+  background: var(--card);
+  color: var(--ink);
+  resize: vertical;
+  width: 100%;
+  min-height: 76px;
+}
+.acc-cform textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.acc-crow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.acc-csend {
+  font-family: var(--code);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: var(--bd-ink);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  box-shadow: var(--sh);
+  min-height: 36px;
+}
+.acc-csend:hover { transform: translate(-1px,-1px); box-shadow: var(--sh-lg); }
+.acc-csend:disabled { opacity: 0.55; cursor: default; transform: none; box-shadow: var(--sh); }
+.acc-cnote { font-family: var(--eina); font-size: 12px; color: var(--ink-3); }
+.acc-cdone { margin: 0; font-family: var(--eina); font-size: 13px; font-weight: 700; color: var(--welfare-ink); }
+
+/* ── Month-by-month controls + table ─────────────────────────────────── */
+.acc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+  align-items: center;
+}
+.acc-select {
+  font-family: var(--eina);
+  font-size: 14px;
+  padding: 9px 12px;
+  border: var(--hair-2);
+  border-radius: var(--r-tight);
+  background: var(--card);
+  color: var(--ink);
+  min-width: 0;
+  min-height: 44px;
+}
+.acc-select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.acc-count {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-left: auto;
+}
+
+.acc-tablewrap {
+  margin-top: 16px;
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  background: var(--card);
+  box-shadow: var(--lift-1);
+  overflow: auto;
+}
+.acc-table { border-collapse: collapse; width: 100%; min-width: 560px; }
+.acc-table th {
+  font-family: var(--code);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: var(--hair-2);
+  background: var(--bg-2);
+  position: sticky;
+  top: 0;
+}
+.acc-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--hair, rgba(10,10,10,0.08));
+  font-family: var(--eina);
+  font-size: 14px;
+  vertical-align: top;
+  color: var(--ink);
+}
+.acc-table tr:last-child td { border-bottom: 0; }
+.acc-table td.d,
+.acc-table td.a {
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.acc-table td.a { text-align: right; font-weight: 700; }
+.acc-table td.a.in { color: var(--welfare-ink); }
+.acc-table td.a.out { color: var(--tomato-ink); }
+.acc-table td.a.n { font-weight: 500; color: var(--ink-2); }
+.acc-zero { color: var(--ink-3); }
+.acc-tfoot td {
+  border-top: var(--hair-2);
+  background: var(--bg-2);
+  font-weight: 700;
+  padding: 13px 16px;
+  font-family: var(--code);
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+}
+.acc-tfoot td:first-child { font-family: var(--eina); font-weight: 700; }
+.acc-empty { padding: 40px 20px; text-align: center; color: var(--ink-2); font-family: var(--eina); font-size: 14px; }
+
+/* ── Context cards ────────────────────────────────────────────────────── */
+.acc-caveats {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 640px) { .acc-caveats { grid-template-columns: 1fr; } }
+.acc-cav {
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+  padding: 20px;
+}
+.acc-cav h3 {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.acc-cav p { margin: 0; font-family: var(--eina); font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+.acc-footnote {
+  padding-top: clamp(28px, 4vw, 40px);
+  color: var(--ink-3);
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .acc-count { margin-left: 0; width: 100%; }
+}

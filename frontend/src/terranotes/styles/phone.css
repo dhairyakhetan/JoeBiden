@@ -1,0 +1,25 @@
+/* The phone layout (narrower than 900px; src/phone/). Drawn at 390px and scaled to the window (CSS zoom = --phone-zoom,
+   set by lib/layoutMode.js; ×1 on phones, which the viewport tag pins to 390px). App.jsx wraps the pages in .phone;
+   the menu sits outside the page, so it takes the zoom itself. */
+.phone,.menu-sheet{zoom:var(--phone-zoom,1)}
+html[data-layout="phone"]{scroll-padding-top:calc(64px * var(--phone-zoom,1))}
+
+/* Phone-only sizing for the full-screen popups. Both fill the visible screen (dvh where supported), counted in the
+   layout's own (zoomed) pixels. */
+
+/* the menu (phone/PhoneMenu.jsx): --s = how much shorter than 844px the screen is; gaps, cards, titles and the
+   footer shrink by it; below 612px tall it scrolls instead */
+.menu-sheet{--vh:calc(100vh / var(--phone-zoom,1));height:var(--vh);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+@supports (height:100dvh){.menu-sheet{--vh:calc(100dvh / var(--phone-zoom,1))}}
+.main-menu{--s:clamp(0px, calc(844px - var(--vh)), 232px);--lift:calc(var(--s) * -0.1);--gap:calc(20px - var(--s) * 0.05);--cardH:calc(68px - var(--s) * 0.08);--title:calc(30px - var(--s) * 0.024);--foot:calc(144px - var(--s) * 0.1);height:100%;min-height:612px;box-sizing:border-box}
+
+/* the photo viewer (shared/PhotoViewer.jsx): --ph = photo height, smaller on short screens so everything fits */
+.photo-viewer{--vh:calc(100vh / var(--phone-zoom,1));height:var(--vh);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:manipulation}
+@supports (height:100dvh){.photo-viewer{--vh:calc(100dvh / var(--phone-zoom,1))}}
+.photo-viewer{--ph:clamp(170px, calc(var(--vh) - 514px), 330px)}
+
+@media (prefers-reduced-motion: reduce){.menu-sheet{transition:none !important}.gal-track,.gal-slide{transition:none !important}}
+
+/* team legend chips are 32px tall on phones; the touch target is the 44px the rest of the site uses (the pill you see stays 32px) */
+.legend-chip{position:relative}
+.legend-chip::before{content:"";position:absolute;left:0;right:0;top:-6px;bottom:-6px}

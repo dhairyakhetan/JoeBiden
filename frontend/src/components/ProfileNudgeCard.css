@@ -1,0 +1,394 @@
+/* ProfileNudgeCard — the in-feed "complete your profile" card.
+   Rounded minimalism (Sept-2026 handoff). The shell class is `.feed-card`,
+   applied by the component, so the edge, radius, padding and lift are the
+   feed's own objects and cannot drift from the cards above and below it;
+   everything here styles the INSIDE of that shell only.
+
+   RADIUS SPINE — 999 / 32 / 22 / 14, concentric, nothing else:
+     .feed-card shell   --r-outer 32
+       - --pad-card 10  ->
+     .pnudge-well       --r-inner 22
+       - 8              ->
+     .pnudge-row        --r-tight 14
+   Pills (track, fill, marks, chips, segmented control) are 999.
+
+   DEPTH is the cream -> white -> cream -> white stack, not shadow. No hard
+   offset shadow appears here: that is retired outside .btn-primary and
+   stamped stickers.
+
+   MEASURED CONTRAST is documented at the top of ProfileNudgeCard.tsx. Every
+   pairing in this file is one of those measured pairs; no accent is ever
+   used as `color` on cream or white, and the one saturated fill (the tick
+   dot) carries full-opacity --ink. */
+
+.pnudge {
+  /* .feed-card sets cursor:pointer for a tappable post; this card's taps are
+     its own controls, so the shell itself must not claim to be clickable. */
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+.pnudge-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 4px 0 6px;
+}
+.pnudge-head-text { flex: 1; min-width: 0; }
+
+.pnudge-title {
+  font-family: var(--display, inherit);
+  font-weight: 700;
+  font-size: clamp(20px, 4.6vw, 24px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);           /* 20.35:1 on --card */
+}
+.pnudge-sub {
+  margin: 5px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-2);         /* 14.35:1 on --card */
+}
+
+/* 44x44 hit target; the glyph itself is small. */
+.pnudge-x {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: -8px -6px 0 0;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  color: var(--ink-3);         /* 6.94:1 on --card */
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pnudge-x:hover:not(:disabled) { background: var(--bg-2); color: var(--ink); }
+.pnudge-x:disabled { opacity: 0.5; cursor: default; }
+
+/* ── Meter ────────────────────────────────────────────────────────────── */
+.pnudge-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+}
+.pnudge-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.pnudge-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  /* 3.48:1 against the --bg-2 track — clears the 3:1 floor for a non-text
+     UI component. The minimum 8% width in the component is deliberate: at
+     1 of 5 a true 20% bar is a sliver, and the point of this card is that
+     one tap must LOOK like it moved something. */
+  background: var(--welfare);
+}
+.pnudge-count {
+  flex-shrink: 0;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--welfare-ink);   /* 6.18:1 on --card */
+}
+
+/* ── The well: cream inside white ─────────────────────────────────────── */
+.pnudge-well {
+  background: var(--bg-2);
+  border-radius: var(--r-inner);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pnudge-row-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+/* A white chip inside the cream well. Same object whether it is a <button>,
+   an <a> or a plain <div>, so the three row kinds line up exactly. */
+.pnudge-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 56px;            /* comfortably past the 44px floor */
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--r-tight);
+  background: var(--card);
+  text-align: left;
+  text-decoration: none;
+  font: inherit;
+  color: var(--ink);
+}
+.pnudge-row-tap { cursor: pointer; }
+.pnudge-row-tap:hover { background: color-mix(in srgb, var(--card) 88%, var(--bg-2)); }
+.pnudge-row-tap:disabled { cursor: default; opacity: 0.62; }
+.pnudge-row:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.pnudge-row-done { background: color-mix(in srgb, var(--card) 92%, var(--bg-2)); }
+
+/* Numbered step / completed tick. */
+.pnudge-mark {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--ink);           /* 15.87:1 on --bg-2 */
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pnudge-mark-done {
+  /* The one saturated fill in the card. The tick is drawn in #0A0A0A —
+     4.56:1 on --welfare, full-opacity ink on a saturated ground, per the
+     design rule. Never a white glyph here (4.34:1, under the bar). */
+  background: var(--welfare);
+}
+
+.pnudge-row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pnudge-row-label { font-size: 14.5px; font-weight: 650; line-height: 1.25; color: var(--ink); }
+.pnudge-row-done .pnudge-row-label { color: var(--welfare-ink); }   /* 6.18:1 */
+.pnudge-row-why {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--ink-3);         /* 6.94:1 on the white chip */
+}
+
+.pnudge-row-go { flex-shrink: 0; color: var(--ink-3); font-size: 14px; line-height: 1; }
+.pnudge-row-tag {
+  flex-shrink: 0;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--welfare-ink);
+}
+
+/* ── Errors ───────────────────────────────────────────────────────────── */
+.pnudge-err {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  /* 4.67:1 on --bg-2, 5.83:1 on --card — visible in both places it lands. */
+  color: var(--danger, #C4231A);
+}
+
+/* Masked confirmation of the member's OWN number only. A guardian's number
+   is never echoed to the screen at all. */
+.pnudge-mask {
+  margin: 0;
+  padding: 0 4px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ── Phone sub-form ───────────────────────────────────────────────────── */
+.pnudge-phone {
+  background: var(--card);
+  border-radius: var(--r-tight);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Two options, one row, equal width. The guardian option is never smaller,
+   never secondary, never behind a disclosure — that equality is the reason
+   asking a 14-year-old for a number is acceptable at all. */
+.pnudge-seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg-2);
+  border-radius: 999px;
+  padding: 4px;
+}
+.pnudge-seg-btn {
+  min-height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink-2);         /* 11.50:1 on --bg-2 */
+  cursor: pointer;
+  padding: 0 8px;
+}
+.pnudge-seg-btn.is-on {
+  background: var(--card);
+  color: var(--ink);           /* 20.35:1 on --card */
+  box-shadow: var(--lift-1);
+}
+.pnudge-seg-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.pnudge-label {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink-2);
+  padding: 0 2px;
+}
+.pnudge-input {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-tight);
+  background: var(--bg-2);
+  padding: 0 14px;
+  font: inherit;
+  font-size: 16px;             /* >=16px so iOS does not zoom on focus */
+  color: var(--ink);
+  width: 100%;
+}
+.pnudge-input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.pnudge-input:disabled { opacity: 0.6; }
+
+.pnudge-help {
+  margin: 0;
+  padding: 0 2px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-3);         /* 6.94:1 on --card */
+}
+
+.pnudge-phone-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.pnudge-save,
+.pnudge-cancel {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.pnudge-save {
+  border: none;
+  background: var(--welfare);
+  color: #0A0A0A;              /* 4.56:1 — full-opacity ink on the fill */
+}
+.pnudge-cancel {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+}
+.pnudge-save:disabled, .pnudge-cancel:disabled { opacity: 0.6; cursor: default; }
+.pnudge-save:focus-visible,
+.pnudge-cancel:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ── Foot ─────────────────────────────────────────────────────────────── */
+.pnudge-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 0 6px 2px;
+}
+.pnudge-foot-link,
+.pnudge-later {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0 4px;
+  color: var(--ink-2);         /* 14.35:1 — never an accent as text on white */
+  text-decoration: none;
+}
+.pnudge-foot-link:hover { text-decoration: underline; }
+.pnudge-later { color: var(--ink-3); }
+.pnudge-later:hover:not(:disabled) { color: var(--ink); text-decoration: underline; }
+.pnudge-later:disabled { opacity: 0.5; cursor: default; }
+.pnudge-foot-link:focus-visible,
+.pnudge-later:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.pnudge-file {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Complete: the brief success moment, then it is gone for good ─────── */
+.pnudge-done {
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 30px var(--pad-card) 32px;
+}
+.pnudge-done-title {
+  font-family: var(--display, inherit);
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--ink);
+}
+.pnudge-done-sub {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ── Loading ──────────────────────────────────────────────────────────── */
+.pnudge-skeleton { cursor: default; gap: 12px; }
+.pnudge-sk {
+  display: block;
+  background: var(--bg-2);
+  border-radius: 999px;
+}
+.pnudge-sk-title { width: 52%; height: 22px; border-radius: var(--r-tight); }
+.pnudge-sk-sub { width: 72%; height: 13px; margin-top: 8px; }
+.pnudge-sk-row {
+  height: 56px;
+  border-radius: var(--r-tight);
+  background: var(--card);
+}
+.pnudge-skeleton .pnudge-well { gap: 6px; }
+
+/* ── Reduced motion ───────────────────────────────────────────────────── */
+/* framer-motion's useReducedMotion() already drops the stagger, the slide
+   and the tap-scale in the component. This covers the two purely-CSS
+   movements: the meter's width transition and every hover/focus transition
+   the shell inherits from .feed-card. */
+@media (prefers-reduced-motion: reduce) {
+  .pnudge,
+  .pnudge *,
+  .pnudge-fill {
+    transition: none !important;
+    animation: none !important;
+  }
+}

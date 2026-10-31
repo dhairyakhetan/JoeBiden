@@ -1,0 +1,1248 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 10 · the feed card catalogue
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Scoped to `.aqc*`. Touches NOTHING in styles/v6.css, tokens.css or
+   styles/routes/feed.css, so mounting the catalogue cannot change the live
+   FeedPostCard. Every value comes from a token; no colour is added.
+
+   RESTYLE 15-post-cards.md: re-tokened onto the rounded-minimalism scale that
+   `00-global-tokens-and-primitives.md` landed — outer 32 with 10px padding,
+   inner 22 (32-10), tight 14 (22-8) — replacing the old --r-card(26)/
+   --r-photo(18) pair this file used before. 15.2's own text: "32 - 10 = 22.
+   22 - 8 = 14." Borders move from --bd's old 2px-ink meaning onto --hair-2
+   (a card's own outer edge); the one hard offset shadow left in the app is
+   --shadow-cta, reserved for .btn-primary and a stamped sticker — every card
+   SHELL instead gets --lift-1, a soft stacking shadow, never a hard offset.
+
+   Load-bearing rules written once here instead of per card:
+   - fixed-height 999px pills carry white-space: nowrap, and every row holding
+     them can shrink (flex: 1 1 auto; min-width: 0), so nowrap does not push a
+     control outside the parent.
+   - mono uppercase labels sitting on a saturated hue use solid var(--ink),
+     never an alpha of it. rgba(10,10,10,.6) on welfare green is 2.79:1.
+   - tap targets are 44x44, achieved with padding plus a negative margin so the
+     visual row stays the size the design draws.
+   - photos and other inner blocks (wells, quote panels) are concentric:
+     --r-outer 32 minus the 10px shell padding gives --r-inner 22.
+   - the shell is `overflow: visible`, NOT hidden (SET, was hidden before this
+     pass): C05's seal and C16's state flag are both specified to break the
+     card's own edge, which a clipped shell would cut off. Nothing inside
+     relies on the shell's own clip — every inner photo/block/stack tile
+     already clips itself independently via its own border-radius, so this is
+     safe. Grepped every card in this family before changing it; see the PR
+     report for the full list. C09 is the one shape that explicitly wants a
+     clipped, full-bleed edge, and it gets its own self-contained overflow via
+     `.aqc-fullbleed` rather than depending on this outer rule (matching how
+     C01's hero already worked before this pass, tone="plain" plus an inner
+     wrapper carrying its own overflow).
+   - prefers-reduced-motion removes every transition and transform animation.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── the shell ───────────────────────────────────────────────────────────── */
+
+.aqc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--pad-card);
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  background: var(--card);
+  box-shadow: var(--lift-1);
+  color: var(--ink);
+  font-family: var(--eina);
+  /* SET visible, was hidden — see the file header note. */
+  overflow: visible;
+}
+
+.aqc-tone-ink { background: var(--ink); color: var(--paper); }
+.aqc-tone-plain { border-color: transparent; background: transparent; padding: 0; box-shadow: none; }
+
+/* Every other hard offset was deleted per 15.2 ("the offset survives only on
+   .btn-primary and stamped stickers"). C01 hero keeps a lift rather than
+   losing its shadow outright — a plain flat wrapper around a full-bleed photo
+   read as unfinished in review. */
+.aqc-hero-shadow { box-shadow: var(--lift-1); }
+
+.aqc-kicker {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.aqc-tone-ink .aqc-kicker { color: var(--nav-fg-faint); }
+
+/* NeutralFace is caps-only: never text-transform: lowercase on it. */
+.aqc-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 19px;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  color: inherit;
+  text-wrap: pretty;
+}
+.aqc-title-lg { font-size: 25px; }
+
+.aqc-body {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.aqc-tone-ink .aqc-body { color: var(--nav-fg-dim); }
+
+/* C01's hero body only. Everywhere else a card shows the whole `rest` and
+   grows; C01 prints it OVER the photograph, so an unbounded body walks up the
+   image until the headline is off the scrim and the type sits on bare
+   photography. Two lines is what the gradient is tall enough to carry.
+   A clamp is safe HERE and nowhere else in family 05, because C01 is the one
+   shape whose text is not the card's own height (cards.css note at .aqc-title:
+   splitPostBody, never a character slice - this clamps the RENDER, not the
+   string, so the focus modal still opens the full body). */
+.aqc-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.aqc-serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ── device 1 · badge-dot pill ───────────────────────────────────────────── */
+
+.aqc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: var(--r-pill);
+  /* Fixed height + 999px radius: nowrap is mandatory, a pill cannot grow. */
+  white-space: nowrap;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  /* Mono label on a saturated fill: SOLID ink, never an alpha. */
+  color: var(--ink);
+}
+.aqc-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+.aqc-badge-over {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+/* ── device 2 · the photo ────────────────────────────────────────────────── */
+
+.aqc-photo {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  background: var(--bg-2);
+}
+.aqc-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The colour block that sits under the photo in C02. */
+.aqc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px;
+  border-radius: var(--r-inner);
+  color: var(--ink);
+}
+
+/* ── device 2b · the arc-set seal (13.6) ─────────────────────────────────── */
+/* The one part of the sticker system that needs bespoke SVG rather than the
+   shared <Sticker>: CSS cannot set type on a curved path, and the shipped
+   components/Sticker.tsx has no textPath support (its type layer is a
+   flex-centred box, straight text only) — so this is NOT built on top of
+   Sticker.tsx, it is the small separate device 13.6 itself describes. The
+   <textPath> technique is not new to this codebase: AboutPage.tsx's spinning
+   "EST. JUNE 2021" badge already does the same thing. */
+.aqc-seal-wrap {
+  position: absolute;
+  /* Pulled in from -14/-14 (2026-09): at `rotate(9deg)` an 80px seal's own
+     rotated bounding box is closer to 92px, which combined with the old
+     78% text width left real posts (a two-line title, not a short quote)
+     with the seal's lower edge sitting on top of the second line. Less
+     overhang plus a smaller size below plus a narrower text column all
+     move together so the seal still breaks the corner (13.6) without ever
+     touching a glyph. */
+  top: -10px;
+  right: -10px;
+  z-index: 2;
+  filter: drop-shadow(2px 4px 5px rgba(10, 10, 10, 0.28));
+  pointer-events: none;
+}
+.aqc-seal { display: block; }
+
+/* ── device 3 · the cream inner CTA ──────────────────────────────────────── */
+
+.aqc-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--r-inner);
+  background: #fffdf2;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.16s ease;
+}
+.aqc-cta-arrow { font-family: var(--mono); font-size: 14px; flex-shrink: 0; }
+
+/* ── device 4 · the detached author pill ─────────────────────────────────── */
+
+.aqc-author {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 5px 14px 5px 5px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  background: var(--card);
+  box-shadow: 0 2px 14px rgba(10, 10, 10, 0.09);
+  color: var(--ink);
+  text-decoration: none;
+  align-self: flex-start;
+  max-width: 100%;
+}
+/* C05 only: the pill overhangs the inner quote card's bottom edge rather than
+   sitting in normal flow below it (15.9). Needs the shell's overflow to be
+   visible, which is now the default — see the file header note. */
+.aqc-author--overhang {
+  margin-top: -16px;
+  width: fit-content;
+}
+.aqc-author-avatar {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 12px;
+  /* Filled by JS per-name via hashColor(); this is only the fallback so an
+     avatar never renders unstyled while that resolves. */
+  color: var(--ink);
+}
+.aqc-author-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.aqc-author-text {
+  display: flex;
+  flex-direction: column;
+  /* nowrap removes give, so the flexible child must be able to shrink. */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.aqc-author-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  /* 15.2: name 700 13-14px var(--eina) (was 800/12.5px, a size and weight off
+     the shared-device spec). */
+  font-weight: 700;
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aqc-author-role {
+  font-family: var(--mono);
+  /* 15.2: mono meta 9.5-10.5px (was 8.5px, under the floor the spec sets). */
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aqc-author-time {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── device 5 · the meta row ─────────────────────────────────────────────── */
+
+.aqc-meta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+/* The -10px pair above is calibrated to be ABSORBED by the card's padding:
+   it pulls the meta row's 44px hit area back into `--pad-card` so the row does
+   not read as an extra band of space. `.aqc-tone-plain` sets `padding: 0`, so
+   on C01 there was nothing to absorb it and the row hung 9px below the
+   article's own box - which is where `.aqc-hero-shadow`'s lift is drawn, so
+   the hero's shadow stopped short of its own content. Measured in the browser,
+   not reasoned about. Negative margin only where there is padding to eat. */
+.aqc-tone-plain > .aqc-meta { margin-bottom: 0; }
+
+.aqc-meta-spacer { flex: 1 1 auto; min-width: 0; }
+.aqc-meta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  /* 16px icon + 14px padding either side = 44px of hit area, negative margin
+     pulls the visual row back to the size the design draws. */
+  min-width: 44px;
+  min-height: 44px;
+  padding: 14px;
+  margin: 0 -4px;
+  border: none;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  /* SET --r-sm (20, off the 999/32/22/14 scale) -> --r-tight. */
+  border-radius: var(--r-tight);
+}
+/* Liked heart: filled + coloured, matching the classic LikeButton's
+   tomato-ink treatment (styles/routes/feed.css's .like-icon-on) rather than
+   staying the same ink outline with a heavier stroke. */
+.aqc-meta-btn.is-liked { color: var(--tomato-ink); }
+.aqc-meta-n {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+
+/* ── device 6 · the stacked collection ───────────────────────────────────── */
+
+/* FIXED 2026-09-11, and it was a bad one. The item was sized `width: 62%` -
+   62% of the CONTAINER'S WIDTH - with `aspect-ratio: 4/5`, inside a container
+   whose height is fixed at 190px. Width and height were therefore set by two
+   unrelated things, and the moment the card got wide the photos became far
+   taller than the box that holds them:
+
+     card 626px wide -> item 388px wide -> 485px TALL, in a 190px box
+
+   With `place-items: center` and no overflow guard anywhere on the chain
+   (`.aqc-stack`, the `.aqc` article and `.home-feed-list` are all
+   `overflow: visible`) the photos escaped ~150px above and below and drew on
+   top of the cards either side of them. Measured live before the fix: three
+   images at 444x522, 437x516 and 375x469, sitting at top -101, -98 and -67
+   relative to a 422px card.
+
+   It only surfaced now because C04 only became reachable on 2026-09-11, when
+   post_feed_view stopped collapsing five image columns into one. The rule was
+   right and the card was never rendered at real width.
+
+   The fix is to drive the item from the container's HEIGHT, which is the
+   dimension that is actually fixed, so the aspect ratio can no longer push it
+   out. `max-width` keeps the original width intent as a cap on a narrow card.
+   `overflow: hidden` on the stack is the belt-and-braces: a rotated child
+   must never be able to paint outside its own card again. */
+/* The container SCALES with the card instead of being pinned at 190px, which
+   is what let the old fixed height and the percentage-of-width item disagree.
+   `aspect-ratio` ties the two dimensions together, so the photos can be big on
+   a wide card and still fit; the clamp keeps it sane at both extremes. */
+.aqc-stack {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 172px;
+  max-height: 300px;
+  place-items: center;
+  overflow: hidden;
+}
+/* Sized off the container's HEIGHT - the dimension the aspect-ratio fixes -
+   so the 4/5 ratio can never push it past the box again. `max-width` is the
+   guard for a very narrow card, where height would otherwise win and the
+   three photos would collide. The transform (fan + rotation) is set inline by
+   PhotoStack: one element, one transform, nothing here fighting it with
+   !important. */
+.aqc-stack-item {
+  grid-area: 1 / 1;
+  height: 88%;
+  width: auto;
+  max-width: 34%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(10, 10, 10, 0.26);
+  transition: transform 0.2s ease;
+}
+.aqc-stack-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── figures and the live marker ─────────────────────────────────────────── */
+
+.aqc-figure { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.aqc-figure-n {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.aqc-figure-label {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.aqc-tone-ink .aqc-figure-label { color: var(--nav-fg-soft); }
+
+/* A figure with no source renders the shared `.aq-live` dashed marker from
+   v6.css (section 31's block set) rather than a second, duplicate rule here. */
+
+/* ── small shared bits ───────────────────────────────────────────────────── */
+
+.aqc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* nowrap pills live in here, so the row must be allowed to shrink. */
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.aqc-grow { flex: 1 1 auto; min-width: 0; }
+
+.aqc-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+}
+.aqc-pill-solid { border-color: transparent; color: var(--ink); }
+
+.aqc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.aqc-btn-primary { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-cta); }
+.aqc-btn-quiet { border-color: var(--line-2); }
+/* A quieter cream pill for an on-paper secondary action (e.g. C11's "Read it
+   -> "). Distinct from device 3's CreamCTA, which is documented to sit
+   INSIDE a coloured block and never on paper - this is the same cream
+   (#FFFDF2) at button proportions instead. */
+.aqc-btn-cream { background: #fffdf2; border: none; color: var(--ink); }
+
+.aqc-rule {
+  width: 4px;
+  border-radius: 999px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.aqc-bar {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg-3);
+  overflow: hidden;
+}
+.aqc-bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; }
+
+/* ── tinted wells ─────────────────────────────────────────────────────────
+   One shared "state module" device: a low-alpha wash of an existing palette
+   hue behind a block of content, radius --r-inner. C16 (grape, .16 alpha) is
+   the value 15.6 gives verbatim; lemon and tomato below reuse that SAME
+   alpha on their own hue rather than inventing a new number, for C23
+   (queued, lemon) and C07's pending/rejected banner (15's "the duty",
+   22.1 — see family05Posts.tsx). None of these are new colours: each is an
+   existing token's hex at a low, non-text alpha (README.md invariant 7:
+   "rgba(...,0.20) and below are non-text only - rules, wells, button
+   grounds"). */
+.aqc-tint {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--r-inner);
+  color: var(--ink);
+}
+.aqc-tint-lemon  { background: rgba(255, 199, 0, 0.16); }   /* --lemon  #FFC700 */
+.aqc-tint-grape  { background: rgba(126, 91, 255, 0.16); }  /* --grape  #7E5BFF */
+.aqc-tint-tomato { background: rgba(255, 77, 46, 0.16); }   /* --tomato #FF4D2E */
+.aqc-tint-cream  { background: #fffdf2; }
+
+/* ── C25 compact rows ────────────────────────────────────────────────────── */
+
+.aqc-compact { gap: 0; padding: 4px 6px 6px; }
+.aqc-compact-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 8px 6px;
+}
+.aqc-compact-count {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+.aqc-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 44px;
+  padding: 9px 8px;
+  color: var(--ink);
+  text-decoration: none;
+  /* SET --r-sm (20, off-scale) -> --r-inner per 15.11. */
+  border-radius: var(--r-inner);
+}
+.aqc-compact-row + .aqc-compact-row { border-top: var(--hair); }
+/* Rows are links: say so on hover/focus (15.11). */
+.aqc-compact-row:hover,
+.aqc-compact-row:focus-visible { background: var(--bg); }
+.aqc-compact-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: var(--ink-3);
+}
+.aqc-compact-name { font-weight: 800; font-size: 13px; }
+.aqc-compact-verb {
+  font-size: 13.5px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aqc-compact-time {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.aqc-compact-more {
+  align-self: center;
+  margin: 4px 0 2px;
+  height: 34px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: #fffdf2;
+  color: var(--ink);
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* ── C24 skeleton ─────────────────────────────────────────────────────────
+   Matches C07's geometry (author row, category rule, title + body lines),
+   NOT a photo block — 15.13: on this dataset the shape that actually arrives
+   is C07 or C25, and a photo-shaped skeleton resolving into a text card is
+   exactly the reflow this device exists to prevent. */
+.aqc-skel {
+  border-radius: var(--r-tight);
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 37%, var(--bg-2) 63%);
+  background-size: 400% 100%;
+  animation: aqc-shimmer 1.4s ease-in-out infinite;
+}
+.aqc-skel--avatar { border-radius: 999px; flex-shrink: 0; }
+@keyframes aqc-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ── C13 certificate ─────────────────────────────────────────────────────── */
+
+.aqc-cert { font-family: var(--mono); }
+.aqc-cert-name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+}
+.aqc-cert-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1.5px solid var(--line);
+  border-bottom: 1.5px dashed var(--line-2);
+}
+
+/* ── C22 roundup ─────────────────────────────────────────────────────────── */
+
+.aqc-roundup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.aqc-roundup-cell {
+  border-radius: var(--r-inner);
+  background: rgba(244, 239, 224, 0.07);
+  padding: 12px;
+}
+
+/* ── C26 poll ────────────────────────────────────────────────────────────── */
+
+.aqc-poll-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  color: var(--ink);
+}
+.aqc-poll-fill { position: absolute; inset: 0 auto 0 0; opacity: 0.22; }
+.aqc-poll-label,
+.aqc-poll-pct { position: relative; }
+.aqc-poll-pct { font-family: var(--code); font-size: 11px; font-variant-numeric: tabular-nums; }
+
+/* ── C27 countdown ───────────────────────────────────────────────────────── */
+
+.aqc-count { display: flex; gap: 8px; }
+.aqc-count-cell {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: var(--r-inner);
+  background: rgba(244, 239, 224, 0.07);
+}
+.aqc-count-n {
+  display: block;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── C17 spotlight avatar stack ──────────────────────────────────────────── */
+
+.aqc-faces { display: flex; align-items: center; }
+.aqc-face {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid var(--card);
+  background: var(--bg-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 11px;
+  color: var(--ink);
+  overflow: hidden;
+}
+.aqc-face + .aqc-face { margin-inline-start: -9px; }
+
+/* ── C05 pull quote (15.9) ────────────────────────────────────────────────
+   The index-card nesting: tinted hue backing (the shell itself) -> white
+   card -> lined ground -> seal breaking the corner -> author pill
+   overhanging the base. */
+
+/* C05 is the ONLY card whose meta row sits on a saturated category ground
+   instead of on paper - everywhere else the shell is `--card` and the dim
+   `--ink-3` used for counts and icons is correct against it. Measured in the
+   browser on the live feed (frontend/scripts/design-probe.js, section 4):
+   --ink-3 on --c-events came out at 2.73:1, well under the 4.5:1 floor for
+   10.5px type. Solid ink clears it on all five hues - the two darkest,
+   grape and teal, measure 3.78:1 and 3.32:1 against PAPER per tokens.css,
+   which puts ink at roughly 5.5:1 and 6.3:1 against them.
+   Found by measurement, not by reading the token. */
+.aqc-quote-outer > .aqc-meta,
+.aqc-quote-outer > .aqc-meta .aqc-meta-btn,
+.aqc-quote-outer > .aqc-meta .aqc-meta-n { color: var(--ink); }
+
+.aqc-quote-inner {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--r-inner);
+  padding: 20px 18px;
+  /* The lined ground: a rule every 31px, offset 14px so the FIRST rule sits
+     under the first line of text rather than through it (15.9, verbatim). */
+  background-image: repeating-linear-gradient(to bottom, transparent 0 30px, rgba(10, 10, 10, 0.07) 30px 31px);
+  background-position: 0 14px;
+}
+.aqc-quote-text {
+  margin: 0;
+  /* 64%, not 78%: reserves a wider, fixed-enough gap for the seal (see
+     .aqc-seal-wrap) regardless of how long the quote/title text is - 78%
+     only cleared the seal for a genuinely short one-line quote, and a
+     longer title wrapping to two lines put the seal's rotated footprint
+     right over the second line. */
+  max-width: 64%;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ── C09 drive, upcoming (15.7) — the full-bleed photo card ─────────────── */
+/* tone="plain" hosts this (like C01's hero): the outer .aqc contributes no
+   background/border/padding of its own, and THIS wrapper is the real,
+   self-contained, clipped shell — 15.7 asks for overflow:hidden specifically
+   for this shape's edge-to-edge photo, which is why it does not lean on the
+   family's now-visible outer overflow. */
+.aqc-fullbleed {
+  position: relative;
+  border-radius: var(--r-outer);
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--bg-2);
+}
+.aqc-fullbleed-scrim {
+  position: absolute;
+  inset: 0;
+  /* Two-stop gradient, not a flat tint (15.7): paper on the .88 stop measures
+     14.2:1, and a flat tint is defeated by a light photo underneath it. */
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.88) 0%, rgba(10, 10, 10, 0.5) 42%, rgba(10, 10, 10, 0.1) 100%);
+}
+.aqc-fullbleed-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+.aqc-fullbleed-date {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* Full paper opacity, deliberately not a rung on the ladder: this sits over
+     a photograph where the composite is unpredictable (15.7). */
+  color: var(--paper);
+}
+.aqc-fullbleed-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-wrap: balance;
+  /* `header` is free text a director types, not the frozen title/body split
+     `splitPostBody` gives a post - a live row measured at 90 characters, a
+     full sentence naming a partner organisation, not a short name. Nothing
+     upstream truncates it (03.5's own
+     rule is "shape comes from the record type, never from body length", so
+     the chooser must not gate on length either) - this is the one place left
+     to stop a sentence-length header from filling the whole photo. Hard
+     3-line clamp, always on, independent of the length-based size step in
+     the component below. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Length-based size step (component picks the class): a header long enough
+   to need the clamp above also needs to give up type size, or 3 clamped
+   lines at 28px still only fits ~9 words and cuts a short sentence off
+   mid-clause. Two rungs, not a fluid clamp() - `text-wrap: balance` already
+   reflows the words, so the size only has to fit the character *count*, not
+   any particular line count. */
+.aqc-fullbleed-title--md { font-size: 22px; letter-spacing: -0.02em; }
+.aqc-fullbleed-title--sm { font-size: 18px; letter-spacing: -0.01em; }
+/* The footer well: pulling the count and CTA onto paper guarantees their
+   contrast regardless of what is in the photo behind them. */
+.aqc-fullbleed-well {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: var(--r-inner);
+  background: var(--card);
+  color: var(--ink);
+}
+/* Compound with .aq-sticker (stickers.css) so this reliably beats that file's
+   own `position: relative` regardless of which stylesheet's import happens
+   to resolve second in the bundle - a tie on specificity between two
+   single-class rules in different files is not something to leave to load
+   order. */
+.aq-sticker.aqc-fullbleed-sticker {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  /* Inset, not edge-breaking: this shell clips (overflow:hidden), unlike the
+     white-shell cards where a sticker is free to overhang the corner. */
+}
+
+/* ── C11 project delivered (15.8) ────────────────────────────────────────── */
+.aqc-delivered-figure {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 52px;
+  line-height: 0.84;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.aqc-delivered-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── C15 birthday ─────────────────────────────────────────────────────────── */
+.aqc-bday-panel {
+  position: relative;
+  margin: calc(var(--pad-card) * -1);
+  margin-bottom: 0;
+  padding: 22px 16px 18px;
+  background: var(--pink);
+  border-radius: calc(var(--r-outer) - 1px) calc(var(--r-outer) - 1px) 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--ink);
+}
+/* One bleeding circle, top-right, for depth (15.4). Decorative, so it must
+   never sit over the avatar/headline — it is pinned past the text's box. */
+.aqc-bday-panel::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.09);
+  pointer-events: none;
+}
+.aqc-bday-avatar {
+  position: relative;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 22px;
+  overflow: hidden;
+}
+.aqc-bday-line {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 1.05;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ── C14 new member welcome — the inline composer (15.5) ─────────────────── */
+.aqc-welcome-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--r-inner);
+  background: var(--welfare);
+  color: var(--ink);
+}
+.aqc-welcome-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  overflow: hidden;
+}
+.aqc-welcome-name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.aqc-welcome-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  /* Full-opacity ink, never an alpha of it, on a saturated fill (README.md
+     invariant 7) — 15.5's literal text names rgba(10,10,10,.7), which
+     measures 3.28:1 on welfare and fails; corrected here, see the PR report. */
+  color: var(--ink);
+}
+/* The cream capsule composer, 03.5.2's vocabulary borrowed early: it has not
+   landed yet (03 is later in the build order than 15), so this is a
+   self-contained version built to the same look (--r-pill, cream ground)
+   rather than importing a component that does not exist yet. Reconcile the
+   two into one shared component when 03 lands. */
+.aqc-greet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 5px 5px 5px;
+  border-radius: var(--r-pill);
+  background: #fffdf2;
+  border: var(--hair);
+}
+.aqc-greet-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: var(--bg-3);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 12px;
+  overflow: hidden;
+}
+.aqc-greet-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  /* KEEP 16px - suppresses iOS Safari's focus-zoom (15.5). */
+  font-size: 16px;
+  font-family: var(--eina);
+  color: var(--ink);
+  padding: 6px 4px;
+}
+.aqc-greet-input::placeholder { color: var(--ink-3); }
+.aqc-greet-send {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.aqc-greet-send:disabled { opacity: 0.4; cursor: default; }
+.aqc-greet-error {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--danger-ink);
+}
+
+/* ── C16 member on a break (15.6) ─────────────────────────────────────────── */
+/* Compound with .aq-sticker for the same reason as .aqc-fullbleed-sticker
+   above: guarantee this beats stickers.css's own `position: relative`
+   regardless of CSS import order between the two files. */
+.aq-sticker.aqc-break-flag {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  z-index: 2;
+  /* The overhang: pulled up by half its own (rendered) height so it truly
+     breaks the card's top edge rather than merely sitting flush inside it -
+     which is what "the state flag overhangs the card" (15.6) means, and why
+     the content below needs the 30px floor to clear it. rotate is a
+     SEPARATE custom property on .aq-sticker itself (stickers.css), so this
+     translate does not clobber it. */
+  transform: translateY(-52%);
+  filter: drop-shadow(2px 4px 5px rgba(10, 10, 10, 0.25));
+}
+/* Floor, not a target: a longer name / wrapped line / font-metric shift must
+   still clear the flag. Do not reduce this to tighten the card (15.6). */
+.aqc-break-body { padding-top: 30px; }
+
+/* ── C12 achievement / C13 certificate - a seal overhanging the top-right
+   corner, same device as C16's flag just mirrored to the other corner so a
+   feed showing both shapes back to back doesn't read as one repeated
+   silhouette. Record shapes only (rare, chooser-throttled per this family's
+   own header) - never the default post card.
+   72px is Sticker.tsx's own hard floor (SIZE_MIN) - a smaller size fails
+   isValidSize() and logs a dev-time error, so this can't be shrunk to buy
+   safety margin the way an earlier draft of this rule tried to (56px,
+   silently invalid). The actual margin comes from the overhang instead:
+   translateY(-60%), pulling MORE of the sticker up and OUT of the card
+   than C16's own flag (-52%) so LESS of it dips into the kicker+meta row
+   that starts immediately below on these two shapes (C16's flag can afford
+   a shallower pull-up only because it sits above an otherwise-empty top
+   edge, with its own padding-top floor doing the rest). NOT visually
+   verified in a live browser this session - check on next real preview. */
+.aq-sticker.aqc-record-seal {
+  position: absolute;
+  top: 0;
+  right: 14px;
+  z-index: 2;
+  transform: translateY(-60%);
+  filter: drop-shadow(2px 4px 5px rgba(10, 10, 10, 0.25));
+}
+
+/* ── C21 crftd drop - a "new" ribbon overhanging the top-left corner. Same
+   72px-floor / -60%-overhang reasoning as .aqc-record-seal above - NOT
+   visually verified in a live browser this session. */
+.aq-sticker.aqc-drop-ribbon {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  z-index: 2;
+  transform: translateY(-60%);
+  filter: drop-shadow(2px 4px 5px rgba(10, 10, 10, 0.25));
+}
+
+/* ── C29 nothing new ──────────────────────────────────────────────────────── */
+.aqc-caughtup-well {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 20px;
+  border-radius: var(--r-inner);
+  background: #fffdf2;
+  text-align: center;
+}
+.aqc-caughtup-tick {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--welfare);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.aqc-caughtup-line {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.15;
+}
+.aqc-caughtup-sentence {
+  margin: 0;
+  max-width: 250px;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* ── motion ──────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .aqc-cta,
+  .aqc-stack-item { transition: none; }
+  .aqc-skel { animation: none; }
+}
+
+/* ── phone ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .aqc-title { font-size: 18px; }
+  .aqc-title-lg { font-size: 22px; }
+  .aqc-cert-grid { grid-template-columns: repeat(2, 1fr); }
+  .aqc-fullbleed-title { font-size: 23px; }
+  .aqc-delivered-figure { font-size: 42px; }
+}
+
+/* ── the host's extras slot (section 10 step 5, 2026-09-07) ──────────────────
+   The six blocks `FeedPostCard` resolves and a shape cannot: the closed-role
+   notice, the welfare write-up, the stat pills, the link CTA and the documents
+   chip. They keep their own `styles/routes/feed.css` styling - this only gives
+   them the same 10px rhythm the rest of the card shell uses, and stops the
+   last one's margin collapsing into the meta row. */
+.feed-card-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.feed-card-extras:empty { display: none; }
+.feed-card-extras > .feed-stats,
+.feed-card-extras > .feed-link-cta,
+.feed-card-extras > .feed-closed-notice { margin: 0; }
+
+/* A control mid-write is dimmed and inert, never removed - the row must not
+   reflow while a like or a bookmark is in flight. */
+.aqc-meta-btn:disabled { opacity: .55; cursor: default; }
+
+/* ── C03 variant 1 · split ────────────────────────────────────────────────
+   Photo beside the words above 640px, stacked below it. 640 is the width the
+   rest of this file already uses for one-column-to-two, so the card changes
+   rhythm at the same place everything else does rather than introducing a
+   fourth breakpoint to the four the codebase already hand-syncs.
+
+   minmax(0, …) on the text column, not 1fr: `1fr` is minmax(auto, 1fr) and an
+   auto minimum resolves to min-content, so one long unbreakable word in a
+   headline would push the column past the card. That is the same defect this
+   pass fixed on the HoD desk's member grid, where it clipped 145px off every
+   card, so it is spelled out rather than left to be rediscovered.           */
+.aqc-split { display: flex; flex-direction: column; gap: 10px; }
+
+@media (min-width: 640px) {
+  .aqc-split {
+    display: grid;
+    grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+}
+
+/* ── C03 variants 3 and 4 and 5 (2026-10-20) · row, wide, rail ───────────────
+   THUMB-ROW (variant 3): a 112px square thumbnail with the words beside it, at every width. minmax(0, 1fr) on the text track for the
+   reason spelled out on .aqc-split above. The body clamps to three lines so the card stays a row.
+   WIDE needs no class: it is the plain order with a 16:9 crop, set from the component's `ratio`.
+   RAIL: the words sit against a hue rail. The hue is a fill (an inset bar), never text on cream. The 4px bar is drawn
+   as an inset shadow so the corner radius stays on the 14/22/32 scale.                                              */
+.aqc-thumb-row { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; align-items: start; }
+.aqc-thumb-row .aqc-badge-over { transform: scale(.78); transform-origin: top left; }
+.aqc-thumb-row .aqc-body { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 380px) { .aqc-thumb-row { grid-template-columns: 92px minmax(0, 1fr); gap: 12px; } }
+
+.aqc-rail { padding: 2px 0 2px 14px; box-shadow: inset 4px 0 0 var(--rail, var(--hair-3)); min-width: 0; }
+
+/* ── C04 variant 1 · mosaic ───────────────────────────────────────────────
+   The album shown rather than implied: one photo at card scale, then the next
+   three as a strip of squares beneath it. The stack variant keeps saying
+   "there is more inside" by hiding; this one says it by showing, which is the
+   whole point of having both.
+
+   The column count comes from the component as --aqc-strip-n, because it
+   knows it: the strip carries whatever is left after the lead photo, three on
+   a five-image drive album and two on a three-image post. `auto-fit` with a
+   minmax(0, ...) minimum was tried first and is a trap - with no floor it will
+   happily create as many tracks as it can, and it produced 48 per card, 46 of
+   them 0px wide. It looked right and was nonsense underneath.
+   minmax(0, 1fr) for the reason spelled out on .aqc-split above.           */
+.aqc-mosaic { display: flex; flex-direction: column; gap: 6px; }
+
+.aqc-mosaic-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--aqc-strip-n, 3), minmax(0, 1fr));
+  gap: 6px;
+}

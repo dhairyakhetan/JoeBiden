@@ -1,0 +1,66 @@
+/* Every endless decorative animation (all transform / opacity only, so they run on the GPU), and every rule that
+   stops them: reduced motion (nothing moves), LITE (low-end devices, lib/motion.js), a section scrolled away
+   (.off-screen, lib/pauseOffscreen.js) and page swaps (html[data-tn-nav], lib/animatedHistory.js). Each rule that keys on <html>
+   has a :host(…) twin, for when the magazine draws inside AQ's shadow root (embed/aq/). */
+
+/* hanging cards: .hang = a tall hanger box that lets taps through (only its cards catch them); .sway = swinging on
+   the string (--a = angle, --d = duration); .flutter = wobbling on the clip (--r = resting tilt).
+   --wind scales every swing, --flap every wobble. */
+:root,:host{--wind:1.5;--flap:1deg}
+.hang{pointer-events:none}
+.hang .card,.hang .label-card,.hang .card *,.hang .card-link,.hang .card-link *{pointer-events:auto}
+.sway{transform-origin:50% 0;animation:sway var(--d,5s) ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(calc(var(--a,1deg) * var(--wind) * -1))}to{transform:rotate(calc(var(--a,1deg) * var(--wind)))}}
+.flutter{transform-origin:50% 0;animation:flutter 3.6s ease-in-out infinite alternate}
+@keyframes flutter{from{transform:rotate(calc(var(--r,0deg) - var(--flap)))}to{transform:rotate(calc(var(--r,0deg) + var(--flap)))}}
+/* an article's cover keeps swaying on its wire once it has landed */
+.hero-sway{animation:heroSway 5.6s ease-in-out .8s infinite alternate}
+@keyframes heroSway{from{transform:rotate(-1.6deg)}to{transform:rotate(0.2deg)}}
+
+/* photo wall: .twist turns a polaroid on its peg now and then (phone), .glint crosses it; fairy lights (.bulb,
+   --core = the bright centre's size) flicker (fk1–fk4); .spark glints pop on a few bulbs */
+.twist{animation-name:twist;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+@keyframes twist{
+0%,72%,100%{transform:perspective(500px) rotate(var(--r,0deg)) rotateY(0)}
+78%{transform:perspective(500px) rotate(var(--r,0deg)) rotateY(24deg)}
+85%{transform:perspective(500px) rotate(var(--r,0deg)) rotateY(-14deg)}
+91%{transform:perspective(500px) rotate(var(--r,0deg)) rotateY(6deg)}
+96%{transform:perspective(500px) rotate(var(--r,0deg)) rotateY(-2deg)}}
+.glint{position:absolute;top:-20%;left:0;width:40%;height:140%;background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.45) 50%,rgba(255,255,255,0) 100%);transform:translateX(-160%) skewX(-12deg);animation-name:glint;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
+@keyframes glint{0%,74%{transform:translateX(-160%) skewX(-12deg)}90%,100%{transform:translateX(320%) skewX(-12deg)}}
+.bulb{position:absolute;border-radius:50%;background:radial-gradient(circle closest-side,rgba(255,200,97,.75),rgba(255,200,97,0));pointer-events:none}
+.bulb::after{content:"";position:absolute;left:50%;top:50%;width:var(--core);height:var(--core);transform:translate(-50%,-50%);border-radius:50%;background:var(--bulb)}
+.fk1{animation:flick 7.3s steps(1,end) infinite}
+.fk2{animation:flick 9.7s steps(1,end) infinite -3.1s}
+.fk3{animation:flick2 11.9s steps(1,end) infinite -5.4s}
+.fk4{animation:flick2 13.3s steps(1,end) infinite -8.2s}
+@keyframes flick{0%,100%{opacity:1}61%{opacity:.25}62%{opacity:.9}63.5%{opacity:.3}65%{opacity:1}}
+@keyframes flick2{0%,100%{opacity:1}28%{opacity:.4}29%{opacity:1}83%{opacity:.2}85%{opacity:.85}86%{opacity:1}}
+.spark{position:absolute;background:var(--spark);clip-path:polygon(50% 0,59% 41%,100% 50%,59% 59%,50% 100%,41% 59%,0 50%,41% 41%);pointer-events:none;transform:scale(0);opacity:0;animation:spark 6.5s ease-out infinite}
+.sp1{animation-delay:-1s}.sp2{animation-delay:-3.8s}.sp3{animation-delay:-5.2s}.sp-late{animation-duration:8.9s}
+@keyframes spark{0%,86%,100%{transform:scale(0) rotate(0);opacity:0}90%{transform:scale(1.15) rotate(20deg);opacity:1}95%{transform:scale(.4) rotate(45deg);opacity:.6}}
+
+/* team faces drift (fl1–fl6: different lengths, so they never sync) */
+@keyframes flA{0%,100%{transform:translate(0,0)}50%{transform:translate(5px,-11px)}}
+@keyframes flB{0%,100%{transform:translate(0,0)}50%{transform:translate(-7px,-8px)}}
+@keyframes flC{0%,100%{transform:translate(0,0)}33%{transform:translate(6px,-6px)}66%{transform:translate(-4px,-12px)}}
+.fl1{animation:flA 5.2s ease-in-out infinite}
+.fl2{animation:flB 6.6s ease-in-out infinite -1.4s}
+.fl3{animation:flC 7.4s ease-in-out infinite -2.2s}
+.fl4{animation:flA 4.8s ease-in-out infinite -3s}
+.fl5{animation:flB 5.8s ease-in-out infinite -0.8s}
+.fl6{animation:flC 6.2s ease-in-out infinite -4s}
+
+/* stopping them (.dz: an edition's own background loops, in its look.css: src/editions/<id>/Decor.jsx) */
+.off-screen,.off-screen *{animation-play-state:paused !important}
+html[data-tn-nav] .dz,:host([data-tn-nav]) .dz{animation-play-state:paused}
+html.tn-lite .dz,:host(.tn-lite) .dz{animation:none !important}
+@media (prefers-reduced-motion: reduce){.dz{animation:none !important}}
+/* while pages swap the incoming page mustn't be redrawn every frame (that made going back stutter on phones) */
+html[data-tn-nav] :is(.sway,.flutter,.hero-sway,.fl1,.fl2,.fl3,.fl4,.fl5,.fl6,.fk1,.fk2,.fk3,.fk4,.glint,.spark,.twist,.buddy-bob,.buddy-crown,.buddy-trophy),
+:host([data-tn-nav]) :is(.sway,.flutter,.hero-sway,.fl1,.fl2,.fl3,.fl4,.fl5,.fl6,.fk1,.fk2,.fk3,.fk4,.glint,.spark,.twist,.buddy-bob,.buddy-crown,.buddy-trophy){animation-play-state:paused}
+html.tn-lite :is(.sway,.flutter,.hero-sway,.twist,.glint,.bulb,.spark,.fl1,.fl2,.fl3,.fl4,.fl5,.fl6,.buddy-bob,.buddy-menu-call svg,.buddy-crown,.buddy-trophy),
+:host(.tn-lite) :is(.sway,.flutter,.hero-sway,.twist,.glint,.bulb,.spark,.fl1,.fl2,.fl3,.fl4,.fl5,.fl6,.buddy-bob,.buddy-menu-call svg,.buddy-crown,.buddy-trophy){animation:none}
+@media (prefers-reduced-motion: reduce){
+  :is(.sway,.flutter,.hero-sway,.twist,.glint,.bulb,.spark,.fl1,.fl2,.fl3,.fl4,.fl5,.fl6){animation:none}
+}

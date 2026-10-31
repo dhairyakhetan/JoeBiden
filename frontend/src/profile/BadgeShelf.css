@@ -1,0 +1,25 @@
+/* Badge shelf on the member's own profile (profile/BadgeShelf.tsx). Rounded language: hairline edge, soft lift, 32/22 radii. */
+.bs { margin-top: 14px; background: var(--card); border: var(--hair-2); border-radius: var(--r-outer); box-shadow: var(--lift-1); padding: clamp(16px, 3vw, 24px); }
+.bs-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.bs-title { margin: 0; font-family: var(--display); font-size: 22px; letter-spacing: -0.02em; text-transform: uppercase; }
+.bs-level { margin: 4px 0 0; font-family: var(--eina); font-size: 14px; color: var(--ink-2); }
+.bs-count { font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px 12px; border: var(--hair-2); border-radius: 999px; background: var(--bg); white-space: nowrap; }
+.bs-count b { color: var(--ink); font-size: 14px; margin-right: 3px; font-variant-numeric: tabular-nums; }
+.bs-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.bs-badge { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px; border-radius: var(--r-inner); border: var(--hair-2); background: color-mix(in srgb, var(--welfare) 14%, var(--card)); }
+.bs-badge.is-locked { background: var(--bg); }
+.bs-badge.is-locked .bs-icon { opacity: .45; filter: grayscale(1); }
+.bs-icon { display: inline-flex; margin-bottom: 4px; }
+.bs-name { font-family: var(--display); font-size: 15px; letter-spacing: -0.01em; text-transform: uppercase; }
+.bs-sub { font-family: var(--eina); font-size: 12px; line-height: 1.35; color: var(--ink-2); }
+.bs-bar { align-self: stretch; height: 5px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 9%, transparent); overflow: hidden; margin-top: 6px; }
+.bs-bar span { display: block; height: 100%; border-radius: inherit; background: var(--welfare); }
+.bs-next { margin: 14px 0 0; font-family: var(--eina); font-size: 13px; color: var(--ink-3); }
+
+/* A badge shown for the first time on this device flips in, staggered by position, with a sweep of light. */
+.bs-badge.is-fresh .bs-icon { animation: bs-flip .7s cubic-bezier(.2, .9, .3, 1.2) calc(var(--i) * .08s) both; }
+.bs-badge.is-fresh::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .7) 50%, transparent 65%); transform: translateX(-120%); animation: bs-shine .9s ease-out calc(var(--i) * .08s + .25s) both; }
+@keyframes bs-flip { 0% { transform: rotateY(90deg) scale(.6); opacity: 0; } 60% { transform: rotateY(-12deg) scale(1.12); opacity: 1; } 100% { transform: none; opacity: 1; } }
+@keyframes bs-shine { to { transform: translateX(120%); } }
+@media (prefers-reduced-motion: reduce) { .bs-badge.is-fresh .bs-icon, .bs-badge.is-fresh::after { animation: none; } }
+.bs-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

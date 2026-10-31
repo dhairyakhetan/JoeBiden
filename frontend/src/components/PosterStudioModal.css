@@ -1,0 +1,68 @@
+/* Poster studio. One panel; on a wide screen the poster sits beside its controls, on a phone they stack.
+   Radii from the 32 / 22 / 14 scale, hairline edges, the modal depth token for lift. */
+.ps-back {
+  position: fixed; inset: 0; z-index: 320; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(10,10,10,0.55); backdrop-filter: blur(8px);
+}
+.ps-panel {
+  width: 100%; max-width: 460px; max-height: 92dvh; display: flex; flex-direction: column; overflow: hidden; outline: none;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-outer); box-shadow: var(--lift-4);
+  animation: sheetUp .22s var(--ease-out);
+}
+.ps-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px 12px; border-bottom: var(--hair); flex: none; }
+.ps-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ps-spark { font-size: 18px; color: var(--ink); }
+.ps-h1 { font-family: var(--display); font-weight: 800; font-size: 17px; line-height: 1; }
+.ps-sub { font-size: 10px; color: var(--ink-3); margin-top: 4px; letter-spacing: .03em; }
+.ps-x { all: unset; box-sizing: border-box; cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--r-pill); color: var(--ink-3); font-size: 16px; transition: background .14s, color .14s; }
+.ps-x:hover { background: var(--bg-2); color: var(--ink); }
+.ps-x:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+.ps-body { flex: 1; min-height: 0; overflow-y: auto; display: grid; gap: 14px; padding: 14px 18px; }
+.ps-stage { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.ps-frame {
+  position: relative; height: min(40dvh, 380px); max-width: 100%; border-radius: var(--r-tight); overflow: hidden;
+  border: var(--hair-2); background: var(--bg-2); display: grid; place-items: center; flex: none; transition: aspect-ratio .2s;
+}
+.ps-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .2s; }
+.ps-img.is-busy { opacity: .35; }
+.ps-busy { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; font-size: 11px; color: var(--ink-2); }
+.ps-spin { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--line-2); border-top-color: var(--welfare); animation: login-spin .8s linear infinite; }
+.ps-err { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center; font-size: 12px; color: var(--tomato-ink); }
+.ps-cap { font-size: 10px; color: var(--ink-3); letter-spacing: .03em; }
+
+.ps-controls { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.ps-field { display: grid; gap: 6px; }
+.ps-label { font-size: 9.5px; color: var(--ink-3); letter-spacing: .05em; text-transform: uppercase; }
+.ps-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--bg-2); border: var(--hair-2); border-radius: var(--r-inner); }
+.ps-seg-btn {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 4px;
+  border-radius: var(--r-tight); color: var(--ink-2); transition: background .16s var(--ease-out), color .16s var(--ease-out);
+}
+.ps-seg-btn:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.ps-seg-btn.is-on { background: var(--ink); color: var(--card); }
+.ps-seg-name { font-family: var(--display); font-weight: 800; font-size: 14px; }
+.ps-seg-dim { font-size: 9.5px; opacity: .7; font-variant-numeric: tabular-nums; }
+.ps-note { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+
+.ps-foot { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; padding-bottom: max(12px, env(safe-area-inset-bottom)); border-top: var(--hair); flex: none; }
+.ps-regen { flex: 1; }
+.ps-go { flex: 1.4; }
+.ps-alt { all: unset; box-sizing: border-box; cursor: pointer; flex: 1 1 100%; text-align: center; padding: 4px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+.ps-alt:hover { color: var(--ink); }
+.ps-alt:disabled { opacity: .5; cursor: default; }
+
+/* wide: poster on the left, controls on the right, actions along the bottom */
+@media (min-width: 900px) {
+  .ps-panel { max-width: 960px; }
+  .ps-body { grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 28px; padding: 20px 24px; align-items: start; }
+  .ps-frame { height: min(68dvh, 620px); }
+  .ps-head, .ps-foot { padding-left: 24px; padding-right: 24px; }
+  .ps-foot { justify-content: flex-end; }
+  .ps-regen, .ps-go { flex: 0 0 auto; min-width: 160px; }
+  .ps-alt { flex: 0 0 auto; align-self: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ps-panel { animation: none; }
+  .ps-spin { animation-duration: 2s; }
+}

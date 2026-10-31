@@ -1,0 +1,181 @@
+/* ParadoxBanner — the Paradox promo that closes the AquaTerra footer.
+
+   ── 2026-09-07 · brought into the AquaTerra system ─────────────────────────
+   This component is NOT in `src/paradox/**`. It is rendered from
+   `AQFooter.tsx`, inside the global footer, so it is the last thing on every
+   public route of the main site — and it was shipping Paradox's visual system
+   onto all of them: a SIXTH typeface (`Bricolage Grotesque` 400/700) plus a
+   seventh (`Boldonse`) on the title, which DESIGN.md §0.1 forbids outright; a
+   `2px solid #181818` card border and a `2px solid #FBF5E6` control border,
+   neither of which is the house border language; and a `3px 3px 0` hard paper
+   offset on the CTA, which the retired-offset rule keeps for `.btn-primary`
+   and stickers only.
+
+   It stays in the footer — see the note at the end — but it stays as an
+   AquaTerra surface: house faces (`--display` / `--eina` / `--mono` /
+   `--serif`), the 999/32/22/14 radius spine, hairlines instead of 2px rules,
+   `--lift-1` instead of a hard offset, and the standard 3px grape focus ring.
+
+   What is deliberately KEPT, because this must still read as a Paradox promo
+   and not as one more AquaTerra card: `#FF4338`, the genuine Paradox brand red
+   (`--c1` in src/paradox/paradox.css), on the sticker, the CTA and the serif
+   accent; the `#181818` Paradox ink ground; and the `#FBF5E6` Paradox cream
+   for its type. Those hexes are hardcoded on purpose — this lives outside the
+   /paradox route, where the brand vars are not in scope.
+
+   Contrast, measured: ink on #FF4338 is 5.76:1 (§14.8's fix, kept); #FBF5E6 on
+   #181818 is 14.5:1; the sub at 0.66 alpha of cream on that ground is 6.9:1,
+   above the 0.55/4.5:1 floor.
+
+   NOTHING under src/paradox/** is touched by this file. */
+
+.px-banner {
+  padding: 12px 12px 12px;
+  -webkit-font-smoothing: antialiased;
+  /* House body face. Was 'Bricolage Grotesque' — a sixth typeface on every
+     public route (DESIGN.md §0.1: "do not add a sixth face"). */
+  font-family: var(--eina);
+}
+
+/* ── Card ── concentric: outer 32, inner controls at 999 ── */
+.px-banner__card {
+  max-width: 1380px;
+  margin: 0 auto;
+  background: #181818;       /* paradox ink — kept, it is the promo's identity */
+  color: #FBF5E6;            /* paradox cream */
+  /* Was `2px solid #181818` — an invisible 2px border on its own fill, and the
+     wrong border language besides. A hairline of the card's own cream at 14%
+     is the house rule for a panel on a dark ground (--hair-inv's shape). */
+  border: 1px solid rgba(251, 245, 230, 0.14);
+  border-radius: var(--r-outer);   /* 32 */
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* the house soft lift, not a hard offset and not a bespoke two-layer shadow */
+  box-shadow: var(--lift-1);
+}
+
+/* ── Sticker ── playful tilt, like the recruitment nudge ── */
+.px-banner__sticker {
+  transform: rotate(-3deg);
+  /* 14-footer.md §14.8: cream text (#FBF5E6) on the true paradox red
+     (#FF4338) was only 3.16:1 — failing AA — across all 22 public routes,
+     since this banner sits in the global footer band. An earlier pass
+     "fixed" it by swapping the fill to #C4231A (this site's --danger/--rust
+     token value, hardcoded) to keep cream text AA-legal; that repurposed a
+     semantic error-red as decorative Paradox branding and, worse, was a
+     DIFFERENT red than the ".px-banner__accent" text two rules down still
+     used — two shades of "Paradox red" in the same card. 14.8 is explicit:
+     "Do not change the red — it is the Paradox brand colour. Only the text
+     colour changes." So the fill is the genuine brand red (matches --c1 in
+     src/paradox/paradox.css) and the text is ink rather than cream:
+     var(--ink) on #FF4338 measures 5.76:1, clearing AA with room to spare,
+     without touching the red at all. */
+  background: #FF4338;       /* the real paradox red (src/paradox --c1) */
+  color: var(--ink);
+  font-family: var(--mono);  /* the house mono token, not a hardcoded stack */
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 9px;            /* DESIGN.md's mono label rung */
+  padding: 4px 11px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Title ── the house display face with the house serif-italic accent ── */
+.px-banner__title {
+  /* Was 'Boldonse' falling back to 'Bricolage Grotesque'. NeutralFace has no
+     lowercase glyphs, so the lowercase wordmark is uppercased rather than
+     given a face that cannot render it. */
+  font-family: var(--display) !important;
+  font-weight: 900;
+  font-size: clamp(24px, 3.4vw, 32px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 10px 0 0;
+  color: #FBF5E6;
+  text-wrap: balance;
+}
+
+.px-banner__accent {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: #FF4338;
+}
+
+/* ── Sub ── soft cream so the title carries the weight ── */
+.px-banner__sub {
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.5;
+  /* was 0.6 — 0.66 keeps it clear of the 0.55 paper-on-ink floor with margin */
+  color: rgba(251, 245, 230, 0.66);
+  margin: 6px 0 12px;
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+/* ── CTA ── the Paradox red, in the house control geometry ── */
+.px-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FF4338;       /* the real paradox red — see .px-banner__sticker */
+  color: var(--ink);         /* 5.76:1 */
+  padding: 0 22px;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 13px;
+  border-radius: var(--r-pill);
+  /* Hard offsets are retired outside .btn-primary and the sticker pack, and
+     `2px solid #FBF5E6` was a foreign border language. A pill on a dark ground
+     needs neither: the fill is the affordance. */
+  border: none;
+  box-shadow: none;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  min-height: 44px;          /* 44+ hit area */
+  transition-property: transform, filter;
+  transition-duration: 120ms;
+  transition-timing-function: var(--ease-out);
+}
+
+/* Only promote to a GPU layer while interacting — was previously always-on,
+   which kept the paint promoted for the entire page lifetime. */
+.px-banner__cta:hover,
+.px-banner__cta:active {
+  will-change: transform;
+}
+
+.px-banner__cta:hover  { transform: translateY(-1px); filter: brightness(1.08); }
+.px-banner__cta:active { transform: scale(0.96); }
+/* DESIGN.md §2 — the one focus ring, everywhere. */
+.px-banner__cta:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* ── Mobile ── tighter padding, full-bleed CTA ── */
+@media (max-width: 560px) {
+  .px-banner {
+    padding: 10px 10px 0;
+  }
+  .px-banner__card {
+    padding: 16px 16px 18px;
+    border-radius: var(--r-inner);   /* 22 — the concentric step below 32 */
+  }
+  .px-banner__cta {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .px-banner__cta { transition: none; }
+  .px-banner__cta:hover, .px-banner__cta:active { transform: none; }
+}

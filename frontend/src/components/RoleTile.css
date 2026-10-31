@@ -1,0 +1,61 @@
+/* Role tiles (components/RoleTile.tsx): a full-colour card per role, colour from the team, a pattern from the id. */
+.rt-board { display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 1120px; margin: 0 auto clamp(24px, 4vw, 36px); }
+@media (min-width: 640px) { .rt-board { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .rt-board { grid-template-columns: repeat(3, 1fr); } .rt-board > .rt-featured, .rt-board > :first-child .rt-tile { grid-column: auto; } }
+.rt-board > :first-child { grid-column: 1 / -1; }
+@media (min-width: 1000px) { .rt-board > :first-child { grid-column: span 2; } }
+.rt-board > :first-child .rt-tile { min-height: 300px; }
+.rt-board > :first-child .rt-title { font-size: clamp(34px, 5vw, 56px); }
+
+.rt-tile {
+  position: relative; overflow: hidden; isolation: isolate; height: 100%;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+  min-height: 230px; padding: 20px 22px 20px;
+  border-radius: var(--r-outer); background: var(--rt-bg, var(--grape)); color: var(--ink);
+  box-shadow: var(--lift-1); transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.rt-tile::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: calc(var(--ox, 80%) - 70px * var(--os, 1)); top: calc(var(--oy, 70%) - 70px * var(--os, 1));
+  width: calc(140px * var(--os, 1)); height: calc(140px * var(--os, 1));
+  border-radius: var(--r-pill); background: rgba(10, 10, 10, 0.1);
+}
+.rt-tile[data-look="stripes"]::after { border-radius: var(--r-inner); background: repeating-linear-gradient(135deg, rgba(10,10,10,0.13) 0 7px, transparent 7px 16px); }
+.rt-tile[data-look="dots"]::after { border-radius: var(--r-inner); background: radial-gradient(rgba(10,10,10,0.22) 28%, transparent 30%) 0 0 / 16px 16px; }
+.rt-tile[data-look="grid"]::after { border-radius: var(--r-tight); background: linear-gradient(rgba(10,10,10,0.15) 1px, transparent 1px) 0 0 / 18px 18px, linear-gradient(90deg, rgba(10,10,10,0.15) 1px, transparent 1px) 0 0 / 18px 18px; }
+.rt-tile[data-look="wedge"]::after { border-radius: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+.rt-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rt-team, .rt-commit {
+  display: inline-flex; align-items: center; min-height: 30px; padding: 0 13px; border-radius: var(--r-pill);
+  font-family: var(--mono); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.rt-team { background: var(--card); }
+.rt-commit { background: rgba(10, 10, 10, 0.82); color: var(--bg); }
+.rt-tile:focus-within { outline: 3px solid var(--ink); outline-offset: 3px; }
+.rt-title {
+  margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(26px, 3.2vw, 34px);
+  line-height: 1; letter-spacing: -0.03em; text-transform: uppercase; text-wrap: balance; overflow-wrap: break-word;
+}
+.rt-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rt-when { font-family: var(--mono); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); }
+.rt-tile { cursor: pointer; }
+.rt-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.rt-more {
+  position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 4px; min-height: 32px;
+  font-family: var(--mono); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
+}
+.rt-more:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: var(--r-tight); }
+/* The Apply button is the tile's one big target: its ::after covers the whole tile, so pressing anywhere opens the form. */
+.quick-apply.rt-apply { position: static; z-index: auto; margin: 0; min-height: 44px; padding: 0 20px; background: var(--ink); color: var(--bg); }
+.quick-apply.rt-apply::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: var(--r-outer); }
+.quick-apply.rt-apply:hover { background: var(--card); color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 760px) {
+  .rt-tile { transform: rotate(var(--tilt, 0deg)); }
+  .rt-tile:hover, .rt-tile:focus-within { transform: rotate(0deg) translateY(-6px); box-shadow: 0 18px 40px -14px rgba(10, 10, 10, 0.4); }
+}
+/* A transformed button would become the containing block of its ::after and shrink the tile-wide target mid-press. */
+.quick-apply.rt-apply:active { transform: none; }
+.rt-tile:active { filter: brightness(0.97); }

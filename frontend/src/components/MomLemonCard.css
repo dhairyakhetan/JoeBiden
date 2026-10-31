@@ -1,0 +1,69 @@
+/* 22.4 · Member of the Month, surfaced. Owned by the component, not by a route file: this card
+   renders on the profile and team pages, and route CSS only loads with its own route. */
+.mom-lemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 20px 16px 18px;
+  border-radius: var(--r-outer);
+  /* The story poster's faint ink grid on the lemon flood. */
+  background-color: var(--lemon);
+  background-image:
+    linear-gradient(rgba(10, 10, 10, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.mom-lemon-kicker { font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+/* The poster's photo card: a white-framed square, tilted, ink border. No hard
+   shadow here: this card can stack, and the system allows one hard offset per
+   screen. */
+.mom-lemon-photo {
+  position: relative;
+  margin-top: 8px;
+  padding: 5px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-inner);
+  transform: rotate(-3deg);
+  flex-shrink: 0;
+}
+.mom-lemon-avatar { width: 88px; height: 88px; font-size: 28px; border-radius: var(--r-tight); flex-shrink: 0; }
+/* The pink MoM burst on the photo's top-right corner. Ink on pink: 6:1+. */
+.mom-lemon-burst {
+  position: absolute;
+  top: -14px;
+  right: -16px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: var(--pink);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  transform: rotate(10deg);
+}
+.mom-lemon-name { font-family: var(--display); font-weight: 900; font-size: 23px; line-height: 1.05; color: var(--ink); margin-top: 8px; }
+.mom-lemon-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 2px; }
+.mom-lemon-pill {
+  font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 999px;
+  background: var(--ink); color: var(--lemon);
+}
+/* The citation is lowercase reading text, so it sits on Eina: NeutralFace is
+   caps-only and would shout it. White card, ink border, as on the poster. */
+.mom-lemon-citation {
+  font-family: var(--eina); font-size: 13px; color: var(--ink); line-height: 1.45;
+  margin: 6px 0 0; padding: 10px 12px; width: 100%; text-align: left;
+  background: #fff; border: 2px solid var(--ink); border-radius: var(--r-tight);
+}
+.mom-lemon-cta { font-family: var(--mono); font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; color: var(--ink); margin-top: 8px; text-decoration: underline; text-underline-offset: 2px; }
+

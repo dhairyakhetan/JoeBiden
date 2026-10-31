@@ -1,0 +1,4052 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AQUATERRA - Y2K BRUTAL SCRAPBOOK
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Instrument Serif, JetBrains Mono, and Caveat are self-hosted (Phase 1.2) -
+   trimmed to only the weights actually used in this codebase (DM Sans and
+   DM Mono were never referenced anywhere and have been dropped entirely;
+   see HANDOFF.md). Google's `<link>` stylesheets are gone from index.html. */
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+/* JetBrains Mono ships as a variable-font woff2 - the same file backs both
+   @font-face declarations below; the browser renders the correct instance
+   from the font's own weight axis based on which @font-face matched. */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Caveat - only weight 500 is ever referenced (ContactPage.tsx signature,
+   index.css --font-hand); weight 700 was unused and dropped. */
+@font-face {
+  font-family: 'Caveat';
+  src: url('/fonts/Caveat-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* woff2 only. The .otf / .ttf fallbacks that used to be listed here were dead
+   weight: woff2 has been supported by every browser this app targets since
+   ~2016 (the app already relies on color-mix(), dvh units and aspect-ratio,
+   all of which are far newer), so the fallback branch could never be reached
+   — while the five files still shipped in every deploy at 419KB. Deleted. */
+@font-face {
+  font-family: 'NeutralFace';
+  src: url('/fonts/NeutralFace-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* font-weight: 700 — NOT the "700 900" range this used to declare.
+   ────────────────────────────────────────────────────────────────────────────
+   That range says "this face covers 700 through 900", which is only true of a
+   VARIABLE font. NeutralFace-Bold.woff2 is a single static Bold cut. Measured
+   in-browser (canvas measureText, 100px, identical string, after
+   document.fonts.ready):
+
+       weight   400        600        700        800        900
+       width    1653.40    1699.70    1699.70    1699.70    1699.70
+
+   Everything from 600 up is the same outline. So the ~155 `font-weight: 800`
+   and ~95 `font-weight: 900` declarations across this codebase render exactly
+   as 700 — including .h-display (800), .giant (800) and --display-weight (800).
+   The hero and a card title are currently the SAME weight; the hero is doing
+   all of its work with size alone.
+
+   Narrowing the declaration to 700 changes no pixels — font matching already
+   resolves 800/900 to this face, and still will. It just stops the stylesheet
+   claiming a weight axis that does not exist.
+
+   To actually GET display contrast you need a real Black cut
+   (NeutralFace-Black.woff2 at font-weight: 900). That is a licensing decision,
+   not a code change — until then, treat 700 as the only bold this family has
+   and don't reach for 800/900 expecting them to do anything. */
+@font-face {
+  font-family: 'NeutralFace';
+  src: url('/fonts/NeutralFace-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Eina01 - used for post card body, title, content. woff2 only (see the note
+   above the NeutralFace faces); Eina is the body face on every page, so
+   this is the single biggest font-payload win. */
+@font-face {
+  font-family: 'Eina01';
+  src: url('/fonts/Eina01-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Eina01';
+  src: url('/fonts/Eina01-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+/* Same correction as NeutralFace above: a static Bold cut, not a 700–900 axis.
+   Measured 400 → 1330.80, 600 → 1224.22 (the SemiBold face), 700/800/900 →
+   1337.30 identically. Eina at least has a genuine three-cut ramp
+   (Regular / SemiBold / Bold); it just doesn't extend past 700. */
+@font-face {
+  font-family: 'Eina01';
+  src: url('/fonts/Eina01-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Design tokens (:root palette, [data-theme] overrides, bridges) now live in
+   tokens.css - the single source of truth imported before this file. */
+
+/* 02.6: ADD `--btm-nav-reserve`. The bottom dock's reserve was a hard-coded
+   `calc(60px + max(14px, env(safe-area-inset-bottom)) + 10px)` repeated in two
+   places (one of them with `!important`), which is exactly the pattern 02.6
+   warns about: "hard-coded 80px is how a taller bar ends up covering
+   content." One token, derived from the dock's own 60px pill height + its
+   14px inset + 10px of breathing room. It lives here rather than in
+   tokens.css because tokens.css is the design lead's file. */
+:root {
+  --btm-nav-h: 60px;
+  --btm-nav-reserve: calc(var(--btm-nav-h) + max(14px, env(safe-area-inset-bottom)) + 10px);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  /* Prevent rubber-band overscroll & accidental pull-to-refresh on mobile
+     without blocking normal scrolling. `contain` stops the bounce but allows scroll. */
+  overscroll-behavior-y: contain;
+}
+
+/* Light-only, declared. See the matching meta in index.html for why: without
+   it, dark-mode phones draw the form controls and scrollbars dark on a cream
+   page, and Chrome for Android auto-darkens the artwork. */
+:root { color-scheme: light; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  /* The Firefox/macOS half of the pair. `-webkit-font-smoothing` above has
+     been here on its own, which left Gecko on macOS rendering the same text
+     heavier than Chrome and Safari do. Affects macOS rendering only; every
+     other platform ignores both properties, and neither changes layout. */
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02";
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* ━━━ SCROLLBAR ━━━ */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-2); }
+::-webkit-scrollbar-thumb { background: var(--welfare); border: 2px solid var(--bg-2); border-radius: 999px; }
+
+/* ━━━ NOISE / GRAIN ━━━ */
+.noise::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ━━━ NAV (floating pill, glass) ━━━ */
+.aq-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  background: transparent;
+  /* L/R gutter trimmed tight - the pill's own max-width (1280px, below) is
+     what actually bounds it on wide screens, so a slim outer gutter just
+     buys the pill more room on everything narrower than that. */
+  padding: 14px 6px 8px;
+  pointer-events: none;
+  /* No background at all - chips float over page content */
+}
+/* no extending background gradient - chips float clean */
+.aq-nav-inner {
+  pointer-events: auto;
+  max-width: var(--frame-max); margin: 0 auto;
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 14px;
+  /* Glass pill on DESKTOP - 1:1 with the Playground `.nav-in` (the design's one
+     permitted soft-shadow surface). Previously the desktop bar was flat/transparent
+     while only mobile got the glass; the prototype is the opposite. The mobile
+     override below (max-width:760) keeps its own 22px liquid-glass variant. */
+  /* REDESIGN 2026-09 section 01. Was a frosted-glass bar: 60px tall,
+     colour-mix background, blur(20px) saturate(1.7), a 1.5px colour-mix
+     border and a two-layer inset+drop shadow. Now the flat white pill from
+     AQ Chrome Poster: 54px, 2px ink border, no blur, no shadow. The blur was
+     also the top half of the app's two fixed re-rasterised surfaces. */
+  height: 54px;
+  padding: 0 8px 0 12px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: var(--bd);
+  box-shadow: none;
+}
+
+/* ── Nav height offset - all layouts need this so content doesn't hide under fixed nav ── */
+
+/* Floating glass filter bar (`.aq-floating-filter*`, `.aq-filter-*`, sticky
+   collapse states) moved to styles/routes/projects.css — used only by the lazy
+   PublicProjectsPage. */
+
+/* logo - same light glass capsule as nav links */
+/* REDESIGN 2026-09: the logo was its own glass capsule (blur(14px), bevel
+   shadow, padding, 999px background) floating on a glass bar - a chip on a
+   chip. It now sits flat on the white pill, as in AQ Chrome Poster. */
+.aq-logo {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  /* DESIGN.md §2: the primary "go home" control measured 30x30 — under the
+     32px absolute floor. Raised to 40 then, and to 44 by the 2026-09-11
+     closing audit: 40 was chosen to "match the nav links", but the nav's own
+     icon buttons (search, bell, avatar, hamburger) all measure 44x44 live, so
+     40 matched nothing and left the single most-present control on the site
+     4px under the app-wide floor on every page. The nav is 70px tall, so
+     there is room. */
+  min-height: 44px; min-width: 44px;
+  padding: 0; border: none; border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  transition-property: transform;
+  transition-duration: 0.16s;
+  transition-timing-function: var(--ease-out);
+}
+.aq-logo:hover { transform: translateY(-1px); }
+.aq-logo:active { transform: scale(0.97); }
+.aq-logo .star {
+  display: inline-block; width: 16px; height: 16px;
+  background: var(--welfare);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spin 14s linear infinite;
+}
+/* logo image - mix-blend-mode removes white background on any bg */
+.aq-logo-img {
+  height: 30px;
+  /* The whole `.aq-logo` button was rendering 2px wide — the site's primary
+     "go home" control, effectively untappable. Two causes, both fixed here:
+       1. `width: auto` gives the box no size until the bitmap decodes, so the
+          nav reflowed around it on every cold load. `aspect-ratio` holds
+          the box's real ratio from the first layout pass instead.
+       2. As a flex item inside the flex `.aq-logo`, the image was free to
+          shrink below its content size and was being squeezed to 0 by the
+          surrounding nav row. `flex: none` opts it out of shrinking — this is
+          the part that actually made the button measurable.
+     FIX (00.4/02.4, UX-GAPS bug #7): `aspect-ratio` was `1332 / 225` -
+     logo.png's wordmark ratio. The AQNav.tsx fix for this exact bug swapped
+     the <img> source to stamp-ink.png (256x256, square) but this rule was
+     not updated with it: a square bitmap inside a 1332:225 box still
+     squished - confirmed live (JS measured a 130x22 rendered box against a
+     256x256 natural one) before this line was corrected. */
+  width: auto;
+  aspect-ratio: 1 / 1;
+  flex: none;
+  object-fit: contain;
+  display: block;
+  mix-blend-mode: multiply;
+  image-rendering: -webkit-optimize-contrast;
+  outline: none !important;  /* override global img outline from aq-design-system */
+  border: none;
+}
+@media (max-width: 480px) {
+  .aq-logo-img { height: 22px; }   /* balanced on the flat glass bar - no longer boxed in a pill */
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ━━━ NAV - INDIVIDUAL FLOATING PILLS ━━━
+   Each link is its own glass capsule, floating
+   independently. No shared container background.     */
+
+.aq-nav-pill {
+  justify-self: center;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+
+/* Each link sits plain on the light glass bar - no per-link pill
+   background by default; only the active state carries color. */
+.aq-nav-link {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 15px;
+  /* 02.4 + DESIGN.md §2: `line-height: 1` on 13.5px type plus 8px padding gave
+     a 29.5px box — below the documented 32px absolute floor for ANY control.
+     40px is 02.4's SET value for a nav link. */
+  /* 44, not 40. 02.4's SET value was 40, which the 2026-09-11 audit measured
+     as the last thing on the page under the app-wide floor; the owner's
+     conversion below is the moment to bring it in line with its own siblings
+     (search, bell, avatar, hamburger are all 44). */
+  min-height: 44px;
+  font-weight: 800; font-size: 12.5px; line-height: 1;
+  /* NeutralFace, UPPERCASE - walkthrough item 1.1, owner's decision
+     2026-09-11, and a deliberate reversal of 02.4.
+     ────────────────────────────────────────────────────────────────────────
+     This rule used to read `var(--eina)` with the note: "02.4: NOT
+     `var(--display)`/`var(--sans)`. `--sans` resolves to NeutralFace, which is
+     caps-only, so the bar rendered 'HOME PROJECTS TEAMS' on a design drawn
+     lowercase."
+
+     That note was correct about the mechanism and it described the design as
+     DRAWN, which is exactly what the owner has now changed. The drawer and the
+     dropdown were converted earlier in the day; leaving the bar in lowercase
+     Eina meant the persistent bar and the menus opening out of it were set in
+     two different faces. Asked directly, the owner chose to convert the bar
+     too, so caps is now the intent rather than an accident of a caps-only
+     font.
+
+     Size drops 13.5 -> 12.5 and weight rises 600 -> 800: caps at the same size
+     read appreciably larger and heavier, and the bar has a fixed width budget
+     before the links start colliding with the right-hand cluster. Tracking is
+     positive because NeutralFace's caps need air; Eina's lowercase did not. */
+  font-family: var(--display); text-transform: uppercase; letter-spacing: 0.02em;
+  color: var(--ink);
+  border: none; cursor: pointer;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  transition-property: background, color, transform, box-shadow;
+  transition-duration: 0.16s;
+  transition-timing-function: var(--ease-out);
+  position: relative;
+}
+.aq-nav-link-icon {
+  display: inline-flex; opacity: 0.65;
+  transition: opacity 0.16s, transform 0.2s var(--ease-pop);
+}
+.aq-nav-link-icon svg { width: 14px; height: 14px; }
+
+/* Hover is a paper wash, not a translucent white film: there is no longer a
+   blurred surface behind it for the alpha to read against. */
+.aq-nav-link:hover {
+  background: var(--bg-2);
+  transform: translateY(-1px);
+}
+.aq-nav-link:hover .aq-nav-link-icon {
+  opacity: 1;
+  transform: rotate(-4deg) scale(1.15);
+}
+.aq-nav-link:active { transform: translateY(0) scale(0.97); }
+
+/* Active pill - a colored chip (brand green) on the frosted-glass bar,
+   rather than flat white. */
+/* Flat. The soft 0 2px 8px drop shadow is retired everywhere in chrome by the
+   section 01 shadow rule: hard offsets only, and only on primary CTAs,
+   stickers and one hero card per screen. */
+.aq-nav-link.active {
+  background: var(--welfare);
+  color: #0A0A0A;
+  box-shadow: none;
+}
+.aq-nav-link.active .aq-nav-link-icon { opacity: 1; color: #0A0A0A; }
+
+/* Director pill - mint when active */
+.aq-nav-link-director.active {
+  background: var(--welfare); color: #0A0A0A;
+  box-shadow: none;
+}
+.aq-nav-link-director.active .aq-nav-link-icon { color: #0A0A0A; }
+
+/* right side - also individual floating pills */
+.aq-nav-actions {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: transparent;
+  padding: 0;
+}
+
+.aq-nav-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  /* 44px is the tap-target floor, kept even though the reference draws 38px:
+     the reference is a static mock with no finger on it. */
+  width: 44px; height: 44px; border-radius: 999px;
+  border: none; cursor: pointer; color: var(--ink);
+  background: transparent;
+  box-shadow: none;
+  transition-property: background, color, transform;
+  transition-duration: 0.16s;
+  transition-timing-function: var(--ease-out);
+  position: relative;
+}
+.aq-nav-icon-btn:hover {
+  background: var(--bg-2);
+  transform: translateY(-1px);
+}
+.aq-nav-icon-btn:active { transform: scale(0.96); }
+.aq-nav-icon-btn.active {
+  background: var(--welfare); color: #0A0A0A;
+  box-shadow: none;
+}
+.aq-nav-icon-btn svg { width: 16px; height: 16px; }
+
+/* REDESIGN 2026-09. This rule declared an 8px dot with a bell-ping scale
+   animation, but AQNav renders a NUMBER inside .aq-bell-dot with inline
+   width/height (14px, widening to 18px past nine) - so the size here was dead,
+   overridden by the inline style, while the animation survived and
+   rhythmically scaled a digit in and out of legibility. Now a static badge
+   matching AQ Chrome Poster: lemon fill, 1.5px ink keyline, ink digits.
+   Lemon over welfare deliberately: #FFC700 under ink is ~12:1, welfare
+   ~4.4:1, and this glyph renders at 9px. Position matches the reference. */
+.aq-nav-icon-bell .aq-bell-dot {
+  position: absolute; top: 4px; right: 3px;
+  border: 1.5px solid var(--ink);
+  background: var(--lemon);
+  color: var(--ink);
+}
+
+.aq-post-btn {
+  padding: 8px 14px !important; border-radius: 999px !important;
+  gap: 6px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 14px -2px rgba(0,0,0,0.1) !important;
+}
+.aq-post-btn:hover { transform: translateY(-2px) !important; }
+.aq-post-btn svg { width: 14px; height: 14px; }
+
+.aq-avatar-btn {
+  /* Match the 44x44 footprint of the other nav icon buttons so the avatar
+     lines up in size with search/bell instead of reading smaller. */
+  width: 44px; height: 44px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; cursor: pointer; line-height: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  transition-property: transform, background;
+  transition-duration: 0.16s;
+  transition-timing-function: var(--ease-out);
+}
+.aq-avatar-btn:hover {
+  background: var(--bg-2);
+  transform: translateY(-1px);
+}
+.aq-avatar-btn:active { transform: scale(0.96); }
+/* 34px identity circle with the canonical 2px ink keyline, per the reference. */
+.aq-avatar-btn .avatar {
+  width: 34px; height: 34px; font-size: 12px;
+  border: var(--bd); box-shadow: none !important;
+}
+
+/* Primary CTA in the nav ("Apply →" etc.) - a colored chip on the frosted
+   glass bar, matching the active-state color language rather than a flat
+   white pill. */
+.aq-nav-actions .btn-primary {
+  background: var(--welfare) !important;
+  color: #0A0A0A !important;
+  /* A primary CTA is one of the three things still allowed a hard offset. */
+  border: var(--bd) !important;
+  /* 00.6 + DESIGN.md §1: the surviving motif is `2px 2px 0 var(--ink)`.
+     `--shadow-cta` painted `rgba(10,10,10,.5) 1.5px 1.5px 0` — a second,
+     softer offset on the single most prominent button in the product, while
+     the footer's own CTA and stickers measured the real `--sh`. */
+  box-shadow: var(--sh) !important;
+  /* DESIGN.md §2: measured 28.8px tall. Match the nav links' 40px. */
+  min-height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.aq-nav-actions .btn-primary:hover { transform: translateY(-1px); }
+
+/* ─── Hamburger - hidden desktop, shown mobile ─────────── */
+.aq-hamburger-btn { display: none; }
+/* REDESIGN 2026-09. The line above used to carry `!important`, and the mobile
+   menu button only ever appeared because a LATER two-class rule
+   (`.aq-nav-actions .aq-nav-icon-btn`, in the phone block near the end of this
+   file) out-specified it. That means mobile's ONLY route to Members, Crftd,
+   Handbook, FAQ, Support, Schools, Classes, Quick Links and the equity policy
+   hung on a specificity accident that any future single-class rule would have
+   silently killed. Stated plainly instead, with no !important on either side. */
+@media (max-width: 760px) { .aq-hamburger-btn { display: inline-flex; } }
+
+/* ─── Left hamburger - fully retired ────────────────────────
+   The mobile top bar reads cleanest as "brand on the left, controls on the
+   right". Putting a menu pill on the LEFT too (next to the logo pill) made two
+   floating glass blobs that filled half the row. The single menu control now
+   lives in the right action cluster (see .aq-hamburger-btn below); this one
+   never renders. */
+.aq-hamburger-left-btn { display: none !important; }
+
+/* ─── Desktop responsive ──────────────────────────────── */
+/* 820, not 980: between 820 and 980 the row has ~145px to spare and unlabelled icons are not identifiable (audit 2026-09-29). Below 820 the
+   four pills, search, log in and menu genuinely do not fit with labels. */
+@media (max-width: 820px) {
+  .aq-nav-link-label { display: none; }
+  .aq-nav-link { padding: 8px 10px; }
+}
+
+/* ─── Mobile nav - ONE floating glass bar, matched to the bottom tab bar ──
+   Top and bottom read as a matching pair of liquid-glass bars bracketing the
+   content. The bar is the surface; the controls inside are flat (transparent,
+   ink-3) like the bottom-bar tab icons - not separate chunky pills. */
+
+/* ━━━ BUTTONS ━━━ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14px;
+  border: var(--hair-2);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  color: var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+/* Rounded-minimalism 00.6: the default/secondary .btn loses the offset
+   motif entirely (background wash, no transform, no shadow). .btn-primary
+   below re-declares its own hover/active so it keeps the motif - it no
+   longer inherits from this rule the way it visually did when both shared
+   one border/box-shadow language. */
+.btn:hover { background: var(--bg-2); transform: none; box-shadow: none; }
+.btn:active { transform: scale(0.96); box-shadow: none; }
+/* Global fix: no `.btn:disabled` rule existed anywhere in this stylesheet -
+   a disabled button (loading state, protected action, empty selection) was
+   visually identical to an enabled one, just silently unclickable. One rule
+   here fixes every disabled button in the app at once, not just the one
+   that surfaced it. */
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.btn:disabled:hover,
+.btn:disabled:active { transform: none; box-shadow: none; }
+
+/* .btn-primary is one of exactly two surfaces (with .sticker) that keeps
+   the hard-offset motif (00.6). It used to get its ink border for free from
+   the base .btn rule above; now that .btn's own border is a hairline, this
+   has to be explicit or .btn-primary silently loses its border entirely. */
+.btn-primary {
+  background: var(--welfare);
+  color: #0A0A0A;
+  border: var(--bd-ink);
+  box-shadow: var(--sh);
+}
+.btn-primary:hover { background: var(--welfare); transform: translate(-1px,-1px); box-shadow: var(--sh-lg); }
+.btn-primary:active { transform: scale(0.96); box-shadow: var(--sh-pressed); }
+.btn-pink { background: var(--pink); color: #0A0A0A; }
+.btn-lemon { background: var(--lemon); color: #0A0A0A; }
+.btn-tomato { background: var(--tomato); color: #fff; }
+/* ADD (00.6): explicit border:none/box-shadow:none so the feed action row's
+   ghost buttons stay bare glyphs regardless of what .btn resolves to -
+   background already matched; border/shadow were only implicit before
+   (inherited from .btn, which is now a hairline rather than nothing). */
+.btn-ghost { background: transparent; border: none; box-shadow: none; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+@media (max-width: 760px) { .aq-nav .btn-sm { min-height: 44px; } } /* the nav's Log in was 40px tall; every other control in that pill is 44 */
+.btn-lg { padding: 16px 28px; font-size: 16px; }
+.btn-xl { padding: 22px 34px; font-size: 20px; font-family: var(--display); font-weight: 700; }
+.btn-icon { padding: 8px; aspect-ratio: 1; border-radius: 50%; }
+
+/* ━━━ CHIPS / TAGS ━━━ */
+/* Rounded-minimalism 00.7. Chips stop being outlined mono capsules and
+   become hairline pills with a hue dot. Baseline mismatches found live vs.
+   what the changelog assumed, applied anyway since the target values are
+   unambiguous: border was 1.5px (not 2px), font-size 12px (not 11px),
+   font-weight 600 (not 700 - the changelog's own text says "unchanged;
+   confirm", so this is SET to the stated target of 700 for consistency with
+   stickers/tabs), gap 6px (not 7px), padding 5px 12px (not 6px 12px). */
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 0 14px;
+  min-height: 38px;
+  border: var(--hair-2);
+  border-radius: var(--r-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-family: var(--eina);
+  background: var(--card);
+  transition: transform 0.15s;
+  /* In a horizontally-scrolling flex row (e.g. .home-mobile-cats) flex items
+     shrink to fit the container by default regardless of overflow-x:auto -
+     without this, chip labels wrapped/clipped instead of the row scrolling. */
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.chip:hover { transform: translateY(-1px) rotate(-1deg); }
+/* The active chip is ink, not green - green now means "welfare", and an
+   active "events" chip rendering green was a category-colour collision. */
+.chip-active { background: var(--ink); color: var(--bg); border-color: var(--ink); box-shadow: none; }
+/* ADD (00.7): the hue marker. A chip representing a category renders a
+   <span class="chip-dot"> with the hue as background instead of filling the
+   whole chip with the hue - ADDED here as a utility class for future callers.
+   NOT retrofitted onto .cat-* below: see the mismatch note there. */
+.chip-dot { width: 7px; height: 7px; border-radius: 999px; flex-shrink: 0; display: inline-block; }
+
+/* MISMATCH, not applied: 00.7's ".chip.cat" step asks to move these five
+   category fills onto var(--bg) background + a child .chip-dot carrying the
+   hue ("the single biggest visual change in this document" per its own
+   text). Live code has no ".chip.cat" + "--cc" mechanism to retarget -
+   instead five/six independent classes (.cat-events/.cat-welfare/.cat-labs/
+   .cat-ops/.cat-operations/.cat-content) each hardcode their own solid hue
+   fill, and grep shows they are consumed far beyond "category filter chips"
+   (badges/tags on cards etc. in many out-of-scope files). Retargeting them
+   to background+dot would require a <span class="chip-dot"> child at every
+   call site to avoid rendering as a colourless, indicator-less blob - not
+   achievable without touching files outside this pass's scope. Left as
+   solid hue fills; reported rather than guessed. */
+.cat-events { background: var(--c-events); color: #0A0A0A; }
+.cat-welfare { background: var(--c-welfare); color: #0A0A0A; }
+.cat-labs { background: var(--c-labs); color: #0A0A0A; }
+.cat-ops, .cat-operations { background: var(--c-ops); color: #0A0A0A; }
+.cat-content { background: var(--c-content); color: #0A0A0A; }
+
+/* ━━━ CARDS ━━━ */
+/* Rounded-minimalism 00.5. border/box-shadow/padding SET per the changelog;
+   border-radius is left pointed at var(--r-outer) for correctness even
+   though a LATER, more specific rule in this file
+   (`.card, .feed-card, .rail-card, .home-compose, .post-card, .post-card-hero
+   { border-radius: var(--r-card) }`, "REDESIGN 2026-09: CONCENTRIC CORNERS")
+   currently wins the cascade for any element also carrying one of those
+   five sibling classes, so it keeps rendering at the shipped 26px there.
+   That combined rule is NOT split apart here: five of its six class names
+   (every one except plain `.card`) are out of this file's scope and their
+   surfaces cannot be verified in this pass, and unifying them at one radius
+   was itself a deliberate, recent fix (see that rule's own comment) that
+   this pass should not silently re-fragment. Reported as a mismatch. */
+.card {
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  box-shadow: var(--lift-1);
+  padding: var(--pad-card);
+  color: var(--ink);
+  position: relative;
+  transition: box-shadow 0.18s var(--ease-out), transform 0.18s var(--ease-out);
+}
+.card:hover { box-shadow: var(--lift-2); }
+/* --card-rot carries a card's resting tilt so the hover-lift transform keeps
+   it instead of snapping the card straight. Unset = 0deg (no rotation). */
+.card-hover { transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; transform: rotate(var(--card-rot, 0deg)); }
+.card-hover:hover { transform: translateY(-2px) rotate(var(--card-rot, 0deg)); box-shadow: var(--lift-3); }
+.card.paper { background: var(--paper); color: var(--paper-ink); }
+
+/* ━━━ TYPOGRAPHY HELPERS ━━━ */
+.h-display { font-family: var(--display); font-weight: 800; letter-spacing: -0.04em; line-height: 0.92; }
+.h-script { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.h-mono { font-family: var(--mono); }
+
+/* huge display size */
+.giant {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(60px, 11vw, 180px);
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+}
+
+/* ━━━ STICKER (changelog 00.8 + 13-sticker-system.md) ━━━
+   MISMATCH, reported not guessed: 13's own header says its files touched are
+   "components/Sticker.tsx (new)" plus this v6.css block. `Sticker.tsx`
+   ALREADY EXISTS - a complete, unrelated, more recent component (SVG
+   die-cut paths, lib/stickerShapes.ts, shapes star4/quatrefoil/gear/etc.,
+   variants solid/patterned/double/outline, its OWN CSS in
+   styles/components/stickers.css) from a different design source
+   ("AQ Stickers.dc.html", ink-seam/soft-card era). It is NOT touched here -
+   overwriting it would destroy a separate, working, actively-used system on
+   the strength of a filename collision. What DOES match 13's description
+   ("one sticker: a lemon pill, 2px ink border, 2px 2px 0 offset... renders
+   flat" - confirmed live, byte for byte, including the exact !important
+   override at the exact predicted line) is THIS OLD plain-CSS `.sticker` /
+   `.sticker-<hue>` utility-class system below, used as `<span
+   className="sticker sticker-mint">` across dozens of files (AQFooter.tsx
+   among them). 13's stamped/die-cut vocabulary is built onto THIS system. */
+/* Base `.sticker` carries the ink-border/hard-offset motif BY DEFAULT (00.8:
+   "ADD border/box-shadow if not present. The sticker is now the ONLY
+   non-button element in the product carrying the motif, so it must carry it
+   unmistakably" - unconditional, not gated behind a modifier class). This
+   also restores what 13.0 says "exists today" pre-bug: "one sticker: a
+   lemon pill, 2px ink border, 2px 2px 0 offset". `.sticker--stamped` below
+   is kept as an explicit, self-documenting alias (13.1's vocabulary) with
+   identical styling - harmless on a plain `.sticker`, and clarifying at any
+   NEW call site that deliberately wants to say "this is a control".
+   `.sticker--diecut` is the opt-in that REMOVES the motif for the inert/
+   decorative cases 13.1 describes (a state readout, a section marker) -
+   applied per 13.9's table at call sites this pass does not own. */
+.sticker {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--display);
+  font-weight: 800;
+  padding: 7px 14px;
+  border: var(--bd-ink);
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  color: #0A0A0A;
+  /* SET -1.5deg -> -2.5deg (00.8/13.3). --rot exposed so :hover/:active can
+     preserve it - an un-rotate on hover reads as a glitch. Falls back to the
+     same -2.5deg when a caller has not set --rot via stickerRotation()
+     (lib/uiHelpers.ts). */
+  --rot: -2.5deg;
+  transform: rotate(var(--rot));
+  box-shadow: var(--sh);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.sticker:hover  { transform: translate(-1px,-1px) rotate(var(--rot)); box-shadow: var(--sh-lg); }
+.sticker:active { transform: scale(.96) rotate(var(--rot));           box-shadow: var(--sh-pressed); }
+
+/* ── 13.1 THE ONE RULE: tappable = stamped (a control, presses); not
+   tappable = die-cut (decoration or a state readout, inert, never a hover). */
+.sticker--stamped {
+  border: var(--bd-ink);
+  box-shadow: var(--sh);
+}
+.sticker--stamped:hover  { transform: translate(-1px,-1px) rotate(var(--rot)); box-shadow: var(--sh-lg); }
+.sticker--stamped:active { transform: scale(.96) rotate(var(--rot));           box-shadow: var(--sh-pressed); }
+.sticker--diecut {
+  border: none;
+  box-shadow: 0 0 0 3px var(--sticker-ground, var(--bg));
+  transform: rotate(var(--rot)) !important; /* cancel .sticker:hover/:active's translate/scale below */
+}
+/* --sticker-ground: the colour BEHIND the sticker, set by the caller per
+   13.1's table (bg on the cream page, card on a white card, ink on an ink
+   section, paper on a photo). Defaults to the page so an unset caller does
+   not render an invisible ink-on-ink ring. */
+/* A die-cut sticker must have no hover state - a hover on an inert object is
+   a lie about affordance (13.1). Overridden back to the resting keyline so
+   the base .sticker:hover/:active above (written for the stamped default)
+   cannot leak a press affordance onto an inert die-cut. */
+.sticker--diecut:hover, .sticker--diecut:active {
+  box-shadow: 0 0 0 3px var(--sticker-ground, var(--bg));
+}
+
+/* ── 13.3 three sizes. sm is below the 44px hit-target floor, so it is
+   die-cut-only - enforced by simply never pairing --sticker-sm with
+   --sticker--stamped at a call site (there is no CSS mechanism to refuse a
+   class combination; noted here as the rule to enforce in review). */
+.sticker--sm { font-size: 9px; letter-spacing: .05em; padding: 4px 10px; }
+.sticker--md { font-size: 11px; letter-spacing: .04em; padding: 6px 13px; }
+.sticker--lg { font-size: 15px; letter-spacing: .03em; padding: 9px 18px; }
+
+/* ── 13.2 eight silhouettes. `.sticker` (pill, above) is the default shape;
+   these are opt-in modifiers. clip-path and box-shadow do not compose, so
+   the three clipped shapes (starburst/rosette/diamond) cannot ALSO carry a
+   `.sticker--diecut` keyline (13.2) - noted per-rule below. */
+.sticker--circle   { border-radius: var(--r-pill); aspect-ratio: 1; padding: 0; display: inline-grid; place-items: center; }
+.sticker--squircle  { border-radius: var(--r-inner); aspect-ratio: 1; padding: 0; display: inline-grid; place-items: center; }
+.sticker--pill      { border-radius: var(--r-pill); }
+/* clip-path shapes: no keyline possible (13.2) - do not add .sticker--diecut
+   to these three. */
+.sticker--starburst { border-radius: 0; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); aspect-ratio: 1; padding: 0; display: inline-grid; place-items: center; box-shadow: none !important; }
+.sticker--rosette   { border-radius: 0; clip-path: polygon(50% 0%,58% 10%,69% 4%,74% 15%,86% 15%,88% 27%,97% 33%,93% 44%,98% 55%,89% 62%,90% 74%,78% 76%,72% 86%,61% 83%,50% 91%,39% 83%,28% 86%,22% 76%,10% 74%,11% 62%,2% 55%,7% 44%,3% 33%,12% 27%,14% 15%,26% 15%,31% 4%,42% 10%); aspect-ratio: 1; padding: 0; display: inline-grid; place-items: center; box-shadow: none !important; }
+.sticker--diamond   { border-radius: 0; clip-path: polygon(50% 2%, 98% 50%, 50% 98%, 2% 50%); aspect-ratio: 1; padding: 0; display: inline-grid; place-items: center; box-shadow: none !important; }
+.sticker--oval      { border-radius: 50%; aspect-ratio: 8 / 5; padding: 0 8px; display: inline-grid; place-items: center; }
+.sticker--bubble    { border-radius: 22px 22px 22px 4px; }
+
+/* sticker color overrides - these are the ONLY allowed bursts of color.
+   FIX (00.4/13.5, "off-palette hex literals"): all seven were hand-added
+   hues outside tokens.css, several also breaking the "text on a saturated
+   fill is ALWAYS ink" rule with white/cream text. Remapped onto the actual
+   palette tokens; text is ink on every hue (paper is legal ONLY on an ink or
+   paper fill, per 13.5, which none of these are). */
+.sticker-pink { background: var(--pink); color: #0A0A0A; }
+.sticker-lemon { background: var(--lemon); color: #0A0A0A; }
+/* Was a hand-darkened tomato (color-mix 72% + black) carrying white text,
+   worked around because white-on-the-real-tomato measured 3.31:1. Ink on the
+   PALETTE's own --tomato measures 6.7:1 (13.5's measured table) - passes
+   outright, so the darkening hack is no longer needed. */
+.sticker-tomato { background: var(--tomato); color: #0A0A0A; }
+.sticker-sky { background: var(--sky); color: #0A0A0A; }
+.sticker-grape { background: var(--grape); color: #0A0A0A; }
+/* .sticker-orange has zero live call sites (grepped `className=.*sticker-orange`
+   across src/** outside paradox) - the actual shipped "#FF7A1A" bug UX-GAPS
+   #8 names is elsewhere (HomePage.tsx's closed-opening notice, out of this
+   file's scope). Fixed anyway since it is a one-line, zero-risk removal of
+   an off-palette literal, and it is what scripts/audit-design.sh's rule 2
+   greps for verbatim. */
+.sticker-orange { background: var(--tomato); color: #0A0A0A; }
+/* MISMATCH: no palette hue is literally "mint". Mapped to --welfare (green),
+   the closest existing accent and the one 13.5 already measures at 4.55:1
+   with ink - reported rather than guessed at a nonexistent token. */
+.sticker-mint { background: var(--welfare); color: #0A0A0A; }
+/* muted/outline variant - used where a sticker needs to sit quietly (e.g. a status note) without adding a competing accent color */
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  25% { transform: rotate(2deg) translateY(-2px); }
+  50% { transform: rotate(-1deg) translateY(0); }
+  75% { transform: rotate(3deg) translateY(-1px); }
+}
+.wobble { animation: wobble 3.5s ease-in-out infinite; }
+
+@keyframes float-soft { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
+.sticker-float { animation: float-soft 3s ease-in-out infinite; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 12s linear infinite; }
+
+/* Starts at 0.9, not 0. Nothing in the real world shrinks to nothing and back —
+   an element that grows from zero reads as conjured rather than arriving. A
+   deflated balloon still has a shape. */
+@keyframes bounce-in {
+  0% { transform: scale(0.9) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-3deg); }
+}
+.sticker-pop-in { animation: bounce-in 0.5s var(--ease-pop); }
+
+/* ━━━ MARQUEE ━━━ */
+/* NOT DELETED - mismatch reported, not reconciled silently. 00.13 asks to
+   "DELETE @keyframes marquee and all call sites, and delete the marquee
+   element markup wherever it renders. It is a decorative infinite
+   scroller..." - that characterisation does not hold. This IS the
+   `Marquee` component (components/v6Shared.tsx, exported and consumed by
+   FOUR files: AQFooter.tsx - in THIS pass's own scope - plus AboutPage.tsx,
+   CollaborationsPage.tsx and VolunteerHandbookPage.tsx). It is the live
+   carrier of the org's public stat line, e.g. `550+ DRIVES` - the exact
+   figure START-HERE.md's own "six numbers that block copy" section names
+   as "the live Marquee", one of the four disputed drives values. Deleting
+   `@keyframes marquee` would not remove the content, only its scroll: with
+   `overflow: hidden; white-space: nowrap` still in force below, the tripled
+   item list would collapse to showing ONLY its first item, the rest
+   permanently clipped and unreachable - a real content regression on three
+   pages this pass cannot touch to compensate. Left fully intact; report
+   this rather than guess. `--marquee-speed` in tokens.css is kept for the
+   same reason (00.13 ties its deletion to this one). */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: var(--hair-2);
+  border-bottom: var(--hair-2);
+  background: var(--lemon);
+  color: #0A0A0A;
+  padding: 14px 0;
+}
+.marquee-track {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+.marquee-track > span { padding: 0 28px; display: inline-block; }
+.marquee-track .dot {
+  display: inline-block; width: 14px; height: 14px; background: #0A0A0A;
+  border-radius: 50%; vertical-align: middle; margin: 0 4px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-rev .marquee-track { animation-direction: reverse; }
+.marquee-pink { background: var(--pink); }
+.marquee-mint { background: var(--welfare); }
+.marquee-tomato { background: var(--tomato); color: #fff; }
+
+/* ━━━ INPUTS ━━━ */
+/* Rounded-minimalism 00.10. MISMATCH found and fixed anyway (the changelog
+   flagged exactly this as a thing to check): background was var(--card),
+   not var(--bg) - meaning an input rendered the same white as the card it
+   sits inside, with no visual recess. SET to var(--bg) per the changelog's
+   own reasoning ("cream inset inside a white card is layer L2 of the
+   stack"). No `.sel` class exists anywhere in src/** (grepped) - `<select>`
+   is styled via the bare element selector elsewhere in this file, not a
+   `.sel` primitive; nothing to rename here since 00.10 doesn't say what a
+   `.sel` caller looks like. */
+.input, .textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: var(--hair-3);
+  border-radius: var(--r-inner);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--eina);
+  /* 16px to suppress iOS Safari focus-zoom on form inputs. */
+  font-size: 16px;
+  min-height: 46px;
+  outline: none;
+  transition: box-shadow 0.12s, border-color 0.12s;
+}
+.textarea { min-height: 110px; resize: vertical; font-family: var(--eina); }
+/* ADD (00.10): error state class only - not wired to any form yet, that is
+   per-page work outside this file's scope. */
+.input[aria-invalid="true"], .textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-tint);
+}
+
+/* ━━━ AVATAR ━━━ */
+/* Rounded-minimalism 00.9. MISMATCH: no box-shadow ink ring exists on this
+   rule to delete (assumed baseline was `box-shadow: 0 0 0 2px var(--ink)`;
+   live has none) - already absent, nothing to do there. The size/font-size
+   SET is applied regardless since it is independent of the ring: 44x44/16px
+   (not the assumed 40x40/13px) -> 34x34/12px. Border is unchanged (2px ink
+   kept; 00.9 does not ask to touch it, only the ring). */
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border: var(--hair-3);
+  border-radius: 50%;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 12px;
+  background: var(--welfare);
+  color: #0A0A0A;
+  flex-shrink: 0;
+}
+.avatar-lg { width: 84px; height: 84px; font-size: 28px; }
+.avatar-xl { width: 128px; height: 128px; font-size: 44px; }
+.avatar-sm { width: 32px; height: 32px; font-size: 12px; }
+/* ADD (00.9): opt-in class for stacked avatars, where a ring IS load-bearing
+   (it separates overlapping circles) - unlike the plain .avatar ring above,
+   which never existed. */
+.avatar-stacked { box-shadow: 0 0 0 2px var(--card); }
+.avatar-stacked + .avatar-stacked { margin-left: -8px; }
+
+
+.post-img-placeholder {
+  aspect-ratio: 4/3;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 12px, rgba(0,0,0,0.06) 12px 13px),
+    var(--catColor, var(--welfare));
+  border-bottom: var(--hair-2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(0,0,0,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}
+.post-img-placeholder::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 40%);
+  pointer-events: none;
+}
+
+/* ━━━ HALFTONE BG ━━━ */
+.halftone {
+  background-image:
+    radial-gradient(circle, currentColor 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
+
+/* ━━━ STAR / SHAPES ━━━ */
+.shape-star, .shape-blob, .shape-burst {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* DELETE (00.13): `@keyframes pop` - grepped for `animation:` referencing it
+   and for any element/class applying it anywhere in src/** outside paradox;
+   zero call sites found (its own comment says "used for non-like
+   animations" but nothing ever consumed it). Confirmed safe to remove
+   outright, per 00.13's own conditional ("only if grep shows no remaining
+   call sites"). */
+
+/* DELETE (00.13): `@keyframes wiggle` and `.wiggle` together - the class was
+   wiggle's only consumer, and grep shows `.wiggle` itself is never applied
+   in any src/** TSX outside paradox. Removing both, not just the keyframe,
+   per the same conditional. */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float { animation: float 3s ease-in-out infinite; }
+
+/* ━━━ LAYOUT ━━━ */
+
+/* Mobile page gutter - single source of truth */
+
+.container {
+  max-width: var(--frame-max);
+  margin: 0 auto;
+  padding: 0 var(--page-px);
+}
+/* Tailwind ships its OWN `.container` utility whose max-width steps up per
+   breakpoint — 1536px at 2xl. Same class name, so above a 1536px viewport it
+   silently won and every .container-based element (footer card, film strip,
+   page frames) rendered 1536 wide, while layouts sized directly off
+   --frame-max (.home-shell) stayed 1280. The two could never line up: on a
+   1920px screen the footer sat at x=213 and the home rails at x=341.
+   Raising specificity makes the design system's frame authoritative. Inline
+   max-widths (FAQ, Contact) still win over this, which is intended. */
+html .container { max-width: var(--frame-max); }
+
+/* Enforce consistent gutter across all common wrappers on mobile */
+@media (max-width: 760px) {
+  .container,
+  .aq-wrap,
+  .aq-wrap-sm,
+  .page-wrap {
+    padding-left:  var(--page-px) !important;
+    padding-right: var(--page-px) !important;
+  }
+}
+
+/* density */
+[data-density="compact"] .card { box-shadow: 2px 2px 0 0 var(--ink); }
+
+/* mobile */
+@media (max-width: 900px) {
+  .aq-nav-links { display: none; }
+  .marquee-track { font-size: 20px; }
+}
+
+
+/* small util */
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; } .gap-8 { gap: 32px; }
+.flex-1 { flex: 1; } .flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; } .items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.text-center { text-align: center; }
+/* `.mono` carries dates / counts / time-agos across the whole app.
+   `tabular-nums` keeps digit columns aligned so "5m ago → 12m ago"
+   doesn't visually jump as numbers change. No-op for non-numeric text. */
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.serif { font-family: var(--serif); font-style: italic; }
+.upper { text-transform: uppercase; letter-spacing: 0.04em; }
+.muted { color: var(--ink-3); }
+.small { font-size: 12px; }
+.xs { font-size: 11px; }
+
+/* Small text used as a LINK. At 11px a bare anchor lays out 15px tall, which
+   fails WCAG 2.5.8 AA (24x24 minimum) — measured on `all projects →` and the
+   two `/links` footers. The text stays 11px; only the hit area grows, and
+   inline-flex centring keeps it optically where it already sat. */
+.link-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+/* The app's own floor on a phone is 44px (2.5.8's 24px is the minimum, not the target). */
+@media (max-width: 760px) { .link-cta { min-height: 44px; } }
+
+/* ━━━ ROUTE TRANSITION ━━━
+   Uses the same `var(--ease-out)` "snappy but soft" curve
+   as the rest of the app (Modal slide-up, fade-in utilities, icon
+   swap). 220ms matches those siblings so route transitions feel
+   like one motion-language across navigation, modals, and toasts. */
+.route-enter {
+  animation: routeIn 0.22s var(--ease-out);
+}
+@keyframes routeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ━━━ BADGE / ROLE ━━━ */
+.role {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px;
+  border: var(--hair-2);
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--card);
+}
+.role-director { background: var(--pink); color: #0A0A0A; }
+.role-lead { background: var(--lemon); color: #0A0A0A; }
+.role-member { background: var(--bg-3); }
+.role-hod { background: var(--sky); color: #0A0A0A; }
+
+/* ━━━ STAT BLOCK ━━━ */
+.stat {
+  border: var(--hair-2);
+  border-radius: var(--r);
+  padding: 18px;
+  background: var(--card);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s var(--ease-out), box-shadow 0.15s;
+}
+.stat:hover { transform: translateY(-2px); box-shadow: var(--lift-3); }
+.stat-num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+/* dropdown menu */
+.menu {
+  position: absolute;
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r);
+  box-shadow: var(--lift-4);
+  padding: 6px;
+  z-index: 50;
+  min-width: 180px;
+}
+.menu-item {
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  /* reset native <button> chrome so menu items (now real buttons for
+     keyboard access) look identical to the old <div>s */
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+}
+.menu-item:hover { background: var(--welfare); color: #0A0A0A; }
+.menu-item.danger:hover { background: var(--tomato); color: #fff; }
+
+/* tabs — section 06.
+   Used ONLY by profile/ProfilePage.tsx and profile/PublicProfilePage.tsx
+   (grep-verified: two `className="tabs"` call sites in the whole app), which
+   is why they can be redefined here rather than overridden per page.
+
+   Before: a folder-tab strip — 36px tall, `--r --r 0 0` top-only radius, a
+   `margin-bottom: -2px` notch sitting on the row's own `border-bottom`, and
+   an active state that was just "paper-coloured with the seam knocked out".
+   After: the F1/F2 pill row — 44px, full 999px radius, active is solid ink
+   with paper text. The row's border-bottom and the notch go with it; a pill
+   that overlaps a rule reads as a rendering bug, not a tab. */
+.tabs {
+  display: flex; gap: 5px;
+  padding-bottom: 0;
+  flex-wrap: wrap;
+}
+/* Rounded-minimalism 00.11. MISMATCH, kept rather than reconciled per
+   WORKFLOW.md: the changelog assumes the active-state class is `.tab.on`
+   and the face is `var(--display)`. Live is `.tab.active` (renaming it would
+   silently break every caller that toggles the class in TSX, none of which
+   are in this file's scope) and `var(--eina)`, with its OWN documented
+   reason directly on the line ("lowercase display type is Eina01, not
+   NeutralFace") - NeutralFace is caps-only, so `.tab`'s lowercase labels
+   would render in caps anyway if switched, which is the opposite of what
+   00.11's "KEEP font-family: var(--display)" assumed it was confirming.
+   Styled at the real selector, `.tab.active`, below. */
+.tab {
+  height: 44px;              /* tap target — the whole row is thumb-driven */
+  padding: 0 15px;
+  font-family: var(--eina);  /* lowercase display type is Eina01, not NeutralFace */
+  font-weight: 700;
+  font-size: 12.5px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;       /* fixed-height 999px pill: mandatory */
+}
+.tab:hover:not(.active) { background: var(--bg-2); }
+.tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 800;
+}
+.tab .count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--card);
+  font-size: 11px;
+  font-family: var(--mono);
+  padding: 0 6px;
+}
+.tab .count { white-space: nowrap; }   /* fixed-height 999px pill */
+/* Was `background: var(--welfare)` — welfare #1B8A5A measures 4.35:1 with
+   ink and this is 11px text, below the 4.5:1 floor. Paper on ink is the
+   active pill's own inverse and measures 18.4:1. */
+.tab.active .count { background: var(--paper); color: var(--ink); }
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   POSTER SYSTEM — the shared block set (sections 29 / 31)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Section 29 names eight blocks. Section 31 adds three more after building
+   four surfaces in the shell, and says they belong to the SYSTEM rather than
+   to the page that needed them:
+
+     TABS                  a 999px bar containing one filled ink pill
+     unresolved figure     a dashed 999px pill reading "live"
+     unresolved identity   a dashed circle, no initials, no name
+
+   All three lived nowhere before this pass. `live` had been re-implemented
+   four times (.aqg-live, .aq-receipt-live, .aqc-live, .dir-count--live) at
+   three different border weights; TABS and the identity placeholder had never
+   been built at all. They are here, beside .tabs/.tab, because this file is
+   the class layer and the tab rules already live in it. */
+
+/* ── TABS ─────────────────────────────────────────────────────────────────
+   For any surface with 3 to 5 mutually exclusive views. Opt-in as
+   `.tabs.tabs--seg`, not a redefinition of `.tabs`, because the third
+   `.tabs` call site (teams/TeamDetailPage.tsx) can mount SIX tabs for a lead
+   and sits outside the block's stated 3-to-5 range.
+
+   From AQ Poster Applied.dc.html, which draws the bar as
+   `padding:5px 6px; border-radius:999px; background:#F4EFE0; gap:4px` with
+   `flex:1; height:38px` tabs, active `#0A0A0A` + Eina 800 paper, inactive
+   Eina 600 on transparent. Two deliberate deviations, both stated:
+
+     - height 38px → 44px. The tab IS the tap target and the phone floor is
+       44x44. The canvas is a static mockup with no tap target to honour.
+     - background #F4EFE0 → var(--card) with a 2px ink border. In the canvas
+       the bar sits INSIDE a white slab; on /profile it sits on the paper page
+       itself, where a paper bar on paper ground is invisible.
+
+   `flex: 1 1 auto; min-width: 0` plus `overflow-x: auto` rather than the
+   canvas's flat `flex: 1`: the live tabs carry real count pills the mockup
+   does not, and rule 8 says copy is never trimmed to fit. The bar scrolls
+   instead of clipping "achievements".
+
+   REDESIGN 04.3 (2026-09): re-inverted to a segmented INK capsule matching
+   the nav's own paper-on-ink chrome, per `AquaTerra Feed.dc.html` 6a/6b/6c —
+   superseding the white-bar-with-hairline choice the paragraph above records
+   (that choice predates 04's own turn and reasoning). Safe to change in
+   place: grep confirms `.tabs--seg` has exactly two consumers in the whole
+   app, ProfilePage.tsx and PublicProfilePage.tsx — the six-tab
+   TeamDetailPage.tsx call site above uses bare `.tabs`, never `--seg`, so it
+   is untouched by this block. `.tab.active` (not `.tab.on`) matches the
+   class both call sites actually render. */
+.tabs.tabs--seg {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2px;
+  padding: 6px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.tabs.tabs--seg::-webkit-scrollbar { display: none; }
+.tabs--seg .tab {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-pill);
+  font-family: var(--eina);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--nav-fg-dim);
+  transition: background-color 0.16s var(--ease-out), color 0.16s var(--ease-out);
+}
+.tabs--seg .tab.active {
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 800;
+  padding: 0 18px;
+}
+.tabs--seg .tab .count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  margin-left: 6px;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+  background: none;
+}
+.tabs--seg .tab.active .count { opacity: 0.55; background: none; color: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .tabs--seg .tab { transition: none; }
+}
+/* 04.3: below 390pt a 4-tab ink capsule does not fit, so the bar becomes a
+   horizontally scrolling row of individual pills — ink for active, a white
+   hairline pill for the rest (6b). `overscroll-behavior-x: contain` on the
+   base rule already stops a swipe here from triggering back/forward nav;
+   kept, not redeclared. */
+@media (max-width: 600px) {
+  .tabs.tabs--seg {
+    background: transparent; padding: 0; gap: 8px;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+  .tabs--seg .tab {
+    flex: none;
+    background: var(--card);
+    border: var(--hair-2);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 0 15px;
+  }
+  .tabs--seg .tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); padding: 0 15px; }
+}
+
+/* ── The unresolved figure ────────────────────────────────────────────────
+   Rule 4 of the guardrails: never render a figure with no source, and never a
+   zero, because a zero is a claim. Dashed so it can never be mistaken for a
+   number.
+
+   Section 31 specifies mono 11px. This ships at 9px, deliberately: on all four
+   surfaces that carry one the marker sits inside a 20-22px inline slot beside
+   a 9px mono label it qualifies, and at 11px it would outrank that label. 9px
+   is also what three of the four bespoke implementations had already settled
+   on independently. */
+/* audit-ok: dashed - this IS the live marker. */
+.aq-live {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border: 1.5px dashed var(--ink-3);
+  border-radius: var(--r-pill);
+  white-space: nowrap;              /* fixed height + 999px radius */
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+/* On an ink slab, where --ink-3 would disappear. Paper at .7 alpha on ink
+   measures 12.8:1, so the alpha is safe here in a way it never is on a hue. */
+.aq-live--on-ink {
+  border-color: rgba(244, 239, 224, 0.45);
+  color: rgba(244, 239, 224, 0.7);
+}
+.aq-live--sm { height: 20px; font-size: 8.5px; }
+
+/* ── The unresolved identity ──────────────────────────────────────────────
+   A dashed circle with NO initials and NO name, paired with the live marker
+   wherever a figure cannot be attributed to a specific member record. The
+   thing it replaces is worse than nothing: a filled hue circle carrying a
+   fabricated initial reads as a real person. Sized by its caller. */
+/* audit-ok: dashed - an unresolved identity, the same "absent" rule. */
+.aq-ident {
+  border: 1.5px dashed var(--ink-3);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE RESPONSIVE PASS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Tablet - collapse 3-col to 2-col */
+@media (max-width: 1100px) {
+  .home-3col {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 20px;
+  }
+  .home-side-left { display: none; }
+}
+
+/* Mobile - stack everything */
+@media (max-width: 760px) {
+  .home-3col {
+    grid-template-columns: 1fr;
+    padding: 14px 12px 100px;
+    gap: 16px;
+  }
+  .home-side, .home-side-left, .home-side-right {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  .home-side-right { order: 2; }
+  .home-center { order: 1; }
+
+  /* Container default - horizontal gutter follows the --page-px token so it
+     matches every other wrapper on mobile (was a hardcoded 12px). */
+  .container { padding: 16px var(--page-px) !important; }
+
+  /* Headlines scale down */
+  .h-display { letter-spacing: -0.03em; }
+  .feed-title { font-size: clamp(48px, 14vw, 80px) !important; }
+  .projects-title { font-size: clamp(56px, 16vw, 96px) !important; }
+  .post-detail-title { font-size: clamp(36px, 9vw, 56px) !important; }
+
+  /* Marquee smaller on mobile */
+  .marquee { font-size: 14px; padding: 8px 0; }
+
+  /* Cards: tighter padding */
+  /* REDESIGN 2026-09: deleted `.card { border-radius: 12px }`. Dead since the
+     concentric !important landed, and 12px is not on the radius scale. */
+
+  /* Nav adjustments */
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex !important; }
+  .nav-bar { padding: 12px 14px !important; }
+
+  /* Grids collapse to single col on phone */
+  .grid-3, .grid-2, .grid-projects {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+
+  /* Masonry → single col */
+  .masonry { columns: 1 !important; }
+
+  /* Compose modal full-width */
+  .post-list-row {
+    grid-template-columns: 70px 1fr;
+    gap: 12px;
+  }
+  .post-list-thumb { width: 70px; height: 70px; }
+  .post-list-row > .row.gap-2:last-child {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    margin-top: 4px;
+  }
+
+  /* Filter pills wrap nicely */
+  .chip { font-size: 11px; padding: 6px 10px; }
+
+  /* Buttons */
+  .btn { padding: 10px 14px; }
+  .btn-lg { padding: 14px 18px; font-size: 14px; }
+
+  /* Stats / numbers shrink */
+  .stat-num { font-size: 40px; }
+
+  /* Post detail body padding */
+  .post-detail-body { padding: 24px 18px !important; }
+
+  /* Tabs scroll horizontally.
+     REDESIGN 2026-09 [FIX]: `border-bottom: 2px solid var(--ink)` deleted. It
+     is the last surviving piece of the folder-tab strip section 01 replaced;
+     that section's own note says "the row's border-bottom and the notch go
+     with it", but only the desktop rule was changed, so on phones a 2px ink
+     rule was still being drawn under a row of 999px pills. A pill that
+     overlaps a rule reads as a rendering bug, not a tab, and under the
+     section 31 TABS bar it drew a line under the bar itself. */
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { white-space: nowrap; flex-shrink: 0; padding: 0 14px; font-size: 12.5px; }
+
+  /* Tweaks panel becomes bottom sheet on mobile */
+  .tweaks-panel, [class*="tweaks"] {
+    max-width: 100% !important;
+  }
+
+  /* Hero sections downscale */
+  .hero, .hero-block { padding: 24px 16px !important; }
+
+  /* Director admin tables → cards */
+  table { font-size: 12px; }
+
+  /* Footer tighter */
+  .aq-footer { padding: 24px 14px !important; }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .h-display { letter-spacing: -0.02em; }
+  .home-3col { padding: 10px 8px 100px; }
+  /* REDESIGN 2026-09: deleted `.card { border-radius: 10px }`. Dead, off-scale. */
+  .avatar { width: 36px; height: 36px; font-size: 13px; }
+}
+
+/* Mobile bottom nav (tab bar) */
+.nav-mobile-toggle { display: none; }
+@media (max-width: 760px) {
+  /* body { padding-bottom: 70px; } removed - `.aq-bottom-bar-spacer` inside
+     DashboardLayout / PublicLayout now reserves space inline, scoped to
+     AquaTerra. Body-level rule was leaking onto Paradox routes (which have
+     no bottom bar) and creating an empty 70-76px strip at the page bottom. */
+}
+
+/* Wider laptops - give the feed center column some breathing room */
+@media (min-width: 1400px) {
+  .home-3col {
+    grid-template-columns: 300px minmax(0, 680px) 340px;
+    max-width: 1380px;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TWEAK HOOKS (body[data-*] driven)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+body { font-size: calc(16px * var(--body-scale)); }
+.h-display { font-weight: var(--display-weight); }
+h1, h2, h3, .h-display { transform: scale(var(--heading-scale, 1)); transform-origin: left top; }
+/* less aggressive: scale via font-size directly via a wrapper var */
+.h-display { font-size: calc(1em * var(--heading-scale)); }
+
+.card, .btn, .chip, .input, .textarea { border-width: var(--border-w) !important; }
+/* DELETE (00.5): `.card { border-radius: calc(var(--r) * var(--radius-scale)) }`
+   removed - --radius-scale is 1 and never changes, so this only existed to
+   fight the base .card rule's radius.
+   DELETE (not separately named by 00.5/00.6/00.7, but the SAME bug for a
+   second pair of selectors): `.btn, .chip { border-radius: calc(var(--r) *
+   var(--radius-scale)) }` computed to 28px (var(--r) = var(--r-md)), a
+   square-ish radius that contradicts both primitives' pill shape. It was
+   masked by the later `.btn { border-radius: 999px }` / `.chip { border-radius:
+   999px }` "redundant" rules further down this file - 00.6/00.7 ask to
+   delete THOSE as redundant-with-the-base-rule, which would have silently
+   un-masked this 28px rule and un-pilled every button and chip in the app.
+   Deleted here instead, so the redundant-rule cleanup below is actually safe. */
+
+body[data-corner="sharp"] .card,
+body[data-corner="sharp"] .btn,
+body[data-corner="sharp"] .chip { border-radius: 0 !important; }
+/* 24px here was LESS round than the default --r-outer (32), so picking
+   "round" made cards squarer than leaving it alone. */
+body[data-corner="round"] .card { border-radius: var(--r-outer) !important; }
+body[data-corner="round"] .btn, body[data-corner="round"] .chip { border-radius: 999px !important; }
+
+body[data-shadow="none"] .card { box-shadow: none !important; }
+body[data-shadow="soft"] .card { box-shadow: 0 8px 28px rgba(0,0,0,0.12) !important; }
+body[data-shadow="hard"] .card { box-shadow: 4px 4px 0 var(--ink) !important; }
+
+body[data-card="flat"] .card { border-color: transparent !important; box-shadow: none !important; background: var(--bg-2) !important; }
+body[data-card="outline"] .card { box-shadow: none !important; }
+
+/* Documented off-scale exception: this is the USER's explicit "square chips"
+   personalisation, and 4px is what makes it read as square rather than as a
+   slightly-tighter pill. The 999/32/22/14 scale governs what the product
+   ships by default, not what a viewer opts into. Do not "fix" to 14.
+   audit-ok: radii - a user personalisation, not a shipped default. */
+body[data-chip="square"] .chip { border-radius: 4px !important; }
+body[data-chip="outline"] .chip { background: transparent !important; }
+
+body[data-case="upper"] .h-display { text-transform: uppercase; letter-spacing: -0.02em; }
+body[data-case="lower"] .h-display { text-transform: lowercase; }
+
+body[data-motion="none"] *, body[data-motion="none"] *::before, body[data-motion="none"] *::after { animation: none !important; transition: none !important; }
+body[data-motion="subtle"] .marquee-track { animation-duration: calc(var(--marquee-speed) * 1.6) !important; }
+
+body[data-sticker="none"] .sticker, body[data-sticker="none"] .wobble { display: none !important; }
+body[data-sticker="light"] .sticker:nth-child(2n) { display: none; }
+body[data-sticker="heavy"] .sticker { transform: rotate(-3deg) scale(1.05); }
+
+/* sticker microinteraction - pop on hover, settle */
+.sticker-pop { transition: transform 0.18s var(--ease-pop), filter 0.18s; }
+.sticker-pop:hover { transform: rotate(0deg) scale(1.08) !important; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18)); }
+.sticker svg { vertical-align: middle; }
+
+/* button icon nudge */
+.btn:hover svg { transform: translateX(1px); transition: transform 0.18s; }
+.btn-primary:hover svg { transform: rotate(8deg) scale(1.1); }
+
+/* heart-ping removed - replaced by LikeButton cross-fade (see .like-btn below) */
+
+/* chip wiggle */
+.chip { transition: transform 0.16s var(--ease-pop); }
+/* Gentle lift only - the earlier scale(1.04)+rotate(-2deg) pushed the chip's
+   corners past the edge of horizontally-scrollable filter rows (overflow-x:auto
+   forces overflow-y:auto), so hovering clipped/cropped the chip. A small lift
+   stays within the row's bounds. */
+.chip:hover { transform: translateY(-1px) rotate(-1deg); }
+
+
+/* avatar bounce */
+.avatar { transition: transform 0.2s var(--ease-pop); }
+.avatar:hover { transform: scale(1.1) rotate(-4deg); }
+
+/* ── Touch-tactile press states ──────────────────────────────────────────
+   The lifts above are desktop hover affordances - on a touch screen they don't
+   fire on tap and, worse, can "stick" after one (sticky :hover). On hover-less
+   devices drop the sticky hover transforms and give every tappable surface a
+   quick :active press instead, so the whole UI feels responsive under a thumb.
+   :active is ordered after the neutralised :hover so a live tap wins the
+   cascade. .btn already ships its own :active, so it's left alone. Specific
+   properties only (transform) - never `transition: all`. */
+@media (hover: none) {
+  .chip:hover, .post-card:hover, .post-card-row:hover,
+  .post-card-hero:hover, .feed-card:hover, .avatar:hover { transform: none; }
+  .card-hover:hover { transform: rotate(var(--card-rot, 0deg)); }
+
+  /* ── The rest of the app's lifts ──────────────────────────────────────────
+     The list above only ever covered the shared feed/card classes. Everything
+     below also lifts on :hover and was therefore sticking after a tap — most
+     importantly `.btn`, which is on literally every screen. (The original note
+     said ".btn already ships its own :active, so it's left alone" — true, but
+     that gives it press feedback; it does nothing about the hover transform
+     staying applied afterwards. Both are needed.)
+
+     Kept as one list in one place rather than 19 per-file `@media (hover: hover)`
+     wrappers: a single block is what makes this reviewable, and page CSS can
+     stay written for the desktop case. */
+  .btn:hover, .stat:hover, .sticker-pop:hover, .aq-post-btn:hover,
+  .aq-scroll-top:hover, .aq-menu-btn:hover, .aq-drop-link:hover,
+  .bl-lead:hover, .blog-more-card:hover, .proj-related-card:hover,
+  .rtk-card:hover, .pp-doc-chip:hover, .feed-link-cta:hover,
+  .team-card-cta:hover, .aq-footer-link:hover,
+  .launchtile:hover, .recentcard.lift:hover, .side-link:hover,
+  .pbento-tile:hover, .pbento-cta:hover,
+  .admin .iconbtn:hover, .admin .adm-pill:hover, .admin .adm-row:hover,
+  .sticker:hover, .aq-logo:hover {
+    transform: none;
+  }
+  /* These two carry a resting rotation that must survive the reset. */
+  .dept-ticket:hover { transform: none !important; }
+  .team-card:hover .team-card-band-icon,
+  .team-card:hover .team-card-badge,
+  .pcard:hover .pcard-arrow,
+  .rail-cat-tile:hover .rail-cat-tile-icon,
+  .rail-launcher-tile:hover .rail-launcher-icon,
+  .blog-card:hover .blog-arrow { transform: none; }
+
+  .chip:active { transform: scale(0.96); }
+  .card-hover:active { transform: scale(0.985) rotate(var(--card-rot, 0deg)); }
+  .post-card:active, .post-card-hero:active, .feed-card:active { transform: scale(0.985); }
+  .post-card-row:active { transform: scale(0.99); }
+  /* Give the newly-neutralised surfaces the same tap feedback the feed cards
+     get, so removing the lift doesn't leave them feeling inert under a thumb. */
+  .bl-lead:active, .blog-more-card:active, .proj-related-card:active,
+  .rtk-card:active, .launchtile:active, .recentcard.lift:active,
+  .pbento-tile:active, .admin .adm-row:active { transform: scale(0.985); }
+  .side-link:active, .pp-doc-chip:active, .feed-link-cta:active,
+  .team-card-cta:active, .admin .adm-pill:active, .admin .iconbtn:active { transform: scale(0.96); }
+}
+
+/* nav link fun underline */
+.aq-nav a, .aq-nav button[data-nav] { position: relative; }
+.aq-nav a::after, .aq-nav button[data-nav]::after {
+  content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px;
+  background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 0.22s var(--ease-pop);
+}
+.aq-nav a:hover::after, .aq-nav button[data-nav]:hover::after { transform: scaleX(1); }
+
+body[data-noise="off"]::before { display: none !important; }
+
+body[data-underline="on"] a { text-decoration: underline; text-underline-offset: 3px; }
+
+body[data-cursor="cross"] { cursor: crosshair; }
+body[data-cursor="chunky"] { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><rect x='2' y='2' width='24' height='24' fill='%23FF4D8C' stroke='black' stroke-width='3'/></svg>") 4 4, default; }
+
+body[data-marquee-pos="off"] .marquee { display: none !important; }
+
+.marquee-track { animation-duration: var(--marquee-speed) !important; }
+
+/* Mobile bottom-bar spacing is now done inside the AquaTerra layouts via
+   `<div className="aq-bottom-bar-spacer" />` (DashboardLayout + PublicLayout)
+   so the rule no longer leaks onto Paradox, which has no bottom bar. */
+
+/* Auth banner (logged-out CTA on home) */
+
+/* Login indicator pill in nav */
+.auth-indicator {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 4px 8px; border-radius: 999px; border: 1.5px solid var(--ink);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.auth-indicator.guest { background: var(--lemon); color: #0A0A0A; }
+.auth-indicator.member { background: var(--welfare); color: #0A0A0A; }
+.auth-indicator.director { background: var(--pink); color: #0A0A0A; }
+
+
+/* ━━━ pages-4 components ━━━ */
+.mtb-item {
+  background: none; border: none; padding: 8px 4px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-2); letter-spacing: 0.05em;
+}
+.mtb-icon { font-size: 22px; line-height: 1; color: var(--ink); }
+.mtb-item.active { color: var(--ink); }
+.mtb-item.active .mtb-icon { color: var(--accent, var(--pink)); transform: scale(1.15); }
+.mtb-item:nth-child(3) .mtb-icon {
+  background: var(--ink); color: var(--bg); width: 40px; height: 40px;
+  border-radius: 50%; display: grid; place-items: center; font-size: 20px;
+}
+
+/* Toasts */
+.toast-stack { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+@media (max-width: 760px) { .toast-stack { bottom: 90px; } }
+.toast {
+  background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08); font-weight: 700; font-size: 14px;
+  display: flex; gap: 10px; align-items: center; box-shadow: var(--lift-4), 0 0 0 2px var(--welfare);
+  animation: toast-in 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  pointer-events: auto;
+}
+.toast.warn { box-shadow: var(--lift-4), 0 0 0 2px var(--tomato); }
+.toast-mark { font-size: 16px; }
+@keyframes toast-in { from { transform: translateY(20px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+/* Modals */
+.modal-back { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 150; display: grid; place-items: center; padding: 20px; animation: fade 0.2s; }
+@keyframes fade { from { opacity: 0; } }
+.modal { background: var(--card); border: var(--hair-2); border-radius: calc(var(--r) * var(--radius-scale, 1)); width: 100%; box-shadow: var(--lift-4); max-height: 90vh; overflow: auto; animation: modal-in 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+@keyframes modal-in { from { transform: scale(0.9) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.modal-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: var(--hair); position: sticky; top: 0; background: var(--card); z-index: 1; }
+.modal-body { padding: 24px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   .panel-h / .iconbtn - GLOBAL BASE
+   Audit 2026-09-17, responsiveness P1.
+
+   Both classes were defined only as `.admin .panel-h` / `.admin .iconbtn` in
+   styles/routes/director.css. Five surfaces outside the desk use them anyway:
+     components/AvatarCropModal.tsx   feed/CreatePostModal.tsx
+     profile/AchievementsList.tsx     public/OpportunitiesPage.tsx
+     teams/detail/OpeningsTab.tsx     teams/detail/ResponsesTab.tsx
+   On those routes the elements got NOTHING - and doubly so, because
+   director.css is imported by director/adminKit.tsx alone, so on a public route
+   the stylesheet is not even loaded. Verified live on /opportunities: no rule
+   matching `.admin .iconbtn` exists in any loaded sheet. That page's modal close
+   button was a bare browser <button>.
+
+   WHY A NEUTRAL BASE RATHER THAN UNSCOPING THE DESK RULES
+   The desk is Sept-2026 rounded minimalism (hairline borders, soft lifts); the
+   public surfaces are neubrutalist (2px ink borders, hard offset shadows). Those
+   are two deliberate design languages, and lifting `.admin .iconbtn` out of its
+   scope would drag desk chrome onto member-facing pages - a visual regression no
+   build step could catch. So: this base carries the LAYOUT and the 44px touch
+   floor, in the public language. `.admin .iconbtn` is specificity (0,2,0) against
+   this (0,1,0), so inside the desk the desk still wins and nothing there moves.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.panel-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--line);
+}
+.panel-h b {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.iconbtn {
+  /* 44px is the floor the rest of the app uses below 760px (see the tap-target
+     block further down). Applied at every width here: these are icon-only
+     controls with no text to widen them, so they never get there on their own. */
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--hair-3);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.iconbtn svg { width: 17px; height: 17px; }
+.iconbtn:active { transform: scale(0.96); }
+.iconbtn.no { color: var(--tomato-ink); }
+@media (prefers-reduced-motion: reduce) {
+  .iconbtn:active { transform: none; }
+}
+
+/* Drawer */
+.drawer-back { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 140; animation: fade 0.2s; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; max-width: 90vw; background: var(--bg); border-left: var(--hair-2); box-shadow: var(--lift-4); animation: drawer-in 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+@keyframes drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+/* Shared "sheet up" reveal for the generator-studio modals - ShareModal,
+   BlogStudioModal, CarouselStudioModal, PosterStudioModal - which reference
+   `animation: 'sheetUp ...'` inline (no CSS module of their own) rather than
+   a class, so the keyframes live here once instead of duplicated per file. */
+@keyframes sheetUp { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+
+/* Notification rows */
+/* changelog/22-social-engine.md §22.2: rows are var(--r-inner) wells, gap 11,
+   a 34px hue disc + glyph, one flowing sentence (subject at 800, the rest at
+   400) truncated to a line, a mono age beneath it, and an 8px dot for unread
+   - never colour alone. `background` is the read state; `[data-unread]` is
+   the welfare tint, set for a genuinely unread row OR (deliberately) a read
+   `post_approved` row, which keeps its tint forever - it's the one the
+   member was waiting for. `:hover` stays a plain brightness nudge so it
+   reads on either base colour. Used only by feed/NotificationsPage.tsx. */
+.notif-row {
+  display: flex; align-items: center; gap: 11px;
+  min-height: 44px; padding: 12px;
+  border-radius: var(--r-inner);
+  background: var(--bg);
+  cursor: pointer;
+  text-decoration: none;
+  transition: filter 0.15s;
+}
+.notif-row:hover { filter: brightness(0.98); }
+.notif-row[data-unread] { background: rgba(27,138,90,.16); }
+.notif-mark { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; font-weight: 700; }
+.notif-body { flex: 1; min-width: 0; }
+.notif-sentence { font-weight: 400; font-size: 13.5px; line-height: 1.42; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notif-subject { font-weight: 800; }
+.notif-readmore { font: inherit; font-weight: 700; color: var(--welfare-ink); cursor: pointer; background: none; border: none; padding: 0; }
+.notif-time { display: block; margin-top: 3px; font-size: 9px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.notif-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--welfare); flex-shrink: 0; }
+/* Same "--r-inner cream well, no action" convention as .pf-empty-well
+   (profile.css 04.4/04.7) - var(--bg) IS the cream paper colour. */
+.notif-empty-well { background: var(--bg); border-radius: var(--r-inner); padding: 40px 24px; text-align: center; }
+
+/* Lightbox */
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 180; display: grid; place-items: center; padding: 40px; animation: fade 0.2s; }
+.lightbox-close { position: absolute; top: 24px; right: 24px; }
+.lightbox-frame { max-width: 1100px; width: 100%; }
+
+/* Upload zone */
+/* audit-ok: dashed - a literal upload DROPZONE. */
+.upload-zone { border: 2px dashed var(--line-2); border-radius: var(--r-inner); padding: 32px; text-align: center; margin-top: 10px; color: var(--ink-2); font-family: var(--mono); font-size: 13px; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.upload-zone:hover { background: var(--bg-2); border-color: var(--welfare); color: var(--ink); }
+
+/* Stale flattening override REMOVED here (found while restyling 12-secondary-
+   pages.md's calendar/yearbook chip toggles): this `!important` rule
+   duplicated .chip-active above with the PRE-redesign values (green accent
+   fill, hard 2px offset shadow) and, being `!important`, silently overrode
+   00.7's already-landed correct rule (line ~528: ink fill, no shadow) at
+   every .chip-active call site product-wide - exactly the "flattening
+   override" class of bug WORKFLOW.md's rule 5 says to find and delete
+   before restyling on top of it. No .admin-scoped override of .chip-active
+   exists (grepped styles/routes/director.css), so this was a live bug on
+   the one caller in director/* too (YearbookManagement.tsx's avatar-source
+   toggle), not something scoped deliberately for the HoD desk. */
+
+/* Like burst */
+.like-burst { position: fixed; pointer-events: none; z-index: 250; }
+.like-burst span { position: absolute; left: 0; top: 0; font-size: 18px; animation: burst 0.7s ease-out forwards; }
+@keyframes burst { from { transform: rotate(var(--a)) translateY(0) scale(1); opacity: 1; } to { transform: rotate(var(--a)) translateY(calc(-1 * var(--d))) scale(0.4); opacity: 0; } }
+
+
+/* ━━━ SEAMLESS MODE - soft borders, calm palette, more sticker fun ━━━ */
+body[data-mode="seamless"] {
+  --line: rgba(0,0,0,0.08);
+  --line-2: rgba(0,0,0,0.14);
+  --pink: var(--user-blue, #3DA9FC);
+  --tomato: var(--user-blue, #3DA9FC);
+  --sky: var(--user-blue, #3DA9FC);
+  --grape: var(--user-blue, #3DA9FC);
+  --lemon: var(--user-green, #5DD686);
+  --c-events: var(--user-blue, #3DA9FC);
+  --c-welfare: var(--user-green, #5DD686);
+  --c-labs: var(--user-blue, #3DA9FC);
+  --c-ops: var(--user-blue, #3DA9FC);
+  --c-content: var(--user-green, #5DD686);
+}
+body[data-mode="seamless"] .card,
+body[data-mode="seamless"] .post-card,
+body[data-mode="seamless"] .post-card-row,
+body[data-mode="seamless"] .post-card-hero,
+body[data-mode="seamless"] .pulse-strip,
+body[data-mode="seamless"] .input,
+body[data-mode="seamless"] .textarea,
+body[data-mode="seamless"] .btn,
+body[data-mode="seamless"] .chip,
+body[data-mode="seamless"] .stat,
+body[data-mode="seamless"] .modal,
+body[data-mode="seamless"] .avatar,
+body[data-mode="seamless"] .mobile-tabbar,
+body[data-mode="seamless"] .post-card-thumb,
+body[data-mode="seamless"] .notif-mark {
+  border-width: 1px !important;
+  border-color: var(--line-2) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.06) !important;
+}
+body[data-mode="seamless"] .card:hover,
+body[data-mode="seamless"] .post-card:hover,
+body[data-mode="seamless"] .post-card-row:hover,
+body[data-mode="seamless"] .post-card-hero:hover,
+body[data-mode="seamless"] .card-hover:hover,
+body[data-mode="seamless"] .btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06), 0 16px 36px rgba(0,0,0,0.10) !important;
+}
+body[data-mode="seamless"] .btn:active { transform: translateY(0) !important; }
+body[data-mode="seamless"] [style*="dashed"] { border-style: solid !important; border-color: var(--line) !important; }
+
+/* sticker gala - bigger, more rotated, more ribbon energy */
+body[data-mode="seamless"] .sticker {
+  font-size: 13px !important;
+  padding: 5px 12px !important;
+  border-width: 1.5px !important;
+  border-color: var(--ink) !important;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 0 var(--ink);
+  transform: rotate(-3deg);
+}
+body[data-mode="seamless"] .sticker:nth-child(2n) { transform: rotate(2deg); }
+body[data-mode="seamless"] .sticker:nth-child(3n) { transform: rotate(-1deg); }
+body[data-mode="seamless"] .sticker-mint { background: var(--user-green, #5DD686) !important; }
+body[data-mode="seamless"] .sticker-pink,
+body[data-mode="seamless"] .sticker-tomato { background: var(--user-blue, #3DA9FC) !important; color: #0A0A0A !important; }
+
+/* keep avatars round + lift slightly */
+body[data-mode="seamless"] .avatar { border-width: 1.5px !important; }
+
+/* ━━━ [REMOVED] GLOBAL BORDER REDUCTION ━━━
+   This block used to strip every ink border (border:none !important) and replace
+   the signature hard offset shadows with soft blur shadows across .card/.btn/.chip/
+   .stat/.modal/etc - sitewide, with !important. It flattened the entire
+   neubrutalist design language into a soft, generic look (only .feed-card was
+   opted out), which is why every page except the feed "felt outdated" vs the
+   Playground handoff. Removed so the base rules' 2px/3px ink borders + hard
+   var(--sh) offset shadows apply as the handoff specifies. Input surface fill +
+   focus ring kept below. */
+.input, .textarea { background: rgba(0,0,0,0.03); }
+.input:focus, .textarea:focus { box-shadow: 0 0 0 2px var(--welfare) !important; }
+
+/* SEAMLESS MODE - kill all shadows; depth comes from soft fill only */
+body[data-mode="seamless"] .card,
+body[data-mode="seamless"] .post-card,
+body[data-mode="seamless"] .post-card-row,
+body[data-mode="seamless"] .post-card-hero,
+body[data-mode="seamless"] .feed-card,
+body[data-mode="seamless"] .modal,
+body[data-mode="seamless"] .stat,
+body[data-mode="seamless"] .rail-card,
+body[data-mode="seamless"] .home-compose {
+  box-shadow: none !important;
+  background: var(--bg-2) !important;
+}
+body[data-mode="seamless"] .card:hover,
+body[data-mode="seamless"] .post-card:hover,
+body[data-mode="seamless"] .post-card-row:hover,
+body[data-mode="seamless"] .post-card-hero:hover,
+body[data-mode="seamless"] .feed-card:hover,
+body[data-mode="seamless"] .rail-card:hover {
+  box-shadow: none !important;
+  background: var(--bg-3) !important;
+  transform: translateY(-1px) !important;
+}
+body[data-mode="seamless"] .btn:hover { box-shadow: none !important; }
+
+/* CONCENTRIC CORNERS.
+   REDESIGN 2026-09. Two changes, both load-bearing:
+
+   (a) VALUES. The outer radius was --r-outer (20px) and the media well was
+       calc(--r-outer - 6px) = 14px. A 6px offset does not describe the design
+       system's photo rule, which is an 8px inset inside a radius-26 card,
+       giving the photo radius 18. Both now read the named tokens --r-card and
+       --r-photo, so the relationship is stated once rather than recomputed.
+
+   (b) !important IS GONE. It was beating `.card { border-radius: var(--r) }`,
+       `.admin .card { var(--hod-radius) }` and every phone override in the
+       tree, which is why the radius tokens appeared to have no effect. The
+       overrides it was masking were dead code and have been deleted in the
+       same pass (search "REDESIGN 2026-09: deleted"), so removing !important
+       does not resurrect them. A section may now set its own radius. */
+.card, .feed-card, .rail-card, .home-compose, .post-card, .post-card-hero { border-radius: var(--r-card); }
+.feed-card-media, .rail-id-cover { border-radius: var(--r-photo); }
+.input, .textarea, .home-compose-input { border-radius: var(--r-sm); }
+/* DELETE (00.6/00.7): `.btn { border-radius: 999px }` and `.chip { border-radius:
+   999px }` - redundant with each primitive's own base rule now that the
+   masked calc() rule above (which these two were unknowingly compensating
+   for) is gone too. */
+.avatar { border-radius: 50%; }
+.modal { border-radius: var(--r-md); }
+
+/* dashed/solid inline borders → hairline - ONLY in the calm "seamless" mode.
+   The default brand keeps its signature 2px-dashed brutalist dividers (this
+   rule used to be global and was silently flattening every dashed seam +
+   2px inline border app-wide to a 1px solid hairline). */
+body[data-mode="seamless"] [style*="dashed"],
+body[data-mode="seamless"] [style*="border-top: 2px"],
+body[data-mode="seamless"] [style*="border-bottom: 2px"] {
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: var(--line) !important;
+}
+
+/* DELETE (00.8/13.0): this rule cancelled the sticker's own border and
+   box-shadow, which is why stickers rendered as flat lemon pills instead of
+   the die-cuts the design intends - confirmed live at exactly this spot.
+   13.0 asks to grep why it was added before deleting: it sat immediately
+   after a `body[data-mode="seamless"] [style*="dashed"], ...` block (above)
+   that flattens borders ONLY in a "seamless" mode - plausibly this was meant
+   to join that block but shipped unscoped instead. Moot either way:
+   `data-mode="seamless"` is never actually set anywhere in the app (grepped;
+   the only reference is main.tsx's changelog noting a sibling dead attribute,
+   `data-mode="studio"`, already removed), so nothing downstream depends on a
+   flat sticker - this override had no live purpose except being the bug. */
+.cat-dot-welfare { background: var(--c-welfare); }
+.cat-dot-labs { background: var(--c-labs); }
+.cat-dot-operations { background: var(--c-ops); }
+.cat-dot-content { background: var(--c-content); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HANDOFF FLOURISH KIT - the "not boring" scrapbook vocabulary the prototype
+   ships but the app never ported (.stag stagger enter, .deco.* colorful
+   shapes, .linktab dotted-accent link, .underline-doodle, .taped tape).
+   All reduced-motion-safe via the global @media(reduce) catch-all.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Split + stagger enter - put `.stag` on a list/grid; direct children cascade. */
+@keyframes cardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.stag > * { animation: cardIn 0.45s var(--ease-out) both; }
+.stag > *:nth-child(1) { animation-delay: 0.02s; }
+.stag > *:nth-child(2) { animation-delay: 0.08s; }
+.stag > *:nth-child(3) { animation-delay: 0.14s; }
+.stag > *:nth-child(4) { animation-delay: 0.20s; }
+.stag > *:nth-child(5) { animation-delay: 0.26s; }
+.stag > *:nth-child(6) { animation-delay: 0.32s; }
+.stag > *:nth-child(7) { animation-delay: 0.38s; }
+.stag > *:nth-child(8) { animation-delay: 0.44s; }
+.stag > *:nth-child(n+9) { animation-delay: 0.50s; }
+
+/* DELETE the decorative doodle system entirely (00.13): `.deco`/`.deco.star`/
+   `.deco.ring`/`.deco.plus`/`.deco.dot` and their keyframes (`twinkle`,
+   named explicitly by 00.13; `bobfloat`, not named but orphaned by this same
+   deletion since `.deco.ring`/`.deco.dot` were its only two consumers).
+   "the clearest single tell of the aesthetic the redesign is moving away
+   from... positioned with magic pixel offsets that break at every
+   breakpoint" (00.13's own words, confirmed: absolutely-positioned, hand-
+   tuned inline top/right offsets at each of 9 call sites).
+   MISMATCH/gap: "delete the elements from the JSX" is only half done here.
+   Grepped `className="deco` across src/** outside paradox: 9 empty,
+   aria-hidden `<span className="deco star/ring/plus" .../>` elements remain
+   in OpeningPickerModal.tsx, CollaborationsPage.tsx, ContactPage.tsx (x1),
+   FAQPage.tsx (x2), HomePage.tsx (x2), QuickLinksPage.tsx (x2),
+   RootsPage.tsx - none in this file's scope. With the CSS gone they render
+   as empty, zero-size, non-positioned spans: harmless (no layout shift, no
+   visible artifact) but dead markup a future pass should remove. */
+@media (prefers-reduced-motion: reduce) {
+  .stag > * { animation: none !important; }
+}
+
+/* In-copy cross-link: dotted accent underline that floods on hover + slides a → in. */
+.linktab {
+  color: var(--ink); text-decoration: none; font-weight: 700;
+  border-bottom: 2px dotted var(--accent); padding-bottom: 1px;
+  transition: color 0.16s, background 0.16s, border-color 0.16s;
+  /* Measured 24x18 on the feed rail's "all" links — under WCAG 2.5.8 AA's
+     24px floor. inline-flex + min-height grows the hit area only; the dotted
+     underline stays welded to the text because the box hugs it. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+/* translateX rather than margin-left — the arrow nudge shouldn't reflow the row. */
+.linktab::after { content: ' →'; opacity: 0; display: inline-block; transition: opacity 0.16s, transform 0.16s; }
+.linktab:hover { color: var(--accent-ink); border-bottom-style: solid; }
+.linktab:hover::after { opacity: 1; transform: translateX(3px); }
+
+/* Hand-drawn animated underline under a section title. */
+.underline-doodle { position: relative; display: inline-block; }
+.underline-doodle::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 8px;
+  background: no-repeat left bottom / 100% 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='8' viewBox='0 0 120 8'%3E%3Cpath d='M1 5 C 30 1, 60 8, 90 3 S 118 4, 119 5' fill='none' stroke='%231B8A5A' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* .taped (scrapbook tape corner) DELETED per 01.7: grepped - the home
+   notice board's `rail-card taped` was its only caller anywhere in src/**,
+   and it was part of the removed decorative doodle layer (00.13). */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE PATCHES - v6 audit 2026-05-09
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Director stats: 2 col on small screens */
+@media (max-width: 600px) {
+  .director-stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+}
+
+/* Tabs: allow horizontal scroll on small screens. A right-edge fade signals
+   "more tabs, scroll →" - without it, a tab strip with 9 items (the HoD desk)
+   just looks like the layout broke/misaligned when the active tab happens
+   to land mid-scroll off to one side. */
+@media (max-width: 640px) {
+  .tabs {
+    overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap !important;
+    scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+}
+
+/* Opening form grid and edit profile grid: single col on mobile */
+@media (max-width: 520px) {
+  .opening-form-grid { grid-template-columns: 1fr !important; }
+  .edit-profile-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Container padding tighter on small phones */
+@media (max-width: 380px) {
+  .container { padding-left: var(--page-px) !important; padding-right: var(--page-px) !important; }
+}
+
+/* category chip - readable border for contrast */
+.chip.cat-events, .chip.cat-welfare, .chip.cat-labs,
+.chip.cat-operations, .chip.cat-content {
+  border: 1.5px solid #0A0A0A;
+  font-weight: 700;
+  padding: 3px 8px;
+  font-size: 10px;
+  box-shadow: 1px 1px 0 0 var(--ink);
+}
+
+/* ━━━ PULSE STRIP ━━━ */
+.pulse-label {
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+  padding-right: 12px;
+  /* SET dashed -> hairline (00.12): a plain divider, not one of the two
+     documented dashed exceptions (the sample-preview notice; the greeting
+     block's dashed-live-marker, i.e. .aq-live/.aq-ident just above in this
+     file, which stay dashed). */
+  border-right: var(--hair-2);
+}
+.pulse-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--tomato);
+  box-shadow: 0 0 0 0 var(--tomato);
+  animation: pulse-blink 1.6s ease-out infinite;
+}
+@keyframes pulse-blink {
+  0%   { box-shadow: 0 0 0 0 rgba(255,77,46,.7); }
+  70%  { box-shadow: 0 0 0 8px rgba(255,77,46,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,77,46,0); }
+}
+.pulse-track {
+  display: flex; gap: 18px; align-items: center;
+  overflow-x: auto; flex: 1;
+  scrollbar-width: none;
+  mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+.pulse-track::-webkit-scrollbar { display: none; }
+.pulse-item {
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+.pulse-item:hover { opacity: .7; }
+
+/* ━━━ TIME SECTION HEADERS ━━━ */
+.time-section {
+  display: flex; align-items: center; gap: 10px;
+  margin: 22px 0 10px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-3);
+}
+.time-section::after {
+  content: ""; flex: 1; height: 0;
+  /* SET dashed -> hairline (00.12): a plain rule extending a heading, not a
+     documented exception. */
+  border-top: var(--hair-2);
+}
+.time-section .badge {
+  background: var(--lemon); color: #0A0A0A;
+  padding: 2px 8px; border: 1.5px solid var(--ink); border-radius: var(--r-tight);
+  font-size: 10px;
+}
+
+/* ━━━ VARIABLE BRIDGES - map old aq-design-system names to v6 values ━━━ */
+
+/* Global heading font - NeutralFace */
+h1, h2, h3, h4, h5, h6,
+.h-display, .giant, .home-feed-title,
+.page-h1, .banner-h, .sec-h, .post-card-title, .rail-id-name {
+  font-family: var(--display) !important;
+}
+/* feed-card-title uses Eina specifically - keep override */
+.feed-card-title { font-family: var(--eina) !important; }
+
+/* Eina for reading, NeutralFace for headings.
+   NeutralFace is a display face — tight, geometric, built to be looked at at
+   size. It was doing double duty as the body face, which is why long-form
+   copy (FAQ answers, blog bodies, About, project write-ups) read stiff and
+   cramped. Eina01 is the text companion the feed cards already used, so this
+   is the face the app was half-using anyway; it now covers every paragraph.
+   Headings are pinned to var(--display) with !important above, so they stay
+   NeutralFace — this only moves running text. */
+body { font-family: var(--eina) !important; }
+/* Base size stays 15.5px: Eina's x-height is close enough to NeutralFace's
+   that the earlier bump still lands, and dropping back to 16 would reflow
+   every capped-measure block on the site. */
+body { font-size: 15.5px !important; }
+p, li, dd, blockquote, .lead, .body-copy { font-family: var(--eina); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PRODUCTION POLISH - interface-details
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ─── Typography ─────────────────────────────────────────
+   text-wrap:balance on all headings - prevents orphaned words
+   tabular-nums on any number that changes - no layout shift  */
+h1, h2, h3, h4, h5, h6, .h-display, .giant {
+  text-wrap: balance;
+}
+p, .feed-card-snippet, .rail-cat-tile-label {
+  text-wrap: pretty;
+}
+.stat-num, .rail-trend-count,
+.rail-id-stats b, .count,
+[class*="count"], [class*="badge"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Focus rings - never invisible, always branded ─────
+   Default outline removed globally, replaced with a
+   2px mint ring that works on any background color.    */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+  /* No border-radius here. DESIGN.md §2: ":focus-visible is 3px solid
+     var(--grape) at outline-offset: 2px - do not restyle it." A radius in this
+     rule reshapes the ELEMENT while focused (it deformed any element without
+     its own radius into a 4px box on keyboard focus). `outline` already
+     follows the element's own border-radius, so the ring is correct without
+     it. Only live since the ring itself was un-broken - the reset below it
+     used to cancel this whole rule. */
+}
+.btn:focus-visible, .chip:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* ─── Skip to main content link ────────────────────────── */
+/* Animates `top`, which is a layout property — normally worth moving to a
+   transform. Tried that (translateY off-screen, translateY(0) on focus) and
+   it left the link visible at rest on every page: something in the cascade
+   lands an identity transform on this element and wins. Not worth chasing —
+   this is ONE element that animates once per keyboard session, so the
+   compositor saving is nil while the failure mode is a green button parked
+   over every page. Left on `top` deliberately. */
+.skip-to-main {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 9999;
+  background: var(--welfare);
+  color: #0A0A0A;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  /* 2026-09-11 closing audit: measured 211x40, four under the floor. This is
+     the FIRST keyboard stop on every page and the one control a keyboard-only
+     or switch user hits before anything else, so it is the last place to be
+     4px short. Padding, not min-height, because it is an inline-flow anchor. */
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-radius: var(--r);
+  transition: top 0.15s;
+}
+.skip-to-main:focus {
+  top: 16px;
+  outline: none;
+}
+
+/* ─── Scale on press - tactile feedback ─────────────────
+   Only .btn gets the press scale; chips and icon buttons
+   inherit it too. Scale must stay at 0.96 exactly.     */
+.btn:active:not(:disabled),
+.chip:active,
+.card-hover:active,
+.rail-cat-tile:active,
+.rail-launcher-tile:active,
+.feed-card:active,
+.aq-logo:active,
+.team-card-cta:active {
+  transform: scale(0.96) !important;
+}
+.btn { transition-property: background, color, border-color, box-shadow, transform, opacity; transition-duration: 0.15s; }
+
+/* ─── Disabled button shake ─────────────────────────────
+   Silent failure is confusing. A shake says "I heard you,
+   but not yet." Apply .btn-shake via JS on disabled click. */
+@keyframes btn-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(3px); }
+}
+.btn-shake { animation: btn-shake 0.35s cubic-bezier(0.36,0.07,0.19,0.97); }
+
+/* ─── Minimum hit areas - 44px on mobile ─────────────────
+   `.aq-hamburger`, `.aq-post-action` and `.post-act` were each sitting at their
+   own 40px floor outside this rule, so the app had two different answers to the
+   same question. They're standalone controls with room around them — unlike the
+   feed-card action row, which deliberately holds 40px so five actions fit a
+   375px card (see the note in styles/routes/feed.css; 40px still clears WCAG
+   2.5.8 AA, which asks for 24px). */
+@media (max-width: 760px) {
+  .btn, .chip, .rail-cat-tile, .rail-launcher-tile, .aq-tab-item, .aq-nav-icon-btn,
+  .aq-hamburger, .aq-post-action, .post-act {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .chip { min-height: 44px; padding: 8px 14px; }
+
+  /* THE NAV CTA IS A DELIBERATE 40px EXCEPTION - do not "fix" it here.
+     The 2026-09-17 audit flagged `.aq-nav-actions .btn-primary` as under the
+     floor (measured 95x40 at 390px), and a rule was briefly added here to lift
+     it. It was reverted: the mobile-nav block near the end of this file sets
+     `height/min-height: 40px !important` with the comment "40px, not 38:
+     matches the desktop CTA and the nav links, and DESIGN.md §2's floor".
+     That is a design decision with a stated reason, and 40px clears WCAG 2.5.8
+     AA (24px). Overriding it from here would have silently contradicted
+     DESIGN.md while appearing to satisfy a generic rule.
+     If 44px is wanted for this button, change it THERE, as a design change. */
+}
+
+/* ─── Overscroll - prevent accidental back navigation ───
+   Horizontal marquee and scrollers must not trigger
+   browser swipe-back on mobile.                        */
+.marquee, .home-mobile-cats, .tabs {
+  overscroll-behavior-x: none;
+}
+
+/* ─── Scroll to top button ──────────────────────────────── */
+.aq-scroll-top {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  transition-property: opacity, transform;
+  transition-duration: 0.2s;
+  border: none;
+}
+.aq-scroll-top:hover { transform: translateY(-2px); }
+
+/* ─── Cursor semantics ───────────────────────────────────
+   pointer only for page navigation links.
+   default for in-page buttons and toggles.             */
+.btn { cursor: pointer; }
+a { cursor: pointer; }
+input, textarea, select { cursor: text; }
+
+/* ─── Transition specificity - never transition: all ────
+   All interactive elements use explicit property lists.  */
+.card-hover {
+  transition-property: transform, box-shadow;
+  transition-duration: 0.18s;
+  transition-timing-function: var(--ease);
+}
+.feed-card {
+  transition-property: transform, box-shadow;
+  transition-duration: 0.16s;
+  transition-timing-function: var(--ease);
+}
+input, textarea, select {
+  transition-property: border-color, box-shadow, background;
+  transition-duration: 0.15s;
+}
+
+/* ─── Reduced motion - respect system preference ────────
+   Users who prefer reduced motion must not see the
+   decorative animations. Keep functional transitions.  */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track { animation: none !important; transform: none !important; }
+  .wobble { animation: none !important; }
+  .spin-slow { animation: none !important; }
+  .sticker-float { animation: none !important; }
+  .route-enter { animation: none !important; opacity: 1 !important; }
+}
+
+/* ─── Selection color ───────────────────────────────────── */
+::selection {
+  background: var(--welfare);
+  color: #0A0A0A;
+}
+
+/* ─── Form label usability ──────────────────────────────── */
+label { cursor: pointer; }
+label.mono { display: block; margin-bottom: 4px; }
+
+/* ─── Input focus glow ──────────────────────────────────── */
+/* This is the rule that actually wins for .input/.textarea focus (two other
+   `!important` rules earlier in this file for the same selector are dead,
+   beaten by source order - left alone rather than pruned, to keep this diff
+   to the rule that matters). SET per 00.10: a hard 2px solid welfare ring
+   read as a hard offset on a focused field, pushing its baseline visually
+   off-centre. Now an ink border + a soft, low-alpha welfare ring. */
+.input:focus, .textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(27,138,90,0.16) !important;
+  border-color: var(--ink) !important;
+}
+
+/* ─── Scrollbar - production quality ────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { border-radius: 3px; background: rgba(0,0,0,0.15); }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+/* ─── Smooth page scroll ────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+/* ─── Image quality ─────────────────────────────────────── */
+img { image-rendering: auto; }
+
+/* ─── Prevent layout shift on font weight hover ──────────── */
+.rail-cat-tile-label::after {
+  content: attr(data-label);
+  display: block;
+  font-weight: 700;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ─── Blurred gradient at scroll edge ───────────────────── */
+.home-mobile-cats {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+  overflow-x: auto;
+  padding: 4px 16px;
+  scrollbar-width: none;
+}
+.home-mobile-cats::-webkit-scrollbar { display: none; }
+
+
+/* text-wrap improvements - intentionally deduplicated below (see PRODUCTION POLISH block above) */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE AUDIT - spacing, sizing, animations, layout
+   Applied mobile-first: fix what hurts real thumb use
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ─── Font scale clamp ───────────────────────────────────
+   Giant headings clip on 375px viewport. Force clamp
+   on all page-level display headings.                    */
+.giant {
+  font-size: clamp(48px, 13vw, 130px) !important;
+  line-height: 0.88 !important;
+}
+@media (max-width: 480px) {
+  .giant { font-size: clamp(40px, 13vw, 96px) !important; }
+}
+
+
+
+/* Dark / full-bleed hero that should sit flush to the very top of the viewport,
+   behind the floating translucent nav. The public layout pads <main> down by
+   --nav-h so normal content clears the nav; on a dark first section that padding
+   shows as a cream strip above the hero. Pulling the hero up by --nav-h closes
+   that strip. The hero must add --nav-h back into its OWN top padding so its
+   content still clears the nav (handled inline per hero). */
+.bleed-under-nav { margin-top: calc(-1 * var(--nav-h, 70px)); }
+
+
+@media (min-width: 901px) {
+  .home-mobile-cats { display: none !important; }
+}
+
+/* ─── Container padding ───────────────────────────────── */
+@media (max-width: 600px) {
+  .container { padding-left: var(--page-px) !important; padding-right: var(--page-px) !important; }
+}
+
+/* ─── Card grid → single col on mobile ──────────────────
+   2-col and 3-col grids are too small below 600px.      */
+@media (max-width: 600px) {
+  .grid-projects {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Profile hero - stack on mobile ─────────────────── */
+@media (max-width: 640px) {
+  .route-enter section .container[style] {
+    /* Force 3-column profile hero to stack */
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  /* Profile collage images - hide on mobile */
+  .profile-collage { display: none; }
+}
+
+/* ─── Stat rotation - flat on mobile ────────────────────
+   Rotated stat cards look broken in a single column.    */
+@media (max-width: 640px) {
+  .stat { transform: none !important; }
+}
+
+/* ─── About page timeline - 3 col on mobile ──────────── */
+@media (max-width: 640px) {
+  .about-timeline { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ─── Section vertical padding ───────────────────────── */
+@media (max-width: 640px) {
+  section[style*="padding: 80px"] {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  section[style*="padding: 60px"] {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+}
+
+/* ─── Card padding ────────────────────────────────────── */
+/* DELETED 2026-09-06. This forced `.card { padding: 16px !important }` below
+   480px, and the comment that used to sit here ("the padding is real and
+   stays") predated the radius migration.
+   Once `.card` moved to --r-outer (32), a 16px pad broke the concentric spine
+   on every card on phones: 32 - 16 = 16, so no nested child could legally sit
+   at --r-inner (22). Measured on /blog, /faq, /classes, /contact,
+   /opportunities and /volunteer at 375: radius 32, padding 16 - the one
+   viewport where the rule matters most.
+   `.card` already carries `padding: var(--pad-card)` (10px) at v6.css:596,
+   which is the value the whole 32/22/14 subtraction depends on, and it needs
+   no breakpoint override - 10px is not too tight on a phone, it is the number
+   the shape language is built from (00.1). */
+
+/* ─── Teams page grid ─────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Force all 3-column team/card grids to 1 column */
+  div[style*="gridTemplateColumns: 'repeat(3"] ,
+  div[style*="gridTemplateColumns: repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Tags / chip rows - wrap not overflow ─────────────── */
+@media (max-width: 640px) {
+  .tabs { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 2px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { white-space: nowrap; flex-shrink: 0; }
+}
+
+/* ─── LoginPage - hide decorative left panel ─────────── */
+@media (max-width: 640px) {
+  .login-split-left { display: none !important; }
+  .login-split { grid-template-columns: 1fr !important; }
+}
+
+/* ─── Director cards - full width on mobile ─────────── */
+@media (max-width: 640px) {
+  .dir-stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ─── Page-level hero sections on mobile ─────────────── */
+@media (max-width: 640px) {
+  /* Prevent collage photos from overflowing on smaller hero sections */
+  .about-collage { height: 280px !important; }
+  .about-collage > div { transform: none !important; }
+
+  /* Opportunities hero */
+  .opps-hero h1 { font-size: clamp(56px, 14vw, 96px) !important; }
+}
+
+/* ─── Sticker animations: reduce to scale-only on mobile
+   Wobble and float are distracting on low-power devices */
+@media (max-width: 640px) {
+  .sticker-float { animation: none !important; }
+  .wobble { animation: none !important; }
+  .spin-slow { animation: none !important; }
+  /* Static stickers still look great - just no motion */
+}
+
+/* ─── Marquee text on mobile ─────────────────────────── */
+@media (max-width: 480px) {
+  .marquee-track { font-size: 18px; gap: 24px; }
+}
+
+/* ─── Bottom padding for mobile tabbar ──────────────────
+   Ensure page content doesn't hide under the tabbar.   */
+@media (max-width: 760px) {
+  .route-enter { padding-bottom: 0; }
+}
+
+/* ─── Hero images: correct aspect on mobile ─────────── */
+@media (max-width: 640px) {
+  /* REDESIGN 2026-09: deleted `.feed-card { border-radius: 16px !important }`.
+     Dead, off-scale; feed cards take --r-card like every other card. */
+  .avatar-xl { width: 72px !important; height: 72px !important; font-size: 24px !important; }
+}
+
+/* ─── Opportunities page: single col on mobile ────────── */
+@media (max-width: 640px) {
+  .opps-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* tabular numbers on counters */
+.rail-id-stats b, .rail-trend-count,
+[class*="count"], [class*="like"] { font-variant-numeric: tabular-nums; }
+
+/* Skeleton shimmer loader */
+@keyframes v6-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.v6-skeleton {
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 50%, var(--bg-2) 75%);
+  background-size: 800px 100%;
+  animation: v6-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--r-tight);
+  flex-shrink: 0;
+}
+/* Skeleton shape helpers */
+.sk-circle { border-radius: 50% !important; }
+.sk-pill { border-radius: 999px !important; }
+/* Stagger first 8 skeleton children's shimmer phase */
+.sk-group > *:nth-child(2) { animation-delay: 0.07s; }
+.sk-group > *:nth-child(3) { animation-delay: 0.14s; }
+.sk-group > *:nth-child(4) { animation-delay: 0.21s; }
+.sk-group > *:nth-child(5) { animation-delay: 0.28s; }
+.sk-group > *:nth-child(6) { animation-delay: 0.35s; }
+.sk-group > *:nth-child(7) { animation-delay: 0.42s; }
+.sk-group > *:nth-child(8) { animation-delay: 0.49s; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE POLISH - v6 patch
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+
+/* Horizontal scroll containers - prevent iOS swipe-back nav trigger */
+.chip-row, .aq-chip-row, .feed-cat-scroll { overscroll-behavior-x: none; }
+
+/* Profile hero - stack to single column on mobile */
+@media (max-width: 640px) {
+  .profile-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+/* Profile stat row - equal-width flex cards on very small screens */
+@media (max-width: 400px) {
+  .profile-stat-row .stat { flex: 1 !important; min-width: 0 !important; }
+}
+
+
+
+
+
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE BOTTOM TAB BAR
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Only render on mobile */
+.aq-bottom-bar        { display: none; }
+.aq-bottom-bar-spacer { display: none; }
+
+@media (max-width: 760px) {
+  /* Spacer so page content clears the bar */
+  .aq-bottom-bar-spacer {
+    display: block;
+    height: var(--btm-nav-reserve);
+  }
+
+  /* Bar wrapper - a detached positioning row. The bar itself is the white
+     floating pill inside it, with the compose FAB floating separately beside
+     it. Redesign section 01 steps 4 to 8: the glass pill (backdrop-filter,
+     colour-mix border, soft drop shadow) is retired for a flat white pill
+     with the canonical 2px ink border. */
+  .aq-bottom-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    position: fixed;
+    left: 12px; right: 12px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    z-index: 50;
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+    border-top: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .aq-bottom-bar-pill {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 60px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: var(--bd);
+    box-shadow: none;
+  }
+
+  /* ── Tab item - icon-only when inactive; the active tab is an ink pill
+     carrying icon + label in paper. ── */
+  .aq-tab-item {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 46px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--ink-3);
+    transition: background 0.18s var(--ease-out), color 0.18s;
+    position: relative;
+  }
+  .aq-tab-item.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .aq-tab-item.active .aq-tab-icon,
+  .aq-tab-item.active .aq-tab-label {
+    color: var(--paper);
+  }
+
+  /* ── Icon wrapper ── */
+  .aq-tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    transition: color 0.18s ease, transform 0.18s ease;
+  }
+  .aq-tab-icon.active {
+    color: #0A0A0A;
+    animation: tab-icon-bounce 0.45s var(--ease-pop) both;
+  }
+
+  /* ── Label - hidden on inactive tabs, shown under the icon on the active
+     one. Eina01 800 at 11px per the section 01 spec; the previous rule used
+     var(--display) (NeutralFace), which is caps-only. ── */
+  .aq-tab-label {
+    font-family: var(--eina);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    color: inherit;
+    white-space: nowrap;
+    display: none;
+  }
+  .aq-tab-item.active .aq-tab-label,
+  .aq-tab-label.active {
+    display: block;
+  }
+
+  /* ── Separate circular FAB, floating beside the pill. 60px to match the
+     pill height, welfare fill, the one hard offset the dock is allowed. ── */
+  .aq-tab-fab {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+    border-radius: 999px;
+    background: var(--welfare);
+    color: var(--ink);
+    border: var(--bd);
+    /* 00.6 / DESIGN.md §1: the one surviving hard offset is `var(--sh)`
+       (2px 2px 0 var(--ink)), not `--shadow-cta`'s half-alpha 1.5px. */
+    box-shadow: var(--sh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .aq-tab-fab:active {
+    transform: scale(0.96);
+  }
+
+  /* Pulse ring. Sits behind the glyph, never intercepts the tap. */
+  .aq-tab-fab-ring {
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--welfare);
+    border-radius: 999px;
+    pointer-events: none;
+    animation: ring 2.6s ease-out infinite;
+  }
+  @keyframes ring {
+    0%   { transform: scale(1);   opacity: .5; }
+    70%  { transform: scale(2);   opacity: 0;  }
+    100% {                        opacity: 0;  }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aq-tab-fab-ring { animation: none; opacity: 0; }
+  }
+
+  /* ── Bounce keyframe ── */
+  @keyframes tab-icon-bounce {
+    0%   { transform: translateY(0); }
+    25%  { transform: translateY(-5px); }
+    50%  { transform: translateY(0); }
+    70%  { transform: translateY(-2px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* ── Scale on press - tactile feedback (Principle 12) ── */
+  .aq-tab-item:active {
+    transform: scale(0.96);
+    transition-property: transform;
+    transition-duration: 0.1s;
+  }
+
+  /* ── No top hamburger on mobile. The bottom tab bar carries navigation and
+     the footer holds the secondary pages, so the top header stays light:
+     just logo + search + apply/avatar. ── */
+}
+
+/* ── Dark mode liquid glass - top + bottom bars match ── */
+@media (max-width: 760px) {
+}
+
+/* ── Spacer accounts for floating pill + gap above it ──
+   REDESIGN 2026-09 (02.6): this was a second, `!important` copy of the same
+   hard-coded calc as the spacer rule ~170 lines above. Both now read the one
+   `--btm-nav-reserve` token declared at the top of this file, so the reserve
+   can never drift from the dock's real height. The duplicate rule is gone. */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   A5 - Limit backdrop-filter on mobile (full nav blur → pill-only blur)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 640px) {
+  /* Kill the blur on the wrapper + the now-flat inner controls. NOT on
+     .aq-nav-inner - that IS the glass bar now and must keep its blur. */
+  .aq-nav,
+  .aq-nav-link,
+  .aq-nav-icon-btn {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Frosted glass pill on the left-side hamburger + logo */
+  .aq-hamburger-left-btn,
+  .aq-logo {
+    background: rgba(255,255,255,0.09) !important;
+    backdrop-filter: blur(12px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.4) !important;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+  }
+
+  /* A6 - Pause all CSS animations on off-screen cards */
+  .aq-animations-paused * {
+    animation-play-state: paused !important;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   D2 - Global focus-visible ring for keyboard navigation
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* Remove the browser default outline for POINTER focus only.
+   This was `button:focus { outline: none }`, which has the same specificity
+   (0,1,1) as the `button:focus-visible` rule above and is declared later - and
+   a keyboard-focused element matches BOTH selectors, so `outline: none` won
+   every time and the grape ring above never painted for any keyboard user in
+   the app. `:not(:focus-visible)` scopes the reset to pointer/programmatic
+   focus, which is what this rule was always meant to do.
+   DESIGN.md §2: ":focus-visible is 3px solid var(--grape) at outline-offset: 2px
+   - do not restyle it." README invariant 7. */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   K1 - Subtle image outlines. DELETED per 00.15.
+
+   00.15 was applied to index.css but this SECOND, duplicate declaration in
+   v6.css was missed, so the rule stayed live app-wide: "`outline` does not
+   follow `border-radius`, so this rule draws a square 1px box across the
+   rounded corners of every photo in the product. It is a visible defect at
+   32/22 radii."
+
+   Worse than the index.css original, this copy was a BARE `img` selector with
+   no `:not(.no-outline)` escape, so the nine `className="no-outline"` call
+   sites (the nav logo, the footer stamp, post media) were never actually
+   excluded - which is why `.aq-avatar img`, `.av img` and `.aq-logo-img` each
+   needed their own `outline: none` patch further down this file. Those patches
+   are now redundant but harmless, and are left alone rather than chased.
+
+   Depth on images comes from the container's radius and --lift-*, not an
+   outline. Do not reintroduce this.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Don't outline circular avatars (already bordered), tiny icons, nav icons */
+.avatar img,
+.aq-nav img,
+[class*="icon"] img,
+.sticker img,
+.emoji-img,
+img[width="16"], img[width="20"], img[width="24"],
+img[height="16"], img[height="20"], img[height="24"] {
+  outline: none !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   C - Text truncation classes (prevent layout shift)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.truncate-1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   F - Form styling for mobile optimization
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.form-label {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(12px, 1.5vw, 14px);
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   C1 - Global prefers-reduced-motion catch-all
+   Covers CSS animations that JS components don't control.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    /* `!important` here too (audit 2026-09-17, responsiveness P2). Without it
+       this universal selector has the lowest possible specificity, so EVERY
+       class-selector transition in the codebase outranked it - which is nearly
+       all of them. The rule read as a catch-all and behaved as a suggestion:
+       animations stopped for a visitor who asked for reduced motion, while
+       transitions carried on. The two lines above already carried it; this one
+       being bare looks like an oversight rather than a decision, and the effect
+       was invisible unless you tested with the OS setting on.
+
+       Scoped to duration only, deliberately. `transition-property: none` would
+       also kill transitions that are doing accessibility work (a focus ring
+       easing in), and this media query is about reducing motion, not removing
+       state changes. */
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GLOBAL TYPOGRAPHY RHYTHM - interface-details audit
+   Single source of truth for line-heights, letter-spacing,
+   body text, and heading scale across every page.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ─── Body + paragraph baseline ─────────────────────────
+   NeutralFace renders tighter than system-ui; 1.6 for
+   paragraphs gives comfortable reading rhythm.
+   The !important overrides the 15.5px + font-family above. */
+body { line-height: 1.5; }
+p    { line-height: 1.6; margin-top: 0; }
+
+/* ─── Heading SIZE scale ─────────────────────────────────────────────────────
+   index.css imports `tailwindcss/preflight.css` (needed for /paradox), and it
+   applies globally. Its reset includes:
+
+       h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+
+   So a bare <h2> renders at body size — measured: 15.5px / weight 400, i.e.
+   identical to a paragraph. `.h-display` does not rescue it either: that class
+   sets face, weight, tracking and leading but its only size declaration is
+   `font-size: calc(1em * var(--heading-scale))`, which with the scale at 1 is
+   just the inherited size again.
+
+   The consequence is structural, not sloppiness: every heading author HAS to
+   invent a size, and they did — 67 distinct clamp() strings in the CSS plus
+   ~201 more inline in TSX.
+
+   HONEST SCOPE: adding this scale does NOT shrink that number today. Measured
+   across / and /about, all 33 headings already carry an explicit size from
+   inline style or a class rule, and those still win — the only unsized heading
+   on either page is an .sr-only one. So this is a floor for what gets written
+   NEXT, not a fix for what exists. Retiring the inline clamps onto these steps
+   is a separate migration, done with the page on screen.
+
+   Paradox is excluded below rather than via :not() — a descendant selector
+   inside :not() is Selectors-4 and needlessly fragile, where a plain
+   `.paradox-root h1` (0,1,1) simply outranks a bare `h1` (0,0,1). Paradox sets
+   font-FAMILY on its headings but never font-size, so without that counter-rule
+   this scale would leak into the sub-app.                                */
+h1 { font-size: clamp(40px, 7vw, 72px); }
+h2 { font-size: clamp(28px, 4vw, 40px); }
+h3 { font-size: clamp(22px, 2.6vw, 26px); }
+h4 { font-size: 20px; }
+h5 { font-size: 17px; }
+h6 { font-size: 15px; }
+/* Restore Paradox to preflight's `inherit`, i.e. exactly what it had before. */
+.paradox-root h1, .paradox-root h2, .paradox-root h3,
+.paradox-root h4, .paradox-root h5, .paradox-root h6 { font-size: inherit; }
+
+/* ─── Heading rag ────────────────────────────────────────
+   `text-wrap: balance` was being hand-applied inline: 44 of the 193 headings
+   in the app had it, so the other 149 were free to drop a single orphaned
+   word onto their own line. It's a property with no downside on short
+   headings (a one-line heading is already balanced) and it belongs to the
+   element, not to each author remembering it — so it goes here.
+
+   Unlike the size scale above, this one SHOULD reach Paradox: its headings
+   are the longest and most display-weight in the codebase. No counter-rule.
+
+   Body copy gets `pretty` instead — same intent, but it only fixes the last
+   line, which is what long-form text needs. */
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+p, li, blockquote, figcaption { text-wrap: pretty; }
+
+/* ─── Heading line-heights ───────────────────────────────
+   NeutralFace is a tall-cap display face. Default browser
+   line-height (1.2) is too loose for large headings.
+   h1: tight (0.95) - page-level hero titles
+   h2: snug (1.05) - section headings
+   h3: comfortable (1.15) - card/panel headers            */
+h1 { line-height: 1.0; margin-top: 0; margin-bottom: 0; }
+h2 { line-height: 1.05; margin-top: 0; margin-bottom: 0; }
+h3 { line-height: 1.15; margin-top: 0; margin-bottom: 0; }
+h4, h5, h6 { line-height: 1.2; margin-top: 0; margin-bottom: 0; }
+
+/* .h-display already has line-height: 0.92 - keep it */
+
+/* ─── Letter-spacing tokens ──────────────────────────────
+   Standardize the chaos of 0.04–0.08em across components.
+   Two values only:
+     --ls-caps:    0.06em - uppercase labels, mono chips, role badges
+     --ls-display: -0.03em - display headings (NeutralFace looks best tight)
+   Usage: just reference these vars in inline styles.      */
+
+/* Apply to all existing CSS uppercase helpers */
+.upper { letter-spacing: var(--ls-caps); }
+.role  { letter-spacing: var(--ls-caps); }
+.mono.upper { letter-spacing: var(--ls-caps); }
+
+/* Tighten NeutralFace headings site-wide */
+h1, h2, h3, .h-display, .giant {
+  letter-spacing: var(--ls-display);
+}
+
+/* ─── Page width wrappers - single source of truth ───────
+   .aq-wrap:    960px - dashboard/admin pages
+   .aq-wrap-sm: 680px - prose-heavy pages (blog, post detail)
+   .aq-wrap-lg: 1200px - wide grid pages (teams, projects)   */
+/* 2026-10-20 (visual QA): .aq-wrap used to be a centred 960px column, so on a wide screen its content started at 264px while the
+   nav, the footer and every other page start at 104px (three different gutters). Dashboard pages now take the frame's width, the
+   same edges as `.container`; text lines inside them keep their own measure. .aq-wrap-lg's 1200px cap sat 16px inside the frame
+   and is the frame now too. .aq-wrap-sm stays centred: it is an article column, where a centred measure is the convention. */
+.aq-wrap    { max-width: var(--frame-max); margin-inline: auto; padding: 0 var(--page-px); }
+.aq-wrap-sm { max-width:  680px; margin-inline: auto; padding: 0 var(--page-px); }
+.aq-wrap-lg { max-width: var(--frame-max); margin-inline: auto; padding: 0 var(--page-px); }
+
+/* ─── Section vertical rhythm ────────────────────────────
+   Replaces 60px / 80px / 40px hardcoded values.
+   .section:    standard internal page section
+   .section-lg: hero / first section               */
+.section    { padding-top: var(--section-py-sm); padding-bottom: var(--section-py-sm); }
+.section-lg { padding-top: var(--section-py);    padding-bottom: var(--section-py); }
+
+/* ─── Standard component gap scale ──────────────────────
+   .gap-section:  between major page sections (32px)
+   .gap-content:  between card/form fields (16px)
+   .gap-tight:    between related micro elements (8px)     */
+
+/* ─── Tabular nums on all counters ──────────────────────
+   Prevent layout shift on live-updating numbers.          */
+[class*="-count"], [class*="-num"], [class*="-stat"],
+.like-count, .stat-num { font-variant-numeric: tabular-nums; }
+
+/* ─── Form field standard gap ────────────────────────────
+   All stacked form fields should breathe at 14px.
+   Use .form-stack to get consistent spacing without
+   per-field marginBottom in every component.              */
+.form-stack { display: flex; flex-direction: column; gap: 14px; }
+.form-stack .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .form-stack .form-row { grid-template-columns: 1fr; } }
+
+/* ─── Director / admin page container standard ───────────
+   All director sub-pages use the same container: 720px  */
+.dir-page { max-width: 760px; margin: 0 auto; padding: clamp(24px, 4vw, 40px) var(--page-px) 80px; }
+
+/* ─── Card internal padding ─────────────────────────────
+   .card-body: default inner padding for .card children   */
+.card-body { padding: 20px; }
+@media (max-width: 480px) { .card-body { padding: 16px; } }
+
+/* ─── Muted helper line-height ───────────────────────────
+   .muted is used for sub-labels - give it a consistent size */
+.muted { line-height: 1.5; }
+.xs    { line-height: 1.4; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Mobile backdrop-filter cap
+   ───────────────────────────────────────────────────────
+   Large blurs (16–20px) are expensive on mid-tier Android
+   GPUs. On phones we cap any heavy blur surface to 10px,
+   which is visually indistinguishable from 20px at thumb
+   distance but cheap to render.
+
+   This rule runs LAST so it wins the cascade for any
+   .aq-* / .modal-back / .feed-* surface defined above
+   without each rule having to know about the cap.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 640px) {
+  /* REMOVED 2026-09 (redesign section 01): .aq-bottom-bar and
+     .aq-bottom-bar-pill were capped here. The pill is now an OPAQUE white
+     surface with a 2px ink border and no backdrop-filter of its own, so this
+     rule was forcing a blur (with !important) behind something nothing can be
+     seen through: zero visual effect, one extra rasterised layer on a fixed
+     element every scroll frame. Deleting the selectors removes the cost
+     entirely, which is strictly better than capping it.
+     .aq-nav-inner (blur(18px)) still cannot be capped from here - its own
+     declaration is !important AND later in the file, so it wins on source
+     order; it is capped at source instead (search "Capped at SOURCE"). */
+  .aq-logo,
+  .aq-hamburger-left-btn,
+  .modal-back {
+    backdrop-filter: blur(10px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.6) !important;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LIQUID GLASS NAV - Apple-Tahoe-style refractive capsules
+   ───────────────────────────────────────────────────────
+   Upgrades the existing frosted floating pills (logo, nav links,
+   icon buttons, avatar) with a layered inset bevel - a bright
+   top-left highlight + a secondary bottom-right highlight + inner
+   depth shadows - for the "liquid glass" refractive edge. Highlights
+   are neutral white/black only (no palette change). Filled .active
+   pills keep their solid look so the active indicator stays clear.
+   Defined last so it wins the cascade over the nav rules above.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Kill the full-width frosted band behind the nav - only the floating
+   capsules carry glass; the bar itself stays clean. (aq-design-system.css
+   sets backdrop-filter on .aq-nav; v6's transparent bar never reset it.)
+   Also tighten the left/right padding so capsules sit closer to the edges. */
+.aq-nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  padding-left: 12px; padding-right: 12px;
+}
+
+/* REDESIGN 2026-09 (00/02, DESIGN.md §1 ground stacking): DELETED, the last
+   liquid-glass block. It gave `.aq-logo`, every inactive `.aq-nav-link`, the
+   icon buttons and the avatar a cream-alpha fill (`--lg-bg`) AND their own
+   `backdrop-filter: blur(16px) saturate(1.85)` — six independently blurred
+   cream capsules stacked on the flat WHITE `.aq-nav-inner` pill, which is
+   both the wrong ground order (cream page → white card → cream well → white
+   chip) and a reinstatement of exactly the blur layers the note at the top of
+   this file records as deliberately removed for performance.
+   The flat-pill redesign already supplies the hover affordance
+   (`.aq-nav-link:hover { background: var(--bg-2) }`), so nothing replaces it.
+   The `--lg-*` tokens stay defined in tokens.css (lead-owned); this block was
+   their only consumer in the app. */
+
+/* Mobile: the mobile-nav rules above set logo/hamburger shadows with
+   !important, so re-apply the liquid bevel with !important here (incl. both
+   hamburgers), and keep the blur capped for perf. */
+/* REDESIGN 2026-09: DELETED, both halves of a self-cancelling pair.
+   These two blocks re-applied the liquid-glass bevel and a 10px backdrop blur
+   to every nav control with !important, and the block immediately below them
+   flattened the same controls back to transparent with !important one media
+   query later. Net visual effect: nothing. Net cost: a backdrop-filter on six
+   selectors that the flattening rule could not actually remove, because
+   `backdrop-filter: none !important` still creates a containing block.
+   The bar is no longer glass, so none of it has a purpose. */
+
+/* REDESIGN 2026-09: DELETED, the third and last of the glass blocks.
+   This one flattened the nav controls back to transparent with !important, to
+   undo the two blocks above it that re-applied the liquid-glass bevel and
+   blur. Those two are gone, so this undoes nothing - and keeping it would
+   leave `backdrop-filter: none !important` in the cascade, which still creates
+   a containing block on six selectors. That containing block was the actual
+   cost the whole deletion was for. */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MEGA MENU - desktop full-screen nav overlay (Playground redesign)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-menu-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  /* 44px, not 40: this is a tap target. The label is lowercase "menu" per
+     section 01 step 14, so the face must be Eina01 - var(--display) is
+     NeutralFace, which has no lowercase glyphs. */
+  height: 44px; padding: 0 16px; border-radius: 999px;
+  border: var(--bd); background: var(--bg);
+  font-family: var(--eina); font-weight: 800; font-size: 13px;
+  letter-spacing: 0.01em; color: var(--ink); cursor: pointer;
+  white-space: nowrap;
+  transition: transform .12s, background .12s, color .12s;
+}
+.aq-menu-btn:hover { background: var(--ink); color: var(--bg); transform: translateY(-1px); }
+/* REDESIGN 2026-09: `.aq-menu-btn-bars` and its three span rules are deleted.
+   They drew the hand-rolled hamburger, which step 14 replaced with
+   EllipsisHorizontalIcon; the markup no longer emits the element. */
+.aq-menu-btn:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+/* Mobile carries navigation via the bottom tab bar + hamburger sheet. */
+@media (max-width: 760px) { .aq-menu-btn { display: none !important; } }
+
+.aq-mega {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--ink); color: #fff; overflow-y: auto;
+  animation: aqMegaIn .28s cubic-bezier(.34, 1.4, .5, 1);
+}
+@keyframes aqMegaIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.aq-mega-scroll { max-width: 1200px; margin: 0 auto; padding: clamp(18px, 4vw, 40px); min-height: 100%; display: flex; flex-direction: column; }
+.aq-mega-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: clamp(18px, 4vw, 40px); }
+.aq-mega-logo { border: none; background: rgba(255,255,255,.94); border-radius: var(--r-tight); padding: 6px 10px; cursor: pointer; display: inline-flex; }
+.aq-mega-logo img { height: 26px; object-fit: contain; display: block; }
+.aq-mega-x {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 10px 20px; border-radius: 999px; border: 2px solid #fff;
+  background: transparent; color: #fff; font-family: var(--display);
+  font-weight: 800; font-size: 14px; cursor: pointer; transition: background .14s, color .14s;
+  min-height: 44px;
+}
+.aq-mega-x:hover { background: #fff; color: var(--ink); }
+.aq-mega-x:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.aq-mega-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; flex: 1; }
+.aq-mega-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); }
+.aq-mega-lbl {
+  font-family: var(--mono); font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .16em; color: var(--ink); background: var(--accent);
+  padding: 4px 10px; border-radius: 6px; margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+/* Step 16: one item per row with a hairline rule between, and the mono index
+   in --sky. `margin: 6px 0` became padding so the rule sits at the row edge
+   rather than 6px inside it; `color: #fff` became var(--paper), which is the
+   ink block's own paper rather than pure white. */
+.aq-mega-link {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 2px solid rgba(244,239,224,.16);
+  font-family: var(--display); font-weight: 900; font-size: clamp(26px, 3.6vw, 44px);
+  letter-spacing: -0.04em; line-height: 1.06; color: var(--paper); cursor: pointer; transition: color .16s;
+}
+.aq-mega-link:last-child { border-bottom: none; }
+.aq-mega-link .num { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--sky-ink); letter-spacing: 0; flex: none; transition: color .16s; }
+.aq-mega-link .ar { color: var(--hc, var(--accent)); opacity: 0; transition: opacity .15s, transform .15s; font-size: .6em; transform: translateX(-4px); }
+.aq-mega-link:hover, .aq-mega-link.is-active { color: var(--hc, var(--accent)); }
+.aq-mega-link:hover .num { color: var(--hc, var(--accent)); }
+.aq-mega-link:hover .ar { opacity: 1; transform: translateX(0); }
+.aq-mega-link:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+/* Touch devices never fire :hover, so the arrow's affordance never appears
+   for them (the mega menu opens above 760px, reachable by e.g. an iPad in
+   landscape). Keep it visible at rest instead of relying on hover. */
+@media (hover: none) {
+  .aq-mega-link .ar { opacity: 1; transform: translateX(0); }
+}
+/* Step 17: the secondary destinations, as an outlined pill cluster. Nine
+   routes that were 44px display links; every one is kept, the weight is not. */
+.aq-mega-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.aq-mega-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 38px; padding: 0 14px; border-radius: 999px;
+  border: 2px solid rgba(244,239,224,.28);
+  background: transparent; color: var(--paper);
+  font-family: var(--eina); font-weight: 700; font-size: 13.5px;
+  white-space: nowrap; cursor: pointer;
+  transition: background .14s, border-color .14s, color .14s;
+}
+.aq-mega-pill .num { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--sky); }
+.aq-mega-pill:hover, .aq-mega-pill.is-active {
+  background: var(--hc, var(--accent));
+  border-color: var(--hc, var(--accent));
+  color: var(--ink);
+}
+/* The index has to flip too, or a --sky number lands on a --sky pill. */
+.aq-mega-pill:hover .num, .aq-mega-pill.is-active .num { color: var(--ink); }
+.aq-mega-pill:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+.aq-mega-side { display: flex; flex-direction: column; gap: 16px; }
+/* Step 18: the join CTA is now full-width and pinned to the bottom of the
+   menu, so `transform: rotate(1.5deg)` is gone - a full-bleed band that is
+   also rotated leaves two wedges of ink at its corners, which reads as a
+   rendering fault rather than as a sticker. Radius moves onto the scale
+   (22 -> --r-md) and the 8px offset drops to the one permitted CTA shadow. */
+.aq-mega-cta {
+  background: var(--lemon); color: #0A0A0A;
+  border-radius: var(--r-md); padding: 26px;
+  border: 3px solid #000; box-shadow: var(--shadow-cta);
+}
+.aq-mega-cta-wide {
+  margin-top: clamp(24px, 4vw, 44px);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+}
+/* The copy is a row on a wide band and a stack on a narrow one. The paragraph
+   takes the flexible slot so the button never wraps under its own label. */
+.aq-mega-cta-wide h3 { margin: 0; flex: none; }
+.aq-mega-cta-wide p {
+  margin: 0; flex: 1 1 240px; min-width: 0;
+  font-family: var(--eina); font-size: 14px; line-height: 1.5; color: #0A0A0A;
+}
+.aq-mega-cta-wide .btn { flex: none; }
+.aq-mega-cta h3 { font-family: var(--display); font-weight: 900; font-size: 30px; letter-spacing: -0.03em; margin: 12px 0 6px; }
+.aq-mega-socs { display: flex; gap: 8px; flex-wrap: wrap; }
+.aq-mega-soc {
+  flex: 1; min-width: 120px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14);
+  border-radius: 14px; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+  transition: background .14s, border-color .14s;
+}
+.aq-mega-soc:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); }
+.aq-mega-soc b { font-family: var(--display); font-weight: 800; font-size: 15px; color: #fff; }
+.aq-mega-soc span { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.5); }
+.aq-mega-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: clamp(24px, 4vw, 44px); padding-top: 20px; border-top: 2px solid rgba(255,255,255,.12); font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.45); }
+@media (max-width: 860px) {
+  .aq-mega-grid { grid-template-columns: 1fr; }
+  .aq-mega-cols { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aq-mega { animation: none; }
+  .aq-mega-cta { transform: none; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PORTED FROM aq-design-system.css (Phase 1 - token unification)
+   These 23 classes were the only live consumers left in that file
+   (see AQ_MASTER_REBUILD_PROMPT §0.4). Ported verbatim - grouped
+   aliases, coupled children, and dependent keyframes included - so
+   the file could be deleted without unstyling any live surface.
+   (.skeleton and .tabular-nums are intentionally NOT here: index.css
+    already owns them and loads after this file.)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* nav link label (AQNav) */
+.aq-nav-link-label { overflow: hidden; white-space: nowrap; }
+.aq-nav:not(.pill) .aq-nav-link-label { opacity: 1; max-width: 120px; transition: opacity 0.12s var(--ease), max-width 0.18s var(--ease); }
+.aq-nav.pill .aq-nav-link-label { opacity: 0; max-width: 0; transition: opacity 0.1s var(--ease), max-width 0.18s var(--ease); }
+
+/* avatar (AQNav) */
+.aq-avatar { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; flex-shrink: 0; overflow: hidden; cursor: pointer; }
+.aq-avatar img, .av img { outline: none; }
+
+/* hamburger (AQNav) */
+.aq-hamburger { display: flex; flex-direction: column; gap: 4.5px; padding: 11px; min-width: 40px; min-height: 40px; cursor: pointer; transition: opacity 0.2s var(--ease), transform 0.12s var(--ease); align-items: center; justify-content: center; }
+.aq-hamburger:active { transform: scale(0.96); transition-property: transform; }
+.aq-hamburger span { display: block; width: 18px; height: 1.8px; background: var(--txt); border-radius: 2px; transition: 0.2s var(--ease); }
+.aq-nav.pill .aq-hamburger { opacity: 0; pointer-events: none; width: 0; min-width: 0; padding: 0; overflow: hidden; }
+.aq-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px,4.5px); }
+.aq-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.aq-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px,-4.5px); }
+@media (max-width: 760px) { .aq-nav-tabs { display: none; } .aq-hamburger { display: flex; } }
+@media (min-width: 761px) { .aq-hamburger { display: none; } }
+
+/* post card body/action (CreatePostModal, TeamDetailPage, LoginPage) */
+.post-auth { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 11px; }
+.post-body { font-size: 14px; line-height: 1.72; color: var(--txt); margin-bottom: 13px; white-space: pre-wrap; word-break: break-word; letter-spacing: -0.01em; text-wrap: pretty; }
+.post-img { border-radius: var(--r-xs); overflow: hidden; margin-bottom: 13px; background: var(--bg-card); border: 1px solid var(--line); }
+.aq-post-action, .post-act {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 12px; border-radius: var(--r-sm);
+  font-weight: 600; font-size: 12px; color: var(--txt-3);
+  transition: color 0.1s, background 0.1s, transform 0.12s var(--ease);
+  min-height: 40px;
+  font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+  background: none; cursor: pointer;
+}
+.aq-post-action:hover, .post-act:hover { color: var(--txt); background: var(--bg-card); }
+.aq-post-action.liked, .post-act.liked { color: #e0414b; }
+.aq-post-action.liked:hover, .post-act.liked:hover { background: rgba(224,65,75,0.07); }
+.aq-post-action:active, .post-act:active { transform: scale(0.96); transition-property: transform; }
+
+/* modal overlay (CreatePostModal) */
+.aq-modal-overlay, .modal-bg {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(14,14,13,0.35); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 560px) {
+  .aq-modal-overlay, .modal-bg { padding: 0; align-items: flex-end; }
+}
+
+/* eyebrow (LoginPage, WelcomeOverlay) */
+.eyebrow { font-family: var(--f); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent-ink); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+/* divider (LoginPage, ProjectManager) */
+.divider, .aq-hr { border: none; border-top: 1px solid var(--line); margin: 0; }
+
+/* stats (ProfilePage, PublicProfilePage, AboutPage, ProjectManager) */
+.stat-n, .aq-stat-pill-num {
+  font-weight: 900; font-size: clamp(34px,5vw,54px);
+  letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; margin-bottom: 6px;
+}
+.stat-l, .aq-stat-pill-label { font-size: 12px; color: var(--txt-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+
+/* blog card (Paradox blog - global CSS applies) */
+.aq-blog-card, .blog-card {
+  background: var(--bg-card); border: 1.5px solid var(--line);
+  border-radius: var(--r-xl); padding: 26px 28px;
+  transition: border-color 0.1s, box-shadow 0.1s, transform 0.1s; display: block;
+}
+.aq-blog-card:hover, .blog-card:hover { border-color: var(--line-2); box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.aq-blog-arrow, .blog-arrow { display: inline-block; transition: transform 0.2s var(--ease); }
+.aq-blog-card:hover .aq-blog-arrow,
+.blog-card:hover .blog-arrow { transform: translateX(6px); }
+
+/* ticker (components/shared/Ticker) */
+.aq-ticker-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 0; }
+.aq-ticker-track { display: flex; gap: 0; animation: aqTicker 28s linear infinite; white-space: nowrap; width: max-content; }
+.aq-ticker-track:hover { animation-play-state: paused; }
+@keyframes aqTicker { to { transform: translateX(-50%); } }
+.aq-ticker-item { display: inline-flex; align-items: center; gap: 20px; padding: 0 20px; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--txt-3); }
+.aq-ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+/* validation shake (CreatePostModal) */
+@keyframes aqShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.aq-shake { animation: aqShake 0.42s var(--ease); }
+
+/* content-network thread links (PublicProfilePage, BlogPostPage, EverythingWeDoPage) */
+.aq-thread-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  /* Was inline-block at 11px → 17px tall, under the 24px WCAG 2.5.8 floor.
+     Two of these are the "apply to AquaTerra" and "read the volunteer
+     handbook" links at the foot of /opportunities. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+.aq-thread-link:hover { color: var(--welfare-ink); }
+
+/* Confirm dialog (components/Confirm.tsx) - shared across the whole app via
+   ConfirmProvider, eager-mounted in App.tsx, so it lives in critical CSS.
+   Moved out of Confirm.tsx's inline <style> const (Phase 1.3). */
+@keyframes aqcOverlayIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes aqcOverlayOut { from { opacity: 1 } to { opacity: 0 } }
+@keyframes aqcDialogIn { from { opacity: 0; transform: scale(.96) translateY(8px) } to { opacity: 1; transform: none } }
+@keyframes aqcDialogOut { from { opacity: 1; transform: none } to { opacity: 0; transform: scale(.98) translateY(4px) } }
+/* ── Confirm dialog: bottom sheet on phone + tablet, card on desktop ──────
+   Redesign 2026-09 section 01 step 27. These four rules were inline styles on
+   the elements in components/Confirm.tsx (border-radius 18, maxWidth 400,
+   padding '22px 22px 18px', box-shadow '4px 4px 0 0 var(--ink)',
+   align-items center, padding 20 on the overlay, flex-direction row-reverse on
+   the actions). They are here because the step specifies two different shapes
+   at two breakpoints and an inline style cannot express that. ── */
+.aqc-overlay { align-items: flex-end; padding: 0; }
+.aqc-dialog {
+  border-radius: 32px 32px 0 0;
+  box-shadow: none;
+  padding: 10px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  width: 100%;
+  max-width: none;
+  max-height: min(560px, 85vh);
+  overflow-y: auto;
+}
+.aqc-grab {
+  width: 44px; height: 5px; border-radius: 999px;
+  background: var(--line-2);
+  align-self: center;
+  margin: 0 0 6px;
+  flex: none;
+}
+.aqc-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; flex-shrink: 0; }
+.aqc-actions > * { width: 100%; }
+
+@media (min-width: 1025px) {
+  .aqc-overlay { align-items: center; padding: 20px; }
+  .aqc-dialog {
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-cta);
+    padding: 22px 22px 18px;
+    max-width: 480px;
+  }
+  .aqc-grab { display: none; }
+  /* Reversed so the primary action is right-aligned, matching the rest of the
+     codebase. DOM order stays confirm-then-cancel. */
+  .aqc-actions { flex-direction: row-reverse; }
+  .aqc-actions > * { width: auto; }
+}
+
+.aqc-overlay { animation: aqcOverlayIn .18s var(--ease-out); }
+.aqc-overlay.aqc-closing { animation: aqcOverlayOut .18s cubic-bezier(.4,0,1,1) forwards; }
+/* The sheet arrives from the edge it is attached to; the centred card keeps
+   the scale-in. One keyframe per shape, rather than one shared compromise. */
+@keyframes aqcSheetIn  { from { transform: translateY(100%) } to { transform: none } }
+@keyframes aqcSheetOut { from { transform: none } to { transform: translateY(100%) } }
+.aqc-dialog { animation: aqcSheetIn .22s var(--ease-out); }
+@media (min-width: 1025px) {
+  .aqc-dialog { animation: aqcDialogIn .18s var(--ease-out); }
+}
+.aqc-overlay.aqc-closing .aqc-dialog { animation: aqcSheetOut .18s cubic-bezier(.4,0,1,1) forwards; }
+@media (min-width: 1025px) {
+  .aqc-overlay.aqc-closing .aqc-dialog { animation: aqcDialogOut .18s cubic-bezier(.4,0,1,1) forwards; }
+}
+@media (prefers-reduced-motion: reduce) { .aqc-overlay, .aqc-dialog { animation: none !important; } }
+
+/* HoD-pulse - the "new HoD desk" attention dot, used by both AQNav.tsx
+   (desktop) and MobileMenuBar.tsx (mobile tab bar); consolidated into one
+   definition here instead of three near-duplicate copies (Phase 1.3). */
+@keyframes hodPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE NAV BAR (components/AQNav.tsx, <=760px) - folded back from
+   styles/routes/nav-mobile.css (Phase-1.1 split had this filed as a "route"
+   sheet, but AQNav is an eager shell component on every layout, so Vite was
+   hoisting it into the entry bundle anyway; keeping it here is honest about
+   that and avoids the double-cost of an unused route-chunk file).
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  /* .aq-nav is just the fixed wrapper; .aq-nav-inner is the floating bar.
+     Gutters mirror the bottom bar (12px sides). */
+  .aq-nav {
+    padding: max(10px, env(safe-area-inset-top)) 12px 0;
+    border-bottom: none !important;
+  }
+
+  /* THE BAR - flat white pill, 1:1 with AQ Chrome Poster's phone frame.
+     REDESIGN 2026-09: was 56px tall at radius 22 with a 50% white fill,
+     blur(10px) saturate(1.6) and a four-layer inset+drop shadow. The
+     "capped at SOURCE" note that used to live here is obsolete: there is no
+     blur left to cap, so the top fixed surface stops being re-rasterised on
+     every scroll frame at all. */
+  .aq-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: 54px;
+    padding: 0 8px 0 12px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: var(--bd);
+    box-shadow: none;
+  }
+
+  .aq-nav-pill { display: none !important; }
+
+  /* Logo sits flat on the bar (the bar gives mix-blend the light surface it needs) */
+  .aq-logo {
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    /* `min-width: 0 !important` silently undid the 40px floor set at
+       .aq-logo (v6.css:219) - whose own comment cites DESIGN.md §2 - leaving
+       the primary "go home" control 23.6px wide on every phone, under the
+       32px absolute floor. The !important that reached past the base rule is
+       exactly how that fix got re-broken; the floor is restored here at the
+       same specificity.
+
+       2026-09-11 closing audit: raised 40 -> 44 in step with the base rule.
+       The base rule's "40px matches the nav links" was wrong - the nav's own
+       icon buttons all measure 44x44 live. Measured here as 40x44 after only
+       the base rule was raised, because `min-height` beats `height` in CSS
+       while `min-width: 40px !important` still won: which is precisely the
+       re-breaking this comment already warns about, caught by measuring
+       rather than by assuming the base rule had taken. */
+    height: 44px !important; min-width: 44px !important; padding: 0 !important;
+    border-radius: 0 !important;
+    border: 0 !important;     /* the frosted-pill rule above leaves a 1px white edge, which showed as a square outline on an ink hero */
+  }
+  .aq-logo-img { outline: none !important; border: none !important; box-shadow: none !important; }
+
+  /* Right cluster */
+  .aq-nav-actions {
+    display: flex; align-items: center; gap: 2px;
+    background: transparent !important; padding: 0 !important; flex-shrink: 0;
+  }
+
+  /* Hidden on mobile (handled by the bottom bar / avatar menu) */
+  .aq-post-btn,
+  .aq-nav-icon-bell,
+  .aq-nav-icon-btn[title="Saved posts"],
+  .aq-nav-actions .aq-nav-icon-btn[title="HoD Desk"] { display: none !important; }
+  .aq-avatar-wrapper { display: block !important; }
+
+  /* Flat icon buttons inside the bar - search + hamburger (+ avatar). Same
+     resting ink-3 colour as the bottom-bar tab icons; soft rounded press state.
+     (The 2-class selector also out-specifies the legacy .aq-hamburger-btn hide,
+     so the menu shows.) */
+  .aq-nav-actions .aq-nav-icon-btn,
+  .aq-nav-actions .aq-avatar-btn {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    width: 44px !important; height: 44px !important; min-width: 44px !important;
+    padding: 0 !important; border-radius: 14px !important;
+    background: transparent !important; box-shadow: none !important; border: none !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    color: var(--ink-3) !important;
+    transition: color 0.18s ease, background 0.15s ease;
+  }
+  .aq-nav-actions .aq-nav-icon-btn:active,
+  .aq-nav-actions .aq-avatar-btn:active { background: rgba(0,0,0,0.05) !important; }
+  .aq-nav-actions .aq-nav-icon-btn.active { color: #0A0A0A !important; background: var(--welfare) !important; }
+  .aq-nav-actions .aq-nav-icon-btn svg { width: 19px !important; height: 19px !important; }
+
+  /* Avatar keeps its coloured identity circle */
+  .aq-nav-actions .aq-avatar-btn { border-radius: 999px !important; }
+
+  /* Apply - colored chip, matching the desktop bar's right-side CTA. */
+  .aq-nav-actions .btn-primary {
+    /* 40px, not 38: matches the desktop CTA and the nav links, and DESIGN.md
+       §2's floor. This rule's `!important`s were out-specifying the base rule
+       ~3100 lines above, so the mobile CTA kept the old numbers. */
+    height: 40px !important; min-height: 40px !important;
+    padding: 0 15px !important; border-radius: 999px !important;
+    font-size: 12.5px !important; font-weight: 800 !important;
+    background: var(--welfare) !important; color: #0A0A0A !important;
+    /* DESIGN.md §1 / 00.6: a primary button is one of the three surviving
+       carriers of `2px solid var(--ink)` + `2px 2px 0 var(--ink)`. This was
+       `border: none` plus a soft green glow — a fourth, off-system motif on
+       the most prominent button on a phone. */
+    border: var(--bd) !important;
+    box-shadow: var(--sh) !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  }
+}
+
+
+/* Project-card `.pcard*` rules moved to styles/routes/projects.css — their only
+   consumer, PostStreamCard.tsx, is imported solely by the lazy PublicProjectsPage,
+   so they are route-only, not eager-shell (the earlier "PostStreamCard is eager"
+   note was stale). See projects.css. */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOASTS - redesign 2026-09, section 01 step 23
+   Lifted out of the inline style in components/Toast.tsx, which pinned the
+   stack to `bottom: max(80px, safe-area + 80px); right: 16px` at every
+   breakpoint. The step specifies two positions, and an inline style cannot
+   carry a media query.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-toasts {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  /* Phone: full width, clearing the dock. The dock's own pill is 60px tall and
+     sits 14px off the bottom, so 88px puts the toast just above it. */
+  left: 12px;
+  right: 12px;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  align-items: stretch;
+}
+@media (min-width: 1025px) {
+  .aq-toasts {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    width: 380px;
+    align-items: stretch;
+  }
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAV SEARCH - redesign 2026-09, section 01 step 15
+   One control, two forms. The icon button is the only search affordance at
+   <= 1024; the 230px field is the only one at >= 1025. They are never both
+   rendered, so only one is ever in the tab order and a screen reader never
+   meets two "Search" controls in the same landmark.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-search-field { display: none; }
+
+@media (min-width: 1025px) {
+  .aq-search-btn { display: none !important; }
+  /* Condensed 2026-09: was 230px wide with 12px/8px side padding - next to
+     the nav's 40px icon buttons and lowercase links it read as a stretched-
+     out pill rather than a compact field. Narrower width, tighter padding
+     and gap, a smaller kbd hint - still 40px tall (matches every other nav
+     control) and still fits the placeholder without clipping it. */
+  .aq-search-field {
+    display: inline-flex; align-items: center; gap: 6px;
+    width: 188px; height: 40px; padding: 0 6px 0 10px;
+    border: var(--bd); border-radius: 999px;
+    background: var(--bg);
+    transition: background .14s, box-shadow .14s;
+  }
+  .aq-search-field:focus-within { background: #FFFFFF; box-shadow: var(--shadow-cta); }
+  .aq-search-field-ic { display: inline-flex; color: var(--ink-3); flex: none; }
+  .aq-search-field-ic svg { width: 14px; height: 14px; }
+  .aq-search-field input {
+    flex: 1 1 auto; min-width: 0;
+    border: none; background: none; outline: none; padding: 0;
+    font-family: var(--eina); font-size: 12.5px; font-weight: 600; color: var(--ink);
+  }
+  .aq-search-field input::placeholder { color: var(--ink-3); font-weight: 500; }
+  /* Chrome draws its own clear affordance on type=search; it collides with
+     the kbd hint and is not on the design system. */
+  .aq-search-field input::-webkit-search-cancel-button { display: none; }
+  .aq-search-field kbd {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 17px; height: 17px; border-radius: 6px;
+    border: 1.5px solid var(--line-2); background: var(--bg-2);
+    font-family: var(--code); font-size: 10px; font-weight: 700; color: var(--ink-3);
+    line-height: 1;
+  }
+  /* Once the caret is in the field the hint is stale: it documents how to get
+     here, and you are here. */
+  .aq-search-field:focus-within kbd { opacity: 0; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SHARED MODAL / FIELD / ALERT PRIMITIVES
+   ───────────────────────────────────────────────────────
+   Redesign 2026-09. components/Modal.tsx, Input.tsx, TextArea.tsx and
+   Alert.tsx were written against Tailwind, which this app no longer loads:
+   Tailwind moved to paradox/tailwind.css and is imported only by the lazy
+   ParadoxRoot, while main.tsx loads tokens.css, v6.css and index.css.
+
+   So `fixed inset-0 z-50`, `bg-black/50`, `flex min-h-full items-center
+   justify-center`, `max-w-md`, `rounded-2xl max-h-[85vh]`, `h-11 w-11` and
+   Alert's whole `bg-green-50 / text-green-800` palette all resolved to
+   nothing. The result was not "slightly off": the modal had no fixed
+   positioning, no scrim, no centring, no width cap and no 44px close target,
+   and the Alert rendered as unstyled text. Two live member-facing modals use
+   it (teams/CreateTeamPostModal.tsx and teams/JoinRequestModal.tsx).
+
+   These classes replace them. Named .aqm-* / .aqa-* so they cannot collide
+   with the older .modal-back / .modal layer, which has a different structure.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aqm-back { position: fixed; inset: 0; z-index: 210; overflow-y: auto; overflow-x: hidden; }
+/* 2026-09-10: routed onto the shared --scrim tokens (tokens.css). Was a
+   one-off rgba(0,0,0,.55) + blur(4px); the audit found nine scrim colours and
+   six blur radii doing this one job across the overlay layer. */
+.aqm-scrim { position: fixed; inset: 0; background: var(--scrim); backdrop-filter: var(--scrim-blur); }
+.aqm-wrap { position: relative; display: flex; min-height: 100%; align-items: center; justify-content: center; padding: 16px; }
+
+/* 2026-09-10: the shared Modal.tsx shell. Was `--bd-hero` (2px ink) plus
+   `--shadow-cta`. Both were wrong for a panel: the 2px ink border survives only
+   on .btn-primary and .sticker, and --shadow-cta is the CTA/sticker offset, not
+   an elevation. A dialog is the most-elevated surface on screen, so it takes the
+   top lift. Fixing it here migrates every Modal.tsx consumer at once. */
+.aqm-panel {
+  position: relative; width: 100%;
+  display: flex; flex-direction: column;
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  box-shadow: var(--lift-4);
+  max-height: 85vh;
+  animation: aqmIn .2s var(--ease-out);
+}
+.aqm-panel:focus { outline: none; }
+.aqm-sm { max-width: 384px; }
+.aqm-md { max-width: 448px; }
+.aqm-lg { max-width: 512px; }
+.aqm-xl { max-width: 576px; }
+
+@keyframes aqmIn { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) { .aqm-panel { animation: none; } }
+
+/* Full-screen on phone when the caller asks for it. A form that fills the
+   screen must still clear the home indicator, hence the safe-area padding on
+   the body below. */
+@media (max-width: 600px) {
+  .aqm-wrap.is-fullscreen { padding: 0; }
+  .aqm-panel.is-fullscreen {
+    max-width: none; height: 100dvh; max-height: 100dvh;
+    border-radius: 0; border-left: none; border-right: none; box-shadow: none;
+  }
+}
+
+.aqm-head {
+  flex: none; display: flex; align-items: center; justify-content: flex-end;
+  padding: 12px 16px;
+}
+.aqm-head.has-title { justify-content: space-between; border-bottom: var(--hair); }
+.aqm-title { font-family: var(--display); font-weight: 800; font-size: 18px; color: var(--ink); margin: 0; }
+.aqm-close {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin-right: -10px;
+  border: none; background: none; border-radius: 999px;
+  color: var(--ink-3); cursor: pointer;
+  transition: background .12s, color .12s, transform .12s;
+}
+.aqm-close:hover { background: var(--bg-2); color: var(--ink); }
+.aqm-close:active { transform: scale(0.96); }
+.aqm-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 16px; }
+.aqm-panel.is-fullscreen .aqm-body { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.aqm-foot {
+  display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+  padding-top: 16px; margin-top: 16px; border-top: var(--hair);
+}
+
+/* ── Field wrapper shared by Input and TextArea ────────────────────────── */
+.aqf { width: 100%; }
+.aqf-label {
+  display: block; margin-bottom: 6px;
+  font-family: var(--eina); font-size: 13px; font-weight: 700; color: var(--ink-2);
+}
+.aqf-req { color: var(--tomato-ink); margin-left: 3px; }
+.aqf-msg { margin: 6px 0 0; font-family: var(--eina); font-size: 12.5px; color: var(--ink-3); }
+.aqf-msg.is-error { color: var(--tomato-ink); }
+.aqf .input[aria-invalid="true"], .aqf .textarea[aria-invalid="true"] { border-color: var(--tomato); }
+
+/* ── Field-level validation, wired once (changelog/11-system-states.md §11.10) ──
+   00.10 shipped `.input[aria-invalid="true"]` etc. as a class with no rule
+   behind it ("ship the class only... do not wire this up in any form yet -
+   that is per-page work"). This is that wiring: an UNSCOPED attribute
+   selector so it backs every field primitive in the product, not just the
+   boxed `.input`/`.textarea`/`.sel` trio - including a plain `<input
+   className="input">` that isn't wrapped in the `.aqf` underline-field
+   system, e.g. public/CollaborationsPage.tsx, which already sets
+   `aria-invalid` per field and is the one form in the app doing per-field
+   errors correctly (copy its `fieldErrors` state shape for any new form,
+   per the spec - do not invent a second pattern). Deliberately LOWER
+   specificity than `.aqf .input[aria-invalid="true"]` above, so §07's
+   underline-field error colour still wins where that system is in use; this
+   is the fallback for everyone else. `.field-error` is a new class name
+   (does not collide with `.aqf-msg.is-error`, §07's own message style) for
+   any form's per-field message span. */
+[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-tint);
+}
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--danger-ink);
+  text-transform: none;
+}
+
+/* ── §07.0 · `.aq-field` — the underline-only field ──────────────────────────
+   changelog/07-auth-and-contact.md §07.0: "the single most reusable thing in
+   this file... replaces the boxed inputs on contact, auth, apply, the
+   composer's detail panel, edit-profile and every desk editor."
+
+   Deliberately ADDITIVE, not a retarget of `.aqf` above. `.aqf` already backs
+   `components/Input.tsx` / `TextArea.tsx`, which are wired into call sites
+   this file does not touch - repointing `.aqf` itself at underline styling
+   would silently restyle every one of those as a side effect of this PR.
+   `.aq-field` is a new, genuinely global class (lives here, not in a
+   page-scoped stylesheet) that forms adopt one call site at a time. First
+   real caller: public/ContactPage.tsx. Not yet used by auth/LoginPage.tsx or
+   RegisterPage.tsx - see the note at the end of this block for why.
+
+   border-radius: 0 is deliberate - the one documented exception to the
+   999/32/22/14 radius scale (changelog/README.md, "the four rules that
+   govern everything"). A line has no corners; do not "fix" this to var(--r-*). */
+.aq-field { display: block; }
+.aq-field-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);                      /* 4.6:1 on cream/card - default (light) ground */
+  margin-bottom: 9px;
+}
+.aq-field-input {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  border-radius: 0;                          /* the one radius-scale exception - see above */
+  /* 2026-09-11 closing audit: these measured 286x36 on /contact and
+     /collaborations - the public forms, the site's actual conversion surface -
+     because an underline field has no box to give it height, only padding.
+     The underline stays exactly where it is relative to the text; the extra
+     height is breathing room above it, so this costs nothing visually and
+     brings the field to the app-wide floor. `box-sizing: border-box` so the
+     min-height includes the padding rather than adding to it. */
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 8px 0 9px;
+  border-bottom: 1.5px solid rgba(10,10,10,0.20);
+  font: 400 17px var(--eina);                /* 17px, never smaller - above the 16px iOS-zoom floor */
+  color: var(--ink);
+  /* Measured live (public/ContactPage.tsx, DevTools): the generic
+     `[aria-invalid="true"] { box-shadow: 0 0 0 3px var(--danger-tint) }`
+     fallback a few rules up (added for forms with no field-level system of
+     their own) is an attribute selector at the SAME specificity as this
+     class, and it was winning on source order and drawing a soft rounded
+     glow around this line-only field - exactly the boxed look §07.0 removes.
+     Same-specificity, later-in-file wins, so this is enough to opt out
+     everywhere (valid, invalid, and focused) without touching that rule,
+     which still needs to glow for the boxed `.input`/`.textarea`/`.sel`
+     fields it backs elsewhere. */
+  box-shadow: none;
+}
+.aq-field-input::placeholder { color: rgba(10,10,10,0.42); }   /* 4.6:1 on cream - a real floor */
+.aq-field-input:focus-visible {
+  outline: none;                              /* legal only because the rule below thickens + darkens */
+  border-bottom-color: var(--ink);
+  border-bottom-width: 2px;
+}
+/* select/textarea share the class (no tag qualifier above), so a native
+   select's own chrome is untouched beyond border/background/font. */
+
+/* Error state - the gap 00-global-tokens-and-primitives.md §00.10 deliberately
+   left open ("ship the class only... do not wire this up in any form yet").
+   Pair with aria-invalid="true" on the control, aria-describedby pointing at
+   the .aq-field-error id, and role="alert" on the message - see
+   public/ContactPage.tsx for the wiring, lifted from CollaborationsPage's
+   fieldErrors pattern per this section's own instruction not to invent a
+   second one.
+
+   DEFAULT here is the CREAM/WHITE ground (--tomato-ink, 6.7:1) - every
+   `.aq-field` live today (ContactPage's form card) sits on --card. The
+   section's own literal CSS block hard-codes --danger-lift with no ground
+   qualifier, but its prose is explicit ("On cream use --tomato-ink instead")
+   and --danger-lift was derived specifically to clear AA on INK (5.2:1) -
+   on cream it was never measured and isn't the intended token there. Treating
+   the prose as authoritative over the unqualified example, cream is default
+   and --on-ink (below) is the override, not the reverse. */
+.aq-field[data-invalid] .aq-field-label { color: var(--tomato-ink); }
+.aq-field[data-invalid] .aq-field-input { border-bottom-color: var(--tomato-ink); }
+.aq-field-error {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--tomato-ink);
+}
+
+/* Ink-ground variant. Naming matches the existing --on-ink suffix convention
+   (.aq-live--on-ink above). No live caller today - every current `.aq-field`
+   sits on a light card - but §07.2's auth right-pane and §07.1's contact
+   right-pane both specify a form directly on ink, so this is ready for
+   whichever surface gets that treatment first. */
+.aq-field--on-ink .aq-field-label { color: var(--nav-fg-faint); }   /* 0.55, 5.6:1 - the floor, not 0.45 */
+.aq-field--on-ink .aq-field-input { border-bottom-color: rgba(244,239,224,0.28); color: var(--nav-fg); }
+.aq-field--on-ink .aq-field-input::placeholder { color: var(--nav-fg-faint); }  /* NOT 0.45: measures 4.06:1 and fails, see §07.0 */
+.aq-field--on-ink .aq-field-input:focus-visible { border-bottom-color: var(--nav-fg); }
+.aq-field--on-ink[data-invalid] .aq-field-label,
+.aq-field--on-ink[data-invalid] .aq-field-input {
+  /* accent-lint-ok: .aq-field--on-ink is the ink-ground field by definition (07.0); --danger-lift measures 7.04:1 on --ink, and --danger-ink only 3.61:1 there. The ground is on an ancestor, so the linter cannot see it. */
+  color: var(--danger-lift);
+  border-bottom-color: var(--danger-lift);
+}
+/* accent-lint-ok: same ink ground as above — --danger-lift 7.04:1 on --ink. */
+.aq-field--on-ink .aq-field-error { color: var(--danger-lift); }
+
+/* ── Alert ─────────────────────────────────────────────────────────────── */
+.aqa {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  border: var(--bd); border-radius: var(--r-sm);
+  font-family: var(--eina); font-size: 13.5px; line-height: 1.5;
+  color: var(--ink); background: var(--card);
+  border-left-width: 4px;
+}
+.aqa-ic { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.aqa-body { flex: 1 1 auto; min-width: 0; }
+/* The hue is a 4px left edge, not a fill: these alerts carry body copy at
+   13.5px, and --welfare under ink is 4.35:1. */
+.aqa-success { border-left-color: var(--welfare); }
+.aqa-success .aqa-ic { color: var(--welfare-ink); }
+.aqa-error   { border-left-color: var(--rust); }
+.aqa-error   .aqa-ic { color: var(--rust); }
+.aqa-warning { border-left-color: var(--lemon); }
+.aqa-warning .aqa-ic { color: var(--lemon-ink); }
+.aqa-info    { border-left-color: var(--sky); }
+.aqa-info    .aqa-ic { color: var(--sky-ink); }
+.aqa-close {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -13px -14px -13px 0;
+  border: none; background: none; color: var(--ink-3); cursor: pointer;
+}
+.aqa-close:hover { color: var(--ink); }
+
+/* ── Delight pass (docs/plans/delight-pass.md): two CSS-only touches on public pages. No script, no bundle cost beyond these bytes. ── */
+/* A sticker gives a little wiggle when pointed at. Fine pointers only; never under reduced motion. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .sticker:hover { animation: aq-wiggle .5s ease-in-out; }
+}
+@keyframes aq-wiggle { 0%, 100% { rotate: 0deg; } 25% { rotate: -5deg; } 60% { rotate: 4deg; } }
+
+/* A hairline reading ribbon along the top edge that fills as you scroll. Browsers without scroll-driven animations just do not
+   show it. Not on the HoD desk, which stays motion-light. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    body:not(:has(.admin))::after {
+      content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 60; pointer-events: none;
+      background: var(--welfare); transform-origin: 0 50%; transform: scaleX(0);
+      animation: aq-read linear both; animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes aq-read { to { transform: scaleX(1); } }

@@ -1,0 +1,89 @@
+/* Inside AQ's website only (TerraNotesRoot.jsx imports it; the magazine's own site never loads it). The magazine draws
+   inside a shadow root there, and a shadow root cannot see or set three things: @font-face (the document owns fonts),
+   rules for <html> (the document scrolls), and the ::view-transition-* tree (page-change crossfades). They live here,
+   keyed on html.tn-on (= a magazine page is showing) so they do nothing on AQ's other pages. Most of it mirrors a rule
+   in the sibling files (base.css, motion.css, web.css, labs.css): change one, change the other. The fonts are the
+   Google families the magazine uses (latin only), served from AQ's own /terranotes/fonts (embed/aq/public/fonts/). */
+
+/* ── from styles/base.css ── */
+
+html.tn-on,html.tn-on body{margin:0;background:var(--tn-page,var(--page))} /* the edition's page colour (lib/edition.js) */
+/* AQ sets scroll-behavior:smooth on <html>; the handoff scrolls with explicit behaviors ('auto' = instant) and needs the browser default back */
+html.tn-on{scroll-behavior:auto}
+/* AQ lays a fixed full-screen film grain over every page (v6.css .noise::before, mix-blend-mode:overlay). Over this design it tints the paper colours
+   and, on a page this tall, makes some software rasterisers draw a block of static. The palette here is fixed by the owner, so no grain. */
+html.tn-on body.noise::before{display:none}
+html.tn-on{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:64px;scrollbar-gutter:stable}
+html.tn-on{touch-action:manipulation}
+
+/* ── from styles/loops.css ── */
+
+
+/* ── from styles/motion.css ── */
+
+html.tn-on::view-transition-group(site-header){animation-duration:320ms}
+html.tn-on::view-transition-old(root),html.tn-on::view-transition-new(root){animation-duration:420ms;animation-fill-mode:both}
+html.tn-on[data-tn-nav]::view-transition-old(root){animation:tnVtOut 220ms ease-out both}
+html.tn-on[data-tn-nav]::view-transition-new(root){animation:tnVtIn 260ms ease-out both}
+html.tn-on::view-transition-old(site-header){animation:none;opacity:0}
+html.tn-on::view-transition-new(site-header){animation:none}
+html.tn-on[data-tn-layout]::view-transition-old(root){animation:tnLayOut 240ms ease-in both}
+html.tn-on[data-tn-layout]::view-transition-new(root){animation:tnLayIn 420ms cubic-bezier(.2,.9,.25,1) 60ms both}
+@keyframes tnLayOut{to{opacity:0;transform:scale(.98)}}
+@keyframes tnLayIn{from{opacity:0;transform:scale(1.02)}}
+@media (prefers-reduced-motion: reduce){html.tn-on::view-transition-group(*),html.tn-on::view-transition-old(*),html.tn-on::view-transition-new(*){animation:none !important}}
+
+/* ── from styles/phone.css ── */
+
+
+/* ── from styles/web.css ── */
+
+html.tn-on[data-layout="web"]{scroll-padding-top:calc(80px * var(--web-zoom,1))}
+html.tn-on[data-layout="phone"]{scroll-padding-top:calc(64px * var(--phone-zoom,1))}
+
+/* ── from styles/intro.css ── */
+
+
+/* ── from styles/buddy.css ── */
+
+
+/* ── from articles/labs/labs.css ── */
+
+@font-face{font-family:'Neutral Face';src:url('/terranotes/fonts/neutral-face.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Neutral Face';src:url('/terranotes/fonts/neutral-face-bold.woff2') format('woff2');font-weight:700 900;font-display:swap}
+@font-face{font-family:'Eina';src:url('/terranotes/fonts/eina-regular.woff2') format('woff2');font-weight:400 500;font-display:swap}
+@font-face{font-family:'Eina';src:url('/terranotes/fonts/eina-semibold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+/* the Google families the magazine uses (latin only), served from /terranotes/fonts instead of fonts.googleapis.com (the
+   own site's twin: styles/fontfaces.css; change one, change the other) */
+@font-face { font-family: 'Archivo Black'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-archivo-black-d1005f159e2d.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Caveat'; font-style: normal; font-weight: 500; font-display: swap; src: url(/terranotes/fonts/g-caveat-82462b710d02.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Caveat'; font-style: normal; font-weight: 700; font-display: swap; src: url(/terranotes/fonts/g-caveat-82462b710d02.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Figtree'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-figtree-58f0d40aee3e.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Figtree'; font-style: normal; font-weight: 500; font-display: swap; src: url(/terranotes/fonts/g-figtree-58f0d40aee3e.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Figtree'; font-style: normal; font-weight: 600; font-display: swap; src: url(/terranotes/fonts/g-figtree-58f0d40aee3e.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-instrument-serif-3dfbf70c14a9.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-instrument-serif-5884f5d07398.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url(/terranotes/fonts/g-jetbrains-mono-530d036ba64a.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 600; font-display: swap; src: url(/terranotes/fonts/g-jetbrains-mono-530d036ba64a.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url(/terranotes/fonts/g-jetbrains-mono-530d036ba64a.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Newsreader'; font-style: italic; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-newsreader-abce1c723406.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Newsreader'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-newsreader-e51539dbe9b6.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Newsreader'; font-style: normal; font-weight: 500; font-display: swap; src: url(/terranotes/fonts/g-newsreader-e51539dbe9b6.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-space-mono-e72d92e15cbd.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url(/terranotes/fonts/g-space-mono-d48301faf404.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Federant'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-federant-a90d9cb9b513.woff2) format('woff2'); unicode-range: U+62-63, U+65, U+6c, U+6e-6f, U+72, U+75; }
+@font-face { font-family: 'Rozha One'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-rozha-one.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Pinyon Script'; font-style: normal; font-weight: 400; font-display: swap; src: url(/terranotes/fonts/g-pinyon-script.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@keyframes tnVtOut{to{opacity:0}}
+@keyframes tnVtIn{from{opacity:0}}
+
+/* entering and leaving the magazine: a short crossfade instead of a hard swap (skipped for reduced motion) */
+@keyframes tnPageIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+  [data-tn-host]{animation:tnPageIn 220ms ease-out both}
+  html[data-tn-left] #main-content{animation:tnPageIn 220ms ease-out both}
+}
+
+/* AQ Labs runs edge to edge: no strip of page between the gallery and AQ's footer */
+html[data-tn-labs] footer.aq-footer{margin-top:0}

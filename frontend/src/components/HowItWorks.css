@@ -1,0 +1,77 @@
+/* Numbered explainer — generalized from the login page's .lg-steps.
+   The vertical rule threading the numerals is what makes it read as one
+   sequence you move along, instead of three unrelated facts. Drawn on the <li>
+   so it stops cleanly at the last step rather than dangling past it. */
+
+.hiw {
+  list-style: none;
+  margin: 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* The numerals are the ordinal signal; the browser's own markers would
+     double it. Reset here rather than relying on a global list reset. */
+  counter-reset: none;
+  --hiw-accent: var(--welfare);
+}
+
+.hiw-ruled {
+  padding: 18px 0 0;
+  border-top: 2px dashed var(--line);
+}
+.hiw-plain { padding: 0; }
+
+.hiw li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-areas:
+    'num title'
+    'num detail';
+  column-gap: 12px;
+  padding-bottom: 16px;
+}
+.hiw li:last-child { padding-bottom: 0; }
+
+/* The connector: from just under one numeral to the top of the next. */
+.hiw li:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 26px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--line);
+}
+
+.hiw-n {
+  grid-area: num;
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--hiw-accent);
+  color: #0A0A0A;
+  border: var(--hair-2);
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.hiw-t {
+  grid-area: title;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.hiw-d {
+  grid-area: detail;
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin-top: 1px;
+}

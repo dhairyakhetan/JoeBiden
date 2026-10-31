@@ -1,0 +1,321 @@
+/* Extracted from PublicProjectDetailPage.tsx's inline <style> block(s) (Phase 1.3). */
+
+        /* ─── PROJECT DETAIL - mobile-first ─── */
+
+        /* ─── TWO-COLUMN LAYOUT ─── */
+        .proj-layout {
+          max-width: var(--frame-max); margin: 0 auto;
+          padding: 18px var(--page-px, 16px) 0;
+        }
+        @media (min-width: 980px) {
+          .proj-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+            gap: clamp(28px, 4vw, 56px);
+            align-items: start;
+            padding-top: 24px;
+          }
+          /* sticky media - stays in view while the info column scrolls */
+          .proj-media-col {
+            position: sticky;
+            top: calc(var(--nav-h) + 20px);
+          }
+        }
+        .proj-media-col { min-width: 0; }
+        .proj-info-col { min-width: 0; }
+        @media (max-width: 979px) {
+          .proj-info-col { padding-top: 24px; }
+        }
+
+        /* Carousel-generate button (breadcrumb row). Press feedback used to
+           be hand-derived via onMouseDown/onMouseUp/onMouseLeave setting
+           style.transform directly - replaced with a plain :active rule,
+           scoped to this button's own class rather than the shared .btn
+           (which already has its own :active elsewhere) so this page can't
+           affect other buttons. */
+        .proj-carousel-btn:active { transform: scale(0.96); }
+
+        /* Media viewer / hero (10.2 §"SET the hero"). Retokenized per the
+           redesign's radius floor (999/32/22/14, +6 notch exception only):
+           was a hard 2px ink border + a 4px/5px offset shadow at a 20/18px
+           literal radius, none of which are on the new scale. */
+        .proj-viewer {
+          position: relative;
+          border: var(--hair-2);
+          border-radius: var(--r-outer);
+          overflow: hidden;
+          background: var(--bg-2);
+          aspect-ratio: 4 / 3;
+          box-shadow: var(--lift-2);
+        }
+        .proj-viewer > img {
+          width: 100%; height: 100%;
+          object-fit: cover; display: block;
+        }
+        .proj-viewer-ph { width: 100%; height: 100%; display: grid; place-items: center; }
+        .proj-media-col .proj-gallery-strip { margin-top: 10px; margin-bottom: 0; }
+
+        /* The two-stop scrim (10.2/15.7), verbatim - the hero variant is
+           slightly deeper (.9/.34/.06 vs .88/.42/.06) per 10.2's own numbers,
+           since the hero also has to carry the back nav and category sticker
+           legibly, not just the title. Never a flat tint/opacity/filter. */
+        .proj-hero-scrim {
+          position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(to top, rgba(10,10,10,.9) 0%, rgba(10,10,10,.34) 48%, rgba(10,10,10,.06) 100%);
+        }
+        .proj-hero-cat {
+          position: absolute; top: 12px; right: 12px; z-index: 1;
+        }
+        /* One line only: the ticket's safe area is ~18px tall at 132px wide.
+           The word is shortened in heroStickerWord.ts; this keeps a stray long
+           one from wrapping out of the die-cut. */
+        .proj-hero-cat .aq-sticker-word { white-space: nowrap; font-size: calc(var(--stk-size) * 0.1); }
+        .proj-hero-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 16px; }
+        .proj-hero-kicker {
+          display: block; font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: 0.04em;
+          text-transform: uppercase; color: var(--paper); margin-bottom: 9px;
+        }
+        /* Single-line uppercase display title (00.1's radius rule has an
+           analogue in copy: the mock sets an uppercase display FIRST line and
+           an italic serif SECOND line, but that needs project.header split
+           at a deliberate point - there's no safe, general way to cut a real
+           NGO project title into two lines algorithmically without risking a
+           bad break on some of the 548 live rows, so this stays one styled
+           line rather than guessing a split. See PR notes. */
+        .proj-hero-title {
+          margin: 0; font-family: var(--display); font-weight: 900; text-transform: uppercase;
+          font-size: clamp(26px, 5.5vw, 40px); line-height: 0.94; letter-spacing: -0.03em;
+          color: var(--paper); text-wrap: balance;
+        }
+        @media (max-width: 979px) {
+          .proj-viewer { border-radius: var(--r-outer); }
+        }
+
+        /* 44px back button, ink-.7 + backdrop-filter, top-left on the hero
+           (10.2). Additive - Breadcrumbs above the hero still carries the
+           full trail; this is the fast one-tap "back to the archive" the
+           mock draws directly on the photo. */
+        .proj-hero-back {
+          position: absolute; left: 12px; top: 12px; z-index: 2;
+          width: 44px; height: 44px; border-radius: var(--r-pill);
+          background: rgba(10,10,10,.7);
+          backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+          display: grid; place-items: center; color: var(--paper);
+          text-decoration: none;
+        }
+
+        /* ─── Notch-geometry bands (17.2, reused per 10.2) ───────────────
+           Two blocks interlock by a circle in the page's background colour,
+           centred on their shared edge. 22px on every free edge, 6px where
+           bands meet - a notched edge is not a corner, hence the third
+           documented radius exception. welfare_projects has no shortfall/
+           target-vs-actual column (verified live against the full column
+           list) so there is no data to drive 10.2's "ink band states what
+           is still missing" + segmented-bar treatment on ANY row, ever -
+           this file ships the two data bands it actually has (volunteers,
+           key_statistic) and goes straight to the general-join CTA band,
+           per 10.2's own documented fallback for exactly this case. */
+        .proj-bands { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 14px 0 0; }
+        .proj-band {
+          position: relative; overflow: hidden;
+          padding: 16px; min-height: 96px;
+          display: flex; align-items: center; gap: 12px;
+          color: #0A0A0A;
+        }
+        .proj-band:first-child { border-radius: var(--r-inner) 6px 6px var(--r-inner); }
+        .proj-band:last-child { border-radius: 6px var(--r-inner) var(--r-inner) 6px; }
+        .proj-band::after {
+          content: ''; position: absolute; width: 26px; height: 26px; border-radius: var(--r-pill);
+          background: var(--card); /* the colour BEHIND the pair - a white .card */
+          top: 50%; transform: translateY(-50%);
+        }
+        .proj-band:first-child::after { right: -13px; }
+        .proj-band:last-child::after { left: -13px; }
+        .proj-band-fig {
+          flex: none; font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 0.86;
+          letter-spacing: -0.045em; font-variant-numeric: tabular-nums;
+        }
+        .proj-band-body { flex: 1; min-width: 0; }
+        .proj-band-label { display: block; font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+        .proj-band-sub { display: block; margin-top: 4px; font-family: var(--eina); font-weight: 600; font-size: 12px; line-height: 1.35; }
+
+        /* ─── Write-up card (10.2) ────────────────────────────────────── */
+        .proj-writeup-card {
+          background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+          padding: 10px; margin-top: 14px;
+        }
+        .proj-writeup-inner { padding: 12px 8px 0; }
+        .proj-writeup p { text-wrap: pretty; line-height: 1.68; }
+        .proj-writeup-pair { display: flex; gap: 6px; margin-top: 14px; padding: 0 8px 8px; }
+        .proj-writeup-pair > span { flex: 1; border-radius: var(--r-inner); overflow: hidden; height: 140px; }
+        .proj-writeup-pair img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* ─── CTA band (10.2): welfare-filled, one bleeding circle ──────── */
+        .proj-cta-band {
+          position: relative; overflow: hidden;
+          background: var(--welfare); border-radius: var(--r-outer); padding: 10px;
+          margin: 14px 0 0; color: #0A0A0A;
+        }
+        .proj-cta-circle { position: absolute; right: -34px; top: -40px; width: 150px; height: 150px; border-radius: 999px; background: rgba(10,10,10,.08); pointer-events: none; }
+        .proj-cta-inner { position: relative; padding: 20px 12px 6px; }
+        .proj-cta-head { margin: 0 0 9px; font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(24px, 5vw, 32px); line-height: 0.94; letter-spacing: -0.04em; }
+        .proj-cta-body { margin: 0; font-family: var(--eina); font-size: 14.5px; line-height: 1.58; text-wrap: pretty; }
+        .proj-cta-action {
+          position: relative; display: flex; align-items: center; justify-content: center;
+          min-height: 52px; margin-top: 16px; border-radius: var(--r-inner);
+          background: #0A0A0A; color: var(--paper); text-decoration: none;
+          font-family: var(--eina); font-weight: 800; font-size: 13.5px;
+        }
+
+        /* Info column */
+        .proj-title {
+          font-family: var(--display); font-weight: 900;
+          font-size: clamp(30px, 4.4vw, 56px);
+          line-height: 0.96; letter-spacing: -0.03em;
+          color: var(--ink); margin: 0 0 16px; text-wrap: balance;
+        }
+        .proj-meta-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 26px; }
+        .proj-meta-chip {
+          font-family: var(--mono); font-size: 11px; font-weight: 600;
+          color: var(--ink-2);
+          background: var(--bg-2);
+          border: 1.5px solid var(--line);
+          padding: 5px 11px; border-radius: 999px;
+          letter-spacing: 0.02em;
+        }
+
+        .proj-summary {
+          font-family: var(--eina);
+          font-size: clamp(17px, 2.5vw, 22px);
+          line-height: 1.55;
+          font-weight: 500;
+          color: var(--ink);
+          margin: 0 0 28px;
+        }
+
+        /* 10.2: "the body at 400 16px/1.68 with text-wrap:pretty. Unclamped."
+           (the `.proj-writeup p` text-wrap/line-height rule near the CTA
+           bands section above wins for the live values; this block keeps
+           the surrounding spacing/colour.) */
+        .proj-writeup {
+          font-family: var(--eina);
+          margin-bottom: 0;
+        }
+        .proj-writeup p {
+          font-family: var(--eina);
+          font-weight: 400;
+          font-size: 16px;
+          color: var(--ink-2);
+          margin: 0 0 18px;
+        }
+
+        /* ─── GALLERY ─── */
+        .proj-gallery { margin-bottom: 40px; }
+
+        .proj-gallery-strip {
+          display: flex;
+          gap: 6px;
+          overflow-x: auto;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          overscroll-behavior-x: none;
+        }
+        .proj-gallery-strip::-webkit-scrollbar { display: none; }
+
+        .proj-thumb {
+          width: 64px; height: 64px;
+          flex-shrink: 0;
+          border-radius: var(--r-tight);
+          overflow: hidden;
+          border: 2px solid transparent;
+          transition: border-color 0.15s, transform 0.15s;
+          cursor: pointer;
+          padding: 0;
+          background: none;
+        }
+        .proj-thumb.active {
+          border-color: var(--ink);
+          transform: scale(1.05);
+        }
+        .proj-thumb img {
+          width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .proj-gallery-caption {
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 12px 14px;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.92);
+          background: linear-gradient(transparent, rgba(0,0,0,0.65));
+          letter-spacing: -0.01em;
+        }
+        .proj-gallery-counter {
+          position: absolute; top: 10px; left: 10px;
+          background: rgba(0,0,0,0.5);
+          backdrop-filter: blur(6px);
+          color: rgba(255,255,255,0.85);
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          padding: 3px 8px; border-radius: 999px;
+        }
+        .proj-gallery-nav {
+          position: absolute; top: 50%; transform: translateY(-50%);
+          width: 40px; height: 40px;
+          background: rgba(0,0,0,0.45);
+          backdrop-filter: blur(8px);
+          color: #fff;
+          border: none; border-radius: 50%; cursor: pointer;
+          font-size: 18px; display: grid; place-items: center;
+          transition: background 0.15s, transform 0.15s;
+        }
+        .proj-gallery-nav:hover { background: rgba(0,0,0,0.7); }
+        .proj-gallery-nav:active { transform: translateY(-50%) scale(0.96); }
+        .proj-gallery-prev { left: 10px; }
+        .proj-gallery-next { right: 10px; }
+
+        /* A `.proj-single-img*` block and a `.proj-related*` block (related
+           being an EARLIER shape of the "similar projects" section, before it
+           was rebuilt as the inline-styled, column-evened grid further down
+           this file) used to live here. Both were dead - zero JSX consumers
+           left in this component - so they're deleted rather than retokenized
+           around, same reasoning as `.pcard*` in styles/routes/projects.css. */
+
+        /* ─── Slideshow progress bar ─── */
+        .proj-progress-bar {
+          position: absolute; bottom: 0; left: 0; right: 0;
+          height: 3px; background: rgba(255,255,255,0.18);
+          pointer-events: none;
+        }
+        .proj-progress-fill {
+          height: 100%;
+          width: 100%;
+          background: rgba(255,255,255,0.82);
+          animation: proj-progress linear forwards;
+          transform-origin: left;
+        }
+        @keyframes proj-progress {
+          from { transform: scaleX(0); }
+          to   { transform: scaleX(1); }
+        }
+        /* Visible chip stays at ~28px so it doesn't crowd the photo, but
+           a transparent ::before pseudo extends the hit target to 44×44
+           (touch-target floor). The pseudo is positioned outside the
+           visible chip so click-through reaches the real button. */
+        .proj-gallery-playpause {
+          position: absolute; bottom: 10px; right: 10px; z-index: 3;
+          width: 28px; height: 28px; border-radius: 50%;
+          background: rgba(0,0,0,0.45);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          color: rgba(255,255,255,0.85);
+          border: none; cursor: pointer; font-size: 10px;
+          display: grid; place-items: center;
+          transition: background 0.15s;
+        }
+        .proj-gallery-playpause::before {
+          content: ''; position: absolute; inset: -8px;
+        }
+        .proj-gallery-playpause:hover { background: rgba(0,0,0,0.7); }
+      

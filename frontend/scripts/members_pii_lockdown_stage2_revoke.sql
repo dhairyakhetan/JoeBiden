@@ -1,0 +1,17 @@
+-- STAGE 2 of members_pii_lockdown_2026_07_29.sql.
+--
+-- ✅ APPLIED live 2026-07-31 (via Supabase MCP) — kept for the record.
+--
+-- Original precondition (now satisfied): do not run until the frontend commit that stops doing
+-- `select('*')` / `select('...,email,...')` directly against `members`
+-- for anything other than the caller's own row is deployed and login has
+-- been confirmed working (AuthContext.fetchMember + profileService now go
+-- through the get_own_member() RPC added in stage 1, which is unaffected
+-- by this revoke since SECURITY DEFINER functions run as the function
+-- owner, not the caller).
+--
+-- Running this before that frontend is live will break login for every
+-- user still on the old bundle (their client does `select('*')` on
+-- members, which will start failing with a permission-denied error the
+-- instant these columns are revoked).
+revoke select (email, phone, auth_uid, google_id) on public.members from authenticated;

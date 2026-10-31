@@ -1,0 +1,371 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 34 · the grid host
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Scoped to `.aqg*`. Adds no colour and touches no shared stylesheet.
+
+   THE GRID LIVES INSIDE THE INK GREETING BLOCK. There is no `.aqg` variant
+   that renders on paper, deliberately: making one is how "the grid is a
+   separate section" comes back.
+
+   Row unit is 72px and it is not a variable anybody should tune. 58px was
+   derived before the tile label was legible and clipped 13 of 16 tiles.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.aqg-block {
+  position: relative;
+  border: var(--bd);
+  border-radius: var(--r-card);
+  background: var(--ink);
+  color: var(--paper);
+  /* 2026-09-09: was --sh-lg (a hard, heavy offset) - this block renders on
+     EVERY visit for EVERY signed-in member, above the fold, so the
+     loudest shadow in the system sitting under it permanently read as
+     the whole page shouting before you'd read a word. --sh (the standard
+     card weight) keeps the ink-block identity without the extra emphasis
+     nothing here is earning by being novel. */
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.aqg-head { padding: 15px 16px 0; }
+
+/* ── the greeting sentence ────────────────────────────────────────────────
+   THE SENTENCE IS THE HEADLINE (2026-09-07 visual pass, from the owner's
+   reference). It used to be a 31px caps greeting stacked above a 12.5px
+   sub-line, which read as a heading plus a caption. Now the name, the chip
+   and the fact run as ONE oversized mixed-weight statement.
+
+   Every paper-on-ink alpha below is a rung off DESIGN.md's six-rung ladder
+   (1.00 / .82 / .78 / .72 / .60 / .55) and nothing sits under the .55 text
+   floor. The old .5 eyebrow (4.78:1, not a rung) and the old .8 recipe pill
+   (not a rung) are corrected to .60 and .82 here.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* The quiet mono anchor, top-left. A chip now rather than a bare line, so it
+   pairs with the recipe pill sitting opposite it at the same 22px height. */
+.aqg-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  background: rgba(244, 239, 224, 0.10);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* rung .60 = 6.5:1. Was .50 (4.78:1) - passes, but is not a rung. */
+  color: rgba(244, 239, 224, 0.60);
+}
+
+.aqg-say {
+  margin: 11px 0 0;
+  /* One flowing line box, so the name, the chip and the fact share a
+     baseline instead of stacking as three blocks. */
+  font-family: var(--eina);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  color: var(--paper);
+}
+
+/* NeutralFace is caps-only and the host already uppercases the string.
+   Never text-transform: lowercase here.
+   2026-09-09: 26/22/24px bold-on-bold across three runs read as a headline
+   shouting on every single visit - dialled back one notch each so the
+   sentence still leads the block without being the loudest thing on the
+   page. Sizes chosen to keep the exact same relative hierarchy (name >
+   tail > lead), just quieter. */
+.aqg-say-name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: -0.04em;
+  color: var(--paper);
+}
+
+/* The payload. Bold, full paper - 15.6:1. */
+.aqg-say-lead {
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--paper);
+}
+
+/* The house emphasis device: one italic serif clause in an accent.
+   Lemon #FFC700 on ink #0A0A0A is 12.7:1.
+
+   2026-09-10 FIX: the rule said `--lemon-ink`, which is #7E6000 - the partner
+   tuned for lemon carrying text on a LIGHT ground. On this ink ground it
+   measures 3.35:1 and failed AA at 19px, on the one block every signed-in
+   member sees on every visit. The comment above was already describing the
+   correct value (#FFC700 = --lemon, 12.7:1); only the token was wrong. The
+   `*-ink` partners are a light-ground rule and must never be used as text on
+   ink - see tokens.css's own note that they are "tuned for the opposite case". */
+.aqg-say-tail {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0;
+  /* accent-lint-ok: .aqg-block paints the ink fill (#0A0A0A) two levels up, so the ground is not cream - measured there, --lemon is 12.7:1 while --lemon-ink is only 3.35:1, so the checker's suggested partner swap is the exact bug this rule was just corrected for. Matches BrandPage.css:355's own exemption. */
+  color: var(--lemon);
+}
+
+/* Space between the runs without a space character, so a line break falls
+   between words rather than inside one. */
+.aqg-say-name + .aqg-chip,
+.aqg-say-name + .aqg-say-lead { margin-left: 8px; }
+.aqg-chip + .aqg-say-lead,
+.aqg-say-lead + .aqg-say-tail { margin-left: 7px; }
+
+/* ── the inline chip ─────────────────────────────────────────────────────
+   The reference's strongest device: a small round avatar sitting between the
+   words, ON the text baseline. Decorative and aria-hidden - the name is
+   already in the text - so its ring alpha is a non-text value. */
+.aqg-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  /* -6px drops the circle's centre onto the lowercase x-height rather than
+     the cap line, which is what makes it read as part of the sentence. */
+  vertical-align: -6px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: rgba(244, 239, 224, 0.14);
+  box-shadow: 0 0 0 2px rgba(244, 239, 224, 0.22);
+}
+.aqg-chip img {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-pill);
+  object-fit: cover;
+  display: block;
+}
+/* The initial fallback. Full paper: 15.6:1. */
+.aqg-chip-i {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--paper);
+}
+
+/* The recipe id. Useful in QA and harmless in production; section 14 says keep it. */
+.aqg-id {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  background: rgba(244, 239, 224, 0.12);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  /* rung .82 = 10.1:1. Was .8, which is not a rung. */
+  color: rgba(244, 239, 224, 0.82);
+}
+
+/* ── the grid ────────────────────────────────────────────────────────────── */
+
+.aqg-grid {
+  margin: 15px 12px 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* FIXED. Not minmax(44px, auto): with auto rows a span of 2 does not equal
+     twice a span of 1 and the span numbers stop meaning anything. */
+  grid-auto-rows: 72px;
+  gap: 6px;
+}
+
+.aqg-tile {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  /* so a two-line body cannot push its row past the 72px unit */
+  min-height: 0;
+  overflow: hidden;
+  padding: 11px 12px;
+  border: none;
+  border-radius: var(--r-photo);
+  background: rgba(244, 239, 224, 0.07);
+  color: var(--paper);
+  text-align: left;
+  text-decoration: none;
+  font-family: var(--eina);
+  cursor: pointer;
+}
+
+/* One solid hue tile per recipe. The wash is what makes it read as the answer. */
+.aqg-tile-hue {
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--ink);
+}
+
+.aqg-tile-wash { align-items: center; justify-content: space-between; gap: 8px; }
+.aqg-tile-stat { flex-direction: column; justify-content: center; align-items: flex-start; gap: 3px; }
+.aqg-tile-map { align-items: center; justify-content: space-between; gap: 8px; padding: 12px; }
+
+.aqg-tile-label {
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--paper);
+  /* two lines at most, then it stops. min-height 0 above does the rest. */
+  overflow: hidden;
+}
+.aqg-tile-hue .aqg-tile-label {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.aqg-tile-sub {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  /* Mono label on a saturated hue: SOLID ink. rgba(10,10,10,.6) on welfare
+     green is 2.79:1. */
+  color: var(--ink);
+}
+
+.aqg-tile-mono {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 224, 0.6);
+}
+
+/* A number is the only thing allowed to be coloured inside a wash tile.
+   Stepped up 21 -> 24 in the 2026-09-07 visual pass: the reference lets ONE
+   big number carry the section, and the figure was previously smaller than
+   the greeting's sub-line it sat beside. 24px + 3px gap + the 8.5px mono
+   label is 38px inside the tile's 50px of usable height, so the 72px row
+   unit is untouched. */
+.aqg-figure {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.aqg-figure-sm { font-size: 22px; }
+
+/* A figure the host could not resolve. DELETED and replaced by the shared
+   `.aq-live .aq-live--on-ink` in v6.css (section 31's block set): this was one
+   of four independent implementations of the same dashed marker. Every wash
+   tile sits on the grid's ink ground, which is why the `--on-ink` variant is
+   the right one; the `hue` tile branch returns before FigureSlot and can never
+   reach it. */
+
+.aqg-arrow {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(244, 239, 224, 0.6);
+}
+
+/* Icons only on tiles spanning two or more rows: a 20px icon in a 72px tile
+   leaves no room for its own label. The rule is enforced in gridRecipes.ts;
+   this is the belt to its braces. */
+.aqg-tile[data-rows='1'] .aqg-icon { display: none; }
+
+/* ── tap targets ─────────────────────────────────────────────────────────── */
+
+/* A single-row tile is 72px tall, comfortably past 44. A 1-column tile on a
+   375px phone is (375 - 28 - 18) / 4 = 82px wide, also past 44. Both clear the
+   minimum without a negative-margin trick. */
+
+@media (max-width: 600px) {
+  /* The sentence steps down together so the three runs keep their optical
+     relationship; at 360px (the small-Android floor) it wraps to four lines
+     inside the block rather than overflowing it. */
+  .aqg-say-name { font-size: 19px; }
+  .aqg-say-lead { font-size: 16px; }
+  .aqg-say-tail { font-size: 17px; }
+  .aqg-grid { margin: 12px 10px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aqg-tile { transition: none; }
+}
+
+/* ── The collapsed hi-block (2026-09-10) ────────────────────────────────────
+   From the owner's walkthrough: "you're always showing this, it's blocking up
+   so much wasted space... don't force a hero." The block used to open every
+   signed-in visit at full height, with a grid of navigation tiles sitting
+   between the member and the first post.
+
+   The recipe system is untouched - a break, a brand-new account, a leader's
+   full queue are all still worth a sentence. What changed is that the sentence
+   no longer costs the viewport: the tiles collapse, and the choice sticks.
+
+   MEASURED, not assumed: `hidden` alone did NOT hide it. `.aqg-grid` sets
+   `display: grid`, and an author class beats the user-agent stylesheet's
+   `[hidden] { display: none }`, so the collapsed grid kept its full 306px and
+   the block only shrank from 541px to... 541px. The attribute needs an author
+   rule of its own to win. This is the classic `hidden`-vs-`display` trap and
+   it is why the collapse is verified by measuring the block, not by trusting
+   that the attribute is set. */
+.aqg-grid[hidden] { display: none !important; }
+
+.aqg-block.is-collapsed .aqg-head { padding-bottom: 15px; }
+
+/* The head becomes a row so the toggle can sit with the sentence rather than
+   under it, which would just move the wasted space rather than remove it. */
+.aqg-block.is-collapsible .aqg-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.aqg-toggle {
+  flex: 0 0 auto;
+  /* 44px tap target, per the same floor every other control here holds. */
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  /* Paper-on-ink: this sits on the block's ink fill, so the hairline and the
+     label both come from the inverted set. */
+  border: var(--hair-inv);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  /* accent-lint-ok: on the ink fill this is paper-on-ink, the inverted ramp's
+     top rung, not an accent used as text on a light ground. */
+  color: var(--paper);
+  cursor: pointer;
+  transition: background 0.14s var(--ease-out);
+}
+.aqg-toggle:hover { background: rgba(255, 255, 255, 0.08); }
+.aqg-toggle:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aqg-toggle { transition: none; }
+}

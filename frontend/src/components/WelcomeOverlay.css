@@ -1,0 +1,163 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   WelcomeOverlay — the first-visit welcome card
+
+   REDESIGN 2026-09-09: replaced the "letter from Kolkata" envelope (a wax
+   seal built from a raw radial-gradient + inset shadows, a gradient flap, a
+   multi-second open choreography) - the one surface in the app still built
+   from bespoke skeuomorphic shading instead of the current flat, token-driven
+   system. Same job, same shell every other modal already uses
+   (--bd-hero/--r-md/--shadow-cta, matching .aqm-panel in v6.css; the scrim
+   matches .aqm-scrim's own rgba(0,0,0,.55) + blur(4px)), one pop-in instead
+   of a four-beat reveal.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.aqwc-scrim {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  animation: aqwcFade .2s var(--ease-out);
+}
+.aqwc-scrim.is-closing { animation: aqwcFadeOut .18s cubic-bezier(.4,0,1,1) forwards; }
+@keyframes aqwcFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes aqwcFadeOut { from { opacity: 1 } to { opacity: 0 } }
+
+.aqwc-panel {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 420px;
+  background: var(--card);
+  /* Overlay-layer migration: --bd-hero (2px ink) survives only on .btn-primary
+     and .sticker now, so the panel edge becomes a hairline, and a modal panel's
+     depth is --lift-4 rather than the CTA hard offset. */
+  border: var(--hair-2);
+  border-radius: var(--r-md);
+  box-shadow: var(--lift-4);
+  padding: clamp(24px, 4vw, 32px);
+  text-align: left;
+  animation: aqwcPop .26s cubic-bezier(.2,.9,.24,1.02) both;
+}
+.aqwc-panel.is-closing { animation: aqwcPopOut .18s cubic-bezier(.4,0,1,1) forwards; }
+@keyframes aqwcPop {
+  from { opacity: 0; transform: scale(.92) translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes aqwcPopOut {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: scale(.96); }
+}
+.aqwc-panel:focus { outline: none; }
+
+.aqwc-mascot {
+  position: absolute; top: -22px; left: 24px;
+  filter: drop-shadow(0 4px 8px rgba(10,10,10,.18));
+}
+
+.aqwc-eyebrow { margin-bottom: 14px; }
+
+.aqwc-head {
+  margin: 0 0 10px;
+  font-family: var(--display), system-ui, sans-serif;
+  font-weight: 900; letter-spacing: -.03em;
+  font-size: clamp(28px, 5vw, 34px); line-height: .98;
+  color: var(--ink);
+}
+.aqwc-serif { font-family: var(--serif), serif; font-weight: 400; font-style: italic; color: var(--welfare-ink); }
+
+.aqwc-body {
+  margin: 0 0 22px;
+  font-family: var(--eina), system-ui, sans-serif;
+  font-size: 14px; line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 42ch;
+}
+
+.aqwc-cta-row { display: flex; flex-direction: column; gap: 9px; }
+
+.aqwc-btn {
+  font-family: var(--display), system-ui, sans-serif;
+  cursor: pointer; border-radius: 999px;
+  min-height: 44px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform .12s var(--ease-out), box-shadow .14s, background .14s, color .14s, border-color .14s;
+}
+/* Hard offset kept - DESIGN.md §1 keeps it on primary buttons/stamped
+   stickers only, and this is a primary CTA. It must be the shared
+   --shadow-cta though, not a hand-rolled 4px offset, and it must not grow
+   on hover: the ladder is gone, hover is a translate only. */
+.aqwc-btn-primary {
+  font-weight: 900; font-size: 15px;
+  background: var(--welfare); color: var(--ink);
+  border: var(--bd-hero);
+  box-shadow: var(--shadow-cta);
+}
+.aqwc-btn-primary:hover { transform: translateY(-2px); }
+.aqwc-btn-primary:active { transform: scale(.97); }
+.aqwc-btn-ghost {
+  /* 44px, matching .aqwc-btn above rather than undercutting it by 4. This is
+     the "no thanks" half of a two-button first-visit overlay and the pair sat
+     at different heights, which reads as a mistake as well as missing the touch
+     floor. Measured live at 390px: 284x37. Audit 2026-09-17. */
+  font-weight: 700; font-size: 13.5px; min-height: 44px;
+  background: transparent; color: var(--ink-2);
+  /* 1.5px --line-2 -> --hair-3, the control-edge hairline */
+  border: var(--hair-3);
+}
+.aqwc-btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.aqwc-btn:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* ── Close ────────────────────────────────────────────────────────────────── */
+.aqwc-x {
+  position: absolute; z-index: 2; top: -14px; right: -12px;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700;
+  background: var(--bg); color: var(--ink-2);
+  /* floating close chip, not a CTA: hairline edge + --lift-3 */
+  border: var(--hair-2);
+  box-shadow: var(--lift-3);
+  cursor: pointer; transition: background .14s, color .14s, transform .12s;
+}
+.aqwc-x:hover { background: var(--ink); color: var(--bg); }
+.aqwc-x:active { transform: scale(.96); }
+
+/* ── Scattered real drive photos ───────────────────────────────────────────
+   Flat ink-bordered polaroids, same device BrandPage's stickerframes use -
+   no tape, no gradient, just the frame + a soft lift and a hand-set rotation. */
+.aqwc-photos { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.aqwc-photo {
+  position: absolute; margin: 0;
+  width: clamp(88px, 10vw, 116px);
+  background: var(--card); padding: 6px 6px 16px;
+  /* polaroid frame is a tile, not a sticker, so its 2px ink edge -> hairline */
+  border: var(--hair-2);
+  border-radius: var(--r-tight);
+  box-shadow: var(--lift-2);
+  transform: rotate(var(--rot, 0deg));
+  opacity: 0;
+  animation: aqwcPhotoIn .4s cubic-bezier(.2,.9,.24,1.02) .12s both;
+}
+.aqwc-photo img {
+  display: block; width: 100%; aspect-ratio: 1/1; object-fit: cover;
+  background: var(--bg-2);
+  border-radius: calc(var(--r-tight) - 4px);
+}
+@keyframes aqwcPhotoIn {
+  from { opacity: 0; transform: rotate(var(--rot, 0deg)) translateY(10px) scale(.92); }
+  to   { opacity: 1; transform: rotate(var(--rot, 0deg)); }
+}
+.aqwc-photo.p1 { top: 14%; left: calc(50% - 280px); }
+.aqwc-photo.p2 { bottom: 12%; left: calc(50% + 180px); }
+
+/* Below ~1080px there isn't room beside the card for the pile. */
+@media (max-width: 1080px) {
+  .aqwc-photos { display: none; }
+}
+
+/* ── Reduced motion: state changes, nothing moves ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .aqwc-scrim, .aqwc-panel, .aqwc-photo { animation: none !important; }
+  .aqwc-photo { opacity: 1; }
+}

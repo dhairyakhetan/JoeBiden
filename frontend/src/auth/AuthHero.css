@@ -1,0 +1,90 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   AuthHero - the contextual "why did you land here" block, now living
+   INSIDE LoginPage's illustrated garden panel (`.lg-garden-hero` wraps it —
+   see LoginPage.css) instead of stacked above the ink page's card. Its own
+   logic is untouched; only the skin changed, from an ink-page sibling to a
+   card floating in the garden.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.ah-root {
+  position: relative;
+  width: 100%;
+}
+
+.ah-card {
+  width: 100%;
+  background: var(--ah-bg);
+  color: var(--ah-ink);
+  border: 1px solid rgba(10,10,10,.12);
+  border-radius: var(--r-inner);
+  padding: clamp(16px, 4vw, 20px) clamp(18px, 4.5vw, 22px);
+  /* The garden is paper, not ink, so the card needs real lift now — the old
+     "ink shadow on ink paints nothing" reasoning no longer applies. */
+  box-shadow: var(--lift-2);
+}
+
+/* The flat/admin variant: deliberately muted and non-promotional (see
+   lib/authHero.ts's own comment on the 'admin' case). No rotation, no
+   sticker, no "★" - a different register from every visitor-facing hero. */
+.ah-root[data-flat='true'] .ah-card {
+  border: 1px solid rgba(10,10,10,.14);
+  box-shadow: none;
+}
+
+.ah-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  min-height: 1px; /* keeps the row's height stable even with no eyebrow */
+}
+
+.ah-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ah-ink) 12%, transparent);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ah-ink);
+}
+
+/* The one Sticker per hero - components/Sticker.tsx's own "at most three
+   mounted, one per card" budget, spent here on the real content fragment
+   (a category word, or the default hero's live team count). */
+.ah-frag { margin-left: auto; flex-shrink: 0; }
+
+.ah-sentence {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(19px, 3.6vw, 25px);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  text-wrap: pretty;
+}
+/* The emphasised clause stays at full ink; everything else mutes to 62% -
+   the same "one clause lands, the rest sets it up" convention LoginPage's own
+   headline uses via lib/authTokens.ts's splitHeadline, reused here so the
+   pattern reads as one system across a palette that changes per variant. */
+.ah-muted { opacity: 0.62; }
+
+.ah-subline {
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.82;
+  max-width: 38ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ah-card { transition: none; }
+}

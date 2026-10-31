@@ -1,0 +1,421 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   /join - the pre-application promo. Redesign section 27.
+
+   House style is the poster system: paper page, radius-28 slabs and 999 bars
+   only, ink used as an accent surface (the ask card) and never as the page
+   background, one sticker on the screen, hue bands carrying display type only.
+
+   Everything here is scoped to `.jp-root`. No token is redefined, no colour is
+   introduced, and no rule reaches outside this file's prefix.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.jp-root {
+  background: var(--paper);
+  padding: 20px 0 56px;
+}
+
+.jp-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+}
+
+/* ── page heading ─────────────────────────────────────────────────────────
+   h1 is Eina 800, not NeutralFace: it is lowercase and NeutralFace has no
+   lowercase glyphs. Card headings below are NeutralFace and therefore caps. */
+.jp-page-head { display: flex; flex-direction: column; gap: 8px; }
+
+.jp-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.jp-h1 {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(26px, 6vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+
+/* ── progress + skip ─────────────────────────────────────────────────────
+   Three segments because there are three promo cards. There is deliberately
+   no fourth segment for the ask: the ask is not a card you progress through. */
+.jp-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.jp-segs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jp-seg {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line);
+  transition: background .18s ease;
+}
+.jp-seg[data-on] { background: var(--ink); }
+
+/* Skip stays in place and greys on the last promo card - the affordance is
+   spent, not gone, so the row's contents never move under the thumb. */
+.jp-skip {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.jp-skip:disabled { color: var(--ink-3); opacity: .45; cursor: default; }
+
+/* ── the card slab ───────────────────────────────────────────────────────── */
+.jp-stage { position: relative; }
+
+.jp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--card);
+  border: var(--bd);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-cta);
+  padding: 22px 18px 26px;
+  overflow: visible;
+}
+
+.jp-head { display: flex; flex-direction: column; gap: 10px; }
+
+.jp-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+}
+
+.jp-h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(30px, 8.5vw, 40px);
+  line-height: .94;
+  letter-spacing: -.045em;
+  color: var(--ink);
+}
+
+.jp-lede {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* ── J1: the two mechanics ───────────────────────────────────────────────── */
+.jp-blocks { display: flex; flex-direction: column; gap: 12px; }
+
+.jp-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+  padding: 16px 16px 18px;
+}
+.jp-block-seal { background: var(--paper); padding-right: 58px; overflow-x: clip; }
+@media (max-width: 360px) { .jp-block-seal { padding-right: 78px; } .jp-seal { max-width: 64px; max-height: 64px; } }
+
+.jp-seal { pointer-events: none; }
+
+.jp-block-h {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.jp-block-body {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ── J2: the eight departments ───────────────────────────────────────────
+   Hues are the literal per-department tokens from lib/departments.ts, set
+   inline from the data. Labels are solid ink (paper on --ink-2), never an
+   alpha: rgba(10,10,10,.6) on welfare green measures 2.79:1. */
+.jp-depts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jp-dept {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+}
+
+.jp-dept-name {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+.jp-note {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+/* ── J3: the three ventures ──────────────────────────────────────────────
+   The hue is the TITLE BAND only. Descriptions sit on white because this copy
+   is inherited from About, where it renders on a light surface, and moving
+   lifted body copy onto a saturated fill would make it less legible than the
+   page it came from. All three, so the family stays consistent.
+
+   [FIX] This note used to read "solid ink at 12.5px on Crftd pink is 3.42:1".
+   It is not. Crftd's department colour is `--pink` #FF4D8C, 6.31:1 with ink.
+   3.42:1 belongs to `--pink-ink` #C4185C, which no department carries. The
+   band was always correct; the stated reason was not. */
+.jp-ventures { display: flex; flex-direction: column; gap: 12px; }
+
+.jp-venture {
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--card);
+}
+
+.jp-venture-band {
+  padding: 10px 14px;
+  border-bottom: var(--bd);
+}
+
+.jp-venture-name {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -.01em;
+}
+
+.jp-venture-detail {
+  margin: 0;
+  padding: 13px 14px 15px;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ── J4: the ask ─────────────────────────────────────────────────────────
+   The one ink surface on the page. Ink is an accent slab here, never the page
+   background. Copy is the About CTA verbatim. */
+.jp-ask {
+  position: relative;
+  background: var(--ink);
+  border: var(--bd);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-cta);
+  padding: 28px 18px 30px;
+  overflow: visible;
+}
+
+.jp-ask-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.jp-ask-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--welfare);
+  color: #0A0A0A;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 12px;
+  white-space: nowrap;
+  transform: rotate(-3deg);
+}
+
+.jp-ask-h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(38px, 11vw, 60px);
+  line-height: .9;
+  letter-spacing: -.045em;
+  color: var(--paper);
+}
+.jp-ask-h em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--welfare-ink);
+}
+
+.jp-ask-sub {
+  margin: 0;
+  max-width: 420px;
+  font-family: var(--eina);
+  font-size: 14px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+
+/* three numbered steps - mirrors the funnel's own explainer, and it is what
+   stops the eight department tiles on J2 reading as a form */
+.jp-steps {
+  width: 100%;
+  border: 2px solid color-mix(in srgb, var(--paper) 28%, transparent);
+  border-radius: var(--r-sm);
+  padding: 14px 14px 16px;
+  text-align: left;
+}
+
+.jp-steps-h {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--paper) 62%, transparent);
+}
+
+.jp-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jp-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--paper) 86%, transparent);
+}
+.jp-step b { color: var(--paper); }
+
+.jp-step-n {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--lemon);
+  color: #0A0A0A;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.jp-ask-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.jp-cta { width: 100%; min-height: 54px; white-space: nowrap; }
+
+.jp-cta-2 {
+  width: 100%;
+  min-height: 48px;
+  background: transparent;
+  color: var(--paper);
+  border-color: color-mix(in srgb, var(--paper) 40%, transparent);
+  white-space: nowrap;
+}
+.jp-cta-2:hover { background: color-mix(in srgb, var(--paper) 12%, transparent); }
+
+.jp-ask-mascot { margin-top: 2px; }
+
+/* ── foot nav ────────────────────────────────────────────────────────────── */
+.jp-foot { display: flex; gap: 10px; }
+
+.jp-back { flex: 0 0 auto; min-height: 48px; white-space: nowrap; }
+.jp-next { flex: 1 1 auto; min-width: 0; min-height: 48px; white-space: nowrap; }
+
+/* ── tablet and up ───────────────────────────────────────────────────────── */
+@media (min-width: 601px) {
+  .jp-root { padding: 32px 0 72px; }
+  .jp-card { padding: 30px 28px 34px; }
+  .jp-ask { padding: 40px 30px 42px; }
+  .jp-depts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .jp-blocks { flex-direction: row; }
+  .jp-block { flex: 1 1 0; }
+  .jp-ventures { flex-direction: row; }
+  .jp-venture { flex: 1 1 0; display: flex; flex-direction: column; }
+}
+
+@media (min-width: 1025px) {
+  .jp-shell { max-width: 860px; gap: 20px; }
+  .jp-depts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Motion is opt-out at the component level too (framer-motion's
+   useReducedMotion), but the CSS transitions need their own gate. */
+@media (prefers-reduced-motion: reduce) {
+  .jp-seg { transition: none; }
+  .jp-ask-pill { transform: none; }
+}

@@ -1,0 +1,40 @@
+/* Extracted from PendingApprovalPage.tsx's inline <style> block(s) (Phase 1.3). */
+
+        /* Step 32. `pending-pulse` animated a box-shadow ring on the dot
+           itself. Replaced by `pending-ring`, which scales a separate halo
+           span so the dot never moves and the growth is a transform rather
+           than a repainted shadow. */
+        @keyframes pending-ring {
+          0%   { transform: scale(1);   opacity: .7; }
+          70%  { transform: scale(3);   opacity: 0;  }
+          100% {                        opacity: 0;  }
+        }
+
+        /* Step 33: the two status chips. 26px, 2px ink, nowrap - a fixed-height
+           999px pill must never be allowed to wrap. */
+        .pending-chip {
+          display: inline-flex; align-items: center;
+          height: 26px; padding: 0 10px;
+          border: var(--hair-3); border-radius: 999px;
+          color: var(--ink);
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          letter-spacing: .04em; text-transform: uppercase;
+          white-space: nowrap;
+        }
+        @keyframes masonry-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes countdown-pop {
+          0% { transform: scale(1.3); opacity: 0.4; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes countdown-pop { 0%, 100% { transform: scale(1); opacity: 1; } }
+        }
+      
+
+        @media (prefers-reduced-motion: reduce) {
+          /* The halo is decoration; the dot and the copy carry the meaning. */
+          [style*="pending-ring"] { animation: none !important; opacity: 0 !important; }
+        }

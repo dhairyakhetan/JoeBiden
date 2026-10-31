@@ -1,0 +1,165 @@
+/* Disco Diwali page: the editorial festival layout in the AquaTerra.live tokens (live.css). Page-specific parts only.
+   Reference moves: a red-to-paper hero with blackletter type and a curved photo arc; a cream page with a big condensed-serif lede,
+   small justified columns and a giant blackletter heading that photographs overlap; full-bleed photo; a red ticker edge.
+   Night bands carry the cosmic idea (stars, mirror-ball gold). Motion is off under prefers-reduced-motion. */
+
+.lv-root[data-event='disco'] { --dd-gold: var(--lv-gold); }
+
+/* ── hero ───────────────────────────────────────────────────────────────────────────── */
+.dd-hero { padding: clamp(28px, 5vw, 64px) var(--lv-gutter) 0; display: grid; justify-items: center; text-align: center; gap: 14px; overflow: hidden; position: relative; }
+.dd-kick { color: var(--lv-bone); } /* it sits on the darkest red of the gradient: bone is 5:1 there, black is 3.4 */
+.dd-title { margin: 0; display: grid; justify-items: center; font-family: var(--lv-black); font-weight: 400; color: var(--lv-ink); line-height: 0.82; letter-spacing: 0; font-size: clamp(80px, 15.5vw, 218px); text-shadow: 0 2px 0 rgba(248, 246, 241, 0.25); }
+.dd-title span:nth-child(2) { margin-top: -0.04em; }
+.dd-sub { margin: 0; font-family: var(--lv-serif); font-size: clamp(24px, 4vw, 44px); line-height: 1.05; }
+.dd-sub em { font-style: italic; color: var(--lv-ink); background: var(--lv-gold); padding: 0 0.18em; }
+.dd-hero-lede { margin: 0; font-family: var(--lv-serif); font-size: clamp(19px, 2.6vw, 28px); line-height: 1.15; max-width: 30em; text-wrap: balance; }
+.dd-hero .lv-count-n { color: var(--lv-ink); }
+.dd-hero .lv-count-l { color: rgba(10, 10, 10, 0.78); }
+.dd-hero-actions { justify-content: center; }
+.dd-arc { position: relative; width: 100%; margin-top: clamp(8px, 2vw, 28px); }
+.dd-prog { position: absolute; right: clamp(8px, 4vw, 80px); bottom: clamp(8px, 4vw, 42px); width: clamp(150px, 20vw, 250px); z-index: 500; text-align: center; padding: 12px; }
+.dd-prog img { width: 82%; margin: 0 auto; }
+.dd-prog p { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+.dd-mask { position: absolute; left: clamp(4px, 5vw, 90px); bottom: clamp(4px, 3vw, 24px); width: clamp(90px, 14vw, 190px); height: auto; rotate: -10deg; z-index: 500; filter: drop-shadow(0 10px 20px rgba(8, 11, 38, 0.5)); animation: ddFloat 6s ease-in-out infinite alternate; }
+@keyframes ddFloat { from { translate: 0 0; } to { translate: 0 -8px; } }
+
+/* ── 01 the night: the editorial page ───────────────────────────────────────────────── */
+.dd-intro { text-align: center; padding-bottom: 0; }
+.dd-intro .lv-kicker { text-align: center; }
+.dd-intro .lv-lede-xl { margin-inline: auto; }
+.dd-intro .lv-cols-s b { font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.92em; margin-right: 2px; }
+.dd-collage { --g: clamp(58px, 12.4vw, 186px); position: relative; margin: clamp(30px, 6vw, 70px) calc(-1 * var(--lv-gutter)) 0; }
+.dd-giant { position: relative; z-index: 1; margin: 0; padding: 0 var(--lv-gutter); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: nowrap; font-weight: 400; line-height: 0.9; font-size: var(--g); color: var(--lv-ink); white-space: nowrap; }
+.dd-giant-l, .dd-giant-r { position: absolute; z-index: 1; top: calc(var(--g) * 0.98); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.dd-giant-l { left: calc(var(--lv-gutter) + 6px); }
+.dd-giant-r { right: var(--lv-gutter); }
+.dd-ph { position: absolute; z-index: 3; margin: 0; border: 3px solid var(--lv-card); box-shadow: var(--lv-lift); }
+.dd-ph img, .dd-full img, .dd-step-ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dd-ph-a { width: calc(var(--g) * 0.95); aspect-ratio: 3 / 4; left: 47%; top: calc(var(--g) * -0.08); translate: -50% 0; }
+.dd-ph-b { width: calc(var(--g) * 1.7); aspect-ratio: 1 / 1; left: 27%; top: calc(var(--g) * 0.62); }
+.dd-ph-b img { object-position: 50% 30%; }
+.dd-full { display: block; width: 100%; height: clamp(300px, 56vw, 760px); margin-bottom: 0; margin-top: calc(var(--g) * 0.62); position: relative; z-index: 2; }
+.dd-edge { margin-top: -1px; padding-top: clamp(26px, 5vw, 70px); }
+.dd-edge-end { padding-top: clamp(30px, 6vw, 90px); background: linear-gradient(180deg, var(--lv-night), var(--lv-red)); }
+
+/* ── night bands ────────────────────────────────────────────────────────────────────── */
+.dd-band { position: relative; overflow: hidden; }
+.dd-above { position: relative; z-index: 1; }
+.lv-sky { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background: linear-gradient(180deg, #050505 0%, var(--lv-night) 55%, #160405 100%); }
+.lv-nebula { position: absolute; inset: -10%; background:
+  radial-gradient(ellipse 55% 45% at 82% 10%, rgba(180, 20, 30, 0.5), transparent 70%),
+  radial-gradient(ellipse 50% 40% at 6% 40%, rgba(232, 195, 106, 0.16), transparent 70%),
+  radial-gradient(ellipse 60% 45% at 70% 95%, rgba(120, 10, 20, 0.55), transparent 72%),
+  radial-gradient(ellipse 35% 25% at 30% 6%, rgba(209, 18, 43, 0.22), transparent 70%); animation: ddNebula 40s ease-in-out infinite alternate; }
+.lv-stars { position: absolute; top: 0; left: 0; width: 1px; height: 1px; border-radius: 50%; background: transparent; }
+.lv-stars-mid { width: 2px; height: 2px; animation: ddTwinkle 6s ease-in-out infinite; }
+.lv-stars-gold { width: 3px; height: 3px; animation: ddTwinkle 4.5s ease-in-out 1.2s infinite; }
+@keyframes ddTwinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes ddNebula { to { transform: translate3d(-2%, 2%, 0) scale(1.06); } }
+
+/* steps */
+.dd-steps { list-style: none; margin: 34px 0 40px; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.dd-steps li { display: grid; gap: 6px; align-content: start; padding: 18px 16px 16px; border-top: 1px solid var(--lv-gold); background: linear-gradient(180deg, rgba(139, 10, 26, 0.42), rgba(139, 10, 26, 0)); }
+.dd-step-n { font-family: var(--lv-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; color: var(--lv-gold); }
+.dd-steps h3 { margin: 0; font-family: var(--lv-black); font-weight: 400; font-size: clamp(30px, 3.4vw, 40px); line-height: 0.95; }
+.dd-steps p { margin: 0; font-size: 14.5px; color: var(--lv-muted); }
+.dd-step-ph { width: 100%; max-width: 200px; aspect-ratio: 1 / 1; margin: 10px 0 0; border: 3px solid var(--lv-card); }
+
+/* mask band (red) */
+.dd-mask-band .dd-split { display: grid; gap: 28px; align-items: center; }
+.dd-split-art { display: grid; place-items: center; min-height: 220px; }
+.dd-mask-big { width: min(100%, 460px); height: auto; rotate: -8deg; filter: drop-shadow(0 22px 34px rgba(8, 11, 38, 0.6)); animation: ddFloat 7s ease-in-out infinite alternate; }
+.dd-code { max-width: 360px; justify-items: start; text-align: left; margin-top: 8px; }
+.dd-code p { font-size: 13px; font-weight: 500; max-width: none; }
+
+/* lineup */
+.dd-lineup { margin-top: 18px; max-width: 760px; }
+.dd-lineup-art { width: 100%; height: auto; overflow: visible; }
+.dd-lineup-lines polyline { fill: none; stroke: rgba(10, 10, 10, 0.4); stroke-width: 1.2; stroke-dasharray: 3 6; }
+.dd-lineup-node { fill: rgba(209, 18, 43, 0.12); stroke: var(--lv-red); stroke-width: 2; stroke-dasharray: 4 3; animation: ddNode 3.6s ease-in-out infinite; }
+@keyframes ddNode { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+
+/* editions */
+.dd-editions { list-style: none; margin: 36px 0 0; padding: 0 0 0 28px; display: grid; gap: 28px; position: relative; }
+.dd-editions::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(var(--lv-ink), rgba(10, 10, 10, 0.15)); }
+.dd-edition-node { position: relative; display: grid; gap: 2px; justify-items: start; }
+.dd-edition-star { position: absolute; left: -29px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--lv-paper); border: 2px solid var(--lv-ink); }
+.dd-edition-year { font-family: var(--lv-black); font-size: clamp(48px, 7vw, 84px); line-height: 0.95; }
+.dd-edition-name { color: var(--lv-muted); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12.5px; font-weight: 600; }
+.is-now .dd-edition-star { background: var(--lv-red); border-color: var(--lv-red); box-shadow: 0 0 0 5px rgba(209, 18, 43, 0.2); animation: ddPulse 2.4s ease-in-out infinite alternate; }
+.is-now .dd-edition-year { color: var(--lv-red); }
+.dd-edition-tag { margin-top: 8px; }
+@keyframes ddPulse { to { box-shadow: 0 0 0 12px rgba(209, 18, 43, 0); } }
+.dd-cause-actions { margin-top: 26px; }
+
+/* final */
+.dd-final-in { display: grid; justify-items: center; text-align: center; gap: 18px; padding-block: clamp(70px, 12vw, 150px); }
+.dd-final-h { font-size: clamp(54px, 11vw, 150px); max-width: 12ch; margin: 0; }
+.dd-final .dd-when { margin: 0; color: var(--lv-muted); letter-spacing: 0.06em; }
+
+
+@media (min-width: 860px) {
+  .dd-mask-band .dd-split { grid-template-columns: 1.1fr 0.9fr; gap: 56px; }
+  .dd-editions { grid-template-columns: repeat(3, 1fr); padding: 38px 0 0; gap: 24px; }
+  .dd-editions::before { left: 0; right: 0; top: 7px; bottom: auto; width: auto; height: 1px; background: linear-gradient(90deg, var(--lv-ink), rgba(10, 10, 10, 0.15)); }
+  .dd-edition-star { left: 0; top: -38px; }
+}
+@media (max-width: 600px) {
+  .dd-hero-actions .lv-btn { width: 100%; }
+  .dd-prog { display: none; }
+  .dd-mask { width: 84px; left: 6px; }
+  .dd-giant-l, .dd-giant-r { display: none; }
+  .dd-ph-b { left: 22%; width: calc(var(--g) * 2.1); top: calc(var(--g) * 0.8); }
+  .dd-ph-a { left: 48%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lv-nebula, .lv-stars-mid, .lv-stars-gold, .dd-mask, .dd-mask-big, .dd-lineup-node, .is-now .dd-edition-star { animation: none; }
+  
+}
+
+
+/* ── motion ─────────────────────────────────────────────────────────────────────────── */
+/* the title rises letter by letter */
+.dd-word { display: block; }
+.dd-ch { display: inline-block; animation: ddRise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms + 250ms); transform-origin: 50% 100%; }
+@keyframes ddRise { from { opacity: 0; transform: translateY(46%) rotate(5deg) scale(0.92); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+/* the hero gradient breathes */
+.dd-hero { background-size: 100% 150%; animation: ddBreathe 14s ease-in-out infinite alternate; }
+@keyframes ddBreathe { from { background-position: 50% 0%; } to { background-position: 50% 28%; } }
+/* the pack of small photos drifts against the scroll, where the browser can do it on the compositor */
+@supports (animation-timeline: view()) {
+  .dd-ph-a { animation: ddDriftA linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+  .dd-ph-b { animation: ddDriftB linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+  .dd-full img { animation: ddZoom linear both; animation-timeline: view(); animation-range: entry 0% cover 60%; }
+}
+@keyframes ddDriftA { from { transform: translateY(46px) rotate(2.5deg); } to { transform: translateY(-46px) rotate(-2deg); } }
+@keyframes ddDriftB { from { transform: translateY(-30px) rotate(-3deg); } to { transform: translateY(40px) rotate(2deg); } }
+@keyframes ddZoom { from { transform: scale(1.14); } to { transform: scale(1); } }
+/* a slow flicker of the dark, like a projector */
+.dd-band::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.55)); animation: ddFlicker 5s steps(1) infinite; }
+@keyframes ddFlicker { 0%, 100% { opacity: 1; } 47% { opacity: 1; } 48% { opacity: 0.82; } 50% { opacity: 1; } 83% { opacity: 0.9; } 84% { opacity: 1; } }
+.dd-above { z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dd-ch, .dd-hero, .dd-band::after, .dd-ph-a, .dd-ph-b, .dd-full img { animation: none; }
+}
+
+/* ── design pass, tier 1 (2026-10-25) ───────────────────────────────────────────────── */
+/* "Party with" must never break mid-word: keep each line whole and let the size fall to fit a phone */
+.dd-word { white-space: nowrap; }
+.lv-root .lv-home-title { font-size: clamp(44px, 12vw, 176px); }
+.dd-hero-lede { margin-top: clamp(16px, 2.4vw, 24px); }
+.dd-hero-when { margin: 0; font-family: var(--lv-cond); font-size: clamp(20px, 3vw, 28px); letter-spacing: 0.08em; text-transform: uppercase; color: var(--lv-ink); }
+.dd-hero-actions { align-items: center; }
+.dd-poster-actions { margin-top: 18px; }
+/* date, time and place: three large cells right under the hero */
+.dd-facts { background: var(--lv-night); color: var(--lv-bone); padding: clamp(22px, 4vw, 40px) var(--lv-gutter); }
+.dd-facts dl { margin: 0 auto; max-width: 1100px; display: grid; gap: 18px; text-align: center; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.dd-facts dt { font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--lv-gold); }
+.dd-facts dd { margin: 4px 0 0; font-family: var(--lv-cond); font-size: clamp(22px, 3.2vw, 30px); line-height: 1.15; text-transform: uppercase; letter-spacing: 0.04em; }
+.dd-hero-when { display: flex; flex-wrap: wrap; justify-content: center; column-gap: 0.6em; max-width: 100%; }
+.dd-hero-when span { white-space: nowrap; }
+.dd-when-t::before { content: '· '; }
+@media (max-width: 700px) { .dd-hero-when { flex-direction: column; align-items: center; } .dd-when-t::before { content: none; } }
+@media (max-width: 700px) { .lv-root .lv-home-title { font-size: clamp(44px, 16.5vw, 120px); } }

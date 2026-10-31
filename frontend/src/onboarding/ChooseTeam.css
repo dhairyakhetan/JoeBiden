@@ -1,0 +1,242 @@
+/* Post-approval "choose your team" nudge.
+ *
+ * Design: interface-redesign-with-rounded-minimalism/project/DESIGN.md.
+ * Radius spine 999 / 32 / 22 / 14 only, concentric:
+ *   panel   --r-outer (32)
+ *   − 10px pad
+ *   tile    --r-inner (22)
+ *   − 8px pad
+ *   chip    --r-tight (14)
+ * No hard offset shadows (retired outside .btn-primary and stamped stickers).
+ *
+ * The panel is an INK ground carrying paper text - the reference's dark panel
+ * holding saturated tiles. Every paper-on-ink value here is a rung off
+ * DESIGN.md §"Paper on ink - a six-rung ladder" (--nav-fg 1.00 / --nav-fg-soft
+ * 0.60 / --nav-fg-faint 0.55, the floor). No invented alphas.
+ *
+ * Text ON a department fill is FULL-OPACITY ink (or paper on the two
+ * ink-family fills, chosen by isDarkDepartmentFill() in lib/departments.ts —
+ * never re-derived here). Never an alpha over a saturated fill.
+ */
+
+.ctp {
+  min-height: 100dvh;
+  background: var(--bg);
+  padding: clamp(16px, 4vw, 40px) 0 64px;
+}
+
+.ctp-panel {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--ink);
+  border-radius: var(--r-outer);
+  /* the 10px that makes 32 − 10 = 22 concentric with the tiles */
+  padding: 10px;
+  color: var(--nav-fg);
+}
+
+.ctp-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px 16px;
+}
+
+.ctp-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--nav-fg-faint);
+  margin: 0 0 6px;
+}
+
+.ctp-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(24px, 4.4vw, 34px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--nav-fg);
+  margin: 0;
+}
+
+/* "skip for now" — a nudge, never a gate. 44×44 minimum. */
+.ctp-skip {
+  flex-shrink: 0;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(244, 239, 224, 0.24);
+  border-radius: 999px;
+  color: var(--nav-fg-soft);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.16s ease, border-color 0.16s ease;
+}
+.ctp-skip:hover,
+.ctp-skip:focus-visible { color: var(--nav-fg); border-color: rgba(244, 239, 224, 0.5); }
+
+/* ── the tile grid ───────────────────────────────────────────────────── */
+
+.ctp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (min-width: 620px) {
+  .ctp-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.ctp-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  /* 22 − 8 = 14 for anything nested inside */
+  padding: 12px;
+  min-height: 116px;
+  border: none;
+  border-radius: var(--r-inner);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.18s var(--ease-pop, ease), filter 0.18s ease;
+}
+.ctp-tile:hover { transform: translateY(-2px); }
+.ctp-tile[aria-pressed='true'] { box-shadow: inset 0 0 0 3px var(--nav-fg); }
+
+.ctp-tile-icon { line-height: 0; opacity: 1; }
+
+.ctp-tile-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Count of open roles on this department. Sits ON the fill, so it is full
+   opacity ink/paper inside a 14px chip, not an alpha. */
+.ctp-tile-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--r-tight);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ── caption + hirings band ──────────────────────────────────────────── */
+
+.ctp-caption {
+  padding: 14px 14px 4px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--nav-fg-faint);
+}
+
+.ctp-band {
+  margin-top: 10px;
+  background: rgba(244, 239, 224, 0.06);
+  border-radius: var(--r-inner);
+  padding: 14px;
+}
+
+.ctp-band-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--nav-fg-soft);
+  margin: 0 0 10px;
+}
+
+.ctp-role {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid rgba(244, 239, 224, 0.18);
+  border-radius: var(--r-tight);
+  color: var(--nav-fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ctp-role + .ctp-role { margin-top: 8px; }
+.ctp-role:hover { border-color: rgba(244, 239, 224, 0.5); }
+.ctp-role-title { font-family: var(--display); font-weight: 700; font-size: 14px; }
+.ctp-role-meta { font-family: var(--mono); font-size: 10.5px; color: var(--nav-fg-faint); }
+
+.ctp-empty {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--nav-fg-soft);
+  margin: 0 0 12px;
+}
+
+/* ── the chosen-department action foot ───────────────────────────────── */
+
+.ctp-foot {
+  margin-top: 10px;
+  padding: 14px;
+  background: rgba(244, 239, 224, 0.06);
+  border-radius: var(--r-inner);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ctp-foot-line { font-size: 13.5px; line-height: 1.5; color: var(--nav-fg); margin: 0; }
+.ctp-foot-note { font-family: var(--mono); font-size: 10.5px; color: var(--nav-fg-faint); margin: 0; }
+
+.ctp-cta {
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.ctp-cta[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+.ctp-error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  /* --rust is the accessible error fill; as text on ink it is too dark, so the
+     error line stays paper and the word "couldn't" carries the meaning. */
+  color: var(--nav-fg);
+  border-left: 3px solid var(--rust, #B23A0F);
+  padding-left: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctp-tile { transition: none; }
+  .ctp-tile:hover { transform: none; }
+}

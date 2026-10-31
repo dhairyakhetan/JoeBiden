@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- AQ integration (tools/export-aq.mjs): AQ serves without trailing slashes, so relative paths need this -->
+<base href="/terranotes/editions/sep26/articles/labs/wisdom-woods/demo/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌳 Wisdom Woods</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#2E8B57;--teal:#0d9488;--gold:#FFD700;
+  --red:#FF4C4C;--purple:#7C3AED;--brown:#92400e;
+  --white:#fff;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:url('assets/BGGG.jpg') no-repeat center center fixed;
+  background-size:cover;
+  min-height:100vh;color:white;
+}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.52);z-index:0}
+
+/* ── NAV ── */
+nav{
+  position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:12px 28px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Fredoka One';font-size:24px;letter-spacing:.5px;}
+.logo-icon{width:48px;height:48px;} /* save your logo as ww_logo.png */
+
+/* ── BUTTONS ── */
+.btn{padding:10px 22px;border:none;border-radius:30px;cursor:pointer;font-family:'Nunito';font-weight:800;font-size:15px;transition:transform .15s,box-shadow .15s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.3)}
+.btn-fill{background:var(--green);color:white}
+.btn-outline{background:white;color:var(--green)}
+.btn-gold{background:var(--gold);color:#333}
+
+/* ── PAGES ── */
+.page{position:relative;z-index:5;display:none;flex-direction:column;justify-content:center;align-items:center;min-height:85vh;text-align:center;padding:20px 16px;}
+.page.active{display:flex}
+
+/* ── CARD ── */
+.card{background:rgba(255,255,255,0.93);color:#222;padding:28px 24px;border-radius:24px;width:350px;box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+.card h2{font-family:'Fredoka One';font-size:24px;color:var(--green);margin-bottom:4px;}
+.card p{font-size:13px;color:#666;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:11px 14px;margin-top:10px;border-radius:12px;border:2px solid #ddd;font-family:'Nunito';font-size:15px;font-weight:700;outline:none;transition:border .2s;background:white;color:#222;}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+
+/* age btns */
+.age-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;}
+.age-btn{padding:8px 16px;border:2px solid #ddd;border-radius:20px;cursor:pointer;font-family:'Nunito';font-weight:800;font-size:14px;background:#f5f5f5;color:#555;transition:all .2s;}
+.age-btn:hover,.age-btn.selected{background:var(--green);color:white;border-color:var(--green);transform:scale(1.05);}
+.diff-pill{display:inline-block;padding:3px 14px;border-radius:20px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-left:6px;vertical-align:middle;}
+.diff-easy{background:#d4edda;color:#155724;}
+.diff-medium{background:#fff3cd;color:#856404;}
+.diff-hard{background:#f8d7da;color:#721c24;}
+
+/* ── AVATAR ── */
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}25%{transform:translateY(-18px) rotate(3deg)}50%{transform:translateY(-22px) rotate(-1deg)}75%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-15deg)}40%{transform:rotate(15deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(8deg)}}
+@keyframes correct-bounce{0%{transform:scale(1)}30%{transform:scale(1.35) rotate(-6deg)}60%{transform:scale(0.9) rotate(6deg)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes wrong-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-12px) rotate(-5deg)}30%{transform:translateX(12px) rotate(5deg)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+@keyframes shadow-pulse{0%,100%{transform:scaleX(1);opacity:.5}50%{transform:scaleX(0.7);opacity:.2}}
+@keyframes idle-breathe{0%,100%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(1.04) translateY(-4px)}}
+@keyframes avatarPopIn{0%{transform:translateX(-220px) scale(.7) rotate(-10deg);opacity:0}70%{transform:translateX(20px) scale(1.05) rotate(3deg);opacity:1}100%{transform:translateX(0) scale(1) rotate(0);opacity:1}}
+
+.avatar-wrap{position:relative;display:inline-block;margin:6px auto 14px;cursor:pointer;animation:avatarPopIn 1s cubic-bezier(.17,.89,.32,1.28);}
+.avatar-img{width:340px;height:340px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(125,255,179,.35)) drop-shadow(0 12px 28px rgba(0,180,90,.45));animation:float 3.5s ease-in-out infinite;}
+.avatar-img.do-wiggle{animation:wiggle .6s ease!important;}
+.avatar-img.do-correct{animation:correct-bounce .65s ease forwards!important;}
+.avatar-img.do-wrong{animation:wrong-shake .6s ease forwards!important;}
+.avatar-shadow{width:70px;height:12px;background:rgba(0,0,0,0.2);border-radius:50%;margin:-2px auto 0;animation:shadow-pulse 3.5s ease-in-out infinite;}
+.avatar-nametag{display:inline-block;background:rgba(255,255,255,0.9);color:#2E8B57;font-family:'Fredoka One';font-size:14px;padding:3px 14px;border-radius:20px;margin-top:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+.badge{display:inline-block;background:var(--gold);color:#333;font-weight:900;font-size:13px;padding:4px 14px;border-radius:20px;margin-top:6px;}
+
+/* ── DASHBOARD GRID ── */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;width:340px;}
+.game-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:16px 10px;cursor:pointer;transition:transform .2s,background .2s;backdrop-filter:blur(4px);}
+.game-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.14)}
+.game-card .icon{font-size:32px;margin-bottom:5px;}
+.game-card h3{font-size:13px;font-weight:900;}
+.game-card p{font-size:10px;opacity:.8;margin-top:2px;}
+
+/* ── GAME PAGES ── */
+.score-bar{display:flex;gap:16px;align-items:center;background:rgba(0,0,0,0.2);padding:7px 18px;border-radius:30px;margin-bottom:12px;font-weight:800;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);}
+.game-box{background:rgba(0,0,0,0.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:24px 20px;border-radius:24px;width:340px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,0.25);}
+.game-box h3{font-family:'Fredoka One';font-size:18px;color:#7dffb3;margin-bottom:11px;line-height:1.4;text-shadow:0 1px 6px rgba(0,0,0,0.5);}
+.progress-wrap{background:rgba(255,255,255,0.2);border-radius:10px;height:7px;width:100%;margin-bottom:11px;}
+.progress-bar{height:7px;border-radius:10px;background:linear-gradient(90deg,#2E8B57,#7dffb3);transition:width .4s ease;}
+.opt{display:block;width:100%;margin:5px 0;padding:10px 13px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-family:'Nunito';font-weight:800;font-size:14px;background:rgba(255,255,255,0.07);backdrop-filter:blur(4px);color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5);transition:all .2s;text-align:left;}
+.opt:hover:not([disabled]){background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.6);transform:translateX(4px)}
+.opt.correct{background:linear-gradient(135deg,rgba(76,175,80,0.88),rgba(46,139,87,0.92));color:white;border-color:#4CAF50;transform:scale(1.03);box-shadow:0 4px 14px rgba(46,139,87,0.5);text-shadow:none;}
+.opt.wrong{background:linear-gradient(135deg,rgba(255,107,107,0.88),rgba(255,76,76,0.92));color:white;border-color:#FF4C4C;text-shadow:none;}
+.feedback-banner{display:none;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:900;margin-top:10px;text-align:center;}
+.feedback-banner.show-correct{display:block;background:rgba(46,139,87,0.35);backdrop-filter:blur(8px);color:#a8ffcc;border:1.5px solid rgba(76,175,80,0.6);}
+.feedback-banner.show-wrong{display:block;background:rgba(200,50,50,0.35);backdrop-filter:blur(8px);color:#ffc0c0;border:1.5px solid rgba(255,76,76,0.6);}
+.explain-text{font-size:12px;font-weight:700;margin-top:5px;opacity:.9;line-height:1.5;}
+
+/* mini avatar fixed bottom-left */
+.mini-avatar-wrap{position:fixed;left:14px;bottom:20px;z-index:20;display:flex;flex-direction:column;align-items:center;pointer-events:none;}
+.mini-avatar{width:260px;height:260px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(125,255,179,.3)) drop-shadow(0 8px 20px rgba(0,180,90,.45));animation:idle-breathe 2s ease-in-out infinite;pointer-events:auto;}
+.mini-avatar.do-correct{animation:correct-bounce .6s ease forwards!important;}
+.mini-avatar.do-wrong{animation:wrong-shake .6s ease forwards!important;}
+
+.back-btn{position:relative;z-index:10;cursor:pointer;font-weight:900;font-size:14px;background:rgba(255,255,255,0.15);border:none;color:white;padding:7px 16px;border-radius:20px;margin-bottom:12px;backdrop-filter:blur(4px);transition:background .2s;}
+.back-btn:hover{background:rgba(255,255,255,0.28)}
+
+/* ── MEMORY ── */
+.memory-grid{display:grid;grid-template-columns:repeat(4,68px);gap:9px;margin:8px auto;}
+.mem-card{width:68px;height:68px;border-radius:13px;cursor:pointer;font-size:28px;display:flex;align-items:center;justify-content:center;background:rgba(46,139,87,0.18);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(4px);color:transparent;transition:all .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 10px rgba(0,0,0,0.15);}
+.mem-card.flipped,.mem-card.matched{background:rgba(255,255,255,0.22);backdrop-filter:blur(10px);color:#fff;transform:rotateY(180deg) scale(1.05);border-color:rgba(255,255,255,0.5);}
+.mem-card.matched{background:rgba(76,175,80,0.4);border-color:rgba(125,255,179,0.7);cursor:default;}
+
+/* ── WORD ── */
+.word-display{font-family:'Fredoka One';font-size:28px;letter-spacing:10px;color:#7dffb3;margin:10px 0;text-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.letter-input{text-align:center;font-size:20px;font-family:'Fredoka One';letter-spacing:4px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:#fff;}
+.letter-input::placeholder{color:rgba(255,255,255,0.5);}
+.letter-input:focus{border-color:rgba(255,255,255,0.7);}
+
+/* ── STORY SCRAMBLE ── */
+.story-line{font-size:15px;line-height:1.8;margin-bottom:10px;color:#e0ffe8;}
+.scramble-words{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;justify-content:center;}
+.sw-chip{padding:6px 13px;border-radius:20px;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.3);color:#fff;}
+.sw-chip:hover{background:rgba(255,255,255,0.25);transform:scale(1.05);}
+.sw-chip.used{opacity:.35;pointer-events:none;}
+.scramble-answer{min-height:40px;background:rgba(255,255,255,0.08);border:1.5px dashed rgba(255,255,255,0.3);border-radius:12px;padding:8px 12px;margin:6px 0;font-size:14px;font-weight:800;color:#7dffb3;display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.ans-chip{padding:4px 10px;background:rgba(125,255,179,0.25);border-radius:14px;cursor:pointer;font-size:13px;font-weight:800;border:1px solid rgba(125,255,179,0.5);}
+.ans-chip:hover{background:rgba(255,100,100,0.3);}
+
+/* ── FILL IN BLANK ── */
+.blank-sentence{font-size:17px;line-height:2;font-weight:800;color:#e0ffe8;margin-bottom:10px;}
+.blank-input{text-align:center;font-size:16px;font-family:'Nunito';font-weight:800;letter-spacing:1px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:#fff;width:100%;}
+.blank-input::placeholder{color:rgba(255,255,255,0.4);}
+
+/* ── MATH CHALLENGE (fill) ── */
+.math-challenge-q{font-family:'Fredoka One';font-size:28px;color:#7dffb3;margin:8px 0;text-shadow:0 2px 8px rgba(0,0,0,0.5);}
+.math-num-pad{display:grid;grid-template-columns:repeat(3,60px);gap:8px;margin:10px auto;width:fit-content;}
+.num-btn{width:60px;height:48px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One';font-size:20px;cursor:pointer;transition:all .2s;}
+.num-btn:hover{background:rgba(255,255,255,0.28);transform:scale(1.08);}
+.math-display{font-family:'Fredoka One';font-size:26px;color:white;min-height:36px;margin:6px 0;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,0.5);}
+
+/* ── SCIENCE SORT ── */
+.sort-items{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:8px 0;}
+.sort-chip{padding:7px 14px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;border:1.5px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;transition:all .2s;}
+.sort-chip:hover{transform:scale(1.06);}
+.sort-chip.selected-a{background:rgba(16,185,129,0.45);border-color:#10b981;}
+.sort-chip.selected-b{background:rgba(245,158,11,0.45);border-color:#f59e0b;}
+.sort-zones{display:flex;gap:10px;margin:8px 0;}
+.sort-zone{flex:1;min-height:60px;border-radius:14px;border:2px dashed rgba(255,255,255,0.25);padding:8px;background:rgba(255,255,255,0.05);font-size:12px;font-weight:800;color:rgba(255,255,255,0.6);}
+.sort-zone-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;opacity:.8;}
+.sorted-chip{padding:4px 10px;border-radius:14px;font-size:12px;font-weight:800;margin:2px;display:inline-block;background:rgba(255,255,255,0.15);}
+
+/* ── GRAMMAR PAGE ── */
+.grammar-box{background:rgba(10,10,10,0.55);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:24px 20px;border-radius:24px;width:420px;max-width:95vw;box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.grammar-box h2{font-family:'Fredoka One';font-size:22px;color:#c4b5fd;margin-bottom:4px;}
+.grammar-box .sub{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:2px;}
+#grammar-input{height:110px;resize:vertical;font-size:14px;font-weight:600;border:1.5px solid rgba(255,255,255,0.25);border-radius:12px;padding:12px;font-family:'Nunito';line-height:1.6;background:rgba(255,255,255,0.1);color:#fff;}
+#grammar-input::placeholder{color:rgba(255,255,255,0.4);}
+#grammar-input:focus{border-color:#c4b5fd;}
+.btn-grammar{background:linear-gradient(135deg,#7C3AED,#5b21b6);color:white;margin-top:12px;width:100%;font-size:15px;border-radius:14px;padding:12px;border:none;cursor:pointer;font-family:'Nunito';font-weight:800;transition:all .2s;}
+.btn-grammar:hover:not(:disabled){background:linear-gradient(135deg,#6d28d9,#4c1d95);transform:translateY(-1px);}
+.btn-grammar:disabled{opacity:.6;cursor:not-allowed;}
+#grammar-output-wrap{margin-top:14px;}
+.grammar-result-box{background:rgba(255,255,255,0.97);color:#1e1b4b;border-radius:16px;padding:18px;font-family:'Nunito';}
+.grammar-section-label{font-size:11px;font-weight:900;text-transform:uppercase;color:#7C3AED;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.change-count{display:inline-block;background:#7C3AED;color:white;font-size:10px;font-weight:900;padding:2px 10px;border-radius:20px;}
+#grammar-output{background:#f5f3ff;border:2px solid #ddd6fe;border-radius:12px;padding:14px;font-size:14px;line-height:1.9;color:#1e1b4b;font-family:'Nunito';font-weight:600;min-height:60px;}
+.word-fixed{background:#ede9fe;border-radius:4px;padding:1px 4px;color:#5b21b6;border-bottom:2px solid #7C3AED;font-weight:900;}
+.changes-list{margin-top:12px;border-top:2px dashed #ddd6fe;padding-top:10px;}
+.change-item{font-size:12px;color:#444;padding:5px 0;display:flex;align-items:flex-start;gap:6px;border-bottom:1px solid #f0f0f0;}
+.change-item:last-child{border:none;}
+.change-tick{color:#7C3AED;font-size:14px;flex-shrink:0;margin-top:1px;}
+.no-changes{background:#d1fae5;border:2px solid #6ee7b7;border-radius:12px;padding:14px;font-size:14px;color:#065f46;font-weight:800;text-align:center;}
+.grammar-loading{text-align:center;padding:18px;color:#c4b5fd;font-weight:800;font-size:14px;}
+.loading-dots span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#7C3AED;margin:0 3px;animation:dot-bounce .9s ease-in-out infinite;}
+.loading-dots span:nth-child(2){animation-delay:.15s;}
+.loading-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes dot-bounce{0%,80%,100%{transform:scale(0.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.copy-btn{margin-top:10px;width:100%;background:white;color:#7C3AED;border:2px solid #c4b5fd;border-radius:12px;padding:9px;font-family:'Nunito';font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;}
+.copy-btn:hover{background:#f5f3ff;}
+.grammar-tone-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.tone-btn{padding:6px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);color:#fff;font-family:'Nunito';font-weight:800;font-size:12px;cursor:pointer;transition:all .15s;}
+.tone-btn:hover,.tone-btn.active{background:#7C3AED;border-color:#7C3AED;color:white;}
+
+/* ── XP / CONFETTI ── */
+@keyframes xp-pop{0%{transform:translate(-50%,-50%) scale(0);opacity:1}60%{transform:translate(-50%,-100%) scale(1.3);opacity:1}100%{transform:translate(-50%,-140%) scale(1);opacity:0}}
+.xp-pop{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--gold),#ffb800);color:#333;font-weight:900;font-size:18px;padding:8px 20px;border-radius:30px;pointer-events:none;animation:xp-pop .9s ease forwards;z-index:999;box-shadow:0 4px 20px rgba(255,215,0,0.5);}
+@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(220px) rotate(720deg);opacity:0}}
+.confetti-bit{position:fixed;pointer-events:none;z-index:9999;font-size:20px;animation:confetti-fall .85s ease forwards;}
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="logo">
+    <img src="assets/ww_logo.png" class="logo-icon" alt="🌳" onerror="this.style.display='none'">
+    🌳 Wisdom Woods
+  </div>
+  <div id="nav-btns">
+    <button class="btn btn-outline" onclick="showPage('auth')">Sign In</button>
+  </div>
+</nav>
+
+<!-- ══ LANDING ══ -->
+<div id="page-landing" class="page active">
+  <img src="assets/ww_logo.png" style="width:300px;margin-bottom:10px;filter:drop-shadow(0 4px 16px rgba(0,180,90,.5));" onerror="this.innerText='🌳'">
+  <h1 style="font-family:'Fredoka One';font-size:52px;text-shadow:0 4px 20px rgba(0,0,0,0.5)">Wisdom Woods 🌳</h1>
+  <p style="font-size:20px;margin:12px 0 22px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,0.5);letter-spacing:.5px;">Where Growth Meets Fun 🌿</p>
+  <button class="btn btn-fill" style="font-size:18px;padding:14px 36px;" onclick="showPage('auth')">Start Adventure 🌿</button>
+</div>
+
+<!-- ══ AUTH ══ -->
+<div id="page-auth" class="page">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:4px;">
+      <img src="assets/ww_logo.png" style="width:28px;" onerror="this.outerHTML='🌳'">
+      <h2 style="margin:0;">Enter the Woods 🌳</h2>
+    </div>
+    <p>Create your explorer profile</p>
+    <input id="inp-name" placeholder="Your explorer name" />
+    <select id="inp-sex">
+      <option value="">Choose your guide...</option>
+      <option value="boy">🧒 Chinu (Boy)</option>
+      <option value="girl">👧 Minu (Girl)</option>
+    </select>
+    <div style="margin-top:14px;">
+      <p style="font-size:12px;color:#888;font-weight:800;text-align:left;margin-bottom:0;">Your age — sets your challenge level!</p>
+      <div class="age-row" id="age-row">
+        <button class="age-btn" onclick="selectAge(8)">8</button>
+        <button class="age-btn" onclick="selectAge(9)">9</button>
+        <button class="age-btn" onclick="selectAge(10)">10</button>
+        <button class="age-btn" onclick="selectAge(11)">11</button>
+        <button class="age-btn" onclick="selectAge(12)">12</button>
+      </div>
+      <div id="age-hint" style="font-size:11px;margin-top:6px;min-height:16px;color:#888;font-weight:700;"></div>
+    </div>
+    <button class="btn btn-fill" style="margin-top:16px;width:100%;font-size:16px;" onclick="login()">Enter the Woods →</button>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="page-dash" class="page">
+  <div class="avatar-wrap" onclick="avatarWiggle()">
+    <video id="avatar-img" class="avatar-img" autoplay muted loop playsinline></video>
+    <div class="avatar-shadow"></div>
+  </div>
+  <div class="avatar-nametag" id="avatar-nametag"></div>
+  <h2 id="welcome-msg" style="font-family:'Fredoka One';font-size:26px;text-shadow:0 2px 12px rgba(0,0,0,0.5);margin-top:6px;"></h2>
+  <div style="display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;justify-content:center;">
+    <div class="badge" id="xp-badge">⭐ 0 XP</div>
+    <div class="badge" id="level-badge" style="background:white;color:#333;"></div>
+  </div>
+  <div class="games-grid">
+    <div class="game-card" onclick="startGame('riddle')"><div class="icon">🧩</div><h3>Brain Puzzles</h3><p>Logic & riddles</p></div>
+    <div class="game-card" onclick="startGame('math')"><div class="icon">🔢</div><h3>Math Quest</h3><p>Numbers & sums</p></div>
+    <div class="game-card" onclick="startGame('memory')"><div class="icon">🃏</div><h3>Memory Flip</h3><p>Match the cards</p></div>
+    <div class="game-card" onclick="startGame('word')"><div class="icon">🔤</div><h3>Word Jungle</h3><p>Spell it right</p></div>
+    <div class="game-card" onclick="startGame('truefalse')"><div class="icon">✅</div><h3>True or False</h3><p>Test your knowledge</p></div>
+    <div class="game-card" onclick="startGame('scramble')"><div class="icon">🔀</div><h3>Sentence Mix</h3><p>Fix the sentence!</p></div>
+    <div class="game-card" onclick="startGame('fillblank')"><div class="icon">✏️</div><h3>Fill the Gap</h3><p>Complete the word</p></div>
+    <div class="game-card" onclick="startGame('mathtyper')"><div class="icon">🧮</div><h3>Speed Maths</h3><p>Type your answer</p></div>
+    <div class="game-card" onclick="startGame('sciencesort')"><div class="icon">🔬</div><h3>Science Sort</h3><p>Sort living things</p></div>
+    <div class="game-card" onclick="startGame('geography')"><div class="icon">🌍</div><h3>World Explorer</h3><p>Countries & capitals</p></div>
+    <div class="game-card" onclick="showPage('grammar')" style="grid-column:span 2;background:rgba(124,58,237,0.22);border-color:rgba(196,181,253,0.4)">
+      <div class="icon">✍️</div><h3>Grammar AI</h3><p>AI-powered writing fixer</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RIDDLE ══ -->
+<div id="page-riddle" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="riddle-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🧩 Brain Puzzles</span><span id="riddle-score">Score: 0</span><span id="riddle-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="riddle-prog"></div></div>
+    <h3 id="riddle-q"></h3>
+    <div id="riddle-opts"></div>
+    <div class="feedback-banner" id="riddle-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:12px;width:100%;" onclick="nextQ('riddle')">Next →</button>
+  </div>
+</div>
+
+<!-- ══ MATH ══ -->
+<div id="page-math" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="math-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🔢 Math Quest</span><span id="math-score">Score: 0</span><span id="math-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="math-prog"></div></div>
+    <h3 id="math-q"></h3>
+    <div id="math-opts"></div>
+    <div class="feedback-banner" id="math-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:12px;width:100%;" onclick="nextQ('math')">Next →</button>
+  </div>
+</div>
+
+<!-- ══ TRUE/FALSE ══ -->
+<div id="page-truefalse" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="tf-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>✅ True or False</span><span id="tf-score">Score: 0</span><span id="tf-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="tf-prog"></div></div>
+    <h3 id="tf-q" style="font-size:16px;line-height:1.5;min-height:52px;"></h3>
+    <div style="display:flex;gap:10px;margin-top:10px;">
+      <button class="opt" style="text-align:center;" id="tf-true-btn" onclick="checkTF(true)">✅ TRUE</button>
+      <button class="opt" style="text-align:center;" id="tf-false-btn" onclick="checkTF(false)">❌ FALSE</button>
+    </div>
+    <div class="feedback-banner" id="tf-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:12px;width:100%;" onclick="nextTF()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ MEMORY ══ -->
+<div id="page-memory" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="score-bar"><span>🃏 Memory Flip</span><span id="mem-score">Pairs: 0</span></div>
+  <div class="memory-grid" id="memory-grid"></div>
+  <button class="btn btn-gold" style="margin-top:14px;" onclick="initMemory()">🔄 New Game</button>
+</div>
+
+<!-- ══ WORD ══ -->
+<div id="page-word" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="word-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🔤 Word Jungle</span><span id="word-score">Score: 0</span><span id="word-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="word-prog"></div></div>
+    <p style="font-size:12px;color:rgba(255,255,255,0.7);" id="word-hint"></p>
+    <div class="word-display" id="word-display"></div>
+    <input class="letter-input" id="word-input" maxlength="14" placeholder="Type the word..." onkeydown="if(event.key==='Enter')checkWord()" />
+    <div class="feedback-banner" id="word-feedback-banner"></div>
+    <button class="btn btn-fill" style="margin-top:10px;width:100%;" onclick="checkWord()">Submit →</button>
+  </div>
+</div>
+
+<!-- ══ SENTENCE SCRAMBLE ══ -->
+<div id="page-scramble" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="scramble-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🔀 Sentence Mix</span><span id="scramble-score">Score: 0</span><span id="scramble-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="scramble-prog"></div></div>
+    <p style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;">Put the words in the right order!</p>
+    <div class="scramble-answer" id="scramble-answer">tap words below…</div>
+    <div class="scramble-words" id="scramble-words"></div>
+    <div class="feedback-banner" id="scramble-feedback"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn btn-fill" style="flex:1;" onclick="checkScramble()">Check ✓</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="clearScramble()">Clear ↺</button>
+    </div>
+    <button class="btn btn-fill" style="margin-top:8px;width:100%;display:none;" id="scramble-next" onclick="nextScramble()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ FILL THE BLANK ══ -->
+<div id="page-fillblank" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="fillblank-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>✏️ Fill the Gap</span><span id="fillblank-score">Score: 0</span><span id="fillblank-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="fillblank-prog"></div></div>
+    <p style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;">Type the missing word!</p>
+    <div class="blank-sentence" id="blank-sentence"></div>
+    <input class="blank-input" id="blank-input" placeholder="Type the missing word..." onkeydown="if(event.key==='Enter')checkFillBlank()"/>
+    <p style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;" id="blank-hint-text"></p>
+    <div class="feedback-banner" id="fillblank-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:10px;width:100%;" onclick="checkFillBlank()">Submit →</button>
+    <button class="btn btn-fill" style="margin-top:6px;width:100%;display:none;" id="fillblank-next" onclick="nextFillBlank()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SPEED MATHS TYPER ══ -->
+<div id="page-mathtyper" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="mathtyper-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🧮 Speed Maths</span><span id="mathtyper-score">Score: 0</span><span id="mathtyper-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="mathtyper-prog"></div></div>
+    <div class="math-challenge-q" id="mathtyper-q"></div>
+    <div class="math-display" id="mathtyper-display">_</div>
+    <div class="math-num-pad" id="mathtyper-pad"></div>
+    <div class="feedback-banner" id="mathtyper-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:10px;width:100%;display:none;" id="mathtyper-next" onclick="nextMathTyper()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SCIENCE SORT ══ -->
+<div id="page-sciencesort" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="sciencesort-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🔬 Science Sort</span><span id="sciencesort-score">Score: 0</span><span id="sciencesort-diff-label"></span></div>
+  <div class="game-box" style="width:360px;">
+    <div class="progress-wrap"><div class="progress-bar" id="sciencesort-prog"></div></div>
+    <h3 id="sciencesort-q" style="font-size:16px;"></h3>
+    <div class="sort-zones">
+      <div class="sort-zone" id="zone-a"><div class="sort-zone-label" id="zone-a-label"></div><div id="zone-a-items"></div></div>
+      <div class="sort-zone" id="zone-b"><div class="sort-zone-label" id="zone-b-label"></div><div id="zone-b-items"></div></div>
+    </div>
+    <div class="sort-items" id="sort-items"></div>
+    <div class="feedback-banner" id="sciencesort-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:10px;width:100%;" onclick="checkSort()">Check ✓</button>
+    <button class="btn btn-fill" style="margin-top:6px;width:100%;display:none;" id="sciencesort-next" onclick="nextSort()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ GEOGRAPHY ══ -->
+<div id="page-geography" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="mini-avatar-wrap"><video id="geography-avatar" class="mini-avatar" autoplay muted loop playsinline></video></div>
+  <div class="score-bar"><span>🌍 World Explorer</span><span id="geography-score">Score: 0</span><span id="geography-diff-label"></span></div>
+  <div class="game-box">
+    <div class="progress-wrap"><div class="progress-bar" id="geography-prog"></div></div>
+    <h3 id="geography-q"></h3>
+    <div id="geography-opts"></div>
+    <div class="feedback-banner" id="geography-feedback"></div>
+    <button class="btn btn-fill" style="margin-top:12px;width:100%;" onclick="nextQ('geography')">Next →</button>
+  </div>
+</div>
+
+<!-- ══ GRAMMAR AI ══ -->
+<div id="page-grammar" class="page">
+  <button class="back-btn" onclick="showPage('dash')">← Back</button>
+  <div class="grammar-box">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <img src="assets/ww_logo.png" style="width:24px;" onerror="this.outerHTML='🌳'">
+      <h2 style="margin:0;">✍️ Grammar AI</h2>
+    </div>
+    <p class="sub">Paste your text — AI fixes grammar, spelling, punctuation & style!</p>
+    <div style="font-size:11px;font-weight:900;text-transform:uppercase;color:#c4b5fd;letter-spacing:.5px;margin-top:10px;margin-bottom:2px;">Tone / Style</div>
+    <div class="grammar-tone-row">
+      <button class="tone-btn active" id="tone-normal" onclick="setTone('normal')">📝 Normal Fix</button>
+      <button class="tone-btn" id="tone-formal" onclick="setTone('formal')">🎩 More Formal</button>
+      <button class="tone-btn" id="tone-simple" onclick="setTone('simple')">🌱 Simpler Words</button>
+      <button class="tone-btn" id="tone-creative" onclick="setTone('creative')">🎨 More Vivid</button>
+    </div>
+    <div style="font-size:11px;font-weight:900;text-transform:uppercase;color:#c4b5fd;letter-spacing:.5px;margin-top:10px;margin-bottom:2px;">Your Text</div>
+    <textarea id="grammar-input" placeholder="Type or paste your text here…
+
+Example: i goed to the store yesterday and buyed some apple's for my friend who dont like oranges very much."></textarea>
+    <button class="btn btn-grammar" id="grammar-btn" onclick="improveGrammar()">✨ Fix My Grammar</button>
+    <div id="grammar-output-wrap"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════
+// AVATARS & CONFIG
+// ══════════════════════════════
+const AVATARS = { boy:'assets/chinu_transparent.webm', girl:'assets/minu_transparent.webm' };
+
+const DIFFICULTY_MAP = {
+  8:{label:'Easy 🌱',cls:'diff-easy',tier:0},
+  9:{label:'Easy 🌱',cls:'diff-easy',tier:0},
+  10:{label:'Medium 🌿',cls:'diff-medium',tier:1},
+  11:{label:'Medium 🌿',cls:'diff-medium',tier:1},
+  12:{label:'Hard 🌳',cls:'diff-hard',tier:2}
+};
+
+// ══════════════════════════════
+// QUESTION BANKS
+// ══════════════════════════════
+const RIDDLE_BANK=[
+  [{q:"2, 4, 8, 16, — next?",o:["20","32","24","18"],a:1,why:"Each number is doubled! 16×2 = 32 🔢",win:"Pattern master! You doubled each number! 🌟"},
+   {q:"What has hands but can't clap?",o:["A glove","A clock","A tree","A robot"],a:1,why:"A clock has a big hand and small hand for time, not clapping! ⏰",win:"Clever! Clock hands show time, not clap! 👏"},
+   {q:"What gets wetter as it dries?",o:["A sponge","Rain","A towel","Ice"],a:2,why:"A towel dries YOU by absorbing water — so it gets wetter itself! 🛁",win:"Riddle master! The towel dries you but gets wet! 🏆"},
+   {q:"What has one eye but can't see?",o:["A camera","A needle","A potato","A cyclops"],a:1,why:"A needle has a tiny hole called its 'eye' for thread — no vision! 🧵",win:"Sharp thinking! The needle's eye is for thread! 💡"},
+   {q:"What has legs but cannot walk?",o:["A fish","A snake","A table","A worm"],a:2,why:"A table has four legs to stand on but can't go anywhere! 🪑",win:"Got it! Table legs support it but can't walk! ✨"},
+   {q:"What do you catch but not throw?",o:["A ball","A cold","A fish","A butterfly"],a:1,why:"You catch a cold (get sick) but you never throw one! 🤧",win:"Smart! You catch a cold from germs, not throwing! 🌟"}],
+  [{q:"A rooster lays an egg on a roof. Which way does it roll?",o:["Left","Right","Roosters don't lay eggs","Down"],a:2,why:"Trick question! Roosters are male — only hens lay eggs! 🐓",win:"Ha! You caught it — roosters can't lay eggs! 🥚"},
+   {q:"I speak without a mouth. What am I?",o:["A ghost","An echo","Wind","A telephone"],a:1,why:"An echo bounces your voice back — no mouth needed! 🏔️",win:"Excellent! An echo repeats you without a mouth! 🎵"},
+   {q:"What has keys but no locks, space but no room?",o:["A map","A piano","A keyboard","A book"],a:2,why:"A keyboard has keys and a spacebar — but no door locks or rooms! 💻",win:"Spot on! Keyboard keys, no locks or rooms! ⌨️"},
+   {q:"What runs but has no legs?",o:["A river","A car","Time","Both A and C"],a:3,why:"Both a river 'runs' downstream AND time 'runs' forward — no legs! 🌊",win:"Perfect! Rivers and time both run with no legs! 🏃"},
+   {q:"I have cities but no houses. Mountains but no trees. What am I?",o:["A dream","A painting","A map","A story"],a:2,why:"A map shows cities and mountains as symbols — nothing real! 🗺️",win:"Amazing! A map represents the world but nothing real lives there! 🌍"},
+   {q:"What travels the world while staying in a corner?",o:["The wind","A stamp","The sun","A shadow"],a:1,why:"A postage stamp lives in the corner of an envelope and travels everywhere! ✉️",win:"Clever! The stamp stays in the corner while the envelope travels! 📬"}],
+  [{q:"The more you take, the more you leave behind. What am I?",o:["Breath","Time","Footsteps","Memories"],a:2,why:"Every step you take leaves a footprint behind — the more steps, the more prints! 👣",win:"Brilliant! Steps taken = footprints left behind! 🧠"},
+   {q:"I'm not alive but I grow. No lungs but I need air. What am I?",o:["A river","Fire","A plant","A cloud"],a:1,why:"Fire grows, needs oxygen to burn, but has no lungs or life! 🔥",win:"Outstanding! Fire needs air (oxygen) to keep burning! 🔥"},
+   {q:"What word becomes shorter when you add two letters?",o:["Short","Long","Small","Tall"],a:0,why:"Short + er = Shorter — a word that literally means more short! 📝",win:"Genius! Short + er = Shorter! 🏆"},
+   {q:"What can be broken but never held?",o:["Glass","A promise","A bone","A secret"],a:1,why:"You break a promise by not keeping it — but you can never hold one! 🤝",win:"Deep! Promises are broken when not kept but never held! 💭"},
+   {q:"I have a head and a tail but no body. What am I?",o:["A snake","A coin","A comet","A tadpole"],a:1,why:"A coin has a heads side and a tails side — but no body! 🪙",win:"Sharp! Coins have heads and tails to flip! 🪙"},
+   {q:"Forward I am heavy, backward I am not. What am I?",o:["A boulder","Ton","A truck","A rock"],a:1,why:"TON = heavy unit of weight. Spelled backward = NOT! 💡",win:"Incredible! TON backward spells NOT! 🔤"}]
+];
+
+const MATH_BANK=[
+  [{q:"🍎 3 + 5 = ?",o:["7","8","9","6"],a:1,why:"Count on from 3: 4,5,6,7,8 — that's 5 steps forward! 🍎",win:"Perfect! 3 + 5 = 8 apples! 🍎"},
+   {q:"🦁 4 × 3 = ?",o:["10","12","14","8"],a:1,why:"4 groups of 3 = 3+3+3+3 = 12! 🦁",win:"Times table ace! 4 × 3 = 12! 🦁"},
+   {q:"🌴 15 ÷ 3 = ?",o:["4","5","6","3"],a:1,why:"How many 3s fit in 15? Count: 3,6,9,12,15 — five! 🌴",win:"Division champ! 15 ÷ 3 = 5! 🌴"},
+   {q:"🐘 20 − 7 = ?",o:["11","12","13","14"],a:2,why:"Start at 20, count back 7: 19,18,17,16,15,14,13! 🐘",win:"Great! 20 − 7 = 13! 🐘"},
+   {q:"🔺 How many sides does a triangle have?",o:["2","3","4","5"],a:1,why:"Tri = three! Triangle has 3 sides and 3 corners! 🔺",win:"Correct! Tri = 3 sides! 🔺"},
+   {q:"🍌 Half of 18?",o:["7","8","9","10"],a:2,why:"Half = ÷2. 18÷2=9. Check: 9+9=18 ✓ 🍌",win:"Spot on! Half of 18 = 9! 🍌"}],
+  [{q:"🐆 7 × 8 = ?",o:["54","56","58","60"],a:1,why:"Trick: 5,6,7,8 → 56=7×8! Or 7×8=7×4×2=56 🐆",win:"Times table expert! 7 × 8 = 56! 🐆"},
+   {q:"🦜 100 − 37 = ?",o:["63","73","57","67"],a:0,why:"100−30=70, then 70−7=63. Check: 63+37=100 ✓ 🦜",win:"Mental maths master! 100−37=63! 🦜"},
+   {q:"🍌 √64 = ?",o:["6","7","8","9"],a:2,why:"8×8=64, so √64=8! What times itself = 64? That's 8! 🍌",win:"Square root star! √64=8! ✨"},
+   {q:"🌿 25% of 80 = ?",o:["15","20","25","30"],a:1,why:"25% = ¼. 80÷4=20. Or 10%=8, so 25%=20! 🌿",win:"Percentage pro! ¼ of 80 = 20! 🌿"},
+   {q:"🐘 Fibonacci: 1,1,2,3,5,8,— next?",o:["11","12","13","14"],a:2,why:"Each number = the two before it added! 5+8=13! 🐘",win:"You know Fibonacci! 5+8=13! 🌀"},
+   {q:"🌴 Rectangle 9cm × 4cm. Area?",o:["26 cm²","36 cm²","32 cm²","13 cm²"],a:1,why:"Area = length × width = 9×4 = 36 cm² 🌴",win:"Geometry genius! 9×4=36 cm²! 📐"}],
+  [{q:"🧮 x + 7 = 15. What is x?",o:["6","7","8","9"],a:2,why:"x = 15−7 = 8. Check: 8+7=15 ✓ 🧮",win:"Algebra ace! x=8! 🧮"},
+   {q:"📐 Area of circle, radius 5? (π≈3.14)",o:["31.4","78.5","15.7","50"],a:1,why:"A=πr²=3.14×25=78.5. Not circumference (31.4)! 📐",win:"Circle master! π×r²=78.5! 🔵"},
+   {q:"🔢 15% of 200?",o:["25","30","35","40"],a:1,why:"10%=20, 5%=10, so 15%=30! 🔢",win:"Percentage wizard! 30! 💯"},
+   {q:"🧊 Volume of cube with side 3cm?",o:["9 cm³","18 cm³","27 cm³","12 cm³"],a:2,why:"Volume=s³=3×3×3=27 cm³. Don't stop at 3×3=9! 🧊",win:"3D pro! 3×3×3=27 cm³! 🧊"},
+   {q:"⚡ 2³ + 3² = ?",o:["13","17","18","15"],a:1,why:"2³=8, 3²=9, 8+9=17! ⚡",win:"Powers expert! 8+9=17! ⚡"},
+   {q:"🚂 Train at 60km/h. Distance in 2.5hrs?",o:["120 km","140 km","150 km","160 km"],a:2,why:"D=S×T=60×2.5=150km (60×2=120, +60×0.5=30) 🚂",win:"Speed-distance champ! 150km! 🚂"}]
+];
+
+const TF_BANK=[
+  [{q:"🌍 The Earth is the 3rd planet from the Sun.",a:true,why:"Mercury=1st, Venus=2nd, Earth=3rd, Mars=4th! 🌍",win:"Astronomy star! Earth is 3rd! 🌞"},
+   {q:"🦈 Sharks are mammals.",a:false,why:"Sharks are fish! Mammals breathe air, are warm-blooded. Sharks have gills! 🦈",win:"Correct! Sharks are fish, not mammals! 🐬"},
+   {q:"🌡️ Water boils at 100°C.",a:true,why:"At sea level, water boils at exactly 100°C (212°F)! ♨️",win:"Science fact nailed! 100°C! 🌡️"},
+   {q:"🦋 Butterflies taste with their feet.",a:true,why:"They have chemoreceptors on their feet — they taste when they land! 🦋",win:"Amazing fact! Feet-tasting butterflies! 🦋"},
+   {q:"🌙 The Moon makes its own light.",a:false,why:"The Moon reflects sunlight — it makes no light of its own! 🌙",win:"Space expert! The Moon just reflects the Sun! 🌙"},
+   {q:"🐬 Dolphins breathe air like humans.",a:true,why:"Dolphins are mammals — they breathe through a blowhole! 🐬",win:"Marine bio ace! Dolphins breathe air! 🐬"}],
+  [{q:"🌿 Bamboo is the fastest-growing plant.",a:true,why:"Some bamboo grows 91cm in ONE day — nearly 4cm per hour! 🌿",win:"Plant fact pro! Bamboo grows a metre a day! 🌿"},
+   {q:"🦁 Lions are the biggest cats.",a:false,why:"Tigers are bigger! Siberian tigers = up to 300kg vs lions = 190kg! 🐯",win:"Wildlife expert! Tigers beat lions in size! 🐯"},
+   {q:"⚡ Lightning never strikes the same place twice.",a:false,why:"Myth! The Empire State Building gets struck 20–25 times every year! ⚡",win:"Truth seeker! Lightning strikes the same spot all the time! ⚡"},
+   {q:"🧠 Humans use only 10% of their brain.",a:false,why:"Myth! Brain scans show we use virtually all of our brain! 🧠",win:"Brain fact champ! We use 100% of our brain! 🧠"},
+   {q:"🌊 The Pacific is the largest ocean.",a:true,why:"The Pacific covers 30%+ of Earth — bigger than all land combined! 🌊",win:"Geography ace! Pacific = Earth's biggest ocean! 🌊"},
+   {q:"🐍 All snakes are venomous.",a:false,why:"Only ~600 of 3,700+ species are venomous. Pythons squeeze, not venom! 🐍",win:"Snake expert! Most snakes aren't venomous! 🐍"}],
+  [{q:"🌏 Australia is both a country and a continent.",a:true,why:"Australia is the only nation that IS its own continent! 🌏",win:"Geography genius! One continent, one country! 🌏"},
+   {q:"⚗️ The chemical symbol for gold is Au.",a:true,why:"Au = 'Aurum', the Latin word for gold! ⚗️",win:"Chemistry whizz! Au = Aurum = gold! ⚗️"},
+   {q:"🌡️ Sound travels faster in water than air.",a:true,why:"Sound = 343m/s in air, 1,480m/s in water — 4× faster! Molecules are closer! 🌊",win:"Physics pro! Sound is 4× faster in water! 🌡️"},
+   {q:"🔭 The Sun is a type of planet.",a:false,why:"The Sun is a STAR — a ball of plasma powered by nuclear fusion! ☀️",win:"Astronomy expert! The Sun is a medium-sized star! ☀️"},
+   {q:"🧬 DNA stands for Deoxyribonucleic Acid.",a:true,why:"DNA=Deoxyribonucleic Acid — your unique genetic instruction manual! 🧬",win:"Biology brilliant! DNA = your genetic code! 🧬"},
+   {q:"🌋 Mount Everest is tallest from sea level.",a:true,why:"Everest = 8,848m above sea level — the highest point on Earth! 🌋",win:"Mountain master! Everest = 8,848m! 🏔️"}]
+];
+
+const WORD_BANK=[
+  [{word:"JUMP",hint:"🐸 What a frog does",why:"Frogs are famous jumpers — some can jump 20× their body length! 🐸"},
+   {word:"BIRD",hint:"🐦 Has wings and feathers",why:"All birds have feathers — even penguins that can't fly! 🐧"},
+   {word:"LEAF",hint:"🍃 A flat green part of a plant",why:"Leaves make food for the plant using sunlight — photosynthesis! 🌿"},
+   {word:"FROG",hint:"🐸 Green amphibian that croaks",why:"Frogs are amphibians — they live in water AND on land! 🌊"},
+   {word:"TREE",hint:"🌳 A tall plant with a trunk",why:"The oldest known tree is over 5,000 years old! 🌳"},
+   {word:"RAIN",hint:"🌧️ Water falling from clouds",why:"Rain is part of the water cycle: evaporate → cloud → rain! 💧"}],
+  [{word:"JUNGLE",hint:"🌿 A dense tropical forest",why:"Jungle comes from Hindi 'jangal' meaning forest! 🌴"},
+   {word:"PARROT",hint:"🦜 A colourful talking bird",why:"Parrots mimic speech and can live 80+ years! 🦜"},
+   {word:"COMPASS",hint:"🧭 Tool for finding direction",why:"Compass needles point North due to Earth's magnetic field! 🧭"},
+   {word:"PYTHON",hint:"🐍 A large jungle snake",why:"Pythons are constrictors — the reticulated python is the world's longest snake! 🐍"},
+   {word:"ISLAND",hint:"🏝️ Land surrounded by water",why:"Continents are technically giant islands! Australia is both! 🌊"},
+   {word:"SAFARI",hint:"🦁 A wildlife expedition",why:"Safari means 'journey' in Arabic/Swahili! 🦁"}],
+  [{word:"EXPLORER",hint:"🧭 Discovers new places",why:"Columbus, Magellan and Polo mapped the unknown world — today we explore deep ocean and space! 🚀"},
+   {word:"ELEPHANT",hint:"🐘 Largest land animal",why:"Elephants use trunks as nose+hand+straw. Elephants never forget! 🐘"},
+   {word:"LEOPARD",hint:"🐆 Spotted big cat",why:"Leopards drag prey UP trees. Every leopard's spots are unique like fingerprints! 🐆"},
+   {word:"VOLCANO",hint:"🌋 Mountain that erupts",why:"Named after Vulcan, Roman god of fire! Hot magma pushes through Earth's crust! 🌋"},
+   {word:"EQUATOR",hint:"🌍 Imaginary line around Earth's middle",why:"The equator is exactly halfway between the North and South Poles! 🌍"},
+   {word:"MONSOON",hint:"🌧️ Seasonal heavy rainfall",why:"From Arabic for 'season'. Monsoons bring vital rains to South Asia every year! ☔"}]
+];
+
+// ── NEW GAME BANKS ──
+
+// SENTENCE SCRAMBLE (tier 0=easy, 1=medium, 2=hard)
+const SCRAMBLE_BANK=[
+  [{sentence:"The dog runs fast",words:["The","dog","runs","fast"],why:"'The dog runs fast' — subject first, then verb, then how! 🐕"},
+   {sentence:"I like to eat apples",words:["I","like","to","eat","apples"],why:"Subject (I) + verb (like) + what you like (to eat apples)! 🍎"},
+   {sentence:"The sun is very bright",words:["The","sun","is","very","bright"],why:"'The sun is very bright' — adjective comes after 'is'! ☀️"},
+   {sentence:"Birds can fly high",words:["Birds","can","fly","high"],why:"Subject (Birds) + helper verb (can) + main verb (fly) + where (high)! 🐦"},
+   {sentence:"She reads a book",words:["She","reads","a","book"],why:"Subject (She) + verb (reads) + object (a book)! 📚"}],
+  [{sentence:"The quick fox jumped over the fence",words:["The","quick","fox","jumped","over","the","fence"],why:"Adjective (quick) comes before the noun (fox)! 🦊"},
+   {sentence:"We should always wash our hands",words:["We","should","always","wash","our","hands"],why:"Subject + modal (should) + adverb (always) + verb + object! 🙌"},
+   {sentence:"My friend loves playing football",words:["My","friend","loves","playing","football"],why:"Possessive (My) + noun + verb + gerund (playing) + object! ⚽"},
+   {sentence:"The library opens at nine",words:["The","library","opens","at","nine"],why:"'Opens at nine' — time phrases go at the end! 📚"},
+   {sentence:"It was raining heavily yesterday",words:["It","was","raining","heavily","yesterday"],why:"Past continuous: was + verb+ing + adverb + time! 🌧️"}],
+  [{sentence:"Despite the rain we enjoyed the picnic",words:["Despite","the","rain","we","enjoyed","the","picnic"],why:"'Despite' starts a contrast clause — comes before the main clause! 🌧️"},
+   {sentence:"Neither the teacher nor the students were late",words:["Neither","the","teacher","nor","the","students","were","late"],why:"Neither...nor connects two negatives — the verb agrees with the second subject! 🏫"},
+   {sentence:"The scientists discovered a new species",words:["The","scientists","discovered","a","new","species"],why:"Subject + past tense verb + article + adjective + noun! 🔬"},
+   {sentence:"She had already finished her homework",words:["She","had","already","finished","her","homework"],why:"Past perfect: had + already + past participle! 📓"},
+   {sentence:"Not only is it raining but it is also cold",words:["Not","only","is","it","raining","but","it","is","also","cold"],why:"'Not only...but also' is a correlative conjunction structure! 🥶"}]
+];
+
+// FILL IN THE BLANK
+const FILL_BANK=[
+  [{sentence:"The ___ shines brightly in the sky.",answer:"SUN",hint:"It rises in the morning",why:"The SUN is our nearest star — it's what gives us light and warmth! ☀️"},
+   {sentence:"A ___ has eight legs.",answer:"SPIDER",hint:"It spins webs",why:"SPIDER — spiders are arachnids, not insects. They have 8 legs, insects have 6! 🕷️"},
+   {sentence:"We breathe ___ to stay alive.",answer:"AIR",hint:"You can't see it",why:"AIR contains oxygen (21%) which our lungs need to work! 💨"},
+   {sentence:"Fish live in ___.",answer:"WATER",hint:"You drink it",why:"Fish breathe dissolved oxygen in WATER through their gills! 🐟"},
+   {sentence:"A baby cat is called a ___.",answer:"KITTEN",hint:"A fluffy baby",why:"KITTEN — baby dogs are puppies, baby cats are kittens! 🐱"}],
+  [{sentence:"The capital of India is ___.",answer:"DELHI",hint:"In north India",why:"New DELHI has been India's capital since 1911. Mumbai is the financial capital! 🇮🇳"},
+   {sentence:"Photosynthesis uses ___ to make food.",answer:"SUNLIGHT",hint:"Comes from the sky",why:"SUNLIGHT + water + CO₂ = glucose + oxygen. That's photosynthesis! 🌿"},
+   {sentence:"The hardest natural substance is ___.",answer:"DIAMOND",hint:"Used in rings",why:"DIAMOND is the hardest natural material — only another diamond can scratch it! 💎"},
+   {sentence:"Animals that eat only plants are called ___.",answer:"HERBIVORES",hint:"Plant eaters",why:"HERBIVORES eat only plants. Carnivores eat meat, omnivores eat both! 🌱"},
+   {sentence:"The force that pulls objects to Earth is ___.",answer:"GRAVITY",hint:"Why things fall",why:"GRAVITY is the force attracting all masses together. Without it we'd float away! 🌍"}],
+  [{sentence:"The process of water turning to vapour is ___.",answer:"EVAPORATION",hint:"Heat causes this",why:"EVAPORATION — liquid water gains energy and becomes water vapour. Part of the water cycle! 💧"},
+   {sentence:"An animal that can live on land and water is an ___.",answer:"AMPHIBIAN",hint:"Frogs are this",why:"AMPHIBIAN — from Greek 'double life'. Frogs, salamanders and toads are amphibians! 🐸"},
+   {sentence:"The largest organ of the human body is the ___.",answer:"SKIN",hint:"You can see it",why:"SKIN! It covers ~2m², regulates temperature and protects internal organs! 🧑"},
+   {sentence:"The speed of light is approximately ___ km/s.",answer:"300000",hint:"Very very fast",why:"Light travels ~300,000 km per second — it reaches the Moon in 1.3 seconds! 💡"},
+   {sentence:"Continents are found on tectonic ___.",answer:"PLATES",hint:"They move slowly",why:"Tectonic PLATES float on Earth's mantle and move 2–10cm per year! 🌍"}]
+];
+
+// SPEED MATHS TYPER
+const MATHTYPER_BANK=[
+  [{q:"5 + 3 = ?",a:"8"},{q:"9 - 4 = ?",a:"5"},{q:"2 × 6 = ?",a:"12"},
+   {q:"10 ÷ 2 = ?",a:"5"},{q:"7 + 8 = ?",a:"15"},{q:"3 × 4 = ?",a:"12"}],
+  [{q:"8 × 7 = ?",a:"56"},{q:"64 ÷ 8 = ?",a:"8"},{q:"15 + 27 = ?",a:"42"},
+   {q:"100 - 43 = ?",a:"57"},{q:"9 × 6 = ?",a:"54"},{q:"√49 = ?",a:"7"}],
+  [{q:"12 × 13 = ?",a:"156"},{q:"144 ÷ 12 = ?",a:"12"},{q:"7² = ?",a:"49"},
+   {q:"3³ = ?",a:"27"},{q:"√121 = ?",a:"11"},{q:"250 × 4 = ?",a:"1000"}]
+];
+
+// SCIENCE SORT
+const SORT_BANK=[
+  [{q:"Sort into: Living or Non-Living 🌱",zoneA:"🌱 Living",zoneB:"🪨 Non-Living",
+    items:[{t:"Dog 🐕",z:"a"},{t:"Rock 🪨",z:"b"},{t:"Tree 🌳",z:"a"},{t:"Chair 🪑",z:"b"},{t:"Mushroom 🍄",z:"a"},{t:"Cloud ☁️",z:"b"}],
+    why:"Living things grow, breathe and reproduce. Rocks, chairs and clouds do none of these!"},
+   {q:"Sort into: Animal or Plant 🌿",zoneA:"🐾 Animal",zoneB:"🌿 Plant",
+    items:[{t:"Rose 🌹",z:"b"},{t:"Elephant 🐘",z:"a"},{t:"Cactus 🌵",z:"b"},{t:"Parrot 🦜",z:"a"},{t:"Grass 🌾",z:"b"},{t:"Frog 🐸",z:"a"}],
+    why:"Animals move and eat. Plants make their own food from sunlight!"},
+   {q:"Sort into: Hot or Cold ☀️",zoneA:"☀️ Hot",zoneB:"❄️ Cold",
+    items:[{t:"Desert 🏜️",z:"a"},{t:"Arctic 🧊",z:"b"},{t:"Volcano 🌋",z:"a"},{t:"Glacier 🏔️",z:"b"},{t:"Lava 🔥",z:"a"},{t:"Snowflake ❄️",z:"b"}],
+    why:"Deserts and volcanoes are blazing hot. The Arctic, glaciers and snowflakes are freezing cold!"}],
+  [{q:"Sort into: Mammal or Reptile 🦎",zoneA:"🐾 Mammal",zoneB:"🦎 Reptile",
+    items:[{t:"Dolphin 🐬",z:"a"},{t:"Crocodile 🐊",z:"b"},{t:"Bat 🦇",z:"a"},{t:"Lizard 🦎",z:"b"},{t:"Bear 🐻",z:"a"},{t:"Tortoise 🐢",z:"b"}],
+    why:"Mammals are warm-blooded and nurse young with milk. Reptiles are cold-blooded with scales!"},
+   {q:"Sort into: Solid or Liquid 💧",zoneA:"🧱 Solid",zoneB:"💧 Liquid",
+    items:[{t:"Ice 🧊",z:"a"},{t:"Juice 🍹",z:"b"},{t:"Rock 🪨",z:"a"},{t:"Milk 🥛",z:"b"},{t:"Wood 🌲",z:"a"},{t:"Water 💧",z:"b"}],
+    why:"Solids keep their shape. Liquids flow and take the shape of their container!"},
+   {q:"Sort: Herbivore or Carnivore 🥩",zoneA:"🌱 Herbivore",zoneB:"🥩 Carnivore",
+    items:[{t:"Rabbit 🐇",z:"a"},{t:"Lion 🦁",z:"b"},{t:"Horse 🐴",z:"a"},{t:"Tiger 🐯",z:"b"},{t:"Deer 🦌",z:"a"},{t:"Eagle 🦅",z:"b"}],
+    why:"Herbivores only eat plants. Carnivores hunt and eat other animals!"}],
+  [{q:"Sort: Vertebrate or Invertebrate 🦴",zoneA:"🦴 Vertebrate",zoneB:"🐛 Invertebrate",
+    items:[{t:"Shark 🦈",z:"a"},{t:"Worm 🪱",z:"b"},{t:"Eagle 🦅",z:"a"},{t:"Octopus 🐙",z:"b"},{t:"Frog 🐸",z:"a"},{t:"Spider 🕷️",z:"b"}],
+    why:"Vertebrates have a backbone. Invertebrates don't — that's 97% of all animals!"},
+   {q:"Sort: Renewable or Non-Renewable ⚡",zoneA:"♻️ Renewable",zoneB:"⛽ Non-Renewable",
+    items:[{t:"Solar ☀️",z:"a"},{t:"Coal 🪨",z:"b"},{t:"Wind 💨",z:"a"},{t:"Oil 🛢️",z:"b"},{t:"Water 💧",z:"a"},{t:"Gas ⛽",z:"b"}],
+    why:"Renewable energy (sun, wind, water) never runs out. Coal, oil and gas took millions of years to form!"},
+   {q:"Sort: Element or Compound 🧪",zoneA:"⚗️ Element",zoneB:"🧪 Compound",
+    items:[{t:"Gold Au 🥇",z:"a"},{t:"Water H₂O 💧",z:"b"},{t:"Oxygen O 🌬️",z:"a"},{t:"Salt NaCl 🧂",z:"b"},{t:"Iron Fe 🔩",z:"a"},{t:"Sugar C₁₂H₂₂O₁₁ 🍬",z:"b"}],
+    why:"Elements are pure substances (one type of atom). Compounds are two or more elements joined together!"}]
+];
+
+// GEOGRAPHY
+const GEO_BANK=[
+  [{q:"🌍 What is the capital of France?",o:["Berlin","Madrid","Paris","Rome"],a:2,why:"Paris is France's capital and home to the Eiffel Tower, built in 1889! 🗼",win:"Geography star! Paris, the City of Light! 🗼"},
+   {q:"🌊 Which is the world's longest river?",o:["Amazon","Congo","Nile","Ganges"],a:2,why:"The Nile at ~6,650km is the longest river, flowing through 11 countries! 🌊",win:"River expert! The Nile = world's longest river! 🌊"},
+   {q:"🏔️ What is the tallest mountain?",o:["K2","Kangchenjunga","Everest","Lhotse"],a:2,why:"Mount Everest at 8,848m is the highest point on Earth! 🏔️",win:"Peak performance! Everest is the tallest! 🏔️"},
+   {q:"🌍 How many continents are there?",o:["5","6","7","8"],a:2,why:"There are 7 continents: Africa, Antarctica, Asia, Australia, Europe, N. America, S. America! 🌍",win:"Continent counter! 7 continents! 🌍"},
+   {q:"🇮🇳 What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:2,why:"New Delhi has been India's capital since 1911. Mumbai is the financial capital! 🇮🇳",win:"India geography ace! New Delhi! 🇮🇳"},
+   {q:"🌊 Which ocean is the largest?",o:["Atlantic","Indian","Arctic","Pacific"],a:3,why:"Pacific Ocean covers 30%+ of Earth — bigger than all land combined! 🌊",win:"Ocean explorer! The Pacific is the biggest! 🌊"}],
+  [{q:"🌎 What is the capital of Brazil?",o:["São Paulo","Rio","Brasília","Salvador"],a:2,why:"Brasília! Rio de Janeiro was the capital until 1960 when Brasília was built! 🌎",win:"South America expert! Brasília is Brazil's capital! 🌎"},
+   {q:"🏜️ What is the world's largest desert?",o:["Sahara","Gobi","Arabian","Antarctic"],a:3,why:"Antarctica is Earth's largest desert at 14.2 million km²! The Sahara is the largest hot desert! 🏜️",win:"Desert genius! Antarctica is the largest desert! ❄️"},
+   {q:"🌍 What continent is Egypt in?",o:["Asia","Europe","Africa","Middle East"],a:2,why:"Egypt is in northeastern Africa, though the Sinai Peninsula is in Asia! 🌍",win:"Africa geography ace! Egypt is in Africa! 🌍"},
+   {q:"🗺️ How many countries are in the world?",o:["175","186","195","210"],a:2,why:"There are 195 countries: 193 UN members + Vatican City + Palestine! 🗺️",win:"World knowledge! 195 countries! 🗺️"},
+   {q:"🇷🇺 Which is the world's largest country?",o:["China","USA","Canada","Russia"],a:3,why:"Russia at 17.1 million km² is the largest country — it's nearly twice the size of Canada! 🇷🇺",win:"Geography champion! Russia is the largest! 🇷🇺"},
+   {q:"🌊 What separates Europe from Africa?",o:["Red Sea","Suez Canal","Mediterranean Sea","Atlantic Ocean"],a:2,why:"The Mediterranean Sea separates Europe from Africa. It's 3,900km long! 🌊",win:"Sea expert! Mediterranean Sea separates them! 🌊"}],
+  [{q:"🗺️ Which country has the most time zones?",o:["Russia","USA","China","France"],a:3,why:"France has 12 time zones due to overseas territories! Russia has 11. 🗺️",win:"Time zone expert! France has the most! 🕐"},
+   {q:"🌋 Where is the Ring of Fire?",o:["Atlantic Ocean","Indian Ocean","Pacific Ocean","Mediterranean Sea"],a:2,why:"The Ring of Fire is a volcanic belt around the Pacific Ocean — 75% of all volcanoes! 🌋",win:"Geology expert! Ring of Fire = Pacific rim! 🌋"},
+   {q:"🏔️ Which country has the most natural lakes?",o:["Russia","USA","Brazil","Canada"],a:3,why:"Canada has ~31,752 lakes with over 100km²! It has 60% of the world's freshwater lakes! 🏔️",win:"Lake champion! Canada leads in lakes! 🍁"},
+   {q:"🌍 What is the smallest country in the world?",o:["Monaco","Liechtenstein","Vatican City","San Marino"],a:2,why:"Vatican City at just 0.44 km² is the world's smallest country — inside Rome! ⛪",win:"Country size expert! Vatican City is the smallest! ⛪"},
+   {q:"🌊 Which river flows through the most countries?",o:["Amazon","Nile","Danube","Congo"],a:2,why:"The Danube flows through 10 countries in Europe — more than any other river! 🌊",win:"River geography ace! The Danube = 10 countries! 🌊"},
+   {q:"🗺️ What is the deepest lake?",o:["Lake Superior","Caspian Sea","Lake Baikal","Titicaca"],a:2,why:"Lake Baikal in Russia is 1,642m deep — it holds 20% of Earth's freshwater! 💧",win:"Lake depth champion! Baikal is deepest! 💧"}]
+];
+
+// ══════════════════════════════
+// STATE
+// ══════════════════════════════
+let user={name:'',sex:'',age:0,xp:0,tier:0,diffLabel:'',diffCls:''};
+let selectedAge=0;
+let gameState={};
+let grammarTone='normal';
+
+// ══════════════════════════════
+// SETUP HELPERS
+// ══════════════════════════════
+function selectAge(age){
+  selectedAge=age;
+  document.querySelectorAll('.age-btn').forEach(b=>b.classList.toggle('selected',parseInt(b.innerText)===age));
+  const d=DIFFICULTY_MAP[age];
+  document.getElementById('age-hint').innerHTML=`Difficulty: <span class="${d.cls}" style="background:none;padding:0;">${d.label}</span>`;
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+}
+
+function getAvatarSrc(){return AVATARS[user.sex]||'';}
+
+function setVideoSrc(el, src){
+  if(!el) return;
+  el.src = src;
+  el.load();
+  el.play().catch(()=>{});
+}
+
+function setAllAvatars(){
+  const src = getAvatarSrc();
+  ['riddle','math','tf','word','scramble','fillblank','mathtyper','sciencesort','geography'].forEach(t=>{
+    setVideoSrc(document.getElementById(t+'-avatar'), src);
+  });
+}
+
+function setDiffLabels(){
+  ['riddle','math','tf','word','scramble','fillblank','mathtyper','sciencesort','geography'].forEach(t=>{
+    const el=document.getElementById(t+'-diff-label');
+    if(el) el.innerHTML=`<span class="diff-pill ${user.diffCls}">${user.diffLabel}</span>`;
+  });
+}
+
+function login(){
+  const name=document.getElementById('inp-name').value.trim();
+  const sex=document.getElementById('inp-sex').value;
+  if(!name){alert('Enter your name!');return;}
+  if(!sex){alert('Choose your guide!');return;}
+  if(!selectedAge){alert('Pick your age!');return;}
+  const d=DIFFICULTY_MAP[selectedAge];
+  user={name,sex,age:selectedAge,xp:0,tier:d.tier,diffLabel:d.label,diffCls:d.cls};
+  setVideoSrc(document.getElementById('avatar-img'), getAvatarSrc());
+  document.getElementById('avatar-nametag').innerText=(sex==='boy'?'🧒 Chinu':'👧 Minu');
+  document.getElementById('welcome-msg').innerText=`Hey ${name}! 🌳`;
+  document.getElementById('level-badge').innerHTML=d.label;
+  document.getElementById('nav-btns').innerHTML=
+    `<span style="font-weight:800;margin-right:10px;">👤 ${name}</span>`+
+    `<button class="btn btn-outline" onclick="logout()">Logout</button>`;
+  setAllAvatars();setDiffLabels();
+  showPage('dash');
+}
+
+function logout(){location.reload();}
+
+function avatarWiggle(){
+  const img=document.getElementById('avatar-img');
+  img.className='avatar-img do-wiggle';
+  setTimeout(()=>img.className='avatar-img',700);
+}
+
+function reactAvatar(type,isCorrect){
+  const idMap={truefalse:'tf',scramble:'scramble',fillblank:'fillblank',mathtyper:'mathtyper',sciencesort:'sciencesort',geography:'geography'};
+  const id=idMap[type]||type;
+  const el=document.getElementById(id+'-avatar');
+  if(!el) return;
+  el.className='mini-avatar '+(isCorrect?'do-correct':'do-wrong');
+  setTimeout(()=>el.className='mini-avatar',800);
+}
+
+function addXP(pts){
+  user.xp+=pts;
+  document.getElementById('xp-badge').innerText='⭐ '+user.xp+' XP';
+  const pop=document.createElement('div');
+  pop.className='xp-pop';pop.innerText='+'+pts+' XP!';
+  document.body.appendChild(pop);
+  setTimeout(()=>pop.remove(),950);
+}
+
+function showFeedback(id,isCorrect,correctText='',explanation=''){
+  const el=document.getElementById(id+'-feedback');
+  if(!el) return;
+  el.className='feedback-banner '+(isCorrect?'show-correct':'show-wrong');
+  const praise=['🎉 Amazing!','🌟 Brilliant!','🔥 On Fire!','🐆 Roar! Correct!','🦁 You got it!','🏆 Superstar!'];
+  const header=isCorrect?praise[Math.floor(Math.random()*praise.length)]:(correctText?'❌ Answer: <b>'+correctText+'</b>':'❌ Not quite!');
+  el.innerHTML=header+(explanation?`<div class="explain-text">${explanation}</div>`:'');
+}
+
+function hideFeedback(id){
+  const el=document.getElementById(id+'-feedback');
+  if(el) el.className='feedback-banner';
+}
+
+function spawnConfetti(){
+  const bits=['🌟','✨','🎊','🌿','⭐','🏆','🦋','🌈'];
+  for(let i=0;i<10;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');
+      c.className='confetti-bit';
+      c.style.left=(15+Math.random()*70)+'vw';
+      c.style.top='35vh';
+      c.innerText=bits[Math.floor(Math.random()*bits.length)];
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),900);
+    },i*70);
+  }
+}
+
+function finishGame(type,score,total){
+  const pct=Math.round(score/total*100);
+  const emoji=pct>=80?'🏆':pct>=50?'🌟':'🌿';
+  spawnConfetti();spawnConfetti();
+  setTimeout(()=>{
+    alert(`${emoji} Game Over!\nScore: ${score}/${total} (${pct}%)\nDifficulty: ${user.diffLabel}\nXP Earned: ${score*10}\nTotal XP: ${user.xp}`);
+    showPage('dash');
+  },300);
+}
+
+// ══════════════════════════════
+// GENERIC Q&A (riddle, math, geography)
+// ══════════════════════════════
+function getBank(type){
+  const banks={riddle:RIDDLE_BANK,math:MATH_BANK,tf:TF_BANK,word:WORD_BANK,geography:GEO_BANK};
+  return banks[type][user.tier];
+}
+
+function startGame(type){
+  gameState[type]={i:0,score:0};
+  if(type==='memory'){initMemory();showPage('memory');return;}
+  if(type==='word'){initWord();showPage('word');return;}
+  if(type==='truefalse'){loadTF();showPage('truefalse');return;}
+  if(type==='scramble'){initScramble();showPage('scramble');return;}
+  if(type==='fillblank'){initFillBlank();showPage('fillblank');return;}
+  if(type==='mathtyper'){initMathTyper();showPage('mathtyper');return;}
+  if(type==='sciencesort'){initSort();showPage('sciencesort');return;}
+  loadQ(type);showPage(type);
+}
+
+function loadQ(type){
+  const data=getBank(type);
+  const st=gameState[type];
+  const d=data[st.i];
+  hideFeedback(type);
+  document.getElementById(type+'-q').innerText=d.q;
+  document.getElementById(type+'-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById(type+'-score').innerText='Score: '+st.score;
+  const box=document.getElementById(type+'-opts');
+  box.innerHTML='';
+  d.o.forEach((o,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.innerText=o;
+    b.onclick=()=>checkQ(type,idx);
+    box.appendChild(b);
+  });
+}
+
+function checkQ(type,idx){
+  const data=getBank(type);
+  const st=gameState[type];
+  const correct=data[st.i].a;
+  const isRight=(idx===correct);
+  document.querySelectorAll('#page-'+type+' .opt').forEach((b,x)=>{
+    b.disabled=true;
+    if(x===correct)b.classList.add('correct');
+    else if(x===idx)b.classList.add('wrong');
+  });
+  if(isRight){st.score++;addXP(10);spawnConfetti();}
+  reactAvatar(type,isRight);
+  const d=data[st.i];
+  showFeedback(type,isRight,isRight?'':d.o[correct],isRight?(d.win||''):(d.why||''));
+  document.getElementById(type+'-score').innerText='Score: '+st.score;
+}
+
+function nextQ(type){
+  const data=getBank(type);
+  const st=gameState[type];
+  st.i++;
+  if(st.i>=data.length)finishGame(type,st.score,data.length);
+  else loadQ(type);
+}
+
+// ── TRUE/FALSE ──
+function loadTF(){
+  const data=getBank('tf');
+  const st=gameState['truefalse'];
+  hideFeedback('tf');
+  document.getElementById('tf-q').innerText=data[st.i].q;
+  document.getElementById('tf-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('tf-score').innerText='Score: '+st.score;
+  ['tf-true-btn','tf-false-btn'].forEach(id=>{
+    const b=document.getElementById(id);
+    b.disabled=false;b.classList.remove('correct','wrong');
+    b.style.background=b.id==='tf-true-btn'?'rgba(46,139,87,0.15)':'rgba(200,50,50,0.15)';
+  });
+  document.getElementById('tf-true-btn').onclick=()=>checkTF(true);
+  document.getElementById('tf-false-btn').onclick=()=>checkTF(false);
+}
+
+function checkTF(answer){
+  const data=getBank('tf');
+  const st=gameState['truefalse'];
+  const correct=data[st.i].a;
+  const isRight=(answer===correct);
+  ['tf-true-btn','tf-false-btn'].forEach(id=>{
+    const b=document.getElementById(id);b.disabled=true;
+    const isTrue=b.id==='tf-true-btn';
+    if(isTrue===correct)b.classList.add('correct');
+    else if(isTrue===answer)b.classList.add('wrong');
+  });
+  if(isRight){st.score++;addXP(10);spawnConfetti();}
+  reactAvatar('truefalse',isRight);
+  const d=data[st.i];
+  showFeedback('tf',isRight,isRight?'':(correct?'TRUE':'FALSE'),isRight?(d.win||''):(d.why||''));
+  document.getElementById('tf-score').innerText='Score: '+st.score;
+}
+
+function nextTF(){
+  const data=getBank('tf');
+  const st=gameState['truefalse'];
+  st.i++;
+  if(st.i>=data.length)finishGame('truefalse',st.score,data.length);
+  else loadTF();
+}
+
+// ── MEMORY ──
+let memFlipped=[],memMatched=0,memLock=false;
+const MEM_SETS=[['🦁','🐘','🦜','🐆','🌴','🦋'],['🦁','🐘','🦜','🐆','🌴','🦋','🐍','🐬'],['🦁','🐘','🦜','🐆','🌴','🦋','🐍','🐬','🌋','🦓']];
+function initMemory(){
+  const emojis=MEM_SETS[user.tier];
+  const total=emojis.length;
+  memFlipped=[];memMatched=0;memLock=false;
+  document.getElementById('mem-score').innerText=`Pairs: 0/${total}`;
+  const cards=[...emojis,...emojis].sort(()=>Math.random()-.5);
+  const grid=document.getElementById('memory-grid');
+  grid.style.gridTemplateColumns=`repeat(${user.tier===2?5:4},68px)`;
+  grid.innerHTML='';
+  cards.forEach((emoji)=>{
+    const b=document.createElement('button');
+    b.className='mem-card';b.dataset.emoji=emoji;b.innerText=emoji;
+    b.onclick=()=>flipCard(b,total);grid.appendChild(b);
+  });
+}
+function flipCard(card,total){
+  if(memLock||card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.classList.add('flipped');memFlipped.push(card);
+  if(memFlipped.length===2){
+    memLock=true;
+    setTimeout(()=>{
+      if(memFlipped[0].dataset.emoji===memFlipped[1].dataset.emoji){
+        memFlipped.forEach(c=>c.classList.replace('flipped','matched'));
+        memMatched++;addXP(15);spawnConfetti();
+        document.getElementById('mem-score').innerText=`Pairs: ${memMatched}/${total}`;
+        if(memMatched===total)setTimeout(()=>finishGame('memory',total,total),500);
+      } else {memFlipped.forEach(c=>c.classList.remove('flipped'));}
+      memFlipped=[];memLock=false;
+    },700);
+  }
+}
+
+// ── WORD ──
+function initWord(){gameState['word']={i:0,score:0};loadWord();}
+function loadWord(){
+  const data=getBank('word');const st=gameState['word'];const d=data[st.i];
+  const masked=d.word.split('').map((_,i)=>{
+    if(i===0)return d.word[i];
+    if(user.tier===0&&i===d.word.length-1)return d.word[i];
+    return '_';
+  }).join(' ');
+  document.getElementById('word-hint').innerText=d.hint;
+  document.getElementById('word-display').innerText=masked;
+  document.getElementById('word-input').value='';
+  document.getElementById('word-feedback-banner').className='feedback-banner';
+  document.getElementById('word-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('word-score').innerText='Score: '+st.score;
+}
+function checkWord(){
+  const data=getBank('word');const st=gameState['word'];const d=data[st.i];
+  const ans=document.getElementById('word-input').value.trim().toUpperCase();
+  if(!ans)return;
+  const fb=document.getElementById('word-feedback-banner');
+  if(ans===d.word){
+    fb.className='feedback-banner show-correct';
+    fb.innerHTML='🎉 Correct! Amazing spelling!'+(d.why?`<div class="explain-text">${d.why}</div>`:'');
+    st.score++;addXP(12);spawnConfetti();reactAvatar('word',true);
+    setTimeout(()=>{st.i++;if(st.i>=data.length)finishGame('word',st.score,data.length);else loadWord();},1800);
+  } else {
+    fb.className='feedback-banner show-wrong';
+    fb.innerText='❌ Try again! ('+d.word.length+' letters, starts with '+d.word[0]+')';
+    reactAvatar('word',false);
+  }
+}
+
+// ── SENTENCE SCRAMBLE ──
+let scrambleAnswer=[];
+function initScramble(){gameState['scramble']={i:0,score:0};loadScramble();}
+function loadScramble(){
+  const data=SCRAMBLE_BANK[user.tier];const st=gameState['scramble'];const d=data[st.i];
+  scrambleAnswer=[];
+  hideFeedback('scramble');
+  document.getElementById('scramble-next').style.display='none';
+  document.getElementById('scramble-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('scramble-score').innerText='Score: '+st.score;
+  document.getElementById('scramble-answer').innerHTML='<span style="opacity:.5">tap words below…</span>';
+  const shuffled=[...d.words].sort(()=>Math.random()-.5);
+  const box=document.getElementById('scramble-words');
+  box.innerHTML='';
+  shuffled.forEach((w,i)=>{
+    const chip=document.createElement('div');
+    chip.className='sw-chip';chip.innerText=w;chip.dataset.idx=i;chip.dataset.word=w;
+    chip.onclick=()=>addToAnswer(chip);
+    box.appendChild(chip);
+  });
+}
+function addToAnswer(chip){
+  if(chip.classList.contains('used'))return;
+  chip.classList.add('used');
+  scrambleAnswer.push({word:chip.dataset.word,chip});
+  renderAnswer();
+}
+function renderAnswer(){
+  const box=document.getElementById('scramble-answer');
+  if(scrambleAnswer.length===0){box.innerHTML='<span style="opacity:.5">tap words below…</span>';return;}
+  box.innerHTML='';
+  scrambleAnswer.forEach((item,i)=>{
+    const c=document.createElement('span');
+    c.className='ans-chip';c.innerText=item.word;
+    c.title='Click to remove';
+    c.onclick=()=>{item.chip.classList.remove('used');scrambleAnswer.splice(i,1);renderAnswer();};
+    box.appendChild(c);
+  });
+}
+function clearScramble(){scrambleAnswer.forEach(i=>i.chip.classList.remove('used'));scrambleAnswer=[];renderAnswer();}
+function checkScramble(){
+  const data=SCRAMBLE_BANK[user.tier];const st=gameState['scramble'];const d=data[st.i];
+  const answer=scrambleAnswer.map(i=>i.word).join(' ');
+  const isRight=answer.trim()===d.sentence.trim();
+  if(isRight){st.score++;addXP(12);spawnConfetti();}
+  reactAvatar('scramble',isRight);
+  showFeedback('scramble',isRight,d.sentence,isRight?'':d.why);
+  document.getElementById('scramble-next').style.display='block';
+}
+function nextScramble(){
+  const data=SCRAMBLE_BANK[user.tier];const st=gameState['scramble'];
+  st.i++;
+  if(st.i>=data.length)finishGame('scramble',st.score,data.length);
+  else loadScramble();
+}
+
+// ── FILL IN THE BLANK ──
+function initFillBlank(){gameState['fillblank']={i:0,score:0};loadFillBlank();}
+function loadFillBlank(){
+  const data=FILL_BANK[user.tier];const st=gameState['fillblank'];const d=data[st.i];
+  hideFeedback('fillblank');
+  document.getElementById('fillblank-next').style.display='none';
+  document.getElementById('blank-input').value='';
+  document.getElementById('blank-input').disabled=false;
+  document.getElementById('fillblank-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('fillblank-score').innerText='Score: '+st.score;
+  document.getElementById('blank-sentence').innerText=d.sentence;
+  document.getElementById('blank-hint-text').innerText='Hint: '+d.hint;
+}
+function checkFillBlank(){
+  const data=FILL_BANK[user.tier];const st=gameState['fillblank'];const d=data[st.i];
+  const ans=document.getElementById('blank-input').value.trim().toUpperCase();
+  if(!ans)return;
+  const isRight=ans===d.answer.toUpperCase();
+  document.getElementById('blank-input').disabled=true;
+  if(isRight){st.score++;addXP(11);spawnConfetti();}
+  reactAvatar('fillblank',isRight);
+  showFeedback('fillblank',isRight,isRight?'':d.answer,isRight?'':(d.why||''));
+  document.getElementById('fillblank-next').style.display='block';
+}
+function nextFillBlank(){
+  const data=FILL_BANK[user.tier];const st=gameState['fillblank'];
+  st.i++;
+  if(st.i>=data.length)finishGame('fillblank',st.score,data.length);
+  else loadFillBlank();
+}
+
+// ── SPEED MATHS TYPER ──
+let mathTyperCurrent='';
+function initMathTyper(){gameState['mathtyper']={i:0,score:0};loadMathTyper();}
+function loadMathTyper(){
+  const data=MATHTYPER_BANK[user.tier];const st=gameState['mathtyper'];const d=data[st.i];
+  mathTyperCurrent='';
+  hideFeedback('mathtyper');
+  document.getElementById('mathtyper-next').style.display='none';
+  document.getElementById('mathtyper-q').innerText=d.q;
+  document.getElementById('mathtyper-display').innerText='_';
+  document.getElementById('mathtyper-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('mathtyper-score').innerText='Score: '+st.score;
+  // Build numpad
+  const pad=document.getElementById('mathtyper-pad');
+  pad.innerHTML='';
+  const keys=['7','8','9','4','5','6','1','2','3','⌫','0','✓'];
+  keys.forEach(k=>{
+    const b=document.createElement('button');
+    b.className='num-btn';b.innerText=k;
+    b.onclick=()=>mathTyperKey(k);
+    pad.appendChild(b);
+  });
+}
+function mathTyperKey(k){
+  if(document.getElementById('mathtyper-next').style.display==='block')return;
+  if(k==='⌫'){mathTyperCurrent=mathTyperCurrent.slice(0,-1);}
+  else if(k==='✓'){checkMathTyper();}
+  else{mathTyperCurrent+=k;}
+  document.getElementById('mathtyper-display').innerText=mathTyperCurrent||'_';
+}
+function checkMathTyper(){
+  const data=MATHTYPER_BANK[user.tier];const st=gameState['mathtyper'];const d=data[st.i];
+  const isRight=mathTyperCurrent===d.a;
+  if(isRight){st.score++;addXP(10);spawnConfetti();}
+  reactAvatar('mathtyper',isRight);
+  showFeedback('mathtyper',isRight,isRight?'':'Answer: '+d.a,'');
+  document.getElementById('mathtyper-next').style.display='block';
+}
+function nextMathTyper(){
+  const data=MATHTYPER_BANK[user.tier];const st=gameState['mathtyper'];
+  st.i++;
+  if(st.i>=data.length)finishGame('mathtyper',st.score,data.length);
+  else loadMathTyper();
+}
+
+// ── SCIENCE SORT ──
+let sortSelections={};
+function initSort(){gameState['sciencesort']={i:0,score:0};loadSort();}
+function loadSort(){
+  const data=SORT_BANK[user.tier];const st=gameState['sciencesort'];const d=data[st.i];
+  sortSelections={};
+  hideFeedback('sciencesort');
+  document.getElementById('sciencesort-next').style.display='none';
+  document.getElementById('sciencesort-prog').style.width=(st.i/data.length*100)+'%';
+  document.getElementById('sciencesort-score').innerText='Score: '+st.score;
+  document.getElementById('sciencesort-q').innerText=d.q;
+  document.getElementById('zone-a-label').innerText=d.zoneA;
+  document.getElementById('zone-b-label').innerText=d.zoneB;
+  document.getElementById('zone-a-items').innerHTML='';
+  document.getElementById('zone-b-items').innerHTML='';
+  const itemsBox=document.getElementById('sort-items');
+  itemsBox.innerHTML='';
+  const shuffled=[...d.items].sort(()=>Math.random()-.5);
+  shuffled.forEach((item,i)=>{
+    const chip=document.createElement('div');
+    chip.className='sort-chip';chip.innerText=item.t;chip.dataset.idx=i;chip.dataset.correct=item.z;
+    chip.onclick=()=>toggleSortChip(chip,item);
+    itemsBox.appendChild(chip);
+  });
+}
+function toggleSortChip(chip,item){
+  const cur=chip.dataset.zone||'';
+  if(cur==='a'){chip.dataset.zone='b';chip.classList.remove('selected-a');chip.classList.add('selected-b');}
+  else if(cur==='b'){chip.dataset.zone='';chip.classList.remove('selected-b');}
+  else{chip.dataset.zone='a';chip.classList.add('selected-a');}
+}
+function checkSort(){
+  const data=SORT_BANK[user.tier];const st=gameState['sciencesort'];const d=data[st.i];
+  const chips=document.querySelectorAll('#sort-items .sort-chip');
+  let allCorrect=true;
+  chips.forEach(chip=>{
+    const chosen=chip.dataset.zone||'';
+    const correct=chip.dataset.correct;
+    if(chosen!==correct)allCorrect=false;
+  });
+  if(allCorrect){st.score++;addXP(13);spawnConfetti();}
+  reactAvatar('sciencesort',allCorrect);
+  showFeedback('sciencesort',allCorrect,'',allCorrect?'':d.why);
+  document.getElementById('sciencesort-next').style.display='block';
+}
+function nextSort(){
+  const data=SORT_BANK[user.tier];const st=gameState['sciencesort'];
+  st.i++;
+  if(st.i>=data.length)finishGame('sciencesort',st.score,data.length);
+  else loadSort();
+}
+
+// ══════════════════════════════
+// GRAMMAR AI — VASTLY IMPROVED
+// ══════════════════════════════
+function setTone(t){
+  grammarTone=t;
+  document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tone-'+t).classList.add('active');
+}
+
+const GRAMMAR_RULES=[
+  // standalone i
+  {find:/(?<![a-zA-Z])\bi\b(?![a-zA-Z])/g,fix:'I',label:'i',reason:'Always capitalise "I" when referring to yourself'},
+  // irregular past tense
+  {find:/\bgoed\b/gi,fix:'went',label:'goed',reason:'"goed" is not a word — the past tense of "go" is "went"'},
+  {find:/\bbuyed\b/gi,fix:'bought',label:'buyed',reason:'"buyed" is not a word — the past tense of "buy" is "bought"'},
+  {find:/\bteached\b/gi,fix:'taught',label:'teached',reason:'"teached" is not a word — use "taught"'},
+  {find:/\bdrawed\b/gi,fix:'drew',label:'drawed',reason:'"drawed" is not a word — use "drew"'},
+  {find:/\bwrited\b/gi,fix:'wrote',label:'writed',reason:'"writed" is not a word — use "wrote"'},
+  {find:/\bcatched\b/gi,fix:'caught',label:'catched',reason:'"catched" is not a word — use "caught"'},
+  {find:/\brunned\b/gi,fix:'ran',label:'runned',reason:'"runned" is not a word — use "ran"'},
+  {find:/\bswimmed\b/gi,fix:'swam',label:'swimmed',reason:'"swimmed" is not a word — use "swam"'},
+  {find:/\beatted\b/gi,fix:'ate',label:'eatted',reason:'"eatted" is not a word — use "ate"'},
+  {find:/\bsitted\b/gi,fix:'sat',label:'sitted',reason:'"sitted" is not a word — use "sat"'},
+  {find:/\bsleeped\b/gi,fix:'slept',label:'sleeped',reason:'"sleeped" is not a word — use "slept"'},
+  {find:/\bbreaked\b/gi,fix:'broke',label:'breaked',reason:'"breaked" is not a word — use "broke"'},
+  {find:/\bfalled\b/gi,fix:'fell',label:'falled',reason:'"falled" is not a word — use "fell"'},
+  {find:/\bgived\b/gi,fix:'gave',label:'gived',reason:'"gived" is not a word — use "gave"'},
+  {find:/\bknowed\b/gi,fix:'knew',label:'knowed',reason:'"knowed" is not a word — use "knew"'},
+  {find:/\bdrived\b/gi,fix:'drove',label:'drived',reason:'"drived" is not a word — use "drove"'},
+  {find:/\bshooted\b/gi,fix:'shot',label:'shooted',reason:'"shooted" is not a word — use "shot"'},
+  {find:/\bwaked\b/gi,fix:'woke',label:'waked',reason:'"waked" is not a word — use "woke"'},
+  {find:/\bfighten\b/gi,fix:'fought',label:'fighten',reason:'"fighten" is not a word — use "fought"'},
+  {find:/\bfighted\b/gi,fix:'fought',label:'fighted',reason:'"fighted" is not a word — use "fought"'},
+  // subject-verb
+  {find:/\bthey was\b/gi,fix:'they were',label:'they was',reason:'Use "they were", not "they was"'},
+  {find:/\bwe was\b/gi,fix:'we were',label:'we was',reason:'Use "we were", not "we was"'},
+  {find:/\byou was\b/gi,fix:'you were',label:'you was',reason:'Use "you were", not "you was"'},
+  {find:/\bi is\b/gi,fix:'I am',label:'i is',reason:'Use "I am", not "I is"'},
+  {find:/\bi are\b/gi,fix:'I am',label:'i are',reason:'Use "I am", not "I are"'},
+  {find:/\bhe are\b/gi,fix:'he is',label:'he are',reason:'Use "he is", not "he are"'},
+  {find:/\bshe are\b/gi,fix:'she is',label:'she are',reason:'Use "she is", not "she are"'},
+  {find:/\bit are\b/gi,fix:'it is',label:'it are',reason:'Use "it is", not "it are"'},
+  {find:/\bthey is\b/gi,fix:'they are',label:'they is',reason:'Use "they are", not "they is"'},
+  // double negatives
+  {find:/\bdon't got no\b/gi,fix:"don't have any",label:"don't got no",reason:'Avoid double negatives — use "don\'t have any"'},
+  {find:/\bain't got no\b/gi,fix:"don't have any",label:"ain't got no",reason:'Avoid double negatives — use "don\'t have any"'},
+  {find:/\bcan't do nothing\b/gi,fix:"can't do anything",label:"can't do nothing",reason:'Double negative — use "can\'t do anything"'},
+  // missing apostrophes
+  {find:/\bdont\b/g,fix:"don't",label:'dont',reason:'Missing apostrophe — "don\'t"'},
+  {find:/\bwont\b/g,fix:"won't",label:'wont',reason:'Missing apostrophe — "won\'t"'},
+  {find:/\bcant\b/g,fix:"can't",label:'cant',reason:'Missing apostrophe — "can\'t"'},
+  {find:/\bisnt\b/g,fix:"isn't",label:'isnt',reason:'Missing apostrophe — "isn\'t"'},
+  {find:/\barent\b/g,fix:"aren't",label:'arent',reason:'Missing apostrophe — "aren\'t"'},
+  {find:/\bwasnt\b/g,fix:"wasn't",label:'wasnt',reason:'Missing apostrophe — "wasn\'t"'},
+  {find:/\bwerent\b/g,fix:"weren't",label:'werent',reason:'Missing apostrophe — "weren\'t"'},
+  {find:/\bhavent\b/g,fix:"haven't",label:'havent',reason:'Missing apostrophe — "haven\'t"'},
+  {find:/\bhasnt\b/g,fix:"hasn't",label:'hasnt',reason:'Missing apostrophe — "hasn\'t"'},
+  {find:/\bdidnt\b/g,fix:"didn't",label:'didnt',reason:'Missing apostrophe — "didn\'t"'},
+  {find:/\bcouldnt\b/g,fix:"couldn't",label:'couldnt',reason:'Missing apostrophe — "couldn\'t"'},
+  {find:/\bwouldnt\b/g,fix:"wouldn't",label:'wouldnt',reason:'Missing apostrophe — "wouldn\'t"'},
+  {find:/\bshouldnt\b/g,fix:"shouldn't",label:'shouldnt',reason:'Missing apostrophe — "shouldn\'t"'},
+  {find:/\bdoesnt\b/g,fix:"doesn't",label:'doesnt',reason:'Missing apostrophe — "doesn\'t"'},
+  {find:/\bhadnt\b/g,fix:"hadn't",label:'hadnt',reason:'Missing apostrophe — "hadn\'t"'},
+  {find:/\bitsnt\b/g,fix:"it isn't",label:'itsnt',reason:'Missing apostrophe — "it isn\'t"'},
+  {find:/\bits a\b/g,fix:"it's a",label:"its a",reason:'"it\'s" (it is) needs an apostrophe'},
+  {find:/\bIts a\b/g,fix:"It's a",label:"Its a",reason:'"It\'s" (It is) needs an apostrophe'},
+  // wrong plural apostrophe
+  {find:/\bapple's\b/gi,fix:'apples',label:"apple's",reason:'No apostrophe for simple plurals — just "apples"'},
+  {find:/\bdog's(?!\s+\w+\s+(?:is|was|has|had))\b/gi,fix:'dogs',label:"dog's",reason:'No apostrophe for simple plurals — just "dogs"'},
+  {find:/\bcat's(?!\s+\w+\s+(?:is|was|has|had))\b/gi,fix:'cats',label:"cat's",reason:'No apostrophe for simple plurals — just "cats"'},
+  // common spelling
+  {find:/\brecieve\b/gi,fix:'receive',label:'recieve',reason:'"i before e except after c" — it\'s "receive"'},
+  {find:/\bfreind\b/gi,fix:'friend',label:'freind',reason:'Spelling: "friend"'},
+  {find:/\bwierd\b/gi,fix:'weird',label:'wierd',reason:'Spelling: "weird"'},
+  {find:/\bthier\b/gi,fix:'their',label:'thier',reason:'Spelling: "their"'},
+  {find:/\bwich\b/gi,fix:'which',label:'wich',reason:'Spelling: "which"'},
+  {find:/\bbecaus\b/gi,fix:'because',label:'becaus',reason:'Spelling: "because"'},
+  {find:/\bbcause\b/gi,fix:'because',label:'bcause',reason:'Spelling: "because"'},
+  {find:/\bsomthing\b/gi,fix:'something',label:'somthing',reason:'Spelling: "something"'},
+  {find:/\beverythin\b/gi,fix:'everything',label:'everythin',reason:'Spelling: "everything"'},
+  {find:/\bprobally\b/gi,fix:'probably',label:'probally',reason:'Spelling: "probably"'},
+  {find:/\bprobaly\b/gi,fix:'probably',label:'probaly',reason:'Spelling: "probably"'},
+  {find:/\bdefenitely\b/gi,fix:'definitely',label:'defenitely',reason:'Spelling: "definitely"'},
+  {find:/\bdefinately\b/gi,fix:'definitely',label:'definately',reason:'Spelling: "definitely"'},
+  {find:/\bseperate\b/gi,fix:'separate',label:'seperate',reason:'Spelling: "separate"'},
+  {find:/\boccured\b/gi,fix:'occurred',label:'occured',reason:'Spelling: "occurred" — double r'},
+  {find:/\buntill\b/gi,fix:'until',label:'untill',reason:'Spelling: "until" — only one l'},
+  {find:/\baccidentaly\b/gi,fix:'accidentally',label:'accidentaly',reason:'Spelling: "accidentally"'},
+  {find:/\bnessecary\b/gi,fix:'necessary',label:'nessecary',reason:'Spelling: "necessary" — one c, two s'},
+  {find:/\bnecessery\b/gi,fix:'necessary',label:'necessery',reason:'Spelling: "necessary"'},
+  {find:/\btommorow\b/gi,fix:'tomorrow',label:'tommorow',reason:'Spelling: "tomorrow" — one m'},
+  {find:/\btoday\b/gi,fix:'today',label:null,reason:null},
+  {find:/\bbeautifull\b/gi,fix:'beautiful',label:'beautifull',reason:'Spelling: "beautiful" — one l'},
+  {find:/\bgoverment\b/gi,fix:'government',label:'goverment',reason:'Spelling: "government" — includes an n'},
+  {find:/\benviornment\b/gi,fix:'environment',label:'enviornment',reason:'Spelling: "environment"'},
+  {find:/\bstudeing\b/gi,fix:'studying',label:'studeing',reason:'Spelling: "studying"'},
+  {find:/\bloosin\b/gi,fix:'losing',label:'loosin',reason:'Spelling: "losing" — one o'},
+  {find:/\bloosing\b/gi,fix:'losing',label:'loosing',reason:'"loosing" is not a word — use "losing"'},
+  {find:/\byour welcome\b/gi,fix:"you're welcome",label:'your welcome',reason:'"You\'re" (you are) welcome — not "your"'},
+  // would/could/should of
+  {find:/\bwould of\b/gi,fix:'would have',label:'would of',reason:'Use "would have", not "would of"'},
+  {find:/\bcould of\b/gi,fix:'could have',label:'could of',reason:'Use "could have", not "could of"'},
+  {find:/\bshould of\b/gi,fix:'should have',label:'should of',reason:'Use "should have", not "should of"'},
+  {find:/\bmight of\b/gi,fix:'might have',label:'might of',reason:'Use "might have", not "might of"'},
+  // a/an
+  {find:/\ba ([aeiouAEIOU])/g,fix:'an $1',label:'a [vowel]',reason:'Use "an" before words starting with a vowel sound'},
+  {find:/\bAn ([^aeiouAEIOU\s])/g,fix:'A $1',label:'An [consonant]',reason:'Use "A" before consonant sounds'},
+  {find:/\ban ([^aeiouAEIOU\s])/g,fix:'a $1',label:'an [consonant]',reason:'Use "a" before consonant sounds'},
+  // there/their/they're
+  {find:/\btheir is\b/gi,fix:'there is',label:'their is',reason:'"there is" (location) not "their is" (possessive)'},
+  {find:/\btheir are\b/gi,fix:'there are',label:'their are',reason:'"there are" not "their are"'},
+  {find:/\bthere going\b/gi,fix:"they're going",label:'there going',reason:'"they\'re going" (they are going)'},
+];
+
+// Tone transformations
+const TONE_UPGRADES = {
+  formal:[
+    {find:/\bgonna\b/gi,fix:'going to',reason:'Replace "gonna" with "going to" for formal writing'},
+    {find:/\bwanna\b/gi,fix:'want to',reason:'Replace "wanna" with "want to"'},
+    {find:/\bgotta\b/gi,fix:'have to',reason:'Replace "gotta" with "have to"'},
+    {find:/\bkinda\b/gi,fix:'somewhat',reason:'Replace "kinda" with "somewhat"'},
+    {find:/\bsorta\b/gi,fix:'somewhat',reason:'Replace "sorta" with "somewhat"'},
+    {find:/\blots of\b/gi,fix:'many',reason:'Replace "lots of" with "many" in formal writing'},
+    {find:/\bkids\b/gi,fix:'children',reason:'Replace "kids" with "children" in formal writing'},
+    {find:/\bgood\b(?!\s+(?:morning|evening|afternoon|night|day))/gi,fix:'excellent',reason:'Elevate "good" to "excellent" in formal writing'},
+    {find:/\bbig\b/gi,fix:'significant',reason:'Elevate "big" to "significant" in formal writing'},
+  ],
+  simple:[
+    {find:/\butilize\b/gi,fix:'use',reason:'Replace "utilize" with the simpler "use"'},
+    {find:/\bcommence\b/gi,fix:'start',reason:'Replace "commence" with "start"'},
+    {find:/\bpurchase\b/gi,fix:'buy',reason:'Replace "purchase" with "buy"'},
+    {find:/\bdemonstrate\b/gi,fix:'show',reason:'Replace "demonstrate" with "show"'},
+    {find:/\bassist\b/gi,fix:'help',reason:'Replace "assist" with "help"'},
+    {find:/\brequire\b/gi,fix:'need',reason:'Replace "require" with "need"'},
+    {find:/\battempt\b/gi,fix:'try',reason:'Replace "attempt" with "try"'},
+    {find:/\bnevertheless\b/gi,fix:'but',reason:'Replace "nevertheless" with "but"'},
+    {find:/\bconsequently\b/gi,fix:'so',reason:'Replace "consequently" with "so"'},
+  ],
+  creative:[
+    {find:/\bwent\b/gi,fix:'journeyed',reason:'Elevate "went" to "journeyed" for vivid writing'},
+    {find:/\bsaid\b/gi,fix:'exclaimed',reason:'Elevate "said" to "exclaimed" for vivid writing'},
+    {find:/\bnice\b/gi,fix:'wonderful',reason:'Elevate "nice" to "wonderful" for vivid writing'},
+    {find:/\bbig\b/gi,fix:'enormous',reason:'Elevate "big" to "enormous" for vivid writing'},
+    {find:/\bsmall\b/gi,fix:'tiny',reason:'Elevate "small" to "tiny" for vivid writing'},
+    {find:/\bhappy\b/gi,fix:'overjoyed',reason:'Elevate "happy" to "overjoyed" for vivid writing'},
+    {find:/\bsad\b/gi,fix:'heartbroken',reason:'Elevate "sad" to "heartbroken" for vivid writing'},
+    {find:/\bwalked\b/gi,fix:'strode',reason:'Elevate "walked" to "strode" for vivid writing'},
+    {find:/\bran\b/g,fix:'sprinted',reason:'Elevate "ran" to "sprinted" for vivid writing'},
+  ]
+};
+
+function improveGrammar(){
+  const inputEl=document.getElementById('grammar-input');
+  const wrap=document.getElementById('grammar-output-wrap');
+  const btn=document.getElementById('grammar-btn');
+  let text=inputEl.value.trim();
+  if(!text){alert('Please type or paste some text first!');return;}
+
+  btn.disabled=true;btn.innerText='⏳ Fixing...';
+  wrap.innerHTML=`<div class="grammar-loading">Fixing your grammar<div class="loading-dots" style="margin-top:8px;"><span></span><span></span><span></span></div></div>`;
+
+  setTimeout(()=>{
+    const changes=[];
+    let fixed=text;
+
+    // Apply grammar rules
+    GRAMMAR_RULES.forEach(rule=>{
+      if(!rule.label||!rule.reason)return;
+      const before=fixed;
+      fixed=fixed.replace(rule.find,rule.fix);
+      if(fixed!==before){
+        const origMatches=before.match(rule.find)||[];
+        origMatches.forEach(orig=>{
+          const corrected=typeof rule.fix==='string'?orig.replace(rule.find,rule.fix):rule.fix;
+          changes.push({original:orig,fixed:corrected,reason:rule.reason,type:'grammar'});
+        });
+      }
+    });
+
+    // Capitalise sentence starts
+    const beforeCap=fixed;
+    fixed=fixed.replace(/(^|[.!?]\s+)([a-z])/g,(m,p1,p2)=>p1+p2.toUpperCase());
+    if(fixed!==beforeCap)changes.push({original:'lowercase sentence start',fixed:'Capital letter',reason:'Every sentence must start with a capital letter',type:'grammar'});
+
+    // Apply tone upgrades
+    if(grammarTone!=='normal'&&TONE_UPGRADES[grammarTone]){
+      TONE_UPGRADES[grammarTone].forEach(rule=>{
+        const before=fixed;
+        fixed=fixed.replace(rule.find,rule.fix);
+        if(fixed!==before){
+          const origMatches=before.match(rule.find)||[];
+          origMatches.forEach(orig=>{
+            changes.push({original:orig,fixed:orig.replace(rule.find,rule.fix),reason:rule.reason,type:'style'});
+          });
+        }
+      });
+    }
+
+    // Fix double spaces + trailing spaces
+    fixed=fixed.replace(/  +/g,' ').trim();
+
+    if(changes.length===0){
+      wrap.innerHTML=`<div class="grammar-result-box"><div class="no-changes">✅ Your text looks perfect — no errors found! Great writing! 🎉</div></div>`;
+    } else {
+      // Highlight fixed words
+      let highlighted=escHtml(fixed);
+      const seenFix=new Set();
+      changes.forEach(ch=>{
+        if(!ch.fixed||ch.fixed==='Capital letter'||ch.type==='style'||seenFix.has(ch.fixed))return;
+        seenFix.add(ch.fixed);
+        const safe=escHtml(ch.fixed).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        highlighted=highlighted.replace(new RegExp('\\b('+safe+')\\b','g'),`<span class="word-fixed">$1</span>`);
+      });
+
+      // Deduplicate by reason
+      const deduped=[];
+      const seenR=new Set();
+      changes.forEach(ch=>{if(!seenR.has(ch.reason)){seenR.add(ch.reason);deduped.push(ch);}});
+
+      const grammarFixes=deduped.filter(c=>c.type==='grammar');
+      const styleFixes=deduped.filter(c=>c.type==='style');
+
+      const renderList=(list)=>list.map(ch=>`
+        <div class="change-item">
+          <span class="change-tick">✓</span>
+          <span>
+            <b style="color:#991b1b;">${escHtml(ch.original)}</b>
+            → <b style="color:#155724;">${escHtml(ch.fixed)}</b>
+            <span style="color:#666;font-size:11px;"> — ${escHtml(ch.reason)}</span>
+          </span>
+        </div>`).join('');
+
+      wrap.innerHTML=`<div class="grammar-result-box">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div class="grammar-section-label" style="margin:0;">✨ Improved Text</div>
+          <span class="change-count">${deduped.length} fix${deduped.length!==1?'es':''}</span>
+        </div>
+        <div id="grammar-output">${highlighted}</div>
+        ${grammarFixes.length>0?`<div class="changes-list">
+          <div class="grammar-section-label" style="margin-bottom:6px;">🔍 Grammar & Spelling Fixes</div>
+          ${renderList(grammarFixes)}
+        </div>`:''}
+        ${styleFixes.length>0?`<div class="changes-list">
+          <div class="grammar-section-label" style="margin-bottom:6px;">🎨 Style Improvements</div>
+          ${renderList(styleFixes)}
+        </div>`:''}
+        <button class="copy-btn" onclick="copyImproved('${encodeURIComponent(fixed)}')">📋 Copy Improved Text</button>
+      </div>`;
+    }
+
+    btn.disabled=false;btn.innerText='✨ Fix My Grammar';
+  },600);
+}
+
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function copyImproved(encoded){
+  const text=decodeURIComponent(encoded);
+  navigator.clipboard.writeText(text)
+    .then(()=>alert('✅ Copied to clipboard!'))
+    .catch(()=>alert('Could not copy — please select the text manually.'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+/* Post detail - redesign section 03. Replaces the earlier ink-article theme
+   entirely: reading and talking both run on paper/cream now, per 03.3/03.4.
+   Used only by PostPage.tsx and feed/post/*.
+
+   ── 02-global-chrome mismatch, reported not guessed ──────────────────────
+   03.3.2/03.4 both ask for pieces of `02-global-chrome.md`'s "segmented ink
+   chrome" (`.nav-seg`/`.nav-joint` mask-composite capsules). AQNav.css's own
+   MAJOR MISMATCH note (02-global-chrome.md) records that mechanic was never
+   built - the live nav is a flat white pill instead - so there is nothing to
+   "reuse... verbatim" here. Built instead: ONE white-pill header-capsule row
+   (back / category / share / bookmark) at both breakpoints, in the same flat
+   `--bd`/`--r-pill` language AQNav.css actually shipped. */
+
+.post-page-root { width: 100%; }
+
+/* ── Page header row (03.3.2) - back / category / share / bookmark, one row
+   of white pill capsules, above the grid, at both breakpoints. ──────────── */
+.pp-header-row {
+  display: flex; align-items: center; gap: 8px;
+  max-width: var(--frame-max); margin: 0 auto;
+  padding: 14px var(--page-px) 0;
+}
+.pp-hcap {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  min-height: 44px; padding: 0 15px;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  color: var(--ink); text-decoration: none; cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.12s var(--ease-out), background 0.14s;
+}
+.pp-hcap:hover { background: var(--bg); }
+.pp-hcap:active { transform: scale(0.96); }
+.pp-hcap svg { flex-shrink: 0; display: block; }
+.pp-hcap--icon { min-width: 44px; padding: 0; justify-content: center; }
+.pp-hcap--icon[aria-pressed="true"] { color: var(--welfare-ink); border-color: var(--welfare-ink); }
+/* Bookmark save pop - same asymmetry as LikeButton's burst (lib/motion.ts):
+   fires on save only, never on remove. `.pp-hcap:active`'s scale(0.96) still
+   wins while the button is actually pressed; this plays right after release. */
+.pp-hcap--pop svg { animation: ppSavePop 0.4s var(--ease-out); }
+@keyframes ppSavePop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.pp-header-spacer { flex: 1 1 auto; min-width: 0; }
+
+/* ── Status well (03.7) - a member viewing their own not-yet-public post.
+   The one state with no schema question left: `posts.status` is readable by
+   its author (verified live RLS), so this reads real data, not a guess. ─── */
+.pp-status-well {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px; padding: 12px 14px;
+  background: color-mix(in srgb, var(--lemon) 18%, var(--bg));
+  border-radius: var(--r-inner);
+}
+.pp-status-well.is-rejected { background: color-mix(in srgb, var(--tomato) 12%, var(--bg)); }
+.pp-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--lemon-ink); }
+.pp-status-well.is-rejected .pp-status-dot { background: var(--tomato-ink); }
+.pp-status-text { font-family: var(--eina); font-size: 13px; font-weight: 600; color: var(--ink-2); line-height: 1.4; }
+.pp-status-text b { font-weight: 800; color: var(--ink); }
+
+/* ── Shell (03.3) ─────────────────────────────────────────────────────────
+   Phone: one column, media+content fused into ONE card (03.4) via matching
+   half-radii on two adjacent siblings (no wrapper needed - see below).
+   Desktop: a flexbox sticky sidebar, NOT a CSS Grid row-span. Measured, not
+   guessed: an earlier `grid-row: 1 / -1` version of this file put the media
+   pane in column 1 spanning every row of column 2 (content/comments/
+   related). That is the textbook grid sticky-sidebar technique, but it has
+   a real, measured failure mode here - when the sidebar is taller than the
+   SUM of the other column's rows (true for a single-photo post with few
+   comments), CSS Grid distributes the shortfall across the spanned rows to
+   satisfy the sidebar's height, which showed up as a ~360px dead gap
+   between the content pane and the comments card (getBoundingClientRect on
+   both, not a screenshot guess). Flexbox's sticky-sidebar pattern doesn't
+   have this failure mode: with only ONE row, there is nothing to distribute
+   shortfall across.
+
+   `.post-media-outer` is the flex item that stretches (default
+   align-items) to match `.post-secondary-col`'s real height, invisibly;
+   `.post-media-pane` inside it is what actually sticks and carries the
+   card's look, sized to its own content. Without this inner/outer split, a
+   sticky element's own box IS the flex item, which does not stretch, so it
+   would run out of room to stick through and stop tracking after its own
+   height's worth of scroll. */
+.post-shell {
+  max-width: var(--frame-max); margin: 0 auto;
+  padding: 14px var(--page-px) 64px;
+}
+.post-media-outer { margin-bottom: 0; }
+.post-media-pane {
+  /* Phone: the top half of the fused card - flat bottom edge, no bottom
+     border, so it reads as one continuous card with .post-content-col
+     directly below it. */
+  background: var(--card); border: var(--hair-2); border-bottom: none;
+  border-radius: var(--r-outer) var(--r-outer) 0 0;
+  padding: var(--pad-card) var(--pad-card) 0;
+}
+.post-secondary-col { display: contents; }
+.post-content-col {
+  /* Phone: the bottom half of the fused card - flat top edge, no top
+     border, --lift-1 carries the whole fused shape's shadow (a soft cast
+     shadow reads fine from only the lower piece; it does not need to wrap
+     around the top). */
+  background: var(--card); border: var(--hair-2); border-top: none;
+  border-radius: 0 0 var(--r-outer) var(--r-outer);
+  padding: 6px var(--pad-card) var(--pad-card);
+  box-shadow: var(--lift-1);
+  margin-bottom: 14px;
+}
+
+@media (min-width: 980px) {
+  .post-shell { display: flex; align-items: flex-start; gap: 14px; }
+  .post-media-outer { flex: 1.06 1 0%; min-width: 0; align-self: stretch; }
+  .post-media-pane {
+    /* Full card again, not fused - and sticky within the stretched outer
+       flex item, which is what gives it room to track column 2's scroll. */
+    border: var(--hair-2); border-radius: var(--r-outer);
+    padding: var(--pad-card); box-shadow: var(--lift-1);
+    position: sticky; top: calc(var(--nav-h) + 14px);
+  }
+  .post-secondary-col {
+    display: flex; flex-direction: column; gap: 14px;
+    flex: 1 1 0%; min-width: 0;
+  }
+  .post-content-col {
+    background: transparent; border: none; box-shadow: none;
+    padding: 0; margin-bottom: 0; border-radius: 0;
+  }
+}
+
+/* ── Media pane content (PostMedia.tsx) ───────────────────────────────────
+   03.3: photo r-inner(22), 4/3, capped so sticky never overruns the
+   viewport. 03.4 (phone): same photo, a segmented progress track instead of
+   a filmstrip, and the {i} of {n} pill overlaid bottom-right instead of
+   beside the strip. Both markups render always; CSS picks one per width. */
+.post-media-photo {
+  position: relative; display: block; width: 100%;
+  border: none; padding: 0; margin: 0; background: var(--bg-2);
+  border-radius: var(--r-inner); overflow: hidden; cursor: zoom-in;
+}
+.post-media-photo img {
+  display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover;
+}
+@media (min-width: 980px) {
+  .post-media-photo img {
+    aspect-ratio: auto; width: 100%; height: auto;
+    max-height: calc(100dvh - var(--nav-h) - 140px);
+    object-fit: contain; background: var(--bg-2);
+  }
+}
+.post-media-count {
+  position: absolute; z-index: 1;
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.68); color: var(--paper);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  pointer-events: none;
+}
+.post-media-count--phone { right: 8px; bottom: 8px; }
+@media (min-width: 980px) { .post-media-count--phone { display: none; } }
+
+.post-media-filmstrip { display: none; }
+@media (min-width: 980px) {
+  .post-media-filmstrip {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: var(--pad-inner);
+  }
+  .post-media-filmstrip-row { display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; flex: 1 1 auto; min-width: 0; }
+  .post-media-filmstrip-row::-webkit-scrollbar { display: none; }
+  .post-media-thumb {
+    flex: none; width: 76px; height: 60px; padding: 0; border: none;
+    border-radius: var(--r-tight); overflow: hidden; cursor: pointer;
+    background: var(--bg-2);
+  }
+  .post-media-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .post-media-thumb.is-active { box-shadow: 0 0 0 2px var(--ink); }
+  .post-media-filmstrip .post-media-count { position: static; background: transparent; color: var(--ink-3); flex: none; }
+}
+
+.post-media-progress { display: flex; gap: 4px; margin-top: var(--pad-inner); }
+@media (min-width: 980px) { .post-media-progress { display: none; } }
+.post-media-seg {
+  flex: 1 1 0; min-width: 0; height: 4px; padding: 0; border: none;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.15); cursor: pointer;
+}
+.post-media-seg.is-active { background: var(--ink); }
+
+/* ── Content pane header (PostHeader.tsx) - 03.3.1 ───────────────────────── */
+.pp-head { padding: 10px 8px 0; }
+.pp-title {
+  font-family: var(--eina); font-weight: 700; font-size: 30px; line-height: 1.18;
+  letter-spacing: -0.028em; color: var(--ink); margin: 0; text-wrap: pretty;
+}
+.pp-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.pp-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--eina); font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+}
+.pp-chip i {
+  font-style: normal; font-family: var(--mono); font-size: 9px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+}
+
+.pp-author-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+.pp-author { display: inline-flex; align-items: center; gap: 10px; min-width: 0; text-decoration: none; flex: 1 1 auto; }
+.pp-author-avatar { width: 38px; height: 38px; font-size: 13px; flex-shrink: 0; }
+.pp-author-name { font-family: var(--eina); font-weight: 700; font-size: 14px; color: var(--ink); line-height: 1.2; }
+.pp-author-school { margin-top: 2px; color: var(--ink-3); }
+.pp-follow {
+  flex-shrink: 0; min-height: 40px; padding: 0 16px;
+  border: none; border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--eina); font-weight: 800; font-size: 12px; color: var(--ink);
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.14s, transform 0.14s;
+}
+.pp-follow:hover:not(:disabled) { background: var(--bg-3); }
+.pp-follow:active:not(:disabled) { transform: scale(0.96); }
+.pp-follow:disabled { opacity: 0.6; cursor: default; }
+.pp-follow[aria-pressed="true"] { color: var(--welfare-ink); }
+
+.pp-tagged-well {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 14px; padding: 10px 14px;
+  background: var(--bg); border-radius: var(--r-inner);
+}
+.pp-tagged-avatars { display: flex; flex-shrink: 0; }
+.pp-tagged-avatars .avatar-stacked { width: 26px; height: 26px; font-size: 9px; box-shadow: 0 0 0 2px var(--bg); }
+.pp-tagged-names { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+.pp-tagged-name-link { color: var(--ink-2); font-weight: 700; text-decoration: none; }
+.pp-tagged-name-link:hover { color: var(--ink); text-decoration: underline; }
+
+/* ── Body (PostBody.tsx) - 03.3.1 ─────────────────────────────────────────── */
+.pp-body { margin-top: 20px; padding: 0 8px; }
+.pp-statrow {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-bottom: 20px;
+}
+.pp-stat { background: var(--bg); border-radius: var(--r-inner); padding: 14px 12px; min-width: 0; }
+.pp-stat-num {
+  font-family: var(--display); font-weight: 900; font-size: 26px; line-height: 1;
+  color: var(--ink); font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere; text-wrap: balance;
+}
+.pp-stat-label {
+  margin-top: 5px;
+  font-family: var(--mono); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+}
+
+.pp-highlights { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.pp-highlight { background: var(--bg); border-radius: var(--r-inner); padding: 14px 16px; }
+.pp-highlight-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--welfare-ink);
+  display: block; margin-bottom: 5px;
+}
+.pp-highlight-text { font-family: var(--eina); font-size: 15px; line-height: 1.55; color: var(--ink); margin: 0; font-weight: 500; text-wrap: pretty; }
+
+/* Unclamped by design (03.3.1) - this is the page where the whole post is
+   readable. No -webkit-line-clamp anywhere in this rule. */
+.pp-body-text { font: 400 16px/1.68 var(--eina); color: var(--ink-2); white-space: pre-wrap; margin: 0 0 14px; text-wrap: pretty; }
+.pp-writeup { margin-top: 22px; padding-top: 20px; border-top: var(--hair); }
+.pp-writeup-label { color: var(--ink-3); font-weight: 700; margin-bottom: 10px; }
+
+.pp-link-cta {
+  margin-top: 4px; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 0 16px;
+  border-radius: var(--r-pill); background: var(--bg); color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 13px; text-decoration: none;
+  transition: background 0.14s;
+}
+.pp-link-cta:hover { background: var(--bg-3); color: var(--ink); }
+
+.pp-docs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.pp-doc-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 0 14px; border-radius: var(--r-pill);
+  background: var(--bg); color: var(--ink); text-decoration: none;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 700;
+  transition: background 0.14s;
+}
+.pp-doc-chip:hover { background: var(--bg-3); color: var(--ink); }
+
+/* ── Action row (PostActionBar.tsx) - 03.3.1 ─────────────────────────────── */
+.pp-actions {
+  display: flex; align-items: center; gap: 2px; flex-wrap: wrap;
+  margin: 22px 8px 0; padding-top: 12px;
+  border-top: var(--hair);
+}
+.pp-action-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-width: 44px; min-height: 44px; padding: 0 10px;
+  border: none; background: transparent; border-radius: var(--r-pill);
+  color: var(--ink-2); text-decoration: none; cursor: pointer;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  transition: background 0.13s, color 0.13s;
+}
+.pp-action-btn:hover:not(:disabled) { background: var(--bg); color: var(--ink); }
+.pp-action-btn:disabled { opacity: 0.5; cursor: default; }
+.pp-action-btn--danger:hover:not(:disabled) { background: color-mix(in srgb, var(--danger) 10%, transparent); color: var(--danger-ink); }
+.pp-action-count { font-variant-numeric: tabular-nums; }
+.pp-actions-spacer { flex: 1 1 auto; min-width: 8px; }
+.pp-actions-time { color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; padding: 0 6px; }
+
+.pp-edit { margin: 14px 8px 0; padding: 16px; background: var(--bg); border-radius: var(--r-inner); }
+.pp-edit-label { color: var(--ink-3); font-weight: 700; margin-bottom: 8px; }
+.pp-edit-textarea {
+  width: 100%; box-sizing: border-box; resize: vertical;
+  padding: 12px 14px; border-radius: var(--r-tight); border: var(--hair-3);
+  background: var(--card); font-family: var(--eina); font-size: 16px; line-height: 1.6;
+  color: var(--ink); outline: none;
+}
+.pp-edit-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end; }
+
+/* ── Comments (PostComments.tsx / CommentBubble.tsx) - 03.5 ──────────────── */
+.pp-comments-card {
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+  padding: var(--pad-card); box-shadow: var(--lift-1);
+  /* A #comments link must not land its heading under the fixed nav. */
+  scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+.pp-comments-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 6px 14px; }
+.pp-comments-title { display: flex; align-items: baseline; gap: 8px; }
+.pp-comments-h { font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--ink); }
+.pp-comments-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.pp-comments-sort { display: flex; gap: 2px; background: var(--bg); border-radius: var(--r-pill); padding: 3px; }
+.pp-comments-sort button {
+  border: none; background: transparent; cursor: pointer;
+  min-height: 28px; padding: 0 11px; border-radius: var(--r-pill);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3);
+}
+.pp-comments-sort button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--lift-1); }
+
+/* Real threading (2026-09-14): the reply-target chip above the composer. */
+.pp-replying-to {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 6px 8px; padding: 4px 10px;
+  background: var(--sky-soft, var(--bg)); border-radius: var(--r-pill);
+  font-size: 10.5px; font-weight: 700; color: var(--ink-3);
+  width: fit-content;
+}
+.pp-replying-to button {
+  border: none; background: transparent; cursor: pointer; color: var(--ink-3);
+  font-size: 11px; line-height: 1; padding: 0;
+}
+
+.pp-compose {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0 6px 16px; padding: 5px 5px 5px 5px;
+  background: var(--bg); border-radius: var(--r-pill);
+}
+.pp-compose-avatar { width: 34px; height: 34px; font-size: 12px; flex-shrink: 0; }
+.pp-compose-input {
+  flex: 1 1 auto; min-width: 0; border: none; background: transparent; outline: none;
+  height: 34px; padding: 0 4px;
+  font-family: var(--eina); color: var(--ink);
+}
+.pp-compose-input::placeholder { color: var(--ink-3); }
+.pp-compose-send {
+  flex-shrink: 0; width: 38px; height: 38px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.12s var(--ease-out), opacity 0.15s;
+}
+.pp-compose-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.pp-compose-send:active:not(:disabled) { transform: scale(0.94); }
+.pp-spin {
+  width: 14px; height: 14px; display: inline-block;
+  border: 2px solid rgba(244,239,224,0.35); border-top-color: var(--paper);
+  border-radius: var(--r-pill); animation: pp-spin 0.8s linear infinite;
+}
+@keyframes pp-spin { to { transform: rotate(360deg); } }
+
+.pp-comments-guest {
+  margin: 0 6px 16px; padding: 14px; text-align: center;
+  background: var(--bg); border-radius: var(--r-inner);
+  font-family: var(--eina); font-size: 13px; color: var(--ink-3);
+}
+.pp-comments-guest a { color: var(--welfare-ink); font-weight: 700; text-decoration: none; }
+.pp-comments-guest a:hover { text-decoration: underline; }
+
+.pp-comments-list { display: flex; flex-direction: column; gap: 10px; padding: 0 6px; }
+.pp-comments-more {
+  align-self: center; margin-top: 4px;
+  min-height: 38px; padding: 0 16px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: var(--bg); color: var(--ink-2);
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pp-comments-more:hover { background: var(--bg-3); }
+
+.pp-comments-empty {
+  margin: 0 6px; padding: 32px 20px; text-align: center;
+  background: var(--bg); border-radius: var(--r-inner);
+}
+.pp-comments-empty-title { font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--ink); }
+.pp-comments-empty-sub { margin: 6px 0 0; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+.aq-comment-skel { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+.aq-comment-skel-avatar { width: 32px; height: 32px; border-radius: var(--r-pill); flex: none; }
+.aq-comment-skel-bar { height: 32px; border-radius: var(--r-pill); }
+
+/* The comment bubble - 03.5.1 verbatim. */
+.aq-comment-row { display: flex; flex-direction: column; }
+.aq-comment {
+  display: inline-flex; align-items: center; gap: 10px;
+  max-width: 100%;
+  background: var(--bg);
+  padding: 6px 16px 6px 6px;
+}
+.aq-comment-avatar { width: 32px; height: 32px; border-radius: var(--r-pill); flex: none; }
+.aq-comment-text { min-width: 0; }
+.aq-comment-author { font-family: var(--eina); font-weight: 700; font-size: 12px; }
+.aq-comment-hod {
+  display: inline-flex; align-items: center; height: 15px; padding: 0 6px;
+  border-radius: var(--r-pill); background: var(--lemon);
+  font-family: var(--mono); font-size: 7.5px; font-weight: 700; text-transform: uppercase; color: var(--ink);
+}
+.aq-comment-body { font-family: var(--eina); font-weight: 400; font-size: 13.5px; color: var(--ink-2); margin: 2px 0 0; line-height: 1.5; }
+.aq-comment-mention { font-weight: 800; background: rgba(10,10,10,0.07); border-radius: 6px; padding: 1px 5px; }
+.aq-comment-more {
+  border: none; background: transparent; cursor: pointer; padding: 4px 0 0;
+  font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--welfare-ink);
+}
+.aq-comment-replyline {
+  display: block; font-size: 9.5px; font-weight: 700; color: var(--ink-3);
+  padding: 0 0 3px 44px; letter-spacing: 0.02em;
+}
+.aq-comment-foot { display: flex; align-items: center; gap: 3px; min-height: 32px; padding: 3px 0 0 44px; }
+.aq-comment-reply {
+  min-height: 32px; padding: 0 9px; border: none; background: transparent; cursor: pointer;
+  border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 10.5px; color: var(--welfare-ink);
+}
+.aq-comment-foot .aq-comment-reply:first-child { padding-left: 0; }
+
+/* ── Related rails (PostRelated.tsx) ──────────────────────────────────────── */
+.pp-related { margin-top: 20px; }
+.pp-related-h {
+  /* Eina01, not var(--display): NeutralFace is caps-only, so
+     `text-transform: lowercase` on it had nothing to render. Same fix already
+     applied in AQNav.css (.aq-drop-link) and documented in referrals.css. */
+  font-family: var(--eina); font-weight: 800; font-size: 19px; color: var(--ink);
+  margin: 0 0 14px 6px; text-transform: lowercase;
+}
+.pp-related-list { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── Phone sticky reply bar (03.4) ─────────────────────────────────────────
+   03.4 asks this to REPLACE the bottom nav on this route. The live bottom
+   nav (.aq-bottom-bar, v6.css) is global chrome rendered outside this file's
+   scope (02-global-chrome.md), so silently suppressing it here is out of
+   bounds for a 03-only change. Built instead is 03's own named fallback:
+   "a taller stack" - the reply bar sits just above the nav pill and the
+   content column carries the extra bottom padding both bars need. */
+.pp-reply-bar { display: none; }
+@media (max-width: 979px) {
+  .pp-reply-bar {
+    display: flex; align-items: center; gap: 8px;
+    position: fixed; left: 12px; right: 12px;
+    bottom: calc(60px + 14px + 8px + env(safe-area-inset-bottom));
+    z-index: 55;
+    height: 58px; padding: 0 6px 0 6px;
+    background: color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: var(--hair-2); border-radius: var(--r-pill);
+    box-shadow: var(--lift-2);
+  }
+  .pp-reply-bar-avatar { width: 38px; height: 38px; flex-shrink: 0; font-size: 13px; }
+  .pp-reply-bar-input {
+    flex: 1 1 auto; min-width: 0; border: none; background: transparent; outline: none;
+    font-family: var(--eina); font-size: 16px; color: var(--ink); height: 100%;
+  }
+  .pp-reply-bar-input::placeholder { color: var(--ink-3); }
+  .pp-reply-bar-send {
+    flex-shrink: 0; width: 42px; height: 42px; border: none; cursor: pointer;
+    border-radius: var(--r-pill); background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pp-reply-bar-send:disabled { opacity: 0.4; }
+  .pp-reply-bar-guest {
+    flex: 1 1 auto; text-align: center; text-decoration: none;
+    font-family: var(--eina); font-size: 13px; font-weight: 700; color: var(--ink-2);
+  }
+  /* Extra clearance on top of the global nav spacer, for the reply bar's own
+     58px + gap - the "taller stack" this file's own fallback names. */
+  .post-page-root { padding-bottom: calc(58px + 24px + env(safe-area-inset-bottom)); }
+}
+
+/* ── States ────────────────────────────────────────────────────────────────
+   Loading: neutral placeholders shaped like the real shell (media block +
+   text lines), no ink theme. Not-found: keeps today's copy verbatim,
+   container moved onto --card/--r-outer per 03.7. */
+.pp-notfound {
+  background: var(--card); border-radius: var(--r-outer);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-hcap, .pp-follow, .pp-action-btn, .pp-compose-send, .pp-comments-more { transition: none; }
+  .pp-hcap:active, .pp-compose-send:active, .pp-follow:active { transform: none; }
+  .pp-spin, .pp-hcap--pop svg { animation: none; }
+}

@@ -1,0 +1,86 @@
+-- ============================================================================
+-- AquaTerra — members social/profile column SELECT-grant fix, 2026-09-05
+--
+-- STATUS: APPLIED + VERIFIED live 2026-09-05 (via Supabase MCP,
+--         migration `members_social_columns_grant_select_2026_09_05`).
+--
+-- Found while reconciling live `members` data against the HR spreadsheets
+-- (COMMUNITY AQUATERRA / AquaTerra Core Records / Cross Departmental
+-- Database) for an email-matched, null-only backfill. Before writing
+-- anything, this session checked information_schema.column_privileges and
+-- has_column_privilege() live, per CLAUDE.md's "verify the live schema, not
+-- the .sql files" rule — and turned up a real, previously undiscovered gap.
+--
+-- THE BUG: the 2026-07/08 members PII lockdown works by REVOKING table-level
+-- SELECT from anon/authenticated entirely and re-GRANTing SELECT column by
+-- column on the "safe" (non-email/phone) columns (see
+-- members_pii_lockdown_2026_07_29.sql / members_pii_lockdown_stage2_revoke
+-- .sql). Seven columns added to `members` AFTER that lockdown —
+-- instagram, linkedin (2026-08-29), birthday, birthday_public (2026-08-29),
+-- break_start, break_end, break_reason (2026-08-30) — were never added to
+-- the column-by-column re-grant. A column with no explicit grant of its own
+-- inherits none, lockdown or not — so all seven have been unreadable by
+-- anon AND authenticated since the day each was added, even though their
+-- own migration files' verification blocks say otherwise (they checked
+-- information_schema.column_privileges for the ABSENCE of a narrow grant as
+-- a sign of health, not realising the lockdown had already flipped the
+-- baseline from "broad grant, narrow revoke" to "no grant unless narrow
+-- grant").
+--
+-- CONFIRMED LIVE (has_column_privilege folds in PUBLIC-role grants too, so
+-- this is authoritative — information_schema.column_privileges alone is
+-- not enough, see the migration-paper-trail-drift lesson in CLAUDE.md):
+--   select c.column_name,
+--          has_column_privilege('anon','public.members',c.column_name,'SELECT') anon_sel,
+--          has_column_privilege('authenticated','public.members',c.column_name,'SELECT') auth_sel
+--     from information_schema.columns c
+--    where c.table_schema='public' and c.table_name='members'
+--      and c.column_name in ('instagram','linkedin','birthday','birthday_public',
+--                             'break_start','break_end','break_reason');
+--   -- returned false/false for all seven, both roles, before this fix.
+--
+-- PRACTICAL IMPACT: a column GRANT is role-scoped, not row-scoped — this
+-- blocked EVERYONE, including a member reading their OWN birthday/instagram,
+-- for any query going through normal PostgREST (only the SECURITY DEFINER
+-- get_own_member() RPC bypassed it, since it runs as the function owner).
+-- Postgres denies the WHOLE statement when any requested column lacks
+-- privilege (42501), not just that column — so any select('*') or an
+-- explicit list naming one of these seven failed entirely. Very likely why
+-- all seven columns were 100% NULL across every one of the 1,375 live
+-- members at the time of this reconciliation (2026-09-05) despite
+-- EditProfilePage having shipped a birthday input weeks earlier — and it
+-- would have made this session's own null-fill backfill silently
+-- unreadable the moment it landed, on the columns that most needed it.
+--
+-- FIX: grant SELECT on all seven to `authenticated` — the minimum bar every
+-- other non-email/phone member column already clears (class_grade, bio,
+-- school_id, ...). instagram/linkedin additionally get anon SELECT, to
+-- match school_id's exact grant set: members_social_links_2026_08_29.sql
+-- explicitly designed these two to "ride school_id's existing path" with no
+-- policy of their own, so they should carry the same grant school_id has.
+-- birthday/birthday_public/break_* deliberately do NOT get anon — birthday
+-- carries its own consent design (birthday_public defaults false precisely
+-- because ~1,200 existing members never opted in to public display) and
+-- break_* is welfare/exam-break status the product frames as
+-- internal-community information. This is a narrower, more conservative
+-- choice than full anon parity with school_id/bio; if the product wants
+-- public anon visibility on birthday/break_* too, that's a separate,
+-- explicit decision for the user — not something to default into here.
+-- ============================================================================
+
+grant select (instagram, linkedin) on public.members to anon, authenticated;
+grant select (birthday, birthday_public, break_start, break_end, break_reason) on public.members to authenticated;
+
+-- ============================================================================
+-- VERIFICATION — run after applying. Expect true/true for instagram/linkedin,
+-- and false/true (anon/authenticated) for the other five.
+-- ============================================================================
+-- select c.column_name,
+--        has_column_privilege('anon','public.members',c.column_name,'SELECT') anon_sel,
+--        has_column_privilege('authenticated','public.members',c.column_name,'SELECT') auth_sel
+--   from information_schema.columns c
+--  where c.table_schema='public' and c.table_name='members'
+--    and c.column_name in ('instagram','linkedin','birthday','birthday_public',
+--                           'break_start','break_end','break_reason')
+--  order by c.column_name;
+-- ============================================================================

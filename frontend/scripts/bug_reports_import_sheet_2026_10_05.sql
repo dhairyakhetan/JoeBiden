@@ -1,0 +1,54 @@
+-- One-time import of the three BUGS-tab rows from the "AQ WEBSITE TASKS" sheet into public.bug_reports,
+-- so /bugs starts with the real history. Owner request 2026-10-05.
+--
+-- APPLIED LIVE 2026-10-05 (execute_sql, as the database owner, so no login: auth.uid() is null).
+-- Do not run it again: it would insert the three rows twice.
+--
+-- What it does, and why it looks the way it does:
+--   * created_at keeps the sheet's date (1 and 2 Oct 2026, noon IST; the sheet had no time). The insert
+--     trigger honours a supplied date only when there is no login, so a member cannot backdate.
+--   * Each row is then updated to solved with its PR link and a plain note. The trigger sets taken_up
+--     and the timestamps; `verified` is left false on purpose: a human ticks it on the live site.
+--   * approved_for_fix stays false (the reporter is unknown, and approving would trip health check H8,
+--     "approved with no approver"). Solved rows are excluded from "waiting for approval", so nothing
+--     shows up as waiting.
+--   * The trigger also writes filed / taken_up / solved events stamped now, actor "routine" (the
+--     owner session counts as the routine). An 'imported' event stamped with the original date says
+--     what really happened. The first three events are the import's, not the routine doing the fix.
+--   * The sheet's screenshots are not readable through the Drive connector, so none were imported.
+--   * The HR tab rows are feature requests, not bugs, and were not imported.
+--
+-- Rows (all three are in docs/SHEET_TRIAGE_LEDGER.md as Merged and live, awaiting human VERIFIED):
+--   1. 01.10.2026 /projects/1018        sticker text overflows        PR 33
+--   2. 02.10.2026 /director/member-of-month  Nysa cannot pick          data fix, no PR
+--   3. 02.10.2026 /director/member-of-month  more than one pick        PR 36
+
+-- The statement that ran, kept commented so it cannot be re-run by accident:
+--
+-- do $$
+-- declare
+--   rows_ jsonb := jsonb_build_array(
+--     jsonb_build_object('at','2026-10-01 12:00+05:30','path','/projects/1018','sev','med',
+--       'desc','the sticker has over flowing text that crops the home button',
+--       'pr','https://github.com/kaxx4/vercelaq/pull/33',
+--       'note','Fixed 2026-10-02: the hero sticker text no longer overflows or crops the home button. Imported from the AQ WEBSITE TASKS sheet, reported 1 Oct 2026. Awaiting a human VERIFIED on the live site.'),
+--     jsonb_build_object('at','2026-10-02 12:00+05:30','path','/director/member-of-month','sev','med',
+--       'desc','nysa - HOD of social media is already assigned HOD on website but still it doesn''t allow her to select the member of thr month for her team',
+--       'pr',null,
+--       'note','Fixed 2026-10-03, a data fix not code: she was an active HoD but had no team roster row, and a HoD picks only for teams they are on. She was added to the Social Media team. Imported from the sheet, reported 2 Oct 2026. Awaiting a human VERIFIED.'),
+--     jsonb_build_object('at','2026-10-02 12:00+05:30','path','/director/member-of-month','sev','high',
+--       'desc','members of the month pick feature doesn''t allow to choose more than 1 member per team for member of the month.',
+--       'pr','https://github.com/kaxx4/vercelaq/pull/36',
+--       'note','Fixed 2026-10-05: a team can now have several honorees in one month. The old one-per-team rule was removed in the database and the desk adds picks. Imported from the sheet, reported 2 Oct 2026. Awaiting a human VERIFIED.')
+--   );
+--   r jsonb; new_id uuid;
+-- begin
+--   for r in select * from jsonb_array_elements(rows_) loop
+--     insert into public.bug_reports (created_at, page_url, page_path, severity, description, reporter_name, capture_method)
+--     values ((r->>'at')::timestamptz, 'https://www.ngoaquaterra.com' || (r->>'path'), r->>'path', r->>'sev', r->>'desc', 'Sheet import', 'form')
+--     returning id into new_id;
+--     update public.bug_reports set solved = true, fix_pr_url = r->>'pr', resolution_note = r->>'note' where id = new_id;
+--     insert into public.bug_report_events (bug_id, at, actor_label, kind, note)
+--     values (new_id, (r->>'at')::timestamptz, 'import', 'imported', 'Imported from the AQ WEBSITE TASKS sheet (BUGS tab).');
+--   end loop;
+-- end $$;

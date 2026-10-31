@@ -1,0 +1,121 @@
+/* Extracted from QuickLinksPage.tsx's inline <style> block(s) (Phase 1.3). */
+
+        .ql-focus:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; border-radius: 14px; }
+        .ql-press { transition: transform 0.12s var(--ease-out); }
+        .ql-press:active { transform: scale(0.97); }
+
+        /* Masthead social pills carry their brand hue on the LABEL TEXT (the pill
+           border is ink and there is no icon), so the hue itself has to clear
+           contrast on the white (--card) pill. Measured on --card: LinkedIn
+           (--sky) 2.54:1, Instagram (--grape) 4.35:1, WhatsApp (#178a43 - the
+           already-darkened brand green set inline in the .tsx) 4.42:1 - all below
+           WCAG AA. Deepen each hue toward ink so every label clears 4.5:1 while
+           staying unmistakably its own colour (the accent hue survives as a
+           darker shade). The pill colours are inline in the .tsx, so these have
+           to win the cascade (!important); the href selectors scope the fix to
+           exactly the three social pills and leave the primary CTA + the in-index
+           links untouched. */
+        .ql-press[href*="linkedin"]  { color: color-mix(in srgb, var(--sky) 60%, black) !important; }   /* -> ~6.2:1 */
+        .ql-press[href*="instagram"] { color: color-mix(in srgb, var(--grape) 78%, black) !important; }  /* -> ~6.5:1 */
+        .ql-press[href*="wa.me"]     { color: color-mix(in srgb, #178a43 88%, black) !important; }        /* deepened brand green -> ~5.5:1 */
+        /* Interactive "everything we do" accordion */
+        .ql-depts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+        .ql-dept {
+          --dc: var(--welfare);
+          text-align: left; width: 100%; cursor: pointer; font: inherit; color: var(--ink);
+          background: var(--bg-2); border: var(--hair-2); border-radius: var(--r-inner); overflow: hidden;
+          /* Rounded minimalism: hairline edge + a constant resting lift. The
+             hover used to climb a 5px/6px hard ink offset; it is a translate
+             now, with the shadow held still. */
+          box-shadow: var(--lift-1);
+          transition: box-shadow .18s, transform .12s var(--ease-out);
+        }
+        @media (hover: hover) and (pointer: fine) {
+          .ql-dept:hover { transform: translateY(-2px); }
+        }
+        .ql-dept:active { transform: scale(0.99); }
+        /* The card is a <div> now and the button inside it holds only the head
+           row, so the ring moves to the container via :has - an outline on the
+           inner button would be clipped by the card's own overflow: hidden. */
+        .ql-dept-btn {
+          display: block; width: 100%; text-align: inherit;
+          background: none; border: none; padding: 0;
+          font: inherit; color: inherit; cursor: pointer;
+        }
+        /* 2026-09-07 a11y fix: this used to be `outline: none` on the button
+           plus a `:has()` ring on the parent .ql-dept. In any engine without
+           `:has()` support that is a keyboard user with NO focus indicator at
+           all - the reset always applies, the replacement may not. The ring
+           now lives on the focused element itself, per DESIGN.md §2. */
+        .ql-dept-btn:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+        .ql-dept.open { border-color: var(--dc); box-shadow: var(--lift-2); }
+        .ql-dept-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; }
+        .ql-dept-icon { width: 38px; height: 38px; flex-shrink: 0; display: grid; place-items: center; font-size: 19px; border-radius: var(--r-tight); background: color-mix(in srgb, var(--dc) 18%, transparent); border: 1px solid color-mix(in srgb, var(--dc) 36%, transparent); }
+        .ql-dept-name { flex: 1; min-width: 0; font-family: var(--display); font-weight: 800; font-size: 16px; letter-spacing: -0.02em; }
+        .ql-dept-cat { font: 700 9px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+        .ql-dept-plus { width: 22px; height: 22px; flex-shrink: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--dc); transition: transform .25s cubic-bezier(.2,.7,.2,1); }
+        .ql-dept.open .ql-dept-plus { transform: rotate(180deg); }
+        /* smooth height via grid-template-rows 0fr → 1fr (interruptible) */
+        .ql-dept-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s cubic-bezier(.2,.7,.2,1); }
+        .ql-dept.open .ql-dept-wrap { grid-template-rows: 1fr; }
+        .ql-dept-body { overflow: hidden; }
+        .ql-dept-body > span { display: block; padding: 0 18px 18px; }
+        .ql-dept-desc { font-family: var(--eina); font-size: 13.5px; line-height: 1.6; color: var(--ink-2); margin: 0 0 10px; text-wrap: pretty; }
+        /* Dept-stat label carried the raw accent hue (var(--dc)) with no contrast
+           floor: on the cream (--bg-2) card, yellow (labs/ShikshAQ) read 1.25:1
+           and blue (events) 2.03:1. Keep the hue identity but darken toward ink
+           on the light card so every label clears WCAG AA (≥4.5:1) — worst case
+           lemon lands ~5.3:1. The accent hue still lives on the icon chip + the
+           open-card shadow, so meaning-by-colour survives. */
+        .ql-dept-stat { font: 700 10px var(--mono); text-transform: uppercase; letter-spacing: 0.05em; color: color-mix(in srgb, var(--dc) 45%, black); }
+
+        /* Primary masthead CTA hover - was imperative onMouseEnter/onMouseLeave
+           DOM mutation; moved to CSS so touch/stylus pointers (which can fire
+           mouseenter without a matching mouseleave) never get stuck hovered. */
+        .ql-cta-primary { transition: transform 0.15s var(--ease-out), box-shadow 0.18s; }
+        @media (hover: hover) and (pointer: fine) {
+          /* Hover no longer grows the offset - --shadow-cta is constant. */
+          .ql-cta-primary:hover { transform: translateY(-2px); }
+        }
+
+        /* "Four ways in" ledger cards - same imperative-hover fix. The card's
+           base rotation moves to the --rot custom property so the CSS hover
+           rule can own the whole `transform` (an inline transform would always
+           win over a class's :hover per CSS specificity). */
+        .ql-big-cta { transform: rotate(var(--rot)); transition: transform 0.16s var(--ease-pop), box-shadow 0.2s; }
+        @media (hover: hover) and (pointer: fine) {
+          .ql-big-cta:hover { transform: translateY(-2px) rotate(0deg); }
+        }
+
+        /* Full-index link rows - same imperative-hover fix. --lc carries the
+           per-link accent colour (was read from `a.color` in JS). */
+        .ql-link-row { transition: border-color 0.15s, transform 0.1s; }
+        @media (hover: hover) and (pointer: fine) {
+          .ql-focus:hover .ql-link-row { border-color: var(--lc); transform: translateY(-1px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .ql-press, .ql-press:active { transition: none; transform: none; }
+          .ql-dept-wrap { transition: none; }
+          .ql-dept-plus { transition: none; }
+          .ql-cta-primary:hover { transition: none; transform: none; }
+          .ql-big-cta:hover { transition: none; transform: rotate(var(--rot)); }
+          .ql-focus:hover .ql-link-row { transition: none; transform: none; }
+        }
+      
+
+        /* 44px TOUCH FLOOR for the masthead social pills (audit 2026-09-17,
+           responsiveness). Measured live at 390px: 104x35, 111x35, 104x35.
+           They are standalone external links to WhatsApp, Instagram and
+           LinkedIn, not inline prose links, so WCAG 2.5.8's inline exemption
+           does not cover them and the app's own 44px floor should.
+
+           Here rather than in the .tsx because the pill's size comes from an
+           inline `padding` and `fontSize`; `min-height` is not set inline, so a
+           stylesheet rule applies cleanly without fighting the cascade. The
+           padding stays, so the label sits exactly where it did and only the
+           tappable box grows. */
+        .ql-press[href^="http"] {
+          min-height: 44px;
+          box-sizing: border-box;
+        }

@@ -1,0 +1,472 @@
+/* ━━━ THE AQ MAP — redesign section 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   The poster system, applied to a page that is entirely doorways: paper page,
+   slabs at --r-md (28) and bars at --r-pill (999), no third radius, hue
+   carrying display type only, and one sticker.
+
+   The page is an INDEX, so its four entrance headings are mono 9px in --ink-3
+   rather than display type. An entrance names a way in; it is not content, and
+   sizing it like content would make the page read as four articles.
+
+   Mobile first. Every entrance is one column on a phone and widens with the
+   viewport; the department grid is the only block that changes column count.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Was .dir-page, which v6.css also defines as a 760px admin container: the public map inherited that cap. */
+.map-page {
+  background: var(--bg);
+  padding: clamp(24px, 5vw, 48px) 0 clamp(56px, 9vw, 96px);
+}
+
+.dir-shell {
+  width: 100%;   /* fill the frame: it shrink-wrapped to its widest line, centred at ~760px, a third gutter beside the nav and footer */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(26px, 5vw, 40px);
+}
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.dir-masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px 0;
+}
+
+.dir-eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Lowercase display type is Eina01 800 or Instrument Serif italic. NeutralFace
+   is caps-only and is never given `text-transform: lowercase`. */
+.dir-h1 {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(38px, 9vw, 62px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.dir-h1-serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--welfare-ink);
+}
+
+.dir-standfirst {
+  margin: 0;
+  max-width: 58ch;
+  font-family: var(--eina);
+  font-size: clamp(14px, 2.6vw, 16px);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── An entrance ─────────────────────────────────────────────────────────── */
+
+.dir-entrance {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dir-entrance-h {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.dir-entrance-sub {
+  margin: 0 0 12px;
+  max-width: 60ch;
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.dir-entrance ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── 1 · Intent bars ─────────────────────────────────────────────────────
+   A bar is single-line by definition, so these carry `nowrap` and the label
+   is the flexible child that shrinks. The destination sits BENEATH the bar,
+   outside the link: a capsule tall enough for two lines would lose about a
+   third of its width to the end caps, which is why rule 2a exists. */
+
+.dir-intents {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dir-intent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 20px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  text-decoration: none;
+  box-shadow: var(--lift-1);
+  transition: transform 0.16s var(--ease-out), background 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dir-intent:hover { transform: translateY(-2px); background: var(--bg-2); }
+}
+
+.dir-intent-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(15px, 3.2vw, 18px);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.dir-intent-arrow {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.dir-intent-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 7px 0 0;
+  padding: 0 6px;
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* The destination, named in mono. Not a control: it labels where the bar above
+   it goes, so it is deliberately not styled as something to press. */
+.dir-route {
+  font-family: var(--code);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ── 2 · Department slabs ────────────────────────────────────────────────
+   Eight literal colour tokens out of `lib/departments.ts`, never a CAT_COLORS
+   lookup. The name is display type at 22px+, so it takes ink on every hue in
+   the palette. Human Resources is the one dark fill (--ink-2) and takes paper
+   instead; that branch is `.dir-dept--dark`, set once from `isDarkFill`. */
+
+.dir-depts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.dir-dept {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  min-height: 116px;
+  padding: 16px 16px 13px;
+  border: var(--bd);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dir-dept:hover { transform: translateY(-2px); }
+}
+
+.dir-dept-name {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(16px, 3.6vw, 22px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: #0A0A0A;
+  text-wrap: balance;
+}
+.dir-dept-stat {
+  flex: 1 1 auto;
+  font-family: var(--eina);
+  font-size: 11.5px;
+  line-height: 1.45;
+  /* Solid ink on a saturated fill, never an alpha: rgba(10,10,10,.6) on the
+     welfare green measures 2.79:1. */
+  color: #0A0A0A;
+  text-wrap: pretty;
+}
+/* The five-value category the department routes through. Mono on a saturated
+   fill, so solid ink again. */
+.dir-dept-cat {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 9px;
+  border: 1.5px solid #0A0A0A;
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: #0A0A0A;
+  white-space: nowrap;
+}
+
+.dir-dept--dark .dir-dept-name,
+.dir-dept--dark .dir-dept-stat,
+.dir-dept--dark .dir-dept-cat { color: var(--paper); }
+.dir-dept--dark .dir-dept-cat { border-color: var(--paper); }
+
+/* ── 3 · Kind bars ──────────────────────────────────────────────────────
+   Two lines of content, so these are slabs at 28px, not 999px bars. The count
+   leads, because the count is what tells you whether the door is worth opening. */
+
+.dir-kinds {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.dir-kind {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 14px;
+  min-height: 68px;
+  padding: 13px 16px;
+  border: var(--bd);
+  border-radius: var(--r-md);
+  background: var(--card);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dir-kind:hover { transform: translateY(-2px); }
+}
+
+.dir-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  height: 30px;
+  padding: 0 11px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  /* Mono label on a saturated fill: solid ink. */
+  color: #0A0A0A;
+  /* Fixed height plus a 999px radius, so nowrap is mandatory. */
+  white-space: nowrap;
+}
+
+/* The dashed marker. It is visibly NOT a number: dashed border, no fill, lower
+   case. A zero is a claim; this is the absence of one.
+   audit-ok: dashed - the live marker, one of the two cases 00.12 keeps. */
+.dir-count--live {
+  background: transparent;
+  border: 2px dashed var(--line-2);
+  color: var(--ink-3);
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  font-size: 9px;
+}
+.dir-count--inline {
+  min-width: 0;
+  height: 20px;
+  padding: 0 8px;
+  vertical-align: -4px;
+}
+
+.dir-kind-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.dir-kind-name {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.dir-kind-note {
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+/* The table this kind comes from, so the map doubles as the schema map. */
+.dir-kind-table {
+  grid-column: 2;
+  font-family: var(--code);
+  font-size: 10px;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dir-legend {
+  margin: 12px 0 0;
+  max-width: 62ch;
+  font-family: var(--eina);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  text-wrap: pretty;
+}
+
+/* ── 4 · Year slabs ─────────────────────────────────────────────────────
+   The year at 44px NeutralFace. Hue bands carry display type; the milestone
+   line beneath takes solid ink, and every hue in this rotation clears 4.5:1
+   against ink at any size. */
+
+.dir-years {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.dir-year {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 76px;
+  padding: 14px 18px;
+  border: var(--bd);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dir-year:hover { transform: translateY(-2px); }
+}
+
+.dir-year-n {
+  flex: 0 0 auto;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: #0A0A0A;
+}
+.dir-year-t {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #0A0A0A;
+  text-wrap: pretty;
+}
+
+/* ── Exits ───────────────────────────────────────────────────────────────── */
+
+.dir-exits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+}
+
+.dir-exit {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 68px;
+  padding: 16px 20px;
+  border: var(--bd);
+  border-radius: var(--r-card);
+  background: var(--card);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dir-exit:hover { transform: translateY(-2px); }
+}
+
+.dir-exit-h {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.dir-exit-p {
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── Tablet ──────────────────────────────────────────────────────────────── */
+/* Single exit card since /welcome (the four-screen onboarding tour) was
+   removed 2026-09-08 - was a two-up grid when there were two exits. */
+@media (min-width: 601px) {
+  .dir-exits { grid-template-columns: 1fr; max-width: 420px; }
+}
+
+/* ── Desktop ─────────────────────────────────────────────────────────────── */
+@media (min-width: 1025px) {
+  .dir-depts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dir-intents {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dir-intent,
+  .dir-dept,
+  .dir-kind,
+  .dir-year,
+  .dir-exit { transition: none; }
+  .dir-intent:hover,
+  .dir-dept:hover,
+  .dir-kind:hover,
+  .dir-year:hover,
+  .dir-exit:hover { transform: none; }
+}

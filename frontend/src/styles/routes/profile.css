@@ -1,0 +1,1471 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   profile.css — changelog/04-profile.md · profile and public profile
+   ────────────────────────────────────────────────────────────────────────
+   Imported by profile/ProfilePage.tsx, profile/PublicProfilePage.tsx,
+   profile/HoursAndCertificateCard.tsx, profile/CvCard.tsx,
+   profile/MemberOfMonthClaimCard.tsx and profile/AchievementsList.tsx.
+   Nothing outside frontend/src/profile may use these selectors; if a second
+   area needs one, promote it to v6.css rather than widening this file.
+
+   REDESIGN 2026-09 (04-profile.md): every `.pf-*` rule below was rewritten
+   for the concentric rounded-minimalism system (`--r-outer`/`--r-inner`/
+   `--r-pill`, `--pad-card`, `--lift-*`, 22%/30% tinted wells + `*-ink` text).
+   The section-06 F1/F2/F2b design source this file used to cite predates
+   that pass; `AquaTerra Feed.dc.html` turns 6a/6b/6c are the current source.
+   `.tabs`/`.tab` stay in v6.css where they already live (04.3 restyles
+   `.tabs.tabs--seg` there; grep-verified zero consumers outside these two
+   page files, so it is safe to change in place rather than forking here).
+
+   Modal scoping: `.pf-modal` is an ADDITIVE class alongside the shared
+   global `.modal`/`.modal-back`/`.modal-head` (v6.css) — deliberately NOT a
+   redefinition of those shared rules, because `.modal` is also the base for
+   several `director/*` (HoD desk) dialogs that keep the older ink-bordered
+   look on purpose (CLAUDE.md: the desk is brutalist by design). Scoping here
+   restyles only the four profile dialogs 04.9 names.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ═══════════════════ 04.1 · Identity card ═══════════════════════════════
+   Own profile (isOwn) is ink — reserved for your own surfaces. The SAME
+   component also renders another ACTIVE member's profile at /profile/:uuid
+   (App.tsx's route exists with no `isOwn` prop, distinct from the public
+   /member/:uuid → PublicProfilePage route) — a case 04.1's prose does not
+   name, since it assumes ProfilePage.tsx is always "your own". Reported in
+   the build notes; resolved here the way the file's own principle implies:
+   `.pf-identity.is-other` re-tokens to the white card 04.7 specifies for
+   PublicProfilePage, so a visitor never sees ink and mistakes the account
+   for their own. */
+.pf-identity {
+  background: var(--ink);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pf-identity.is-other {
+  background: var(--card);
+  border: var(--hair-2);
+  box-shadow: var(--lift-1);
+}
+.pf-id-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.pf-id-top {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex: 1 1 420px;
+  min-width: 0;
+}
+/* the portrait — a flex sibling that reserves its own width, NEVER
+   absolutely positioned over the name (04.1: a long name must be free to
+   grow under `text-wrap:balance` without anything painting over it). */
+.pf-portrait {
+  width: 196px;
+  flex: none;
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  /* Relative so the edit-avatar pencil badge below can anchor to this box's
+     own bottom-right corner, not the whole identity card. */
+  position: relative;
+}
+.pf-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Quick edit-avatar affordance directly on the picture (own profile only) -
+   a pencil in a white circle at the bottom-right corner, matching the
+   pattern most social apps use so a member doesn't have to find "edit
+   profile" first just to change their photo. Links straight to
+   /profile/edit?uploadAvatar=1, which EditProfilePage.tsx already
+   recognizes and auto-opens the file picker for (see its own
+   wantsAvatarUpload handling - this reuses that deep link, not a new flow). */
+.pf-avatar-edit {
+  position: absolute; right: 6px; bottom: 6px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--paper); border: var(--hair-3);
+  display: grid; place-items: center;
+  color: var(--ink); box-shadow: var(--lift-1);
+  transition: transform 0.14s var(--ease-out);
+}
+.pf-avatar-edit:hover { transform: scale(1.08); }
+.pf-avatar-edit:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .pf-avatar-edit { width: 28px; height: 28px; right: 4px; bottom: 4px; }
+}
+.pf-portrait .pf-initials {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 64px;
+  letter-spacing: -0.04em;
+  /* avatar initials are ALWAYS solid ink regardless of the hue behind them
+     (00.4 corollary) — hard-coding white for a "dark-looking" hue is the
+     exact mistake that rule exists to stop. */
+  color: var(--ink);
+}
+.pf-namewrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 8px 4px;
+  gap: 12px;
+}
+.pf-eyebrow {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nav-fg-faint);
+}
+.pf-identity.is-other .pf-eyebrow { color: var(--ink-3); }
+.pf-name {
+  margin: 8px 0 0;
+  font-size: clamp(34px, 7vw, 84px);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
+  color: var(--paper);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.pf-identity.is-other .pf-name { color: var(--ink); }
+.pf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.pf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(244,239,224,0.09);
+  border-radius: var(--r-pill);
+  padding: 7px 13px;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--paper);
+  white-space: nowrap;
+}
+.pf-identity.is-other .pf-chip {
+  background: var(--bg);
+  color: var(--ink);
+}
+.pf-chip-dot { width: 6px; height: 6px; border-radius: var(--r-pill); flex-shrink: 0; }
+
+/* third column: the hours hero tile + edit/share actions, stacked */
+.pf-id-side {
+  width: 230px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pf-hourtile {
+  position: relative;
+  flex: 1;
+  background: var(--welfare);
+  border-radius: var(--r-inner);
+  padding: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 92px;
+}
+.pf-hourtile::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: -34px;
+  width: 108px;
+  height: 108px;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.10);
+}
+.pf-hourtile-label {
+  position: relative;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.pf-hourtile-figure {
+  position: relative;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 0.85;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.pf-hourtile-sub {
+  position: relative;
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.pf-idbuttons { display: flex; gap: 6px; }
+.pf-editbtn {
+  flex: 1;
+  min-height: 44px;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  border: none;
+  cursor: pointer;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.pf-identity.is-other .pf-editbtn { background: var(--ink); color: var(--paper); }
+.pf-sharebtn {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: rgba(244,239,224,0.09);
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--paper);
+  font-size: 13px;
+  font-family: var(--eina);
+  font-weight: 700;
+}
+.pf-identity.is-other .pf-sharebtn { background: var(--bg); color: var(--ink); }
+
+@media (max-width: 860px) {
+  .pf-id-row { flex-direction: column; }
+  .pf-id-top { flex: 1 1 auto; }
+  .pf-portrait { width: 84px; height: 84px; }
+  .pf-portrait .pf-initials { font-size: 30px; }
+  .pf-id-side { width: 100%; flex-direction: row; }
+  .pf-hourtile { min-height: 76px; }
+}
+
+/* ═══════════════════ 04.6 · Break state ══════════════════════════════════
+   A banner INSIDE the ink identity card, not a separate card. Grape at 28%
+   on ink is the one tinted-on-ink case in the product — measured 12.81:1
+   for paper text, 6.39:1 for the 0.66 sub-line; both pass, do not raise it. */
+.pf-break {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 14px;
+  border-radius: var(--r-inner);
+  background: rgba(126,91,255,0.28);
+}
+.pf-break-avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--r-pill);
+  background: rgba(244,239,224,0.12);
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  color: var(--paper);
+}
+.pf-break-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-pill); }
+.pf-break-moon { width: 17px; height: 17px; color: var(--paper); }
+.pf-break-text { flex: 1 1 auto; min-width: 0; }
+.pf-break-sentence { font-family: var(--eina); font-weight: 700; font-size: 13px; color: var(--paper); }
+/* The reassurance sub-line (BREAK_REASSURANCE) is real, tested, deliberately
+   shared copy between this banner and BreakModal — see ProfilePage.tsx's own
+   comment on why it must not go back to saying nothing. 04.6 both specifies
+   "a mono sub-line in --nav-fg-dim" AND separately says "no second line";
+   kept, styled per the former, because deleting real shipped functionality
+   to satisfy the latter would be the worse mismatch. Logged in the report. */
+.pf-break-sub {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--nav-fg-dim);
+}
+.pf-break-actions { display: flex; gap: 6px; flex: none; }
+.pf-break-btn {
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  border: none;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pf-break-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* ═══════════════════ 04.2 · Stat bento ═══════════════════════════════════
+   Four (or three — see the build report on `driveCount`) white --r-outer
+   cards, each holding one --r-inner tinted well. Lemon ships at 30%, not
+   22% — it is the one accent lighter than the paper (01.5 documents the
+   same exception) and 22% reads as nearly invisible over cream. */
+.pf-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.pf-bento-tile {
+  background: var(--card);
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  box-shadow: var(--lift-1);
+}
+.pf-bento-well {
+  border-radius: var(--r-inner);
+  padding: 15px 16px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.pf-bento-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.pf-bento-figure {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+/* Tablet tier (matching director.css's documented 601-1023 range): the grid
+   used to hold 4 columns down to 701px, then jump straight to 2 - cramped
+   rather than resized. Placed BEFORE the max-width:700 collapse below so
+   that rule still wins on the overlap (601-700) and only 701-1023 gets the
+   new 3-column step; the phone collapse itself is unchanged. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .pf-bento { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 700px) {
+  .pf-bento { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ═══════════════════ 04.x · Photo collection ══════════════════════════════
+   "Your posts and activity" - a real scrapbook of this member's own post
+   photos, sourced from the page's own already-fetched `posts` (no new
+   query). Matches this page's own hairline/lift convention (--hair-2/
+   --lift-1/--r-inner), not the front-end's hard-ink-border system - the
+   profile bento above already sets that precedent on this page. */
+.pf-photos { margin-top: 22px; }
+.pf-photos-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.pf-photos-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 800;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3);
+}
+.pf-photos-count { font-family: var(--display); font-weight: 900; font-size: 13px; color: var(--ink); }
+/* Scrolls, never clips (audit-design.sh rule 18); overscroll-behavior
+   contains the scroll chain so a swipe here can't drag the whole page
+   (rule 19). */
+.pf-photos-strip {
+  display: flex; gap: 14px;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  padding: 8px 2px 16px;
+  scroll-snap-type: x proximity;
+}
+.pf-photo-card {
+  flex: 0 0 auto; width: 96px; height: 96px;
+  border: var(--hair-2); border-radius: var(--r-inner);
+  overflow: hidden; box-shadow: var(--lift-1);
+  transform: rotate(var(--rot, 0deg));
+  scroll-snap-align: start;
+}
+.pf-photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (prefers-reduced-motion: reduce) {
+  .pf-photo-card { transition: none; }
+}
+
+/* ═══════════════════ 04.4 · Achievements ═════════════════════════════════ */
+.pf-ach-card { display: flex; flex-direction: column; }
+.pf-ach-cover { border-radius: var(--r-inner); overflow: hidden; aspect-ratio: 16/9; background: var(--bg-2); }
+.pf-ach-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pf-ach-body { padding: 12px 8px 0; display: flex; flex-direction: column; flex: 1; }
+.pf-ach-meta { display: flex; align-items: center; gap: 7px; margin-bottom: 9px; flex-wrap: wrap; }
+.pf-ach-date { font-family: var(--mono); font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--ink-3); }
+.pf-ach-title { margin: 0 0 6px; font-family: var(--eina); font-weight: 700; font-size: 17px; line-height: 1.28; letter-spacing: -0.02em; color: var(--ink); text-wrap: pretty; }
+.pf-ach-desc { margin: 0; font-family: var(--eina); font-weight: 400; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pf-ach-foot { display: flex; align-items: center; gap: 2px; margin-top: 12px; padding-top: 8px; border-top: var(--hair); }
+.pf-ach-share {
+  min-height: 44px;
+  padding: 0 13px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--welfare-ink);
+}
+.pf-ach-share:disabled { opacity: 0.5; cursor: wait; }
+.pf-ach-iconbtn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-pill);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: background 0.12s var(--ease-out);
+}
+.pf-ach-iconbtn:hover { background: var(--bg-2); }
+.pf-ach-iconbtn.is-danger { color: var(--danger); }
+.pf-ach-iconbtn.is-danger:hover { background: var(--danger-tint); }
+.pf-ach-iconbtn:disabled { opacity: 0.5; cursor: wait; }
+
+/* Legacy pending/rejected banner. `createAchievement` has set
+   status:'approved' unconditionally since the review desk was retired, so
+   this only ever paints for a handful of historical rows created before
+   that change — kept (not deleted) so an old rejected/pending row still
+   explains itself, restyled off its old off-palette hex (#A07700 etc,
+   none of them tokens) onto the same 22/30%-tint + *-ink formula as
+   everywhere else in this file. */
+.pf-ach-flag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* the verification pill — replaces the old rotated .pf-stamp ink stamp.
+   An achievement is a claim about what someone did, with a verification
+   state attached: it is data, so it never rotates (only chrome may). */
+.pf-verified, .pf-awaiting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--r-pill);
+  padding: 5px 11px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pf-verified { background: color-mix(in srgb, var(--welfare) 22%, transparent); color: var(--welfare-ink); }
+.pf-awaiting { background: color-mix(in srgb, var(--lemon) 30%, transparent); color: var(--lemon-ink); }
+.pf-awaiting-dot { width: 6px; height: 6px; border-radius: var(--r-pill); background: var(--lemon-ink); flex-shrink: 0; }
+
+.pf-add-ach {
+  width: 100%;
+  min-height: 56px;
+  border-radius: var(--r-outer);
+  background: var(--card);
+  border: var(--hair-2);
+  box-shadow: var(--lift-1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+/* ─── Empty-state well (04.4 / 04.7): a --r-inner cream well inside the
+   --r-outer card, replacing every `padding: 48/60, textAlign: center` flat
+   pad this file used to hand-roll per empty state. No dashed border (00.12). */
+.pf-empty-well {
+  background: var(--bg);
+  border-radius: var(--r-inner);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+
+/* ═══════════════════ 04.5 · Side cards ═══════════════════════════════════
+   The mono capsule label (F1: "hours volunteered"). Sits on --card/--paper,
+   never on a saturated fill, so --ink-3 (5.02:1 on white) is legitimate. */
+.pf-label {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: var(--hair-2);
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* the header row itself: label at 800 14px display, aside icon at 15px
+   ink-3 on the right — 04.5's header-row treatment for every side card. */
+.pf-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  padding: 6px 8px 12px;
+}
+.pf-label-row > .pf-label-aside {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--ink-3);
+}
+/* the label capsule above predates 04.5's plain-text header row and is kept
+   only where a call site still renders it inside a `.pf-label-row` (none do
+   post-restyle, but the class stays defined for safety / partial rollouts). */
+
+/* the single figure (F1: "18.5h") — one unit, one line, no progress bar */
+.pf-figure {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+/* the mono sub-line under a figure or under body copy */
+.pf-sub {
+  margin-top: 7px;
+  padding: 0 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+/* body copy sub-lines (CV blurb, empty note) read as prose, not mono caps —
+   opted out per call site with this modifier rather than forking the class. */
+.pf-sub.pf-sub-prose {
+  font-family: var(--eina);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ─── Status pill (the "pending" chip on a certificate request) ─────────
+   DELETE-and-replace of the old three solid-fill rules (04.0 bug 1 / 04.5):
+   22%-tint background + the hue's *-ink text partner, matching the
+   achievement pills above instead of a saturated fill with ink/paper text. */
+.pf-status {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pf-status-pending  { background: color-mix(in srgb, var(--lemon) 30%, transparent); color: var(--lemon-ink); }
+.pf-status-issued   { background: color-mix(in srgb, var(--welfare) 22%, transparent); color: var(--welfare-ink); }
+.pf-status-declined { background: var(--danger-tint); color: var(--tomato-ink); }
+
+/* a request row inside the hours card */
+.pf-request-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border-radius: var(--r-inner);
+  background: var(--bg);
+}
+
+/* Certificate progress well (04.5) is deliberately NOT built: it needs a
+   computed eligibility figure and a {n}/{target} readout that do not exist
+   anywhere in HoursAndCertificateCard.tsx or certificateService.ts, and the
+   component's own preserved comment forbids inventing an hours threshold
+   ("there is no 50-hour threshold anywhere in this codebase... If a
+   threshold is ever wanted, add CERTIFICATE_HOURS to lib/orgFacts.ts").
+   Building the well would mean inventing the exact number that comment
+   exists to prevent. Logged in the build report, not guessed at here. */
+
+/* ─── Action rows on the private cards ─────────────────────────────────
+   `.btn` resolves to ~42px and `.btn-sm` to ~30px, both under the 44px
+   phone floor, and these rows are the only controls on their card. */
+.pf-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 0 8px;
+}
+.pf-actions .btn { min-height: 44px; }
+
+/* the break trigger row ("going on a break?") — a --r-inner cream well
+   inside its --r-outer card, 38px white circle + moon in --grape-ink
+   (raw --grape is 4.33:1 and fails as a small glyph on cream), label, chevron */
+.pf-break-trigger {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--bg);
+  border-radius: var(--r-inner);
+  padding: 14px 15px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+.pf-break-trigger-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-pill);
+  background: var(--card);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--grape-ink);
+}
+.pf-break-trigger-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+.pf-break-trigger-chevron { flex: none; color: var(--ink-3); }
+
+/* ─── Education / CV list rows (CvCard.tsx) ────────────────────────────── */
+.pf-edu-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 8px;
+  border-top: var(--hair);
+}
+
+/* ─── Modals (04.9) — additive scope over the shared .modal primitive ───── */
+.pf-modal.modal {
+  border-radius: var(--r-outer);
+  border: none;
+  box-shadow: var(--lift-4);
+}
+.pf-modal .modal-head {
+  padding: 16px 16px 14px;
+  border-bottom: var(--hair);
+}
+.pf-modal .modal-body { padding: 10px 16px 16px; }
+.pf-modal-close {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-pill);
+  background: var(--bg);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+  flex: none;
+}
+@media (max-width: 600px) {
+  /* Full-screen sheets with a sticky header/footer, mirroring the shape
+     director.css already ships for `.admin .modal`/`.modal-head` (06.6.4) —
+     restated here (not reused directly) because these dialogs sit outside
+     `.admin` scope. */
+  .pf-modal-back { padding: 0; align-items: stretch; }
+  .pf-modal.modal {
+    width: 100%; max-width: none; height: 100dvh; max-height: 100dvh;
+    border-radius: 0; box-shadow: none;
+    display: flex; flex-direction: column;
+  }
+  .pf-modal .modal-head { position: sticky; top: 0; z-index: 1; background: var(--card); }
+  .pf-modal .modal-body { flex: 1; overflow-y: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+}
+
+/* ─── BreakModal sheet ─────────────────────────────────────────────────
+   `.chip` is global (25+ call sites) so its 5px/12px padding cannot be
+   changed for everyone. Inside the break sheet the reason and duration
+   chips are the primary controls a thumb hits, so they get the 44px
+   minimum here, scoped. nowrap because they are now fixed-height pills. */
+.aq-break-panel .chip {
+  min-height: 44px;
+  padding-inline: 14px;
+  white-space: nowrap;
+}
+
+/* The team chips in the public "about" tab are links, so they are tap
+   targets and owe the 44px floor. Scoped for the same reason as above. */
+.pf-teams .chip {
+  min-height: 44px;
+  padding-inline: 14px;
+  white-space: nowrap;
+}
+
+/* ─── The CV sheet (FR9, 2026-09-05) ────────────────────────────────────
+   `profile/CvCard.tsx` only. A document, not a poster: guardrails §5 draws
+   the same line for the HoD desk ("chrome is brutalist, data is legible"),
+   and a CV is read by a stranger deciding something about the member, so it
+   gets the calm end of the system - flat surface, one ink hairline per
+   section, mono capsule headings, no rotation, no offset shadow, no sticker.
+
+   No new colours and no new fonts: --paper/--ink/--ink-2/--ink-3/--line-2
+   and --display/--eina/--mono are all existing tokens. */
+.cv-sheet {
+  background: var(--paper);
+  /* audit-ok, 2026-09-10: this 2px ink edge is DELIBERATE and must not be
+     converted to a hairline. `.cv-sheet` is a print artifact (see the
+     @media print block below and CvCard.tsx), and the poster system's own
+     print rule is "no hairlines that vanish on paper" - a 1px 0.12-alpha
+     border is exactly the edge that disappears on a home printer. The
+     2px-ink-is-retired rule is a SCREEN rule. */
+  border: 2px solid var(--ink);
+  /* The outermost surface of the CV document - concentric radii run
+     outer→inner, so this takes --r-outer (32px), not the tight rung. */
+  border-radius: var(--r-outer);
+  padding: 28px;
+  color: var(--ink);
+  font-family: var(--eina);
+}
+
+.cv-head { padding-bottom: 18px; border-bottom: 2px solid var(--ink); }
+
+.cv-name {
+  margin: 0;
+  /* Eina01 800, NOT --display. NeutralFace is caps-only (guardrails §2), and a
+     CV must print the member's name with its real capitalisation - "McDonald",
+     "de Souza" - not flattened to caps. Eina01 800 is the sanctioned lowercase
+     display face, so this is the system's own answer, not an exception to it.
+
+     `!important` because v6.css's variable-bridge block sets
+     `h1..h6 { font-family: var(--display) !important }`, which otherwise wins
+     over any class here. `.feed-card-title` is the existing precedent for the
+     same escape hatch; `.cv-name` outranks the bare element selector on
+     specificity, so the two !importants resolve in this file's favour
+     regardless of stylesheet order. */
+  font-family: var(--eina) !important;
+  font-weight: 800;
+  font-size: clamp(26px, 6vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.cv-role {
+  margin: 6px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* Label/value pairs. Grid with gap, never margin-per-child. */
+.cv-contact { margin: 14px 0 0; display: grid; gap: 4px; }
+.cv-contact-row { display: flex; gap: 10px; align-items: baseline; }
+.cv-contact-row > dt {
+  flex: 0 0 auto;
+  min-width: 72px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.cv-contact-row > dd {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.cv-section { margin-top: 22px; }
+
+.cv-heading {
+  margin: 0 0 12px;
+  /* !important for the same reason as .cv-name above: this is an <h2>, and
+     v6.css's h1..h6 bridge would otherwise force NeutralFace onto a label that
+     is deliberately mono. */
+  font-family: var(--mono) !important;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+/* Sibling entries are spaced by the section's own gap, not per-child margin. */
+.cv-section > .cv-entry + .cv-entry { margin-top: 14px; }
+
+.cv-entry-title { margin: 0; font-family: var(--eina); font-weight: 800; font-size: 14px; line-height: 1.35; }
+.cv-entry-meta  { margin: 3px 0 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-2); }
+.cv-entry-body  { margin: 5px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink-2); }
+
+.cv-foot {
+  margin-top: 26px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-2);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* ─── Printing the CV ───────────────────────────────────────────────────
+   Same pipeline BrandPage.css already uses: no PDF dependency, the browser's
+   own print-to-PDF. `CvCard` adds `.cv-printing` to <body> for the duration
+   of the dialog, and the modal is portalled to <body>, so hiding every direct
+   body child except the scrim leaves exactly the sheet on the page. The
+   dialog's own chrome (head, buttons, the empty-record note) is interface,
+   not document, and is dropped. */
+@media print {
+  @page { margin: 14mm; }
+
+  body.cv-printing > * { display: none !important; }
+  body.cv-printing > .modal-back {
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    animation: none !important;
+    /* .modal-back is `display: grid; place-items: center` on screen. Flipping
+       it to block is not enough on its own - the centring properties survive
+       the change and shrink-wrap the panel to its content width, which prints
+       a half-width sheet with a wide right margin. Reset them explicitly. */
+    place-items: stretch !important;
+  }
+  body.cv-printing .modal {
+    display: block !important;
+    position: static !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    animation: none !important;
+  }
+  body.cv-printing .modal-body { padding: 0 !important; }
+  /* chrome, not document */
+  body.cv-printing .modal-head,
+  body.cv-printing .modal .pf-actions,
+  body.cv-printing .cv-empty-note { display: none !important; }
+
+  body.cv-printing .cv-sheet {
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    background: #FFFFFF !important;
+    color: #0A0A0A !important;
+  }
+  /* A section that straddles a page break is unreadable in a CV. */
+  body.cv-printing .cv-section,
+  body.cv-printing .cv-entry,
+  body.cv-printing .cv-head { break-inside: avoid; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   changelog/16-profile-wall.md — the profile wall
+   ──────────────────────────────────────────────────────────────────────
+   Appended below the `@media print` block on purpose, never inside it
+   (WORKFLOW.md: "do not enter" — the CV print pipeline is fragile).
+   Consumed by profile/wall/WallTab.tsx, WallNote.tsx and WallComposer.tsx.
+
+   THE ONE HARD RULE (16.1): nothing in .wall-board is `position: absolute`.
+   An earlier draft made the hash pill (.wall-label) absolutely positioned
+   on a `position: relative` note; measured, in a multi-column layout each
+   note is a fragmentainer child and an absolutely-positioned child does not
+   reliably resolve against it — the right-side pill rendered 293×515px over
+   a 175×173px note and covered eighteen text nodes down the column. So
+   `.wall-label` is a STATIC FIRST CHILD, sized by its own text, overhanging
+   via negative margins only. Do not "simplify" this back to absolute
+   positioning — see the changelog file for the full account.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── 16.1 · the pinboard ─────────────────────────────────────────────── */
+
+.wall-board {
+  columns: 2;
+  column-gap: 8px;
+}
+@media (max-width: 480px) {
+  .wall-board { columns: 1; }
+}
+@media (min-width: 1025px) {
+  .wall-board { columns: 3; }
+}
+
+.wall-note {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  /* NOT position: relative — the label pill never needs to resolve against
+     this box; it is sized and placed by its own margins, not by it. */
+  border-radius: var(--r-inner);
+  padding: 15px 14px;
+}
+.wall-note.has-image {
+  /* "The image note is a white card, not a tint" (16.1) — a photo on a
+     tinted ground fights it, and the white card gives the image a defined
+     edge (the same reasoning as 15.9's nesting). */
+  background: var(--card);
+  border: var(--hair-2);
+}
+
+/* the hash pill — a static FIRST CHILD, never absolutely positioned */
+.wall-label {
+  align-self: flex-start;
+  margin: -7px 0 0 -5px;
+  width: fit-content;
+  border-radius: var(--r-pill);
+  padding: 4px 10px;
+  border: var(--hair-3);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  transform: rotate(var(--rot));
+  transform-origin: center;
+}
+.wall-label.is-right {
+  align-self: flex-end;
+  margin: -7px -5px 0 0;
+}
+
+.wall-note-image {
+  border-radius: var(--r-tight);
+  overflow: hidden;
+  margin-bottom: 10px;
+  aspect-ratio: 4 / 3;
+}
+.wall-note-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.wall-note-body {
+  margin: 8px 0 12px;
+  color: var(--ink);
+  font-family: var(--eina);
+  font-weight: 400;
+  line-height: 1.5;
+  /* never rotated — rotation is chrome (the pill), not content */
+  transform: none;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.wall-note.has-image .wall-note-body { margin-top: 0; }
+/* "a long body" — the one other place besides 15.9 the serif carries a
+   sentence (16.1's Note variants table). font-size is set inline per note
+   (wallShape.ts's bodyFontSize), so only the family/style live here. */
+.wall-note-body.is-long {
+  font-family: var(--serif);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.wall-note-foot {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.wall-note-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  flex: none;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 8px;
+  color: var(--ink);
+}
+.wall-note-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wall-note-author {
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+.wall-note-age {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+/* An in-flow control at the end of the footer row — never a corner overlay,
+   for the same reason the label pill isn't absolutely positioned: this is
+   still inside .wall-board's fragmentainer flow. Visual size stays small
+   (18px glyph) while the real hit area is the accessibility-floor 44px via
+   negative margins, matching Toast.tsx's dismiss-button technique. */
+.wall-note-remove {
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  margin-top: -11px;
+  margin-bottom: -11px;
+  margin-right: -10px;
+  flex: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-3);
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+.wall-note-remove:hover { color: var(--ink); }
+
+/* loading skeleton — matches the real note geometry (11-system-states.md);
+   `.wall-note` supplies the radius, `.v6-skeleton` the shimmer. Higher
+   specificity than the bare `.v6-skeleton` rule so this radius wins. */
+.wall-note.wall-skel { border-radius: var(--r-inner); }
+
+/* ── 16.2 · the empty state / off-switch card ───────────────────────── */
+
+.wall-empty-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.wall-empty-lede { text-align: left; }
+.wall-empty-disc {
+  /* Was an icon-in-a-lemon-pill box; 18-mascots-and-motion.md swapped the
+     glyph for the tuk mascot (already lemon-hued from its own cast entry),
+     so this is now just the alignment/spacing wrapper, not a second pill
+     drawn behind it. */
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+.wall-empty-title {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.wall-empty-copy {
+  font-family: var(--eina);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 46ch;
+  margin: 0;
+}
+.wall-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 4px;
+  border-top: var(--hair);
+}
+.wall-empty-lede + .wall-toggle-row { margin-top: 2px; }
+.wall-toggle-label {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ink);
+}
+.wall-toggle-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+/* real role="switch", 46×28 with a 22px knob, 44px hit area (16.2) */
+.wall-toggle {
+  position: relative;
+  flex: none;
+  width: 46px;
+  height: 44px;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.wall-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 8px 0;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.14);
+  transition: background 0.15s var(--ease-out);
+}
+.wall-toggle.is-on::before { background: var(--welfare); }
+.wall-toggle-knob {
+  position: absolute;
+  top: 11px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(10,10,10,0.3);
+  transition: transform 0.15s var(--ease-out);
+}
+.wall-toggle.is-on .wall-toggle-knob { transform: translateX(18px); }
+.wall-toggle:disabled { opacity: 0.6; cursor: default; }
+
+/* Two notes on the .wall-toggle::before/.wall-toggle-knob pair above: both
+   are positioned relative to `.wall-toggle` itself (a plain, non-board
+   control outside `.wall-board` entirely — the "nothing in the board is
+   absolute" rule governs pinboard notes, not this standalone switch, which
+   is the same kind of construction as any ordinary custom checkbox). */
+
+/* ── States · removed banner (optimistic + undo, per 06.6.3's pattern) ── */
+
+.wall-removed-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 13px 14px;
+  border-radius: var(--r-inner);
+  background: color-mix(in srgb, var(--tomato) 22%, var(--bg));
+}
+.wall-removed-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink);
+}
+.wall-removed-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+.wall-removed-undo {
+  flex: none;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  border: var(--hair-3);
+  background: var(--card);
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ── 16.5 · the sticky "leave a note" bar (visitor only) ────────────── */
+
+.wall-sticky-bar {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-pill);
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+}
+@media (max-width: 760px) {
+  /* On phone this "replaces the bottom nav on that route" (16.5, matching
+     03.4's post-detail reply bar) — approximated here by sitting fixed
+     above it at a higher z-index (the nav pill is z-index:50 in v6.css)
+     rather than unmounting the shared nav component, which lives in 02's
+     scope, not this file's — see the build report. */
+  .wall-sticky-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 60;
+    margin-top: 0;
+    border-radius: 0;
+    border-left: none; border-right: none; border-bottom: none;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── 16.3 · the composer ─────────────────────────────────────────────── */
+
+.wall-sheet-back {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10,10,10,0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.wall-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border-radius: var(--r-outer) var(--r-outer) 0 0;
+  border: var(--hair-2);
+  border-bottom: none;
+  overflow: hidden;
+}
+@media (min-width: 761px) {
+  .wall-sheet-back { align-items: center; padding: 24px; }
+  .wall-sheet { border-radius: var(--r-outer); border-bottom: var(--hair-2); box-shadow: var(--lift-4); }
+}
+
+.wall-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--pad-card);
+  border-bottom: var(--hair);
+  flex: none;
+}
+.wall-sheet-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.wall-sheet-close {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: var(--r-pill);
+  border: none;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.wall-sheet-body {
+  padding: var(--pad-card);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wall-field-well {
+  background: var(--bg);
+  border-radius: var(--r-inner);
+  padding: 14px;
+}
+.wall-field {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  resize: none;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--eina);
+  font-weight: 400;
+  font-size: 17px; /* above the iOS zoom floor */
+  line-height: 1.5;
+}
+.wall-field::placeholder { color: var(--ink-3); }
+
+.wall-counter { display: flex; align-items: center; gap: 10px; }
+.wall-counter-track {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.10);
+  overflow: hidden;
+}
+.wall-counter-fill { display: block; height: 100%; border-radius: var(--r-pill); transition: width 0.1s linear; }
+.wall-counter-figure { font-size: 11px; font-weight: 700; color: var(--ink-3); flex: none; }
+.wall-counter-figure.is-over { color: var(--danger-ink); }
+
+.wall-inline-notice {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--r-tight);
+  background: var(--danger-tint);
+  color: var(--danger-ink);
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.wall-inline-notice:not(.is-blocked) { background: var(--bg); color: var(--ink-2); }
+
+.wall-label-row { display: flex; flex-direction: column; gap: 8px; }
+.wall-label-caption {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.wall-label-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.wall-label-chip {
+  /* 38px is the sanctioned chip target (guardrails §2). 32px is only
+     sanctioned for comment-foot actions sitting inside a 44px row; these are
+     standalone controls in a composer. */
+  min-height: 38px;
+  padding: 0 13px;
+  border-radius: var(--r-pill);
+  border: var(--hair-3);
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+.wall-label-chip.is-on { background: var(--ink); color: var(--paper); }
+
+.wall-image-preview {
+  position: relative;
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-tight);
+  overflow: hidden;
+  border: var(--hair-2);
+}
+.wall-image-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wall-image-remove {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 26px; height: 26px;
+  border-radius: var(--r-pill);
+  border: none;
+  background: rgba(10,10,10,0.65);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+/* Exception to the board's absolute-positioning ban, deliberately: this sits
+   on the composer's OWN image preview, a fixed-aspect-ratio box with no
+   auto-height text beneath it to ever cover — not a .wall-board note. */
+
+.wall-sheet-dock {
+  display: flex;
+  align-items: center;
+  /* wrap so the send button's "why you can't pin this yet" line
+     (changelog/11-system-states.md §11.9 state 11) takes its own row rather
+     than squeezing the controls beside it. */
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px var(--pad-card);
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  border-top: var(--hair);
+  flex: none;
+}
+.wall-dock-image {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--r-pill);
+  border: var(--hair-2);
+  background: var(--bg);
+  color: var(--ink-2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.wall-dock-image:disabled { opacity: 0.5; cursor: default; }
+.wall-dock-note {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.wall-dock-send {
+  flex: none;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: var(--r-pill);
+  border: var(--bd-ink);
+  background: var(--welfare);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: var(--sh);
+  cursor: pointer;
+}
+.wall-dock-send:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wall-toggle::before, .wall-toggle-knob, .wall-counter-fill { transition: none; }
+}

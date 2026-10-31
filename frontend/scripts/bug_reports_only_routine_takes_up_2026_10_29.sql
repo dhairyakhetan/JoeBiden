@@ -1,0 +1,23 @@
+-- 2026-10-29: only the routine can mark a bug report "taken up".
+--
+-- APPLIED LIVE on 2026-10-29 by the daily routine (owner instruction: "leaders shouldn't mark taken up, only
+-- Claude can"). It narrows an existing rule; nothing is deleted.
+--
+-- Why: a leader ticking "taken up" moves a report out of the routine's queue (the probe counts only reports that
+-- are not taken up), so three high-severity reports filed on 28 Oct sat unworked after a leader ticked them on
+-- 29 Oct. "Taken up" is the routine's claim that it has started work, so only the routine may make it true.
+--
+-- Change: in private.bug_reports_before_update(), a signed-in session (auth.uid() is not null) can no longer
+-- set taken_up from false to true. The routine (no session) still can. A leader can still UNDO a taken-up
+-- (true to false), which is how a send-back and a mis-click are reversed, and every other leader action is unchanged.
+--
+-- Proven in a rolled-back DO block: a HoD's attempt to take a report up was refused with the new message, the
+-- routine's was accepted, and a HoD could still undo it.
+--
+-- Applied by replacing the function body with one extra guard placed before the existing leader check:
+--
+--   if not is_routine and new.taken_up and not old.taken_up then
+--     raise exception 'only the routine can take a report up';
+--   end if;
+--
+-- To undo: remove that guard (create or replace the function without it).

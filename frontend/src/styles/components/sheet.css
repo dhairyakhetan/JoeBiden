@@ -1,0 +1,97 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   The two-detent ink sheet — redesign 08.3 / 17.1's shared `.aq-sheet`.
+   See components/Sheet.tsx for the behaviour this styles.
+
+   Radii used here are the 08-scope trio: --r-outer (32), --r-pill (999).
+   Nothing on the wide 999/32/22/14 scale is invented for this file.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.aq-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(10, 10, 10, 0.28);
+  /* The page itself already dims to .5 opacity behind the sheet
+     (useSheetPageStyle) - a heavy scrim here would double that up. */
+}
+
+.aq-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: var(--r-outer) var(--r-outer) 0 0;
+  box-shadow: 0 -12px 40px -8px rgba(0, 0, 0, 0.7), 0 -1px 0 rgba(244, 239, 224, 0.14);
+  /* The drag is ours - a vertical pan on the grabber must not also scroll
+     the page underneath it. */
+  touch-action: none;
+  transition: top 320ms var(--ease-out), height 320ms var(--ease-out);
+}
+
+/* Higher specificity than the base rule above (attribute + class beats a
+   bare class), so no !important is needed to suspend the transition while
+   a drag is live-following the pointer, or permanently under reduced motion. */
+.aq-sheet[data-dragging],
+.aq-sheet.aq-sheet--reduced {
+  transition: none;
+}
+
+.aq-sheet-grabber-hit {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 0 4px;
+  background: none;
+  border: none;
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.aq-sheet-grabber-hit:active { cursor: grabbing; }
+
+.aq-sheet-grabber {
+  width: 44px;
+  height: 5px;
+  border-radius: var(--r-pill);
+  /* Non-text, so the low alpha against ink is legal (README's ladder only
+     governs text/glyphs). */
+  background: rgba(244, 239, 224, 0.28);
+}
+
+.aq-sheet-peek {
+  flex-shrink: 0;
+  padding: 0 var(--page-px, 24px) 14px;
+  color: var(--paper);
+}
+.aq-sheet[data-detent="peek"] .aq-sheet-peek { cursor: pointer; }
+
+.aq-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* The safe-area allowance lives HERE, not only in the footer. The footer is
+     optional - a sheet rendered without one had its last row sitting under the
+     iPhone home indicator, unreadable and untappable. The footer keeps its own
+     larger allowance for when it IS present; this is the floor for when it is
+     not. */
+  padding: 0 var(--page-px, 24px) calc(12px + env(safe-area-inset-bottom, 0px));
+  color: var(--paper);
+}
+
+.aq-sheet-footer {
+  flex-shrink: 0;
+  padding: 12px var(--page-px, 24px) calc(18px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(244, 239, 224, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aq-sheet { transition: none; }
+}

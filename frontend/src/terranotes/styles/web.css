@@ -1,0 +1,49 @@
+/* Web layout (900px and up; src/web/). Drawn at 1440px and scaled to fit the window (CSS zoom = --web-zoom,
+   set by lib/layoutMode.js). Mouse users: hover lifts things out of their hard shadow, press drops them in. */
+.web{zoom:var(--web-zoom,1)}
+html[data-layout="web"]{scroll-padding-top:calc(80px * var(--web-zoom,1))}
+.web a{color:var(--ink)}
+.web a,.web button{cursor:pointer}
+.web button[disabled]{cursor:default}
+.web :is(a,button):active{opacity:1}
+
+/* cards and buttons: lift on hover, drop into the shadow on press (`translate` keeps any tilt) */
+.card-link article{transition:translate 200ms cubic-bezier(0.32,0.72,0,1),box-shadow 200ms cubic-bezier(0.32,0.72,0,1)}
+.card-link:hover article{translate:-3px -3px;box-shadow:10px 10px 0 var(--ink) !important}
+.card-link:active article{translate:3px 3px;box-shadow:2px 2px 0 var(--ink) !important}
+.btn{transition:translate 160ms ease,box-shadow 160ms ease}
+.btn:hover{translate:-2px -2px}
+.btn:active{translate:2px 2px}
+.btn[disabled]:hover,.btn[disabled]:active{translate:none}
+.web .w-opt:active{transform:none}
+
+/* hovering a hanging card holds its swing still */
+.web .sway:hover,.web .sway:hover .flutter{animation-play-state:paused}
+
+/* the article line (web/WebArticleLine.jsx): native sideways scroll, thin ink scrollbar */
+.art-scroller{scrollbar-width:thin;scrollbar-color:var(--ink) transparent;overscroll-behavior-x:contain}
+.art-scroller::-webkit-scrollbar{height:6px}
+.art-scroller::-webkit-scrollbar-thumb{background:var(--ink)}
+.art-scroller{cursor:grab}
+/* only cards on screen (or next up) sway; nothing does once the line is scrolled out of the window */
+.art-scroller .hang{contain:layout style}
+.art-scroller .hang:not(.live),.art-scroller.away .hang{animation-play-state:paused}
+.art-scroller.dragging,.art-scroller.dragging *{cursor:grabbing !important}
+.art-scroller:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+
+/* photo wall: on web the polaroids don't turn on their pegs; the glint still crosses them */
+.web .twist{animation:none}
+
+/* team: faces hold still on hover and grow a little; legend chips light up */
+.web .face:hover{animation-play-state:paused}
+.web .bub{transition:transform 180ms cubic-bezier(0.32,0.72,0,1)}
+.web .bub:hover{transform:scale(1.05)}
+.web .legend-chip{transition:background-color 160ms ease}
+.web .legend-chip:hover{background:var(--outside) !important;color:var(--ink) !important}
+
+/* photo viewer (shared/PhotoViewer.jsx): fills the visible screen; --ph = photo height, smaller on short screens */
+.web-viewer{--vh:100vh;height:calc(var(--vh) / var(--web-zoom,1));overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+@supports (height:100dvh){.web-viewer{--vh:100dvh}}
+.web-viewer{--ph:clamp(240px, calc(var(--vh) / var(--web-zoom,1) - 430px), 470px)}
+
+@media (prefers-reduced-motion: reduce){.card-link article,.btn{transition:none}}

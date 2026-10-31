@@ -1,0 +1,40 @@
+/* Settings sidebar - split out of v6.css (2026-08); only consumer is SettingsPage.tsx. */
+/* Settings sidebar */
+.settings-link { background: none; border: 2px solid transparent; padding: 10px 14px; text-align: left; cursor: pointer; font-family: var(--mono); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ink-2); border-radius: var(--r-tight); }  /* DESIGN.md §1: 8 is off-scale. */
+.settings-link:hover { background: var(--bg-2); color: var(--ink); }
+.settings-link.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ── the two-column layout (2026-09-12) ──────────────────────────────────────
+   SettingsPage built this out of Tailwind utilities - `grid grid-cols-1
+   md:grid-cols-[220px_1fr] gap-7 items-start` on the wrapper and `flex
+   md:flex-col gap-1 overflow-x-auto` on the rail. Tailwind is NOT in the main
+   bundle: it moved to `paradox/tailwind.css`, which only the lazily-mounted
+   ParadoxRoot imports. Confirmed in the built output - the only file in dist/
+   containing `220px_1fr` is the Paradox chunk, and index-*.css has no `.grid`
+   rule at all.
+
+   So none of those classes resolved. The wrapper was a plain block, the aside
+   stacked full width above the panel, and its six buttons laid out as
+   inline-block boxes separated by source whitespace instead of a rail.
+   components/Modal.tsx already documents this exact failure mode for a
+   different file; this was an unfixed instance of it. */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.settings-nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  /* Audit rule 19: a horizontal scroller contains its overscroll, so swiping
+     the tab strip on a phone does not trigger the browser's back gesture. */
+  overscroll-behavior-x: contain;
+}
+/* The panel keeps a form-reading width (760px) next to the rail, while the rail starts at the page's own left edge like every
+   other page: it used to be a centred 880px block starting at 304px. */
+@media (min-width: 768px) {
+  .settings-layout { grid-template-columns: 220px minmax(0, 760px); }
+  .settings-nav { flex-direction: column; overflow-x: visible; }
+}

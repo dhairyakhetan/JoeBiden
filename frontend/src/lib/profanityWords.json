@@ -1,0 +1,5 @@
+{
+  "_readme": "Custom word list consumed by lib/profanityFilter.ts, on top of the English coverage that already comes from the 'obscenity' npm package (see profanityFilter.ts). This file is for Hinglish/Bengali slang (or any English term not already caught by the library) that the team supplies directly -- Claude does not author entries here. Plain lowercase strings, no special syntax -- matching/normalization (spacing, leetspeak, repeated letters) is handled automatically by checkText(), so list each word in its normal spelling once. 'block' = hard-block the submission everywhere. 'flag' = allowed through but forces pending_review on posts/comments/achievements (forms still hard-block on flag -- see the design doc).",
+  "block": [],
+  "flag": []
+}

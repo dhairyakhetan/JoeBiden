@@ -1,0 +1,19 @@
+{
+  "name": "Paradox",
+  "short_name": "Paradox",
+  "description": "Paradox - Creative Platform by AquaTerra",
+  "start_url": "/paradox/",
+  "scope": "/paradox/",
+  "display": "standalone",
+  "background_color": "#FF4338",
+  "theme_color": "#FF4338",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/paradox/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

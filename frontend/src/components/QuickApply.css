@@ -1,0 +1,13 @@
+/* The Apply pill (components/QuickApply.tsx). Variants set their own size: .rt-apply (RoleTile), .quick-apply-rail (Home). */
+.quick-apply {
+  position: relative; z-index: 2;
+  margin: 10px 26px 12px; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 40px; padding: 0 16px; border-radius: var(--r-pill);
+  background: var(--ink); color: var(--bg); border: 0; cursor: pointer;
+  font-family: var(--mono); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+  transition: transform 140ms ease, background 140ms ease;
+}
+.quick-apply:hover { background: var(--rc, var(--ink)); color: var(--ink); }
+.quick-apply:active { transform: scale(0.96); }
+.quick-apply:disabled { opacity: 0.6; cursor: progress; }

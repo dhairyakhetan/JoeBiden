@@ -1,0 +1,48 @@
+/* Base styles, both layouts. Nearly all styling is inline in the components; CSS is only for what inline styles
+   can't do: resets, :active / :hover / :focus states, keyframes, and classes several components share.
+   Phone taps use :active (no :hover); web hover states live in web.css.
+   Inside AQ's website these files are injected into a shadow root (embed/aq/): rules on html / body do nothing there
+   (.tn-body is its stand-in for <body>), and rules that start with :host apply only there. */
+html,body{margin:0;background:var(--outside)}
+body,.tn-body{font-family:var(--font-body);color:var(--text)}
+/* inside AQ: no darker band around the artboards, AQ's page is the magazine's cream */
+.tn-body{margin:0;background:var(--page)}
+/* drawn to exact sizes: iPhones mustn't enlarge the text on their own; #section jumps clear the sticky header;
+   no sideways jump when a popup locks scrolling */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:64px;scrollbar-gutter:stable}
+a,button{-webkit-tap-highlight-color:transparent}
+html,a,button{touch-action:manipulation} /* no double-tap zoom, so no tap delay */
+#top{box-shadow:0 0 0 1px var(--edge)} /* the home pages' edge against the darker background */
+:host([data-tn-aq]) #top,html[data-tn-aq] #top{box-shadow:none}
+/* Inside AQ, AQ's own nav floats over the top of the page, so the magazine's header is not drawn: its box stays as the
+   spacer under that nav (every artboard is positioned against its 64px / 80px), visibility so nothing that measures
+   it breaks. */
+:host([data-tn-aq]) header.site-header > *,html[data-tn-aq] header.site-header > *{visibility:hidden} /* the band stays: text doesn't show through under AQ's nav */
+/* AQ's nav is z-index 50: the band (sticky, z-index 50 inline) goes just under it, still over the page scrolling by */
+:host([data-tn-aq]) header.site-header,html[data-tn-aq] header.site-header{z-index:49 !important}
+
+/* press feedback: links and buttons dim while pressed, except the ones with their own press style */
+:where(a,button):active{opacity:.6}
+:where(a:has(> article),.card,.menu-card,.w-opt,.bub,.legend-chip,.press):active{opacity:1}
+/* .press: a hard-shadow button that drops into its shadow (--c = the shadow colour) */
+.press:active{translate:2px 2px;box-shadow:1px 1px 0 var(--c,var(--ink)) !important}
+.card:active article{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink) !important}
+.menu-card:active{translate:4px 4px;box-shadow:2px 2px 0 var(--c) !important}
+.w-opt:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink) !important}
+.bub:active{transform:translate(3px,3px)}
+.legend-chip:active{transform:translate(1px,1px)}
+.ph-open:active{background:rgba(255,255,255,.16) !important}
+.page-home a{color:var(--text)}
+.page-article a{color:var(--ink)}
+.page-article a:active > article{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink) !important}
+.page-article button:active{transform:translate(1px,1px)}
+
+/* keyboard focus: a clear ring (mouse and touch don't show it) */
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+/* "Skip to main content": off screen until it has keyboard focus */
+.skip-link{position:fixed;left:12px;top:12px;z-index:1000;padding:12px 16px;background:var(--ink);color:var(--page);border:2px solid var(--page);box-shadow:4px 4px 0 var(--yellow);font-family:var(--font-mono);font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;text-decoration:none;transform:translateY(-200%);transition:transform .15s ease}
+.skip-link:focus{transform:none;outline:2px solid var(--yellow);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.skip-link{transition:none}}
+
+/* the wordmark on the black phone menu: a thin cream edge so its dark blue letters still read */
+.wordmark-img.on-dark{filter:drop-shadow(1px 0 0 var(--page)) drop-shadow(-1px 0 0 var(--page)) drop-shadow(0 1px 0 var(--page)) drop-shadow(0 -1px 0 var(--page))}

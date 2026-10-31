@@ -1,0 +1,21 @@
+-- APPLIED LIVE 2026-09-14 via Supabase MCP (migration name:
+-- team_follows_team_id_index)
+--
+-- Owner asked to "make everything blazing fast" - ran get_advisors
+-- (type=performance) as the authoritative check rather than guessing
+-- further, per this project's own established pattern (see
+-- members_update_wrap_auth_uid_initplan_2026_09_14.sql). It flagged exactly
+-- one NEW, real finding since the last audit: team_follows_team_id_fkey
+-- (added earlier today by team_follows_table_2026_09_14.sql) has no
+-- covering index. followService.ts's getTeamFollowerCount(teamId) filters
+-- on team_id directly, and getFollowedTeamUuids's join walks the same
+-- column from the other direction - both real, already-shipped call sites,
+-- not a hypothetical future one.
+--
+-- Everything else the advisor reports is the same pre-existing,
+-- already-triaged "informational, not a speed bug" set from the last audit
+-- (36 unused-index hits on low-traffic tables, members.deleted_by, the Auth
+-- connection-allocation strategy) - unchanged, still not touched, for the
+-- same reasons recorded in that earlier migration file.
+
+create index if not exists team_follows_team_id_idx on public.team_follows(team_id);

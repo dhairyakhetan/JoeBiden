@@ -1,0 +1,51 @@
+/* September 2026's look, "exam season" (src/editions/sep26/look.js): the pages are sheets of a school notebook.
+   Only this edition's pages get it (html / the shadow host carry data-edition="sep26": lib/edition.js); loaded through
+   src/editions/pages.js EDITION_CSS. Pages opt in with class="page-sheet" on their root (the home and article pages).
+   The pages set their background inline (background: var(--page)), so these use !important to lay the ruling on top. */
+
+/* ruled paper: faint blue lines every 28px under the header (web: 32px), a red margin line; lib/ruled.js and
+   ruled.js RULE use the same numbers */
+html[data-edition="sep26"] .page-sheet,:host([data-edition="sep26"]) .page-sheet{
+  --margin-x:14px;
+  background-image:linear-gradient(to right,transparent 0 var(--margin-x),rgba(229,72,77,.45) var(--margin-x) calc(var(--margin-x) + 1.5px),transparent calc(var(--margin-x) + 1.5px)),repeating-linear-gradient(to bottom,transparent 0 27px,rgba(61,123,253,.14) 27px 28px) !important;
+  background-position:0 0,0 104px !important;
+  background-repeat:no-repeat,repeat !important;
+}
+/* web: a wider margin, and punch holes down the left edge */
+html[data-edition="sep26"] .web .page-sheet,:host([data-edition="sep26"]) .web .page-sheet{
+  --margin-x:104px;
+  background-image:radial-gradient(circle at 46px 50%,var(--outside) 0 12px,rgba(24,33,58,.28) 12.5px 14px,transparent 14.5px),linear-gradient(to right,transparent 0 var(--margin-x),rgba(229,72,77,.45) var(--margin-x) calc(var(--margin-x) + 2px),transparent calc(var(--margin-x) + 2px)),repeating-linear-gradient(to bottom,transparent 0 31px,rgba(61,123,253,.14) 31px 32px) !important;
+  background-size:92px 260px,auto,auto !important;
+  background-position:0 140px,0 0,0 128px !important;
+  background-repeat:repeat-y,no-repeat,repeat !important;
+}
+
+/* the home page's doodles move a little (Decor.jsx, class .dz: stopped by reduced motion, LITE and page changes in
+   styles/loops.css, paused off screen by shared/EditionDecor.jsx). translate / rotate / scale only, so their tilt stays. */
+.sep-plane{animation:sep-plane 6s ease-in-out infinite alternate}
+@keyframes sep-plane{from{translate:0 0;rotate:0deg}to{translate:-14px -10px;rotate:-3deg}}
+.sep-star{animation:sep-star 2.8s ease-in-out infinite alternate}
+@keyframes sep-star{from{scale:1;opacity:.75}to{scale:1.14;opacity:1}}
+.sep-sticky{transform-origin:50% 0;animation:sep-sticky 4.6s ease-in-out infinite alternate}
+@keyframes sep-sticky{from{rotate:0deg}to{rotate:-2.5deg}}
+.sep-float{animation:sep-float 10s ease-in-out infinite}
+@keyframes sep-float{0%{translate:0 0;rotate:-6deg;opacity:0}12%{opacity:.55}40%{opacity:.45}55%,100%{translate:8px -60px;rotate:8deg;opacity:0}}
+
+/* the diary under "Meet the team" (Diary.jsx): each letter inks in after the one before, then the line sinks into the
+   page. One-shots, opacity / translate only. */
+.diary-line{display:block}
+.diary-ch{opacity:0;animation:diary-ink .45s ease-out forwards}
+@keyframes diary-ink{from{opacity:0}60%{opacity:1}to{opacity:.88}}
+.diary-sink{animation:diary-sink 1.6s ease-in forwards}
+@keyframes diary-sink{to{opacity:0;translate:0 5px}}
+@media (prefers-reduced-motion: reduce){.diary-ch{animation:none;opacity:.88}.diary-sink{animation:none;opacity:0}}
+
+/* writing on the lines (lib/ruled.js useRuledPage moves each [data-ruled] block so its first baseline sits on a rule;
+   these give its lines the ruling's spacing, so the rest follow): --gap = one rule (RULE in ruled.js) */
+html[data-edition="sep26"] .page-sheet,:host([data-edition="sep26"]) .page-sheet{--gap:28px}
+html[data-edition="sep26"] .web .page-sheet,:host([data-edition="sep26"]) .web .page-sheet{--gap:32px}
+html[data-edition="sep26"] .page-sheet [data-ruled="1"],:host([data-edition="sep26"]) .page-sheet [data-ruled="1"]{line-height:var(--gap) !important;transform:none !important}
+html[data-edition="sep26"] .page-sheet [data-ruled="2"],:host([data-edition="sep26"]) .page-sheet [data-ruled="2"]{line-height:calc(var(--gap) * 2) !important;transform:none !important}
+/* web "Land. Water. City.": three rules a line, starting a rule lower, clear of the label above */
+html[data-edition="sep26"] .web [data-rid="hero"],:host([data-edition="sep26"]) .web [data-rid="hero"]{top:176px !important}
+html[data-edition="sep26"] .page-sheet [data-ruled="3"],:host([data-edition="sep26"]) .page-sheet [data-ruled="3"]{line-height:calc(var(--gap) * 3) !important;transform:none !important}

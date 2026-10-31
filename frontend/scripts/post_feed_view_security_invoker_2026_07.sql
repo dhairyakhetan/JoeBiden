@@ -1,0 +1,20 @@
+-- ============================================================================
+-- post_feed_view_security_invoker_2026_07.sql
+-- (applied live as migration 020_post_feed_view_security_invoker)
+--
+-- STATUS: APPLIED to community project hzowuwffjqtgszecngpe via Supabase MCP.
+-- Prompt 2.0 audit finding P1-1 (Supabase advisor ERROR 0010 security_definer_view).
+--
+-- post_feed_view was SECURITY DEFINER, so it bypassed the posts table's RLS: a direct
+-- PostgREST query of the view (without the app's status='published' filter) could read
+-- unpublished/pending post bodies. Switching to security_invoker=on makes the view run
+-- under the QUERYING user's RLS.
+--
+-- Verified SAFE before applying: posts has SELECT policies
+--   "Public can view published posts"  USING (status = 'published')
+--   "Authors and directors can view pending posts"  USING (author = me OR is_director())
+-- so anon still reads published rows (public feed keeps working — verified: 555 posts,
+-- 10 cards, images all still load), while pending/rejected bodies are no longer leakable
+-- through the view. Requires Postgres 15+ (project is PG17).
+-- ============================================================================
+ALTER VIEW public.post_feed_view SET (security_invoker = on);

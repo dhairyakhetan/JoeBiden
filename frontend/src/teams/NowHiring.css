@@ -1,0 +1,21 @@
+/* "now hiring" on the Teams page (teams/NowHiring.tsx). It sits on the page's ink hero, and its cards are the shared RoleTile, laid out as a plain grid. */
+.tm-hire { margin-top: clamp(32px, 5vw, 64px); }
+.tm-hire-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; margin-bottom: 20px; }
+.tm-hire-title { margin: 0; font-family: var(--display); font-weight: 900; font-size: clamp(30px, 5vw, 48px); line-height: .95; letter-spacing: -0.03em; text-transform: uppercase; color: var(--paper); }
+.tm-hire-count { margin: 0; flex: 1 1 auto; font-family: var(--eina); font-size: 15px; color: var(--nav-fg-strong); }
+.tm-hire-all { font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--paper); text-decoration: none; padding: 8px 0; }
+.tm-hire-all:hover { text-decoration: underline; text-underline-offset: 4px; }
+.tm-hire-all:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; border-radius: var(--r-tight); }
+.tm-hire-groups { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 30px 28px; }
+.tm-hire-group { flex: 0 1 auto; min-width: 0; }
+.tm-hire-dept { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--nav-fg-strong); }
+.tm-hire-dept b { padding: 2px 9px; border-radius: 999px; background: var(--lemon); color: var(--ink); }
+.tm-hire-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 1), 270px); gap: 14px; }
+.tm-hire .rt-tile { min-height: 210px; }
+.tm-hire .rt-title { font-size: clamp(22px, 2.2vw, 28px); overflow-wrap: break-word; }
+
+/* On a phone every department takes the full width and its roles stack. */
+@media (max-width: 759px) {
+  .tm-hire-group { flex: 1 1 100%; }
+  .tm-hire-grid { grid-template-columns: 1fr; }
+}

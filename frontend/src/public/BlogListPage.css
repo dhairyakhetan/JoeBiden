@@ -1,0 +1,35 @@
+/* Scoped hover-zoom for the lead cover-story card's image.
+   Extracted from BlogListPage.tsx's inline <style> const (Phase 1.3). */
+.bl-lead-imgwrap { overflow: hidden; }
+/* 300ms, not 700ms. At 0.7s the image was still creeping long after the pointer
+   had settled, which reads as lag rather than luxury. */
+.bl-lead-img { transition: transform 0.3s var(--ease-out); display: block; }
+@media (hover: hover) { .bl-lead:hover .bl-lead-img { transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .bl-lead-img { transition: none !important; } .bl-lead:hover .bl-lead-img { transform: none !important; } }
+
+/* ─── Blog lead story card (moved from v6.css) ─── */
+/* Blog lead story card - two-column (image + text) on desktop, stacked on
+   mobile. Grid template lives here (not inline) so the media query can win;
+   the image divider flips from right border to bottom border when stacked.
+   12-secondary-pages.md §12.1 blanket transform: card shell moves onto
+   var(--card)/var(--hair-2)/var(--r-outer)/var(--lift-1); the 3px ink
+   border + 7px/10px hard offset (and the hover jump) are deleted - only
+   .btn-primary and .sticker keep the offset motif now (00.2/00.6). */
+.bl-lead {
+  display: grid; grid-template-columns: 1fr;
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  overflow: hidden;
+  box-shadow: var(--lift-1);
+  transition: box-shadow 0.18s var(--ease-out);
+}
+.bl-lead:hover { box-shadow: var(--lift-2); }
+.bl-lead--img { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.bl-lead--img .bl-lead-imgwrap { border-right: var(--hair); }
+@media (max-width: 720px) {
+  .bl-lead--img { grid-template-columns: 1fr; }
+  .bl-lead--img .bl-lead-imgwrap { border-right: none; border-bottom: var(--hair); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bl-lead { transition: none; }
+}

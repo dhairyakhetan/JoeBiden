@@ -1,0 +1,250 @@
+/* ━━━ MEMBERS — redesign section 13, the public surface ━━━━━━━━━━━━━━━━━━━
+   The poster system on a page that lists real students, a large share of them
+   minors. That fact sets the whole design, not just the data layer:
+
+     · no contact detail of any kind renders here, and none is queried;
+     · the card carries a name, a school and a role, and nothing else;
+     · nothing on a card is copyable, shareable or exportable. It is a way to
+       reach a profile, not a record to take away.
+
+   `/member/:uuid` carries `noindex` and the sitemap excludes it deliberately.
+   This page is indexable and links to those profiles; that asymmetry is the
+   point and is not a bug to tidy up.
+
+   Everything below was inline `style={{ … }}` on MembersPage.tsx before this
+   pass. Inline styles beat the cascade, which is how the same page ended up
+   with radii of 16, 14 and 12 that no token could reach.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.mem-hero {
+  background: var(--bg-2);
+  padding: clamp(32px, 5vw, 56px) var(--page-px, 24px) clamp(20px, 3vw, 32px);
+  border-bottom: var(--bd);
+}
+
+.mem-h1 {
+  margin: 10px 0 0;
+  font-size: clamp(44px, 7vw, 80px);
+  line-height: 0.92;
+}
+.mem-h1-serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--welfare-ink);
+}
+
+.mem-total {
+  margin-top: 8px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mem-body {
+  padding-top: clamp(20px, 4vw, 28px);
+  padding-bottom: 80px;
+}
+
+/* ── Search ──────────────────────────────────────────────────────────────── */
+
+.mem-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 16px;
+  margin-bottom: 14px;
+  background: var(--card);
+  border: var(--bd);
+  /* A single-line control, so it is a bar: 999px, not a third radius. */
+  border-radius: var(--r-pill);
+}
+.mem-search-icon { color: var(--ink-3); display: inline-flex; }
+
+.mem-search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  /* 2026-09-10: the bar is 52px but the input only took its ~20px content
+     height (align-items: center on the parent), so two thirds of what LOOKS
+     like the tap target did nothing - a tap near the top or bottom edge of the
+     pill missed the field entirely. Stretching the input to the bar's height
+     makes the whole 52px focusable, which is what it already looked like. */
+  align-self: stretch;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--sans);
+  /* 16px suppresses iOS Safari's focus-zoom; anything under 16 triggers it. */
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.mem-search-clear {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 12px;
+}
+
+/* ── Role filters ────────────────────────────────────────────────────────── */
+
+.mem-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+/* `.chip` is the shared pill. Fixed height plus a 999px radius, so nowrap is
+   mandatory; the row wraps rather than letting a label break. */
+.mem-filters .chip {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+/* ── The grid ────────────────────────────────────────────────────────────── */
+
+.mem-grid {
+  /* The loading skeleton's height (MembersPage.tsx's MEM_CARD_H). Measured
+     off the real `.mem-card`, and it moves at the same breakpoint the card
+     does - v6.css drops .avatar from 84px to 36px at 380px. A row that also
+     carries a school line is taller, but that is per-row content the
+     skeleton cannot know; this matches the base row. */
+  --mem-skel-h: 183px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+  gap: 12px;
+}
+
+/* ── Two up on a phone ────────────────────────────────────────────────────
+   The auto-fill above is correct everywhere except the one width most people
+   actually use it at. A 375px phone leaves a 343px container, and two 180px
+   tracks plus the 12px gap need 372 - so auto-fill drops to ONE column and
+   every member gets a full-width card 168px tall holding an avatar, a name and
+   a role chip. Measured on the live page: 8,190px of scroll for the first
+   page of a 1,327-person directory, most of it empty card.
+
+   Two explicit columns below 600px instead. A 165px tile is far more than
+   enough for what is in it - v6.css already drops .avatar from 84px to 36px
+   below 380px, so the tallest thing in the card is the name.
+
+   Explicit `repeat(2, …)` rather than a smaller auto-fill minimum, because
+   lowering the minimum to fit two phone columns would also make DESKTOP go
+   from six tiles a row to seven, which is a different decision on a different
+   surface and nobody asked for it.
+
+   minmax(0, 1fr), not 1fr: an `auto` minimum resolves to min-content, and a
+   long unbroken name would push the track wider than the grid. Same defect
+   this pass fixed on the HoD desk's member grid, where it clipped 145px off
+   every card.                                                               */
+@media (max-width: 600px) {
+  .mem-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.mem-card {
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  /* The tile is an <a> (it needs a real href - see MembersPage.tsx), so it
+     resets the anchor defaults rather than inheriting blue and an underline. */
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  background: var(--card);
+  border-radius: var(--r-card);
+  transition: transform 0.16s var(--ease-out);
+}
+.mem-card:hover { transform: translateY(-2px); }
+
+/* Concentric: the avatar is inset inside a radius-26 card, and it is circular,
+   which is still correct at this size inside a card. */
+.mem-avatar {
+  margin: 4px auto;
+  overflow: hidden;
+}
+.mem-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.mem-name {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The school line is a proper noun - "St. Xavier's College, Kolkata
+   (Autonomous)", "Modern High School for Girls". The card carries `.mono`,
+   which since 2026-09-18 resolves to NeutralFace, and NeutralFace is caps-only,
+   so every school on the page would render SHOUTED. --code (JetBrains Mono)
+   keeps real lowercase and is what this line already looked like.
+   Compound selector because `.mono` matches at the same specificity and would
+   otherwise win on cascade order. */
+.mem-school { margin-top: 2px; }
+.mem-card .mem-school { font-family: var(--code); }
+.mem-role { margin-top: 8px; display: inline-block; }
+
+.mem-end {
+  margin-top: 28px;
+  text-align: center;
+}
+
+/* ── The contextual push ─────────────────────────────────────────────────
+   Guests only, and it sits at the END of the roll, after someone has scrolled
+   past the people rather than in front of them. Not a permanent banner. */
+
+.mem-join {
+  margin-top: 40px;
+  padding: 24px;
+  text-align: center;
+  background: var(--lemon);
+  border: var(--bd);
+  border-radius: var(--r-md);
+  /* Mono and body copy on a saturated fill: solid ink, never an alpha. */
+  color: #0A0A0A;
+}
+.mem-join-h { font-size: 28px; margin-bottom: 8px; }
+.mem-join-p { font-size: 14px; margin-bottom: 16px; }
+
+/* ── The lateral exit ────────────────────────────────────────────────────
+   No screen is a dead end. A person reading the roll of people is one step
+   from wanting the shape of the whole org, which is what the map is for. */
+
+.mem-exit {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 68px;
+  margin-top: 12px;
+  padding: 16px 20px;
+  border: var(--bd);
+  border-radius: var(--r-card);
+  background: var(--card);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+.mem-exit:hover { transform: translateY(-2px); }
+.mem-exit-h {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.mem-exit-p {
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+@media (max-width: 380px) {
+  .mem-grid { --mem-skel-h: 139px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mem-card, .mem-exit { transition: none; }
+  .mem-card:hover, .mem-exit:hover { transform: none; }
+}

@@ -1,0 +1,1908 @@
+/* ─── TerraThon 2026, scoped to .tt-root ─────────────────────────────────────
+   AquaTerra's own paper-and-ink system, in an event-ticketing register:
+   cream ground, hard black rules, one hot accent for the ask, sticker badges
+   for status, and ticket stubs with real perforations.
+
+   It reads the global token layer (styles/tokens.css) rather than inventing a
+   second palette, and every face it uses is already declared in v6.css, so this
+   section makes NO font request of its own.
+
+   Two rules that bite, both from the token layer's own notes:
+     · NeutralFace is CAPS-ONLY. Its lowercase glyphs are drawn as capitals, so
+       every display use here is uppercase. Lowercase prose is Eina01.
+     · NeutralFace has NO tabular figures. Anything that is a digit column,
+       such as prices, countdown or reference codes, is JetBrains Mono (--code).
+   ────────────────────────────────────────────────────────────────────────── */
+
+.tt-root {
+  /* ── Ground and ink, INVERTED 2026-09-21 ──────────────────────────────────
+     This section used to run AquaTerra's cream paper with black ink. It now
+     runs the campaign poster: a night sky ground, cream type, and the two
+     poster hues as fills. The rest of ngoaquaterra.com is untouched, because
+     every value here is scoped to .tt-root.
+
+     The roles did not change, only which colour plays each one. "Paper" is
+     still the ground and "ink" is still the tone that contrasts with it, so
+     the ~60 rules that draw borders and hard shadows with var(--ink) keep
+     working and simply come out cream instead of black. That is the whole
+     reason this was a token edit rather than a rewrite. */
+  --tt-paper:     #05060A;
+  --tt-paper-2:   #0E1019;
+  --tt-paper-3:   #171A26;
+  --tt-card:      #0B0E16;
+  --tt-ink:       #F2EFE3;
+  --tt-ink-2:     rgba(242, 239, 227, 0.84);
+  --tt-ink-3:     rgba(242, 239, 227, 0.68);
+
+  /* The global --ink is black and this section reads it in roughly sixty
+     border, rule and box-shadow declarations. Overriding it here, once, is
+     what flips all of them at the same time. --bg is deliberately NOT
+     overridden: components use it to mean "the light tone", which is exactly
+     what type sitting on a saturated fill still needs to be. */
+  --ink:          #F2EFE3;
+
+  /* And the rest of the global palette, for the same reason.
+     Overriding --ink alone was not enough: a measured sweep of six rendered
+     pages found 27 failures, and almost all of them were call sites reading
+     the GLOBAL muted and *-ink tokens directly rather than this section's
+     --tt-* copies. --ink-2 and --ink-3 are dark greys, and every *-ink partner
+     was DARKENED for legibility on cream, which is exactly backwards on night:
+     --tomato-ink measured 3.69:1 and --ink-2 1.32:1.
+
+     --bg is still NOT in this list. It means "the light tone" and is what type
+     sitting on a saturated fill has to be. */
+  --ink-2:        rgba(242, 239, 227, 0.84);
+  --ink-3:        rgba(242, 239, 227, 0.68);
+  --bg-2:         #0E1019;
+  --bg-3:         #171A26;
+  --card:         #0B0E16;
+  --tomato-ink:   #FF8A6E;
+  --lemon-ink:    #FFD166;
+  --sky-ink:      #6FBCF7;
+  --pink-ink:     #FF8FB6;
+  --grape-ink:    #A98FFF;
+  --welfare-ink:  #5BE2A6;
+  /* A FILL, not a text colour, but the brand sky is light enough that cream
+     glyphs on it measured 2.2:1 on the wordmark. Deepened so the same cream
+     clears the floor without changing what the mark looks like. */
+  --sky:          #1583DC;
+
+  /* Accents are FILLS with ink on top. The *-ink partners are the only legal
+     way to put these hues on glyphs against paper. */
+  /* Straight off the poster: orchid outlines, torn-paper green, a blue for the
+     stars and a warm yellow for the prize figures.
+
+     The *-ink partners flip meaning along with the ground. On cream they were
+     DARKENED so a hue could be legible as text; on night they are LIGHTENED
+     for the same reason. Every one below clears 4.5:1 against --tt-paper:
+     orchid 8.9, green 9.6, lemon 12.4, sky 6.1. */
+  --tt-hot:       #DD6CEE;
+  --tt-hot-ink:   #E9A6F5;
+  --tt-lemon:     #FFD166;
+  --tt-lemon-ink: #FFD166;
+  --tt-sky:       #1583DC;
+  --tt-sky-ink:   #6FBCF7;
+  --tt-pink:      #FF4D8C;
+  --tt-pink-ink:  #FF8FB6;
+  --tt-grape:     #7E5BFF;
+  --tt-grape-ink: #A98FFF;
+  --tt-go:        #24CB7E;
+  --tt-go-ink:    #5BE2A6;
+
+  /* ── The poster's two voices ──────────────────────────────────────────────
+     Archivo Black for headlines, Bungee for the chunky second line. Both come
+     straight off the campaign poster, replacing Bebas Neue on 2026-09-21.
+
+     Bebas was a tall CONDENSED face chosen as scoreboard lettering. The poster
+     is set in a wide heavy one, so the two did not read as the same event. The
+     practical consequence runs the opposite way to the Bebas note this
+     replaces: Archivo Black is considerably WIDER at the same size, so every
+     headline that was measured to fit Bebas LOSES room. The display sizes
+     below came down to pay for it.
+
+     Neither face has tabular figures, so digit columns stay on --tt-code,
+     which is the same rule the old note ended on. Loaded in TerraThonRoot and
+     scoped to this section only. */
+  --tt-display: 'Archivo Black', 'NeutralFace', system-ui, sans-serif;
+  --tt-poster:  'Bungee', 'NeutralFace', system-ui, sans-serif;
+
+  /* ── Night, for the bands that carry the event ────────────────────────────
+     Flat #0A0A0A against flat tomato and lemon is what read as a children's
+     palette: three saturated primaries at full strength with nothing between
+     them. The slabs now sit on a deep blue-black instead, which is a floodlit
+     ground rather than a printed one: the same hues read as lit rather than
+     drawn, and the cream reading sections gain something to push against. */
+  --tt-night:     #0C1020;
+  --tt-night-2:   #151B2E;
+  --tt-night-ink: #F4EFE0;
+  --tt-body:    'Eina01', 'NeutralFace', system-ui, sans-serif;
+  --tt-code:    'JetBrains Mono', ui-monospace, monospace;
+  --tt-serif:   'Instrument Serif', Georgia, serif;
+  /* No handwriting face. Caveat was here for exactly one annotation and cost
+     49.7KB, the single heaviest asset on /terrathon, a quarter of all font
+     weight, for one phrase. On a page aimed at students on mobile data that is
+     a bad trade, and Caveat is not one of AQ's six documented type tokens
+     either. The annotation now rides on Eina01, which is already downloaded.
+     See .tt-note below. */
+
+  /* ── Compatibility aliases ────────────────────────────────────────────────
+     The first build of this section used a dark charcoal/volt palette. The
+     admin desk still reads those names in places, and mapping them here means
+     the desk inherits the paper-and-ink system automatically instead of
+     rendering against missing variables. Prefer the names above in new code;
+     these exist so a half-migrated file is never a broken one. */
+  --tt-bg:         var(--tt-paper);
+  --tt-text:       var(--tt-ink);
+  --tt-muted:      var(--tt-ink-3);
+  --tt-surface:    var(--tt-card);
+  --tt-raised:     var(--tt-paper-2);
+  /* These four resolve to the TEXT-SAFE partner, not the display hue, because
+     every remaining call site uses them on glyphs. Lemon on cream measures
+     ~1.6:1 and sky ~2.5:1, both unreadable. The *-ink partners clear 4.5:1 on both
+     paper and white. Anything that genuinely needs the bright hue as a FILL
+     names it directly (var(--lemon), var(--tomato)) rather than going through
+     one of these. */
+  /* These four resolve to whichever partner is legible on the CURRENT ground.
+     That used to mean the darkened one; on night it means the lightened one.
+     The names and the call sites are unchanged. */
+  --tt-volt:       var(--tt-lemon-ink);
+  --tt-cyan:       var(--tt-sky-ink);
+  --tt-danger:     #FF8A6E;
+  --tt-amber:      var(--tt-lemon-ink);
+  /* The poster's box outline, at rest and awake. Every card, chip and ticket
+     edge in the section is one of these two. */
+  --tt-line:       rgba(221, 108, 238, 0.55);
+  --tt-hairline:   rgba(242, 239, 227, 0.20);
+  --tt-hairline-2: #F2EFE3;
+  --tt-r-card:     var(--tt-r);
+  --tt-r-btn:      var(--tt-r-in);
+
+  /* ── Scale, taken from the global token layer, not invented here ────────
+     This section used to hand-pick every padding and radius, which is what
+     made it read as a different product bolted onto the site: the main pages
+     run 44px pills with 12px/20px padding, radii of 22/14/999 and body type
+     around 15-17px, while this one ran 31px chips, nine different radii and
+     10.5px meta. Same brand, two scales.
+
+     Everything below now points at styles/tokens.css. Do not add a fourth
+     radius or a literal padding at a call site; reach for one of these. */
+  --tt-sp-1: var(--sp-1, 4px);
+  --tt-sp-2: var(--sp-3, 8px);
+  --tt-sp-3: var(--sp-5, 12px);
+  --tt-sp-4: var(--sp-6, 16px);
+  --tt-sp-5: var(--sp-7, 20px);
+  --tt-sp-6: var(--sp-8, 24px);
+  --tt-sp-7: var(--sp-9, 32px);
+  --tt-sp-8: var(--sp-10, 48px);
+  /* Between page sections, and between blocks inside one. */
+  --tt-section: var(--sp-section, clamp(32px, 6vw, 52px));
+  --tt-block:   var(--sp-block, clamp(18px, 3.5vw, 32px));
+
+  /* Type floor. Nothing on a TerraThon surface sits below --tt-fs-meta. */
+  --tt-fs-meta:  12.5px;   /* mono facts, dates, prices in a row */
+  --tt-fs-label: 13px;     /* chip and button labels */
+  --tt-fs-body:  15.5px;   /* prose */
+  --tt-fs-lead:  17px;     /* the one paragraph under a page title */
+  /* Every button label, primary and quiet alike. Added 2026-09-21 because the
+     two variants had drifted to 15px and 13.5px, so a "Grab a slot" pill and
+     the "See the sports" pill beside it set their labels at two different
+     sizes on the same row. One token means one answer. */
+  --tt-fs-btn:   15px;
+
+  /* One control height, everywhere, matching the main site's pills. */
+  --tt-ctl:      44px;
+  --tt-ctl-lg:   52px;
+  --tt-ctl-pad:  0 20px;
+
+  --tt-bw: 2px;              /* the standard rule weight */
+  /* Four radii and no others, straight off the global scale. Concentric:
+     outer 32 minus a 10px inset is inner 22; inner minus 8 is tight 14. */
+  --tt-r:      var(--r-inner, 22px);  /* card */
+  --tt-r-in:   var(--r-tight, 14px);  /* inner */
+  --tt-r-out:  var(--r-outer, 32px);  /* outer / feature */
+  --tt-r-pill: var(--r-pill, 999px);
+
+  position: relative;
+  min-height: 100dvh;
+  background: var(--tt-paper);
+  color: var(--tt-ink);
+  font-family: var(--tt-body);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The global design system puts a hairline outline on every img. On the
+   cream ground it reads as a dirty grey edge around each flat-vector mark. */
+.tt-root img { outline: none !important; }
+/* Except the photographs. The rule above exists because the global design
+   system's hairline read as a dirty grey rim around a flat vector mark on
+   cream. A real photograph on a near-black ground has the opposite problem: a
+   dark frame in the picture dissolves into the page with no edge at all. Pure
+   white at low alpha, never a tinted neutral, which would pick up the colour
+   underneath and read as grime along the edge.
+
+   Note the selector. This was written as a bare `.tt-photo` and therefore
+   never applied to anything: `.tt-root img` above scores (0,1,1) and
+   `.tt-photo` only (0,1,0), so with BOTH carrying `!important` the reset won
+   every photograph in the section and each one computed
+   `outline-style: none`. Measured in the browser 2026-09-21. Matching the
+   reset's specificity is what makes the exception an exception. */
+.tt-root img.tt-photo {
+  outline: 1px solid rgba(255, 255, 255, 0.1) !important;
+  outline-offset: -1px;
+}
+
+/* ── Ink slab ───────────────────────────────────────────────────────────────
+   A full-bleed black section. Inside it the roles invert: paper becomes the
+   text colour and cards sit on ink. Anything nested picks this up for free. */
+.tt-slab {
+  /* The background is an explicit hex, NOT var(--tt-ink). Custom properties
+     resolve at the point of use, so a rule that both reads --tt-ink and
+     redefines it on the same element reads the NEW value and paints the slab
+     paper-on-paper: the whole hero went invisible exactly this way. */
+  /* The band used to be the one dark thing on a cream page. The page is now
+     night itself, so the slab's job changed: it is the lifted band the poster
+     sets its lockups on. Slightly above the ground, edged in orchid so it
+     still separates, and lit from the top. Explicit hexes for the same reason
+     the comment above gives. */
+  background: linear-gradient(176deg, #161A28 0%, #0A0C14 62%);
+  color: #F2EFE3;
+  border-block: 2px solid rgba(221, 108, 238, 0.55);
+
+  /* Only the INK role flips. Every border, rule and hard shadow drawn with
+     var(--ink) becomes paper, so it stays visible against the slab.
+     --bg deliberately does NOT flip: components use it to mean "the paper
+     colour", which is exactly what text sitting on ink needs to be. */
+  --ink: #F2EFE3;
+  --tt-ink: #F2EFE3;
+  --tt-card: #121622;
+  --tt-paper-2: #161A28;
+  --tt-ink-2: rgba(242, 239, 227, 0.84);
+  --tt-ink-3: rgba(242, 239, 227, 0.68);
+}
+.tt-slab .tt-card { box-shadow: none; }
+
+/* ── The listing band ───────────────────────────────────────────────────────
+   Cream cards on an ink ground. This is the single change that took the sports
+   section from the weakest thing on the page to the strongest: a cream card on
+   a cream page has nothing to push against, and the reference's punchiest
+   screen is exactly this: pale cards floating on black.
+
+   `.tt-slab` exists to make cards DISAPPEAR into the slab, so it flips
+   --tt-card dark and --ink to paper. These cards must do the opposite: they
+   are the page's primary objects. Everything the slab flipped is restored
+   inside the card and nowhere else, so the band's own heading and note still
+   read as light-on-dark.
+
+   `color` has to be restated explicitly. The card would otherwise inherit the
+   slab's paper text colour and set cream type on a cream card, invisible. */
+.tt-listing .tt-card {
+  --ink: #0A0A0A;
+  --tt-ink: #0A0A0A;
+  --tt-card: var(--tt-paper);
+  background: var(--tt-paper, #F4EFE0);
+  color: #0A0A0A;
+  /* No hard shadow: a black offset is invisible on a black ground, and the
+     reference's cards-on-black carry none either. The cream shape is the edge. */
+  box-shadow: none;
+}
+
+/* ── The poster ─────────────────────────────────────────────────────────────
+   One picture with the name over it. The whole hero is this object plus a chip
+   rail, which is the shape the event-ticketing reference uses and the reason
+   it reads as a poster rather than a page of sections.
+
+   Sized by aspect-ratio, not height: the art keeps its proportions from a
+   320px phone to a wide desktop, and the type over it scales with vw so the
+   three lines always fill the same share of the picture. */
+.tt-poster {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-height: 74vh;
+  border-radius: var(--tt-r);
+  overflow: hidden;
+  border: 3px solid var(--tt-line);
+}
+@media (min-width: 760px)  { .tt-poster { aspect-ratio: 16 / 10; } }
+@media (min-width: 1100px) { .tt-poster { aspect-ratio: 16 / 9; } }
+
+.tt-poster__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The poster changes shape at 760px, so the artwork changes with it. See the
+   header of PosterArt.tsx for what the portrait cut looks like in a 16/9 box
+   (short version: no head, no sun). */
+.tt-poster__art--wide { display: none; }
+@media (min-width: 760px) {
+  .tt-poster__art--tall { display: none; }
+  .tt-poster__art--wide { display: block; }
+}
+
+/* The title sits ON the illustration, whose colour changes across its width,
+   so a ratio cannot be held against the art itself. This gives the type its
+   own ground: opaque ink under the text, fading up into the picture. */
+/* The scrim is drawn BY the type block, not as a share of the card.
+   ──────────────────────────────────────────────────────────────────────────
+   Its one job: text over a gradient over artwork has no contrast ratio
+   anything can measure, because the ground changes colour under every glyph.
+   So the part the type sits on has to be solid ink, and only the fade above
+   it does picture work.
+
+   It used to be `height: 66%` on a separate element, which held that promise
+   at 4/5 and broke it everywhere else. The type block is a fixed thing: the
+   wordmark, two lines of meta and a button come to about 255px at every width,
+   while the card's height swings with its aspect ratio: 419px at 4/5 on a
+   phone, 450px at 16/10, 610px at 16/9. So the share of the card the type
+   needs is 55% on a phone, 56% at 16/10 and 42% at 16/9, and no single
+   percentage covers them. Measured at 768px with a 60% scrim: the ink turned
+   solid at 52% of the card and the first line of type began at 43.8%, so the
+   wordmark's caps were sitting across the horizon, green and tomato showing
+   through the top half of every letter.
+
+   Anchoring it to `.tt-poster__body` makes the question disappear: the
+   gradient ends exactly where the content starts, at every aspect ratio, by
+   construction rather than by arithmetic. */
+.tt-poster__body { isolation: isolate; }
+.tt-poster__body::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  /* The fade reaches up out of the block, and it finishes EARLY: solid by
+     72% of the strip, so there is a band of flat ink above the wordmark
+     rather than the gradient arriving exactly at the cap line. Ending it flush
+     with the type was measurably correct (the glyphs did sit on #0A0A0A) and
+     still looked wrong: the green horizon ran right up to the tops of the
+     letters with nothing between them.
+
+     The numbers are matched to what the 4/5 card did before any of this, since
+     that one was never the broken case: a ~50px fade, then a clear band of ink,
+     with the picture holding the top third. At 375px this gives 138px of clean
+     artwork, a 50px fade and 50px of flat ink above the wordmark, within a few
+     pixels of the original, and it now derives the same result at 16/10 and
+     16/9 instead of only at 4/5. */
+  top: calc(-1 * clamp(90px, 14vw, 150px));
+  background: linear-gradient(180deg,
+    rgba(10, 10, 10, 0) 0%,
+    rgba(10, 10, 10, 0.5) 30%,
+    #0A0A0A 55%,
+    #0A0A0A 100%);
+  z-index: -1;
+}
+
+.tt-poster__body {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 0 16px 18px;
+  box-sizing: border-box;
+}
+@media (min-width: 760px) { .tt-poster__body { padding: 0 28px 26px; } }
+
+/* Centred, three lines, filling the width. `size` on the component is a number
+   it derives its offset and year scale from, so the clamp is applied here the
+   way the footer mark does it. */
+.tt-poster__mark {
+  font-size: clamp(31px, 9.7vw, 76px) !important;
+  text-align: center;
+  line-height: 0.86;
+}
+/* The year's own size and its gap are computed inline from the component's
+   `size` number (64), which the clamp above overrides, so at any width where
+   the clamp resolves larger than 64 the year kept a 3.8px gap and printed on
+   top of the wordmark. Both have to be re-derived here, in the same units the
+   title uses. */
+.tt-poster__mark > span {
+  display: block;
+  margin-top: clamp(10px, 2.4vw, 20px) !important;
+  font-size: clamp(10px, 2.3vw, 17px) !important;
+  letter-spacing: 0.26em;
+  text-indent: 0.4em;
+}
+
+.tt-poster__meta {
+  margin-top: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: var(--tt-fs-meta);
+  line-height: 1.45;
+  color: rgba(244, 239, 224, 0.9);
+}
+@media (min-width: 760px) { .tt-poster__meta { font-size: var(--tt-fs-label); } }
+
+/* The reference's primary is a soft-cornered rectangle, not a lozenge, and it
+   is the only one on the screen. */
+.tt-btn--poster {
+  border-radius: var(--tt-r-in);
+  border-width: var(--tt-bw);
+  box-shadow: none;
+  min-height: 50px;
+  padding: 0 30px;
+}
+
+/* ── The chip rail ──────────────────────────────────────────────────────────
+   Two rows that run off the right edge on purpose: the overflow is what says
+   there is more, without spending a row on an arrow. Scrollable so the ones
+   past the edge are still reachable, with the scrollbar hidden. */
+.tt-chiprail {
+  margin: 14px -20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+@media (min-width: 900px) { .tt-chiprail { margin-inline: -48px; } }
+
+.tt-chiprail__row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 20px;
+}
+@media (min-width: 900px) { .tt-chiprail__row { padding-inline: 48px; } }
+.tt-chiprail__row::-webkit-scrollbar { display: none; }
+.tt-chiprail__row > * { flex: 0 0 auto; }
+
+/* The solid chip is the one filled shape in the rail: cream fill, ink glyphs.
+   It reads the section's own pair rather than the globals, for the same reason
+   .tt-chip--on does. */
+.tt-chip--solid {
+  background: var(--tt-ink);
+  color: var(--tt-paper);
+  border-color: var(--tt-ink);
+}
+
+/* ── The closing band ───────────────────────────────────────────────────────
+   Paper, not ink. It was the fifth dark section on the page and the house
+   rule allows two; the ask is carried by the tomato button, which is louder
+   on paper than another black band ever was. */
+.tt-close { background: var(--tt-paper-2); border-top: 2px solid var(--tt-line); }
+
+/* ── The hero's graphic layer ───────────────────────────────────────────────
+   The reference this page is built from carries its hero on a full-bleed
+   photograph. This event has not happened yet, so there is no photograph of
+   it, and stock imagery of somebody else's tournament would be a lie about
+   what this is. Oversized sport marks do that job instead: cropped hard by the
+   slab edge, so what shows is a fragment rather than an icon sitting in a
+   corner, which is the difference between graphic and clip-art.
+
+   Positions are chosen to stay off the reading column. Large display type over
+   a 0.3-opacity outline is still far above its 3:1 floor; a 16px paragraph
+   would not be, so nothing is placed behind one. */
+.tt-heroart {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Sized in CSS, not by the size prop: the phone column is narrow enough that a
+   360px mark runs straight through the wordmark and reads as a brown bar
+   rather than a bat. Small enough here to clear the type, full size where
+   there is room. */
+.tt-heroart > svg { position: absolute; opacity: 0.5; }
+.tt-heroart__a { top: -84px; right: -66px; width: 232px; height: 232px; }
+@media (min-width: 980px) {
+  .tt-heroart__a { top: -96px; right: -104px; width: 360px; height: 360px; }
+}
+/* Only one mark below phone width. The others would land behind the countdown
+   card, which is translucent, and read as smudges through it. */
+.tt-heroart__b,
+.tt-heroart__c { display: none; }
+@media (min-width: 980px) {
+  .tt-heroart__b { display: block; bottom: -118px; left: -96px; }
+  .tt-heroart__c { display: block; top: 34%; left: 47%; opacity: 0.4; }
+}
+
+/* ── The three-sport strip ──────────────────────────────────────────────────
+   Three panels of real artwork, full-bleed, no gutters and no card. It closes
+   the hero with a picture instead of a seventh block of text, and it is the
+   shortest route into a sport page.
+
+   Equal columns on every width, including the phone: three 130px panels at
+   390px still read as three distinct scenes, and stacking them would make the
+   hero taller, which is the thing this is here to fix.  rather
+   than a fixed height, so the scenes keep their proportions as the column
+   narrows. */
+.tt-striprow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 2px solid var(--tt-hairline);
+}
+.tt-strip {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  text-decoration: none;
+  border-right: 2px solid var(--tt-hairline);
+}
+.tt-strip:last-child { border-right: 0; }
+@media (min-width: 760px) { .tt-strip { aspect-ratio: 16 / 9; } }
+.tt-strip__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The label sits on its own ink bar rather than straight on the scene. Type
+   over an illustration that changes colour across its width cannot be held to
+   a contrast ratio; a solid bar can. */
+.tt-strip__label {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  /* Stacked below 430px. Three panels on a 390px phone give the label about
+     110px of usable width, and "PICKLEBALL" plus a fee does not fit on one
+     line there, it truncated to "PICKLEBA...", which is worse than a second
+     line. Side by side as soon as there is room for it. */
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  padding: 8px 9px;
+  background: var(--tt-paper-2);
+  border-top: 2px solid var(--tt-line);
+}
+@media (min-width: 430px) {
+  .tt-strip__label { flex-direction: row; align-items: baseline; gap: 8px; padding: 9px 11px; }
+  .tt-strip__fee { margin-left: auto; }
+}
+.tt-strip__name {
+  font-family: var(--tt-display); font-weight: 700;
+  font-size: clamp(12px, 3.4vw, 19px);
+  letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--bg, #F4EFE0); line-height: 1;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tt-strip__fee {
+  flex: 0 0 auto;
+  font-size: clamp(10px, 2.6vw, 13px);
+  color: var(--lemon, #FFC700);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tt-strip__art { transition: transform 260ms ease; }
+  .tt-strip:hover .tt-strip__art { transform: scale(1.04); }
+}
+
+/* ── Paper texture ──────────────────────────────────────────────────────────
+   Two layers only, both static. A moving texture on a cream ground is noise
+   and costs battery on the low-end Android most of this audience arrives on. */
+.tt-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.tt-bg__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}
+/* The starfield, which is the poster's ground.
+   Painted with radial-gradients rather than shipped as an image: it costs no
+   request and no bytes, and it tiles at 520px so a tall page never shows the
+   same nine stars marching down it. The mowing stripes it replaces were a
+   0.022 alpha black, which on a night ground is invisible. */
+.tt-bg__stripes {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: 520px 520px;
+  background-image:
+    radial-gradient(1.6px 1.6px at 40px 60px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 180px 30px, #CFD8E3 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 330px 95px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 470px 150px, #B9C4D2 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 90px 210px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 260px 265px, #CFD8E3 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 430px 300px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 30px 360px, #B9C4D2 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 200px 420px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 370px 470px, #CFD8E3 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 500px 400px, #FFFFFF 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 140px 500px, #B9C4D2 50%, transparent 51%);
+  opacity: 0.85;
+}
+
+.tt-content { position: relative; z-index: 1; }
+
+/* ── Type ───────────────────────────────────────────────────────────────── */
+/* `!important`, and not by choice.
+   styles/v6.css sets `font-family: var(--display) !important` on every heading
+   element site-wide. That declaration beats an ordinary rule here AND the
+   inline style on the Wordmark component, so until this was added every h1-h6
+   inside this section silently rendered in the site's display face rather than
+   the section's own: the nav brand took Bebas because it is an <a>, and the
+   poster wordmark beside it did not because it is an <h1>. A class plus an
+   element (0,1,1) outranks the bare element selector (0,0,1) at the same
+   importance, so this wins without escalating any further. */
+.tt-root h1, .tt-root h2, .tt-root h3,
+.tt-root h4, .tt-root h5, .tt-root h6 {
+  font-family: var(--tt-display) !important;
+  font-weight: 700;
+  /* Even line lengths instead of a one-word last line. Every heading here is
+     short enough to qualify: Chromium only balances blocks of six lines or
+     fewer and silently ignores the rest, so this is safe to apply broadly.
+     It was previously set inline on exactly one h2 out of the section's
+     forty-odd headings. */
+  text-wrap: balance;
+  text-transform: uppercase;   /* NeutralFace is caps-only; be explicit */
+  letter-spacing: -0.005em;
+  line-height: 0.95;
+  margin: 0;
+}
+.tt-kicker {
+  font-family: var(--tt-display);
+  font-weight: 700;
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.tt-code { font-family: var(--tt-code); font-variant-numeric: tabular-nums; }
+
+/* Body copy: no orphan on the last line. `pretty` has no line-count limit and,
+   unlike `balance`, does not try to equalise the lines, which is what you want
+   for a paragraph. Not applied to the long rules prose in Markdown.tsx, where
+   the browser's default wrapping is cheaper and looks the same. */
+.tt-root p,
+.tt-root li,
+.tt-root figcaption,
+.tt-root blockquote { text-wrap: pretty; }
+
+/* Digits that must not jitter as they change.
+   ──────────────────────────────────────────────────────────────────────────
+   This class was used in eight places and DEFINED IN NONE, so every live
+   count, price column and reference code in the section was asking for
+   tabular figures and getting whatever it inherited.
+
+   `font-variant-numeric` alone would not have saved it either. Measured in
+   this page at 40px: NeutralFace sets "111" at 68.7px and "000" at 82.9px,
+   and turning tabular-nums ON changes neither number, since the font has no
+   tabular set, so the property is a no-op and a three-digit counter shifts
+   14px as it ticks. Eina01 (69.8/69.8) and JetBrains Mono (72/72) are both
+   genuinely tabular. So the class has to change the FAMILY, not just ask.
+   This is the case `--code` exists for; see the token table in CLAUDE.md. */
+.tt-num {
+  font-family: var(--tt-code);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Optical alignment for a control with a leading icon.
+   ──────────────────────────────────────────────────────────────────────────
+   Both chips and buttons run `--tt-ctl-pad: 0 20px`, which is geometrically
+   even and looks wrong the moment a mark sits on the left: an icon's bounding
+   box carries more air than a capital does, so the pair reads as pushed right.
+   Two pixels off the icon side is the standard correction.
+
+   `:has()` rather than a modifier class, so it cannot fall out of sync with
+   the markup. It deliberately cannot reach the bar's icon-only buttons: those
+   are 44x44 inline-styled elements, neither .tt-chip nor .tt-btn, and an
+   icon-only control must stay symmetric. */
+.tt-chip:has(> svg:first-child),
+.tt-btn:has(> svg:first-child),
+.tt-btn:has(> span:first-child > svg) { padding-left: 18px; }
+
+/* Horizontal rails must not hand the swipe to the browser.
+   ──────────────────────────────────────────────────────────────────────────
+   Every one of these scrolls sideways past its own edge, and all three
+   reported `overscroll-behavior-x: auto`. On iOS and Android that means a
+   swipe that runs off the end of the rail keeps going and becomes the
+   browser's back gesture. The section this matters most for is the one where
+   the rails live: a visitor flicking through the three sport cards on the home
+   page, or the chips under the poster, gets navigated off the site, and if
+   they had already started the registration form, that is a part-filled form
+   gone. The main site already does this for `.chip-row` and `.feed-cat-scroll`
+   (v6.css); TerraThon's own rails were never given the same treatment.
+
+   `none` rather than `contain`, because there is no parent scroller here that
+   should inherit the gesture. */
+.tt-sports-grid,
+.tt-chiprail__row,
+.tt-navrail { overscroll-behavior-x: none; }
+.tt-serif { font-family: var(--tt-serif); font-style: italic; }
+/* A margin note. What makes it read as one is the rotation, the tomato ink and
+   the drop to reading size next to a 62px headline, not a novelty face. Set in
+   Eina01, the lowercase reading voice, so it costs no extra font download. */
+/* The right-hand tile of a sport card's tile · meta · tile row. It is framing,
+   not information, so it is the first thing to go when the card gets narrow;
+   below that the meta column is squeezed to two words a line.
+   A CONTAINER query, not a viewport one, and the distinction is load-bearing
+   here: the card is ~285px in the mobile rail but only ~235px at the 860px
+   three-column breakpoint, so card width does not track viewport width at all.
+   A `min-width: 420px` media query would have shown the tile on a wide phone
+   where it does not fit and hidden it on a desktop where it does.
+   Where @container is unsupported the tile simply stays hidden, which is the
+   card's own narrow layout and degrades cleanly.
+   The threshold is a CONTENT-box width, which is what tripped the first
+   attempt: `inline-size` containers measure inside the padding, so a 351px
+   card is only 315px to this query once its 16px sides and 2px rules come off.
+   Measured widths: 288/252 (phone rail), 267/232 (3-up at 880), 351/315
+   (3-up at 1280). 300 is the only value that splits those correctly. */
+/* Six of these render on the home page. The scene's ball-arc and roll loops
+   are invisible detail at 72px and would put six infinite animations on the
+   most important screen of the site for nothing. Killed here only; the
+   full-size scene on each sport page still animates. */
+/* (The `animation: none` that used to live here is gone with the animations
+   themselves: StadiumScene's arc and roll loops were removed at source, for
+   the reasons written above their keyframes. Nothing to override.) */
+
+.tt-sportcard { container-type: inline-size; }
+.tt-tile-2 { display: none; }
+@container (min-width: 300px) { .tt-tile-2 { display: block; } }
+
+/* The footer wordmark, sized down on narrow screens. `size` is a number the
+   component derives its shadow and year scale from, so it cannot take a clamp;
+   the same override the hero mark uses applies it here. 11vw puts a 320px
+   phone at ~35px, which measures ~231px and clears the 280px column. */
+.tt-foot__mark { font-size: clamp(25px, 9.2vw, 40px) !important; }
+/* And the year with it, for exactly the reason .tt-poster__mark documents: the
+   component computes the year's gap from its `size` NUMBER, so overriding the
+   font-size in CSS leaves the gap behind. At 46 that is 2.76px, under a 41px
+   cap set on a 33.8px line box, which the glyphs already overflow, so "2026"
+   printed inside the wordmark's own descender space and read as a collision. */
+.tt-foot__mark > span { margin-top: clamp(8px, 2.2vw, 12px) !important; }
+
+.tt-note {
+  font-family: var(--tt-body);
+  font-size: var(--tt-fs-body);
+  line-height: 1.3;
+  max-width: 19ch;
+  display: inline-block;
+}
+
+/* The nav's wordmark is a link to the section home and measured 165x21, the
+   text's own height, with nothing around it. `.tt-hit` already exists for this
+   (a 44px ::after overlay); it just had not been put on the brand. */
+
+/* The desk link.
+   Translucent, because it is for the handful of people running the event and
+   not for the visitor reading the footer, but still a real link with a real
+   word and a 44px target on touch. It brightens on hover and focus so it is
+   findable once you know it is there, and it never falls under the contrast
+   floor for the size it is set at. */
+.tt-adminlink {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.45;
+  font-family: var(--tt-code);
+  font-size: var(--tt-fs-meta);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 140ms ease;
+}
+.tt-adminlink:hover,
+.tt-adminlink:focus-visible { opacity: 1; text-decoration: underline; }
+@media (pointer: coarse) {
+  .tt-adminlink { min-height: 44px; }
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────────
+   One hot primary. The hard offset shadow collapses on press, so the button
+   physically moves into the page rather than fading. */
+.tt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: var(--tt-ctl-lg);
+  padding: var(--tt-ctl-pad);
+  border: 3px solid transparent;
+  border-radius: var(--tt-r-pill);
+  background: var(--tt-go);
+  color: #062B18;
+  font-family: var(--tt-display);
+  font-weight: 700;
+  font-size: var(--tt-fs-btn);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  /* No hard offset, for the same reason the cards lost theirs. A press is
+     read from the scale instead, which is the one thing that still works on
+     any ground. 0.96 exactly: below 0.95 reads as a gimmick. */
+  box-shadow: none;
+  transition-property: transform, background-color, border-color, opacity;
+  transition-duration: 140ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tt-btn:hover:not(:disabled) { transform: translateY(-2px); }
+}
+.tt-btn:active:not(:disabled) { transform: scale(0.96); }
+.tt-btn:disabled { opacity: 0.42; cursor: not-allowed; }
+
+/* The compact in-card pill. The reference's version is a flat orange lozenge
+   with no border; this one keeps AQ's ink rule and hard offset, because the
+   brief was that shape language, in our colours and on our system: a flat,
+   borderless pill would be the one element on the page not built like the
+   rest. Smaller border and offset than the full CTA so it sits inside a card
+   without competing with it. */
+.tt-btn--pill {
+  border-width: var(--tt-bw);
+  box-shadow: none;
+  letter-spacing: 0.1em;
+}
+.tt-btn--pill:active:not(:disabled) { transform: scale(0.96); }
+
+.tt-btn--ink   { background: var(--ink, #0A0A0A); color: var(--bg, #F4EFE0); }
+.tt-btn--lemon { background: var(--tt-lemon); }
+.tt-btn--sky   { background: var(--tt-sky); }
+.tt-btn--go    { background: var(--tt-go); color: #062B18; }
+/* --ghost and --quiet are the names the first build used and several surfaces
+   still carry. Same treatment, kept so a half-migrated file is never unstyled. */
+.tt-btn--plain,
+.tt-btn--ghost,
+.tt-btn--quiet {
+  /* The outline pill. Measured 1.03:1 before it took its own colour: these
+     three fill themselves with --tt-card, which the palette flip turned from
+     white into near-black, while still inheriting the base button's ink. */
+  background: transparent;
+  color: var(--tt-ink);
+  border: 3px solid var(--tt-ink);
+  min-height: 46px;
+  font-size: var(--tt-fs-btn);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tt-btn--plain:hover:not(:disabled),
+  .tt-btn--ghost:hover:not(:disabled),
+  .tt-btn--quiet:hover:not(:disabled) { background: rgba(242, 239, 227, 0.08); border-color: var(--tt-go); }
+}
+.tt-btn--plain:active:not(:disabled),
+.tt-btn--ghost:active:not(:disabled),
+.tt-btn--quiet:active:not(:disabled) { transform: scale(0.96); }
+
+/* Buttons need no slab-specific override: --ink already flipped to paper
+   above, so their borders and hard shadows come out paper automatically. The
+   one exception is the outline variant, whose fill must go transparent. */
+.tt-slab .tt-btn--plain,
+.tt-slab .tt-btn--ghost,
+.tt-slab .tt-btn--quiet { background: transparent; color: var(--bg, #F4EFE0); }
+
+/* Chips on a slab. The DEFAULT chip sits on the slab's dark card, so it keeps
+   paper text; forcing ink here painted black on #17170F and made every chip
+   in the preview harness unreadable. Only the coloured variants, which are
+   bright fills, take ink glyphs. */
+/* Colour ONLY. Restating `background` here would out-specify every
+   .tt-chip--* variant (0,2,0 beats 0,1,0) and flatten lemon, tomato and sky
+   back to the dark card, which is exactly what it did. The base .tt-chip
+   background is already var(--tt-card), and --tt-card is dark inside a slab. */
+.tt-slab .tt-chip { color: var(--bg, #F4EFE0); }
+.tt-slab .tt-chip--hot,
+.tt-slab .tt-chip--lemon,
+.tt-slab .tt-chip--sky,
+.tt-slab .tt-chip--pink,
+.tt-slab .tt-chip--grape,
+.tt-slab .tt-chip--on { background: var(--tt-ink); color: var(--tt-paper); }
+.tt-slab .tt-chip--go { color: #062B18; }
+
+/* Focus never relies on colour alone: the ring also thickens and offsets. */
+.tt-root :focus-visible {
+  outline: 3px solid var(--tt-sky-ink);
+  outline-offset: 3px;
+  border-radius: var(--tt-r-in);
+}
+.tt-slab :focus-visible { outline-color: var(--tt-lemon); }
+
+/* ── The split-flap clock ───────────────────────────────────────────────────
+   See the header of Countdown.tsx for how the four halves fit together. The
+   sizes here are the point of the whole thing: the board is the largest object
+   in the hero, because "when" is the one question a countdown answers. */
+/* min-width: 0 so the grid track can collapse, and the board below may wrap.
+   The clock is four digit pairs plus separators and sizes itself off the
+   viewport, so inside a narrower COLUMN (the schedule page puts it beside a
+   heading) it ran 636 into a 611 box. */
+.tt-clock { display: grid; gap: 14px; justify-items: center; min-width: 0; max-width: 100%; }
+.tt-clock__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.tt-clock__board {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(6px, 1.6vw, 14px);
+}
+/* The colon between groups. Two dots drawn with a border rather than a glyph,
+   so it never depends on a font's punctuation metrics lining up with digits. */
+.tt-clock__sep {
+  align-self: center;
+  margin-top: -1.1em;
+  width: 6px; height: 34px;
+  flex: 0 0 auto;
+  background:
+    radial-gradient(circle at 50% 22%, currentColor 2.6px, transparent 2.7px),
+    radial-gradient(circle at 50% 78%, currentColor 2.6px, transparent 2.7px);
+  opacity: 0.5;
+}
+
+.tt-flipcell { display: grid; gap: 9px; justify-items: center; }
+
+/* Two rows of two on a phone, rather than four groups squeezed onto one line.
+   Eight digits plus three separators cannot fit 335px of content width at a
+   size worth calling a board: laid out in one row the seconds ran off the
+   right edge. Wrapping buys each digit nearly twice the width, which is the
+   point: this is meant to be the biggest thing on the screen. The separators
+   go with it, since a colon between two stacked rows means nothing. */
+@media (max-width: 560px) {
+  .tt-clock__board { flex-wrap: wrap; max-width: 340px; gap: 14px 10px; }
+  .tt-clock__sep { display: none; }
+  .tt-flipcell { flex: 0 0 calc(50% - 5px); }
+  .tt-flip--lg { --flip-h: clamp(78px, 24vw, 124px); --flip-w: clamp(56px, 17vw, 90px); }
+}
+.tt-flipcell__digits { display: flex; gap: 4px; }
+.tt-flipcell__label {
+  font-family: var(--tt-display);
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.66;
+}
+
+.tt-flip {
+  --flip-h: clamp(52px, 13vw, 96px);
+  --flip-w: clamp(38px, 9.4vw, 70px);
+  position: relative;
+  display: block;
+  width: var(--flip-w);
+  height: var(--flip-h);
+  perspective: 320px;
+  font-family: var(--tt-code);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: calc(var(--flip-h) * 0.64);
+  line-height: 1;
+  border-radius: var(--tt-r-in);
+  background: #0A0A0A;
+  color: var(--bg, #F4EFE0);
+  box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.tt-flip--lg { --flip-h: clamp(64px, 17vw, 124px); --flip-w: clamp(46px, 12vw, 90px); }
+/* On a paper ground the card inverts, so the board still reads as a board. */
+.tt-flip--paper { background: var(--tt-paper-2); color: var(--tt-ink); }
+
+/* Four halves, each cropping the SAME full-height digit.
+   The inner element is the height of the whole card and centres its glyph; the
+   half is 50% tall with overflow hidden and anchors that inner to its own top
+   or bottom edge. So both halves show two exact pieces of one character and
+   meet on the hinge, instead of being two separately centred glyphs that never
+   quite line up. */
+.tt-flip__face,
+.tt-flip__leaf {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: inherit;
+  backface-visibility: hidden;
+}
+.tt-flip__face--top,
+.tt-flip__leaf--fall { top: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.55); }
+.tt-flip__face--bottom,
+.tt-flip__leaf--land { bottom: 0; }
+
+.tt-flip__d {
+  position: absolute;
+  left: 0; right: 0;
+  height: var(--flip-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tt-flip__face--top .tt-flip__d,
+.tt-flip__leaf--fall .tt-flip__d { top: 0; }
+.tt-flip__face--bottom .tt-flip__d,
+.tt-flip__leaf--land .tt-flip__d { bottom: 0; }
+
+.tt-flip__leaf--fall {
+  transform-origin: bottom center;
+  animation: tt-flip-fall 0.42s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+  z-index: 2;
+}
+.tt-flip__leaf--land {
+  transform-origin: top center;
+  transform: rotateX(90deg);
+  animation: tt-flip-land 0.42s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+  z-index: 2;
+}
+@keyframes tt-flip-fall {
+  0%   { transform: rotateX(0deg);   filter: brightness(1); }
+  100% { transform: rotateX(-90deg); filter: brightness(0.62); }
+}
+@keyframes tt-flip-land {
+  0%, 50% { transform: rotateX(90deg); filter: brightness(0.62); }
+  100%    { transform: rotateX(0deg);  filter: brightness(1); }
+}
+
+/* Archivo Black is a wide face carrying a lot of ink. Tracking that opened up
+   a condensed Bebas headline just pushes this one out of its box, so display
+   type tightens rather than opens. Measured, not guessed: three separate
+   elements clipped at 320px before this. */
+.tt-root h1, .tt-root h2, .tt-root h3 { letter-spacing: -0.02em; }
+
+/* ── Chips and stickers ─────────────────────────────────────────────────── */
+.tt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: var(--tt-ctl);
+  padding: var(--tt-ctl-pad);
+  border: var(--tt-bw) solid var(--ink, #0A0A0A);
+  border-radius: var(--tt-r-pill);
+  background: var(--tt-card);
+  color: var(--ink, #0A0A0A);
+  font-family: var(--tt-display);
+  font-weight: 700;
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* A chip is 35px tall, which is right under a mouse and too small for a thumb.
+   Only the ones that are actually links need to grow, and only on touch:
+   a static label chip ("2 to 4 October", "Kolkata") is not a target and
+   inflating it would just make the rail baggy. Keyed on pointer, not width,
+   because the nav rail appears at 1000px and a landscape tablet is a touch
+   device at that width. */
+@media (pointer: coarse) {
+  a.tt-chip, button.tt-chip { min-height: 44px; }
+}
+
+/* Named against the section's own paper/ink pair, not the global --ink and
+   --bg. Both of those resolve to cream inside .tt-root after the palette flip,
+   so `background: var(--ink); color: var(--bg)` was cream on cream at 1:1. */
+.tt-chip--on    { background: var(--tt-ink); color: var(--tt-paper); }
+/* Ink on every bright fill, everywhere, not just inside a slab. Measured on
+   the sport hero's timing bubble at 1.25:1 (cream on lemon) before this. */
+.tt-chip--hot   { background: var(--tt-hot);   color: #0A0A0A; }
+.tt-chip--lemon { background: var(--tt-lemon); color: #0A0A0A; }
+.tt-chip--sky   { background: var(--tt-sky);   color: #0A0A0A; }
+.tt-chip--pink  { background: var(--tt-pink); }
+.tt-chip--grape { background: var(--tt-grape); }
+.tt-chip--go    { background: var(--tt-go); color: #062B18; }
+
+/* The rotated badge slapped on a card corner. */
+.tt-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: var(--tt-bw) solid #0A0A0A;
+  border-radius: var(--tt-r-pill);
+  background: var(--tt-lemon);
+  color: #0A0A0A;
+  font-family: var(--tt-display);
+  font-weight: 700;
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: none;
+  transform: rotate(-2.5deg);
+  white-space: nowrap;
+}
+.tt-sticker--hot  { background: var(--tt-hot); }
+.tt-sticker--sky  { background: var(--tt-sky); }
+.tt-sticker--pink { background: var(--tt-pink); }
+.tt-sticker--go   { background: var(--tt-go); color: #062B18; }
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+/* Outlined, not offset.
+   The hard 5px ink shadow was the paper build's whole idea: a sticker pressed
+   onto a cream page. It cannot survive the move to night, because a black
+   offset against a black ground is not a shadow, it is nothing, and the cards
+   simply lost their edges. The poster draws its boxes the other way, as a
+   rounded orchid outline with the ground showing through, so that is what a
+   card is now. Radius goes to the outer step to match. */
+.tt-card {
+  background: var(--tt-card);
+  border: 3px solid var(--tt-line);
+  border-radius: var(--tt-r-out);
+  padding: var(--tt-sp-6);
+  box-shadow: none;
+}
+.tt-card--flat  { border-color: var(--tt-hairline); }
+.tt-card--paper { background: var(--tt-paper-2); }
+/* "Lift" used to mean a bigger offset. On night it means the outline is the
+   live one: full-strength orchid rather than the resting 55%. */
+.tt-card--lift  { border-color: var(--tt-hot); }
+.tt-card--raised { border-color: var(--tt-hot); }
+
+/* ── Cream token reset ──────────────────────────────────────────────────────
+   Any surface that is cream needs the section's tones pointed back the way
+   they were before the palette flip, because every one of them was tuned for
+   night: --ink-2 and --ink-3 are cream at low alpha, and every *-ink accent
+   partner was LIGHTENED so a hue could be read on black. On cream those are
+   the unreadable values.
+
+   This is the token half on its own, so a panel that already draws its own box
+   can take the tones without also inheriting a border and a radius it does not
+   want. `.tt-plate` is this plus the box. Measured before it existed: the hero
+   wordmark's year, set inline to var(--tomato-ink), at 2.0:1 on cream. */
+.tt-oncream,
+.tt-plate {
+  --ink: #0A0A0A;
+  --tt-ink: #0A0A0A;
+  --ink-2: #2A2A28;
+  --ink-3: #5A5A55;
+  --tt-ink-2: #2A2A28;
+  --tt-ink-3: #5A5A55;
+  --tt-muted: #5A5A55;
+  --tt-line: rgba(10, 10, 10, 0.18);
+  --tt-hairline: rgba(10, 10, 10, 0.14);
+  --tt-card: #FFFFFF;
+  --tt-paper-2: #E8E3D2;
+  --tt-danger:    #C6300F;
+  --tt-volt:      #7E6000;
+  --tt-cyan:      #0B6BB8;
+  --tt-amber:     #7E6000;
+  --tomato-ink:   #C6300F;
+  --lemon-ink:    #7E6000;
+  --sky-ink:      #0B6BB8;
+  --pink-ink:     #C4185C;
+  --grape-ink:    #6B44E8;
+  --welfare-ink:  #146F47;
+  --tt-hot-ink:   #7A2B8A;
+  --tt-go-ink:    #146F47;
+  --tt-lemon-ink: #7E6000;
+  --tt-sky-ink:   #0B6BB8;
+  --lemon:        #7E6000;
+  --tt-hot:       #7A2B8A;
+}
+
+/* ── The cream plate ────────────────────────────────────────────────────────
+   The poster's one light surface: a cream panel inside a thick orchid border,
+   carrying the lockup. On the site it does the same job for any block that has
+   to read as a different KIND of thing from the night page around it, which in
+   practice means the steps panel and the registration form.
+
+   It exists because `.tt-card--paper` does not do this any more. That class
+   fills with --tt-paper-2, which the palette flip turned from a warm cream into
+   a near-black, so a caller reaching for "the paper one" now gets another dark
+   box. Anything that genuinely wants cream asks for it by name here, and gets
+   the ink text colour with it so nothing has to remember to set both. */
+.tt-plate {
+  /* Explicit hexes, NOT var(--tt-ink) and var(--tt-paper), and this is the same
+     trap .tt-slab documents a few hundred lines up. A custom property resolves
+     at the point of use, so a rule that both READS --tt-ink and REDEFINES it on
+     the same element reads the NEW value. Writing `background: var(--tt-ink)`
+     here would have painted the plate #0A0A0A and then set #0A0A0A text on it:
+     black on black, the whole panel gone. The slab lost its hero to exactly
+     this once already. */
+  background: #F2EFE3;
+  color: #0A0A0A;
+  border: 3px solid var(--tt-hot);
+  border-radius: var(--tt-r-out);
+  padding: var(--tt-sp-6);
+}
+/* A deliberately DARK block inside the plate, for the one line that has to
+   stop the reader. It restates both colours because everything the plate set
+   above points the other way. */
+.tt-plate .tt-oncream-dark,
+.tt-oncream .tt-oncream-dark {
+  background: #0A0A0A;
+  color: #F2EFE3;
+  border-radius: var(--tt-r);
+}
+.tt-plate .tt-oncream-dark strong,
+.tt-oncream .tt-oncream-dark strong { color: var(--tt-go); }
+/* A button on the plate takes the ink treatment: green on cream measures under
+   the floor for a large fill people are meant to hit. */
+.tt-plate .tt-btn--quiet,
+.tt-oncream .tt-btn--quiet { border-color: #0A0A0A; color: #0A0A0A; }
+
+/* ── Ticket stub ────────────────────────────────────────────────────────────
+   A real perforation with punched notches. Used for the schedule rows and the
+   entry-pass page, and it is also literally what this product ships. */
+.tt-ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  background: var(--tt-card);
+  border: 3px solid var(--tt-line);
+  border-radius: var(--tt-r-out);
+  box-shadow: none;
+  overflow: hidden;
+}
+/* 104, not 88. Minus 2x12 of padding, 88 left a 64px column, and
+   "Sat, 3 Oct + Sun, 4 Oct" broke into four lines in it, which made the
+   Cricket stub half again as tall as the two either side of it and undid the
+   even rhythm the three are meant to have. */
+@media (max-width: 560px) { .tt-ticket { grid-template-columns: 104px 1fr; } }
+.tt-ticket__stub {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 16px 12px;
+  background: var(--tt-paper-2);
+  border-right: var(--tt-bw) dashed var(--ink, #0A0A0A);
+}
+.tt-ticket__body { padding: 16px 18px; min-width: 0; }
+/* Sport name and price. They share a line when there is room for both and
+   stack when there is not; see the note at the call site for the arithmetic.
+   `baseline` in row mode so the 26px name and the 16px price sit on the same
+   line rather than on the same top edge. */
+.tt-ticket__head { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+@media (min-width: 420px) {
+  .tt-ticket__head { flex-direction: row; align-items: baseline; gap: 14px; }
+  .tt-ticket__head > .tt-code { margin-left: auto; flex: 0 0 auto; }
+}
+/* The notches: paper-filled circles straddling the perforation line. */
+.tt-ticket::before,
+.tt-ticket::after {
+  content: '';
+  position: absolute;
+  left: calc(116px - 9px);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--tt-r-pill);
+  background: var(--tt-paper);
+  border: var(--tt-bw) solid var(--ink, #0A0A0A);
+}
+@media (max-width: 560px) {
+  .tt-ticket::before, .tt-ticket::after { left: calc(104px - 9px); }
+}
+.tt-ticket::before { top: -9px; }
+.tt-ticket::after  { bottom: -9px; }
+
+/* The date-of-birth verdict.
+   ──────────────────────────────────────────────────────────────────────────
+   Green when the date clears the cut-off, red when it does not. Colour is
+   never the only signal: each state has its own sentence and its own mark, so
+   it still reads on a monochrome screen and to a screen reader, which gets it
+   through aria-live. Both grounds are tinted rather than saturated so the text
+   on them clears 4.5:1 without having to fight the fill. */
+.tt-verdict {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--tt-r-in);
+  font-size: var(--tt-fs-body);
+  line-height: 1.45;
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.tt-verdict::before {
+  flex: 0 0 auto;
+  font-family: var(--tt-display);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.tt-verdict--ok {
+  background: rgba(27, 138, 90, 0.12);
+  border: 2px solid var(--welfare, #1B8A5A);
+  color: var(--welfare-ink, #146F47);
+}
+/* These two marks were '\2713' and '\2715' (a tick and a cross) written as
+   CSS escapes, and at some point the backslash-2-7 was eaten, leaving U+00B9
+   followed by a digit. They rendered as a literal superscript "¹3" / "¹5"
+   beside the message. Kept as escapes rather than the characters themselves:
+   escapes are ASCII, so no future encoding round-trip can mangle them again. */
+.tt-verdict--ok::before { content: '\2713'; }
+.tt-verdict--no {
+  background: rgba(198, 48, 15, 0.1);
+  border: 2px solid var(--tomato-ink, #C6300F);
+  color: var(--tomato-ink, #C6300F);
+}
+.tt-verdict--no::before { content: '\2715'; }
+
+/* ── The fixtures table ─────────────────────────────────────────────────────
+   A real table above 760px and a stack of cards below it. The switch is not
+   cosmetic: six columns on a 375px screen gives each about 50px, which turns
+   every venue into a column of single letters. Below the breakpoint each cell
+   grows its own label out of `data-label`, so a card still says which number is
+   the entry fee and which is the prize. */
+.tt-fixtures { margin-top: var(--tt-block); }
+.tt-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: var(--tt-fs-body);
+}
+.tt-table thead th {
+  text-align: left;
+  padding: 0 16px 6px;
+  font-family: var(--tt-display);
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tt-ink-3);
+  font-weight: 400;
+}
+.tt-table tbody tr {
+  background: var(--tt-card);
+}
+.tt-table tbody th,
+.tt-table tbody td {
+  padding: 16px;
+  text-align: left;
+  font-weight: 400;
+  border-block: var(--tt-bw) solid var(--ink, #0A0A0A);
+  vertical-align: middle;
+}
+/* The sport's own hue as a bar down the leading edge, which is what makes the
+   three rows scannable rather than three identical white bands. */
+.tt-table tbody th:first-child {
+  border-left: var(--tt-bw) solid var(--ink, #0A0A0A);
+  border-top-left-radius: var(--tt-r);
+  border-bottom-left-radius: var(--tt-r);
+  box-shadow: inset 6px 0 0 0 var(--row-accent, var(--tomato, #FF4D2E));
+  padding-left: 22px;
+}
+.tt-table tbody td:last-child {
+  /* nowrap: the action column is the narrowest, and "Sign up" broke across two
+     lines inside a pill. */
+  white-space: nowrap;
+  border-right: var(--tt-bw) solid var(--ink, #0A0A0A);
+  border-top-right-radius: var(--tt-r);
+  border-bottom-right-radius: var(--tt-r);
+  text-align: right;
+}
+.tt-table__sport { display: inline-flex; align-items: center; gap: 10px; }
+.tt-table__sport a {
+  font-family: var(--tt-display);
+  font-size: 22px;
+  text-transform: uppercase;
+  color: var(--tt-ink);
+  text-decoration: none;
+}
+.tt-table__sport a:hover { text-decoration: underline; }
+.tt-table__split {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--tt-fs-meta);
+  color: var(--tt-ink-3);
+}
+
+@media (max-width: 759px) {
+  .tt-table, .tt-table tbody, .tt-table tbody tr,
+  .tt-table tbody th, .tt-table tbody td { display: block; width: 100%; }
+  .tt-table thead { display: none; }
+  .tt-table { border-spacing: 0; }
+  .tt-table tbody tr {
+    border: var(--tt-bw) solid var(--ink, #0A0A0A);
+    border-radius: var(--tt-r);
+    box-shadow: none;
+    margin-bottom: var(--tt-sp-5);
+    overflow: hidden;
+    border-left-width: 8px;
+    border-left-color: var(--row-accent, var(--tomato, #FF4D2E));
+  }
+  .tt-table tbody th,
+  .tt-table tbody td {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 11px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    text-align: right;
+  }
+  .tt-table tbody th:first-child {
+    box-shadow: none;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--tt-hairline);
+    justify-content: flex-start;
+  }
+  .tt-table tbody td[data-label]:not([data-label=""])::before {
+    content: attr(data-label);
+    font-family: var(--tt-display);
+    font-size: var(--tt-fs-label);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--tt-ink-3);
+    text-align: left;
+  }
+  .tt-table tbody td:last-child { text-align: left; padding-top: 4px; padding-bottom: 16px; }
+  .tt-table__split { display: inline; margin-left: 6px; }
+}
+
+/* ── Forms ──────────────────────────────────────────────────────────────── */
+.tt-input, .tt-select, .tt-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 13px 15px;
+  background: var(--tt-card);
+  border: var(--tt-bw) solid var(--ink, #0A0A0A);
+  border-radius: var(--tt-r-in);
+  color: var(--ink, #0A0A0A);
+  font-family: var(--tt-body);
+  font-size: 16px;  /* 16px stops iOS Safari zooming the page on focus */
+  line-height: 1.4;
+}
+.tt-textarea { min-height: 88px; resize: vertical; }
+.tt-input::placeholder, .tt-textarea::placeholder { color: var(--tt-ink-3); }
+/* The raw fills fail as a focus indicator against --tt-paper: --tt-sky measures
+   ~2.2:1 and --tt-hot ~2.9:1, both under the 3:1 minimum for a non-text UI
+   indicator. Swapped for their text-safe *-ink partners, which are already the
+   only legal way to put these hues on glyphs against paper (see the --tt-*-ink
+   note above): --tt-sky-ink measures ~4.8:1 and --tt-hot-ink ~4.77:1 on
+   --tt-paper, both clearing 3:1 with room to spare, while keeping the section's
+   hard-offset shadow instead of falling back to a generic outline ring. */
+.tt-input:focus, .tt-select:focus, .tt-textarea:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 0 var(--tt-sky-ink);
+}
+.tt-input[aria-invalid='true'] { box-shadow: 4px 4px 0 0 var(--tt-hot-ink); }
+
+.tt-label {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--tt-display);
+  font-weight: 700;
+  font-size: var(--tt-fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tt-help { margin: 7px 0 0; font-size: var(--tt-fs-label); color: var(--tt-ink-3); }
+.tt-err  { margin: 7px 0 0; font-size: var(--tt-fs-label); font-weight: 600; color: var(--tt-hot-ink); }
+
+/* 26px box, 44px tap target via padding. */
+.tt-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 9px 0;
+  cursor: pointer;
+  font-size: var(--tt-fs-body);
+  line-height: 1.5;
+}
+.tt-check input {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border: var(--tt-bw) solid var(--ink, #0A0A0A);
+  border-radius: var(--tt-r-in);
+  background: var(--tt-card);
+  cursor: pointer;
+  position: relative;
+  transition: background-color 120ms ease;
+}
+.tt-check input:checked { background: var(--tt-go); }
+/* The tick is always in the box, hidden rather than absent, so it can ease in
+   with the fill instead of appearing after it. Scale/opacity/blur, not a
+   visibility toggle. */
+.tt-check input::after {
+  content: '';
+  position: absolute;
+  left: 8px; top: 3px;
+  width: 6px; height: 12px;
+  border: solid #FFFFFF;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg) scale(0.25);
+  transform-origin: center;
+  opacity: 0;
+  filter: blur(4px);
+  transition-property: transform, opacity, filter;
+  transition-duration: 140ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.tt-check input:checked::after {
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+  filter: blur(0px);
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+/* Expand a small control's touch target to 44px WITHOUT changing how it looks.
+   The desk is run one-handed on a phone at a gate, and a 25px copy button or an
+   18px expander is a miss waiting to happen. Its own controls had drifted under
+   the same rule: the two filter rows sat at 36px and 40px, disagreeing with
+   each other as well as with --tt-ctl, and the row actions at 38px. All of them
+   take the token now, because 44 is the number this section already decided on
+   and the desk is the surface with the least margin for a missed tap. The checkboxes do not need this:
+   their <label> wrapper already carries 9px of vertical padding around a 26px
+   box, so the effective target is 44px and the whole label is clickable. */
+.tt-hit { position: relative; }
+.tt-hit::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/* Link lists sit at their type size under a mouse, where a 22px row is right,
+   and open up to a 44px target on a touch screen. Gated on pointer: coarse
+   rather than a width breakpoint: a 1024px tablet needs the bigger target too.
+   The gap shrinks as the rows grow so the block's overall height barely moves,
+   so don't reintroduce an inline `gap` on these; it out-specifies the query. */
+/* `align-content: start` is load-bearing, not tidiness. These sit side by side
+   in a flex row, so both columns get stretched to the taller one's height, and
+   a grid's default `align-content: normal` then stretches its ROWS to fill the
+   extra space. The footer's 3-link column was inflating its rows to 56px while
+   the 4-link column stayed at 44px, so the two lists visibly failed to line up
+   with each other. */
+.tt-linklist { display: grid; gap: 10px; align-content: start; }
+.tt-linklist > a { display: inline-flex; align-items: center; }
+@media (pointer: coarse) {
+  .tt-linklist { gap: 2px; }
+  .tt-linklist > a { min-height: 44px; }
+}
+
+.tt-wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--tt-sp-5); }
+@media (min-width: 900px) { .tt-wrap { padding: 0 var(--tt-sp-8); } }
+
+/* ── Section rhythm ─────────────────────────────────────────────────────────
+   One class instead of a hand-written paddingTop on every <section>. Those
+   literals ran 44, 56, 64, 76 with no reason for the differences, which is
+   what "inconsistent spacing" actually looks like in a diff. */
+/* The vertical frame a page stands in.
+   ──────────────────────────────────────────────────────────────────────────
+   Before this there were sixteen hand-picked vertical values across the
+   section and not one of them was on the scale: page tops ran 0, 20, 26, 48,
+   56, 64, 70 and 80; page bottoms ran 10, 60, 80, 90, 96 and 100; the rhythm
+   between sections was 22 here, 32 there and 36 on the sport pages. Every page
+   was internally tidy and no two agreed, which is what "inconsistent spacing"
+   looks like when you measure it instead of squinting at it.
+
+   Two tokens now carry all of it: --tt-section between pages and major
+   sections, --tt-block between blocks inside one. */
+.tt-page { padding-block: var(--tt-section); }
+
+.tt-sec      { padding-block: var(--tt-section); }
+.tt-sec--top { padding-block: var(--tt-section) 0; }
+.tt-sec--tight { padding-block: var(--tt-block); }
+
+.tt-sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* A hard rule between sections, the way an editorial page breaks. */
+.tt-rule { border: 0; border-top: var(--tt-bw) solid var(--ink, #0A0A0A); margin: 0; }
+
+/* Sticky mobile CTA, above the iOS home indicator. */
+.tt-sticky {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 40;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--tt-paper) 64%, transparent);
+}
+@media (min-width: 900px) { .tt-sticky { display: none; } }
+
+/* Reserve the bar's own height at the bottom of the page.
+   Without this the last 76px of the document can never be read: scrolled all
+   the way down on a sport page, the footer's bottom edge lands exactly at the
+   viewport bottom and the fixed bar sits on top of it, permanently hiding the
+   line that says where the entry fees go. There is no scroll left to escape
+   with. `:has()` keeps it tied to the bar actually being rendered, so the
+   pages without one do not grow a mystery gap. */
+@media (max-width: 899px) {
+  .tt-root:has(.tt-sticky) .tt-content {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
+
+/* The marquee's rules are gone with the marquee itself; see the note at its
+   old call site in Home.tsx for why. Its reduced-motion override went too. */
+
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────
+   Everything non-essential stops. The countdown keeps updating, it just stops
+   pulsing, and the confetti degrades to a single painted burst in JS. */
+@media (prefers-reduced-motion: reduce) {
+  .tt-root *,
+  .tt-root *::before,
+  .tt-root *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tt-float { display: none; }
+}
+
+/* ── The rules dialog ────────────────────────────────────────────────────
+   A real <dialog> opened with showModal(), so Esc, the focus trap and
+   inertness behind it come from the browser rather than from us. Only the
+   skin is here. */
+.tt-dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(78vh, 720px);
+  padding: 0;
+  border: 2px solid var(--tt-ink);
+  border-radius: 22px;
+  background: var(--tt-paper);
+  color: var(--tt-text);
+  box-shadow: 8px 8px 0 0 var(--tt-ink);
+  overflow: hidden;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.tt-dialog[open] { display: grid; }
+.tt-dialog::backdrop { background: rgba(10, 10, 10, 0.55); }
+
+.tt-dialog__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--tt-ink);
+  background: var(--tt-ink);
+  color: var(--tt-night-ink);
+}
+.tt-dialog__head h2 { margin: 0; font-size: 24px; text-transform: uppercase; }
+
+.tt-dialog__x {
+  width: var(--tt-ctl); height: var(--tt-ctl);
+  flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: none; border: 2px solid currentColor; border-radius: 999px;
+  color: inherit; cursor: pointer;
+  transition-property: transform, background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.tt-dialog__x:hover { background: var(--tt-hot); border-color: var(--tt-hot); }
+/* Every other control in the section presses at 0.96. This one is the most
+   visually button-shaped thing on the dialog and was the only one that did
+   not move, which reads as a dead control on a touch screen where there is
+   no hover to fall back on. */
+.tt-dialog__x:active { transform: scale(0.96); }
+
+/* The only scrolling region, so the head and foot stay put. */
+.tt-dialog__body { overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
+
+.tt-dialog__kicker {
+  margin: 0 0 10px;
+  font-family: var(--tt-mono); font-size: var(--tt-fs-label); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--tt-muted);
+}
+.tt-dialog__kicker:not(:first-child) { margin-top: 22px; }
+
+.tt-dialog__list {
+  margin: 0; padding-left: 20px;
+  display: grid; gap: 9px;
+  font-size: var(--tt-fs-body); line-height: 1.6;
+}
+
+.tt-dialog__foot {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;
+  padding: 14px 18px;
+  border-top: 2px solid var(--tt-ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tt-dialog[open] { animation: tt-dialog-in 180ms cubic-bezier(0.2, 0, 0, 1); }
+}
+@keyframes tt-dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* A button that has to read as a link, because it sits mid-sentence inside a
+   consent line. It opens a dialog rather than navigating, so <button> is the
+   honest element; everything here is undoing the UA button styling that would
+   otherwise break the sentence it lives in. */
+.tt-inlinebtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--tt-cyan);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.tt-inlinebtn:hover { color: var(--tt-hot); }
+/* On a cream surface the section's lightened accents are the unreadable ones.
+   Measured: the register form's "event rules" link at 2.45:1 in --tt-hot. */
+.tt-plate .tt-inlinebtn,
+.tt-oncream .tt-inlinebtn,
+.tt-plate .tt-inlinebtn:hover,
+.tt-oncream .tt-inlinebtn:hover { color: #7A2B8A; }
+
+
+/* ── Narrow widths, last word ───────────────────────────────────────────────
+   At the END of the file on purpose. An earlier copy of this block sat above
+   `@media (max-width: 560px) { .tt-ticket { grid-template-columns: 104px 1fr } }`
+   and lost to it: same specificity, later rule wins, and both match at 320.
+   The measured symptoms were the stub at 298 in a 275 box and the fee column
+   at 97 in a 75 one.
+
+   Everything here is measured, not precautionary. Archivo Black is far wider
+   than the Bebas these boxes were fitted to, so the boxes give way rather than
+   the type shrinking under a readable size. */
+@media (max-width: 430px) {
+  .tt-ticket { grid-template-columns: 74px 1fr; }
+  .tt-ticket__head,
+  .tt-ticket__body { min-width: 0; }
+  /* More specific than the min-width rule further up that puts this row back
+     to `row` with the fee pushed right; both match at 320 and this needs to
+     win. Measured 176 in a 155 before it did. */
+  .tt-ticket .tt-ticket__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+  .tt-ticket .tt-ticket__head > .tt-code { margin-left: 0; }
+  /* The stub's head stacks at this width, so its min-content is its widest
+     child rather than the row. A sport name is one word and was measuring 176
+     in a 165 column. */
+  .tt-ticket .tt-ticket__head > * { min-width: 0; overflow-wrap: anywhere; }
+  /* A price is one token, and `.tt-code` sets `white-space: nowrap` so it can
+     never break. At 320 that turned "Rs 2,400 / team" into 97px of text in a
+     75px flex item, clipped. Scoping this to .tt-ticket and .tt-sportcard was
+     not enough: the weekend stubs put the same class in a bare flex DIV. Below
+     380 a digit column may wrap rather than be cut off. */
+  .tt-root .tt-code { white-space: normal; overflow-wrap: anywhere; }
+  /* The flip clock is the exception: its cards are fixed boxes, one glyph
+     each, and wrapping inside one would break the card. */
+  .tt-root .tt-flip,
+  .tt-root .tt-flip * { white-space: nowrap; }
+  /* The flip card is a fixed box holding one glyph, and Archivo Black's digits
+     are wider than the Bebas the box was sized for: measured 49 in a 46. The
+     glyph comes down rather than the card growing, because four cards plus
+     their separators already fill the row at 320. */
+  /* Widen the CARD, do not shrink the digit. Its width floor was 38px and a
+     JetBrains digit at the matching height measured 40, so the card clipped by
+     2px at every phone width. Shrinking the type to fit a box that is simply
+     too narrow is the wrong trade on the one element whose entire job is to be
+     read at a glance. The height floor comes up with it so the card keeps its
+     proportion. */
+  /* The digit is sized as a RATIO of the card height (0.64 in the base rule),
+     so chasing the card's width never converges: raise the width and the
+     height clamp raises the glyph with it. The ratio comes down instead, which
+     is the only term that decouples them. */
+  .tt-flip    { min-width: 0; --flip-w: clamp(48px, 12vw, 70px);  --flip-h: clamp(60px, 15vw, 96px); font-size: calc(var(--flip-h) * 0.54); }
+  .tt-flip__face, .tt-flip__leaf { font-size: inherit; }
+
+  /* A button's min-content is its longest word PLUS its padding, and neither
+     shrinks on its own. Measured at 320: the page's big "Register Now" call to
+     action carried 48px of side padding at 20px type and came out 340 wide in
+     a 320 column, and the contact button's "WhatsApp Pratyaksh . 98305 54654"
+     did the same. The padding comes in and the label may break. */
+  .tt-root .tt-btn {
+    max-width: 100%;
+    padding-inline: 16px;
+    /* break-word, not anywhere: `anywhere` splits a word even when shrinking
+       would have fitted it, which turned a "CRICKET" label into "CRICKE T". */
+    overflow-wrap: break-word;
+  }
+  .tt-flip--lg{ min-width: 0; --flip-w: clamp(50px, 13vw, 90px);  --flip-h: clamp(68px, 18vw, 124px); }
+  .tt-flip { letter-spacing: -0.03em; }
+
+  /* A card whose row cannot shrink pushes past its own edge. The contact rows
+     measured 309 in a 275 card, because a name and a phone number sat in one
+     unshrinkable flex line. Long tokens may break, and children may shrink.
+
+     `min-width: 0` on the card itself matters as much as on its children: a
+     grid or flex ITEM defaults to a min-width of auto, which is its own
+     min-content, so a card sitting in a track will refuse to go narrower than
+     its longest line no matter what the track says. The sport pages' fact
+     strip measured 340 inside a 320 column for exactly that reason. */
+  .tt-card,
+  .tt-card > * { min-width: 0; }
+  .tt-card { overflow-wrap: anywhere; }
+
+  /* 283 in a 280. Three pixels, but it clips the last glyph of a heading. */
+  .tt-root h1 { font-size: clamp(26px, 8.4vw, 64px); }
+}
+
+/* The register form's sport cards are a three-up grid of equal columns, so the
+   longest label decides whether any of them fit. Measured at 1280: the button
+   ran 161 inside a 157 track. The label wraps rather than the track growing,
+   because the three have to stay the same width to read as one control. */
+.tt-sportpick__btn {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ══ POSTER PRIMITIVES ══════════════════════════════════════════════════════
+   Added 2026-09-21 for the rebuild against the approved canvas. Five shapes
+   account for nearly every block on those boards, and before this each page
+   reimplemented them in its own scoped <style>, which is how six agents
+   working in parallel produced six slightly different section headings.
+
+   Use these. Do not hand-roll a sixth. */
+
+/* The green Bungee line that sits above a heading. On the boards it is always
+   short, always uppercase, and always the thing that says what KIND of block
+   is coming. */
+.tt-kick {
+  display: block;
+  font-family: var(--tt-poster);
+  font-size: clamp(var(--tt-fs-meta), 1.5vw, 15px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tt-go);
+}
+
+/* A section heading at poster scale. Archivo Black is wide, so this clamps
+   hard at the bottom: measured at 320px, anything with a floor above 30px
+   clipped inside a 280px column. */
+.tt-h1-poster { font-size: clamp(34px, 8.4vw, 92px); line-height: 0.9; letter-spacing: -0.04em; }
+.tt-h2-poster { font-size: clamp(28px, 5.4vw, 54px); line-height: 0.95; letter-spacing: -0.035em; }
+
+/* The Bungee second voice: a lockup's sub-line, a sport name on a card. */
+.tt-poster-line {
+  font-family: var(--tt-poster);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+/* The ENTRY / PRIZE POOL pair. Two of these sit side by side under a sport,
+   the second usually tinted green because the pot is the happier number. */
+.tt-stat {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: var(--tt-r-in);
+  background: rgba(242, 239, 227, 0.08);
+}
+.tt-stat--go { background: rgba(36, 203, 126, 0.14); }
+.tt-stat__k {
+  display: block;
+  font-size: var(--tt-fs-meta);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tt-ink-3);
+}
+.tt-stat--go .tt-stat__k { color: var(--tt-go-ink); }
+.tt-stat__v {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--tt-code);
+  /* The family alone does not switch the feature on. These two sit side by
+     side as Entry and Prize pool, so their digits have to share a column. */
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(19px, 2.2vw, 26px);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.tt-stat--go .tt-stat__v { color: var(--tt-go); }
+
+/* The vertical rhythm of a board: one value, used between every section. */
+.tt-band { padding-block: clamp(44px, 6vw, 84px); }
+.tt-band--tight { padding-block: clamp(28px, 4vw, 52px); }
+
+/* The nav's text links, as the approved board draws them: four uppercase
+   words, no chrome, the current one in green. They replaced a chip per sport,
+   which duplicated the cards one screen below and made the bar read as a
+   filter row. */
+.tt-navlink {
+  /* A 40px target. 10px of padding around a 12.5px line came to 37, and these
+     are tapped on a tablet where the rail is visible from 760px up. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-family: var(--tt-display);
+  font-size: var(--tt-fs-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tt-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0 2px;
+  transition-property: color;
+  transition-duration: 160ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.tt-navlink:hover { color: var(--tt-ink); }
+.tt-navlink.is-on { color: var(--tt-go); }
+.tt-navlink:focus-visible { outline: 3px solid var(--tt-go); outline-offset: 3px; border-radius: 6px; }
+
+/* A page wrapper used as a grid must let its tracks collapse.
+   Several pages render `<div className="tt-wrap" style={{display:'grid'}}>`
+   as the page column. A grid ITEM defaults to `min-width: auto`, meaning its
+   own min-content, so one long line anywhere inside a section pushed the
+   implicit track wider than the wrapper itself: measured on the sport pages at
+   320px, the track resolved to 340.375px inside a 280px content box and 40px
+   of every card sat outside the screen. The wrapper could not clip it either,
+   because the overflow is on .tt-root.
+
+   `minmax(0, 1fr)` on the implicit track plus `min-width: 0` on the children
+   is the pair that fixes it. Neither alone is enough. */
+.tt-root .tt-wrap {
+  min-width: 0;
+  grid-auto-columns: minmax(0, 1fr);
+}
+.tt-root .tt-wrap > * { min-width: 0; }

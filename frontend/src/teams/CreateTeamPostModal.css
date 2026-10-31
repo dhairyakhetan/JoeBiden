@@ -1,0 +1,183 @@
+/* ── CreateTeamPostModal (2026-09-12) ────────────────────────────────────────
+   WHY THIS FILE EXISTS
+
+   This modal was styled entirely in Tailwind utilities - `space-y-4`,
+   `sm:max-h-[60vh]`, `overflow-y-auto`, `border-gray-200`, `rounded-lg`,
+   `flex-col-reverse`, `w-full`, `text-gray-500` - and Tailwind IS NOT IN THE
+   MAIN BUNDLE. It moved to `paradox/tailwind.css`, imported only by the lazily
+   mounted ParadoxRoot. Verified against the built output: `index-*.css`
+   contains no `.grid`, `.space-y-4`, `.overflow-y-auto` or `.rounded-lg` rule
+   at all.
+
+   So NOTHING here was styled. The scroll area had no max height and no
+   scrolling, the member list had no border and no bounded height, the footer
+   never reversed on phones, and the buttons were never full width. On a long
+   roster the list simply grew until the modal ran off the screen.
+
+   `components/Modal.tsx` already documents this exact failure mode, and
+   `auth/SettingsPage.tsx` was a second instance fixed in the same pass. This
+   was the third, and it was the worst of them because the whole component
+   depended on it.
+
+   The palette is the project's tokens, not Tailwind's greys. `text-gray-500`
+   and `border-gray-200` were never on-brand even when they rendered - the
+   equivalents here are `--ink-3` and `--hair`.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.ctp-shell { display: flex; flex-direction: column; }
+
+/* The scroll area. The height cap is what keeps the fixed footer reachable:
+   without it a team with 60 members pushed Cancel/Create off the viewport. */
+.ctp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+@media (min-width: 640px) {
+  .ctp-body { max-height: 60vh; }
+}
+
+.ctp-error {
+  padding: 12px;
+  border: 1px solid var(--tomato);
+  border-radius: var(--r-tight);
+  background: color-mix(in srgb, var(--tomato) 10%, var(--card));
+  color: var(--ink);
+  font-family: var(--eina);
+  font-size: 13.5px;
+}
+
+.ctp-select {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: var(--hair-2, 1px solid rgba(10, 10, 10, 0.18));
+  border-radius: var(--r-tight);
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--eina);
+  font-size: 15px;
+}
+
+.ctp-tag-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.ctp-caption {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+.ctp-selectall {
+  background: none;
+  border: none;
+  cursor: pointer;
+  /* 44px of hit area without 44px of visual weight - the negative margin pulls
+     the padding back out of the layout, same trick as .aqc-meta-btn. */
+  padding: 12px 8px;
+  margin: -12px -8px;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--welfare-ink, var(--ink));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ctp-search { margin-bottom: 8px; }
+
+.ctp-list {
+  max-height: 128px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  border: var(--hair-2, 1px solid rgba(10, 10, 10, 0.18));
+  border-radius: var(--r-tight);
+  background: var(--card);
+}
+@media (min-width: 640px) {
+  .ctp-list { max-height: 192px; }
+}
+
+.ctp-empty {
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.ctp-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  min-height: 48px;
+  cursor: pointer;
+  border-bottom: var(--hair);
+}
+.ctp-row:last-child { border-bottom: none; }
+.ctp-row:hover { background: var(--bg-2); }
+
+.ctp-check { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--welfare-ink, var(--ink)); }
+
+.ctp-row-main { flex: 1 1 auto; min-width: 0; }
+.ctp-name {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ctp-role {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 12px;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The role label is shown ONCE. It used to render twice - as a line under the
+   name and again as a pill - with both hidden below 640px, so a phone user saw
+   no role at all and a desktop user saw it twice. */
+.ctp-role { display: none; }
+@media (min-width: 640px) {
+  .ctp-role { display: block; }
+}
+
+.ctp-foot {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: var(--hair);
+}
+@media (min-width: 640px) {
+  .ctp-foot {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
+.ctp-foot > * { width: 100%; }
+@media (min-width: 640px) {
+  .ctp-foot > * { width: auto; }
+}

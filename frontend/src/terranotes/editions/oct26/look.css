@@ -1,0 +1,44 @@
+/* October 2026's look, "Pujo" (src/editions/oct26/look.js), in bright festival colours: a ribbon down both sides of the
+   page (hibiscus red, a marigold thread, an aqua thread) over sunny cream paper with a faint two-colour alpana dot
+   pattern (pink dots, aqua dots between). Only this edition's pages get it (html / the shadow host carry
+   data-edition="oct26": lib/edition.js); loaded through src/editions/pages.js EDITION_CSS, on the pages with
+   class="page-sheet". The pages set their background inline, so these use !important. The ribbon colours are written
+   out here: a gradient stop can't be tidied into the look's variables without the stripes changing in older editions. */
+html[data-edition="oct26"] .page-sheet,:host([data-edition="oct26"]) .page-sheet{
+  --b:8px;
+  background-image:linear-gradient(to right,#F0214A 0 var(--b),#FFC914 var(--b) calc(var(--b) + 2px),#18C7B8 calc(var(--b) + 2px) calc(var(--b) + 4px),transparent calc(var(--b) + 4px) calc(100% - var(--b) - 4px),#18C7B8 calc(100% - var(--b) - 4px) calc(100% - var(--b) - 2px),#FFC914 calc(100% - var(--b) - 2px) calc(100% - var(--b)),#F0214A calc(100% - var(--b))),radial-gradient(circle,rgba(240,33,74,.13) 0 2px,transparent 2.5px),radial-gradient(circle,rgba(24,199,184,.2) 0 2px,transparent 2.5px) !important;
+  background-size:auto,28px 28px,28px 28px !important;
+  background-position:0 0,0 0,14px 14px !important;
+  background-repeat:no-repeat,repeat,repeat !important;
+}
+html[data-edition="oct26"] .web .page-sheet,:host([data-edition="oct26"]) .web .page-sheet{
+  --b:26px;
+  background-image:linear-gradient(to right,#F0214A 0 var(--b),#FFC914 var(--b) calc(var(--b) + 4px),#18C7B8 calc(var(--b) + 4px) calc(var(--b) + 8px),transparent calc(var(--b) + 8px) calc(100% - var(--b) - 8px),#18C7B8 calc(100% - var(--b) - 8px) calc(100% - var(--b) - 4px),#FFC914 calc(100% - var(--b) - 4px) calc(100% - var(--b)),#F0214A calc(100% - var(--b))),radial-gradient(circle,rgba(240,33,74,.12) 0 2.5px,transparent 3px),radial-gradient(circle,rgba(24,199,184,.2) 0 2.5px,transparent 3px) !important;
+  background-size:auto,36px 36px,36px 36px !important;
+  background-position:0 0,0 0,18px 18px !important;
+}
+
+/* the home page's decorations move a little (Decor.jsx, class .dz: stopped by reduced motion, LITE and page changes in
+   styles/loops.css, paused off screen by shared/EditionDecor.jsx). translate / rotate / scale only, so their tilt stays. */
+.oct-leaf{transform-box:fill-box;transform-origin:50% 0;animation:oct-leaf 3.4s ease-in-out infinite alternate}
+@keyframes oct-leaf{from{rotate:-7deg}to{rotate:7deg}}
+.oct-tag{transform-origin:50% 0;animation:oct-tag 4.2s ease-in-out infinite alternate}
+@keyframes oct-tag{from{rotate:-3deg}to{rotate:3deg}}
+.oct-petal{animation:oct-petal 9.6s linear infinite}
+@keyframes oct-petal{0%{translate:0 0;rotate:0deg;opacity:0}6%{opacity:.9}25%{translate:16px 110px}50%{translate:-10px 220px;opacity:.8}70%,100%{translate:12px 320px;rotate:300deg;opacity:0}}
+.oct-twinkle{animation:oct-twinkle 2.6s ease-in-out infinite alternate}
+@keyframes oct-twinkle{from{scale:.65;rotate:-12deg;opacity:.7}to{scale:1.1;rotate:12deg;opacity:1}}
+
+/* the festive touches from the design brief (src/editions/oct26/festive/), slow and small: a hanging diya swings on its
+   thread and its flame flickers (Diya.jsx); the dhunuchi's smoke drifts up (Dhunuchi.jsx); the dhakis' arms beat out of
+   step and their drums bounce (DhakPlayers.jsx, SVG animations of its own). Class dz: stopped by reduced motion and
+   LITE (styles/loops.css). */
+.oct-diya-sway{animation:oct-diya-sway 4.6s ease-in-out infinite alternate}
+@keyframes oct-diya-sway{from{rotate:-3.5deg}to{rotate:3.5deg}}
+.oct-flame{transform-box:fill-box;transform-origin:50% 100%;animation:oct-flame .9s ease-in-out infinite alternate}
+@keyframes oct-flame{from{scale:.9 .94;opacity:.85}to{scale:1.06 1.05;opacity:1}}
+.oct-wisp{animation:oct-wisp 4.2s ease-in-out infinite}
+@keyframes oct-wisp{0%{translate:0 4px;opacity:0}30%{opacity:.9}100%{translate:3px -10px;opacity:0}}
+/* Rozha One's capitals are tall: headings set at 0.95 line height touch, so this edition spaces them a little more
+   (the shared components multiply their heading leading by --head-lead; other editions leave it at 1) */
+html[data-edition="oct26"],:host([data-edition="oct26"]){--head-lead:1.06}

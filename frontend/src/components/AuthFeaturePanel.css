@@ -1,0 +1,105 @@
+/* The seeded auth art panel — changelog/07-auth-and-contact.md §07.2.
+   No gradient anywhere on this surface (§07.3). No new hex: every colour
+   below resolves from styles/tokens.css. */
+
+/* The frame is the cream ground the panel floats on; 10px of it makes the
+   panel's 22px radius concentric with the shell's 32px (DESIGN.md §1). */
+.aq-authart-frame {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+.aq-authart {
+  --aq-authart-hue: var(--welfare);
+  position: relative;
+  height: 100%;
+  min-height: 320px;
+  box-sizing: border-box;
+  background: var(--aq-authart-hue);
+  border-radius: var(--r-inner);   /* 22 — the radius scale, no exception */
+  overflow: hidden;
+  padding: clamp(20px, 3vw, 32px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(12px, 2vw, 24px);
+}
+
+/* §07.2: the die-cut keyline on each sticker is the colour of what it lies
+   on — here, the panel hue, which changes per composition. `Sticker` paints
+   that edge as the one stroked path in its shape SVG. */
+.aq-authart .aq-sticker-svg > path[stroke] {
+  stroke: var(--aq-authart-hue);
+}
+
+/* ── the sticker pair ── its own grid row, so nothing decorative can enter
+   the box of the mascot or the kicker (README's overlap rule). */
+.aq-authart-stickers {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+.aq-authart-stickers > * { flex: 0 0 auto; }
+
+/* ── the mascot ── */
+.aq-authart-stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+/* ── ghost letters ── `AQ` at 900 52px in rgba(10,10,10,.12). Decoration:
+   aria-hidden by the panel root, and inert to the pointer. */
+.aq-authart-ghost {
+  position: absolute;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgba(10, 10, 10, 0.12);
+  pointer-events: none;
+  user-select: none;
+}
+/* Placed in the panel's middle band rather than hard into a corner: the
+   corners already belong to the sticker row and the foot row, and the
+   overlap rule wants decoration out of their boxes, not layered on them. */
+.aq-authart-ghost--tl { top: 34%;    left: 16px; }
+.aq-authart-ghost--tr { top: 34%;    right: 16px; }
+.aq-authart-ghost--bl { bottom: 24%; left: 16px; }
+.aq-authart-ghost--br { bottom: 24%; right: 16px; }
+
+/* ── the foot: kicker + the composition index, so a screenshot is
+   reproducible (§07.2 verification #7). Ink on all seven hues passes. */
+.aq-authart-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-width: 0;
+}
+.aq-authart-kicker,
+.aq-authart-index {
+  font-family: var(--mono);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.aq-authart-kicker { font-size: 11px; }
+.aq-authart-index  { font-size: 9.5px; }
+
+/* ── compact (mobile top strip) ── */
+.aq-authart--compact {
+  min-height: 0;
+  padding: 18px;
+  gap: 10px;
+}
+.aq-authart--compact .aq-authart-kicker { font-size: 10px; }

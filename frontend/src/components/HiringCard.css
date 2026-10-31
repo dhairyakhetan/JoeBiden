@@ -1,0 +1,40 @@
+/* "We're hiring" card for job_opening posts, in the rounded-minimal language of the home rail's open-roles hero
+   (home.css .rail-role.is-hero): category fill with ink text, soft lift, no ink border, no tilt, one corner disc.
+   The earlier version was a rotated ticket with a 3px ink border and a hard offset shadow. */
+.hiring-card {
+  position: relative; display: block; overflow: hidden; text-decoration: none; color: var(--ink);
+  padding: 16px 18px 15px;
+  border-radius: var(--r-inner);
+  background: var(--rc, var(--welfare));
+  box-shadow: var(--lift-1);
+  transition: box-shadow .16s var(--ease-out), transform .16s var(--ease-out);
+}
+.hiring-card::after {
+  content: ""; position: absolute; right: -34px; bottom: -40px; width: 120px; height: 120px;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.10); pointer-events: none;
+}
+.hiring-card:hover { box-shadow: var(--lift-3); transform: translateY(-2px); }
+.hiring-card:active { transform: scale(0.98); }
+.hiring-card:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+.hiring-card > * { position: relative; z-index: 1; }
+.hiring-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.hiring-card-kicker {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+  background: var(--ink); color: var(--bg); padding: 3px 10px; border-radius: var(--r-pill);
+}
+.hiring-card-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: rgba(10,10,10,0.66); }
+.hiring-card-title {
+  margin: 0; font-size: clamp(17px, 2.4vw, 20px); line-height: 1.12; letter-spacing: -0.02em;
+  max-width: 82%;
+}
+.hiring-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.hiring-card-meta { font-size: 11px; font-weight: 600; color: rgba(10,10,10,0.66); }
+.hiring-card-go {
+  font-size: 13px; font-weight: 800; background: var(--ink); color: var(--bg);
+  padding: 7px 14px; border-radius: var(--r-pill); white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hiring-card { transition: none; }
+  .hiring-card:hover, .hiring-card:active { transform: none; }
+}

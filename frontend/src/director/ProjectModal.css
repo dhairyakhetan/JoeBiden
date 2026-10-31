@@ -1,0 +1,263 @@
+/* Extracted from ProjectModal.tsx's inline <style> block(s) (Phase 1.3). */
+
+        .pm-overlay {
+          position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(4px);
+          z-index: 1000; display: flex; align-items: center; justify-content: center;
+          padding: 16px;
+        }
+        /* HoD desk shell - the brutalist panel recipe (same as `.admin .card`):
+           white surface, 3px ink border, hard offset shadow, 20px radius.
+           overflow stays hidden here (unlike `.card`) because the sidebar /
+           body columns must clip to the rounded shell. */
+        .pm-modal {
+          background: var(--hod-surface-1);
+          border: var(--hod-border-w) solid var(--hod-border);
+          border-radius: var(--hod-radius); width: 100%; max-width: 840px;
+          max-height: 92vh; display: flex; overflow: hidden;
+          box-shadow: var(--hod-shadow);
+        }
+        .pm-sidebar {
+          width: 224px; flex-shrink: 0;
+          padding: 20px 16px; border-right: var(--hod-border-w) solid var(--hod-border);
+          display: flex; flex-direction: column;
+          background: var(--hod-bg); overflow-y: auto;
+        }
+        .pm-label {
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.1em;
+          color: var(--ink-3); user-select: none;
+        }
+        .pm-req { color: var(--welfare-ink); font-weight: 700; }
+        .pm-hint { font-family: var(--sans); font-size: 11.5px; line-height: 1.45; color: var(--ink-3); }
+        .pm-err { font-family: var(--sans); font-size: 11.5px; font-weight: 600; color: var(--hod-danger); }
+        .pm-input-error { border-color: var(--hod-danger) !important; }
+        .pm-spinner { width: 18px; height: 18px; border: 2px solid var(--line-2); border-top-color: var(--welfare); border-radius: 50%; animation: pmspin 0.7s linear infinite; }
+        @keyframes pmspin { to { transform: rotate(360deg); } }
+        .pm-img-ok { position: absolute; top: 8px; right: 8px; z-index: 2; font-family: var(--mono); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); background: var(--welfare); padding: 3px 7px; border-radius: 999px; }
+        /* live mini preview - a small brutalist panel floating on the
+           sidebar's tinted background: 2px ink border + hard offset shadow.
+           Top stripe (functional, not decorative) picks up the project's own
+           category color. */
+        .pm-preview {
+          border: var(--hod-border-w) solid var(--hod-border); border-top: 4px solid var(--accent, var(--welfare));
+          border-radius: var(--hod-radius-sm); overflow: hidden; background: var(--hod-surface-1);
+          box-shadow: var(--lift-1);   /* was 3px 3px 0 0 - the desk takes soft lifts, not hard offsets */
+        }
+        .pm-preview-img { position: relative; aspect-ratio: 16/10; background: var(--bg-3); display: flex; align-items: center; justify-content: center; }
+        .pm-preview-img img { width: 100%; height: 100%; object-fit: cover; display: block; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
+        .pm-preview-noimg { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+        .pm-preview-tag { position: absolute; top: 8px; left: 8px; font-family: var(--mono); font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); padding: 3px 7px; border-radius: 999px; }
+        .pm-preview-body { padding: 9px 11px 11px; }
+        .pm-preview-title { font-family: var(--display); font-weight: 800; font-size: 13px; line-height: 1.2; color: var(--ink); word-break: break-word; text-wrap: balance; }
+        .pm-preview-loc { font-size: 10.5px; color: var(--ink-3); margin-top: 3px; }
+        /* readiness - same brutalist mini-panel treatment as the preview card
+           above, so the sidebar reads as two stamped panels on the tinted
+           sidebar, drawn with the same pen. */
+        .pm-ready { background: var(--hod-surface-1); border: var(--hod-border-w) solid var(--hod-border); border-radius: var(--hod-radius-sm); padding: 12px; box-shadow: var(--lift-1); }
+        .pm-ready-head { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin-bottom: 8px; }
+        .pm-ready-bar { height: 5px; border-radius: 3px; background: var(--line-2); overflow: hidden; margin-bottom: 10px; }
+        /* Progress fill is full-width and scaled by --pct (set inline in
+           ProjectModal.tsx) rather than having its `width` animated — width is a
+           layout property and this bar updates on every keystroke in the form. */
+        .pm-ready-bar span { display: block; width: 100%; height: 100%; border-radius: 3px; transform-origin: left center; transform: scaleX(var(--pct, 0)); transition: transform 0.3s var(--ease-out); }
+        .pm-ready-list { display: flex; flex-direction: column; gap: 4px; }
+        .pm-ready-item { display: flex; align-items: center; gap: 7px; font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
+        .pm-ready-item.done { color: var(--ink); }
+        .pm-ready-tick { width: 14px; text-align: center; color: var(--ink-3); }
+        .pm-ready-item.done .pm-ready-tick { color: var(--welfare-ink); font-weight: 700; }
+        /* tab content dot */
+        .pm-tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--welfare); margin-left: auto; flex-shrink: 0; }
+        .pm-mobile-ready { margin-left: auto; align-self: center; font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--ink-3); white-space: nowrap; padding-left: 12px; font-variant-numeric: tabular-nums; }
+        .pm-footer-status { margin-right: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+        .pm-tab {
+          display: flex; align-items: center; gap: 10px; min-height: 40px;
+          background: none; border: 1.5px solid transparent; cursor: pointer;
+          padding: 10px 12px; border-radius: var(--r-tight);
+          font-family: var(--sans); font-size: 13px; font-weight: 600;
+          color: var(--ink-2); text-align: left;
+          transition: background 0.12s, color 0.12s, border-color 0.12s;
+        }
+        .pm-tab:hover { background: var(--card); border-color: var(--ink); color: var(--ink); }
+        /* Solid ink fill - the brutalist desk's active-state convention
+           (same as .adm-pill.is-active). */
+        .pm-tab-active, .pm-tab-active:hover {
+          background: var(--hod-ink); border-color: var(--hod-ink); color: var(--hod-surface-1);
+          box-shadow: none;
+        }
+        .pm-tab-active .pm-tab-dot { background: var(--hod-surface-1); }
+        .pm-toggle {
+          display: flex; align-items: center; gap: 7px; cursor: pointer; min-height: 40px;
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2);
+          user-select: none;
+        }
+        /* Visually hidden but still focusable and still in the accessibility
+           tree. `display: none` removed the real checkbox from the tab order
+           entirely, so publish and feature could not be operated by keyboard
+           or announced by a screen reader. */
+        .pm-toggle input {
+          position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+          overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+          white-space: nowrap; border: 0;
+        }
+        .pm-toggle input:focus-visible + .pm-toggle-dot {
+          outline: 3px solid var(--ink); outline-offset: 2px;
+        }
+        .pm-toggle-dot {
+          width: 32px; height: 18px; border-radius: 9px;
+          background: var(--line-2); position: relative;
+          transition: background 0.15s;
+        }
+        .pm-toggle-dot::after {
+          content: ''; position: absolute; top: 2px; left: 2px;
+          width: 14px; height: 14px; border-radius: 7px;
+          background: #fff; transition: transform 0.15s;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .pm-toggle input:checked + .pm-toggle-dot { background: var(--tc, var(--welfare)); }
+        .pm-toggle input:checked + .pm-toggle-dot::after { transform: translateX(14px); }
+        .pm-body {
+          flex: 1; min-height: 0; overflow-y: auto; padding: 28px 28px 20px;
+          -webkit-overflow-scrolling: touch;
+        }
+        .pm-grid {
+          display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+        }
+        .pm-span-2 { grid-column: span 2; }
+        .pm-field { display: flex; flex-direction: column; gap: 6px; }
+        /* Surface / border / radius come from the desk's shared `.admin .input`
+           rule (3px ink border, brutalist) - this only sets the modal's own
+           type scale and padding. The old soft 1.5px/line-2 overrides that
+           fought that rule with !important are gone. */
+        .pm-input {
+          font-size: 14px !important;
+          padding: 10px 14px !important;
+        }
+        /* `.pm-obj-chip` now lives in ProjectManager.css - that sheet is always
+           loaded (this one only mounts with the modal), and the manager's
+           objective filter row needs the chip styling before any modal opens. */
+        /* Progressive-disclosure reveal - opens a tab's optional fields. */
+        .pm-adv-toggle {
+          display: inline-flex; align-items: center; gap: 9px; width: fit-content;
+          background: none; border: none; cursor: pointer; text-align: left;
+          font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+          color: var(--ink-3); padding: 8px 2px; min-height: 40px;
+          transition: color .12s, transform .1s var(--ease-out);
+        }
+        .pm-adv-toggle:hover { color: var(--ink); }
+        .pm-adv-toggle:active { transform: scale(0.98); }
+        .pm-adv-chev {
+          display: inline-grid; place-items: center; flex-shrink: 0;
+          width: 22px; height: 22px; border-radius: 7px;
+          background: var(--bg-2); border: var(--hod-border-w) solid var(--hod-border);
+          font-size: 11px; color: var(--ink-2);
+          transition: transform .18s var(--ease-out), border-color .12s;
+        }
+        .pm-adv-toggle:hover .pm-adv-chev { border-color: var(--ink); }
+        .pm-adv-open .pm-adv-chev { transform: rotate(180deg); }
+        .pm-footer {
+          padding: 14px 28px; border-top: var(--hod-border-w) solid var(--hod-border);
+          display: flex; justify-content: flex-end; gap: 10px;
+          background: var(--hod-surface-1);
+        }
+        /* .pm-ghost-btn lives in the outer ProjectManager component's own
+           <style> tag (always mounted) - a single source of truth instead of
+           two competing copies fighting over DOM order. */
+        .pm-img-btn {
+          background: rgba(255,255,255,0.15); backdrop-filter: blur(6px);
+          border: 1px solid rgba(255,255,255,0.2); border-radius: var(--r-tight);
+          padding: 5px 12px; cursor: pointer;
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.06em;
+          color: #fff; transition: background 0.15s;
+        }
+        .pm-img-btn:hover { background: rgba(255,255,255,0.25); }
+        /* Unified with the rest of the desk's destructive-action color
+           (#c0341f, matching adm-badge-danger) - was a lighter, unrelated
+           coral (#ff6b6b) that didn't match delete/reject actions anywhere
+           else on the HoD desk. Border/hover kept a touch more opaque than
+           the flat-card convention since this button sits on a blurred
+           glass overlay atop an arbitrary photo, not a plain surface. */
+        .pm-img-btn-danger { color: var(--hod-danger); border-color: color-mix(in srgb, var(--hod-danger) 50%, transparent); background: rgba(255,255,255,0.55); }
+        .pm-img-btn-danger:hover { background: color-mix(in srgb, var(--hod-danger) 25%, transparent); color: #fff; }
+        .pm-mobile-tabs {
+          display: none; padding: 0 20px;
+          border-bottom: var(--hod-border-w) solid var(--hod-border);
+          gap: 0; overflow-x: auto; overscroll-behavior-x: contain;
+        }
+        .pm-mtab {
+          background: none; border: none; cursor: pointer; min-height: 44px;
+          padding: 14px 14px 12px; font-family: var(--sans);
+          font-size: 13px; font-weight: 600; color: var(--ink-3);
+          border-bottom: 2px solid transparent;
+          white-space: nowrap; transition: color 0.12s;
+          display: inline-flex; align-items: center; gap: 6px;
+        }
+        .pm-mtab-active { color: var(--welfare-ink); border-bottom-color: var(--welfare); }
+        /* Top bar - close lives here so the dialog is always dismissable (no header before). */
+        .pm-topbar {
+          display: flex; align-items: center; justify-content: flex-end;
+          padding: 12px 14px 12px 20px; flex-shrink: 0;
+        }
+        .pm-topbar-title { display: none; font-family: var(--display); font-weight: 800; font-size: 15px; color: var(--ink); margin-right: auto; }
+        /* Same recipe as the desk's shared `.iconbtn` (3px ink border). */
+        .pm-close {
+          width: 40px; height: 40px; flex-shrink: 0; border-radius: var(--hod-radius-sm);
+          border: var(--hod-border-w) solid var(--hod-border); background: var(--hod-surface-1);
+          color: var(--hod-ink); font-size: 15px; cursor: pointer;
+          display: grid; place-items: center;
+          transition: color .15s, background .15s, transform .1s var(--ease-out);
+        }
+        .pm-close:hover { color: var(--hod-ink); background: var(--hod-surface-2); transform: translate(-1px, -1px); }
+        .pm-close:active { transform: scale(0.96); }
+        /* Mobile-only publish controls (sidebar toggles are hidden on mobile). */
+        .pm-mobile-controls { display: none; }
+        .pm-tab:active, .pm-mtab:active, .pm-ghost-btn:active { transform: scale(0.97); }
+        @media (max-width: 700px) {
+          /* Bottom sheet: rises from the bottom, rounded top, dodges the keyboard
+             far better than a vertically-centred dialog. */
+          .pm-overlay { align-items: flex-end; padding: 0; }
+          .pm-modal {
+            flex-direction: column; max-height: 92dvh; max-width: 100%;
+            border-radius: var(--r-outer) var(--r-outer) 0 0; border-bottom: none;
+            animation: pm-sheet-up .26s var(--ease-out);
+          }
+          .pm-sidebar { display: none; }
+          .pm-mobile-tabs { display: flex; }
+          .pm-topbar-title { display: block; }
+          .pm-mobile-controls {
+            display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+            padding: 10px 18px; border-bottom: 1px solid var(--line-2);
+          }
+          .pm-grid { grid-template-columns: 1fr; }
+          .pm-span-2 { grid-column: span 1; }
+          .pm-body { padding: 18px 18px 16px; }
+          /* 16px inputs stop iOS auto-zooming the whole page on focus. */
+          .pm-input { font-size: 16px !important; }
+          .pm-footer {
+            padding: 12px 18px; padding-bottom: max(12px, env(safe-area-inset-bottom));
+            flex-wrap: wrap; gap: 8px;
+          }
+          .pm-footer-status { display: none; }
+          .pm-footer .pm-ghost-btn { min-height: 44px; }
+          .pm-footer .btn.accent { flex: 1; min-height: 44px; }
+        }
+        /* Phone: a true full-screen sheet, matching `.adm-sheet`'s phone rule
+           in director.css - an 11-field form with image uploads has no business
+           being a 92dvh partial sheet with a scrim strip above it. */
+        @media (max-width: 600px) {
+          .pm-overlay { padding: 0; align-items: stretch; }
+          .pm-modal {
+            height: 100dvh; max-height: 100dvh; width: 100%; max-width: none;
+            border-radius: 0; border-left: none; border-right: none; border-top: none;
+            box-shadow: none;
+          }
+          .pm-topbar { position: sticky; top: 0; z-index: 3; background: var(--hod-surface-1); }
+          .pm-footer { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+          .pm-close, .pm-mtab, .pm-toggle { min-height: 44px; }
+          .pm-close { width: 44px; height: 44px; }
+        }
+        @keyframes pm-sheet-up { from { transform: translateY(28px); } to { transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .pm-modal { animation: none; } }
+      

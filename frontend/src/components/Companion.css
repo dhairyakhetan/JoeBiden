@@ -1,0 +1,203 @@
+/* The companion - changelog/18-mascots-and-motion.md §18.1/§18.3.
+   Position (the transform) is driven entirely by Companion.tsx via direct
+   style writes on discrete events (a 45s ambient tick, a pointermove past
+   the follow dead-zone, a tap) - the same "one writer per CSS property"
+   split the design doc calls for. Everything else here - the resting slot,
+   the bone, the dismiss control - is plain CSS.
+
+   18.3, "one shared requestAnimationFrame loop": this file's motion needs
+   NONE at all. Both the ambient drift and the follow-mode trail only ever
+   ease toward one newly-chosen point at a time, picked on a discrete event,
+   not a target that changes every frame - exactly what a CSS `transition`
+   already interpolates on the compositor thread for free. AQFooter.tsx's
+   parallax is the one motion in this app that genuinely needs a per-frame
+   loop (it re-lerps toward a continuously-moving pointer/gyro reading every
+   frame while active) and it is left exactly as it was - already verified,
+   already self-stopping on visibilitychange/out-of-view. So the companion
+   adds zero additional loops: the app still has exactly the one rAF loop it
+   had before this file, not three. */
+
+.aq-companion-root {
+  /* 13.1: `--sticker-ground` is the colour of whatever the sticker LIES ON,
+     not the sticker's own. The companion is `position: fixed` over the cream
+     page, so its die-cut seal's keyline is `var(--bg)`. It was hard-coded to
+     `var(--ink)` — an ink keyline drawn across cream, which reads as a stray
+     rule rather than a cut edge. (The footer wall's `.aq-wall-seal` keeps
+     `var(--ink)`: that one genuinely lies on the ink footer.) Host surfaces
+     that are not the cream page should override this property. */
+  --sticker-ground: var(--bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Below the nav (.aq-nav, z-index: 50 in v6.css) and everything heavier -
+     drawers (140), modal-back (150), lightbox (180), the mega menu / toast
+     stack (200), aqm-back (210), sheet.css (900/901). The lowest of the
+     "must stay under" set is the nav itself, so anything under 50 clears
+     all of them. */
+  z-index: 40;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 0.2s ease;
+}
+
+/* prefers-reduced-motion: a fixed resting spot, no JS transform at all. */
+.aq-companion-static {
+  right: 16px;
+  bottom: 16px;
+  left: auto;
+  top: auto;
+}
+@media (max-width: 760px) {
+  .aq-companion-static {
+    bottom: calc(74px + env(safe-area-inset-bottom) + 10px);
+    right: 10px;
+  }
+}
+
+.aq-companion-body {
+  position: relative;
+  display: inline-block;
+  pointer-events: auto;
+}
+
+.aq-companion-x {
+  /* DESIGN.md §2: hit targets >= 44x44. The BOX is now genuinely 44x44 -
+     transparent, borderless, no background of its own - and the visible 20px
+     disc is drawn by `::before` behind the glyph. The previous pass tried to
+     buy the hit area with a transparent `::before { inset: -12px }` on a
+     20x20 button; that does expand the real pointer target, but the element
+     still MEASURES 20x20 (`getBoundingClientRect` ignores pseudo-elements),
+     so every audit - human or scripted - reads it as a 20px target and there
+     is nothing in the DOM to prove otherwise. Making the button itself the
+     44px box is the same hit area with none of the ambiguity.
+     The hard offset `box-shadow: 1.5px 1.5px 0 var(--ink)` is also gone: this
+     is neither a `.btn-primary` nor a sticker, and hard offsets are retired
+     everywhere else. */
+  position: absolute;
+  top: -18px;
+  right: 0; /* was -18px: the 44px box stuck 4px past the viewport edge at >=768px */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+/* The visible 20px disc. Kept at 20px so it does not swamp the 44px companion
+   it hangs off - only the invisible target grew. */
+.aq-companion-x::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: var(--card, #fff);
+  box-shadow: var(--lift-1);
+  z-index: -1;
+}
+.aq-companion-body:hover .aq-companion-x,
+.aq-companion-body:focus-within .aq-companion-x {
+  opacity: 1;
+}
+.aq-companion-x:hover { transform: scale(1.1); }
+/* Touch has no hover to reveal it on - show it faintly rather than hide the
+   only dismiss affordance behind a gesture that input can't make. */
+@media (hover: none) {
+  .aq-companion-x { opacity: 0.85; }
+}
+
+.aq-companion-bone {
+  position: absolute;
+  right: 100%;
+  bottom: -2px;
+  margin-right: 2px;
+  pointer-events: auto;
+  cursor: grab;
+  filter: drop-shadow(1.5px 2px 3px rgba(0, 0, 0, 0.25));
+  transition: opacity 0.15s ease;
+}
+.aq-companion-bone:active { cursor: grabbing; }
+/* Mid-drag: the disc token stays put at home and fades - only the ghost
+   (portalled, see Companion.tsx) travels with the cursor. */
+.aq-companion-bone.is-dragging { opacity: 0.18; }
+
+/* The drag ghost: JUST the bone glyph, no disc/badge chrome around it -
+   "just the bone should follow around with my cursor, not the circle". Fixed
+   to the viewport and centred on the live pointer position via left/top (set
+   inline per-move) rather than a translate, so it never has to fight the
+   companion root's own transform for a containing block. */
+.aq-companion-bone-ghost {
+  position: fixed;
+  z-index: 45;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
+  pointer-events: none;
+  filter: drop-shadow(1.5px 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+/* The plate: where the bone goes back.
+   Taking the bone used to be a one-way door - the follow flag was written and
+   nothing cleared it, so the only way to stop the mascot following was to
+   dismiss it outright. This sits in the same slot the bone vacated, so the
+   affordance appears exactly where the one it replaces disappeared from. */
+/* The home corner once follow mode is active: the plate plus, underneath it,
+   the "reach out to us" WhatsApp CTA - it fills the empty space the mascot
+   left behind rather than leaving it blank. */
+.aq-companion-home {
+  position: absolute;
+  right: 100%;
+  bottom: -2px;
+  margin-right: 2px;
+}
+
+.aq-companion-cta {
+  position: absolute;
+  right: -6px;
+  bottom: -8px;
+  width: 72px;
+  height: 66px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  border-radius: var(--r-inner, 22px);
+  background: var(--welfare, #1B8A5A);
+  box-shadow: var(--lift-2, 0 2px 10px rgba(0, 0, 0, 0.18));
+  pointer-events: auto;
+  text-decoration: none;
+}
+.aq-companion-cta-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--paper, #F7F3E8);
+  white-space: nowrap;
+}
+
+.aq-companion-plate {
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(1.5px 2px 3px rgba(0, 0, 0, 0.25));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Belt-and-suspenders: Companion.tsx already renders the static variant
+     under reduced motion and never writes a transition/transform in that
+     branch, but a stray inline transition from a mid-flight animation must
+     not survive a live preference toggle either. */
+  .aq-companion-root { transition: none !important; }
+}

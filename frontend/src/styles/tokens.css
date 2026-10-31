@@ -1,0 +1,598 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AQUATERRA - DESIGN TOKENS (single source of truth)
+   Phase 1 (token unification): every design token - palette,
+   category hues, theme overrides, fonts, radii, elevation,
+   spacing, bridges - is consolidated here. Imported FIRST in
+   main.tsx, before v6.css (class layer) and index.css.
+   The competing aq-design-system.css :root (wrong category
+   hues: events=orange, labs=purple, content=rust) has been
+   deleted; THIS file's hex palette is authoritative.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+  /* PALETTE - paper/beige light theme as default */
+  --bg: #F4EFE0;
+  --bg-2: #EDE6D0;
+  --bg-3: #E2D9BD;
+  --ink: #0A0A0A;
+  --ink-2: #2A2A28;
+  --ink-3: #5A5A55;
+  --line: rgba(0,0,0,0.18);
+  --line-2: rgba(0,0,0,0.32);
+  --card: #FFFFFF;
+  --paper: #F4EFE0;
+  --paper-ink: #0A0A0A;
+
+  /* paper-bold palette accent colours */
+  --pink:   #FF4D8C;
+  --lemon:  #FFC700;
+  --tomato: #FF4D2E;
+  /* Accessible danger/error red — clears WCAG AA (4.5:1) on --card, unlike the
+     ad-hoc #e05c5c (~3.5:1) it replaces. --danger-tint backs error badges. */
+  --danger: #C4231A;
+  --danger-tint: color-mix(in srgb, var(--danger) 13%, transparent);
+  --sky:    #3DA9FC;
+  --grape:  #7E5BFF;
+
+  /* category colors - one hue per vertical, never reused (design audit P0: "category colour collapse") */
+  --c-events:  #3DA9FC;
+  --c-welfare: #1B8A5A;
+  --c-labs:    #FFC700;
+  --c-ops:     #12909C;
+  --c-content: #7E5BFF;
+  /* Unprefixed aliases so handoff-prototype markup (which uses var(--events),
+     var(--welfare), var(--teal), …) ports 1:1 without resolving to empty. */
+  --events:  var(--c-events);
+  --welfare: var(--c-welfare);
+  --labs:    var(--c-labs);
+  --ops:     var(--c-ops);
+  --content: var(--c-content);
+  --teal:    #12909C;
+
+  /* ── Text-safe partners for the accent hues ──────────────────────────────
+     The display hues above are tuned to be FILLS with --ink sitting on top,
+     which is how they're used almost everywhere and is correct. Several of
+     them fail WCAG AA the other way round — as the text colour on a light
+     ground:
+        --welfare #1B8A5A  4.35:1 on --card   (needs 4.5)
+        --grape   #7E5BFF  4.33:1
+        --tomato  #FF4D2E  3.31:1
+        --pink    #FF4D8C  3.14:1
+        --sky     #3DA9FC  2.54:1
+        --lemon   #FFC700  1.61:1
+     Each *-ink below is the same hue darkened until it clears 4.5:1 on BOTH
+     light grounds (--card #FFFFFF and the paper --bg #F4EFE0). Reach for these
+     whenever the hue carries the glyphs; keep the display hue for fills,
+     borders, and large display type (>=24px, which only needs 3:1). */
+  --welfare-ink: #146F47;  /* 6.18:1 on --card · 5.38:1 on --bg */
+  --tomato-ink:  #C6300F;  /* 5.45:1 · 4.74:1 */
+  --grape-ink:   #6B44E8;  /* 5.81:1 · 5.05:1 */
+  --pink-ink:    #C4185C;  /* 5.71:1 · 4.97:1 */
+  --sky-ink:     #0B6BB8;  /* 5.52:1 · 4.80:1 */
+  --lemon-ink:   #7E6000;  /* 5.92:1 · 5.15:1 */
+  --accent-ink:  var(--welfare-ink);
+  /* --teal/--ops #12909C had no text-safe partner at all (3.82:1 on --card,
+     3.32:1 on --bg — fails both). --teal-ink is the same hue darkened until it
+     clears AA on BOTH light grounds; measured 5.97:1 on --card · 5.20:1 on
+     --bg. --ops-ink mirrors the --ops/--teal fill aliasing above. */
+  --teal-ink:    #0E6E77;  /* 5.97:1 on --card · 5.20:1 on --bg */
+  --ops-ink:     var(--teal-ink);
+  /* Ink partners for the three category aliases that share a hue with a
+     paper-bold accent, so `var(--events)` text has the same one-token swap the
+     other hues do. Mapping follows the --c-* definitions above, not intuition:
+       --events  = --c-events  #3DA9FC = --sky    → --sky-ink
+       --labs    = --c-labs    #FFC700 = --lemon  → --lemon-ink
+       --content = --c-content #7E5BFF = --grape  → --grape-ink
+     (--welfare already has --welfare-ink; --ops is covered by --ops-ink.) */
+  --events-ink:  var(--sky-ink);
+  --labs-ink:    var(--lemon-ink);
+  --content-ink: var(--grape-ink);
+
+  /* bridge aliases */
+  --txt:     #0A0A0A;
+  --txt-2:   #2A2A28;
+  --txt-3:   #5A5A55;
+  --txt-4:   #5A5A55;
+  --bg-card: #FFFFFF;
+
+  --display: 'NeutralFace', system-ui, sans-serif;
+  --sans:    'NeutralFace', system-ui, sans-serif;
+  --eina:    'Eina01', 'NeutralFace', system-ui, sans-serif;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+
+  /* ── --mono and --code, 2026-09-18 ────────────────────────────────────────
+     `--mono` used to be JetBrains Mono. It is now NeutralFace, so the label
+     voice across the site is one family instead of two. This is safe for the
+     overwhelming majority of its call sites because they were already
+     `text-transform: uppercase` kickers, counts and chips: measured live
+     across 13 routes, 329 of 401 elements carrying --mono already rendered as
+     capitals.
+
+     NeutralFace has two properties that decide where it can NOT go, both
+     measured, not assumed:
+
+       · It is CAPS-ONLY. Its lowercase glyphs are drawn as capitals, so
+         "handwriting" and "HANDWRITING" set to the same 751px at 100px
+         (ratio 1.000; Eina01 gives 563 vs 733 for the same pair). Lowercase
+         text pointed at --mono therefore reads as SHOUTED, and a literal path
+         like /login reads as /LOGIN, which is a different URL.
+       · It has NO tabular figures. Under `font-variant-numeric: tabular-nums`
+         "111" measures 172px and "000" measures 207px, i.e. the feature is a
+         no-op. JetBrains Mono sets both at 180px. So a digit column pointed at
+         --mono no longer aligns as the numbers change.
+
+     `--code` is JetBrains Mono kept under a name that says what it is for:
+     digit columns that must align, and literal machine text (paths, URLs,
+     hex values, keycaps, slugs, code samples). Reach for --code when the
+     glyphs ARE the content; reach for --mono when it is a label. */
+  --mono: 'NeutralFace', system-ui, sans-serif;
+  --code: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ── Radius scale, redesign 2026-09 ───────────────────────────────────────
+     The changelog's step 01.1 reads "add --r-sm/--r-md/--r-lg", but all three
+     names were already live at 6 / 14 / 22. They are REDEFINED here rather
+     than added, which is the plan's stated end state ("Replaces the old
+     6 / 14 / 22"). Only 30 call sites read these vars; the rest of the app
+     hardcodes radii and is migrated per section.
+     --r stays as an alias of --r-md so its 25 consumers move with the scale. */
+  /* SET per rounded-minimalism 00.1, which collapses this three-rung scale onto
+     the 32/22/14 spine rather than letting a second scale coexist with it:
+       --r-sm -> --r-tight (14), --r (== --r-md) -> --r-inner (22),
+       --r-lg -> --r-outer (32).
+     The prior values (20/28/40) were a fourth scale that 00.1 forbids
+     ("Do not introduce a fourth structural value"), and were the reason cards,
+     inputs and photo media still rendered at pre-redesign radii. */
+  --r-sm:  var(--r-tight);
+  --r-md:  var(--r-inner);
+  --r-lg:  var(--r-outer);
+  --r:     var(--r-md);
+  --r-pill: 999px;
+  /* 00.1: `--r-photo: 22px` is an alias of --r-inner. --r-card is not named by
+     00.1 (it postdates the spec's baseline) but is the outer card radius for
+     .card/.feed-card/.rail-card/.post-card, so it collapses onto --r-outer.
+     Concentricity: outer 32 − --pad-card 10 = inner 22 − --pad-inner 8 = 14. */
+  --r-card: var(--r-outer);
+  --r-photo: var(--r-inner);
+
+  /* ── Canonical elevation - ONE hard-offset shadow system ──────────────────
+     Per the Design Audit (P0: "unify border weights & shadows"): every raised
+     surface uses these ink-offset tokens on the 2/4/6/8 scale, pressed = 1px,
+     and exactly ONE soft blur (--sh-soft) reserved for overlays/modals. Never
+     mix a hard offset with a soft blur on the same element. The neubrutalist
+     public surface uses --sh-*; the flat `.admin` HoD desk re-tokens these to
+     its shade-based --hod-shadow-* inside its own scope (unchanged here). */
+  --sh-sm:      1.5px 1.5px 0 0 var(--ink);
+  /* SET per 00.2: the hard offset survives only on .btn-primary and .sticker,
+     and tightens there. 3->2, 4->3, 5.5->4. Definitions are KEPT (00.2 says
+     not to delete them); their call sites are what get removed. */
+  --sh:         2px 2px 0 0 var(--ink);   /* default resting card/button */
+  --sh-lg:      3px 3px 0 0 var(--ink);   /* hover-lifted state */
+  --sh-xl:      4px 4px 0 0 var(--ink);   /* modals, mega surfaces */
+  --sh-pressed: 1px 1px 0 0 var(--ink);   /* active/pressed */
+  --sh-soft:    0 10px 30px -10px rgba(0,0,0,0.3); /* overlays only */
+  /* Rounded-minimalism 00.2: hairlines, the new default edge. Ink at low
+     alpha, never a colour. */
+  --hair:      1px solid rgba(10,10,10,0.08);   /* dividers inside a card */
+  --hair-2:    1px solid rgba(10,10,10,0.12);   /* a card's own outer edge */
+  --hair-3:    1px solid rgba(10,10,10,0.18);   /* an input's edge, and the only hairline that may darken on focus */
+  /* Lifts - depth from stacking, never from outline. */
+  --lift-1: 0 1px 2px rgba(10,10,10,0.04), 0 2px 8px -2px rgba(10,10,10,0.06);
+  --lift-2: 0 1px 2px rgba(10,10,10,0.04), 0 3px 12px -4px rgba(10,10,10,0.08);
+  --lift-3: 0 2px 4px rgba(10,10,10,0.05), 0 12px 32px -12px rgba(10,10,10,0.14);
+  --lift-4: 0 4px 8px rgba(10,10,10,0.06), 0 24px 56px -20px rgba(10,10,10,0.18);
+  --bd:         1px solid rgba(10,10,10,0.12); /* SET 2px solid ink -> hairline (00.2); most-consumed border token in the app - expect a large visual delta, that is intended */
+  --bd-hero:    2px solid var(--ink);     /* SET 3px -> 2px (00.2); survives as the ink border, but only .btn-primary and .sticker may use it now */
+  --bd-ink:     2px solid var(--ink);     /* explicit name for the two surfaces that keep ink (00.2) */
+  /* ADD (02.7): a hairline for paper-on-ink grounds (the footer). --hair is
+     ink-on-light and unusable on a dark surface. */
+  --hair-inv:   1px solid rgba(244,239,224,0.14);
+
+  /* ── Redesign 2026-09 additions ───────────────────────────────────────────
+     --shadow-cta is the changelog's single remaining hard offset: primary
+     CTAs, stickers and ONE hero card per screen. Everything else goes flat
+     with a 2px ink border. */
+  --shadow-cta: 1.5px 1.5px 0 0 rgba(10,10,10,.5);
+  /* The changelog names var(--rust) and var(--paper-dark) for the error and
+     offline toasts but its own ground rule forbids adding colours. Both are
+     therefore ALIASES of live tokens, not new hues:
+       --rust       = --danger #C4231A, the palette's only red that clears
+                      4.5:1 (as a fill, carrying --paper text, 5.8:1).
+                      --tomato #FF4D2E was rejected: 3.31:1 fails AA.
+       --paper-dark = --bg-3 #E2D9BD, the existing darker paper step. */
+  --rust:       var(--danger);
+  --paper-dark: var(--bg-3);
+  /* changelog/11-system-states.md §11.10 names var(--danger-ink) for field-
+     error message text ("--danger-ink for the text, never --danger, which is
+     a fill") at #C6300F, 6.7:1 on cream - the same hex that already exists
+     under a different name, --tomato-ink.
+
+     2026-09-07 CORRECTION: that alias was a mis-alias. --tomato-ink #C6300F is
+     LIGHTER than --danger #C4231A itself, so the "partner" measured WORSE than
+     its own fill everywhere it was used (on the desk's danger badge tint:
+     --danger-ink 3.81:1 vs --danger 4.05:1; on --card 5.48 vs 5.83; on --bg
+     4.77 vs 5.07). A partner lighter than its own fill is not a partner.
+     --danger is already text-safe on both light grounds, so --danger-ink now
+     aliases --danger. Still an alias, still no new colour. (The ink-ground
+     error state keeps using --danger-lift; see below.) */
+  --danger-ink: var(--danger);
+
+  /* changelog/07-auth-and-contact.md §07.0 - the ONE genuinely new colour in
+     the whole redesign (everything else above is an alias of an existing
+     hue). --danger #C4231A measures 4.1:1 on --ink and fails AA; every red
+     already in the palette (--tomato, --tomato-ink) was tuned for a LIGHT
+     ground and also fails on ink, so there was no live token to alias this
+     time. --danger-lift is --danger lightened until it clears AA on ink:
+     #FF6B4D measures 5.2:1 on --ink. It backs the `.aq-field--on-ink` error
+     state ONLY (styles/v6.css §07.0) - a field on a cream/white ground keeps
+     using --tomato-ink (6.7:1) exactly as before. */
+  --danger-lift: #FF6B4D;
+
+  /* ── The poster system, sections 29 / 31 / 32 ─────────────────────────────
+     House style. The eight rules, so they sit beside the values that serve
+     them and nobody has to open the changelog to find out what a token is for:
+
+       1. Paper is the PAGE, not a slab. A --poster-gutter shows paper between
+          every card in a stream.
+       2. Two radii and no others: --r-md (28px) on slabs, --r-pill (999px) on
+          bars. A slab is content; a bar is a label, a chant or one action.
+          2a. A list row carrying two or more lines is a SLAB even when it
+              navigates. A capsule tall enough for two lines loses about a
+              third of its width to the end caps.
+          2b. Physical-object chrome (the phone bezel, onboarding's taped-clip
+              caps) is exempt. Nothing else is.
+          2c. The gutter is for infinite mixed STREAMS only. A paged flow takes
+              the radii and the keyline but not the gutter, and a missing
+              gutter there is not a missed pass.
+       3. Ink is an accent, never the page. At most two --ink slabs per screen.
+       4. One sticker per slab, at an edge, rotated, 2px ink border plus the
+          --keyline double ring so it reads as stuck on rather than cut out.
+       5. Hue bands carry display type only; anything under 24px moves to paper
+          or white.
+          5a. THE PINK BRANCH, measured: ink on #C4185C (--pink-ink) is 3.42:1
+              at ANY size, paper on it is 5.03:1, white 5.78:1. Every other
+              palette hue clears 4.5:1 with ink at 9px (sky 7.81, tomato 5.99,
+              teal 5.18, grape 4.55, welfare 4.55, lemon well clear). The
+              branch belongs in the component: read --on-<fill> below, never
+              hand-write the exception at a call site. It was reintroduced four
+              times in one session by patching instances.
+       6. Photos are concentric: --r-card 26 with an 8px inset gives --r-photo 18.
+       7. A photo belongs to the row it sits in. Empty main_image, no photo.
+       8. Copy is never trimmed to fit. If a frozen string does not fit its
+          slab, the slab is the wrong size.
+
+     The desk exception (section 32): the 17 HoD desks take the radius pair and
+     --keyline and NOTHING else. Chrome is brutalist, data is legible. */
+
+  /* Rule 1. Paper showing between cards in an infinite mixed stream. */
+  --poster-gutter: 9px;
+  /* Rule 4. The sticker's double keyline: a paper ring, then an ink ring, so
+     the sticker reads as stuck on top of the slab rather than cut out of it.
+     The FIRST ring is the colour of the surface the sticker sits on, which is
+     the page almost everywhere; a surface with its own ground (the sign-in
+     receipt's #FFFDF2 paper stock) re-points --keyline-bg locally and still
+     reads the one --keyline definition. This is the "must live in exactly one
+     place" value from section 29 step 1. */
+  --keyline-bg: var(--paper);
+  --keyline: 0 0 0 2px var(--keyline-bg), 0 0 0 4px var(--ink);
+
+  /* Rule 5a, resolved once per fill. `--on-X` is the measured text colour for
+     type sitting ON the fill `X` at label sizes (below 24px, so the 4.5:1
+     floor applies, not 3:1). Solid values only: rgba(10,10,10,.6) on welfare
+     green is 2.79:1, which is why an alpha is never allowed here. */
+  --on-welfare:  var(--ink);     /* 4.55:1 */
+  --on-events:   var(--ink);     /* 7.81:1 — same hue as --sky */
+  --on-sky:      var(--ink);     /* 7.81:1 */
+  --on-labs:     var(--ink);     /* lemon, well clear */
+  --on-lemon:    var(--ink);
+  --on-ops:      var(--ink);     /* teal 5.18:1 */
+  --on-teal:     var(--ink);
+  --on-content:  var(--ink);     /* grape 4.55:1 */
+  --on-grape:    var(--ink);
+  --on-tomato:   var(--ink);     /* 5.99:1 */
+  --on-pink:     var(--ink);     /* #FF4D8C is 6.31:1 — the display hue PASSES */
+  --on-pink-ink: var(--paper);   /* #C4185C is 3.42:1 with ink — THE branch */
+  --on-rust:     var(--paper);   /* #C4231A, 3.40:1 with ink */
+  --on-ink:      var(--paper);
+  --on-ink-2:    var(--paper);
+
+  /* ── Breakpoints, documentation only (CSS cannot use vars in media queries).
+     Three tiers, replacing the previous mixed set. Adopted per section as
+     each section's steps name its files.
+       phone   <= 600px
+       tablet  601px to 1024px
+       desktop >= 1025px
+     CORRECTED 2026-09-07: 760px is not a one-off exception limited to the
+     mobile dock (the previous note here claimed exactly that). It is a
+     second, real, load-bearing split point - --nav-h and --page-px a few
+     lines below in this file switch there too, and so does the primary
+     nav's own hamburger-to-tabs swap (.aq-nav-tabs/.aq-hamburger in
+     v6.css, components/AQNav.tsx). A long tail of per-component rules
+     across the app (teams, opportunities, the director desk, footer,
+     profile, projects and more) also key off it. Collapsing it into the
+     phone/tablet/desktop tiers above would be a real, app-wide breakpoint
+     change with its own regression risk, not a documentation fix - out of
+     scope here. Revisit in section 16 (desktop compositions), which owns
+     the three-pane shell. */
+
+  /* ── Spacing ───────────────────────────────────────────────────────────────
+     HONEST STATE, measured 2026-08: this scale is not yet the system. The block
+     that used to sit here called itself "the authoritative 8-step scale
+     (4·8·12·15·18·22·32·52)" and instructed "snap all padding/gaps to these
+     steps". A count of the real codebase found --sp-1..8 used EIGHT times in
+     total, and --sp-section / --sp-block used zero times. On the rendered
+     homepage the most common paddings and gaps are 10px (225 occurrences) and
+     6px (129) — neither of which the old scale contained. 26 distinct spacing
+     values are live on one page.
+
+     So the scale below is rebuilt on a strict 4px base that actually CONTAINS
+     the values the app uses, instead of a list the app was never going to
+     match. 15/18/22 are gone — they were the reason the old scale couldn't be
+     adopted, since nothing lands on them naturally.
+
+     Re-pointing --sp-1..8 does move the eight places that reference them, so
+     this is not a no-op in the abstract — but all eight are in
+     dev/ComponentGallery.tsx, which is routed behind `import.meta.env.DEV` and
+     tree-shaken out of production. No shipped surface changes.
+
+     Adopting the scale for real is a separate, deliberate migration that needs
+     eyes on the result: replace literal px with the matching token one surface
+     at a time, checking each, rather than a blind find-replace across 225 call
+     sites. Until that happens this is the TARGET, not a description of the
+     code — which is exactly what the previous comment got wrong by asserting
+     authority it never had. */
+  --sp-1:  4px;   --sp-2:  6px;   --sp-3:  8px;   --sp-4: 10px;
+  --sp-5: 12px;   --sp-6: 16px;   --sp-7: 20px;   --sp-8: 24px;
+  --sp-9: 32px;   --sp-10: 48px;
+  --sp-section: clamp(32px, 6vw, 52px);   /* between page sections */
+  --sp-block:   clamp(18px, 3.5vw, 32px); /* between blocks within a section */
+
+  --density: 1;
+}
+
+/* ── There is deliberately no [data-theme="dark"] block, and no duplicate
+   [data-theme="light"] one ────────────────────────────────────────────────
+   index.html hard-pins `data-theme="light"` and deletes any stored `aq-theme`
+   preference on every load, so the app has exactly one theme. What used to sit
+   here was a full 32-token dark palette plus ~28 [data-theme="dark"] rules
+   across v6.css, director.css, projects.css, feed.css, QuickLinksPage.css and
+   index.css — all of it unreachable, all of it shipped in the render-blocking
+   global stylesheet, and all of it still being maintained (a past audit spent
+   real effort tuning dark-mode contrast for a theme nobody could see).
+
+   Alongside it was a [data-theme="light"] block that re-declared every value in
+   :root above, byte for byte. Two sources of truth for one palette is exactly
+   the drift that produced the .aq-footer-link contrast bug, so :root is now the
+   only place the palette is written.
+
+   If dark mode is ever wanted, it comes back as a real feature — a toggle, the
+   token block, and a contrast pass — not as dormant CSS. The deleted rules are
+   in git history at the commit that removed them. */
+
+:root { --nav-h: 70px; }
+
+@media (max-width: 760px) { :root { --nav-h: 62px; } }
+
+:root { --page-px: 24px; }
+
+@media (max-width: 760px) { :root { --page-px: 16px; } }
+
+@media (max-width: 320px) { :root { --page-px: 12px; } }
+
+/* Canonical content-frame width - the nav pill, the footer, and the default
+   .container all bound to this so their left/right edges line up on every page
+   (they were 1320 / 1320 / 1380 before, which read as inconsistent gutters).
+   Intentionally-narrow reading columns (blog/FAQ prose) stay centred inside it. */
+:root { --frame-max: 1280px; }
+
+:root { --border-w: 1px; --display-weight: 800; --heading-scale: 1; --body-scale: 1; --radius-scale: 1; --marquee-speed: 28s;
+  /* --border-w SET 2px->1px per 00.3. --marquee-speed is KEPT: 00.13 asks to
+     delete it alongside `@keyframes marquee`, but that keyframe carries real
+     content (org-stat Marquee, see the "Unresolved"/mismatch report) and is
+     staying, so its token stays too - see the note at @keyframes marquee below. */
+  /* --accent is the primary brand accent and the handoff binds it to welfare green
+     ("welfare == primary accent", #1B8A5A). It was overridden to pink (#FF4D8C) here,
+     which turned every var(--accent) surface pink site-wide (heroes, flourishes,
+     footer pills, live-dots) - a major drift from the Playground. Restored to green. */
+  --accent: #1B8A5A;
+  /* --accent2 and --mint aliases were fully retired in Phase 7 - every usage was
+     migrated to --events / --welfare respectively (identical hues in both themes
+     and in seamless mode, where --c-welfare/--c-events carry the same user
+     customization), so the duplicate names are gone. */
+}
+
+/* Rounded-minimalism 00.1, superseding the note this replaces (kept below for
+   the paper trail). The changelog's own concentric rule: outer 32px with
+   10px padding -> inner 22px (32-10) with 8px padding -> tight 14px (22-8).
+   Only 999/32/22/14 exist on this scale, plus three documented exceptions
+   (a 6px jigsaw notch, a 6px mention mark, an 18px desk checkbox - none of
+   which land in this file's scope).
+
+   PRIOR STATE (found live, superseding the changelog's assumed baseline of
+   a literal `--r-outer: 20px` etc.): this trio had ALREADY been repointed by
+   an earlier redesign onto --r-card(26)/--r-sm(20) as aliases, specifically
+   so nothing would drift a fourth scale. That prior system (--r-card 26,
+   8px inset -> --r-photo 18) is still live and still has 17 (--r-card) and
+   8 (--r-photo) consumers outside this file's scope (feed/rail/post cards,
+   the whole photo-media system) - changing THEIR values is out of scope for
+   this pass and is reported as a mismatch rather than done here.
+
+   This trio is put back to independent literal values rather than staying
+   aliased, because staying aliased would import the OLD 26/20 numbers into
+   this pass instead of the changelog's 32/22/14 - the two systems now
+   coexist deliberately (a "half-migrated" state 00's own header calls
+   "expected and correct"). --r-outer/-inner/-tight already have two live
+   consumers outside this file (home.css, feed.css) who reference THESE
+   names specifically (not --r-card/--r-sm), so they were already primed to
+   receive the new scale. */
+:root {
+  --r-outer: 32px;
+  --r-inner: 22px;
+  --r-tight: 14px;
+  /* The two paddings the subtractions depend on, so a future change to one
+     cannot silently break the concentricity (00.1). */
+  --pad-card: 10px;
+  --pad-inner: 8px;
+}
+
+:root {
+  /* Font bridges */
+  --f:         var(--sans);
+  --f-display: var(--display);
+  --f-body:    var(--eina);
+  --f-serif:   var(--serif);
+  --fm:        var(--mono);
+  --f-mono:    var(--mono);
+  /* Color bridges */
+  --txt:       var(--ink);
+  --txt-2:     var(--ink-2);
+  --txt-3:     var(--ink-3);
+  --txt-4:     var(--ink-3);
+  /* Background bridges */
+  --bg-card:   var(--card);
+  --surface:   rgba(0,0,0,0.03);
+  --surface-2: rgba(0,0,0,0.06);
+  /* Shadow bridges - SET per 00.2: point the soft-blur bridges at the new
+     lifts instead of their own blur values, so there is one elevation system
+     rather than a second one hiding in the bridge aliases. */
+  --shadow-sm:  var(--lift-1);
+  --shadow:     var(--lift-2);
+  --shadow-lg:  var(--lift-3);
+  --s1:         0 0 0 1px rgba(10,10,10,0.08);
+  --s2:         0 0 0 1px rgba(10,10,10,0.08), var(--lift-2);
+  --s3:         0 0 0 1px rgba(10,10,10,0.12), var(--lift-3);
+  /* ── Easing ────────────────────────────────────────────────────────────────
+     Three curves, and only three. A live audit found `--ease` was defined here
+     and used by literally nothing (0 of 111 elements carrying a cubic-bezier on
+     the homepage), while `cubic-bezier(0.34, 1.56, 0.64, 1)` had been
+     hand-written 37 times across 8 files in two different spellings — the same
+     curve, un-named, impossible to tune in one place.
+
+       --ease       decelerate. Default for anything entering or resizing.
+       --ease-out   the app's other common decelerate (0.2,0,0,1); slightly
+                    snappier, used on presses and small state flips.
+       --ease-pop   the overshoot curve. Deliberate on playful brand moments
+                    (toggles, stickers, the footer CTA) — not a default.       */
+  --ease:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-pop:   cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:root {
+  --ls-caps:    0.06em;
+  --ls-display: -0.03em;
+}
+
+/* ── The scrim, ADDED 2026-09-10 ───────────────────────────────────────────
+   A design audit counted NINE distinct scrim colours (rgba(0,0,0,) at .2/.5/
+   .55/.6/.72/.92 and rgba(10,10,10,) at .28/.45/.65/.75) crossed with SIX blur
+   radii (none/2/4/6/8/12) across the overlay layer - for one job. The result
+   is that how "behind" the page feels depends on which dialog you opened.
+
+   Two tokens, one answer. Ink-based, not pure black, so the scrim sits in the
+   same warm family as the rest of the palette (the same reasoning the nav's
+   --lg-bg block already documents for its tint).
+
+   --scrim-strong is for a surface that OWNS the screen (a full focus view, a
+   lightbox); --scrim is the default for a dialog you are meant to read the
+   page behind. A sheet that already dims the page itself (see
+   styles/components/sheet.css, which documents exactly this) keeps its own
+   lighter value and does not double up. */
+:root {
+  --scrim:        rgba(10, 10, 10, 0.55);
+  --scrim-strong: rgba(10, 10, 10, 0.72);
+  --scrim-blur:   blur(6px);
+}
+
+:root {
+  --section-py:    clamp(48px, 7vw, 80px);
+  --section-py-sm: clamp(32px, 5vw, 56px);
+}
+
+:root {
+  --gap-section: clamp(24px, 4vw, 40px);
+  --gap-content: 16px;
+  --gap-tight:   8px;
+}
+
+:root {
+  --lg-blur: blur(16px) saturate(1.85);
+  /* ── Liquid glass, warmed and simplified ───────────────────────────────────
+     The glass stays — it's the handoff's nav treatment and it's wanted. Two
+     things changed, both because it was reading as generic template chrome on
+     the one element every visitor sees on every page:
+
+     1. TINT. The fill was pure white at 58%. Over the #F4EFE0 paper ground a
+        white scrim reads cool and slightly blue — the "paper theme whose nav
+        forgot to be paper" tell. It's now mixed from --bg, so the bar sits in
+        the same warm family as everything under it.
+
+     2. LAYERS. The bevel was EIGHT box-shadow layers (four white inset
+        highlights, two dark inset shades, two drop shadows) — a full Apple
+        specular-glass emulation. At the 1–2px offsets actually in play, six of
+        those eight are sub-pixel and cancel each other out; what survives is
+        one top highlight and one soft drop. Keeping exactly those two costs
+        nothing visually and stops the nav painting eight shadow layers on every
+        scroll frame.
+
+     Note the mix goes toward TRANSPARENT, not toward white: color-mix's second
+     operand is what the remainder is made of, so `62%, white` would have given
+     an opaque fill and silently killed the blur underneath it. */
+  --lg-bg: color-mix(in srgb, var(--bg) 62%, transparent);
+  --lg-bg-hover: color-mix(in srgb, var(--bg) 82%, transparent);
+  --lg-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    0 4px 16px -4px rgba(10,10,10,0.12);
+  --lg-shadow-hover:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    0 8px 22px -6px rgba(10,10,10,0.16);
+
+  /* ── ADD (02.2), partially. The changelog's --lg-* SET instructions above
+     (ink fill, blur, shadow) are NOT applied - see the mismatch note atop
+     components/AQNav.css: the live nav is a flat white pill, and retuning
+     these to ink would produce dark glass pills on a white bar, not the
+     coherent ink chrome 02 describes.
+     CORRECTION 2026-09-06: this comment used to claim "two live (not dead)
+     --lg-* consumers". That is no longer true. Their only consumer was the
+     liquid-glass block at v6.css:3084-3098, which put six independently
+     blurred cream-alpha capsules on top of the flat WHITE bar - a third
+     state that was neither the old glass nav nor the new flat one, and six
+     backdrop-filter layers that v6.css:184-188 says were deliberately
+     removed for performance. That block is deleted; grep confirms it was the
+     only consumer app-wide. The --lg-* tokens are kept DEFINED but are now
+     unreferenced - delete them if the segmented-chrome decision (see the
+     AQNav.css mismatch note) lands on retiring 02's nav for good.
+     The paper-on-ink LADDER below is added anyway: it is a
+     self-contained, generally useful set (any dark-ground text, not only a
+     segmented ink nav) and AQFooter.css's contrast fix (02.7) already
+     consumes --nav-fg-dim. The nav-STRUCTURAL tokens 02.2 also asks for
+     (--nav-ink, --nav-h-bar, --nav-notch, --nav-joint-w, --nav-hit,
+     --nav-well, --nav-rule) are NOT added - they describe measurements of
+     the segmented/joint bar that is not being built, and defining them
+     unused would misleadingly imply scaffolding exists for it. */
+  /* Six rungs, each measured against #F4EFE0 composited over #0A0A0A. Use a
+     rung; never invent an alpha between them (README.md invariant 7). */
+  --nav-fg:         var(--paper);             /* 1.00 · 15.6:1 · primary label, active glyph   */
+  --nav-fg-strong:  rgba(244,239,224,0.82);   /* 0.82 · 10.1:1 · nav link + rail item labels    */
+  --nav-fg-dim:     rgba(244,239,224,0.78);   /*  0.78 ·  9.4:1 · inactive label                */
+  --nav-fg-mid:     rgba(244,239,224,0.72);   /*  0.72 ·  7.9:1 · icon glyphs, dock buttons     */
+  --nav-fg-soft:    rgba(244,239,224,0.60);   /*  0.60 ·  6.5:1 · secondary meta                */
+  --nav-fg-faint:   rgba(244,239,224,0.55);   /*  0.55 ·  5.6:1 · THE FLOOR for text on ink     */
+}
+
+
+/* ── Orphan tokens ported from the deleted aq-design-system.css ──────────────
+   Live components reference these; they were previously defined ONLY in
+   aq-design-system.css. Re-based onto the brief-correct welfare accent
+   (#1B8A5A) instead of the old #00a35c. */
+:root {
+  --accent-h:  #146F47;                 /* welfare, darkened for hover (AA) */
+  --accent-bg: rgba(27,138,90,0.08);    /* welfare tint fill */
+  --accent-br: rgba(27,138,90,0.22);    /* welfare tint border */
+
+  /* legacy radii retained only for ported tail classes.
+     SET per rounded-minimalism 00.1: --r-xs 6->14 (collapses onto --r-tight),
+     --r-xl 28->32 (collapses onto --r-outer). Each has exactly one consumer
+     (v6.css .post-img / .blog-card-ish rule), grepped before changing. */
+  --r-xs: 14px;   /* .post-img */
+  --r-xl: 32px;   /* .blog-card */
+}

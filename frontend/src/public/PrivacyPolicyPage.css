@@ -1,0 +1,62 @@
+/* Additions to the shared policy-document look in EquityPolicyPage.css.
+   Only what that page had no need for: data tables and a flagged paragraph. */
+
+/* Tables must scroll inside their own box, never push the page sideways. */
+.pp-scroll {
+  overflow-x: auto; overscroll-behavior-x: contain;
+  margin: 16px 0 4px;
+  /* Rounded minimalism: hairline edge + a resting soft lift (was a 2px ink
+     border with a 2px hard offset). */
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  background: var(--card);
+  box-shadow: var(--lift-1);
+}
+
+.pp-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  font-family: var(--eina);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pp-table th,
+.pp-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.pp-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--bg);
+  border-bottom: var(--hair);
+  white-space: nowrap;
+}
+
+.pp-table tr:last-child td { border-bottom: none; }
+.pp-table td strong { color: var(--ink); font-weight: 700; }
+
+/* A paragraph that is deliberately unresolved — an open decision or a blank
+   the org has to fill. Marked so it reads as "we know", not as an oversight,
+   and so it's obvious on the page when it finally gets filled in. */
+.pp-flag {
+  border-left: 3px solid var(--lemon);
+  padding: 10px 0 10px 14px;
+  background: color-mix(in srgb, var(--lemon) 10%, transparent);
+  border-radius: 0 var(--r-tight) var(--r-tight) 0;
+}
+.pp-flag strong { color: var(--ink); }
+
+/* The two tables are now focusable scroll regions (WCAG 2.1.1: below a 520px
+   viewport there was no keyboard route to the right-hand columns), so they need
+   a visible focus indicator of their own. */
+.pp-scroll:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }

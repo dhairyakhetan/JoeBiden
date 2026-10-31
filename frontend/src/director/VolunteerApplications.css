@@ -1,0 +1,384 @@
+/* Volunteer applications desk.
+   Originally extracted from the component's inline <style> block (Phase 1.3);
+   stage 3A moved the remaining inline `style` objects in here too, so the row
+   ledger is styled by the cascade instead of by inline specificity.
+
+   This desk deliberately keeps its own five-way colour system
+   (texted / joined / repeated / already-in-AQ / expired) rather than the
+   shared three-way pending/approved/rejected `StatusStamp` - it is a lead
+   pipeline, not an approval queue, and the five states are not verdicts.
+   Each label's colour arrives as `--lc`, set per element. */
+
+/* ── Table chrome ────────────────────────────────────────────────────────── */
+/* The shell is the shared `.card` panel + `.panel-h`, set in the TSX; this
+   wrapper only owns the horizontal scroll so wide tables scroll INSIDE the
+   card. The radius is the flat inner radius: 06.1 deleted the
+   `hod-radius - hod-border-w` subtraction because with a 1px border the
+   subtraction is meaningless, and the concentric rule now derives the inner
+   radius from PADDING, not border width. (The old `var()` fallbacks here,
+   20px/3px, were the pre-06.1 brutalist values and computed to 31px.) */
+.vol-tablewrap { overflow-x: auto; overscroll-behavior-x: contain; border-radius: 0 0 var(--r-inner) var(--r-inner); }
+.vol-table { width: 100%; border-collapse: collapse; min-width: 480px; }
+.vol-headrow { border-bottom: var(--hod-border-w) solid var(--hod-border); background: var(--hod-surface-2); }
+.vol-th {
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  text-align: left;
+  white-space: nowrap;
+}
+.vol-th-check { width: 44px; text-align: center; padding: 10px 6px 10px 14px; }
+.vol-th-num { width: 38px; text-align: center; }
+.vol-th-status { min-width: 136px; }
+.vol-th-chev { width: 32px; }
+.vol-td { padding: 11px 12px; vertical-align: middle; }
+.vol-td-check { text-align: center; padding: 0 6px 0 14px; width: 44px; }
+.vol-td-num { text-align: center; padding: 0 8px; }
+.vol-td-status { padding: 0 10px; }
+.vol-td-chev { text-align: center; padding: 0 10px 0 4px; }
+.vol-check { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); }
+
+/* Row content is flat and legible - the left edge carries the label colour,
+   nothing readable is tinted or rotated. */
+.vol-row { cursor: pointer; border-left: 5px solid var(--lc, transparent); }
+.vol-row.is-open { border-bottom: none; }
+/* Perforated-ledger divider, same as the shared `.qrow`. */
+.vol-row:not(.is-open) { border-bottom: 1.5px dashed var(--line-2); }
+.vol-row:last-child:not(.is-open) { border-bottom: none; }
+.vol-row.is-labelled { background: color-mix(in srgb, var(--lc) 16%, transparent); }
+.vol-row.is-checked { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.vol-row:hover { background: var(--bg-2); }
+
+/* Name/email use the shared `.qname` / `.qsub` voice (director.css); the
+   table only adds density + ellipsis layout on top. */
+.vol-table .qname { font-size: 13px; }
+.vol-table .qsub { font-size: 10px; margin-top: 2px; }
+.vol-cell-clip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.vol-college { font-family: var(--eina); font-size: 12px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vol-year { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-top: 2px; }
+.vol-applied { font-family: var(--mono); font-size: 10px; color: var(--ink-3); white-space: nowrap; }
+.vol-rownum { font-family: var(--mono); font-size: 10px; color: var(--ink-3); cursor: pointer; }
+.vol-pending-dot { width: 6px; height: 6px; border-radius: 50%; flex: none; background: var(--welfare); }
+.vol-pending-dot.is-pending { background: var(--lemon); }
+.vol-numcell { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.vol-chev { display: block; margin: auto; color: var(--ink-3); }
+
+/* ── WhatsApp affordance - the one place a third-party brand colour is
+   correct, since it identifies the destination app. ──────────────────────── */
+.vol-wa { color: #25D366; }
+
+/* Both of these open WhatsApp — a real outbound action on a real phone
+   number — and both were far under the WCAG 2.5.8 AA 24px floor: the row
+   number measured 6x15 and the WA button 34x15. Six pixels wide is not a
+   target, it's a dare. Grown via min-height/min-width and centring, so the
+   type stays the size the dense table needs. */
+.vol-wa-num {
+  font-family: var(--mono); font-size: 10px; color: #25D366;
+  text-decoration: none; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 24px; min-width: 24px;
+}
+/* REDESIGN 2026-09, section 19 (responsive half). The label was #FFFFFF on
+   #25D366, which is 2.19:1 - under every floor there is, on the one control
+   that leaves the app. The design reference's own WA chip darkens the green
+   to #1B8A5A and sets the label in solid ink (4.71:1), which is also the
+   project rule for a mono label on a saturated hue. Same chip on the table
+   row and on the card, so the two never drift. */
+.vol-wa-btn {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 3px;
+  background: #1B8A5A; border: 2px solid var(--ink); border-radius: 999px; padding: 0 8px;
+  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #0A0A0A; text-decoration: none; line-height: 1.4;
+  white-space: nowrap; min-height: 24px; min-width: 34px;
+}
+
+/* ── Label dots (per-row assign) + chips (filter row) ────────────────────── */
+.vol-dots { display: flex; gap: 6px; align-items: center; }
+.vol-dot {
+  width: 14px; height: 14px; border-radius: 50%; padding: 0; flex: none;
+  cursor: pointer; border: 2px solid var(--lc); background: transparent; opacity: 0.3;
+}
+.vol-dot.is-on { background: var(--lc); opacity: 1; }
+.vol-dot:hover { opacity: 1; }
+
+.vol-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink-2);
+  background: color-mix(in srgb, var(--lc) 4%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--lc) 25%, transparent);
+  border-radius: 999px; padding: 5px 12px; cursor: pointer;
+  white-space: nowrap;
+}
+.vol-chip.is-dashed { border-style: dashed; }
+.vol-chip.is-on {
+  color: var(--lc);
+  background: color-mix(in srgb, var(--lc) 12%, transparent);
+  border-color: var(--lc);
+}
+.vol-chip-swatch { width: 9px; height: 9px; border-radius: 50%; background: var(--lc); flex: none; }
+.vol-chip-swatch.is-hollow { background: none; border: 1.5px solid var(--lc); }
+.vol-legend-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink-3); flex: none; margin-right: 2px; align-self: center;
+}
+
+/* ── Expanded detail ─────────────────────────────────────────────────────── */
+.vol-detail-cell { padding: 0 20px 22px; border-top: 1.5px dashed var(--line-2); border-bottom: 1.5px dashed var(--line-2); border-left: 5px solid var(--lc, transparent); background: var(--hod-surface-2); }
+.vol-detail-cell.is-labelled { background: color-mix(in srgb, var(--lc) 16%, transparent); }
+.vol-detail-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); margin: 16px 0; }
+.vol-detail-h {
+  font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink-3); margin-bottom: 6px;
+}
+.vol-detail-body { font-family: var(--eina); font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+/* Inner detail panels take the desk's ledger treatment - white surface,
+   the one soft hairline border weight (06.1: 1px, not the pre-redesign
+   3px ink), small radius (nested inside a .card, so no second hard shadow). */
+.vol-panel { background: var(--hod-surface-1); border: var(--hod-border-w) solid var(--hod-border); border-radius: var(--hod-radius-sm); padding: 14px; margin-bottom: 14px; }
+.vol-panel .vol-detail-h { margin-bottom: 8px; }
+.vol-quote { font-family: var(--eina); font-size: 14px; color: var(--ink-2); line-height: 1.65; margin: 0; font-style: italic; }
+.vol-prose { font-family: var(--eina); font-size: 14px; color: var(--ink-2); line-height: 1.65; margin: 0; }
+/* Interest pills now use the shared `.qtag` (director.css) with the interest
+   colour handed in as `--cc` - the old bespoke `.vol-interest` is superseded. */
+.vol-copybtn {
+  background: none; border: none; padding: 0; font: inherit; color: var(--accent-ink);
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+}
+.vol-outreach { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.vol-outreach label {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font-family: var(--eina); font-size: 13px; color: var(--ink-2); min-height: 40px;
+}
+.vol-outreach input { width: 18px; height: 18px; cursor: pointer; }
+
+/* ── Bulk bar actions (this desk's own; the shell is adminKit's) ─────────── */
+.vol-bulk-dot {
+  width: 22px; height: 22px; border-radius: 50%; flex: none; padding: 0;
+  border: 2px solid var(--lc); background: var(--lc); cursor: pointer;
+}
+.vol-bulk-btn {
+  font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+  background: var(--hod-surface-1);
+  border: var(--hod-border-w) solid var(--hod-border); border-radius: var(--r-tight);
+  padding: 4px 10px; cursor: pointer; color: var(--hod-ink); white-space: nowrap;
+  min-height: 32px;
+}
+.vol-bulk-btn.is-done { background: var(--welfare); border-color: var(--welfare); color: #0A0A0A; }
+.vol-bulk-sep { width: 1px; height: 18px; background: var(--line); flex: none; }
+
+/* ── Live indicator ──────────────────────────────────────────────────────── */
+.vol-live {
+  display: inline-flex; align-items: center; gap: 5px;
+  /* --welfare measured 3.78:1 as 10px text on the desk surface; darkened to
+     clear AA while the adjacent live dot keeps the undarkened brand green. */
+  color: color-mix(in srgb, var(--welfare) 78%, black);
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.vol-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--welfare); }
+.vol-spinner {
+  width: 20px; height: 20px; border: 2px solid var(--line-2);
+  border-top-color: var(--accent); border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vol-dot, .vol-chip, .vol-bulk-btn { transition: opacity 0.12s, background 0.12s, border-color 0.12s, color 0.12s; }
+  .vol-chev { transition: transform 0.2s; }
+  .vol-live-dot { animation: vol-live-pulse 1.8s ease-in-out infinite; }
+  .vol-spinner { animation: spin 0.8s linear infinite; }
+}
+@keyframes vol-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.82); }
+}
+
+/* `.vol-hide-sm` is DELETED, not just unused. It hid College / Year and
+   Applied below 560px, which is what left a 390px phone with a checkbox, a
+   row number, a name and five dots. The table now starts at 1025px, where
+   all seven columns fit, so there is nothing left for it to hide - and the
+   two fields it used to drop are on the card ledger by name. */
+
+@media (max-width: 600px) {
+  /* 44px touch-target floor (WCAG 2.5.5). The label chips are the desk's
+     primary triage control and sat at 28px. */
+  .vol-chip { min-height: 44px; padding-block: 10px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION 19 · THE AFFORDANCE LEDGER
+   ──────────────────────────────────────────────────────────────────────────
+   Every rule below exists because a control on this desk did something a
+   person could not see. Nothing here changes a query, a filter push, the
+   export path or a single frozen string.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── The five status dots ────────────────────────────────────────────────
+   14px circles whose five names lived only in `title` and `aria-label`. A
+   phone has no hover, so on the device this desk is actually used on the
+   names were unreachable, and nothing said that tapping the active dot
+   clears the label. The block is captioned, the targets are 44px, the active
+   dot carries a check, and a mono line names the current label. */
+.vol-dotblock {
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: var(--r-sm, 14px);
+  padding: 10px 12px;
+  background: var(--card);
+  min-width: 0;
+}
+.vol-dotblock-label {
+  display: block; margin-bottom: 8px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+}
+.vol-dotblock .vol-dots { gap: 6px; }
+.vol-dotblock .vol-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 14px;
+  flex: 1 1 auto; min-width: 0;
+}
+.vol-dotblock .vol-dot.is-on {
+  border-radius: 14px;
+  box-shadow: var(--keyline);
+}
+.vol-dot-face {
+  font-family: var(--mono); font-size: 14px; font-weight: 800; line-height: 1;
+  color: #0A0A0A;
+}
+
+/* Two of the five label hues (#00E5A0, #FFC700) fail contrast as text, which
+   is why no label hue anywhere on this desk ever carries type. The check is
+   solid ink on the fill, and the fill is the only place the hue appears. */
+
+/* ── The quote ───────────────────────────────────────────────────────────
+   The one field on this desk that is READ rather than scanned, and the one
+   the decision actually turns on. It was set at the same 14px as the prose
+   around it. The literal quote marks are already in the string, so there are
+   deliberately no CSS quotes here. */
+.vol-quote {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif);
+  font-style: italic; font-size: 16.5px; line-height: 1.45;
+  color: var(--ink); margin: 0;
+}
+
+@media (max-width: 600px) {
+  /* nowrap removes give, so the row shrinks: the dots are the flexible
+     children and the block itself takes the full width. */
+  .vol-dotblock { width: 100%; }
+  .vol-dotblock .vol-dot { flex: 1 1 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION 19 · THE CARD LEDGER
+   ──────────────────────────────────────────────────────────────────────────
+   The affordance half of section 19 shipped first; this is the responsive
+   half, and it closes the one gap the section left open. Seven columns that
+   hid two below 560px and scrolled the rest sideways showed a 390px phone a
+   checkbox, a row number, a name and five dots. A table does not become a
+   phone by scrolling.
+
+   EXACTLY TWO LAYOUTS. The table survives unchanged at >= 1025px; the card
+   ledger renders below it. There is deliberately no third layout in between,
+   so a 900px tablet gets the cards, not a squeezed table. The split is made
+   in the TSX by `useIsDeskTable()` (mirroring MemberDirectory's
+   DESKTOP_TABLE_MQ), so only one layout is ever in the DOM and no control
+   is duplicated into a second accessible name.
+
+   Shell geometry is the SHARED `.adm-ledger` / `.adm-lcard` vocabulary in
+   director.css - block 18-25.13, which was written for this desk by name.
+   Everything below is only what this desk owns on top of it: the `--lc`
+   label rail, the two row states, the per-row busy dim, and the status block.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The panel shell drops on the card ledger - a 3px-ink card wrapping 2px-ink
+   cards is two frames for one list - so the two frozen `.panel-h` strings
+   become a plain caption row on the paper. */
+.vol-ledger-cap {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; padding: 0 4px 8px;
+}
+.vol-ledger-cap b { font-family: var(--eina); font-weight: 800; font-size: 14px; color: var(--ink); }
+
+/* Select-all leaves the table header, where there is no header to sit in, and
+   becomes a named 44px control above the cards. The visible text IS the
+   accessible name (label wraps the input), so the count is announced rather
+   than hidden behind a generic "select all rows". */
+.vol-selectall {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 0 16px; margin: 0 0 10px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 999px; background: var(--card); cursor: pointer;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-2);
+  white-space: nowrap;
+}
+.vol-selectall:hover { border-color: var(--ink); color: var(--ink); }
+.vol-selectall .vol-check { width: 18px; height: 18px; flex: none; }
+
+/* Row states. Specificity beats `.admin .adm-lcard` regardless of which
+   stylesheet loads last, which is why these are written against both classes. */
+.admin .adm-lcard.vol-lcard { box-shadow: inset 5px 0 0 0 var(--lc, transparent); }
+.admin .adm-lcard.vol-lcard.is-checked { background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+/* Per-row busy, never desk-wide: only the card being written to dims. */
+.admin .adm-lcard.vol-lcard.is-busy { opacity: 0.55; }
+.admin .adm-lcard.vol-lcard.is-busy .vol-lcard-head,
+.admin .adm-lcard.vol-lcard.is-busy .vol-lcard-status { pointer-events: none; }
+
+/* Band 1 - select, name, WA, email, and the row number as a corner label. */
+.vol-lcard-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -8px 0 -8px -10px; flex: none; cursor: pointer;
+}
+.vol-lcard-ident { flex: 1 1 auto; min-width: 0; }
+.vol-lcard-nameline { display: flex; align-items: center; gap: 7px; min-width: 0; }
+/* The pending dot keeps its source rule (`!reviewed`); on the card it sits
+   before the name, because the number cell it used to live in is now a
+   corner label. */
+.vol-lcard-pending {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--tomato); box-shadow: 0 0 0 3px rgba(255, 77, 46, 0.22);
+}
+/* The WA chip keeps the reference's 24px height so it reads as a mark beside
+   the name rather than a second button, and reaches the 44px phone floor
+   through its hit area instead of its box. Nothing else on the name line is
+   a control, so the overlay can only ever swallow inert text. */
+.vol-lcard .vol-wa-btn { position: relative; }
+.vol-lcard .vol-wa-btn::after {
+  content: ""; position: absolute; inset: -10px -5px; border-radius: var(--r-tight);
+}
+.vol-lcard .qname { font-size: 14.5px; }
+.vol-lcard .qsub { font-size: 10px; margin-top: 2px; }
+
+/* Band 2 - college, year, applied date. The college is the only flexible
+   child: it ellipsises rather than pushing the date out of the card, which
+   an unshrinkable nowrap item would do. The row wraps, so the date's
+   `margin-left: auto` degrades to a right-aligned second line rather than
+   an overflow. */
+.vol-lcard .vol-college { flex: 1 1 auto; min-width: 0; }
+.vol-lcard .vol-year { flex: none; }
+.vol-lcard-when { flex: none; margin-left: auto; }
+
+/* Band 3 - the status block. Same `LabelDots` component as the table cell,
+   so the five 44px targets, the check glyph and the line naming the current
+   label all come across unchanged; only the enclosure widens. */
+.vol-lcard-status { margin-top: 12px; }
+.vol-lcard .vol-dotblock {
+  width: 100%; border-color: var(--ink); background: var(--bg); border-radius: var(--r-inner);
+}
+.vol-lcard .vol-dot { flex: 1 1 0; }
+
+/* Band 4 - the detail, under the shared `.adm-disclose` button. */
+.vol-lcard-detail {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 2px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vol-selectall { transition: border-color 0.12s, color 0.12s; }
+  .admin .adm-lcard.vol-lcard { transition: opacity 0.12s, background 0.12s; }
+}

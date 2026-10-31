@@ -1,0 +1,81 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+nul
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+
+# Claude
+.claude/
+
+# Paradox OS source workbooks - raw data incl. participant PII, never commit
+frontend/scripts/import-data/
+
+# Design/HR handoff reference bundle - member PII in the HR workbooks, local reference only
+Mobile-first redesign changelog-handoff/
+Mobile-first redesign changelog-handoff.zip
+
+# HR source workbooks - the four sheets the command desk is replacing. Raw
+# member PII: ~2,360 names, emails and phone numbers, many of them minors.
+# Local reference for the import script only, NEVER committed (this repo has
+# a GitHub remote). Same reasoning as frontend/scripts/import-data/ above.
+/*.xlsx
+"audit and fixes MDs"/
+audit and fixes MDs/
+
+# Downloaded agent-skill bundles — installed to ~/.claude/skills, not part of
+# the product. They are tooling for whoever is working on the repo, not code
+# the app ships.
+/*.zip
+
+# Obsidian per-user UI state (open panes, cursor positions) - churns constantly.
+# The rest of AQ ECOSYSTEM/.obsidian (appearance, graph, plugins) is shared config.
+AQ ECOSYSTEM/.obsidian/workspace.json
+
+# ─────────────────────────────────────────────────────────────────────────
+# Design handoff bundle — NEVER COMMIT.
+# `new aq website/.../uploads/` contains members_rows.csv: a 1,370-row export
+# of the live members table including email, phone, google_id and auth_uid,
+# for a membership that is largely minors. The .dc.html canvases in the same
+# bundle were built from those exports and may embed real names.
+#
+# This repo has already had member PII pushed into its history once
+# (2,360 emails/phones). Do not add more. The bundle is an INPUT artifact:
+# it lives on disk and in Claude Design, and the product does not build from it.
+# ─────────────────────────────────────────────────────────────────────────
+new aq website/
+Mobile-first redesign changelog-handoff/
+Mobile-first redesign changelog-handoff.zip
+*.xlsx
+members_rows.csv
+posts_rows.csv
+welfare_projects_rows.csv
+
+# Source doc for the equity policy: carries five named members' personal
+# mobile numbers. The page renders this content already; the raw doc adds
+# nothing but a second copy of the PII. Keep it local.
+NGO AQUATERA-Equity Policy.md

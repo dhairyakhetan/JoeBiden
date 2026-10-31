@@ -1,0 +1,46 @@
+/* changelog/11-system-states.md §11.9 state 11 — the ineligible control and
+   its reason. Its own file rather than a block in styles/v6.css: v6.css is
+   being edited by several concurrent workstreams and this is net-new. */
+
+/* The control keeps its own shape (radius, border, size) — only the ground and
+   the text drop back, exactly as §11.9 specifies. No new radius is introduced
+   here, so the 999/32/22/14 rule is untouched. */
+[data-gated] {
+  background: var(--bg) !important;
+  color: var(--ink-3) !important;
+  border-color: var(--line-2) !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+/* It is still focusable on purpose (see GatedButton.tsx), so it still needs a
+   real focus ring — a control a keyboard user can reach but cannot see is
+   worse than one they cannot reach. */
+[data-gated]:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* No hover lift, and nothing that reads as "press me". */
+[data-gated]:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* The reason. `flex-basis: 100%` makes it drop to its own line inside the
+   wrapping button rows this app uses, instead of squeezing the control beside
+   it; `order: 99` keeps it after the control when the row reverses on phone.
+   Matches .field-error's type treatment so the two read as one family. */
+.gated-reason {
+  display: block;
+  flex-basis: 100%;
+  width: 100%;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-3);
+  text-transform: none;
+  order: 99;
+}

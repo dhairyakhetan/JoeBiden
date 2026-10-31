@@ -1,0 +1,283 @@
+/* Extracted from DirectorDashboard.tsx's inline <style> block(s) (Phase 1.3).
+   Redesign 06.2 (2026-09) first replaced the topbar + horizontal nav strip +
+   desktop sidebar with a single ink rail. 17.1 amends that rail into THREE
+   tiers on desktop (a 68px glyph rail, a 230px label column, the content)
+   and collapses both nav tiers into one shared sheet below 1024px - see
+   `06.3`/`17.1` for the two build passes and the mismatch note in
+   DirectorDashboard.tsx about the real (four, not five) NAV_GROUPS. */
+
+/* Hide the "← back" buttons inside embedded tab panels */
+.director-tab-panel a.btn[href="/director"] { display: none !important; }
+/* Remove route-enter animation on embedded panels (page already animated) */
+.director-tab-panel .route-enter { animation: none !important; }
+
+/* ── Shell ─────────────────────────────────────────────────────────────── */
+.ops-shell {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  background: var(--bg);
+  min-height: 100dvh;
+  align-items: flex-start;
+}
+
+/* ── Tier 1 - the glyph rail (17.1) ───────────────────────────────────── */
+.ops-rail1 {
+  width: 68px; flex: none; align-self: stretch;
+  background: var(--ink);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: sticky; top: 14px; max-height: calc(100dvh - 28px);
+}
+.ops-rail1-brand {
+  width: 40px; height: 40px; border-radius: var(--r-pill);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4px;
+}
+.ops-glyph {
+  width: 48px; height: 48px; flex: none;
+  border: none; background: transparent;
+  border-radius: var(--r-pill);
+  display: grid; place-items: center; cursor: pointer;
+  color: var(--nav-fg-mid); /* 0.72 - 7.9:1 */
+  position: relative;
+  font-size: 17px;
+}
+.ops-glyph:hover { background: rgba(244,239,224,0.07); color: var(--nav-fg); }
+.ops-glyph[aria-current="page"] { background: var(--paper); color: var(--ink); }
+/* 48px, not the desk's usual 44px floor: the rail is 68px wide with 10px
+   padding on each side, so 48 is the maximum that fits, and it clears the
+   44px floor rather than falling under it. */
+.ops-glyph-badge {
+  position: absolute; top: 2px; right: 2px;
+  min-width: 19px; height: 19px; padding: 0 4px;
+  border-radius: var(--r-pill);
+  background: var(--lemon); color: var(--ink);
+  font-size: 9.5px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 2px var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+/* 17.1's third badge state: a 9px welfare dot when the group has content but
+   no waiting count. Without it, 14 of the 18 desks look identical to empty.
+   Non-text, so it carries no contrast requirement. */
+.ops-glyph-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 9px; height: 9px;
+  border-radius: var(--r-pill);
+  background: var(--welfare);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.ops-glyph[aria-current="page"] .ops-glyph-dot { box-shadow: 0 0 0 2px var(--paper); }
+.ops-rail1-avatar {
+  margin-top: auto;
+  background: var(--welfare); color: var(--ink);
+  font-family: var(--mono); font-weight: 800; font-size: 12px;
+  text-decoration: none;
+}
+.ops-rail1-avatar:hover { background: var(--welfare); opacity: 0.9; }
+
+/* ── Tier 2 - the label column (17.1) ─────────────────────────────────── */
+.ops-rail2 {
+  width: 230px; flex: none; align-self: stretch;
+  background: var(--ink);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  display: flex; flex-direction: column; gap: var(--pad-inner);
+  position: sticky; top: 14px; max-height: calc(100dvh - 28px); overflow-y: auto;
+}
+.ops-rail2-head { padding: 6px 8px 12px; flex: none; }
+.ops-rail2-desk {
+  font-family: var(--display); font-weight: 900; font-size: 16px;
+  letter-spacing: -0.02em; color: var(--paper); line-height: 1.1;
+}
+.ops-rail2-scope {
+  margin-top: 4px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--nav-fg-faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.ops-rail2-nav { display: flex; flex-direction: column; gap: 3px; flex: 1 1 auto; min-height: 0; }
+.ops-rail2-sep { height: 1px; background: var(--hair-inv); margin: 6px 4px; }
+
+/* Collapsed group row. */
+.ops-rail2-collapsed {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  min-height: 42px; padding: 0 10px; margin: 0;
+  border: none; background: transparent; border-radius: var(--r-inner);
+  cursor: pointer; text-align: left;
+}
+.ops-rail2-collapsed:hover { background: rgba(244,239,224,0.07); }
+.ops-rail2-collapsed-label {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px; color: var(--nav-fg-strong);
+}
+.ops-rail2-collapsed-count { font-size: 10px; font-weight: 800; color: var(--nav-fg-faint); font-variant-numeric: tabular-nums; flex: none; white-space: nowrap; }
+.ops-rail2-chevron { flex: none; color: var(--nav-fg-faint); font-size: 12px; }
+
+/* Expanded group well. Substitutes a literal rgba for `var(--nav-well)` -
+   tokens.css documents that token as deliberately not added (it belongs to
+   the segmented/joint nav that 02 never built), so referencing it verbatim
+   would resolve to nothing. Same rgba(244,239,224,.07) 06.3.1 already uses
+   for "a subtle well on ink" elsewhere in this file. */
+.ops-rail2-well { background: rgba(244,239,224,0.07); border-radius: var(--r-inner); padding: 6px; }
+.ops-rail2-parent {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  min-height: 42px; padding: 0 12px; margin: 0; border: none; cursor: pointer;
+  background: var(--paper); color: var(--ink); border-radius: var(--r-tight);
+  font-family: var(--eina); font-weight: 800; font-size: 12.5px; text-transform: lowercase;
+}
+.ops-rail2-collapse {
+  width: 26px; height: 26px; border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.08); display: grid; place-items: center;
+  font-size: 14px; line-height: 1;
+}
+
+.ops-rail2-children { position: relative; padding-left: 16px; margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+.ops-rail2-connector { position: absolute; left: 6px; top: 0; bottom: 20px; width: 1px; background: var(--hair-inv); }
+.ops-rail2-child {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 40px; padding: 0 10px 0 14px; margin: 0;
+  border-radius: var(--r-tight); text-decoration: none;
+  font-family: var(--eina); font-weight: 600; font-size: 12.5px; color: var(--nav-fg-strong); /* 0.82, 10.1:1 */
+}
+.ops-rail2-child:hover { background: rgba(244,239,224,0.06); }
+.ops-rail2-child.is-active { background: var(--paper); color: var(--ink); font-weight: 800; }
+.ops-rail2-child-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ops-rail2-stub { position: absolute; left: -10px; top: 50%; width: 9px; height: 1px; background: var(--hair-inv); }
+.ops-rail2-child-count {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 800; flex: none;
+  color: var(--ink); background: var(--lemon); border-radius: var(--r-pill); padding: 1px 7px;
+  font-variant-numeric: tabular-nums;
+}
+.ops-rail2-child.is-active .ops-rail2-child-count { background: transparent; padding: 0; color: inherit; }
+/* Empty: a 7px dot, not a count. Non-text, so the low alpha is legal
+   (README invariant 7 only governs text/glyphs). */
+.ops-rail2-child-dot { width: 7px; height: 7px; border-radius: var(--r-pill); background: rgba(244,239,224,0.28); flex: none; }
+
+/* ── Shared rail foot: "last opened" well + the four-up utility row
+   (06.3.3, unchanged by 17.1). ── */
+.ops-rail-foot { flex: none; display: flex; flex-direction: column; gap: var(--pad-inner); padding-top: 4px; }
+.ops-rail-lastopened {
+  background: rgba(244, 239, 224, 0.07); border-radius: var(--r-inner); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.ops-rail-lastopened-label {
+  font-family: var(--mono); font-size: 8.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--nav-fg-faint);
+}
+.ops-rail-lastopened-value { font-size: 11px; color: var(--nav-fg); }
+.ops-rail-utility { display: flex; gap: 6px; }
+.ops-rail-util {
+  flex: 1; min-height: 44px; border-radius: var(--r-pill);
+  background: rgba(244, 239, 224, 0.07); color: var(--nav-fg-mid);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; position: relative;
+}
+.ops-rail-util:hover { background: rgba(244, 239, 224, 0.14); color: var(--nav-fg); }
+.ops-rail-avatar { background: var(--welfare); color: var(--ink); font-family: var(--mono); font-weight: 800; font-size: 12px; }
+.ops-rail-unreaddot {
+  position: absolute; top: 8px; right: 10px;
+  width: 7px; height: 7px; border-radius: var(--r-pill);
+  background: var(--tomato); box-shadow: 0 0 0 2px var(--ink);
+}
+
+/* ── Phone header + shared nav sheet - hidden on desktop. ── */
+.ops-phonebar { display: none; }
+
+/* ── Main column ───────────────────────────────────────────────────────── */
+.ops-main {
+  --page-px: 20px;
+  flex: 1; min-width: 0; width: 100%;
+  padding: 0 0 40px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.ops-loading { padding: 40px 0; text-align: center; font-family: var(--mono); font-size: 13px; color: var(--hod-ink-3); }
+
+/* ═════════ 1024px and below: one header, one shared sheet ═════════
+   THE BOUNDARY IS 1024 / 1025. Tablet ceiling `max-width: 1024px`, desktop
+   floor `min-width: 1025px`, contiguous with no pixel in between.
+
+   This rule used to say 1023 while its own heading said "Below 1024px", and
+   they were not the same thing: `max-width: 1023px` means 1023 AND BELOW, so
+   at exactly 1024 neither this block nor the `min-width: 1025px` desktop
+   blocks applied. The desk rendered with its rails still visible but none of
+   the desktop sizing that makes them work. Five rules across the repo said
+   1023 and five said 1024, so half the layout switched at that width and half
+   did not. Fixed 2026-09-18 by making all ten say 1024.
+
+   1024 is only ever a ceiling in this codebase and never a floor; 1025 is the
+   only desktop floor, and it is what the JS constants name too
+   (DESKTOP_TABLE_MQ in MemberDirectory.tsx and VolunteerApplications.tsx,
+   ContentManager.tsx's matchMedia). CSS and JS must keep naming the same
+   width: director-people.css's own note explains what breaks when they drift. */
+@media (max-width: 1024px) {
+  .ops-shell { flex-direction: column; padding: 10px; gap: 10px; align-items: stretch; }
+  .ops-rail1, .ops-rail2 { display: none; }
+
+  .ops-phonebar {
+    display: flex; align-items: center; gap: 10px;
+    /* 06 invariant 7: hit targets >= 44x44 on phone. The bar grows from 52px
+       so its 44px count button and 40px logo fit with real padding. */
+    min-height: 60px; padding: 4px 8px 4px 6px;
+    background: var(--ink); border-radius: var(--r-pill);
+    position: sticky; top: 10px; z-index: 150;
+  }
+  .ops-phonebar-logo {
+    flex: none; width: 40px; height: 40px; border-radius: var(--r-pill);
+    background: rgba(244, 239, 224, 0.08);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ops-phonebar-title {
+    flex: 1 1 auto; min-width: 0; color: var(--paper);
+    font-family: var(--eina); font-weight: 800; font-size: 14px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .ops-phonebar-title em { font-style: normal; color: var(--welfare-ink); }
+  .ops-phonebar-count {
+    flex: none; display: flex; align-items: center; gap: 5px;
+    /* The ONLY route to the nav sheet on phone - it was 83x36, under the
+       44px floor. */
+    min-height: 44px; padding: 0 14px; border: none; border-radius: var(--r-pill);
+    background: rgba(244, 239, 224, 0.1); color: var(--paper);
+    font-family: var(--eina); font-weight: 700; font-size: 12.5px; cursor: pointer;
+  }
+
+  .ops-main { padding: 0; gap: 12px; }
+}
+
+/* ── The shared nav sheet's content (17.1: "the sheet is the ink bottom
+   sheet from search, reused" - components/Sheet.tsx / styles/components/
+   sheet.css). Peek is disabled for this caller: it only ever mounts at
+   `detent="full"`, and closing unmounts it rather than collapsing to peek -
+   there is no persistent docked bar for the desk nav the way there is for
+   search filters. ── */
+.ops-navsheet-peek {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--display); font-weight: 900; font-size: 20px; letter-spacing: -0.02em;
+}
+.ops-navsheet-body { display: flex; flex-direction: column; gap: 16px; }
+.ops-navsheet-group { display: flex; flex-direction: column; gap: 4px; }
+.ops-navsheet-grouplabel {
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--nav-fg-faint); padding: 6px 4px 2px;
+}
+.ops-navsheet-item {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 46px; padding: 0 10px; border-radius: var(--r-tight);
+  text-decoration: none; color: var(--nav-fg-strong);
+  font-family: var(--eina); font-weight: 600; font-size: 14px;
+}
+.ops-navsheet-item.is-active { background: var(--cc, var(--lemon)); color: var(--ink); font-weight: 800; }
+.ops-navsheet-item-label { flex: 1 1 auto; min-width: 0; }
+.ops-navsheet-item-count {
+  font-size: 11px; font-weight: 800; color: var(--ink); background: var(--lemon);
+  border-radius: var(--r-pill); padding: 2px 8px; font-variant-numeric: tabular-nums;
+}
+.ops-navsheet-item.is-active .ops-navsheet-item-count { background: transparent; padding: 0; color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ops-rail2-chevron { transition: none; }
+}

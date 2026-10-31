@@ -1,0 +1,2224 @@
+/* Route-scoped: HoD desk (director/*), everything scoped under .admin. Extracted from v6.css (Phase 1.1). */
+
+/* ════════════════════════════════════════════════════════════════════════
+   ADMIN DESK KIT - one calm, consistent surface for the HoD/director desk.
+   Middle-ground brand: flat, efficient controls + a few branded accents
+   (sticker section label, accent count chip). The desk is wrapped in `.admin`,
+   which also flattens the public site's playful button/chip motion.
+   ════════════════════════════════════════════════════════════════════════ */
+/* Verified before deleting these `!important`s (06.7): `.admin .btn:hover`/
+   `.admin .chip:hover` already out-specify the public `.btn:hover`/
+   `.chip:hover` rules in v6.css on selector specificity alone (an
+   `.admin`-scoped rule is strictly more specific than its unscoped
+   counterpart), so the flattening holds with or without `!important`. */
+.admin .btn:hover { transform: none; box-shadow: 0 2px 8px rgba(0,0,0,0.10); }
+.admin .btn:active { transform: translateY(1px) scale(0.98) !important; box-shadow: none !important; }
+.admin .chip:hover { transform: none; }
+.admin .chip { transition: background 0.14s, color 0.14s, border-color 0.14s; }
+/* Desktop hit-area floor - the public 44px floor only applies <=760px. */
+.admin .btn-sm { min-height: 40px; }
+
+.adm-layout { max-width: 1120px; margin: 0 auto; padding: 0 var(--page-px, 24px); }
+
+/* Desks render inside `.ops-main`, which ALREADY owns the page gutter. Without
+   this, the two gutters stacked - at 360px that cost 56px (15.5% of the
+   viewport) before any content. The shell owns horizontal space; the kit
+   layout only owns max-width/centering. */
+.admin .ops-main > .director-tab-panel .adm-layout,
+.admin .ops-main .adm-layout { padding-left: 0; padding-right: 0; }
+/* One top inset for every desk. It used to live in an inline style on eleven of the sixteen desks, so five of them (Hiring,
+   Enquiries, Yearbook, People, Permissions) started 16px higher than the rest. */
+.admin .ops-main .adm-layout { padding-top: clamp(8px, 2vw, 16px); }
+
+/* ── Header - one treatment across every tab ── */
+.adm-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.adm-header-label { display: inline-flex; font-family: var(--mono); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0a0a0a; background: var(--welfare); padding: 3px 9px; border-radius: 6px; margin-bottom: 10px; }
+.adm-header-titlerow { display: flex; align-items: center; gap: 10px; }
+.adm-header-title { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.02em; line-height: 1; margin: 0; color: var(--ink); }
+.adm-header-count { font-family: var(--mono); font-size: 12px; font-weight: 800; background: var(--ink); color: var(--bg); padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.adm-header-sub { font-family: var(--eina); font-size: 13.5px; color: var(--ink-3); margin: 6px 0 0; max-width: 60ch; line-height: 1.5; }
+.adm-header-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ── Toolbar - search + filters + right-aligned actions ── */
+.adm-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.adm-search { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1.5px solid var(--line-2); border-radius: var(--r-tight); padding: 0 12px; height: 42px; min-width: 200px; flex: 1 1 220px; max-width: 360px; transition: border-color 0.15s, box-shadow 0.15s; }
+/* rgb(0,229,160) was a hand-added mint that exists in no token (06.0 item 3,
+   same hand-added mint found in the notice-board modal, 01.7). */
+.adm-search:focus-within { border-color: var(--welfare); box-shadow: 0 0 0 3px color-mix(in srgb, var(--welfare) 16%, transparent); }
+.adm-search svg { color: var(--ink-3); flex-shrink: 0; }
+/* 2026-09-10 audit: measured 299x20 on six desk tabs. `.adm-search` is a 42px
+   bar (46px on phone) with `align-items: center`, so the input only ever took
+   its ~20px content height - more than half of what LOOKS like the search field
+   did nothing, and a tap near the top or bottom edge of the bar missed it.
+   `align-self: stretch` makes the whole bar focusable, which is what it already
+   looked like. Same defect, same fix as `.mem-search input` on the public
+   members page; this one covers every desk that has a search. */
+.adm-search input { flex: 1; align-self: stretch; border: none; outline: none; background: transparent; font-size: 15px; color: var(--ink); min-width: 0; }
+.adm-toolbar-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.adm-toolbar-actions { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+
+/* ── Filter pill - calmed brand chip ── */
+/* [FIX] `white-space: nowrap` added. Guardrail §2: any pill with an explicit
+   height AND a 999px radius must carry it, and it belongs in the shared rule,
+   never per instance. This is the desk's shared filter pill (adminKit's
+   FilterPill) and it was the one text-carrying fixed-height capsule in the tree
+   still missing it; a two-word filter label could wrap inside a 36px capsule
+   and clip. `.adm-badge`, `.adm-seg` and `.tab .count` already had it. */
+.adm-pill { font-family: var(--mono); font-size: 12px; font-weight: 700; text-transform: lowercase; letter-spacing: 0.02em; color: var(--ink-2); background: var(--bg-2); border: 1.5px solid var(--line-2); border-radius: 999px; padding: 0 14px; height: 36px; white-space: nowrap; cursor: pointer; transition: background 0.14s, color 0.14s, border-color 0.14s; }
+.adm-pill:hover { border-color: var(--ink-3); }
+.adm-pill.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ── Status badge - one vocabulary (replaces 5 representations) ── */
+.adm-badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.adm-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+/* 06.0 item 4: four hand-added hex literals that duplicated existing *-ink
+   tokens (#0b7d57≈--welfare-ink, #8a6d00≈--lemon-ink, #c0341f≈--danger,
+   #1769a8≈--sky-ink). SET to the tokens they were duplicating. */
+.adm-badge-neutral { background: var(--bg-2); color: var(--ink-2); }
+.adm-badge-success { background: color-mix(in srgb, var(--welfare) 16%, transparent); color: var(--welfare-ink); }
+.adm-badge-warn { background: color-mix(in srgb, var(--lemon) 18%, transparent); color: var(--lemon-ink); }
+.adm-badge-danger { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
+.adm-badge-info { background: color-mix(in srgb, var(--sky) 18%, transparent); color: var(--sky-ink); }
+
+/* ── Bulk-action bar (06.6.2) - an ink capsule, not a bordered card. The
+   count is data (plain mono text on ink), not the rotated lemon sticker
+   chip this used to be - see adminKit.tsx's BulkActionBar. */
+.adm-bulkbar {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 8px 8px 18px;
+  background: var(--ink); border: none;
+  border-radius: var(--r-pill);
+  box-shadow: var(--lift-4); max-width: calc(100vw - 32px);
+}
+.adm-bulkbar-count { font-family: var(--mono); font-size: 11px; font-weight: 800; color: var(--paper); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.adm-bulkbar-divider { width: 1px; height: 20px; background: rgba(244,239,224,0.20); flex-shrink: 0; }
+.adm-bulkbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.adm-bulkbar-clear { background: none; border: none; cursor: pointer; color: var(--paper); padding: 4px 6px; font-family: var(--mono); font-size: 14px; line-height: 1; }
+
+/* ── Empty state - one treatment ── */
+.adm-empty { text-align: center; padding: clamp(40px, 8vw, 72px) 24px; color: var(--ink-3); }
+.adm-empty-icon { font-size: 34px; margin-bottom: 12px; opacity: 0.85; }
+.adm-empty-title { font-family: var(--display); font-weight: 800; font-size: 18px; color: var(--ink-2); }
+.adm-empty-hint { font-family: var(--eina); font-size: 14px; color: var(--ink-3); margin: 8px auto 0; max-width: 360px; line-height: 1.5; }
+.adm-empty-action { margin-top: 18px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HOD DESK - brand-consistent redesign (2026-07-21)
+   ─────────────────────────────────────────────────────────────────────────
+   The desk uses the SAME visual language as the rest of the site - paper
+   surface, hard ink borders, JetBrains Mono labels, NeutralFace display
+   type, Instrument Serif italic accents, brand category colors - because a
+   completely different dark "admin tool" aesthetic reads as generic AI
+   dashboard slop bolted onto a distinctive brand. What actually changed
+   from the old brutalist pass: the shell moved from a horizontal tab strip
+   to a left rail (DirectorDashboard.tsx, genuine structural improvement -
+   12 tabs no longer fight for space on a 375px screen), and every
+   interactive surface got a real craft pass - concentric radius, tabular
+   numerals, scale-on-press, ≥40px hit areas, layered shadows instead of
+   single hard offsets on dense list rows (offset shadows stay reserved for
+   primary actions/buttons, matching how the public site uses them).
+   ───────────────────────────────────────────────────────────────────────── */
+.admin {
+  --hod-bg:        var(--bg);
+  --hod-surface-1: var(--card);
+  --hod-surface-2: var(--bg-2);
+  /* Redesign 06.1: the desk stops declaring a competing elevation system and
+     reads the global one. --hod-border was `var(--ink)` at 3px; the desk now
+     draws its cards with the same hairline every other surface in the app
+     uses. --hair-2 is the "a card's own outer edge" rung (rgba(10,10,10,.12)). */
+  --hod-border:    rgba(10, 10, 10, 0.12);
+  --hod-ink:       var(--ink);
+  --hod-ink-2:     var(--ink-2);
+  --hod-ink-3:     var(--ink-3);
+  --hod-border-w:  1px;
+  --hod-shadow:    var(--lift-1);
+  --hod-shadow-sm: var(--lift-1);
+  /* The bulk bar and sheets genuinely float above content and get a deeper
+     lift than a resting card. */
+  --hod-shadow-md: var(--lift-3);
+  --hod-radius:    var(--r-outer);    /* 32px, was 20px */
+  --hod-radius-sm: var(--r-inner);    /* 22px, was 12px */
+  --hod-radius-xs: var(--r-tight);    /* 14px, for chips inside rows */
+  /* One danger color across the desk - replaces the #c0341f hex literal that
+     was hand-copied into several files (Part 3.6: AccountApprovals.tsx,
+     PostModeration.tsx now read this token instead). */
+  --hod-danger:    var(--danger);
+  --rail-w: 252px;
+  --rail-w-tablet: 216px;
+  background: var(--hod-bg);
+  color: var(--hod-ink);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cards - the ledger "panel": one surface, one 3px ink border, one shadow.
+   No hover-deepen (that reintroduces a second shadow depth) - hover lifts by
+   translating instead, so the shadow value itself never changes. */
+.admin .card,
+.admin .hod-card {
+  background: var(--hod-surface-1);
+  border: var(--hod-border-w) solid var(--hod-border);
+  border-radius: var(--hod-radius);
+  box-shadow: var(--hod-shadow);
+  color: var(--hod-ink);
+  transition: box-shadow 0.15s ease;
+}
+/* Cards no longer move on hover; their lift deepens instead (00.5). */
+.admin .card:hover {
+  box-shadow: var(--lift-2);
+}
+.admin .hod-card--hover:hover {
+  transform: translate(-1px, -1px) !important;
+}
+.admin .hod-card--raised {
+  background: var(--hod-surface-2);
+  box-shadow: var(--hod-shadow);
+}
+
+/* ── Panel rows (`.panel-h` header / `.qrow` list rows / `.qtag` / `.iconbtn`) ──
+   Category color comes in per-row via --cc and shows as a tinted tag - the
+   same "color codes the category" logic used across the public feed, just
+   applied to a denser table row.
+
+   Redesign 06.6.1 retired the "stamped manifest entry" ledger treatment
+   this comment used to describe: the per-row counter index, the dashed
+   "perforated ledger paper" divider and the rotated StatusStamp ink-stamp
+   are gone (a `--hair` top border and the `.adm-status` tinted pill replace
+   them - see adminKit.tsx and the pill rules earlier in this file). */
+/* 06.7: the ✦ before every panel title was decoration in a data tool -
+   DELETE. Border/background/padding/radius demoted to hairline chrome. */
+.admin .panel-h {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 14px;
+  border-bottom: var(--hair); background: var(--bg);
+  border-radius: var(--r-inner);
+}
+.admin .panel-h b { font-family: var(--display); font-weight: 800; font-size: 15px; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* ── `.qrow` (06.6.1) ────────────────────────────────────────────────────
+   The counter-index, the dashed "perforated ledger paper" divider and the
+   coloured left spine are DELETED - the redesign's status pill carries the
+   hue now, and a row number that renumbers when you filter is worse than
+   no row number. The row's own flex layout is KEPT: `.qrow` is still used
+   directly (not through a shared component) by six desks this pass does
+   not touch (MemberOfMonth, VolunteerApplicationsParts, PostModeration,
+   FormResponses, HiringResponses, BlogDrafts) - deleting the class outright
+   would break their layout, which is out of scope to fix here. Those desks
+   inherit this restyle and look "partly migrated" per 06.8's own framing. */
+.admin .qrow {
+  display: flex; align-items: center; gap: 14px;
+  min-height: 44px;
+  padding: 11px 14px;
+  border-top: var(--hair);
+  transition: background 0.12s;
+}
+.admin .qrow:first-child { border-top: none; }
+.admin .qrow:hover { background: var(--bg); }
+.admin .qmeta { flex: 1; min-width: 0; }
+/* Eina, not NeutralFace - NeutralFace is caps-only, so a member's name
+   rendered as shouting (AQNav.css and 01.8 document the same bug). */
+.admin .qname { font-family: var(--eina); font-weight: 700; font-size: 13.5px; line-height: 1.25; color: var(--hod-ink); text-wrap: pretty; }
+.admin .qsub { font-family: var(--code); font-size: 11.5px; color: var(--hod-ink-2); margin-top: 3px; letter-spacing: 0.01em; }
+.admin .qtag {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 4px 9px; border-radius: 999px; border: 1.5px solid var(--cc, var(--ink));
+  background: color-mix(in srgb, var(--cc, var(--accent)) 16%, transparent);
+  color: color-mix(in srgb, var(--cc, var(--ink)) 78%, black); flex: none; white-space: nowrap;
+}
+.admin .qacts { display: flex; gap: 6px; flex: none; }
+.admin .iconbtn {
+  width: 44px; height: 44px; border-radius: var(--r-pill); border: var(--hair-2);
+  display: inline-flex; align-items: center; justify-content: center; background: var(--hod-surface-1);
+  color: var(--hod-ink); cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.admin .iconbtn:active { transform: scale(0.96); }
+.admin .iconbtn svg { width: 17px; height: 17px; }
+.admin .iconbtn.ok:hover { background: var(--welfare); border-color: var(--welfare); }
+.admin .iconbtn.no { color: var(--tomato-ink); }
+.admin .iconbtn.no:hover { background: var(--tomato); color: #fff; border-color: var(--tomato); }
+.admin .role-badge {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 4px 9px; border-radius: 999px; border: 1.5px solid var(--hod-border);
+  background: var(--hod-surface-1); color: var(--hod-ink-2); flex: none; white-space: nowrap;
+}
+
+/* ── 06.6 · Row primitives ────────────────────────────────────────────────
+   `20.0` Verification 1 asks for ONE table implementation. The `.adm-table*`
+   grid primitive specified by `06.6.1` shipped here with ZERO consumers while
+   three real desks kept their own semantic `<table>`s (`.mdir-table`,
+   `.pm-table`, `.vol-table`) - so the codebase carried FOUR definitions and
+   used three of them.
+
+   Resolution: the never-adopted primitive is DELETED rather than half-migrated.
+   The three live tables are real `<table>` elements with sortable `<th>`
+   controls, a sticky first column, zebra striping and their own phone card
+   fallbacks; converting them to a div-grid would trade working table semantics
+   for markup churn across ~170KB of desk code with no test coverage, which is
+   a larger regression risk than the duplication it removes. `06.8` also puts
+   `ProjectManager.css` and `VolunteerApplications.css` explicitly out of scope.
+   If those desks are ever rebuilt, re-introduce the primitive from `06.6.1`
+   and adopt it in all three at once - never in one.
+
+   What stays below is what the live rows actually use: the checkbox cell,
+   the row verdicts, and the undo chrome. ── */
+
+/* Leading checkbox column. 6px is the one radius off the scale, deliberate:
+   an 18px box at 14px radius reads as a circle, and a circular checkbox
+   reads as a radio. The hit target is the whole 38x44 cell (a <label>
+   wrapping the input), not the 18px box itself. A native
+   `<input type="checkbox">` with `accent-color` (already `.adm-row-check`'s
+   behaviour) is the safer default and keeps keyboard/AT support for free;
+   `.adm-check` below is the custom-painted alternative only if the native
+   control fights the design. */
+.admin .adm-check {
+  width: 18px; height: 18px; border-radius: 6px;
+  border: 1.5px solid rgba(10,10,10,0.30); background: var(--card);
+  display: grid; place-items: center; cursor: pointer;
+}
+.admin .adm-check.is-on { background: var(--ink); border-color: var(--ink); }
+/* The <label> IS the hit area: 38px wide x the 44px row minimum. The 18px
+   box inside it is only the painted control. */
+.admin .adm-checkcell {
+  width: 38px; min-height: 44px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; align-self: stretch;
+}
+
+/* Row verdicts - approve/reject render inline on every queue row, at every
+   width. 38px on desktop (the desk's documented floor is 40px; these sit
+   inside a 44px row, so there is a 2px discrepancy against that floor -
+   noted rather than silently matched to it). On phone (see the 760px block
+   further down) they grow to 46px. */
+.admin .adm-verdict-yes {
+  min-height: 38px; padding: 0 13px;
+  border-radius: var(--r-pill);
+  background: var(--welfare); color: var(--ink);
+  border: 2px solid var(--ink); box-shadow: var(--lift-1);   /* was a hard offset */
+  font-family: var(--eina); font-weight: 800; font-size: 12px; cursor: pointer;
+}
+.admin .adm-verdict-no {
+  width: 38px; height: 38px; border-radius: var(--r-pill);
+  background: var(--card); border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+  display: grid; place-items: center; cursor: pointer; color: var(--danger);
+}
+
+/* Optimistic write + undo toast (adminKit.tsx `useUndoableAction`, already
+   live on AccountApprovals' and PostModeration's approve action - this is
+   its toast chrome). Reject on both those desks keeps a dialog instead: it
+   requires a mandatory rejection note the author is notified with, not a
+   plain yes/no the pattern below could replace. See the build report for
+   the full per-desk list. */
+.admin .adm-undo {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 8px 8px 8px 16px;
+  background: var(--card); border: var(--hair-2);
+  border-radius: var(--r-pill); box-shadow: var(--lift-3);
+}
+
+@media (max-width: 760px) {
+  .admin .adm-cellpills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+  .admin .adm-cellpill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border-radius: var(--r-pill); padding: 6px 11px;
+  }
+  .admin .adm-cellpill-label { font-family: var(--mono); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+  .admin .adm-cellpill-value { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--ink); }
+  .admin .adm-verdicts { display: flex; gap: 7px; margin-top: 11px; }
+  .admin .adm-verdict-yes { flex: 1; min-height: 46px; font-size: 13.5px; }
+  .admin .adm-verdict-no { width: auto; min-height: 46px; padding: 0 18px; }
+}
+
+/* `.hod-statrow` (the old bento tile) is DELETED - DirectorLanding.tsx's
+   redesigned `.ops-stat` (see the landing section below) no longer applies
+   this class, and grepping `director/*.tsx` after that change found zero
+   remaining consumers anywhere in the desk. */
+
+/* ── Status pill (adminKit.tsx `<StatusStamp/>`) - redesign 06.6.1 ────────
+   Replaces the rotated ink-stamp: it rotated DATA (the design rule elsewhere
+   in this file says only chrome may rotate), it animated in on every
+   render, and its text colour was a color-mix-toward-black patch the file
+   itself needed five times for contrast. A tinted pill with a *-ink label
+   is the same information at a guaranteed ratio. KEEPS the component's
+   props (label/tone/color), the STATUS_TONE maps in HiringResponses/
+   FormResponses/ContentManager and the `queued` relabel - only the
+   rendering changed, so no desk file needed to change. ── */
+.admin .adm-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: var(--r-pill); padding: 5px 11px;
+  background: color-mix(in srgb, var(--sc, var(--ink)) 22%, transparent);
+  justify-self: start; flex: none; white-space: nowrap;
+}
+/* --sc-dot is only set by the `custom` tone (adminKit.tsx), where the label
+   had to be forced to full ink for contrast; the dot keeps the caller's hue
+   so the colour cue is not lost. The built-in tones set no --sc-dot and fall
+   through to their *-ink partner exactly as before. */
+.admin .adm-status-dot { width: 6px; height: 6px; border-radius: var(--r-pill); background: var(--sc-dot, var(--sc-ink, var(--ink))); flex: none; }
+.admin .adm-status-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--sc-ink, var(--ink));
+}
+/* 2026-09-07. `is-rejected` was the odd one out - it set --sc-ink to --danger,
+   the SAME value as its fill, while the other two used their *-ink partner.
+   But measuring the obvious fix showed the partner was WORSE (--danger-ink on
+   the 22% danger tint is 3.81:1, --danger itself 4.05:1), and that ALL THREE
+   tones were already under the 4.5:1 floor this 9px/800 label needs:
+
+     on white card   pending 5.31 · approved 4.66 · rejected 4.05
+     on cream        pending 4.42 · approved 3.86 · rejected 3.32
+
+   An accent read as text on a 22% tint OF ITSELF cannot clear the floor - the
+   tint moves with the hue, so the pair never separates. So all three now use
+   the mechanism adminKit's `custom` tone already established a few lines
+   above: the LABEL goes to full ink, and --sc-dot carries the hue so the
+   colour cue is not lost. Measured after (ink on each tint):
+
+     on white card   pending 17.82 · approved 14.92 · rejected 13.75
+     on cream        pending 14.91 · approved 12.36 · rejected 11.29
+
+   This is DESIGN.md §2's rule applied to a tint rather than a saturated fill,
+   and it makes the three built-ins consistent with `custom` instead of a
+   fourth variation. (UPDATE 2026-09-07: --danger-ink no longer aliases
+   --tomato-ink - that alias was the mis-alias described below and now points
+   at --danger itself, so --sc-dot on `is-rejected` is simply --danger. Still
+   no new colour. The label-goes-to-ink fix above stands either way.) */
+.admin .adm-status.is-pending  { --sc: var(--lemon);   --sc-dot: var(--lemon-ink);   --sc-ink: var(--ink); }
+.admin .adm-status.is-approved { --sc: var(--welfare); --sc-dot: var(--welfare-ink); --sc-ink: var(--ink); }
+.admin .adm-status.is-rejected { --sc: var(--danger);  --sc-dot: var(--danger-ink);  --sc-ink: var(--ink); }
+/* The one place a `custom` tone gets the sticker keyline (renamed from
+   `.stamp` - see the SOP urgency rail further down this file): a P3 goal's
+   custom fill is --paper, which is invisible without it. Scoped to
+   `.is-p3` (set by SopManagement.tsx) rather than every `.sop-goal` row -
+   P1/P2 already have a visible saturated fill and don't need the extra
+   ink border/keyline chrome a plain adm-status pill elsewhere never gets. */
+.admin .sop-goal.is-p3 .adm-status { box-shadow: var(--keyline); border-color: var(--ink); }
+
+/* ── adminKit.tsx shared primitives (toolbar/pill/badge/empty-state) ── */
+.admin .adm-search {
+  background: var(--hod-surface-1);
+  border: var(--hair-3);
+  border-radius: var(--hod-radius-sm);
+  box-shadow: none;
+  color: var(--hod-ink);
+}
+.admin .adm-search:focus-within {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--welfare) 16%, transparent);
+}
+.admin .adm-pill {
+  background: var(--hod-surface-1);
+  border: var(--hair-2);
+  color: var(--hod-ink);
+  min-height: 40px;
+}
+.admin .adm-pill:hover { background: var(--bg-2); }
+.admin .adm-pill:active { transform: scale(0.96); }
+.admin .adm-pill.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.admin .adm-badge { border: 1.5px solid var(--hod-border); font-family: var(--mono); }
+/* KEEP `.adm-badge` for use OUTSIDE tables (in-table status now uses
+   `.adm-status` above) - SET to the same 22%-tint + *-ink formula so a
+   fully-saturated badge is never louder than the row's own action. */
+.admin .adm-badge-neutral { background: var(--hod-surface-2); color: var(--hod-ink-2); }
+.admin .adm-badge-success { background: color-mix(in srgb, var(--welfare) 22%, transparent); color: var(--welfare-ink); }
+.admin .adm-badge-warn    { background: color-mix(in srgb, var(--lemon) 22%, transparent);   color: var(--lemon-ink); }
+/* DANGER IS THE ONE HUE IN THIS FAMILY THAT CANNOT TAKE THE 22% TINT.
+   The family formula is "22% tint of the hue + that hue's --*-ink partner as
+   the label", and it measures fine for the other three on a white desk card:
+   welfare 4.66:1, lemon 5.31:1, sky 4.52:1. Danger breaks it twice over.
+     · --danger #C4231A is ALREADY a text-safe colour (5.83:1 on --card,
+       5.07:1 on --bg) — it is the only "accent" in the palette that does not
+       need an ink partner, so the label correctly stays var(--danger).
+     · --danger-ink WAS an alias of --tomato-ink #C6300F, which is LIGHTER
+       than --danger itself. Swapping the label to that "partner" measured
+       3.81:1 — worse, not better. A partner lighter than its own fill is not
+       a partner, so on 2026-09-07 --danger-ink was re-aliased to --danger in
+       tokens.css; the label below was already var(--danger) and is unchanged.
+   So the fix is the TINT, not the label: 22% over white gives a #F2CFCD
+   ground and only 4.05:1, under the floor. Back to the 14% of the base rule
+   above (line 70) — #F7E0DF, 4.63:1. Do not raise this back to 22% for
+   family symmetry; the symmetry is what failed. */
+.admin .adm-badge-danger  { background: color-mix(in srgb, var(--danger) 14%, transparent);  color: var(--danger); }
+.admin .adm-badge-info    { background: color-mix(in srgb, var(--sky) 22%, transparent);     color: var(--sky-ink); }
+
+/* ── Empty ledger (adminKit.tsx `<EmptyLedger/>`) - redesign 06.7. `00.12`
+   allows dashed borders in exactly two places and an empty state is not one
+   of them, so the dashed border is gone; it sits flush inside its parent
+   card (`var(--r-inner)`, since a ledger is always inside a var(--r-outer)
+   container) on a plain cream fill. ── */
+.admin .adm-empty,
+.admin .ledger-empty {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--r-inner);
+  margin-top: 4px;
+}
+.admin .ledger-empty {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 10px; padding: clamp(36px, 7vw, 60px) 24px;
+}
+/* `.ledger-empty-doodle` (a hand-drawn squiggly arrow, by its own component
+   comment) is DELETED per 06.7's conditional - it is the desk's version of
+   the `.deco` doodles removed in 00.13, not "a single simple arrow". See
+   adminKit.tsx's `EmptyLedger`. */
+/* `--font-hand`/Caveat was a fifth, uncontrolled typeface (falls through to
+   whatever `cursive` maps to on the device) - SET to the display face, and
+   NeutralFace has no italic, so the italic/rotation are DELETED with it. */
+.admin .ledger-empty-note {
+  font-family: var(--display);
+  font-size: clamp(18px, 2.4vw, 22px); font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; color: var(--ink); max-width: 34ch;
+}
+.admin .ledger-empty-sub {
+  font-family: var(--mono); font-size: 11.5px; color: var(--hod-ink-3);
+  letter-spacing: 0.02em; max-width: 40ch;
+}
+
+/* Buttons.
+   ────────────────────────────────────────────────────────────────────────────
+   The comment that used to sit here said the desk "just needs a proper press
+   state and a floor on hit area" because the site's own `.btn`/`.btn-primary`
+   "already carry the brand's hard-border + offset-shadow language". That was
+   true of the 2026-07 brutalist desk and has been stale since the Sept-2026
+   rounded-minimalism handoff, which reset this desk to hairline borders, the
+   32/22/14 radii and soft lifts - and which CLAUDE.md states plainly: do not
+   restore 3px ink borders, 20px radii or hard offset shadows here.
+
+   It also left a real inconsistency behind. The block below overrode
+   `border-color` and `border-width` to the hairline but NOT `box-shadow`, so a
+   `.btn-primary` inside the desk inherited the global `box-shadow: var(--sh)` -
+   a hard offset drawn against a hairline that is no longer there to cast it.
+   The button read as a brutalist control with its border rubbed out.
+
+   So the shadow is overridden to the desk's own lift, not the brand's offset.
+   `--hod-shadow` IS `var(--lift-1)` since 06.1; naming the desk token rather
+   than the raw lift keeps this one decision in one place. */
+.admin .btn {
+  border-radius: var(--hod-radius-sm);
+  border-color: var(--hod-border);
+  border-width: var(--hod-border-w);
+  box-shadow: var(--hod-shadow);
+  min-height: 40px;
+  transition-property: background, border-color, box-shadow, transform;
+  transition-duration: 0.14s;
+}
+/* The global rules restate the offset on hover/active, so the desk has to
+   answer those too or the shadow reappears the moment a pointer touches it. */
+.admin .btn:hover { box-shadow: var(--lift-2); transform: none; }
+.admin .btn:active { transform: scale(0.96) !important; box-shadow: none !important; }
+/* A ghost button is a bare glyph: v6.css makes `border: none; box-shadow: none`
+   explicit on `.btn-ghost` precisely so it "stays a bare glyph regardless of
+   what .btn resolves to" - but that is (0,1,0) and the `.admin .btn` rules
+   above are (0,2,0), so inside the desk every ghost button (the cancel beside
+   "save changes" in the Teams, SOP and template dialogs) was casting a drop
+   shadow with no edge to cast it. The variant has to opt out again here. */
+.admin .btn-ghost,
+.admin .btn-ghost:hover { box-shadow: none; }
+
+/* Inputs - plain focus ring in brand ink, not a hard offset shadow (offset
+   shadows on every focused field in a dense form reads busy). */
+.admin .input,
+.admin .textarea,
+.admin select {
+  background: var(--hod-surface-1);
+  border: var(--hod-border-w) solid var(--hod-border);
+  border-radius: var(--hod-radius-sm);
+  color: var(--hod-ink);
+  box-shadow: none;
+  min-height: 40px;
+}
+
+/* `.torn-divider` / `.torn-divider--v` are DELETED (06.4.2, 06.7): a tiled
+   zigzag seam is decoration, the desk's equivalent of the `.deco` doodles
+   removed in `00.13`, and it cannot follow a 32px corner. Grepped for
+   callers first - the only two were DirectorLanding.tsx (removed with the
+   torn-paper seam under the old stat bento) and adminKit.tsx's
+   AdminErrorState (removed alongside its two seams); both are in this
+   file set's scope, so nothing outside it references either class. */
+
+/* 06.6.1: the row stagger (`@keyframes ledgerRowIn`, `.qrow`'s entrance and
+   its reduced-motion guard) is DELETED - a 28ms-per-row stagger on a
+   200-row directory was 5.6 seconds of entrance. Same removal applied to
+   `.adm-skel-row`/`.adm-skel-card` below. */
+.admin .input:focus,
+.admin .textarea:focus,
+.admin select:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(15,15,20,0.1) !important;
+  outline: none;
+}
+
+/* Dynamic counts never reflow their row. */
+.admin .ops-stat-value,
+.admin .hod-statrow b,
+.admin .ops-rail-count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Mobile touch-target floor for the HoD desk ──────────────────────────
+   The desk is a desktop-dense tool; several inline-styled controls render at
+   25–30px tall with a 10px font (native <select> status/role pickers, the
+   ProjectManager .pm-obj-chip filter chips, the small status-filter pills on
+   Volunteer Applications / Content). That's fine with a mouse but genuinely
+   hard to tap and read on a phone. Scope the bump to ≤760px so the dense
+   desktop layout is untouched, and use min-height (inline `padding` sets the
+   box but not a floor, so this wins without an !important war). */
+@media (max-width: 760px) {
+  .admin select,
+  .admin .pm-obj-chip,
+  .admin .pm-statfilter,
+  .admin .adm-filter-chip,
+  .admin .adm-pill {
+    /* 44, not the 38 this shipped with: 38 predated the WCAG 2.5.5 target-size
+       floor and, being `.admin`-scoped, outspecified the later 44px rules -
+       so it silently capped these chips below the minimum. */
+    min-height: 44px;
+  }
+  .admin select {
+    /* 16px kills iOS's zoom-on-focus jump and is actually legible on a phone,
+       vs the 10px mono these inline styles ship. */
+    font-size: 16px !important;
+    padding: 6px 10px !important;
+  }
+  .admin .pm-obj-chip {
+    font-size: 12px !important;
+    padding: 8px 14px !important;
+  }
+
+  /* Compact the stat readouts on phones - the ops-shell's own 860px
+     breakpoint already collapses these to a 2-col grid; tighten the padding
+     further so four tiles don't eat the whole first screen. */
+  .admin .ops-stat {
+    padding: 10px 12px !important;
+  }
+  .admin .ops-stat-value {
+    font-size: 22px !important;
+  }
+}
+
+/* Typography - console voice. Section titles keep the brand display face;
+   everything else (labels, meta, counts) defaults toward mono so numbers and
+   status read as instrument data, not copy. */
+.admin,
+.admin .adm-header-sub,
+.admin p, .admin td, .admin li {
+  font-family: var(--eina);
+}
+.admin .h-display,
+.admin .adm-header-title {
+  font-family: var(--display);
+}
+.admin .mono, .admin .adm-badge, .admin .adm-pill, .admin .adm-header-label {
+  font-family: var(--mono);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ADMIN KIT - Part 3 additions (foundational primitives for the later
+   desk-by-desk adoption pass). "Chrome is brutalist, data is legible" - see
+   adminKit.tsx's header comment for the full rule.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── 3.1 AdminSkeleton - approximates real row/card rhythm so nothing jumps
+   when data resolves. Reuses the public site's `.v6-skeleton` shimmer. ── */
+.admin .adm-skel-listwrap { padding: 0; }
+.admin .adm-skel-row {
+  display: flex; align-items: center; gap: 14px;
+  min-height: 44px; padding: 11px 14px;
+  border-bottom: var(--hair);
+}
+.admin .adm-skel-row:last-child { border-bottom: none; }
+.admin .adm-skel-row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+.admin .adm-skel-row-acts { display: flex; gap: 6px; flex: none; }
+.admin .adm-skel-circle { width: 40px; height: 40px; border-radius: var(--r-pill); }
+.admin .adm-skel-bar { flex-shrink: 0; }
+.admin .adm-skel-gridwrap {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px;
+}
+.admin .adm-skel-cardwrap { display: flex; flex-direction: column; gap: 12px; }
+.admin .adm-skel-card {
+  background: var(--hod-surface-1); border: var(--hair-2);
+  border-radius: var(--r-inner); padding: 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.admin .adm-skel-card--wide { align-items: flex-start; }
+.admin .adm-skel-avatar { width: 56px; height: 56px; border-radius: var(--r-pill); }
+
+/* ── 3.2 AdminRow - a row that owns its own busy state. No prop here can
+   disable a sibling row, which is the structural fix for the old
+   "one action loading -> every row's buttons disable" bug. ── */
+.admin .adm-row {
+  background: var(--hod-surface-1);
+  border: var(--hod-border-w) solid var(--hod-border);
+  border-radius: var(--hod-radius-sm);
+  box-shadow: var(--hod-shadow-sm);
+  margin-bottom: 10px;
+  transition: transform 0.14s var(--ease-out);
+  position: relative;
+}
+/* Rows no longer move on hover; their lift deepens instead, same fix as
+   `.admin .card:hover` above - this one was missed when that was migrated. */
+.admin .adm-row:hover { box-shadow: var(--lift-2); }
+.admin .adm-row.is-selected { border-color: var(--accent); }
+.admin .adm-row-main {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; min-height: 40px;
+  transition: opacity 0.15s;
+}
+.admin .adm-row-check { width: 18px; height: 18px; flex: none; accent-color: var(--ink); cursor: pointer; }
+.admin .adm-row-body { flex: 1; min-width: 0; }
+/* Primary content - flat, legible, unrotated, high contrast (never chrome). */
+.admin .adm-row-primary { font-family: var(--display); font-weight: 800; font-size: 15px; color: var(--hod-ink); line-height: 1.25; text-wrap: pretty; }
+.admin .adm-row-secondary { font-family: var(--code); font-size: 11.5px; color: var(--hod-ink-2); margin-top: 3px; letter-spacing: 0.01em; }
+.admin .adm-row-meta { font-family: var(--mono); font-size: 11px; color: var(--hod-ink-3); flex: none; text-align: right; white-space: nowrap; }
+/* Stamp - the one rotated element on the row card; chrome, not data. */
+.admin .adm-row-stamp { flex: none; }
+.admin .adm-row-acts { display: flex; align-items: center; gap: 6px; flex: none; }
+.admin .adm-row-spinner {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--hod-border); border-top-color: transparent;
+  animation: adminRowSpin 0.7s linear infinite;
+}
+@keyframes adminRowSpin { to { transform: rotate(360deg); } }
+.admin .adm-row-expand {
+  /* 00.12: dashed dividers become hairlines - this one is not one of the
+     two documented dashed exceptions (sample-preview notice, absent/live
+     marker), so it was a leftover. */
+  border-top: var(--hair-2);
+  padding: 12px 16px 14px;
+  font-family: var(--eina); font-size: 13.5px; color: var(--hod-ink-2); line-height: 1.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin .adm-row-spinner { animation-duration: 1.4s; }
+}
+
+/* ── 3.5 AdminErrorState - torn-edge note + retry. ── */
+.admin .adm-error { display: flex; flex-direction: column; margin: 16px 0; }
+.admin .adm-error-body {
+  background: var(--hod-surface-1);
+  padding: clamp(24px, 5vw, 40px) 20px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+}
+.admin .adm-error-icon { font-size: 28px; color: var(--hod-danger); }
+.admin .adm-error-msg { font-family: var(--eina); font-size: 14px; color: var(--hod-ink-2); max-width: 44ch; line-height: 1.5; }
+.admin .adm-error-retry { border-color: var(--hod-danger) !important; color: var(--hod-danger); }
+
+/* 06.6.2: KEEP the phone rule that pins the bar full-width to the bottom
+   edge with env(safe-area-inset-bottom), but the top corners round to match
+   the desk's outer radius instead of squaring off, and the primary bulk
+   action sits on welfare (it already rests on ink, where an ink offset
+   would be invisible). */
+.admin .adm-bulkbar-primary { background: var(--welfare); color: var(--ink); border: none; }
+@media (max-width: 600px) {
+  .admin .adm-bulkbar {
+    position: fixed; left: 0; right: 0; bottom: 0; transform: none;
+    max-width: 100%; width: 100%; border-radius: var(--r-outer) var(--r-outer) 0 0;
+    border-left: none; border-right: none;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    justify-content: space-between;
+  }
+  .admin .adm-bulkbar-actions { flex: 1; justify-content: flex-end; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PART 4 - RESPONSIVE RULE SYSTEM (2026-07, stage 2)
+   ─────────────────────────────────────────────────────────────────────────
+   Three real breakpoints, phone-first (this is a phone-first product for
+   students; the desk was previously desktop-dense with two ad-hoc queries):
+
+     ≤600px   phone    - the primary target
+     601–1023 tablet   - two-column where it helps, toolbar stays one row
+     ≥1024px  desktop  - current dense behaviour + DirectorDashboard's rail
+
+   Hard rules encoded below:
+     · data NEVER scrolls horizontally - every grid collapses to a stacked card
+     · row actions collapse to a `⋯` bottom sheet (adminKit `AdminRowActions`),
+       except approve/reject on queue desks, which stay inline, full-width,
+       stacked, ≥44px tall (that IS the job of those desks)
+     · toolbar: full-width search row 1, scrollable filter pills row 2,
+       primary action floats
+     · header drops its subtitle; sticker label + title + count survive
+     · modals become full-screen sheets with sticky header + footer
+     · ≥44×44px touch targets everywhere
+     · all numerics tabular so live counts don't jitter
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Numerics: one rule, everywhere. Counts/dates/ids must not jitter. ── */
+.admin .mono,
+.admin .adm-row-meta,
+.admin .adm-row-secondary,
+.admin .qsub,
+.admin .adm-nums,
+.admin .adm-status-label,
+.admin .adm-bulkbar-count,
+.admin .adm-header-count { font-variant-numeric: tabular-nums; }
+
+/* ── Collapsible data grid. Any desk laying rows out with columns should use
+   `.adm-grid` (+ its own grid-template-columns) instead of a bare inline
+   gridTemplateColumns, so the phone rule below can flatten it to a stack. ── */
+.adm-grid { display: grid; gap: 14px; }
+.adm-stack-on-phone { min-width: 0; }
+
+/* ── Row avatar (06.7 / 17.4). The taped-photo `.adm-tape` - a rotated,
+   hard-shadowed photo with a simulated lemon tape strip - is DELETED: it
+   rotated data, sat off the radius scale at 4px, and its `::before` overflowed
+   the row's `overflow: hidden`. A plain `--r-pill` avatar replaces it, with an
+   `is-square` variant at `--r-tight` for logos and post thumbnails. ── */
+.admin .adm-avatar {
+  position: relative; flex: none;
+  width: 46px; height: 46px;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  background: var(--bg-2);
+}
+.admin .adm-avatar.is-square { border-radius: var(--r-tight); }
+.admin .adm-avatar img,
+.admin .adm-avatar .adm-avatar-fallback {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.admin .adm-avatar .adm-avatar-fallback {
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 900; font-size: 15px; color: #0A0A0A;
+}
+
+/* ── Queue verdict buttons - approve is a mint sticker, reject a bordered
+   ghost in the desk's one danger token. ── */
+.admin .adm-approve {
+  background: var(--welfare) !important; color: #0A0A0A !important;
+  border-color: var(--ink) !important; font-weight: 800;
+}
+.admin .adm-reject {
+  background: transparent !important; color: var(--hod-danger) !important;
+  border-color: color-mix(in srgb, var(--hod-danger) 45%, transparent) !important;
+}
+
+/* ── 06.6.3 · Row verdicts. Scoped to `.adm-verdicts` deliberately:
+   `.adm-approve`/`.adm-reject` are also worn by bulk-bar buttons, `issue`,
+   `mark closed`, `copy` and others, and those must stay ordinary text
+   buttons. Only the in-row verdict pair gets the treatment - and per the
+   spec, "these are the only hard-offset objects inside a table". ── */
+/* The cluster had no desktop rule at all - only the 760px one - so it was a
+   block box and its children stacked once the reject became a 38px disc. */
+.admin .adm-verdicts { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.admin .adm-verdicts > .adm-approve {
+  min-height: 38px; padding: 0 13px;
+  border-radius: var(--r-pill);
+  background: var(--welfare) !important; color: var(--ink) !important;
+  border: 2px solid var(--ink) !important;
+  box-shadow: var(--lift-1);   /* was a hard offset */
+  font-family: var(--eina); font-weight: 800; font-size: 12px;
+}
+.admin .adm-verdicts > .adm-reject {
+  width: 38px; height: 38px; min-height: 38px; min-width: 38px; padding: 0;
+  border-radius: var(--r-pill);
+  background: var(--card) !important;
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent) !important;
+  display: grid; place-items: center;
+  color: var(--danger) !important;
+  box-shadow: none;
+}
+/* The word is hidden, not deleted - the button keeps aria-label="reject",
+   and the phone block below brings the label back with the full-width row. */
+.admin .adm-verdicts > .adm-reject .adm-verdict-label { display: none; }
+
+/* ── Row action cluster + `⋯` trigger (adminKit `AdminRowActions`) ── */
+.admin .adm-rowacts { display: flex; align-items: center; gap: 6px; }
+.admin .adm-more {
+  width: 44px; height: 44px; border-radius: var(--r-pill);
+  border: var(--hair-2); background: var(--hod-surface-1);
+  color: var(--hod-ink); font-size: 18px; line-height: 1; cursor: pointer;
+  display: none; align-items: center; justify-content: center; flex: none;
+}
+
+/* ── Bottom sheet (adminKit `BottomSheet`) - the phone home for row actions
+   and for anything that would otherwise be a cramped desktop modal. ── */
+.adm-sheet-back {
+  position: fixed; inset: 0; z-index: 1200;
+  background: rgba(0,0,0,0.45);
+  display: grid; place-items: center; padding: 16px;
+}
+.adm-sheet {
+  width: 100%; max-width: 440px;
+  background: var(--hod-surface-1, var(--card));
+  border: none;
+  border-radius: var(--r-outer);
+  box-shadow: var(--lift-4);
+  display: flex; flex-direction: column; max-height: 88vh; overflow: hidden;
+}
+.adm-sheet-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 16px; border-bottom: var(--hair);
+  font-family: var(--display); font-weight: 800; font-size: 15px;
+  position: sticky; top: 0; background: inherit; z-index: 1;
+}
+.adm-sheet-body { padding: 12px 16px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.adm-sheet-body > button, .adm-sheet-body > a { width: 100%; justify-content: center; min-height: 46px; }
+.adm-sheet-close {
+  background: none; border: none; cursor: pointer; font-size: 18px; line-height: 1;
+  color: var(--ink-3); min-width: 44px; min-height: 44px; border-radius: var(--r-pill);
+}
+
+/* ── External-link affordance (evidence/proof links open in a new tab) ── */
+.admin .adm-extlink {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--hod-ink-2); text-decoration: underline; text-underline-offset: 3px;
+  min-height: 44px;
+}
+.admin .adm-extlink::after { content: '↗'; text-decoration: none; font-size: 13px; }
+
+/* ── Clamped body text - keeps queue rows the same height until expanded. ── */
+.admin .adm-clamp {
+  /* Always user-authored body text, so --code (real lowercase), never the
+     caps-only NeutralFace that --mono now resolves to. */
+  font-family: var(--code);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* ═════════ TABLET - 601px to 1023px ═════════ */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .adm-layout { padding: 0 20px; }
+  /* Two columns where it helps; the toolbar deliberately stays a single row. */
+  .admin .adm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin .adm-toolbar { flex-wrap: nowrap; }
+  .admin .adm-toolbar-filters {
+    overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; overscroll-behavior-x: contain;
+    /* Right-edge scroll-affordance fade, same pattern as v6.css's `.tabs` rule. */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+  .admin .adm-toolbar-filters::-webkit-scrollbar { display: none; }
+}
+
+/* ═════════ PHONE - ≤600px (primary target) ═════════ */
+@media (max-width: 600px) {
+  /* 7 - touch-target floor. `.btn-sm` shipped at 40px (and some inline
+     controls under that); nothing tappable may be under 44px here. */
+  /* min-WIDTH too: an icon-only `.btn-sm` was 41px wide at a legal 44px tall,
+     which still misses the 44×44 target. */
+  .admin .btn,
+  .admin .btn-sm { min-width: 44px; }
+  .admin .btn,
+  .admin .btn-sm,
+  .admin .iconbtn,
+  .admin .adm-pill,
+  .admin .adm-row-check,
+  .admin select,
+  .admin .input,
+  .admin .textarea { min-height: 44px; }
+  .admin .iconbtn { width: 44px; }
+  .admin .adm-row-check { width: 24px; height: 24px; min-height: 24px; }
+
+  /* 1 - NO horizontal scrolling of data. Every column layout stacks.
+
+     minmax(0, 1fr), NOT 1fr, and the difference is the whole rule. `1fr` is
+     shorthand for `minmax(auto, 1fr)`, and a track's `auto` MINIMUM resolves to
+     its content's min-content width. So one unbreakable string inside a card -
+     a long email address, which this desk is full of - pushes the track wider
+     than the grid itself, and the rule above ends up guaranteeing the exact
+     horizontal overflow its own comment forbids.
+
+     Measured on /dev/desk at 375px before this: the Members grid sat in a 343px
+     container and computed a 487.65px track, so every member card was 488px and
+     its right-hand 145px was clipped away by `.admin { overflow-x: hidden }`.
+     Silently - the page itself did not scroll, so nothing looked wrong until
+     you noticed the card had no right edge. With minmax(0, …) the track
+     resolves to 343.2px and the card to 343px.
+
+     This is why the desk was invisible for so long: there was no way to render
+     it without a director login until /dev/desk existed. */
+  .admin .adm-grid,
+  .admin [class*='adm-grid'] { grid-template-columns: minmax(0, 1fr) !important; }
+  .admin .adm-row-main { flex-wrap: wrap; }
+  /* `flex-wrap: wrap` above never actually fired, because `.adm-row-body` is
+     `flex: 1` - basis 0 with the min-content floor removed - so it shrinks to
+     nothing rather than pushing its `flex: none` siblings onto a second line.
+     Measured on /director/directors at 375px: a HoD row's 230px action block
+     plus a 52px status stamp left the body at 26px while the member's name
+     painted 116px outside it, straight across the role select and the stamp.
+     Giving the body a full-width basis is what makes the wrap real. */
+  /* `calc(100% - 48px)`, NOT 100%. 48px is the selection checkbox's 38px cell
+     plus the row's own 10px gap, so the body still sits beside a checkbox on
+     line one and only the stamp and the action block wrap. A flat 100% basis
+     wrapped the checkbox itself onto a line of its own and grew every row on
+     the four bulk-select queues from ~67px to ~127px - half as many rows on
+     screen, on the highest-volume desks. Rows with no checkbox lose 48px of
+     hypothetical width, which is far less than any action block that was
+     causing the overlap this rule exists to fix. */
+  .admin .adm-row-body { flex: 1 1 calc(100% - 48px); min-width: 0; }
+  .admin .adm-row-meta { text-align: left; width: 100%; }
+  .admin { overflow-x: hidden; }
+
+  /* Inner padding is trimmed on phone too - desktop-comfortable insets spend
+     screen a phone doesn't have. Chrome keeps its presence; the space between
+     the border and the text is what gives. */
+  .admin .adm-row-main { padding: 10px 12px; gap: 10px; }
+  .admin .adm-row { margin-bottom: 8px; }
+  .admin .adm-row-expand { padding: 0 12px 10px; }
+  .admin .qrow { padding: 10px 12px 10px 8px; gap: 10px; }
+  .admin .panel-h { padding: 10px 12px; gap: 8px; }
+  .admin .card { border-radius: var(--hod-radius-sm); }
+  .admin .adm-empty,
+  .admin .ledger-empty { padding: 28px 16px; }
+  .admin .ledger-empty { gap: 6px; }
+
+  /* 2 - row actions collapse to a single `⋯` opening a bottom sheet. */
+  .admin .adm-more { display: inline-flex; }
+  .admin .adm-rowacts.has-sheet > *:not(.adm-more) { display: none; }
+  /* …except queue verdicts, which stay inline, full-width, stacked. */
+  .admin .adm-verdicts {
+    display: flex; flex-direction: column; gap: 8px; width: 100%;
+  }
+  .admin .adm-verdicts > .btn { width: 100%; justify-content: center; min-height: 44px; }
+  /* On phone the block IS the entry point, so the reject verdict goes back to
+     a labelled full-width button rather than the desktop 38px disc. */
+  .admin .adm-verdicts > .adm-reject {
+    width: 100%; height: auto; min-height: 44px; padding: 0 14px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .admin .adm-verdicts > .adm-reject .adm-verdict-label { display: inline; }
+  /* The stack is the whole card width, not the width of its widest button: .adm-row-acts is flex:none, so without this it
+     shrink-wrapped to ~110px and sat left-aligned under the meta line. */
+  .admin .adm-row-acts:has(> .adm-verdicts) { flex: 1 1 100%; width: 100%; }
+  /* approve spoke in lowercase Eina 12px beside CONTACTED and REJECT in the button voice; one voice per stack on a phone. */
+  .admin .adm-verdicts > .adm-approve { font-family: var(--sans); font-size: 14px; }
+
+  /* 3 - toolbar: search + any inline control share row 1, scrolling pills take
+     row 2, primary action floats clear of the content.
+
+     This was `flex-direction: column`, which gave every child its own full-width
+     row. On MemberDirectory - the one desk that passes an inline control - that
+     made three stacked rows: search 44 + filters 46 + sort 44 plus gaps = 146px
+     of toolbar, and measured at 375x812 the first member row started at y=355,
+     44% of the viewport gone before any content. `order` puts the pills last
+     because they are the one child that genuinely needs the full width to
+     scroll; search and sort share what is left. */
+  .admin .adm-toolbar { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .admin .adm-search { max-width: none; width: auto; flex: 1 1 240px; min-width: 0; order: 1; height: 44px; }
+  .admin .adm-toolbar-filters {
+    order: 3; flex: 1 0 100%; min-width: 0;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; padding-bottom: 2px; margin: 0 calc(var(--page-px, 16px) * -1);
+    padding-inline: var(--page-px, 16px);
+    /* Swiping through filter pills at the left/right edge shouldn't trigger
+       the browser's swipe-back/forward navigation - that's a real, jarring
+       loss of the desk's in-progress state (search text, expanded rows). */
+    overscroll-behavior-x: contain;
+    /* Right-edge scroll-affordance fade, same pattern as v6.css's `.tabs` rule. */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+  .admin .adm-toolbar-filters::-webkit-scrollbar { display: none; }
+  .admin .adm-toolbar-filters > * { flex: none; }
+  .admin .adm-toolbar-actions {
+    position: fixed; right: 14px; bottom: calc(88px + env(safe-area-inset-bottom));
+    z-index: 180; margin-left: 0; flex-direction: column; align-items: flex-end;
+  }
+  /* ...but NOT when the slot holds inline controls rather than a floating
+     action button. MemberDirectory passes a sort <select> here; the rule above
+     pinned it near the bottom of the screen, ~330px below the results and
+     detached from the filters it controls (measured y=680 at 375px wide).
+     Grouping a control with what it acts on is the whole point of the
+     toolbar. See DataToolbar's `actionsInline` prop.
+
+     It no longer takes a row of its own either: `order: 2` parks it beside the
+     search box, and `flex: 0 1 auto` lets it give way first if the two together
+     ever exceed the width. */
+  .admin .adm-toolbar-actions.adm-toolbar-actions-inline {
+    position: static;
+    margin-left: 0;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    order: 2;
+    flex: 0 1 auto;
+    min-width: 0;
+    z-index: auto;
+  }
+  .admin .adm-toolbar-actions > .btn { box-shadow: var(--hod-shadow); }
+
+  /* 4 - header: subtitle is desktop luxury; sticker + title + count survive.
+     Vertical rhythm is tightened too - on a 760px-tall phone the header +
+     toolbar block was pushing the first actual row below the fold.
+
+     The four values below were tightened further by the 2026-09-11 density
+     pass, but that pass wrote them into director-people.css, which only five
+     of the nineteen desks import. Vite chunked it, so the other fourteen got
+     the compaction only after the visitor happened to open Members or Teams in
+     the same session, and never on a cold load. They belong here, in the file
+     adminKit.tsx imports and therefore every desk loads. */
+  .admin .adm-header-sub { display: none; }
+  .admin .adm-header { margin-bottom: 8px; gap: 8px; }
+  .admin .adm-header-label { margin-bottom: 4px; }
+  .admin .adm-toolbar { margin-bottom: 10px; gap: 6px; }
+
+  /* 6 - modals become full-screen sheets, sticky head + footer actions. */
+  .admin .modal-back,
+  .adm-sheet-back { padding: 0; align-items: stretch; }
+  .admin .modal,
+  .adm-sheet {
+    width: 100%; max-width: none; height: 100dvh; max-height: 100dvh;
+    border-radius: 0; border-left: none; border-right: none;
+    box-shadow: none; display: flex; flex-direction: column;
+  }
+  .admin .modal-head,
+  .adm-sheet-head { position: sticky; top: 0; z-index: 2; background: var(--hod-surface-1, var(--card)); }
+  .admin .modal-body,
+  .adm-sheet-body { flex: 1; overflow-y: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .admin .modal-body .row { flex-direction: column-reverse; align-items: stretch; }
+  .admin .modal-body .row > .btn { width: 100%; justify-content: center; }
+
+  /* MODALS THAT NEVER ADOPTED THE .modal-body CONTRACT.
+     Audit 2026-09-17, responsiveness P2.
+
+     The rules above turn a modal into a full-screen sheet and put ALL of its
+     scrolling in `.modal-body` (`flex: 1; overflow-y: auto`). Seven components
+     use `.modal` with a `.panel-h` header and no `.modal-body` wrapper at all -
+     MemberBreakDialog, MemberTeamsDialog, HiringResponses, AvatarCropModal,
+     OpportunitiesPage, OpeningsTab, ResponsesTab. For those, the sheet rules
+     still applied but the scroll container did not exist, so on a phone a tall
+     dialog became a 100dvh box with its content simply cut off and no way to
+     reach the buttons at the bottom.
+
+     Rather than edit seven files' markup, detect the shape: a modal with no
+     `.modal-body` child opts out of the flex sheet and keeps the plain
+     overflow model it had before, which scrolls correctly on its own. Modals
+     that DO follow the contract are untouched. `:has()` is the right tool here
+     and is supported everywhere this app runs. */
+  .admin .modal:not(:has(> .modal-body)) {
+    display: block;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+  /* `.panel-h` is those components' header, so give it the same sticky
+     treatment `.modal-head` gets above - otherwise the title and the close
+     button scroll away and the dialog has no visible way out. */
+  .admin .modal:not(:has(> .modal-body)) > .panel-h {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--hod-surface-1, var(--card));
+  }
+
+  /* NOTE: no `.adm-layout` gutter and no `.adm-row-main` padding here - both
+     are set once, above. The shell (`.ops-main`) owns the page gutter and the
+     phone block above owns the tightened inner padding; re-declaring either
+     here just fought those rules. */
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REDESIGN SECTIONS 04 + 08 - the desk restyle.
+   ─────────────────────────────────────────────────────────────────────────
+   "Chrome is brutalist, data is legible" is unchanged; this block only
+   re-shapes the chrome to the redesign's radius pair and pill geometry.
+   The desk takes TWO things from the poster system and no more: the radius
+   pair (--r-card / --r-sm) and the sticker keyline (paper ring, then ink
+   ring) on the stamp. No rotation is added to anything that carries data.
+
+   These rules live here rather than in v6.css or tokens.css (high-collision
+   shared files) and are `.admin`-scoped so nothing outside the desk moves.
+   They also intentionally out-specify the older `.ops-stat*` declarations in
+   director/DirectorDashboard.css, which is imported BEFORE this file.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── 04.1 Header ── */
+.admin .adm-header-label {
+  height: 24px; align-items: center; padding: 0 10px; border-radius: 999px;
+  background: transparent; border: 2px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  color: var(--ink-3); font-size: 8.5px; letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+.admin .adm-header-main { flex: 1 1 auto; min-width: 0; }
+.admin .adm-header-titlerow { justify-content: flex-start; width: 100%; }
+.admin .adm-header-title {
+  font-weight: 900; font-size: 32px; line-height: 0.94; letter-spacing: -0.048em;
+}
+/* A count is a chip beside the title, not a bare number at the far right (it read as a stray "9" on the Teams desk). */
+.admin .adm-header-count {
+  background: var(--bg-2); color: var(--ink-2); border: var(--hair-2); padding: 3px 10px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 800; white-space: nowrap; align-self: center;
+}
+
+/* ── 06.5 Toolbar: 46px search capsule, 38px filter pills, hairline
+   borders instead of 2px ink. ── */
+.admin .adm-search {
+  height: 46px; border-radius: 999px; border: var(--hair-3);
+  background: var(--card); padding: 0 16px;
+}
+/* The ≤600px block far above ALSO sets `height: 44px` on this selector, and
+   loses: identical specificity (0,2,0), and a media query adds none, so the
+   later rule wins wherever it sits in the file. The phone height has to be
+   restated HERE, after the base, or the density pass is silently a no-op.
+   (Not `!important` - 06.7 deliberately removed those from this file.) */
+@media (max-width: 600px) {
+  .admin .adm-search { height: 44px; }
+}
+/* 16px is a fix, not taste - iOS zooms the viewport on focus below it (the
+   desk's own phone block already forces this on `select` for the same
+   reason). */
+.admin .adm-search input { font-size: 16px; }
+.admin .adm-pill {
+  height: 38px; border-radius: 999px; border: var(--hair-2);
+  background: var(--card); color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  padding: 0 14px; white-space: nowrap;
+}
+.admin .adm-pill.is-active {
+  background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 800;
+}
+.admin .adm-pill-count { font-family: var(--mono); font-size: 10px; opacity: 0.6; margin-left: 5px; }
+/* A hairline divider between the status pills and a secondary control - not
+   wired into any desk's toolbar in this pass (each desk's filter state
+   lives in its own out-of-scope file), so this ships as an unused primitive
+   until a desk adopts it. */
+.admin .adm-toolbar-divider { width: 1px; height: 22px; background: rgba(10,10,10,0.12); flex: none; }
+
+/* The old "04.3 Stamp" fill override (targeting `.stamp-pending`/
+   `.stamp-approved`/`.stamp-rejected`) is DELETED - those classes no longer
+   render (06.6.1's `.adm-status` pill above replaced them; its `is-pending`/
+   `is-approved`/`is-rejected` tone colours already live at the top of this
+   file). Leaving this block in place would be dead CSS matching nothing. */
+
+/* `.ledger-empty`'s border/radius/background are set once, at the pill's
+   definition above (06.7) - this second override (dashed-adjacent border,
+   the old 26px radius) is DELETED so it can't win the cascade back. */
+.admin .ledger-empty-action { margin-top: 10px; }
+
+/* ── Error state + bulk bar ── */
+.admin .adm-error-body { background: var(--bg); border-radius: var(--r-inner); }
+.admin .adm-error-retry { min-height: 44px; }
+.admin .adm-bulkbar-actions { flex: 1 1 auto; min-width: 0; gap: 8px; flex-wrap: nowrap; }
+.admin .adm-bulkbar-actions > * {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-height: 44px;
+}
+.admin .adm-bulkbar-clear {
+  flex: 0 0 auto; width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* ── 04.6 Row action pills (the content manager's card footer) ── */
+.admin .adm-actpill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  height: 36px; padding: 0 14px; border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: transparent; color: var(--ink-3);
+  font-family: var(--eina); font-weight: 700; font-size: 11.5px;
+  cursor: pointer; white-space: normal; text-decoration: none;
+  transition: border-color 0.14s, color 0.14s;
+}
+.admin .adm-actpill:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.admin .adm-actpill:disabled { opacity: 0.5; cursor: default; }
+.admin .adm-actpill.is-on { border-color: currentColor; }
+/* B3 - destructive at rest is pink text on a 40% pink border. The filled
+   treatment belongs to the confirm sheet, not to the row. */
+.admin .adm-actpill.is-danger {
+  color: var(--pink-ink); border-color: color-mix(in srgb, var(--pink-ink) 40%, transparent);
+}
+.admin .adm-actpill.is-danger:hover:not(:disabled) { color: var(--pink-ink); border-color: var(--pink-ink); }
+
+/* Status select rendered as a 36px outlined pill with a chevron. It is still
+   a native <select> underneath - the chevron is a sibling and the select keeps
+   its own keyboard and screen-reader behaviour. */
+.admin .adm-selectpill { position: relative; display: inline-flex; align-items: center; flex: none; }
+.admin .adm-selectpill > select {
+  appearance: none; -webkit-appearance: none;
+  height: 36px; min-height: 36px; padding: 0 32px 0 14px;
+  border-radius: 999px; border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: transparent; color: var(--ink);
+  font-family: var(--code); font-size: 10px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+.admin .adm-selectpill > svg {
+  position: absolute; right: 11px; pointer-events: none; color: var(--ink-3);
+}
+
+/* ── 04.7 The post card ── */
+.admin .cm-card {
+  /* 06.0 item 2: --r-card is live (17 consumers outside this file's scope)
+     but its 26px value sits on no scale this pass introduces - SET to the
+     concentric outer radius. Narrow fix only: ContentManager's own restyle
+     was out of scope for that pass. 20.13's pass (this one) picked it back
+     up and found two stragglers this narrow fix missed: the phone-width
+     override further down still redeclared --r-card, and .cm-sla right
+     below carried the same un-migrated value - both now match this rule. */
+  border: var(--hair-2); border-radius: var(--r-outer);
+  background: var(--card); overflow: hidden; padding: 0;
+  box-shadow: var(--lift-1);
+  transition: box-shadow 0.14s, border-color 0.14s;
+}
+/* B1 - hover deepens the lift and tints the edge toward the category hue, so
+   the target is legible before the click. --cc is set per card from
+   CAT_COLORS. Cards no longer move (06.7: their lift deepens instead). */
+.admin .cm-card:hover { box-shadow: var(--lift-2); border-color: color-mix(in srgb, var(--cc, var(--ink)) 45%, transparent); }
+.admin .cm-head {
+  display: flex; align-items: center; gap: 7px; padding: 10px 12px;
+  border-bottom: var(--hair); flex-wrap: wrap;
+}
+.admin .cm-body { padding: 12px; }
+.admin .cm-foot {
+  padding: 9px 12px; border-top: var(--hair);
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+/* The category chip carries the accent now, so the row reads as one object
+   instead of a card with a stripe glued to its left edge. A mono label on a
+   saturated fill is SOLID ink, never an alpha of it. No border - the fill
+   alone carries the chip; a 2px ink ring on top of it is the desk's retired
+   hard-chrome language. */
+.admin .cm-cat {
+  display: inline-flex; align-items: center; height: 24px; padding: 0 9px;
+  border: none; border-radius: 999px;
+  background: var(--cc, var(--welfare));
+  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink);
+  white-space: nowrap; flex: none;
+}
+.admin .cm-author {
+  font-family: var(--eina); font-weight: 800; font-size: 12px;
+  color: var(--ink); text-decoration: none;
+}
+.admin a.cm-author:hover { text-decoration: underline; text-underline-offset: 3px; }
+.admin .cm-counts {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.admin .cm-counts > span { display: flex; align-items: center; gap: 3px; }
+.admin .cm-clamp {
+  margin: 0; font-family: var(--eina); font-size: 13px; line-height: 1.65;
+  color: var(--ink-2); white-space: pre-wrap; word-break: break-word;
+}
+.admin .cm-clamp.is-clamped {
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+.admin .cm-readall {
+  display: block; margin-top: 6px; background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+  text-decoration: underline; text-underline-offset: 3px; min-height: 44px;
+}
+/* Inline editor - radius 14, hairline resting edge with a coloured focus
+   ring on activation (same mechanism as .adm-search:focus-within), 96px
+   floor. The 2px solid accent border this replaced was a hard-chrome
+   leftover; the ring reads as "active" without a heavy resting edge. */
+.admin .cm-editor {
+  width: 100%; box-sizing: border-box; min-height: 96px; padding: 11px 12px;
+  border: var(--hair-3); border-radius: var(--r-sm, 20px);
+  background: var(--bg); color: var(--ink);
+  font-family: var(--eina); font-size: 13px; line-height: 1.7;
+  resize: vertical; outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc, var(--welfare)) 18%, transparent);
+}
+.admin .cm-editor-acts { display: flex; gap: 7px; margin-top: 9px; justify-content: flex-end; flex-wrap: wrap; }
+.admin .cm-editor-acts > button {
+  height: 40px; padding: 0 18px; border-radius: 999px; border: var(--hair-2);
+  background: transparent; color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px; cursor: pointer;
+  white-space: nowrap;
+}
+/* The save action is a primary CTA - one of the desk's few surviving hard
+   offsets (tokens.css: --shadow-cta), so it keeps a solid ink border while
+   its cancel sibling above went to a hairline. */
+.admin .cm-editor-acts > button.is-save {
+  background: var(--cc, var(--welfare)); color: var(--ink); font-weight: 800;
+  border: 2px solid var(--ink); box-shadow: var(--shadow-cta);
+}
+.admin .cm-editor-acts > button:disabled { opacity: 0.55; cursor: default; box-shadow: none; }
+
+/* SLA banner - lemon card, rendered only when a real oldest wait exceeds the
+   48h target. Never a zero, never a placeholder. */
+.admin .cm-sla {
+  display: flex; align-items: center; gap: 9px; margin-bottom: 10px;
+  /* Same concentric-outer-radius fix as .cm-card just above (06.0 item 2) -
+     this card sits directly above it and was still on the un-migrated
+     --r-card, a straggler the earlier narrow fix missed. */
+  padding: 11px 12px; border: var(--hair-2); border-radius: var(--r-outer);
+  background: var(--lemon); color: var(--ink); box-shadow: var(--lift-1);
+}
+.admin .cm-sla-text { flex: 1 1 auto; min-width: 0; font-family: var(--eina); font-weight: 700; font-size: 12.5px; }
+.admin .cm-sla-target {
+  flex: 0 0 auto; font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink); white-space: nowrap;
+}
+/* 06.0 item 1 straggler: --rust already aliases to --danger (tokens.css), so
+   this rendered correctly, but every other desk was swept to the real name -
+   SET for consistency, same as the categories-desk agent's 4 catches. */
+.admin .cm-overdue { font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--danger); }
+.admin .cm-sched {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--sky-ink);
+}
+
+/* End rule - what replaces "load more" once the last page is in. A real
+   total read from the same `count`, never a dead button. */
+.admin .cm-end {
+  display: flex; align-items: center; gap: 10px; padding-top: 12px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.admin .cm-end::before,
+.admin .cm-end::after { content: ''; flex: 1 1 auto; height: 2px; background: rgba(10,10,10,.14); }
+.admin .cm-loadmore {
+  height: 44px; padding: 0 18px; border-radius: 999px; border: var(--hair-2);
+  background: transparent; color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px; cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── 04.8 The triage deck (D5). Presentation only: same state, same
+   handlers, one data path. Below 1025px it is not rendered at all. ── */
+.admin .cm-deck { display: none; }
+.admin .cm-cards { display: flex; flex-direction: column; gap: 10px; }
+.admin .cm-keycap {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); border-radius: 7px;
+  font-family: var(--code); font-size: 9px; font-weight: 700; color: var(--ink-3);
+  white-space: nowrap; flex: none;
+}
+
+@media (min-width: 1025px) {
+  .adm-layout--wide { max-width: 1180px; }
+  .admin .cm-deck { display: block; }
+  .admin .cm-cards.has-deck { display: none; }
+
+  .admin .cm-deckframe {
+    border: var(--hair-2); border-radius: var(--r-outer); background: var(--bg);
+    box-shadow: var(--lift-1); overflow: hidden;
+  }
+  .admin .cm-deckhead {
+    padding: 16px 20px; border-bottom: var(--hair);
+    display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;
+  }
+  .admin .cm-deckhead-title {
+    font-family: var(--display); font-weight: 900; font-size: 30px;
+    line-height: 0.94; letter-spacing: -0.048em; color: var(--ink);
+  }
+  .admin .cm-keys { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .admin .cm-keys .cm-keyname { font-family: var(--code); font-size: 9px; color: var(--ink-3); }
+  .admin .cm-decksplit { display: flex; align-items: stretch; min-height: 520px; }
+  .admin .cm-rail {
+    width: 312px; flex: none; border-right: var(--hair-2);
+    background: var(--bg-3); padding: 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    max-height: 660px; overflow-y: auto;
+  }
+  .admin .cm-railhead {
+    display: flex; align-items: center; gap: 8px; padding: 0 2px 4px;
+    font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+    letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .admin .cm-railitem {
+    width: 100%; text-align: left; padding: 11px 12px;
+    border: var(--hair-2); border-radius: var(--r-sm, 20px);
+    background: var(--card); cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px; flex: none;
+  }
+  .admin .cm-railitem.is-current { background: var(--ink); }
+  .admin .cm-railitem-title {
+    display: block; font-family: var(--eina); font-weight: 800; font-size: 12.5px;
+    line-height: 1.35; color: var(--ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .admin .cm-railitem-by { font-family: var(--mono); font-size: 9px; color: var(--ink-3); }
+  .admin .cm-railitem.is-current .cm-railitem-title { color: var(--paper); }
+  .admin .cm-railitem.is-current .cm-railitem-by { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+  .admin .cm-railnote {
+    margin-top: auto; padding: 10px 12px;
+    border: var(--hair-2); border-radius: var(--r-inner);   /* was 2px dashed - 00.12 */
+    font-family: var(--mono); font-size: 8.5px; line-height: 1.6; color: var(--ink-3);
+  }
+  .admin .cm-detail { flex: 1 1 auto; min-width: 0; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .admin .cm-detail-title {
+    font-family: var(--display); font-weight: 900; font-size: 32px;
+    line-height: 1; letter-spacing: -0.04em; color: var(--ink); text-wrap: pretty;
+  }
+  .admin .cm-detail-body {
+    margin: 0; font-family: var(--eina); font-size: 14px; line-height: 1.7;
+    color: var(--ink-2); white-space: pre-wrap; word-break: break-word;
+  }
+  .admin .cm-facts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .admin .cm-fact {
+    display: inline-flex; align-items: center; height: 30px; padding: 0 11px;
+    border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); border-radius: 999px;
+    font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--ink);
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .admin .cm-verdicts {
+    margin-top: auto; padding-top: 14px; border-top: var(--hair);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  /* "ask for changes" (the unmodified base rule) is a secondary action, so it
+     gets a hairline resting edge like every other non-CTA control on the
+     desk; approve is the primary CTA and keeps the solid ink border that
+     pairs with --shadow-cta (tokens.css's one surviving hard offset). */
+  .admin .cm-verdict {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 52px; padding: 0 22px; border-radius: 999px; border: var(--hair-2);
+    background: var(--card); color: var(--ink);
+    font-family: var(--eina); font-weight: 800; font-size: 14px; cursor: pointer;
+    white-space: normal;
+  }
+  .admin .cm-verdict.is-approve { background: var(--welfare); border: 2px solid var(--ink); box-shadow: var(--shadow-cta); }
+  .admin .cm-verdict.is-ghost {
+    border-color: color-mix(in srgb, var(--ink) 22%, transparent); background: transparent;
+    color: var(--ink-3); font-weight: 700; font-size: 13.5px; padding: 0 18px;
+  }
+  .admin .cm-verdict.is-danger {
+    border-color: color-mix(in srgb, var(--pink-ink) 40%, transparent); background: transparent;
+    color: var(--pink-ink); font-weight: 700; font-size: 13.5px; padding: 0 16px;
+  }
+  .admin .cm-verdict:disabled { opacity: 0.55; cursor: default; box-shadow: none; }
+  .admin .cm-deck:focus-visible { outline: none; }
+  .admin .cm-deck:focus-visible .cm-deckframe { outline: 3px solid var(--ink); outline-offset: 3px; }
+}
+
+/* B12 - at 200% zoom the 1180px composition stops fitting, the media query
+   above stops matching, and the phone cards return in one column. Nothing is
+   lost behind a horizontal scroll because there is no second layout to
+   scroll to. */
+
+/* B2 - one focus ring for every interactive surface on the desk. Never
+   removed, never replaced by a colour change alone. */
+.admin .adm-pill:focus-visible,
+.admin .adm-actpill:focus-visible,
+.admin .cm-loadmore:focus-visible,
+.admin .cm-readall:focus-visible,
+.admin .cm-railitem:focus-visible,
+.admin .cm-verdict:focus-visible,
+.admin .adm-bulkbar-clear:focus-visible,
+.admin .adm-more:focus-visible,
+.admin .ops-stat:focus-visible,
+.admin .ops-desk-row:focus-visible,
+.admin .adm-selectpill > select:focus-visible,
+.admin .cm-editor-acts > button:focus-visible {
+  outline: 3px solid var(--ink); outline-offset: 3px;
+}
+
+/* B9 - reduced motion drops the transition entirely; the hover state (a
+   deeper lift + tinted edge, no movement since 06.7) still applies
+   instantly. The stamp's own keyframe is already guarded by
+   `prefers-reduced-motion: no-preference` further up this file. */
+@media (prefers-reduced-motion: reduce) {
+  .admin .cm-card { transition: none; }
+}
+
+/* ── 06.4 · The landing ───────────────────────────────────────────────────
+   DOM order inverted: scope -> title -> triage -> stat strip -> desk list.
+   The triage card is now the page's subject; the stat row is a strip of
+   totals underneath it, not a six-tile bento above it. ── */
+.admin .ops-landing-scope { font-weight: 700; letter-spacing: 0.08em; margin-bottom: 12px; }
+.admin .ops-landing-title {
+  font-family: var(--display); font-weight: 900; font-size: 52px; line-height: 0.9;
+  letter-spacing: -0.045em; color: var(--ink); margin: 0 0 16px;
+}
+.admin .ops-landing-title i {
+  font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400;
+  color: var(--welfare-ink);
+}
+@media (max-width: 600px) {
+  .admin .ops-landing-title { font-size: 54px; }
+}
+
+/* ── 06.4.2 Triage ─────────────────────────────────────────────────────── */
+.admin .ops-triage { background: var(--ink); border-radius: var(--r-outer); padding: var(--pad-card); }
+.admin .ops-triage-head { display: flex; align-items: center; gap: 11px; padding: 12px 14px 14px; }
+.admin .ops-triage-title {
+  flex: 1; font-family: var(--display); font-size: 19px; font-weight: 900;
+  letter-spacing: -0.03em; color: var(--paper);
+}
+/* The total chip is a sticker (lemon, ink text, hard offset) - the one hard
+   offset object outside the table primitive, because this number is the
+   whole reason the card exists.
+   audit-ok: offset shadow - a stamped, rotated sticker. */
+.admin .ops-triage-total {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--lemon); color: var(--ink); border: var(--hair-2);
+  border-radius: 999px; padding: 5px 11px 4px;
+  box-shadow: var(--lift-1);
+  font-family: var(--mono); font-size: 12px; font-weight: 800;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.admin .ops-triage-total-word { display: none; }
+@media (min-width: 601px) { .admin .ops-triage-total-word { display: inline; } }
+.admin .ops-triage .ledger-empty { margin-top: 0; }
+/* ── 17.2 The jigsaw - replaces 06.4.3's stat strip entirely ──────────────
+   `.ops-statrow`/`.ops-stat`/`.ops-stat-inner` (06.4.3's white-card-with-a-
+   cream-inset strip) are DELETED - DirectorLanding.tsx no longer renders
+   them, superseded by the blocks below.
+
+   The notch: two blocks interlock by a 26px circle in the page's background
+   colour, centred on their shared edge - no clip-path, no mask, no SVG. The
+   blocks sit on the cream page (not inside a white card), so the notch
+   colour is `var(--bg)` at every breakpoint - the one way this effect looks
+   broken is picking the wrong "colour behind it". ── */
+.admin .ops-jigsaw { display: flex; flex-direction: column; gap: 6px; }
+.admin .ops-jigsaw-row { display: grid; gap: 6px; }
+.admin .ops-block {
+  position: relative; overflow: hidden; padding: 16px; min-height: 132px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  text-decoration: none; color: var(--ink);
+  background: var(--cc, var(--lemon));
+  border-radius: var(--r-inner);
+}
+.admin .ops-block.is-ink { background: var(--ink); color: var(--paper); }
+.admin .ops-triage .ops-block.is-ink { background: color-mix(in srgb, var(--paper) 10%, var(--ink)); }
+/* The empty-state block (17's States section) - one full-width welfare
+   slab instead of four real zeros. No number, no notch: it is not a count. */
+.admin .ops-block--clear {
+  min-height: 64px; flex-direction: row; align-items: center; justify-content: center;
+  text-align: center;
+}
+.admin .ops-block--clear .ops-block-label { font-size: 10.5px; }
+/* The notch - a 26px circle the colour of the ground BEHIND the block. The blocks sit inside the
+   "what needs you today" slab, so that ground is the ink fill; an is-ink block lifts a step so it does not vanish. */
+.admin .ops-block::after {
+  content: ''; position: absolute;
+  width: 26px; height: 26px; border-radius: var(--r-pill);
+  background: var(--bg);
+  right: -13px; top: 50%; transform: translateY(-50%);
+}
+.admin .ops-triage .ops-block::after { background: var(--ink); }
+/* Radius rule for a notched block: 6px on every notched side, 22px on every
+   free side - a three-across row reads 22/6/6/22, 6, 6/22/22/6. A lone
+   surviving block (this pass's row 2, once certificates and next-drive are
+   dropped) has no notched side at all, so it stays fully free-radius and
+   its notch is suppressed rather than pointing at nothing. */
+.admin .ops-jigsaw-row > .ops-block:first-child:not(:only-child) { border-radius: var(--r-inner) 6px 6px var(--r-inner); }
+.admin .ops-jigsaw-row > .ops-block:not(:first-child):not(:last-child) { border-radius: 6px; }
+.admin .ops-jigsaw-row > .ops-block:last-child:not(:only-child) { border-radius: 6px var(--r-inner) var(--r-inner) 6px; }
+.admin .ops-jigsaw-row > .ops-block:last-child:not(:only-child)::after { display: none; }
+.admin .ops-jigsaw-row > .ops-block:only-child { border-radius: var(--r-inner); }
+.admin .ops-jigsaw-row > .ops-block:only-child::after { display: none; }
+.admin .ops-block-n {
+  font-family: var(--display); font-weight: 900; line-height: 0.82;
+  font-size: 38px; letter-spacing: -0.05em; font-variant-numeric: tabular-nums;
+}
+.admin .ops-jigsaw-row:first-child .ops-block-n { font-size: 58px; }
+/* Label: full-opacity ink on hue blocks, the paper-ladder floor on the ink
+   block. NOT an alpha of ink on a hue fill - welfare/grape sit only 0.05
+   above the 4.5:1 floor at full opacity, so rgba(10,10,10,.7) (an earlier
+   draft's instruction) measures 3.28:1 there and fails; this pass has no
+   welfare/grape block, but the rule is general and enforced here regardless. */
+.admin .ops-block-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink);
+}
+.admin .ops-block.is-ink .ops-block-label { color: var(--nav-fg-faint); }
+@media (max-width: 760px) {
+  /* 17.2 Phone: the stack does NOT lose its interlock - the notch rotates to
+     the horizontal edge instead of being deleted. Radius reads
+     22 22 6 6 (first) / 6 (middle) / 6 6 22 22 (last). The 6px here is the
+     THIRD documented exception to the radius scale (with the 6px mention mark
+     and the 18px checkbox) and exists because a notched edge is not a corner.
+     The notch colour is --bg: on phone the blocks sit on the cream page, not
+     inside a white card. */
+  .admin .ops-jigsaw-row { grid-template-columns: 1fr !important; }
+  /* Reset every horizontal variant above, selector-for-selector, so the
+     vertical rules that follow are not out-specified by them. */
+  .admin .ops-jigsaw-row > .ops-block:first-child:not(:only-child),
+  .admin .ops-jigsaw-row > .ops-block:not(:first-child):not(:last-child),
+  .admin .ops-jigsaw-row > .ops-block:last-child:not(:only-child),
+  .admin .ops-jigsaw-row > .ops-block:only-child { border-radius: 6px; }
+  .admin .ops-jigsaw-row > .ops-block:last-child:not(:only-child)::after,
+  .admin .ops-jigsaw-row > .ops-block:only-child::after { display: block; }
+  .admin .ops-jigsaw-row > .ops-block::after {
+    display: block;
+    right: auto; top: auto;
+    left: 50%; bottom: -13px;
+    transform: translateX(-50%);
+    background: var(--bg);
+  }
+  /* First and last block of the whole STACK (not of a row) carry the free
+     corners; everything between them is notched top and bottom. */
+  .admin .ops-jigsaw > .ops-jigsaw-row:first-child > .ops-block:first-child:not(.ops-block--clear) {
+    border-radius: var(--r-inner) var(--r-inner) 6px 6px;
+  }
+  .admin .ops-jigsaw > .ops-jigsaw-row:last-child > .ops-block:last-child:not(.ops-block--clear) {
+    border-radius: 6px 6px var(--r-inner) var(--r-inner);
+  }
+  /* One surviving block is not notched at all. */
+  .admin .ops-jigsaw > .ops-jigsaw-row:only-child > .ops-block:only-child {
+    border-radius: var(--r-inner);
+  }
+  /* The last block in the stack has nothing below it to interlock with. */
+  .admin .ops-jigsaw > .ops-jigsaw-row:last-child > .ops-block:last-child:not(.ops-block--clear)::after { display: none; }
+  .admin .ops-block--clear { border-radius: var(--r-inner) !important; }
+  .admin .ops-block--clear::after { display: none !important; }
+}
+
+/* ── 06.4.4 Desk directory ─────────────────────────────────────────────── */
+.admin .ops-desks { margin-top: 4px; display: flex; flex-direction: column; gap: 10px; }
+.admin .ops-desks-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 4px; }
+.admin .ops-desks-title {
+  font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.admin .ops-desks-needyou {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--lemon-ink);
+}
+.admin .ops-desks-panel {
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+  padding: var(--pad-card); box-shadow: var(--lift-1);
+}
+.admin .ops-desks-groups { display: flex; flex-direction: column; gap: 14px; }
+.admin .ops-desks-group { display: flex; flex-direction: column; gap: 7px; }
+.admin .ops-desks-grouphead { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
+.admin .ops-desks-grouplabel {
+  font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--ink);
+}
+.admin .ops-desks-grouprule { flex: 1 1 auto; height: 1px; background: var(--hair-2); }
+.admin .ops-desks-groupcount {
+  font-family: var(--mono); font-size: 9px; font-weight: 700; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.admin .ops-desks-grouprows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+/* Tablet tier - same rationale as .ops-triage-grid above: an explicit
+   601-1023 step instead of one late jump from 3 columns straight to 1 at
+   760px. Placed before that existing collapse so it still wins on overlap. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .admin .ops-desks-grouprows { grid-template-columns: repeat(2, 1fr); }
+}
+.admin .ops-desk-row {
+  display: flex; align-items: center; gap: 11px;
+  min-height: 56px; padding: 10px 13px;
+  border-radius: var(--r-inner);
+  background: var(--bg);
+  text-decoration: none; color: inherit;
+}
+/* A desk with something waiting is tinted with its group hue. */
+.admin .ops-desk-row.has-count { background: color-mix(in srgb, var(--cc) 22%, transparent); }
+.admin .ops-desk-glyph {
+  width: 32px; height: 32px; border-radius: var(--r-tight); /* 14 inside 22 */
+  background: var(--card); display: grid; place-items: center; flex: none;
+  font-family: var(--mono); font-size: 14px; color: var(--cc-ink, var(--ink));
+}
+.admin .ops-desk-meta { flex: 1 1 auto; min-width: 0; }
+.admin .ops-desk-name { display: block; font-family: var(--eina); font-weight: 700; font-size: 13px; color: var(--ink); }
+/* `.ops-desk-path` (the route string, mono 9px) occupied this slot until
+   2026-09-11. It is now `.ops-desk-blurb`, one plain sentence saying what the
+   desk is for - walkthrough item 4.3. The rule is kept, unreferenced, because
+   06-hod-desk §08 specifies it and restoring the path is a one-word change in
+   DirectorLanding. */
+.admin .ops-desk-path {
+  display: block; margin-top: 3px; font-family: var(--code); font-size: 9px;
+  letter-spacing: 0.03em; color: var(--ink-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Prose, so: the desk's own text face rather than mono, and 11px rather than
+   9px. Clamped to two lines so an 18-row list cannot grow unboundedly on the
+   longest blurb; the row's `title` carries the full sentence either way. */
+.admin .ops-desk-blurb {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  margin-top: 3px; font-family: var(--eina); font-size: 11px; line-height: 1.35;
+  color: var(--ink-3); overflow: hidden;
+}
+.admin .ops-desk-count {
+  flex: none; font-family: var(--mono); font-size: 12px; font-weight: 800;
+  color: var(--cc-ink, var(--ink)); font-variant-numeric: tabular-nums;
+}
+.admin .ops-desk-clear {
+  flex: none; font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .admin .ops-desks-grouprows { grid-template-columns: 1fr; }
+}
+
+/* ── 04/08 phone reconciliation ───────────────────────────────────────────
+   Two older `.admin`-scoped blocks further up this file already set floors
+   for the desk on small screens, and both out-specify or !important-override
+   the geometry above. Reconciled here rather than by weakening either. ── */
+@media (max-width: 760px) {
+  /* The `.admin select` rule above sets `padding: 6px 10px !important`, which
+     drops the 32px right inset the chevron sits in and lands the glyph on top
+     of the option text. The pill keeps its own inset. */
+  .admin .adm-selectpill > select {
+    padding: 6px 34px 6px 14px !important;
+    height: auto; min-height: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* 34px on phone, 32px above - the phone title is the only display type on
+     the screen and can afford the two extra pixels. */
+  .admin .adm-header-title { font-size: 34px; }
+  /* Row actions inside the phone sheet are full-width and comfortably above
+     the 44px floor. The `.adm-sheet-body > button` rule does not reach them
+     because AdminRowActions wraps its children in a div. */
+  .admin .adm-sheet-body .adm-actpill {
+    width: 100%; justify-content: center; min-height: 46px;
+  }
+  /* B11 - a button wraps rather than truncating. A truncated verb is
+     unreadable, and every verb on this desk is one or two words. */
+  .admin .adm-actpill { height: auto; min-height: 44px; padding: 8px 14px; }
+  /* The card's own inner padding gives, the way `.adm-row-main`'s does. */
+  .admin .cm-head { padding: 10px 12px; }
+  .admin .cm-body { padding: 10px 12px; }
+  .admin .cm-foot { padding: 8px 12px; }
+  /* Straggler: this phone override still redeclared the pre-migration
+     --r-card (26px), silently shrinking the card's corner 6px below 600px
+     while the base rule above (line ~1040) already reads --r-outer (32px).
+     Matched to the base rule so the radius no longer changes at the
+     breakpoint. */
+  .admin .cm-card { border-radius: var(--r-outer); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REDESIGN SECTIONS 18-25 - the remaining HoD desks.
+   ─────────────────────────────────────────────────────────────────────────
+   Same contract as the 04+08 block above: the desk takes exactly TWO things
+   from the poster system, the radius pair (--r-card / --r-sm) and the
+   sticker keyline, and nothing else. Chrome is brutalist, data is legible;
+   nothing below rotates anything that carries data.
+
+   Everything here is `.admin`-scoped and additive. It exists because eight
+   sections needed the SAME primitives - a real disclosure button, a labelled
+   block, a mono consequence note, an inline alert, a segmented control and a
+   phone card ledger - and building them per desk is how the desk grew twelve
+   vocabularies the first time.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── 18-25.1 Disclosure - "read full post", "read application", "read message"
+   The single most repeated hidden affordance on the desk: source appended the
+   cue to the END of a run-on secondary line that also held an email, a phone
+   number and a role, so the only thing saying "this row opens" was a sentence
+   fragment. It becomes a real button. ── */
+.admin .adm-disclose {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; min-height: 44px; margin-top: 10px; padding: 0 14px;
+  border: var(--hair-2);
+  border-radius: 999px; background: transparent; color: var(--ink-2);
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap;
+  cursor: pointer;
+}
+.admin .adm-disclose:hover { border-color: var(--ink); color: var(--ink); }
+/* A phone wants the full-width tap target; a desktop card does not need a 1000px outlined bar to say "this opens". */
+@media (min-width: 761px) {
+  .admin .adm-disclose { display: inline-flex; width: auto; min-height: 36px; padding: 0 16px; }
+}
+.admin .adm-disclose svg { width: 14px; height: 14px; flex: none; }
+
+/* ── 18-25.2 Labelled block - a control lifted OUT of a data slot ──────────
+   DriveManagement put a live combobox in AdminRow.meta and it collided with
+   the stamp at 390px; SopManagement's goal-only fields materialised loose in
+   the form flow. Both get a bordered, captioned enclosure instead. ── */
+.admin .adm-block {
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: var(--r-sm, 20px); padding: 12px 14px; margin-top: 10px;
+  background: var(--card);
+}
+.admin .adm-block.is-sky    { border-color: var(--sky);     background: color-mix(in srgb, var(--sky) 10%, var(--card)); }
+.admin .adm-block.is-lemon  { border-color: var(--lemon);   background: color-mix(in srgb, var(--lemon) 16%, var(--card)); }
+.admin .adm-block.is-welfare{ border-color: var(--welfare); background: color-mix(in srgb, var(--welfare) 8%, var(--card)); }
+.admin .adm-block-label {
+  display: block; margin-bottom: 8px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+}
+
+/* ── 18-25.3 The consequence note ─────────────────────────────────────────
+   A mono line that says, in words, what a control actually does. Solid ink-2
+   rather than a muted alpha: these lines are the whole point of the
+   affordance ledgers and must not read as decoration. ── */
+.admin .adm-note {
+  margin: 6px 0 0; font-family: var(--code); font-size: 9.5px; font-weight: 600;
+  line-height: 1.5; color: var(--ink-2); letter-spacing: 0.02em;
+  text-wrap: pretty;
+}
+.admin .adm-note.is-quiet { color: var(--ink-3); }
+
+/* ── 18-25.4 Inline alert - a failure a toast alone cannot explain ────────
+   Used where an optimistic row silently REVERTS (FormResponses) or a batch
+   partially fails (VolunteerApplications). The toast stays; this is the
+   thing still on screen next to the wrong row. ── */
+.admin .adm-alert {
+  display: flex; gap: 10px; align-items: flex-start;
+  border: 2px solid var(--rust); border-radius: var(--r-sm, 20px);
+  background: color-mix(in srgb, var(--rust) 10%, var(--card));
+  padding: 10px 14px; margin: 10px 0;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  line-height: 1.5; color: var(--ink);
+}
+.admin .adm-alert svg { width: 16px; height: 16px; flex: none; color: var(--rust); margin-top: 1px; }
+
+/* ── 18-25.5 Segmented control - a MODE switch, not a filter ──────────────
+   Kind tabs (SOPs), sub-tabs (Hiring) and table switches (Enquiries) all
+   swap the object on screen rather than filtering one list, so they must
+   not look like the filter pills sitting under them. ── */
+.admin .adm-seg {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px;
+  /* was a hard ink border - the rest of this pill/picker family (adm-block,
+     adm-disclose, adm-selectpill, adm-sheet-opt) tints ink to ~20-22%; this
+     one was missed. */
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 999px; background: var(--card);
+  max-width: 100%;
+}
+.admin .adm-seg > button {
+  flex: 1 1 auto; min-width: 0; min-height: 42px; padding: 0 16px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.admin .adm-seg > button.is-active { background: var(--ink); color: var(--paper); font-weight: 800; }
+
+/* ── 18-25.6 Filter-pill swatch - 9px of the category's own hue ───────────
+   Five separate colour sources feed these and they are never merged; the
+   swatch just renders whichever one the desk already owns. "all" gets none,
+   deliberately: it is not a category. ── */
+.admin .adm-swatch {
+  width: 9px; height: 9px; border-radius: 999px; flex: none;
+  background: var(--sw, var(--ink-3)); border: 1px solid var(--ink);
+  margin-right: 7px; display: inline-block; vertical-align: middle;
+}
+.admin .adm-pill { display: inline-flex; align-items: center; }
+
+/* ── 18-25.7 Horizontal scroller for pill rows ───────────────────────────
+   Six named chips do not fit 390px, and a wrapping grid gives a filter
+   vocabulary the visual weight of navigation. ── */
+.admin .adm-hscroll {
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  -webkit-overflow-scrolling: touch; padding-bottom: 2px;
+}
+.admin .adm-hscroll::-webkit-scrollbar { display: none; }
+.admin .adm-hscroll > * { flex-shrink: 0; }
+
+/* ── 18-25.8 Dashed marker - an ABSENT value, not a small one ────────────
+   "never run" rendered in the same slot as an age reads as merely old. The
+   project's standing treatment for absent is dashed. ── */
+/* audit-ok: dashed - the live/absent marker (00.12 case 2). */
+.admin .adm-marker {
+  display: inline-flex; align-items: center; height: 26px; padding: 0 10px;
+  border: 2px dashed color-mix(in srgb, var(--ink) 34%, transparent);
+  border-radius: 999px; background: transparent; color: var(--ink-3);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+}
+
+/* ── 18-25.9 Per-row busy - only the ACTING row dims ─────────────────────
+   Five desks each shipped a desk-wide flag once and froze the whole page.
+   The redesign has to SHOW the per-row scope, so the acting row gets a
+   visible "working…" chip rather than just a disabled cluster. ── */
+/* audit-ok: dashed - an in-flight "working…" chip: provisional, not yet real. */
+.admin .adm-working {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px;
+  border: 2px dashed var(--ink); border-radius: 999px; background: var(--lemon);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink);
+  white-space: nowrap;
+}
+.admin .is-rowbusy { opacity: 0.55; }
+
+/* ── 18-25.10 Counted picker - one dashed control instead of a third pill row
+   Hiring rendered a tool switch, a status filter and an optional role filter
+   as three identical pill rows; at 390px they read as one wall.
+   audit-ok: dashed - 18-25.10 specifies this control as the dashed one. ── */
+.admin .adm-picker {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  padding: 0 16px; border: 2px dashed var(--ink); border-radius: 999px;
+  background: transparent; color: var(--ink); cursor: pointer;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  white-space: nowrap; max-width: 100%;
+}
+.admin .adm-picker > span { overflow: hidden; text-overflow: ellipsis; }
+.admin .adm-picker-count {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--ink-3);
+  white-space: nowrap;
+}
+.admin .adm-sheet-opt {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; min-height: 46px; padding: 0 14px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 999px; background: transparent; color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 13px; cursor: pointer;
+  text-align: left;
+}
+.admin .adm-sheet-opt.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.admin .adm-sheet-opt .adm-picker-count { color: inherit; opacity: 0.75; }
+
+/* ── 18-25.11 Cache strip - data of unknown age, named ───────────────────
+   FormResponses paints instantly from a session cache and KEEPS showing it
+   when revalidation fails. A director could read stale rows with no
+   indication at all. ── */
+/* Enquiries' collab-type filter row. It has to stay a SIBLING of the toolbar
+   (FormResponses.tsx explains why: inside it, a second non-shrinking hscroll
+   pushed the page 76px wider at 1280px), but stacked bare it was a second
+   identical pill row reading as one wall with the status row above it. The
+   label is what tells them apart. Margins live here so the ≤600px block below
+   can compact them, instead of inline styles the cascade cannot reach. */
+.admin .fr-typefilter {
+  display: flex; align-items: center; gap: 8px;
+  margin: -10px 0 14px; min-width: 0;
+}
+.admin .fr-typefilter > .adm-hscroll { flex: 1 1 auto; min-width: 0; margin: 0; }
+@media (max-width: 600px) {
+  .admin .fr-typefilter { margin: -6px 0 10px; gap: 6px; }
+}
+
+.admin .adm-cachestrip {
+  display: flex; align-items: center; gap: 9px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 999px; padding: 8px 14px; margin-bottom: 10px;
+  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2);
+  background: var(--card);
+}
+.admin .adm-cachestrip.is-stale { border-color: var(--lemon); background: color-mix(in srgb, var(--lemon) 18%, var(--card)); }
+.admin .adm-cachering {
+  width: 13px; height: 13px; flex: none; border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-top-color: var(--ink);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .admin .adm-cachestrip:not(.is-stale) .adm-cachering { animation: admCacheSpin 0.9s linear infinite; }
+}
+@keyframes admCacheSpin { to { transform: rotate(360deg); } }
+
+/* ── 18-25.12 Progress bar - the yearbook's completion rate ──────────────
+   Derived from the two numbers already in the subtitle. Nothing new is
+   fetched, so this can never show a figure the desk did not measure. ── */
+.admin .adm-progress {
+  height: 9px; border: 2px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  border-radius: 999px;
+  background: var(--card); overflow: hidden; margin-top: 8px; max-width: 320px;
+}
+.admin .adm-progress > i { display: block; height: 100%; background: var(--welfare); }
+
+/* ── 18-25.13 The phone card ledger ──────────────────────────────────────
+   ProjectManager's nine fixed columns total ~750px and VolunteerApplications
+   is a seven-column table that hid two columns and showed a 390px phone a
+   checkbox, a row number, a name and five 10px dots. Neither becomes a phone
+   by scrolling. Same data path, one article per row. ── */
+.admin .adm-ledger { display: flex; flex-direction: column; gap: 10px; }
+.admin .adm-lcard {
+  /* was a hard 2px ink border - every other card container in the desk
+     (.card, .hod-card, .adm-table, .adm-sheet) draws a 1px hairline. */
+  position: relative; border: var(--hair-2); border-radius: var(--r-outer); /* 06.0 item 2 */
+  background: var(--card); padding: 14px 16px; overflow: hidden;
+}
+.admin .adm-lcard-head { display: flex; align-items: flex-start; gap: 12px; }
+.admin .adm-lcard-title {
+  font-family: var(--eina); font-weight: 800; font-size: 15px; color: var(--ink);
+  line-height: 1.25; text-wrap: pretty; margin: 0;
+}
+.admin .adm-lcard-sub {
+  margin: 4px 0 0; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+  line-height: 1.5; word-break: break-word;
+}
+.admin .adm-lcard-facts {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px;
+}
+.admin .adm-lcard-acts {
+  display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px;
+  /* the 12% tint here is exactly --hair-2's colour at 2x its width - normalized
+     to the token so it matches every other in-card divider (.panel-h, .qrow). */
+  border-top: var(--hair-2);
+  flex-wrap: wrap;
+}
+.admin .adm-lcard-no { margin-left: auto; font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--ink-3); flex: none; }
+
+/* ── 18-25.14 Field panel - grouped labelled rows with hairline dividers ── */
+.admin .adm-fields {
+  border: 2px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  border-radius: var(--r-sm, 20px); background: var(--bg); overflow: hidden;
+}
+.admin .adm-fieldrow {
+  display: flex; gap: 12px; padding: 9px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.admin .adm-fieldrow:last-child { border-bottom: 0; }
+.admin .adm-fieldrow > dt {
+  flex: 0 0 56px; font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3);
+  padding-top: 2px;
+}
+.admin .adm-fieldrow > dd { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 13px; color: var(--ink); word-break: break-word; }
+
+/* ── 18-25.15 The quote - the one field on a desk that is READ, not scanned ── */
+.admin .adm-quote {
+  font-family: var(--serif, 'Instrument Serif', Georgia, serif); font-style: italic;
+  font-size: 16.5px; line-height: 1.45; color: var(--ink); margin: 0;
+}
+
+/* ── 18-25.16 Verdict ranking (section 24) ───────────────────────────────
+   Three verdicts where one is a QUESTION. "ask…" is non-destructive: it
+   notifies the author and leaves the post in the queue. Source rendered it
+   as a plain button between two verdicts, so it read as the least important
+   of the three and nobody used it. ── */
+.admin .adm-verdicts .adm-ask {
+  /* was a hard ink border with no shadow to justify it - unlike its
+     .adm-approve/.adm-reject siblings, "ask" was never one of 06.6.3's
+     documented hard-offset exceptions, so it gets the same no-border
+     treatment as a filled pill (06.6.2's .adm-bulkbar-primary). */
+  background: var(--lemon); border: none; color: var(--ink);
+  font-weight: 800; white-space: nowrap;
+}
+.admin .adm-verdicts .adm-approve { flex: 1 1 auto; min-width: 0; }
+
+/* ── 18-25.17 Stats consequence line - the highest-stakes sentence here ──
+   Approving commits a member's self-reported numbers to the org's public
+   totals. Both strings move off .muted grey onto solid ink. ── */
+.admin .adm-consequence {
+  margin: 8px 0 0; font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink);
+}
+
+/* ── 18-25.18 Phone floors ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .admin .adm-seg { display: flex; width: 100%; }
+  .admin .adm-picker { width: 100%; justify-content: space-between; }
+  .admin .adm-lcard { padding: 12px 14px; border-radius: var(--r-outer); }
+  .admin .adm-lcard-acts > * { min-height: 44px; }
+  .admin .adm-fieldrow { flex-direction: column; gap: 3px; }
+  .admin .adm-fieldrow > dt { flex: none; }
+  /* A header action becomes a full-width control under the subtitle rather
+     than a shrunken pill fighting the title for the same line. */
+  .admin .adm-header-actions { width: 100%; }
+  .admin .adm-header-actions > .btn { width: 100%; justify-content: center; min-height: 46px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin .adm-disclose,
+  .admin .adm-picker,
+  .admin .adm-sheet-opt { transition: none !important; }
+}
+
+/* ── 18-25.19 Shared list-foot and row-link pills ────────────────────────── */
+.admin .adm-loadmore {
+  /* was a hard ink border - its sibling .adm-docpill right below already
+     tints ink to 22%; this one was missed. */
+  min-height: 44px; border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: transparent; white-space: nowrap; padding: 0 22px;
+}
+.admin .adm-docpill {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  padding: 0 14px; border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 999px; white-space: nowrap; text-decoration: none;
+}
+.admin .adm-opensheet {
+  /* was a hard ink border - tinted to match .adm-docpill/.adm-loadmore. */
+  min-height: 46px; border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  color: var(--welfare-ink, var(--welfare)); font-weight: 800; white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .admin .adm-opensheet { width: 100%; justify-content: center; }
+}
+
+/* ── 21.x SOPs and goals ─────────────────────────────────────────────────── */
+
+/* The task gets its own line. At 390px a wrapping primary row put a native
+   select mid-sentence, between the task and the rest of it. */
+.admin .sop-task {
+  display: block; font-family: var(--eina); font-weight: 800; font-size: 14.5px;
+  color: var(--ink); line-height: 1.3; text-wrap: pretty;
+}
+
+/* The control row: the status select and the age line the mark-run button
+   changes, together, under the copy rather than in a right-aligned meta slot. */
+.admin .sop-controls {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px;
+}
+.admin .sop-age {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* A procedure's freshness stamp is its only signal of whether it still
+   happens, and it was buried in the actions sheet. It becomes the card's
+   primary, directly under the line it changes. */
+.admin .sop-markrun {
+  display: inline-flex; align-items: center; gap: 7px; margin-top: 10px;
+  min-height: 44px; border-radius: 999px; white-space: nowrap;
+}
+
+/* Three escalating weights off one number. Strings, threshold and the ⚠
+   prefix are unchanged; only the weight escalates. */
+.admin .sop-dl {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.04em; color: var(--ink-3); white-space: nowrap;
+}
+.admin .sop-dl.is-soon {
+  display: inline-flex; align-items: center; height: 26px; padding: 0 10px;
+  border: 2px solid var(--danger); border-radius: 999px; color: var(--danger);
+}
+.admin .sop-dl.is-over {
+  display: inline-flex; align-items: center; height: 26px; padding: 0 10px;
+  border: 2px solid var(--ink); border-radius: 999px;
+  background: var(--danger); color: var(--paper);
+}
+
+/* The urgency rail. --ug is set per row from URGENCY_FILL, with P3 falling
+   back to a neutral edge because its own fill is --paper. */
+.admin .sop-goal > .adm-row { box-shadow: inset 5px 0 0 0 var(--ug, transparent); }
+/* P3's custom-tone pill fills with --paper too, so without the sticker
+   keyline it would not read as a status pill at all. Renamed from `.stamp`
+   to `.adm-status` alongside 06.6.1's stamp -> pill rendering change (see
+   the rule of the same purpose near the top of this file) - required
+   rather than decorative, so the rename travels with it. */
+
+/* The status select stays native; the shell is tinted by state so a row's
+   status reads without opening the menu. */
+.admin .sop-statuspill > select { background: var(--tint, var(--paper)); }
+
+/* ── 23.2 WhatsApp templates ─────────────────────────────────────────────
+   A section inside the hiring desk, never its own screen: no AdminLayout and
+   no AdminTabHeader here on purpose, and nothing about that changes.
+
+   Copy is the desk's whole purpose and it shipped inside the "⋯" actions
+   sheet. As the card's primary it needs a filled treatment and a floor that
+   does not shrink below the tap target when the label swaps to "copied ✓". */
+.admin .wa-copy {
+  min-height: 44px; border-radius: 999px; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 23.3 Yearbook ───────────────────────────────────────────────────────
+   The desk chases people for a photo and a quote, so its outbound action -
+   export - is the card's primary, and the quote is reading type. There is
+   deliberately NO search here: the one search box on this screen belongs to
+   the invite picker and searches all members, not the list. */
+.admin .yb-copy,
+.admin .yb-invite {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 46px; border-radius: 999px; white-space: nowrap;
+}
+.admin .yb-export {
+  min-height: 44px; border-radius: 999px; white-space: nowrap;
+  background: var(--lemon); color: var(--ink); border: var(--hair-3);
+}
+.admin .yb-ready {
+  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+  white-space: nowrap;
+}
+/* Closed, not failed. Dimmed rather than removed, because a skipped entry is
+   still a decision someone made and the count still includes it. */
+.admin .adm-row.yb-skipped { opacity: 0.72; }
+.admin .yb-chip {
+  min-height: 32px; border-radius: 999px; white-space: nowrap;
+  background: var(--lemon); color: var(--ink); border: var(--hair-3);
+}
+
+/* ── 24.x The approve window ─────────────────────────────────────────────
+   Approve is optimistic and its network call fires only when the 5s window
+   closes, so undo is a cancel rather than a server-side rollback. The row it
+   applies to therefore stays on screen, dimmed and ringed, with a line saying
+   where the undo is - a row that simply vanished into a toast gave no way to
+   tell which of two similar posts had just been approved. */
+.admin .adm-row.is-approving {
+  outline: 2px solid var(--welfare); outline-offset: -2px;
+  border-radius: var(--r-sm, 20px);
+}
+.admin .adm-row.is-approving .adm-row-main { opacity: 0.6; }

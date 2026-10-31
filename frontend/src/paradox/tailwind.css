@@ -1,0 +1,108 @@
+/* Tailwind v4 + the Paradox theme. Imported by ParadoxRoot.tsx, which is
+   lazy() in App.tsx - so this whole sheet is fetched ONLY when someone opens
+   /paradox.
+
+   It used to live in src/index.css, which main.tsx imports eagerly. That put
+   Tailwind's theme + preflight + utilities (~74 KB raw / ~12.9 KB gzipped,
+   roughly 45% of the entry stylesheet) into the single render-blocking CSS
+   file on every AquaTerra page - for utilities that, by the @source directive
+   below, exist only for paradox/**. The homepage was paying for it.
+
+   Splitting also removed two real cross-contamination bugs: this file's
+   `pop` and `wiggle` keyframes are NOT the same as the ones in styles/v6.css
+   (paradox's `pop` is a rotate(-6deg) entrance, AquaTerra's is a scale bounce
+   for ticker chips), and because index.css was imported LAST it was silently
+   overriding v6.css's versions app-wide. Scoped here, each side gets its own.
+
+   IMPORTANT (kept from index.css): AquaTerra ships its own preflight/reset
+   UNLAYERED. Tailwind 4's default `@import "tailwindcss"` puts utilities into
+   `@layer utilities`, and unlayered CSS ALWAYS outranks layered CSS regardless
+   of specificity - that wiped out every Tailwind padding/margin utility
+   paradox/* relies on. We import Tailwind's pieces individually so utilities
+   land UNLAYERED, competing with AquaTerra's reset at normal cascade rules
+   where higher specificity (`.px-4`) wins. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+/* Relative to THIS file, which now sits inside paradox/. */
+@source "./**/*.{ts,tsx}";
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Paradox 2026 - Tailwind v4 theme tokens
+   Powers utility classes used inside frontend/src/paradox/* (bg-bg, text-ink,
+   text-c1, font-display, shadow-ink, etc.). Tokens are global so Tailwind's
+   JIT scanner registers them, but the body-level paint of these colours is
+   scoped to `.paradox-root` (see frontend/src/paradox/paradox.css).
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-bg:    #FBF5E6;
+  --color-ink:   #181818;
+  --color-c1:    #FF4338;
+  --color-c2:    #FFD23F;
+  --color-c3:    #B79CED;
+  --color-c4:    #B79CED;
+
+  --font-display: 'Boldonse', 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body:    'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --font-hand:    'Caveat', cursive;
+
+  --shadow-ink:     4px 4px 0 0 #181818;
+  --shadow-ink-sm:  2px 2px 0 0 #181818;
+  --shadow-ink-lg:  6px 6px 0 0 #181818;
+  --shadow-ink-c1:  4px 4px 0 0 #FF4338;
+  --shadow-ink-c2:  4px 4px 0 0 #FFD23F;
+  --shadow-ink-c3:  4px 4px 0 0 #B79CED;
+
+  --animate-marquee:      marquee 22s linear infinite;
+  --animate-marquee-fast: marquee 14s linear infinite;
+  --animate-pop:          pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+  --animate-wiggle:       wiggle 1.6s ease-in-out infinite;
+  --animate-pulse-ring:   pulseRing 1.4s cubic-bezier(0.4,0,0.2,1) infinite;
+  --animate-float:        floatY 3s ease-in-out infinite;
+  --animate-bob:          bob 5s ease-in-out infinite;
+  --animate-bob-r:        bobR 6s ease-in-out infinite;
+  --animate-bob-slow:     bob 7s ease-in-out infinite;
+  --animate-ss-float:     ssFloat 3s ease-in-out infinite alternate;
+  --animate-spin-slow:    spin 12s linear infinite;
+
+  --tracking-tightest: -0.04em;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0px) rotate(-2deg); }
+  50%      { transform: translateY(-12px) rotate(2deg); }
+}
+@keyframes bobR {
+  0%, 100% { transform: translateY(0px) rotate(2deg); }
+  50%      { transform: translateY(-10px) rotate(-1deg); }
+}
+@keyframes ssFloat {
+  from { transform: translateY(0) rotate(var(--r, 0deg)); }
+  to   { transform: translateY(-8px) rotate(calc(var(--r, 0deg) + 2deg)); }
+}
+@keyframes pop {
+  0%   { transform: rotate(-6deg) scale(0.4);  opacity: 0; }
+  60%  { transform: rotate(-6deg) scale(1.15); opacity: 1; }
+  100% { transform: rotate(-6deg) scale(1);    opacity: 1; }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  50%      { transform: rotate(1deg); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(255,67,56,0.6); }
+  100% { box-shadow: 0 0 0 16px rgba(255,67,56,0); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

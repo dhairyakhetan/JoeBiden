@@ -1,0 +1,410 @@
+/* ━━━ EQUITY POLICY — redesign appendix A4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   A governance document, given the poster system: paper page, one slab per
+   section, the welcome block and Consequences on ink, one sticker, and no
+   motion beyond a hover lift on the two exits.
+
+   12-secondary-pages.md §12.8 (2026-09): container-only restyle onto the
+   rounded-minimalism scale - var(--r-outer) (32) on every slab that sits
+   directly on the page, var(--r-inner) (22) on the cream well nested inside
+   one (.ep-principle), var(--r-tight) (14) on the xref nested inside THAT -
+   plus body type at 400 16px/1.7 and a 68ch measure, both named explicitly
+   in §12.8. This superseded appendix A4's own --r-md(28)/--r-card(26)/
+   --r-sm(20) numbers for exactly these properties. Nothing else on this
+   page changed: not a heading, not a word of .ep-p, not the jump nav (which
+   §12.8 says "do not ADD" - it already existed here, so it stays), not the
+   dashed xref/quote borders (00.12's dashed-to-hairline rule is not one of
+   12's ten blanket-transform items, and §12.8's own warning - "this is the
+   one page where a design improvement is a compliance risk" - is reason
+   enough not to extend it here on inference). var(--bd) already resolves to
+   the same hairline value as var(--hair-2) (see tokens.css), so every
+   existing `border: var(--bd)` already renders correctly and none were
+   renamed.
+
+   The read is still the point. The measure stays near 62ch inside each slab,
+   headings keep more air above than below, and nothing here animates while a
+   person is trying to read a rule that will be quoted back at them.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.ep-page {
+  background: var(--bg);
+  padding: clamp(24px, 5vw, 48px) 0 clamp(56px, 9vw, 96px);
+}
+
+.ep-shell {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+
+.ep-masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px clamp(10px, 2vw, 18px);
+}
+
+.ep-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Lowercase display type is Eina 800 or Instrument Serif italic. NeutralFace
+   has no lowercase glyphs and is never given `text-transform: lowercase`. */
+.ep-h1 {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(38px, 9vw, 60px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.ep-h1-serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--welfare-ink);
+}
+
+.ep-standfirst {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--eina);
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── The ink block ───────────────────────────────────────────────────────── */
+
+.ep-ink {
+  position: relative;
+  margin-top: 12px;
+  background: var(--ink);
+  border-radius: var(--r-outer);
+  padding: clamp(22px, 4vw, 30px) clamp(20px, 4vw, 26px);
+}
+
+.ep-ink-h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(22px, 5.6vw, 32px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--paper);
+}
+
+/* The seven principle names as an index line. */
+.ep-ink-p {
+  margin: 14px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  /* accent-lint-ok: measured in-browser on an ink ground (#0A0A0A) — the display hue clears AA there and its --*-ink partner does not (welfare 4.55 vs 3.20; lemon 15.1 vs 3.36). */
+  color: var(--lemon);
+  text-wrap: pretty;
+}
+
+.ep-ink-sticker {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  /* Mono label on a saturated fill: solid ink, never an alpha. */
+  color: var(--ink);
+  transform: rotate(3deg);
+  box-shadow: var(--keyline);
+  white-space: nowrap;
+}
+
+/* ── Jump bar ────────────────────────────────────────────────────────────── */
+
+.ep-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 6px 0 4px;
+}
+
+.ep-jump-link {
+  display: inline-flex;
+  align-items: center;
+  /* Fixed height + 999px radius, so nowrap is mandatory; the row wraps
+     instead of the label. 44px keeps it a real tap target on phone. */
+  height: 44px;
+  padding: 0 15px;
+  border: var(--bd);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ep-jump-link:hover { background: var(--lemon); color: var(--ink); }
+
+/* ── The document ────────────────────────────────────────────────────────── */
+
+.ep-doc {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ep-slab {
+  background: var(--card);
+  border: var(--bd);
+  border-radius: var(--r-outer);
+  padding: clamp(20px, 4vw, 28px) clamp(20px, 4vw, 26px);
+  /* The jump bar lands here, and the fixed nav must not cover the heading. */
+  scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+
+.ep-slab--ink { background: var(--ink); border-color: var(--ink); }
+
+.ep-h {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(17px, 2.4vw, 21px);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.ep-h--ink { color: var(--lemon); }
+
+.ep-p {
+  margin: 0 0 12px;
+  max-width: 68ch;
+  font-family: var(--eina);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.ep-p:last-child { margin-bottom: 0; }
+.ep-p strong { color: var(--ink); font-weight: 700; }
+.ep-p--ink { color: rgba(244, 239, 224, 0.86); }
+
+.ep-list {
+  margin: 0;
+  padding-left: 1.15em;
+  max-width: 68ch;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-family: var(--eina);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.ep-list li::marker { color: var(--welfare-ink); }
+.ep-list--ink { color: rgba(244, 239, 224, 0.86); }
+.ep-list--ink li::marker { color: var(--lemon); }
+
+/* ── The seven principles ────────────────────────────────────────────────── */
+
+.ep-slab--principles { padding-bottom: clamp(16px, 3vw, 22px); }
+
+.ep-principles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  counter-reset: none;
+}
+
+/* Each principle is a self-contained rule, so each gets its own card rather
+   than a bullet in a run of seven. */
+.ep-principle {
+  position: relative;
+  padding: 15px 18px 15px 52px;
+  background: var(--bg);
+  /* cream well nested inside the white .ep-slab card - r-inner (22), not the
+     outer card radius (00.10 / 11.3's "cream inset inside a white card"). */
+  border-radius: var(--r-inner);
+}
+
+.ep-principle-no {
+  position: absolute;
+  left: 18px;
+  top: 15px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--welfare-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ep-term {
+  margin: 0 0 5px;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.ep-principle-body {
+  margin: 0;
+  max-width: 58ch;
+  font-family: var(--eina);
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* The one piece of non-policy text on the page. Dashed, mono-labelled, and
+   deliberately unlike every clause around it. */
+.ep-xref {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: var(--hair-2);   /* was 2px dashed var(--line-2) - 00.12 */
+  /* nested inside .ep-principle, itself nested inside .ep-slab - the
+     innermost tier of the concentric scale. */
+  border-radius: var(--r-tight);
+  background: var(--card);
+}
+.ep-xref-label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ep-xref-body {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── Contact ─────────────────────────────────────────────────────────────── */
+
+.ep-contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-family: var(--eina);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.ep-contact-name { color: var(--ink); font-weight: 600; }
+.ep-contact-num {
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  /* 44px row on touch without pushing the list apart visually. */
+  display: inline-block;
+  padding: 4px 0;
+}
+.ep-contact-num:hover { color: var(--ink); }
+
+/* ── The closing quotation ───────────────────────────────────────────────── */
+
+.ep-quote {
+  margin: 2px 0 0;
+  padding: clamp(20px, 4vw, 28px) clamp(20px, 4vw, 26px);
+  border: var(--hair-2);   /* was 2px dashed var(--line-2) - 00.12 */
+  border-radius: var(--r-outer);
+}
+.ep-quote p {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 2.2vw, 19px);
+  line-height: 1.45;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── Lateral exits ───────────────────────────────────────────────────────── */
+
+.ep-exits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.ep-exit {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 68px;
+  padding: 16px 20px;
+  border: var(--bd);
+  border-radius: var(--r-outer);
+  background: var(--card);
+  text-decoration: none;
+  transition: transform 0.16s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ep-exit:hover { transform: translateY(-2px); }
+}
+
+.ep-exit-h {
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.ep-exit-p {
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+@media (min-width: 601px) {
+  .ep-exits { grid-template-columns: 1fr 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-exit { transition: none; }
+  .ep-exit:hover { transform: none; }
+}

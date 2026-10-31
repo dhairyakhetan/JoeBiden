@@ -1,0 +1,2 @@
+/* Set by lib/pauseAmbient.ts on decorative loops that are far out of view. */
+[data-ambient-off] { animation-play-state: paused !important; }

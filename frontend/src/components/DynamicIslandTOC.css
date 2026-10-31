@@ -1,0 +1,53 @@
+/* Extracted from DynamicIslandTOC.tsx's inline <style> block(s) (Phase 1.3). */
+
+        .bp-toc-rail {
+          bottom: 28px;
+          /* Moved out of the component's inline style, because inline wins over
+             the cascade and the phone media query below could not override it. */
+          display: flex;
+          justify-content: center;
+        }
+        @media (max-width: 767px) { .bp-toc-rail { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); } }
+
+/* ── NOT ON A PHONE ───────────────────────────────────────────────────────
+   Below 768 this island was the SECOND thing floating over the page. The
+   MobileMenuBar dock already owns the bottom of the screen, so the island was
+   pushed 96px up to clear it - which put it squarely in the reading column.
+   Screenshotted on /about at 375x812: it sat across the body text of the first
+   position card, with "Every school club is student..." disappearing behind it
+   and the line below cut in half. The dock then covered the next 84px.
+
+   Two floating bars over an 812px screen is roughly 18% of the viewport
+   permanently unavailable for reading, to duplicate navigation the dock is
+   already providing. So the island is a tablet-and-up affordance now. The page
+   still has its headings and the dock still has its links; nothing is lost on
+   a phone except the thing that was covering the words.
+
+   Kept at 768 rather than the 760 used elsewhere because that is the width the
+   rail's own offset above is already written against, and the two must agree
+   or the island reappears in the gap between them.                          */
+@media (max-width: 767px) {
+  .bp-toc-rail { display: none; }
+}
+
+/* The footprint the island occupies, reserved so the last content on the page
+   clears it instead of sitting underneath. Added by DynamicIslandTOC on mount
+   and removed on unmount, so only /about and /brand pay for it.
+
+   The sum mirrors the rail's own `bottom` above plus its 52px height plus a
+   16px breathing gap: 28 + 52 + 16 = 96. Keep the two in step.
+
+   Tablet and up only, because that is the only place the island exists now. */
+body.has-toc-island { padding-bottom: 96px; }
+/* No reservation on a phone: the island is hidden there (see above), so the
+   only thing at the bottom is the dock, and PublicLayout already reserves for
+   that with .aq-bottom-bar-spacer. Reserving twice would put 164px of dead
+   space under every page on /about and /brand - the exact waste this pass is
+   removing elsewhere. */
+@media (max-width: 767px) {
+  body.has-toc-island { padding-bottom: 0; }
+}
+@media print {
+  body.has-toc-island { padding-bottom: 0; }
+}
+      

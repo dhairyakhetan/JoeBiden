@@ -1,0 +1,374 @@
+/* Extracted from AQNav.tsx's inline <style> block(s) (Phase 1.3).
+   Note: `@keyframes hodPulse` (used here and by components/MobileMenuBar.tsx)
+   now lives once in critical v6.css instead of being redefined per-component. */
+
+/* ── Per-pill nav icon colors ─────────────────────────────────────────────
+   The four center-pill links (home/projects/teams/HoD Desk) previously all
+   rendered flat ink - no way to tell them apart except the label text. This
+   gives each its own tint using existing category-color tokens
+   (tokens.css) rather than inventing new hues, and deliberately only tints
+   the icon (via .aq-nav-link-icon's `color`, which every icon inherits
+   through `currentColor`) - not a colored pill background, which would
+   fight the flat-white minimal-chrome bar (see the MAJOR MISMATCH note
+   below on why that bar is deliberately unsegmented).
+
+   *-ink variants, not the raw fill hues: v6.css's .aq-nav-link-icon sits at
+   opacity 0.65 on the --card white bar, i.e. these read as small glyph
+   foregrounds, not big fills - and tokens.css documents that several raw
+   hues (--welfare 4.35:1, --sky 2.54:1, --lemon 1.61:1...) fail WCAG AA as
+   a foreground on a light ground, while the paired *-ink tokens are tuned
+   to clear it. --pink-ink for HoD Desk deliberately echoes the pulse-dot's
+   --pink (that dot is a fill, at full size and short-lived, so it can use
+   the raw hue where these small persistent glyphs cannot).
+
+   Selector specificity (two classes) sits BELOW v6.css's `.aq-nav-link.active
+   .aq-nav-link-icon` / `.aq-nav-link-director.active .aq-nav-link-icon`
+   (three classes each), so the active state's black-on-color icon - the
+   existing "you are here" affordance - always wins over these tints
+   regardless of stylesheet order. Only the at-rest/hover state picks up the
+   color; hover (`.aq-nav-link:hover .aq-nav-link-icon`) only ever touches
+   opacity/transform in v6.css, never color, so the two compose cleanly. */
+.aq-nav-link-home .aq-nav-link-icon { color: var(--welfare-ink); }
+.aq-nav-link-projects .aq-nav-link-icon { color: var(--sky-ink); }
+.aq-nav-link-teams .aq-nav-link-icon { color: var(--teal-ink); }
+.aq-nav-link-terranotes .aq-nav-link-icon { color: var(--grape-ink); }
+.aq-nav-link-director .aq-nav-link-icon { color: var(--pink-ink); }
+
+/* ── Desktop search collapses to icon-only ───────────────────────────────
+   v6.css's "NAV SEARCH" block (search for `.aq-search-field`) still declares
+   the >=1025px 188px bordered field and the <=1024px-only `.aq-search-btn`
+   hide rule; AQNav.tsx no longer renders that field at all (removed, along
+   with its "/"-focuses-the-field wiring - see the effect above the JSX).
+   These two rules override v6.css rather than editing it, since this pass's
+   scope is AQNav.tsx/.css only: AQNav.css loads after v6.css (both are
+   static imports reachable from main.tsx - tokens.css/v6.css directly,
+   AQNav.css transitively through App -> AQNav.tsx's own `import
+   './AQNav.css'` - and ES module execution runs each import's dependencies
+   before its own body, so v6.css finishes injecting before AQNav.css does),
+   so equal-specificity/equal-!important rules here win the cascade tie. */
+@media (min-width: 1025px) {
+  .aq-search-btn { display: inline-flex !important; }
+}
+.aq-search-field { display: none !important; }
+
+/* ── Chameleon pill tint (2026-09-09) ─────────────────────────────────────
+   Recolors the flat-white pill to match a full-bleed hero currently sitting
+   under it (AboutPage/CollaborationsPage's ink hero, RootsPage's grape hero)
+   instead of always showing a white pill over a dark backdrop. Driven by
+   AQNav.tsx's navTint state (one IntersectionObserver watching the small set
+   of `[data-nav-tint]` hero sections that opt in) setting `data-tint` on
+   `.aq-nav` itself.
+
+   This is deliberately NOT a revival of the segmented glass-bar spec the
+   MISMATCH note below records as retired 2026-09-06 - that spec was six
+   backdrop-filter blur layers on the most-rendered surface in the app,
+   dropped for a real, measured performance cost. This is a solid
+   background-color swap, no blur, and it only ever runs on pages that
+   explicitly opt a hero in - every other page's pill renders exactly as
+   before ([data-tint] absent, none of this matches). */
+.aq-nav[data-tint] .aq-nav-inner { border-color: transparent; }
+/* stamp-white.png is a real alpha-transparent PNG (see DirectorDashboard's
+   plain <img> use of it) - v6.css's `.aq-logo-img { mix-blend-mode:
+   multiply }` exists only to erase stamp-ink.png's white canvas and can
+   only darken, so it would make a white mark a no-op against the ink pill. */
+.aq-logo-img--white { mix-blend-mode: normal; }
+.aq-nav[data-tint="ink"] .aq-nav-inner { background: var(--ink); }
+.aq-nav[data-tint="grape"] .aq-nav-inner { background: var(--grape); }
+/* --welfare is a mid-tone green (13.5's own contrast table: ink on it is
+   4.55:1, paper on it fails at 3.78:1) - unlike ink/grape it wants the
+   DEFAULT ink text/icons/logo, not the light-on-dark treatment below, so it
+   is deliberately left out of every ".aq-nav[data-tint]:not(...)" selector
+   further down (AQNav.tsx's navTint→isDark check does the same for the logo). */
+.aq-nav[data-tint="welfare"] .aq-nav-inner { background: var(--welfare); }
+
+/* Links/icons/search/bell go light-on-dark for the two DARK tints only
+   (welfare is mid-tone and keeps the default ink text - see above).
+   `:not(.active)` keeps this from ever touching the active pill's own
+   opaque mint-and-ink treatment just below (already high-contrast on any
+   ground, tint or not) - and, since `:not()` carries its argument's
+   specificity, this rule also outranks the per-hue icon tints above without
+   needing source-order to save it: those are tuned for a light ground and
+   would risk failing contrast here. */
+.aq-nav[data-tint="ink"] .aq-nav-link:not(.active),
+.aq-nav[data-tint="grape"] .aq-nav-link:not(.active),
+.aq-nav[data-tint="ink"] .aq-nav-icon-btn:not(.active),
+.aq-nav[data-tint="grape"] .aq-nav-icon-btn:not(.active) {
+  color: var(--bg);
+}
+.aq-nav[data-tint="ink"] .aq-nav-link:not(.active) .aq-nav-link-icon,
+.aq-nav[data-tint="grape"] .aq-nav-link:not(.active) .aq-nav-link-icon {
+  color: var(--bg);
+}
+.aq-nav[data-tint="ink"] .aq-nav-link:not(.active):hover,
+.aq-nav[data-tint="grape"] .aq-nav-link:not(.active):hover,
+.aq-nav[data-tint="ink"] .aq-nav-icon-btn:not(.active):hover,
+.aq-nav[data-tint="grape"] .aq-nav-icon-btn:not(.active):hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Smooth swap rather than a hard cut when the tint engages/disengages. */
+.aq-nav-inner {
+  transition: background-color 0.22s var(--ease-out), border-color 0.22s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .aq-nav-inner { transition: none; }
+}
+
+/* ── RESOLVED 2026-09-06: the mismatch below is now the RULING ──────────────
+   The project owner retired changelog/02's sections 02.1-02.6 outright. The
+   live flat-white nav documented under this note is the product; the
+   segmented ink chrome is not going to be built. See the SUPERSEDED banner at
+   the top of changelog/02-global-chrome.md for the reasoning (a different
+   design source, and six backdrop-filter layers deliberately dropped for
+   performance on the most-rendered surface in the app).
+
+   02.7 (footer) and 02.8 (focus offset) were NOT retired and are applied.
+   The accessibility half of 02.4 was applied to the nav that actually ships:
+   links and logo are 40px min, labels use --eina (NeutralFace is caps-only,
+   so `text-transform: lowercase` had nothing to transform), and the --lg-*
+   liquid-glass block is deleted.
+
+   Do not rebuild the segmented bar without a new decision from the owner.
+   The historical mismatch note is kept below as the record of WHY. */
+
+/* ── MAJOR MISMATCH, reported not guessed (02-global-chrome.md) ─────────────
+   02.1-02.6 describe the nav inverting from cream to a solid ink, frosted,
+   SEGMENTED capsule bar: distinct `.nav-seg` capsules for logo/links/
+   utility/Post joined by `.nav-joint` elements with mask-composite concave
+   corners, five links grouped 2/2/1, a welfare "Post" capsule at the end of
+   the bar, `--nav-fg`/`--nav-ink`/`--lg-*` driving an ink-glass surface.
+   NONE of this exists in the live component, and it is not a small value
+   drift: the actual `.aq-nav`/`.aq-nav-inner` (v6.css, "NAV (floating pill,
+   glass)") is a FLAT WHITE pill - "REDESIGN 2026-09 section 01. Was a
+   frosted-glass bar... Now the flat white pill from AQ Chrome Poster: 54px,
+   2px ink border, no blur, no shadow. The blur was also the top half of the
+   app's two fixed re-rasterised surfaces" (i.e. a documented, deliberate,
+   PERFORMANCE-motivated move AWAY from glass/blur, on both the top bar and
+   the bottom tab bar, from a design source this changelog does not name -
+   "AQ Chrome Poster"/"the Playground", not "AquaTerra Feed.dc.html"). There
+   is no "Post" capsule in the top nav at all (compose lives only in the
+   bottom bar's separate FAB); the top nav carries exactly THREE primary
+   links (home/projects/teams - "matched 1:1 to the Playground target...
+   Blog + About intentionally dropped", a recorded decision in AQNav.tsx),
+   not five.
+   Rebuilding the segmented/joint/ink structure would mean discarding this
+   already-shipped, recently-tuned, carefully-commented chrome (search "/"
+   shortcut, realtime notification count, the compact dropdown + full-screen
+   mega menu + drawer sub-systems, the HoD pulse indicator, a confetti
+   easter egg) on the strength of a blind spec that was not written against
+   it, is the highest-risk file in the whole set by its own admission, and
+   cannot be fully verified in this pass. NOT built. What IS built below:
+   the dropdown (`.aq-drop*`) and drawer (`.aq-draw*`) sub-systems, which DO
+   match 02.4's description closely and are restyled per its instructions;
+   the confirmed, isolated logo-aspect-ratio bug (AQNav.tsx); focus-ring
+   inset (02.8, below) and radius/hairline token cascades from 00 (which
+   apply automatically via var(--bd)/var(--r-pill) and are not fought here).
+   `--lg-bg`/`--lg-blur`/`--lg-shadow` (02.2) are NOT changed to their ink
+   values: v6.css still has two live (not dead) consumers of them - an
+   individual glass-pill treatment on each inactive nav link/icon/logo/
+   avatar, layered UNDER the flat-white-bar redesign by an even earlier
+   pass ("Defined last so it wins the cascade over the nav rules above").
+   Changing the tokens to ink would turn those into dark glass pills
+   floating on a white bar - not the coherent ink chrome 02 describes, just
+   a new, different-looking bug.
+
+   UPDATE 2026-09-06, two items from the above resolved:
+
+   (a) `--lg-bg`/`--lg-blur`/`--lg-shadow` now have ZERO consumers in the
+   app. The v6.css block described above ("an individual glass-pill treatment
+   on each inactive nav link/icon/logo/avatar, layered UNDER the flat-white-
+   bar redesign") has been DELETED. It was measurably painting six
+   independently `backdrop-filter: blur(16px) saturate(1.85)`-ed cream-alpha
+   capsules on top of the flat WHITE `.aq-nav-inner` pill - wrong under
+   DESIGN.md 1's ground stacking (cream page -> white card -> cream well ->
+   white chip), and a reinstatement of the very blur layers this file records
+   as deliberately removed for performance. The tokens themselves stay
+   defined in tokens.css (the design lead's file); nothing reads them.
+
+   (b) 02.4's `.nav-rule` group dividers: NOT added, deliberately. 02.4 calls
+   them "the one structural addition to the nav", but it specifies them for a
+   FIVE-link bar grouped 2/2/1, and adds: "If today's nav has a different
+   number of links than five, keep the number it has and place the dividers
+   to make roughly even groups." This nav has THREE links (home / projects /
+   teams - Blog + About intentionally dropped, recorded in AQNav.tsx). Three
+   items admit no "roughly even groups": any divider placement produces a
+   1/2 or 2/1 split that asserts a grouping the information architecture
+   does not have, and two dividers would put a rule between every pair,
+   which is not a grouping device at all. The dividers exist to make a long
+   run of links scannable; a three-link run is already scannable. Revisit
+   this the moment the top nav grows back past four links. */
+
+              .aq-drop-scrim { position: fixed; inset: 0; z-index: 78; background: transparent; }
+              /* Rounded-minimalism 02.4: restyle only, mechanism/links/scrim/
+                 animation/reduced-motion disable all KEPT. */
+              .aq-drop {
+                position: fixed; z-index: 79;
+                top: calc(var(--nav-h) - 4px); right: max(12px, calc((100vw - 1280px) / 2 + 12px));
+                width: 260px; max-width: calc(100vw - 24px);
+                /* Never spill past the viewport bottom - scroll inside instead. */
+                max-height: calc(100vh - var(--nav-h) - 20px); overflow-y: auto;
+                background: var(--card); color: var(--ink);
+                border: var(--hair-2); border-radius: var(--r-outer);
+                box-shadow: var(--lift-4);
+                padding: var(--pad-card); display: flex; flex-direction: column; gap: 4px;
+                animation: aqDropIn 0.16s var(--ease-out);
+                transform-origin: top right;
+              }
+              @keyframes aqDropIn { from { opacity: 0; transform: translateY(-8px) scale(0.98) } to { opacity: 1; transform: none } }
+              @keyframes aqDropOut { from { opacity: 1; transform: none } to { opacity: 0; transform: translateY(-8px) scale(0.98) } }
+              /* Closing state: AQNav.tsx keeps the dropdown mounted for this
+                 duration after `showDrop` goes false so the exit animation can
+                 actually play (mirrors components/Confirm.tsx's shown/closing
+                 pattern), instead of the conditional render yanking it out of
+                 the DOM instantly. */
+              .aq-drop.aq-drop-closing { animation: aqDropOut 0.16s var(--ease-out) forwards; }
+              .aq-drop-lbl {
+                font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 0.08em; color: var(--ink-3); padding: 2px 8px 6px;
+              }
+              .aq-drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+              .aq-drop-link, .aq-drop-full {
+                display: flex; align-items: center; justify-content: space-between; gap: 8px;
+                width: 100%; min-height: 44px; padding: 9px 11px; border-radius: var(--r-inner);
+                border: none; background: transparent; cursor: pointer;
+                /* NeutralFace (--display), uppercase - walkthrough item 1.1,
+                   "more NeutralFace in the menus and everywhere".
+
+                   This rule used to read `--eina` + `text-transform: lowercase`
+                   with the note "NeutralFace is caps-only, so lowercase had
+                   nothing to render". That was true and it is the whole reason
+                   the menus were not in the brand face: the obstacle was never
+                   the font, it was the LOWERCASE TREATMENT. A survey of the
+                   codebase found exactly one CSS rule that was both --eina and
+                   already uppercase, so there was no free conversion anywhere -
+                   every menu had to change case to change face. Doing that is
+                   the owner's call and the owner asked for it. */
+                font-family: var(--display); font-weight: 800; font-size: 13px;
+                letter-spacing: 0.01em;
+                color: var(--ink); text-transform: uppercase; text-align: left;
+                transition: background 0.12s, border-color 0.12s, transform 0.12s;
+              }
+              .aq-drop-link:hover { background: var(--bg); }
+              .aq-drop-link.on { background: var(--ink); color: var(--bg); }
+              .aq-drop-link.on .aq-drop-ar { color: var(--bg); }
+              .aq-drop-hod { color: var(--accent-ink); grid-column: 1 / -1; }
+              .aq-drop-ar { color: var(--ink-3); font-weight: 800; font-size: 13px; }
+              .aq-drop-full {
+                justify-content: center; margin-top: 4px; background: var(--bg); border: none;
+                font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 0.05em; color: var(--ink-2); gap: 6px;
+              }
+              .aq-drop-full:hover { background: var(--bg-2); }
+              .aq-drop-cta { margin-top: 6px; width: 100%; justify-content: center; }
+              @media (max-width: 760px) {
+                .aq-drop { top: calc(var(--nav-h) + 2px); left: 12px; right: 12px; width: auto; transform-origin: top center; }
+                /* "full menu" is the ONLY way into the mobile drawer (the hamburger opens
+                   this same dropdown, not the drawer), so it stays visible: the drawer
+                   carries Members, Crftd, Handbook, FAQ, Support, Schools, Classes,
+                   Quick Links and the equity policy, which have no other mobile route
+                   outside the footer. (It was display:none under a stale comment that
+                   said the hamburger opened the drawer.) */
+              }
+              @media (prefers-reduced-motion: reduce) { .aq-drop, .aq-drop.aq-drop-closing { animation: none; } }
+            
+
+            /* The full menu on a phone: a sheet of rounded cards, one per group, on the page colour. The header
+               clears the status bar (the page is viewport-fit=cover) and the sheet scrolls under it. */
+            .aq-drawer {
+              position: fixed; inset: 0; z-index: 76;
+              background: var(--bg); color: var(--ink);
+              display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
+              animation: aqDrawerIn 0.2s ease;
+            }
+            .aq-draw-hd {
+              position: sticky; top: 0; z-index: 1; flex-shrink: 0;
+              display: flex; align-items: center; justify-content: space-between;
+              padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+              background: var(--bg);
+            }
+            .aq-draw-logo { display: inline-flex; align-items: center; min-height: 44px; border-radius: var(--r-tight); }
+            .aq-draw-logo:focus-visible, .aq-draw-link:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+            /* Rounded-minimalism 02.4: 40x40 -> 44x44 (P0 hit target), ink
+               border/#fff -> none/--bg-2. */
+            .aq-draw-x {
+              width: 44px; height: 44px; border-radius: var(--r-pill); border: none;
+              background: var(--bg-2); color: var(--ink); display: inline-flex; align-items: center;
+              justify-content: center; cursor: pointer; flex-shrink: 0;
+              transition: transform 0.13s, box-shadow 0.13s;
+            }
+            /* 0.96 is the house press scale (lib/motion tapScale) — 0.92 read as a lurch
+   next to every other control on the page. DELETE (02.4): the offset
+   box-shadow on :active - the motif is reserved for .btn-primary/.sticker. */
+.aq-draw-x:active { transform: scale(0.96); }
+            .aq-draw-body {
+              display: flex; flex-direction: column; gap: 16px;
+              padding: 4px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
+            }
+            .aq-draw-group {
+              background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+              box-shadow: var(--lift-1); padding: var(--pad-card);
+            }
+            .aq-draw-lbl {
+              margin: 0; padding: 8px 12px 6px;
+              font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase;
+              letter-spacing: 0.08em; color: var(--ink-3);
+            }
+            .aq-draw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+            /* NeutralFace, uppercase (item 1.1). Two columns keep the whole menu to about two screens;
+               the longest label ("Bugs & requests", "Collaborations") is measured to clear a 320px phone. */
+            .aq-draw-link {
+              display: flex; align-items: center; justify-content: space-between; gap: 8px;
+              min-height: 48px; padding: 10px 12px; min-width: 0;
+              border-radius: var(--r-inner); text-decoration: none; cursor: pointer;
+              font-family: var(--display); font-weight: 800; font-size: 13px; line-height: 1.15;
+              letter-spacing: 0.01em; text-transform: uppercase; color: var(--ink); background: transparent;
+              transition: background 0.12s, transform 0.12s;
+            }
+            .aq-draw-name { min-width: 0; display: inline-flex; align-items: center; gap: 8px; }
+            .aq-draw-link:active { background: var(--bg-2); transform: scale(0.96); }
+            .aq-draw-link.on { background: var(--ink); color: var(--bg); }
+            .aq-draw-hod, .aq-draw-wide { grid-column: 1 / -1; }
+            .aq-draw-hod { color: var(--accent-ink); }
+            .aq-draw-hod.on { color: var(--bg); }
+            .aq-draw-arrow { font-size: 14px; opacity: 0.4; flex-shrink: 0; }
+            .aq-draw-link.on .aq-draw-arrow { opacity: 1; }
+            .aq-draw-pulse {
+              display: inline-flex; width: 7px; height: 7px; border-radius: 50%;
+              background: var(--pink); animation: hodPulse 1.4s ease-in-out infinite; flex-shrink: 0;
+            }
+            .aq-draw-foot {
+              margin-top: auto; padding: 16px max(16px, env(safe-area-inset-right));
+              padding-bottom: max(20px, calc(env(safe-area-inset-bottom) + 12px));
+            }
+            .aq-draw-cta { width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+            @media (prefers-reduced-motion: reduce) { .aq-drawer { animation: none; } .aq-draw-link:active { transform: none; } }
+            @keyframes aqDrawerIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+
+              /* Section 33: the Labs block in the explore dropdown. Below 768px
+                 the mega menu never renders, so this is mobile's only route to
+                 the cohort. Ink, so it reads as a destination rather than as an
+                 eighth peer of the seven links above it. */
+              .aq-drop-labs {
+                grid-column: 1 / -1;
+                background: var(--ink);
+                color: var(--paper);
+                border-radius: var(--r-inner);
+              }
+              /* DELETE (02.4): the :hover translate - kept the background
+                 change only. */
+              .aq-drop-labs:hover { background: var(--ink-2); }
+              .aq-drop-labs .aq-drop-ar { color: var(--lemon); }
+
+/* ADD (02.8). Changelog names `.nav-bar`/`.btm-nav`, which do not exist
+   live (see the mismatch note at the top of this file) - scoped here to the
+   real chrome selectors instead (.aq-nav, top; .aq-bottom-bar, bottom,
+   defined in v6.css). Keeps the grape colour (3px solid, per the global
+   rule); only the offset flips inward so the ring stays inside a tightly-
+   packed pill row instead of overlapping an adjacent capsule. */
+.aq-nav :focus-visible, .aq-bottom-bar :focus-visible { outline-offset: -2px; }
+
+/* The logo, pill items and dropdown rows are real links now (they were buttons that called navigate()); a link brings its own
+   underline and colour, and inline-level layout, which the button rules never had to cancel. */
+a.aq-logo, a.aq-nav-link, a.aq-drop-link:not(.aq-drop-labs):not(.on) { text-decoration: none; color: inherit; text-align: center; } /* :not(.on): the current-page link sets paper text on ink, and this rule (0,3,1 with :not) beat it, leaving ink on ink and an empty black pill (found in a 2026-10-20 visual pass). :not(.aq-drop-labs): the ink block sets its own colour, the old (0,1,1) selector here beat it and left ink text on the ink block */
+a.aq-drop-labs { text-decoration: none; text-align: center; }

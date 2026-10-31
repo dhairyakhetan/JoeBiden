@@ -1,0 +1,37 @@
+/* Partner-wall card hover - was imperative onMouseEnter/onMouseLeave DOM
+   mutation with no reduced-motion fallback and no touch guard (a touch tap
+   can fire mouseenter without a matching mouseleave, leaving the card stuck
+   hovered). --tint carries the per-partner accent colour (was read from
+   `p.color` in JS) via color-mix(), same math as before. */
+.collab-partner { transition: background-color 0.18s, transform 0.18s var(--ease-pop), box-shadow 0.18s; }
+
+@media (hover: hover) and (pointer: fine) {
+  .collab-partner:hover {
+    background: color-mix(in srgb, var(--tint) 15%, white);
+    /* Hover is transform-only now; the hard 5px ink offset is retired
+       and the card keeps whatever resting lift .card gives it. */
+    transform: rotate(-2deg) scale(1.04);
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collab-partner:hover { transition: none; transform: none; }
+}
+
+/* ── paired form fields (2026-09-12) ─────────────────────────────────────────
+   These two rows were `grid grid-cols-1 sm:grid-cols-2 gap-3.5` - Tailwind,
+   which is not in the main bundle (it lives in paradox/tailwind.css, imported
+   only by the lazy ParadoxRoot). So the pairs never became two columns at any
+   width AND had no gap at all: the two inputs sat flush against each other as
+   plain stacked blocks. Same defect as auth/SettingsPage and
+   teams/CreateTeamPostModal, all three fixed in one pass. */
+.col-fieldpair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 640px) {
+  .col-fieldpair { grid-template-columns: 1fr 1fr; }
+}

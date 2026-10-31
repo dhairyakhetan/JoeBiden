@@ -1,0 +1,447 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   LOGIN — rebuilt from zero, 2026-09-09.
+
+   Concept: an illustrated garden (the real mascot cast, from
+   components/Mascot.tsx — border-radius shapes, no image asset) beside a
+   clean sign-in card. Replaces the previous "AQ membership card on an ink
+   page" concept entirely — this file no longer shares a single line with
+   that version. Real brand primitives: the 999/32/22/14 radius spine,
+   hairline borders, --shadow-cta as the one surviving hard offset (the
+   primary CTA only), Instrument Serif italic for the one warm word,
+   JetBrains Mono for machine-ish micro labels, Eina for anything you read.
+
+   Deliberately NOT routed through AuthShell/AuthFeaturePanel: those are
+   shared with /register and /auth/callback, so redesigning through them
+   would have silently restyled registration too.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.lg-page {
+  /* 2026-09-11: was `calc(100dvh - var(--nav-h))`, subtracting a 70px nav bar
+     that PublicLayout no longer renders on auth routes (lib/authRoutes.ts).
+     The subtraction left a 70px band of dead cream under the shell on every
+     sign-in. An auth route owns its whole viewport. */
+  min-height: 100dvh;
+  display: flex;
+  align-items: stretch;
+  background: var(--card);
+}
+
+/* ── The garden ───────────────────────────────────────────────────────────
+   The scene-setting half: brand wordmark, the mascot cast standing in a
+   painted garden, and the contextual AuthHero card. Never full-bleed photo —
+   every part here is CSS. */
+.lg-garden {
+  position: relative;
+  flex: 1 1 56%;
+  min-height: 320px;
+  overflow: hidden;
+  /* Was a cream/beige gradient - "the space behind the mascots... should be
+     black background." `--ink` is the app's one real black, reused rather
+     than a new hex so this stays in step with the rest of the token scale. */
+  background:
+    radial-gradient(circle, rgba(255,255,255,.09) 1.5px, transparent 1.5px) 0 0 / 26px 26px,
+    radial-gradient(circle, rgba(255,199,0,.10) 1.5px, transparent 1.5px) 9px 14px / 34px 34px,
+    var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.lg-garden::before,
+.lg-garden::after {
+  content: '';
+  position: absolute;
+  border-radius: 46% 54% 999px 999px;
+  pointer-events: none;
+}
+.lg-garden::before {
+  left: -10%; bottom: -18%; width: 46%; aspect-ratio: 1.25;
+  background: color-mix(in srgb, var(--welfare) 22%, transparent);
+}
+.lg-garden::after {
+  right: -12%; bottom: -22%; width: 50%; aspect-ratio: 1.25;
+  border-radius: 54% 46% 999px 999px;
+  background: color-mix(in srgb, var(--lemon) 18%, transparent);
+}
+
+.lg-garden-word {
+  position: relative;
+  z-index: 1;
+  margin: clamp(24px, 4vw, 40px) 0 0 clamp(24px, 4vw, 40px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lg-garden-word span:first-child {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--on-ink);
+}
+.lg-garden-word span:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 999px;
+  background: var(--welfare);
+}
+.lg-garden-tag {
+  font-family: var(--mono);
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--on-ink) 65%, transparent);
+}
+
+.lg-garden-mascot {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+}
+/* Three characters standing at different points along the garden floor,
+   loosely staggered so no two share a baseline. */
+.lg-garden-mascot--a { margin: auto 0 0 clamp(24px, 8vw, 90px); }
+.lg-garden-mascot--b { margin: auto 0 0 clamp(-8px, 4vw, 40px); transform: rotate(-3deg); }
+/* Positioned from the TOP, in the wordmark's own band, so it can never drift
+   down into the AuthHero card's footprint the way a bottom-anchored offset
+   did (that card's height varies by which of the 7 intents fired). */
+.lg-garden-mascot--c { position: absolute; right: clamp(24px, 10vw, 110px); top: clamp(70px, 16vh, 120px); transform: rotate(4deg); }
+.lg-garden-mascot--a,
+.lg-garden-mascot--b { display: flex; }
+
+/* The subtle cursor/gyro lean - a separate element from `.lg-garden-mascot`
+   so the JS-driven translate (LoginPage.tsx) never fights that element's own
+   position/rotate styles above. */
+.lg-garden-tilt {
+  display: inline-flex;
+  transition: transform 0.35s var(--ease-out, ease-out);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-garden-tilt { transition: none; }
+}
+
+.lg-garden-gyro-enable {
+  position: absolute;
+  z-index: 2;
+  right: clamp(20px, 4vw, 36px);
+  top: clamp(16px, 3vw, 28px);
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(244,239,224,.3);
+  background: rgba(244,239,224,.1);
+  color: var(--on-ink);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.lg-garden-hero {
+  position: relative;
+  z-index: 1;
+  margin: 20px clamp(20px, 4vw, 36px) clamp(20px, 4vw, 36px);
+}
+
+/* ── The card ─────────────────────────────────────────────────────────────
+   A full-height panel now, not a floating rotated card — the garden supplies
+   the "hand-placed" charm, the card is where the actual decision happens. */
+.lg-card {
+  position: relative;
+  flex: 1 1 44%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--card);
+  padding: clamp(28px, 5vw, 64px) clamp(20px, 5vw, 56px);
+}
+/* On a wide screen the form column was left-aligned in its panel with 160px empty on the right and 56px on the left. Centre
+   the 460px reading column instead (every child already caps at 420 to 460px). */
+@media (min-width: 1025px) {
+  .lg-card > * { width: 100%; max-width: 460px; margin-left: auto; margin-right: auto; }
+}
+
+.lg-back {
+  align-self: flex-start;
+  margin-bottom: clamp(16px, 3vw, 28px);
+  padding: 10px 4px;
+  margin-left: -4px;
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.lg-back:hover { color: var(--ink); }
+
+/* ── Heading ──────────────────────────────────────────────────────────── */
+.lg-eyebrow {
+  display: inline-flex; align-items: center;
+  height: 28px; padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(10,10,10,.12);
+  width: fit-content;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+[data-first="true"]  .lg-eyebrow { background: color-mix(in srgb, var(--welfare) 16%, var(--card)); }
+[data-first="false"] .lg-eyebrow { background: color-mix(in srgb, var(--sky) 16%, var(--card)); }
+
+.lg-heading {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+  max-width: 460px;
+}
+@media (min-width: 1025px) {
+  .lg-heading { font-size: clamp(34px, 3.4vw, 42px); }
+}
+/* The single serif-italic word — one register shift per screen. */
+.lg-heading i {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--welfare-ink);
+}
+
+.lg-sub {
+  font-family: var(--eina);
+  font-size: 15px; line-height: 1.5;
+  color: var(--ink-3);
+  margin: 0 0 24px;
+  max-width: 40ch;
+}
+
+/* ── Section 15 · the invite block ──────────────────────────────────────── */
+.lg-invite { margin: 0 0 20px; }
+.lg-invite:empty { display: none; }
+
+/* Owner request 2026-09-14: a one-line label directly over the CTA, so the
+   page states plainly that pressing the button below joins AquaTerra -
+   distinct from `.lg-eyebrow` above the headline (that one just says
+   welcome/welcome back) and from `.lg-signup-note` below the button (which
+   explains what the button IS, after the fact). */
+.lg-join-label {
+  margin: 0 0 8px;
+  color: var(--ink-3);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* ── Google CTA — the primary path in ─────────────────────────────────── */
+.lg-google {
+  width: 100%;
+  max-width: 420px;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  height: auto;
+  padding: 12px 20px;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+  font-size: 15px; font-weight: 700;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid rgba(10,10,10,.14);
+  border-radius: 999px;
+  box-shadow: var(--shadow-cta);
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1),
+              box-shadow 0.12s var(--ease-out);
+}
+.lg-google svg { transition: transform 0.2s cubic-bezier(.34,1.56,.64,1); }
+.lg-google:hover:not(:disabled) { transform: translateY(-2px); }
+.lg-google:hover:not(:disabled) svg { transform: rotate(-12deg) scale(1.14); }
+.lg-google:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+.lg-google:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── "This is the sign-up" note ────────────────────────────────────────── */
+.lg-signup-note {
+  margin: 12px 0 0;
+  max-width: 420px;
+  padding: 11px 14px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-br);
+  border-radius: var(--r-tight);
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.lg-signup-note strong { color: var(--accent-ink); font-weight: 800; }
+
+/* ── "how joining works" — three rotated ink-ring stamps ─────────────────
+   The reference's stamp-card device: a double-ring badge (paper ring, ink
+   ring — the same --keyline idea the poster system uses for stickers), not
+   a flat numbered chip. */
+.lg-steps {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lg-steps li {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.lg-step-n {
+  flex: none;
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: var(--bg);
+  border: var(--hair-3);
+  box-shadow: 0 0 0 2px var(--card);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.lg-steps li:nth-child(1) .lg-step-n { transform: rotate(-4deg); }
+.lg-steps li:nth-child(2) .lg-step-n { transform: rotate(3deg); }
+.lg-steps li:nth-child(3) .lg-step-n { transform: rotate(-3deg); }
+
+.lg-step-txt { display: flex; flex-direction: column; min-width: 0; }
+.lg-step-t {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.lg-step-d {
+  font-family: var(--eina);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+
+/* ── Error ────────────────────────────────────────────────────────────── */
+.lg-error-slot {
+  margin-bottom: 18px;
+  max-width: 420px;
+  animation: shake .34s ease-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-3px); }
+  40%, 80% { transform: translateX(3px); }
+}
+@media (prefers-reduced-motion: reduce) { .lg-error-slot { animation: none; } }
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+.lg-foot {
+  margin-top: 10px;
+  text-align: left;
+  font-family: var(--eina);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.lg-foot:first-of-type { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(10,10,10,.1); max-width: 420px; }
+.lg-foot button {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; font-weight: 800;
+  color: var(--welfare-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 12px 6px;
+  margin: -12px -6px;
+}
+.lg-foot button:hover { color: var(--accent-ink); }
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .lg-page { flex-direction: column; }
+  .lg-garden { flex: 0 0 auto; min-height: 260px; padding-bottom: 8px; }
+  .lg-garden-mascot--c { top: clamp(56px, 14vh, 90px); }
+  .lg-card { flex: 1 1 auto; }
+}
+
+/* Global reduced-motion contract. */
+@media (prefers-reduced-motion: reduce) {
+  .lg-google { transition: none; }
+  .lg-google:hover:not(:disabled),
+  .lg-google:active:not(:disabled) {
+    transform: none;
+    box-shadow: var(--shadow-cta);
+  }
+  .lg-google:hover:not(:disabled) svg { transform: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   A6 — the one-line headline with inline tokens (section 02 step 40).
+   Kept as a stacked single-column variant within the (now narrower) card
+   panel — the old wide-desktop two-column grid assumed an 880px centred
+   card, which this layout no longer has, so A6 now shares the same column
+   shape as the default state and differs only in headline emphasis and the
+   demoted fine-print steps line.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.lg-muted { color: var(--ink-3); }
+
+.lg-token {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 12px;
+  margin: 0 2px;
+  vertical-align: middle;
+  position: relative;
+  top: -0.08em;
+  border: 1px solid rgba(10,10,10,.14);
+  border-radius: 999px;
+  background: var(--lemon);
+  white-space: nowrap;
+}
+.lg-token b {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  line-height: 1;
+}
+.lg-token i {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+}
+.lg-token-photo {
+  padding: 0;
+  width: 36px;
+  object-fit: cover;
+  background: var(--bg-2);
+}
+
+.lg-steps-fine {
+  margin: 18px 0 0;
+  max-width: 420px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: var(--ink-3);
+  text-wrap: pretty;
+}

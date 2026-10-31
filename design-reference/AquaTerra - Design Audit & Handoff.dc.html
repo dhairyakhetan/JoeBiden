@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'NeutralFace';src:url('assets/fonts/NeutralFace-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'NeutralFace';src:url('assets/fonts/NeutralFace-Bold.woff2') format('woff2');font-weight:700 900;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-Bold.ttf') format('truetype');font-weight:700 900;font-display:swap}
+html{scroll-behavior:smooth}
+body{margin:0;background:#F4EFE0;font-family:'Eina01','NeutralFace',system-ui,sans-serif;color:#0A0A0A;-webkit-font-smoothing:antialiased}
+::selection{background:#1B8A5A;color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wob{0%,100%{transform:rotate(-3deg)}25%{transform:rotate(2deg) translateY(-2px)}50%{transform:rotate(-1deg)}75%{transform:rotate(3deg) translateY(-1px)}}
+@keyframes burst{0%{transform:scale(1)}35%{transform:scale(1.5)}55%{transform:scale(.9)}75%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes pulsedot{0%{box-shadow:0 0 0 0 rgba(27,138,90,.55)}70%{box-shadow:0 0 0 8px rgba(27,138,90,0)}100%{box-shadow:0 0 0 0 rgba(27,138,90,0)}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media(max-width:1080px){.ag-shell{grid-template-columns:1fr!important}.ag-side{display:none!important}}
+</style>
+</helmet>
+
+<div class="ag-shell" style="display:grid;grid-template-columns:264px minmax(0,1fr);gap:0;max-width:1400px;margin:0 auto;align-items:start">
+
+  <aside class="ag-side" style="position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 20px 40px;border-right:2px solid #0A0A0A;background:#EDE6D0">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+      <span style="width:17px;height:17px;background:#1B8A5A;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:spin 12s linear infinite;display:inline-block"></span>
+      <b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.03em">aquaterra</b>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55;margin-bottom:22px">design audit · v1.0</div>
+    <nav style="display:flex;flex-direction:column;gap:1px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600">
+      <a href="#top" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">00 · Overview</a>
+      <a href="#summary" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">01 · Executive summary</a>
+      <a href="#principles" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">02 · Principles</a>
+      <a href="#color" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">03 · Color tokens</a>
+      <a href="#type" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">04 · Typography</a>
+      <a href="#space" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">05 · Space · radius · border</a>
+      <a href="#elevation" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">06 · Elevation · shadow</a>
+      <a href="#motion" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">07 · Motion tokens</a>
+      <a href="#components" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">08 · Components + states</a>
+      <a href="#drift" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">09 · Consistency drift</a>
+      <a href="#a11y" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">10 · Accessibility</a>
+      <a href="#responsive" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">11 · Responsive</a>
+      <a href="#content" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">12 · Content · SEO</a>
+      <a href="#pages" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">13 · Page-by-page</a>
+      <a href="#flow" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">14 · Flow audit</a>
+      <a href="#code" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">15 · Code-level findings</a>
+      <a href="#pending" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">15b · Pending vs live code</a>
+      <a href="#checklist" style="padding:7px 10px;border-radius:8px;color:#0A0A0A" style-hover="background:#E2D9BD">16 · Dev checklist</a>
+    </nav>
+    <a href="AquaTerra - Playground.dc.html" style="display:block;margin-top:22px;padding:10px 12px;border:2px solid #0A0A0A;border-radius:12px;background:#fff;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;text-align:center;box-shadow:3px 3px 0 #0A0A0A" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 #0A0A0A">↗ open live prototype</a>
+  </aside>
+
+  <main style="min-width:0;padding:0 clamp(20px,4vw,64px) 120px">
+
+    <!-- ═══ COVER ═══ -->
+    <section id="top" style="padding:64px 0 44px;border-bottom:3px solid #0A0A0A">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1B8A5A"><span style="width:9px;height:9px;border-radius:50%;background:#1B8A5A;display:inline-block;animation:pulsedot 2s infinite"></span>development-ready spec</div>
+      <h1 style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:clamp(44px,7vw,86px);line-height:.9;letter-spacing:-0.045em;margin:18px 0 0">the design <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#1B8A5A">audit</span>.</h1>
+      <p style="font-family:'Eina01',sans-serif;font-size:clamp(16px,2vw,20px);line-height:1.55;color:#2A2A28;max-width:640px;margin:20px 0 0;text-wrap:pretty">A complete, buildable specification for the AquaTerra platform — tokens, components, states, accessibility, responsive behaviour and page-by-page notes. Everything here is standardised on the canonical <b>Playground</b> visual direction so engineering can build one system, once.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:26px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:8px 13px;border:2px solid #0A0A0A;border-radius:999px;background:#fff">38 screens</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:8px 13px;border:2px solid #0A0A0A;border-radius:999px;background:#fff">7 token groups</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:8px 13px;border:2px solid #0A0A0A;border-radius:999px;background:#fff">24 components</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:8px 13px;border:2px solid #0A0A0A;border-radius:999px;background:#FFC700">canonical: 1d Playground</span>
+      </div>
+    </section>
+
+    <!-- ═══ 01 EXECUTIVE SUMMARY ═══ -->
+    <section id="summary" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">01 — executive summary</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 4px">what's actually broken</h2>
+      <svg viewBox="0 0 220 9" class="ud" style="display:block;height:9px;width:190px;margin-bottom:22px"><path d="M2 5 Q 55 1 110 5 T 218 4" fill="none" stroke="#FF4D2E" stroke-width="3" stroke-linecap="round"/></svg>
+
+      <p style="font-family:'Eina01',sans-serif;font-size:16px;line-height:1.6;color:#2A2A28;max-width:680px;text-wrap:pretty">The prototype is rich and characterful, but it carries <b>three overlapping design languages</b> that drifted apart over time: the original forest-green system, a global "soften everything" override layer, and the current Y2K brutal-scrapbook look. On a single screen you get brutalist 3px-ink feed cards sitting beside soft floating rails, and category colours that collapse into the same blue. This document freezes <b>one</b> system — the Playground direction — and specifies it down to the pixel so it can be built without guesswork.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px 0 30px">
+        <div style="border:3px solid #0A0A0A;border-radius:16px;padding:16px;background:#fff;box-shadow:4px 4px 0 #0A0A0A"><b style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:34px;display:block;line-height:1">3→1</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5A5A55">design systems reconciled</span></div>
+        <div style="border:3px solid #0A0A0A;border-radius:16px;padding:16px;background:#fff;box-shadow:4px 4px 0 #0A0A0A"><b style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:34px;display:block;line-height:1;color:#FF4D2E">6</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5A5A55">P0 blockers to fix first</span></div>
+        <div style="border:3px solid #0A0A0A;border-radius:16px;padding:16px;background:#fff;box-shadow:4px 4px 0 #0A0A0A"><b style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:34px;display:block;line-height:1">4</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5A5A55">contrast pairs — fixed ✓</span></div>
+        <div style="border:3px solid #0A0A0A;border-radius:16px;padding:16px;background:#fff;box-shadow:4px 4px 0 #0A0A0A"><b style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:34px;display:block;line-height:1">0</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5A5A55">focus rings — now global ✓</span></div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:18px;margin:0 0 12px">Priority ledger</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:820px">
+        <div style="display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;border:2px solid #0A0A0A;border-radius:14px;padding:13px 15px;background:#fff;border-left:8px solid #FF4D2E">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:6px;padding:5px 0;text-align:center">P0</span>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.5;color:#2A2A28">Ship-blockers: unify border weights &amp; shadows, fix the 4 failing contrast pairs, add visible focus states, restore one-colour-per-category, guarantee 44px hit targets, add page titles/meta for SEO.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;border:2px solid #0A0A0A;border-radius:14px;padding:13px 15px;background:#fff;border-left:8px solid #FFC700">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:6px;padding:5px 0;text-align:center">P1</span>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.5;color:#2A2A28">Consistency: tokenise spacing/radius, standardise empty &amp; loading states, align microcopy voice, honour <span style="font-family:'JetBrains Mono',monospace;font-size:12px">prefers-reduced-motion</span>, consolidate the two nav patterns.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;border:2px solid #0A0A0A;border-radius:14px;padding:13px 15px;background:#fff;border-left:8px solid #3DA9FC">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#0A0A0A;background:#3DA9FC;border-radius:6px;padding:5px 0;text-align:center">P2</span>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.5;color:#2A2A28">Polish: decorative-element performance budget, image lazy-loading, print styles, refine tilt/wobble timing across cards.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 02 PRINCIPLES ═══ -->
+    <section id="principles" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">02 — principles</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 22px">five rules that keep it AquaTerra</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+        <div style="border:2px solid #0A0A0A;border-radius:16px;padding:18px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:26px;color:#1B8A5A">01</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;display:block;margin:6px 0 4px">Ink outline, hard shadow</b><span style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5;color:#5A5A55">Every raised surface has a solid ink border and an offset drop-shadow — never a soft blur. This is the load-bearing motif.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;padding:18px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:26px;color:#FF4D2E">02</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;display:block;margin:6px 0 4px">Colour = meaning</b><span style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5;color:#5A5A55">Each of the five verticals owns exactly one hue. Colour is a wayfinding system, not decoration — don't reuse a vertical's hue for anything else.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;padding:18px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:26px;color:#7E5BFF">03</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;display:block;margin:6px 0 4px">Playful, never sloppy</b><span style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5;color:#5A5A55">Tilts, wobbles and stickers are deliberate and small (≤3°). Fun lives in motion and accents; structure stays rigorous.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;padding:18px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:26px;color:#3DA9FC">04</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;display:block;margin:6px 0 4px">Three type voices</b><span style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5;color:#5A5A55">Display (NeutralFace) shouts, Eina01 speaks, mono labels annotate. Instrument Serif italic is the single "human" flourish.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;padding:18px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:26px;color:#0E7C86">05</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;display:block;margin:6px 0 4px">Warm paper base</b><span style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5;color:#5A5A55">The cream substrate + subtle noise is non-negotiable. Pure white is reserved for raised cards only.</span></div>
+      </div>
+    </section>
+
+    <!-- ═══ 03 COLOR ═══ -->
+    <section id="color" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">03 — color tokens</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">the palette</h2>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Substrate &amp; ink</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:28px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#F4EFE0"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--bg</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#F4EFE0</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#EDE6D0"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--bg-2</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#EDE6D0</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#E2D9BD"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--bg-3</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#E2D9BD</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#FFFFFF"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--card</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#FFFFFF</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#0A0A0A"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--ink</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#0A0A0A</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#2A2A28"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--ink-2</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#2A2A28</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#5A5A55"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--ink-3</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#5A5A55</span></div></div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 6px">Category hues <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#5A5A55;text-transform:none;letter-spacing:0">— one per vertical, never reuse</span></h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:14px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#1B8A5A;display:flex;align-items:flex-end;padding:8px"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;color:#0A0A0A">welfare</span></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--welfare / --accent</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#1B8A5A</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#3DA9FC;display:flex;align-items:flex-end;padding:8px"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;color:#0A0A0A">events</span></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--events / --sky</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#3DA9FC</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#FFC700;display:flex;align-items:flex-end;padding:8px"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;color:#0A0A0A">labs</span></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--labs / --lemon</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#FFC700</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#0E7C86;display:flex;align-items:flex-end;padding:8px"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;color:#fff">ops</span></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--ops / --teal</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#12909C</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:64px;background:#7E5BFF;display:flex;align-items:flex-end;padding:8px"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;color:#fff">content</span></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--content / --grape</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#7E5BFF</span></div></div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:22px 0 6px">Signal colours</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:52px;background:#FF4D2E"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--tomato</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#FF4D2E · alerts/like</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:52px;background:#FF4D8C"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--pink</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">#FF4D8C · accent only</span></div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;overflow:hidden;background:#fff"><div style="height:52px;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.32))"></div><div style="padding:10px 12px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:block">--line / --line-2</b><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">rgba ink 18% / 32%</span></div></div>
+      </div>
+
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #FF4D2E;padding:14px 16px;max-width:820px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#FF4D2E">P0 · drift to kill</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">Legacy tokens <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--mint</span> and <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--accent2</span> are duplicate aliases of <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--welfare</span> and <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--events</span>. Ship the five semantic vertical names + <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--tomato/--pink/--lemon</span> only; delete the colour aliases so no one paints "events" with <span style="font-family:'JetBrains Mono',monospace;font-size:12px">--sky</span> by accident. See <a href="#drift" style="color:#1B8A5A;font-weight:700">§09</a>.</p>
+      </div>
+    </section>
+
+    <!-- ═══ 04 TYPE ═══ -->
+    <section id="type" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">04 — typography</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">type system</h2>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:26px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;padding:16px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:40px;line-height:1">Aa</div><b style="font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-top:8px">--display · NeutralFace</b><span style="font-family:'Eina01',sans-serif;font-size:12px;color:#5A5A55">Headlines, titles, numbers. 700–900.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;padding:16px;background:#fff"><div style="font-family:'Eina01',sans-serif;font-weight:400;font-size:40px;line-height:1">Aa</div><b style="font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-top:8px">--eina · Eina01</b><span style="font-family:'Eina01',sans-serif;font-size:12px;color:#5A5A55">Body, snippets, descriptions. 400–700.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;padding:16px;background:#fff"><div style="font-family:'JetBrains Mono',monospace;font-weight:400;font-size:36px;line-height:1">Aa</div><b style="font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-top:8px">--mono · JetBrains Mono</b><span style="font-family:'Eina01',sans-serif;font-size:12px;color:#5A5A55">Labels, metadata, counts, tags.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;padding:16px;background:#fff"><div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:42px;line-height:1">Aa</div><b style="font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-top:8px">--serif · Instrument Serif</b><span style="font-family:'Eina01',sans-serif;font-size:12px;color:#5A5A55">The single italic flourish word.</span></div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Type scale (live)</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px;border-bottom:2px dashed rgba(0,0,0,.14)"><span style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:64px;line-height:.9;letter-spacing:-0.04em">Display XL</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">clamp 44–86 · 900 · -0.045em</span></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px;border-bottom:2px dashed rgba(0,0,0,.14)"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:46px;line-height:.95;letter-spacing:-0.04em">Feed / page title</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">40–78 · 800/900</span></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px;border-bottom:2px dashed rgba(0,0,0,.14)"><span style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:28px;letter-spacing:-0.03em">Section head</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">24–34 · 800</span></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px;border-bottom:2px dashed rgba(0,0,0,.14)"><span style="font-family:'Eina01',sans-serif;font-weight:800;font-size:17.5px">Card title (Eina 800)</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">17.5 · 800</span></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px;border-bottom:2px dashed rgba(0,0,0,.14)"><span style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6">Body copy — Eina01 regular, the workhorse for snippets and descriptions.</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">14 · 400 · 1.6</span></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;padding:14px 18px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5A5A55">META LABEL · MONO CAPS</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;white-space:nowrap">10–11 · 700 · .05em</span></div>
+      </div>
+      <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.55;color:#5A5A55;max-width:820px;margin:14px 0 0"><b style="color:#0A0A0A">Rule:</b> body text never drops below 13px; mono labels never below 10px. Titles use tight tracking (−0.03 to −0.045em); body stays at 0.</p>
+    </section>
+
+    <!-- ═══ 05 SPACE / RADIUS / BORDER ═══ -->
+    <section id="space" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">05 — space · radius · border</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">geometry tokens</h2>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 10px">Spacing scale <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#5A5A55;text-transform:none;letter-spacing:0">— 4px base, proposed tokenisation</span></h3>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:8px">
+        <div style="text-align:center"><div style="width:4px;height:4px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">1 · 4</span></div>
+        <div style="text-align:center"><div style="width:8px;height:8px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">2 · 8</span></div>
+        <div style="text-align:center"><div style="width:12px;height:12px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">3 · 12</span></div>
+        <div style="text-align:center"><div style="width:15px;height:15px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">4 · 15</span></div>
+        <div style="text-align:center"><div style="width:18px;height:18px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">5 · 18</span></div>
+        <div style="text-align:center"><div style="width:22px;height:22px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">6 · 22</span></div>
+        <div style="text-align:center"><div style="width:32px;height:32px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">7 · 32</span></div>
+        <div style="text-align:center"><div style="width:52px;height:52px;background:#1B8A5A;border:1px solid #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">8 · 52</span></div>
+      </div>
+      <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.55;color:#5A5A55;max-width:820px;margin:6px 0 26px">The prototype uses many ad-hoc values (11, 13, 14, 16, 18, 20, 22px). <b style="color:#0A0A0A">P1:</b> snap to this 8-step scale on build; container padding = 16 (rails) or 18–22 (heroes), grid gaps = 14–18.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Radius</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:2px solid #0A0A0A;border-radius:8px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">8 · inputs, chips-sq</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:2px solid #0A0A0A;border-radius:14px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">14 · tiles, notices</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:2px solid #0A0A0A;border-radius:20px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">20 · cards, rails</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:2px solid #0A0A0A;border-radius:999px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">999 · pills, buttons</span></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Border weight <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#FF4D2E;text-transform:none;letter-spacing:0">— P0 rule</span></h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:2px solid #0A0A0A;border-radius:12px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">2px · secondary/inline<br><span style="color:#5A5A55">rails, chips, notices, inputs</span></span></div>
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:52px;height:40px;background:#fff;border:3px solid #0A0A0A;border-radius:12px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:12px">3px · primary/hero<br><span style="color:#5A5A55">feed cards, team cards, panels, heroes</span></span></div>
+          </div>
+          <p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:12px 0 0">Today 2px and 3px are mixed at random. This two-tier rule (structural = 3, everything else = 2) removes the guesswork and preserves the depth hierarchy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 06 ELEVATION ═══ -->
+    <section id="elevation" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">06 — elevation · shadow</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">hard shadows, one system</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 24px">Elevation is expressed as a solid, un-blurred ink offset — the signature of the language. The <b>lift</b> interaction shifts the element up-left and grows the shadow; <b>active</b> presses it flat. Soft blurred shadows are permitted <i>only</i> on the glass nav.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+        <div style="text-align:center"><div style="width:120px;height:80px;background:#fff;border:2px solid #0A0A0A;border-radius:16px;box-shadow:2px 2px 0 #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;display:block;margin-top:10px">rest-sm<br>2px 2px 0</span></div>
+        <div style="text-align:center"><div style="width:120px;height:80px;background:#fff;border:3px solid #0A0A0A;border-radius:16px;box-shadow:4px 4px 0 #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;display:block;margin-top:10px">rest-lg<br>4px 4px 0</span></div>
+        <div style="text-align:center"><div style="width:120px;height:80px;background:#fff;border:3px solid #0A0A0A;border-radius:16px;box-shadow:6px 6px 0 #0A0A0A;transform:translate(-3px,-3px)"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;display:block;margin-top:10px">hover / lift<br>6px 6px 0 · −3,−3</span></div>
+        <div style="text-align:center"><div style="width:120px;height:80px;background:#fff;border:3px solid #0A0A0A;border-radius:16px;box-shadow:1px 1px 0 #0A0A0A"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;display:block;margin-top:10px">active<br>1px 1px 0 · flat</span></div>
+        <div style="text-align:center"><div style="width:120px;height:80px;background:rgba(255,255,255,.5);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.65);border-radius:16px;box-shadow:0 10px 30px -10px rgba(0,0,0,.3)"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55;display:block;margin-top:10px">glass (nav only)<br>blur + soft</span></div>
+      </div>
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #FF4D2E;padding:14px 16px;max-width:820px;margin-top:24px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#FF4D2E">P0 · drift to kill</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">The legacy override layer replaced some cards' hard shadows with soft blurred ones (<span style="font-family:'JetBrains Mono',monospace;font-size:12px">0 10px 26px …</span>). Remove it entirely — every raised surface uses the offset scale above. Only <span style="font-family:'JetBrains Mono',monospace;font-size:12px">.nav-in</span> keeps a blur.</p>
+      </div>
+    </section>
+
+    <!-- ═══ 07 MOTION ═══ -->
+    <section id="motion" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">07 — motion tokens</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">motion &amp; interaction</h2>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Durations</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12px">
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px dashed rgba(0,0,0,.14)"><span>micro / press</span><b>120–140ms</b></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px dashed rgba(0,0,0,.14)"><span>hover / lift</span><b>160–180ms</b></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px dashed rgba(0,0,0,.14)"><span>page in</span><b>380ms</b></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 14px"><span>card stagger step</span><b>60ms</b></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Easings</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px">
+            <div style="padding:9px 14px;border-bottom:1px dashed rgba(0,0,0,.14)"><b>ease-out</b> cubic-bezier(.2,0,0,1) — enters</div>
+            <div style="padding:9px 14px;border-bottom:1px dashed rgba(0,0,0,.14)"><b>spring</b> cubic-bezier(.34,1.56,.64,1) — chips, tiles, avatars</div>
+            <div style="padding:9px 14px"><b>linear</b> — marquee &amp; star spin only</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Named animations (live)</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:24px 20px">
+        <div style="text-align:center"><span style="width:26px;height:26px;background:#1B8A5A;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:spin 12s linear infinite;display:inline-block"></span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">spin 12s</span></div>
+        <div style="text-align:center"><span style="display:inline-flex;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:10.5px;padding:6px 12px;border-radius:999px;background:#FFC700;animation:wob 3.4s ease-in-out infinite">★ sticker</span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">wob 3.4s</span></div>
+        <div style="text-align:center"><span style="width:12px;height:12px;border-radius:50%;background:#1B8A5A;display:inline-block;animation:pulsedot 2s infinite"></span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">pulsedot 2s</span></div>
+        <div style="text-align:center;overflow:hidden;width:130px;border:2px solid #0A0A0A;border-radius:8px;background:#FFC700"><div style="display:flex;white-space:nowrap;width:max-content;animation:marq 8s linear infinite;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:11px;padding:6px 0"><span style="padding:0 10px">★ MEALS ✦ TREES ★ MEALS ✦ TREES&nbsp;</span><span style="padding:0 10px">★ MEALS ✦ TREES ★ MEALS ✦ TREES&nbsp;</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">marq linear</span></div>
+      </div>
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #FFC700;padding:14px 16px;max-width:820px;margin-top:20px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A">P1 · required</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">Wrap all infinite/decorative motion (spin, wob, marquee, drift, twinkle, pulsedot) in <span style="font-family:'JetBrains Mono',monospace;font-size:12px">@media (prefers-reduced-motion: reduce)</span> and disable it. Keep functional transitions (hover/press/page-in) but drop their transforms to opacity-only under the same query.</p>
+      </div>
+    </section>
+
+    <!-- ═══ 08 COMPONENTS ═══ -->
+    <section id="components" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">08 — components + states</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">component inventory</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 26px">Hover the interactive samples to see live states. Each block lists the states engineering must implement: <b>rest · hover · active · focus · disabled</b>, plus empty / loading / error where relevant.</p>
+
+      <!-- BUTTONS -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#1B8A5A;border-radius:2px"></span>Buttons</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:22px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#fff;color:#0A0A0A;transition:transform .13s,box-shadow .13s" style-hover="transform:translate(-2px,-2px);box-shadow:3px 3px 0 #0A0A0A">default →</button>
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#1B8A5A;color:#0A0A0A;transition:transform .13s,box-shadow .13s" style-hover="transform:translate(-2px,-2px);box-shadow:3px 3px 0 #0A0A0A">primary →</button>
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#3DA9FC;color:#0A0A0A;transition:transform .13s,box-shadow .13s" style-hover="transform:translate(-2px,-2px);box-shadow:3px 3px 0 #0A0A0A">sky →</button>
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:7px 13px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:12px;border:2px solid #0A0A0A;border-radius:999px;background:#fff;color:#0A0A0A;transition:transform .13s,box-shadow .13s" style-hover="transform:translate(-2px,-2px);box-shadow:3px 3px 0 #0A0A0A">small</button>
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#1B8A5A;color:#0A0A0A;outline:3px solid #7E5BFF;outline-offset:2px">focus (new)</button>
+        <button style="display:inline-flex;align-items:center;gap:7px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#1B8A5A;color:#0A0A0A;opacity:.45;cursor:not-allowed">disabled</button>
+        <button style="display:inline-flex;align-items:center;gap:8px;padding:10px 17px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px;border:2px solid #0A0A0A;border-radius:999px;background:#1B8A5A;color:#0A0A0A;opacity:.75"><span style="width:13px;height:13px;border:2.5px solid #0A0A0A;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:inline-block"></span>loading</button>
+      </div>
+      <p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:0 0 30px"><b style="color:#FF4D2E">P0:</b> disabled = opacity .45 + not-allowed; loading = spinner + pointer-events none. <b style="color:#FF4D2E">Focus</b> ring (3px grape, offset 2) is missing everywhere today — add globally.</p>
+
+      <!-- CHIPS + STICKERS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:30px">
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#FF4D8C;border-radius:2px"></span>Chips</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:2px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;background:#fff;transition:transform .16s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:translateY(-2px) rotate(-2deg)">latest</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:2px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;background:#1B8A5A;color:#0A0A0A;box-shadow:2px 2px 0 #0A0A0A">on</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:2px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;background:#3DA9FC;color:#0A0A0A">events</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:2px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;background:#7E5BFF;color:#fff">content</span>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#FFC700;border-radius:2px"></span>Stickers &amp; badges</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <span style="display:inline-flex;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:10.5px;padding:6px 12px;border-radius:999px;background:#FFC700;color:#0A0A0A;transform:rotate(-3deg)">★ kolkata, 2021</span>
+            <span style="display:inline-flex;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:10.5px;padding:6px 12px;border-radius:999px;background:#FF4D2E;color:#fff;transform:rotate(2deg)">★ hot</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.1em;color:#0A0A0A;background:#FFC700;border:1.5px solid #0A0A0A;border-radius:5px;padding:3px 7px;transform:rotate(-3deg);display:inline-block">STAMP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVATARS + TOGGLE + TABS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:30px">
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#7E5BFF;border-radius:2px"></span>Avatars</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:20px;display:flex;gap:14px;align-items:center">
+            <span style="width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:13px;background:#1B8A5A;box-shadow:0 0 0 2px #0A0A0A;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.08) rotate(-4deg)">AS</span>
+            <span style="width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:13px;background:#3DA9FC;box-shadow:0 0 0 2px #0A0A0A">RM</span>
+            <div style="display:flex"><span style="width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:#1B8A5A;box-shadow:0 0 0 1.5px #0A0A0A"></span><span style="width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:#7E5BFF;box-shadow:0 0 0 1.5px #0A0A0A;margin-left:-7px"></span><span style="width:24px;height:24px;border-radius:50%;border:2px solid #fff;background:#FF4D2E;box-shadow:0 0 0 1.5px #0A0A0A;margin-left:-7px"></span></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#0E7C86;border-radius:2px"></span>Toggle · tabs</h3>
+          <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+            <div style="width:46px;height:27px;border-radius:999px;background:#1B8A5A;border:2px solid #0A0A0A;position:relative"><span style="position:absolute;left:21px;top:1.5px;width:19px;height:19px;border-radius:50%;background:#fff;border:2px solid #0A0A0A"></span></div>
+            <div style="width:46px;height:27px;border-radius:999px;background:#E2D9BD;border:2px solid #0A0A0A;position:relative"><span style="position:absolute;left:2px;top:1.5px;width:19px;height:19px;border-radius:50%;background:#fff;border:2px solid #0A0A0A"></span></div>
+            <div style="display:flex;gap:8px"><span style="padding:9px 16px;border:2px solid #0A0A0A;border-radius:999px;background:#0A0A0A;color:#F4EFE0;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px">posts</span><span style="padding:9px 16px;border:2px solid #0A0A0A;border-radius:999px;background:#fff;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:13px">saved</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INPUTS -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#3DA9FC;border-radius:2px"></span>Form fields</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:22px;margin-bottom:30px;display:flex;flex-direction:column;gap:14px;max-width:480px">
+        <div style="display:flex;align-items:center;gap:10px;background:#F4EFE0;border:2px solid #0A0A0A;border-radius:12px;padding:0 14px;height:48px;font-family:'Eina01',sans-serif;font-size:14px;color:#5A5A55">Rest — placeholder text</div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #1B8A5A;border-radius:12px;padding:0 14px;height:48px;font-family:'Eina01',sans-serif;font-size:14px;color:#0A0A0A;outline:3px solid rgba(27,138,90,.25);outline-offset:0">Focus — accent border + soft ring<span style="width:2px;height:20px;background:#0A0A0A;margin-left:2px"></span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #FF4D2E;border-radius:12px;padding:0 14px;height:48px;font-family:'Eina01',sans-serif;font-size:14px;color:#0A0A0A">Error — tomato border<span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:#FF4D2E">required</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:repeating-linear-gradient(45deg,#EDE6D0,#EDE6D0 10px,#E2D9BD 10px,#E2D9BD 20px);border:2px solid #0A0A0A;border-radius:12px;padding:0 14px;height:48px;font-family:'Eina01',sans-serif;font-size:14px;color:#5A5A55">Disabled / read-only<span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;background:#0A0A0A;color:#fff;padding:5px 10px;border-radius:999px">🔒 locked</span></div>
+      </div>
+
+      <!-- CARDS -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#FF4D2E;border-radius:2px"></span>Cards</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:14px">
+        <!-- feed card mini -->
+        <div style="background:#fff;border:3px solid #0A0A0A;border-radius:20px;overflow:hidden;position:relative">
+          <div style="position:absolute;left:-1px;top:16px;bottom:16px;width:6px;border-radius:0 6px 6px 0;background:#1B8A5A"></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:13px 15px 7px"><span style="width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;background:#1B8A5A;box-shadow:0 0 0 2px #0A0A0A">AS</span><div style="flex:1"><div style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:14px">ananya sen</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55">welfare · 2h</div></div><span style="padding:4px 9px;border:2px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#1B8A5A">welfare</span></div>
+          <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.55;color:#2A2A28;padding:4px 16px 12px;margin:0">fed 40+ street dogs before sunrise today.</p>
+          <div style="display:flex;gap:6px;padding:6px 11px 8px;border-top:2px dashed rgba(0,0,0,.18);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#5A5A55"><span>♥ 128</span><span>💬 14</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5A5A55;padding:0 15px 10px">.fcard · 3px border</div>
+        </div>
+        <!-- rail card -->
+        <div style="background:#fff;border:2px solid #0A0A0A;border-radius:20px;padding:16px">
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;color:#5A5A55;margin-bottom:10px"><span>openings</span><span>2</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:2px dashed rgba(0,0,0,.18)"><span style="width:9px;height:9px;border-radius:50%;background:#7E5BFF"></span><span style="flex:1;font-family:'Eina01',sans-serif;font-weight:700;font-size:13px">video editor</span><span style="color:#5A5A55">→</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0"><span style="width:9px;height:9px;border-radius:50%;background:#1B8A5A"></span><span style="flex:1;font-family:'Eina01',sans-serif;font-weight:700;font-size:13px">field volunteer</span><span style="color:#5A5A55">→</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5A5A55;margin-top:8px">.railcard · 2px border</div>
+        </div>
+        <!-- event row + notice -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;border-radius:13px;overflow:hidden;border:2px solid #0A0A0A"><div style="padding:9px 11px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1B8A5A;border-right:2px solid #0A0A0A;color:#0A0A0A"><b style="font-family:'NeutralFace',sans-serif;font-weight:900;font-size:22px;line-height:1">08</b><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;text-transform:uppercase">jun</span></div><div style="flex:1;padding:9px 11px;background:#fff"><div style="font-family:'NeutralFace',sans-serif;font-weight:700;font-size:12.5px">dog feeding drive</div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55">welfare team</span></div></div>
+          <div style="border:2px solid #0A0A0A;border-radius:13px;overflow:hidden"><div style="height:5px;background:#3DA9FC"></div><div style="padding:9px 11px;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:12.5px">paradox 4.0 kick-off <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5A5A55;font-weight:400;display:block">.notice · colour cap</span></div></div>
+        </div>
+      </div>
+
+      <!-- EMPTY / LOADING / ERROR -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:17px;margin:26px 0 12px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;background:#0A0A0A;border-radius:2px"></span>Systemic states — empty · loading · error</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div style="border:2px dashed rgba(0,0,0,.32);border-radius:16px;background:#fff;padding:30px 18px;text-align:center"><div style="font-size:34px">🌱</div><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;display:block;margin-top:8px">Nothing here yet</b><span style="font-family:'Eina01',sans-serif;font-size:12.5px;color:#5A5A55">Empty: friendly line + one action.</span></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><div style="height:14px;width:60%;background:#EDE6D0;border-radius:6px;margin-bottom:10px"></div><div style="height:10px;width:90%;background:#EDE6D0;border-radius:6px;margin-bottom:6px"></div><div style="height:10px;width:75%;background:#EDE6D0;border-radius:6px"></div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5A5A55;margin-top:12px">Loading: skeleton on bg-2</div></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;border-left:8px solid #FF4D2E;padding:16px;display:flex;flex-direction:column;justify-content:center"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;color:#FF4D2E">Something broke</b><span style="font-family:'Eina01',sans-serif;font-size:12.5px;color:#5A5A55;margin:4px 0 10px">Error: dashed tomato inline banner + retry.</span><button style="align-self:flex-start;padding:7px 13px;border:2px solid #0A0A0A;border-radius:999px;background:#fff;font-family:'NeutralFace',sans-serif;font-weight:700;font-size:12px">retry</button></div>
+      </div>
+      <p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:14px 0 0"><b style="color:#FFC700;background:#0A0A0A;padding:1px 6px;border-radius:4px">P1</b> &nbsp;Today empty/loading/error appear ad-hoc per screen. Ship these three as shared components so every list, form and fetch uses the same treatment.</p>
+    </section>
+
+    <!-- ═══ 09 DRIFT ═══ -->
+    <section id="drift" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">09 — consistency drift</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">the three-systems problem</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 24px">Left = what a legacy layer produces; right = the canonical Playground fix. Build the right column everywhere.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px">
+        <div style="border:2px solid rgba(0,0,0,.32);border-radius:18px;padding:20px;background:#fff">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#FF4D2E;margin-bottom:14px">✕ drifted (legacy)</div>
+          <div style="background:#fff;border-radius:18px;padding:14px;box-shadow:0 10px 26px -8px rgba(0,0,0,.22);margin-bottom:10px"><b style="font-family:'Eina01',sans-serif;font-weight:800;font-size:14px">Soft floating card</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block">no border · blurred shadow</span></div>
+          <div style="display:flex;gap:6px"><span style="padding:4px 9px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#3DA9FC">events</span><span style="padding:4px 9px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#3DA9FC">labs</span><span style="padding:4px 9px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#3DA9FC">ops</span></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">3 verticals collapse to one blue</span>
+        </div>
+        <div style="border:3px solid #0A0A0A;border-radius:18px;padding:20px;background:#fff;box-shadow:5px 5px 0 #0A0A0A">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#1B8A5A;margin-bottom:14px">✓ canonical (playground)</div>
+          <div style="background:#fff;border:2px solid #0A0A0A;border-radius:16px;padding:14px;box-shadow:3px 3px 0 #0A0A0A;margin-bottom:10px"><b style="font-family:'Eina01',sans-serif;font-weight:800;font-size:14px">Ink-outlined card</b><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block">2/3px border · offset shadow</span></div>
+          <div style="display:flex;gap:6px"><span style="padding:4px 9px;border:1.5px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#3DA9FC">events</span><span style="padding:4px 9px;border:1.5px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#FFC700">labs</span><span style="padding:4px 9px;border:1.5px solid #0A0A0A;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;background:#0E7C86;color:#fff">ops</span></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:6px">one hue each, restored</span>
+        </div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Drift register</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;background:#EDE6D0;border-bottom:2px solid #0A0A0A;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em"><span>Issue</span><span>Resolution</span><span>Pri</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Mixed border weights</b><span style="color:#2A2A28">Adopt the 2px/3px two-tier rule from <a href="#space" style="color:#1B8A5A;font-weight:700">§05</a>. Remove all 1px/1.5px structural borders.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Soft vs hard shadows</b><span style="color:#2A2A28">Delete the override layer. All raised surfaces use the offset scale; blur only on <span style="font-family:'JetBrains Mono',monospace;font-size:11px">.nav-in</span>.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Category colour collapse</b><span style="color:#2A2A28">Bind each vertical to its own token; never remap events/labs/ops to <span style="font-family:'JetBrains Mono',monospace;font-size:11px">--sky</span>.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Duplicate colour aliases</b><span style="color:#2A2A28">Drop <span style="font-family:'JetBrains Mono',monospace;font-size:11px">--mint / --accent2</span>; keep the 5 vertical names + signals.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Two nav patterns</b><span style="color:#2A2A28">Popup quick-menu + full mega-menu overlap. Keep mega for desktop, popup for mobile; share one link source.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr 0.5fr;gap:12px;padding:12px 16px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.45"><b>Ad-hoc spacing values</b><span style="color:#2A2A28">Snap to the 8-step scale; replace inline pixel one-offs with tokens.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+      </div>
+    </section>
+
+    <!-- ═══ 10 A11Y ═══ -->
+    <section id="a11y" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">10 — accessibility</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">WCAG 2.1 AA readiness</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 24px">Measured contrast ratios for every text-on-colour pair in the system. AA needs ≥4.5 for body text, ≥3.0 for large text (≥24px / 19px bold) and UI.</p>
+
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;overflow:hidden;margin-bottom:14px">
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:11px 16px;background:#EDE6D0;border-bottom:2px solid #0A0A0A;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase"><span>Pair</span><span>Ratio</span><span>Verdict</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on cream bg</span><b>17.2</b><span style="color:#1B8A5A">✓ AAA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink-3 mut on cream</span><b>6.0</b><span style="color:#1B8A5A">✓ AA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on lemon</span><b>12.7</b><span style="color:#1B8A5A">✓ AAA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on sky (events)</span><b>7.8</b><span style="color:#1B8A5A">✓ AA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on green (welfare)</span><b>4.55</b><span style="color:#1B8A5A">✓ AA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on tomato</span><b>5.99</b><span style="color:#1B8A5A">✓ AA</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>ink on teal (ops → #12909C)</span><b>5.18</b><span style="color:#1B8A5A">✓ AA · fixed</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>white on teal (deprecated — use ink)</span><b>3.82</b><span style="color:#1B8A5A">✓ resolved</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px"><span>white on green (stickers now ink)</span><b>4.35</b><span style="color:#1B8A5A">✓ resolved</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,77,46,.06)"><span>white on grape (content)</span><b style="color:#FF4D2E">4.35</b><span style="color:#FF4D2E">✕ large only</span></div>
+        <div style="display:grid;grid-template-columns:2fr 0.7fr 1fr;gap:10px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px"><span>white on tomato (stickers now ink)</span><b>3.31</b><span style="color:#1B8A5A">✓ resolved · large-only elsewhere</span></div>
+      </div>
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #FF4D2E;padding:14px 16px;max-width:840px;margin-bottom:26px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#FF4D2E">P0 · fix</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">Applied in the Playground: <b>ops teal darkened to #12909C</b> (ink passes AA), tomato/green stickers switched to ink text. Standing rule: <b>ink text on green/sky/lemon/tomato/teal; white only on grape at large sizes</b>. For body-size labels on saturated surfaces, prefer ink on a lightened tint.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 6px">P0</span>Focus visible</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:8px 0 0">No focus styles exist. Add <span style="font-family:'JetBrains Mono',monospace;font-size:11px">:focus-visible</span> → 3px grape outline, 2px offset, on every interactive element.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 6px">P0</span>Hit targets</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:8px 0 0">Icon buttons are 36–38px. Bump interactive targets to <b>≥44×44</b> (bottom-nav, nav icons, act buttons, close ×).</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 6px">P0</span>Semantics</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:8px 0 0">Icon-only buttons need <span style="font-family:'JetBrains Mono',monospace;font-size:11px">aria-label</span>; toggles need <span style="font-family:'JetBrains Mono',monospace;font-size:11px">role=switch/aria-checked</span>; tabs need the tab/tabpanel pattern; feed = <span style="font-family:'JetBrains Mono',monospace;font-size:11px">&lt;article&gt;</span>.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:3px 6px">P1</span>Motion &amp; alt</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:8px 0 0">Honour reduced-motion (<a href="#motion" style="color:#1B8A5A;font-weight:700">§07</a>); every content image needs meaningful <span style="font-family:'JetBrains Mono',monospace;font-size:11px">alt</span>; decorative stars/doodles get <span style="font-family:'JetBrains Mono',monospace;font-size:11px">aria-hidden</span>.</p></div>
+      </div>
+    </section>
+
+    <!-- ═══ 11 RESPONSIVE ═══ -->
+    <section id="responsive" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">11 — responsive</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">breakpoints &amp; behaviour</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 22px">Container maxes: <span style="font-family:'JetBrains Mono',monospace;font-size:12px">1320px</span> (wide/feed) · <span style="font-family:'JetBrains Mono',monospace;font-size:12px">1060px</span> (narrow). The 3-column shell is <span style="font-family:'JetBrains Mono',monospace;font-size:12px">230 / 1fr / 264</span>. Consolidate the many component-level queries onto these five system breakpoints.</p>
+
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;overflow:hidden;margin-bottom:22px">
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;background:#EDE6D0;border-bottom:2px solid #0A0A0A;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase"><span>Name</span><span>Max-width</span><span>Layout change</span></div>
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'Eina01',sans-serif;font-size:13px"><b style="font-family:'JetBrains Mono',monospace;font-size:12px">desktop</b><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A55">&gt; 1080</span><span style="color:#2A2A28">Full 3-column shell, glass top nav, mega-menu, right rail visible.</span></div>
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'Eina01',sans-serif;font-size:13px"><b style="font-family:'JetBrains Mono',monospace;font-size:12px">laptop</b><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A55">≤ 1080</span><span style="color:#2A2A28">Right rail hides; shell → 2-col (210 / 1fr). Grids 3→2 cols.</span></div>
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'Eina01',sans-serif;font-size:13px"><b style="font-family:'JetBrains Mono',monospace;font-size:12px">tablet</b><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A55">≤ 760</span><span style="color:#2A2A28">Single column; top nav collapses; <b>bottom nav appears</b>; category chips become a horizontal scroller; sticky offsets shrink.</span></div>
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;border-bottom:1px dashed rgba(0,0,0,.14);font-family:'Eina01',sans-serif;font-size:13px"><b style="font-family:'JetBrains Mono',monospace;font-size:12px">mobile</b><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A55">≤ 420</span><span style="color:#2A2A28">Stat rows 4→2 cols; hero padding tightens; display sizes step down via clamp.</span></div>
+        <div style="display:grid;grid-template-columns:0.7fr 0.8fr 2fr;gap:10px;padding:11px 16px;font-family:'Eina01',sans-serif;font-size:13px"><b style="font-family:'JetBrains Mono',monospace;font-size:12px">mobile-sm</b><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A55">≤ 340</span><span style="color:#2A2A28">Everything single column; achievement + stat grids stack fully.</span></div>
+      </div>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px">
+        <div style="text-align:center"><div style="width:190px;height:120px;border:3px solid #0A0A0A;border-radius:10px;background:#fff;display:grid;grid-template-columns:32px 1fr 40px;gap:4px;padding:6px"><div style="background:#EDE6D0;border-radius:3px"></div><div style="background:#1B8A5A;border-radius:3px;opacity:.3"></div><div style="background:#EDE6D0;border-radius:3px"></div></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">desktop · 3-col</span></div>
+        <div style="text-align:center"><div style="width:130px;height:120px;border:3px solid #0A0A0A;border-radius:10px;background:#fff;display:grid;grid-template-columns:28px 1fr;gap:4px;padding:6px"><div style="background:#EDE6D0;border-radius:3px"></div><div style="background:#1B8A5A;border-radius:3px;opacity:.3"></div></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">laptop · 2-col</span></div>
+        <div style="text-align:center"><div style="width:70px;height:120px;border:3px solid #0A0A0A;border-radius:10px;background:#fff;display:flex;flex-direction:column;gap:4px;padding:6px"><div style="height:10px;background:#EDE6D0;border-radius:3px"></div><div style="flex:1;background:#1B8A5A;border-radius:3px;opacity:.3"></div><div style="height:12px;background:#0A0A0A;border-radius:3px"></div></div><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5A5A55;display:block;margin-top:8px">mobile · 1-col + botnav</span></div>
+      </div>
+    </section>
+
+    <!-- ═══ 12 CONTENT + SEO ═══ -->
+    <section id="content" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">12 — content · SEO</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">voice &amp; discoverability</h2>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:26px">
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:18px">
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Microcopy voice</h3>
+          <ul style="margin:0;padding-left:18px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.7;color:#2A2A28">
+            <li><b>lowercase</b> for UI labels &amp; nav ("apply →", "the feed.")</li>
+            <li>Warm, direct, first-person plural ("we read everything").</li>
+            <li>One star ★ glyph as the brand tick — don't over-sprinkle.</li>
+            <li>Numbers stay concrete: "2 min to apply · 24 hrs to hear back".</li>
+            <li>Sentence case in body; Title Case only for proper nouns.</li>
+          </ul>
+          <p style="font-family:'Eina01',sans-serif;font-size:12px;line-height:1.5;color:#5A5A55;margin:12px 0 0"><b style="color:#0A0A0A">P1 drift:</b> some titles use Title Case + trailing period inconsistently. Pick one (lowercase + period) and apply across all page titles.</p>
+        </div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:18px">
+          <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">SEO provisions <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 6px">P0</span></h3>
+          <ul style="margin:0;padding-left:18px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.7;color:#2A2A28">
+            <li>Per-route <span style="font-family:'JetBrains Mono',monospace;font-size:11px">&lt;title&gt;</span> + <span style="font-family:'JetBrains Mono',monospace;font-size:11px">meta description</span> (SPA needs SSR/prerender or head management).</li>
+            <li>One <span style="font-family:'JetBrains Mono',monospace;font-size:11px">&lt;h1&gt;</span> per page; heading order not skipped.</li>
+            <li>Open Graph + Twitter card image (use brand cover art).</li>
+            <li>Semantic landmarks: <span style="font-family:'JetBrains Mono',monospace;font-size:11px">header / nav / main / footer</span>.</li>
+            <li><span style="font-family:'JetBrains Mono',monospace;font-size:11px">sitemap.xml</span> + <span style="font-family:'JetBrains Mono',monospace;font-size:11px">robots.txt</span>; the Quick-links page doubles as an HTML sitemap.</li>
+            <li>JSON-LD: <span style="font-family:'JetBrains Mono',monospace;font-size:11px">Organization</span>, <span style="font-family:'JetBrains Mono',monospace;font-size:11px">Event</span> (drives), <span style="font-family:'JetBrains Mono',monospace;font-size:11px">JobPosting</span> (openings), <span style="font-family:'JetBrains Mono',monospace;font-size:11px">Article</span> (blog).</li>
+            <li>Descriptive <span style="font-family:'JetBrains Mono',monospace;font-size:11px">alt</span> on all imagery; canonical URLs.</li>
+          </ul>
+        </div>
+      </div>
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #FFC700;padding:14px 16px;max-width:840px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A">note for eng</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">This is a client-rendered SPA today. For crawlable content (blog, projects, openings, team pages), plan server-side rendering or static prerendering of those routes — the marketing surfaces need it most; authed app screens (HOD desk, settings) can stay client-only with <span style="font-family:'JetBrains Mono',monospace;font-size:12px">noindex</span>.</p>
+      </div>
+    </section>
+
+    <!-- ═══ 13 PAGE-BY-PAGE ═══ -->
+    <section id="pages" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">13 — page-by-page</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 6px">every screen, noted</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 24px">38 screens across five clusters. Each card lists purpose, primary components, and the specific thing to fix. <b style="color:#FF4D2E">▲</b> = has a P0 item.</p>
+
+      <!-- MARKETING -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:18px;margin:8px 0 14px;display:flex;align-items:center;gap:10px"><span style="width:11px;height:11px;background:#1B8A5A;border-radius:3px"></span>Public &amp; marketing <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#5A5A55">· indexable</span></h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:30px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Home / Feed <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">3-col social feed: join card, category grid, compose, feed cards, openings/events rails. <b style="color:#0A0A0A">Fix:</b> feed card border+shadow drift; rails must match card system.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">About</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Long-form story w/ floating island TOC. <b style="color:#0A0A0A">Fix:</b> single h1; island needs keyboard access + aria.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Blog</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Magazine masthead + lead + grid. <b style="color:#0A0A0A">Fix:</b> Article JSON-LD; consistent card border weight.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Blog post</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Reading view, prose columns. <b style="color:#0A0A0A">Fix:</b> prose max-width ~68ch; heading hierarchy for SEO.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Teams</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Colour-banded team cards + open-roles banner. <b style="color:#0A0A0A">Fix:</b> band text contrast per <a href="#a11y" style="color:#1B8A5A;font-weight:700">§10</a>.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Team detail</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Hero band + members + projects. <b style="color:#0A0A0A">Fix:</b> reuse card system; avstack needs alt/names.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Members</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">People directory grid. <b style="color:#0A0A0A">Fix:</b> add empty/no-results state; searchable.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Public profile</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Visitor-facing member page. <b style="color:#0A0A0A">Fix:</b> distinguish clearly from owner Profile; cover gradient contrast.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Projects</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Dark hero + project grid. <b style="color:#0A0A0A">Fix:</b> card hover parity; lazy-load images.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Project detail</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Cover + narrative + stats. <b style="color:#0A0A0A">Fix:</b> border weight; back-chip pattern reuse.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Openings <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Role list. <b style="color:#0A0A0A">Fix:</b> JobPosting JSON-LD; role dots = category tokens.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">What we do</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Overview of verticals. <b style="color:#0A0A0A">Fix:</b> each vertical uses its own hue consistently.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Collaborations</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Partner logo wall. <b style="color:#0A0A0A">Fix:</b> logo alt text; grid border hairline consistency.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Schools</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Campus outreach landing. <b style="color:#0A0A0A">Fix:</b> CTA hierarchy; form validation states.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Classes / Shikshaq</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Education vertical (lemon hero). <b style="color:#0A0A0A">Fix:</b> ink text on lemon (ok); sub-brand naming.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">ROOTS shop</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Streetwear lookbook + cart bar. <b style="color:#0A0A0A">Fix:</b> grape hero uses white (large only); Product JSON-LD.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">FAQ</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Accordion list. <b style="color:#0A0A0A">Fix:</b> button semantics + aria-expanded; FAQPage JSON-LD.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Support</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Help center hub. <b style="color:#0A0A0A">Fix:</b> merge overlap w/ FAQ; link rows ≥44px.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Contact</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Postcard form. <b style="color:#0A0A0A">Fix:</b> label association; error/success states; Caveat legibility.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Quick links</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Sitemap. <b style="color:#0A0A0A">Fix:</b> mirror into <span style="font-family:'JetBrains Mono',monospace;font-size:11px">sitemap.xml</span>.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Design language</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">In-app brand page. <b style="color:#0A0A0A">Fix:</b> should mirror THIS spec's tokens; noindex.</p></div>
+      </div>
+
+      <!-- COMMUNITY APP -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:18px;margin:8px 0 14px;display:flex;align-items:center;gap:10px"><span style="width:11px;height:11px;background:#3DA9FC;border-radius:3px"></span>Community app <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#5A5A55">· authed · noindex</span></h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:30px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Profile <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Hero + stats + tabbed content + achievements. <b style="color:#0A0A0A">Fix:</b> tab a11y pattern; achievement tilt consistency.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Settings <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Edit profile, avatar swatches, toggles. <b style="color:#0A0A0A">Fix:</b> toggle = role=switch; save/dirty states.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Notifications</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Unread count + list. <b style="color:#0A0A0A">Fix:</b> read/unread state; empty state; live-region announce.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Saved</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Bookmarks. <b style="color:#0A0A0A">Fix:</b> empty state; bookmark toggle parity w/ feed.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">My posts</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">User's activity. <b style="color:#0A0A0A">Fix:</b> reuse feed card exactly; empty state.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Post detail</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Single post + comments. <b style="color:#0A0A0A">Fix:</b> comment input states; card w/o tilt here (correct).</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Search <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Query + results. <b style="color:#0A0A0A">Fix:</b> input focus ring; empty/no-results/loading states.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">HOD Desk <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Admin: role-switch, stats, applicant queue, approve/reject. <b style="color:#0A0A0A">Fix:</b> richest state matrix — loading/error/permission-denied/empty must all be specced; iconbtn ≥44px.</p></div>
+      </div>
+
+      <!-- AUTH / ONBOARDING -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:18px;margin:8px 0 14px;display:flex;align-items:center;gap:10px"><span style="width:11px;height:11px;background:#7E5BFF;border-radius:3px"></span>Recruitment &amp; onboarding</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:30px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Apply <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Recruitment form + quiz. <b style="color:#0A0A0A">Fix:</b> field validation, step progress, error summary, focus mgmt.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Login <span style="color:#FF4D2E">▲</span></b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Auth card. <b style="color:#0A0A0A">Fix:</b> error banner (present) + focus ring; autocomplete attrs.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Register</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Create account. <b style="color:#0A0A0A">Fix:</b> inline validation; password rules visible.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Onboarding</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Welcome / next-steps. <b style="color:#0A0A0A">Fix:</b> steps list keyboard order; progress persistence.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Handbook</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Flip-through field manual. <b style="color:#0A0A0A">Fix:</b> flip needs keyboard + reduced-motion fallback to scroll.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Pending</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Application under review. <b style="color:#0A0A0A">Fix:</b> status banner = shared component w/ HOD read-only state.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Rejected</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Not-accepted + re-apply info. <b style="color:#0A0A0A">Fix:</b> warm tone; clear re-apply timeline.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Thank you</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Post-submit confirmation. <b style="color:#0A0A0A">Fix:</b> star anim → reduced-motion; clear next action.</p></div>
+      </div>
+
+      <!-- SYSTEM -->
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:18px;margin:8px 0 14px;display:flex;align-items:center;gap:10px"><span style="width:11px;height:11px;background:#FF4D2E;border-radius:3px"></span>System &amp; utility</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">404</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Not-found w/ compass decor. <b style="color:#0A0A0A">Fix:</b> real HTTP 404 status; link home + search.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Overlays</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Popup menu, mega menu, toast, island TOC, cart bar. <b style="color:#0A0A0A">Fix:</b> focus trap + Esc close + scrim aria; toast = live region.</p></div>
+        <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;padding:15px"><b style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:15px">Global chrome</b><p style="font-family:'Eina01',sans-serif;font-size:12.5px;line-height:1.5;color:#5A5A55;margin:6px 0 0">Glass top nav, marquee, bottom nav, load/welcome screens. <b style="color:#0A0A0A">Fix:</b> skip-to-content link; nav landmark + current-page aria.</p></div>
+      </div>
+    </section>
+
+    <!-- ═══ 14 FLOW AUDIT ═══ -->
+    <section id="flow" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">14 — flow audit</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">navigation &amp; user flows</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 22px">Audited against the actual state machine (<span style="font-family:'JetBrains Mono',monospace;font-size:12px">state.page</span> + <span style="font-family:'JetBrains Mono',monospace;font-size:12px">nav()</span>). Every screen is reachable; the gaps are in <b>parameterised routing, back behaviour, and flow completion</b>.</p>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Flow findings</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;overflow:hidden;margin-bottom:24px">
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;background:#EDE6D0;border-bottom:2px solid #0A0A0A;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase"><span>Finding</span><span>Detail · fix for build</span><span>Pri</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Detail screens are singletons</b><span style="color:#2A2A28"><b style="color:#1B8A5A">✓ post detail fixed in prototype</b> — feed cards now call <span style="font-family:'JetBrains Mono',monospace;font-size:11px">openPost(id)</span> and the detail renders the clicked post's data. Project, team, blog-post and public-profile details remain hardcoded. <b>For build:</b> routes take params (<span style="font-family:'JetBrains Mono',monospace;font-size:11px">/post/:id</span>) and every detail view renders from the entity.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>No URL routing at all</b><span style="color:#2A2A28"><span style="font-family:'JetBrains Mono',monospace;font-size:11px">state.page</span> only — no deep links, no browser back/forward, refresh loses your place. <b>Fix:</b> real router with one URL per screen; browser Back must work (currently only the visited-pills trail approximates it).</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>No auth gating</b><span style="color:#2A2A28">Profile, HOD Desk, Saved, Settings are reachable logged-out; login is decorative (any credentials pass). <b>Fix:</b> route guards → redirect to login with return-to; HOD additionally role-guarded (the role-switcher UX is good — keep it, driven by real session role).</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Apply flow has no failure path</b><span style="color:#2A2A28">Quiz → form → thank-you is complete and pleasant, but there's no per-field validation, no error summary, and no draft persistence (a refresh mid-form loses everything). Rejected/Pending states exist as screens but nothing routes to them. <b>Fix:</b> wire submit → pending → approved/rejected as a real status flow.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Cart has no checkout flow</b><span style="color:#2A2A28">ROOTS "checkout" clears the cart and toasts — no address/payment/confirmation screens exist. <b>Fix:</b> either design the 3-step checkout or route to an external store; don't ship a dead-end CTA.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Modals: no focus trap / Esc</b><span style="color:#2A2A28"><b style="color:#1B8A5A">✓ Esc-close added in prototype</b> (modals, menus, drawer, island). Still needed for build: focus trap, return-focus, <span style="font-family:'JetBrains Mono',monospace;font-size:11px">aria-modal</span> on the shared modal primitive.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P0</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;border-bottom:1px dashed rgba(0,0,0,.16);font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Search is static</b><span style="color:#2A2A28">Query field pre-filled with "welfare"; results never change with input. Fine for a mock — for build, wire to real search w/ debounce, loading + no-results states (already specced in §08).</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">P1</span></div>
+        <div style="display:grid;grid-template-columns:1.1fr 1.6fr 0.4fr;gap:12px;padding:12px 16px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.5"><b>Good patterns to keep</b><span style="color:#2A2A28">Visited-trail pills (nice recency model, cap 6), scroll-to-top on nav, optimistic like/bookmark with toast feedback, HOD role-switcher for permission preview, confirm-modal before destructive actions. Preserve these in build.</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:#fff;background:#1B8A5A;border-radius:5px;padding:4px 0;text-align:center;height:fit-content">✓</span></div>
+      </div>
+
+      <h3 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:16px;margin:0 0 12px">Core flow map</h3>
+      <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2.1;overflow-x:auto">
+        <div><b style="color:#1B8A5A">visitor</b> → home → apply(quiz→form) → thank-you → <span style="color:#FF4D2E">⚠ pending/rejected unreachable</span></div>
+        <div><b style="color:#3DA9FC">member</b> → login → home → post/like/comment/save → profile ⇄ settings</div>
+        <div><b style="color:#7E5BFF">hod</b> → hod desk → approvals · moderation · achievements · hiring · enquiries <span style="color:#FF4D2E">⚠ no auth/role guard</span></div>
+        <div><b style="color:#FFC700;background:#0A0A0A;padding:0 5px;border-radius:4px">shop</b> → roots → add-to-cart → checkout <span style="color:#FF4D2E">⚠ dead-end (no payment flow)</span></div>
+        <div><b style="color:#5A5A55">detail</b> → feed/teams/projects/blog → *Detail <span style="color:#FF4D2E">⚠ singleton, no :id param</span></div>
+      </div>
+    </section>
+
+    <!-- ═══ 15 CODE-LEVEL ═══ -->
+    <section id="code" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">15 — code-level findings</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">what the prototype's code tells engineering</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:720px;margin:0 0 22px">The prototype is the spec of record for behaviour — but some of its implementation choices are demo shortcuts that must NOT be carried into production.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 8px">do not port</b><ul style="margin:12px 0 0;padding-left:18px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.7;color:#2A2A28"><li>Demo login — any credentials succeed after a fake 1.1s delay.</li><li>Artificial 1.6s loading screen (<span style="font-family:'JetBrains Mono',monospace;font-size:11px">setTimeout</span>) — gate on real data readiness instead.</li><li>Dead code <span style="font-family:'JetBrains Mono',monospace;font-size:11px">_animateBigOld()</span> — <b style="color:#1B8A5A">removed ✓</b>.</li><li>IDs from <span style="font-family:'JetBrains Mono',monospace;font-size:11px">Date.now()</span>; <span style="font-family:'JetBrains Mono',monospace;font-size:11px">volStatus</span> keyed by email — use server ids.</li></ul></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:3px 8px">reimplement properly</b><ul style="margin:12px 0 0;padding-left:18px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.7;color:#2A2A28"><li>Count-up animations run on 40ms <span style="font-family:'JetBrains Mono',monospace;font-size:11px">setInterval</span> + setState — use rAF or CSS.</li><li>Confetti + toast host are appended to <span style="font-family:'JetBrains Mono',monospace;font-size:11px">document.body</span> imperatively — make them portal components; toast needs <span style="font-family:'JetBrains Mono',monospace;font-size:11px">role=status</span> live region.</li><li>Notice-board carousel — <b style="color:#1B8A5A">now pauses when tab hidden ✓</b>; still honour reduced-motion.</li><li>Single-toast model drops rapid successive messages — queue them. Toast now has <span style="font-family:'JetBrains Mono',monospace;font-size:11px">role=status</span> live region <b style="color:#1B8A5A">✓</b>.</li></ul></div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px"><b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;background:#1B8A5A;border-radius:5px;padding:3px 8px">data model notes</b><ul style="margin:12px 0 0;padding-left:18px;font-family:'Eina01',sans-serif;font-size:13px;line-height:1.7;color:#2A2A28"><li>Category key drift: <span style="font-family:'JetBrains Mono',monospace;font-size:11px">ops</span> vs <span style="font-family:'JetBrains Mono',monospace;font-size:11px">operations</span> both exist (the <span style="font-family:'JetBrains Mono',monospace;font-size:11px">_cc</span> map papers over it) — pick ONE slug.</li><li>Post shape is solid (id, author, cat, sticker, link, img, counts) — formalise as the Post entity.</li><li>Feed images — <b style="color:#1B8A5A">now get generated alt text ✓</b>; in production alt is an authoring-time required field.</li><li>Entities to spec server-side: Post, Comment, Member, Team, Project, Opening, Application, Enquiry, Achievement, Product.</li></ul></div>
+      </div>
+    </section>
+
+    <!-- ═══ 15b PENDING VS LIVE CODEBASE ═══ -->
+    <section id="pending" style="padding:52px 0 44px;border-bottom:2px dashed rgba(0,0,0,.18)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">15b — pending designs vs live codebase</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 8px">what's built vs what's waiting</h2>
+      <p style="font-family:'Eina01',sans-serif;font-size:14px;line-height:1.6;color:#2A2A28;max-width:740px;margin:0 0 22px">Checked against <span style="font-family:'JetBrains Mono',monospace;font-size:12px">kaxx4/AQWEB</span> (React + Vite + Supabase, master). The live site implements <b>14 pages</b>; this prototype specs <b>38 screens</b>. Gap analysis:</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px">
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;background:#1B8A5A;border-radius:5px;padding:3px 8px">live in AQWEB · restyle to spec</b>
+          <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.75;color:#2A2A28;margin:12px 0 0">About · Blog list · Blog post · Collaborations · Contact · Projects · Project detail · Support · Quick links (Links) · Apply (VolunteerApply) · Handbook · Thank-you · 404 · Nav + Footer.<br><span style="color:#5A5A55">These exist — they need the Playground token/component pass from §03–§08, not a rebuild.</span></p>
+        </div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:5px;padding:3px 8px">designed · not yet in codebase</b>
+          <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.75;color:#2A2A28;margin:12px 0 0"><b>Marketing:</b> Teams · Team detail · Members · Openings · What we do · Schools · Classes/ShikshAQ · ROOTS shop · FAQ<br><b>Community app:</b> Home/Feed · Post detail · Profile · Public profile · Settings · Notifications · Saved · My posts · Search · Login · Register · Onboarding · Pending · Rejected<br><b>Admin:</b> HOD Desk (12 tabs) — likely lives in <span style="font-family:'JetBrains Mono',monospace;font-size:11px">community-platform-aq</span>; confirm before duplicating.</p>
+        </div>
+        <div style="border:2px solid #0A0A0A;border-radius:16px;background:#fff;padding:16px">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:5px;padding:3px 8px">codebase flags</b>
+          <p style="font-family:'Eina01',sans-serif;font-size:13px;line-height:1.75;color:#2A2A28;margin:12px 0 0"><span style="font-family:'JetBrains Mono',monospace;font-size:11px">Clone.tsx</span> is a 98KB single-file page — split it before applying the new system.<br>Only 2 shared components exist (Nav, Footer) — the §08 component inventory is the build list for the shared library.<br>Supabase is already wired — the §15 entity list maps onto its tables.</p>
+        </div>
+      </div>
+      <div style="border:2px solid #0A0A0A;border-radius:14px;background:#fff;border-left:8px solid #3DA9FC;padding:14px 16px;max-width:840px">
+        <b style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A">suggested build order</b>
+        <p style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:1.55;color:#2A2A28;margin:6px 0 0">1) Token file + shared components (buttons, cards, chips, modal, toast, empty/loading/error) → 2) restyle the 14 live pages → 3) marketing gap pages (Teams, Members, Openings, FAQ) → 4) community app behind auth → 5) HOD desk.</p>
+      </div>
+    </section>
+
+    <!-- ═══ 16 CHECKLIST ═══ -->
+    <section id="checklist" style="padding:52px 0 80px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5A5A55">16 — dev checklist</div>
+      <h2 style="font-family:'NeutralFace',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:.98;letter-spacing:-0.03em;margin:10px 0 20px">ready-for-build gate</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <div style="border:3px solid #0A0A0A;border-radius:18px;background:#fff;padding:20px;box-shadow:5px 5px 0 #FF4D2E">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;background:#FF4D2E;border-radius:6px;padding:5px 10px">P0 · blockers</b>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:2;color:#2A2A28;margin-top:12px">☐ One token file, aliases removed<br>☐ 2/3px border rule applied<br>☐ Offset-shadow scale only<br>☐ One hue per vertical<br>☐ 4 contrast pairs fixed<br>☐ :focus-visible everywhere<br>☐ 44px hit targets<br>☐ Per-route title + meta<br>☐ Real router + :id params<br>☐ Auth/role route guards<br>☐ Modal focus trap + Esc</div>
+        </div>
+        <div style="border:3px solid #0A0A0A;border-radius:18px;background:#fff;padding:20px;box-shadow:5px 5px 0 #FFC700">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#0A0A0A;background:#FFC700;border-radius:6px;padding:5px 10px">P1 · consistency</b>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:2;color:#2A2A28;margin-top:12px">☐ Spacing snapped to scale<br>☐ Shared empty/loading/error<br>☐ Microcopy voice pass<br>☐ prefers-reduced-motion<br>☐ Nav patterns consolidated<br>☐ Toggle/tab/accordion aria<br>☐ Semantic landmarks</div>
+        </div>
+        <div style="border:3px solid #0A0A0A;border-radius:18px;background:#fff;padding:20px;box-shadow:5px 5px 0 #3DA9FC">
+          <b style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#0A0A0A;background:#3DA9FC;border-radius:6px;padding:5px 10px">P2 · polish</b>
+          <div style="font-family:'Eina01',sans-serif;font-size:13.5px;line-height:2;color:#2A2A28;margin-top:12px">☐ Image lazy-loading<br>☐ Decorative-motion budget<br>☐ Print styles<br>☐ JSON-LD structured data<br>☐ OG/Twitter cards<br>☐ sitemap.xml + robots.txt</div>
+        </div>
+      </div>
+      <div style="margin-top:34px;padding-top:24px;border-top:3px solid #0A0A0A;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="width:15px;height:15px;background:#1B8A5A;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);display:inline-block;animation:spin 12s linear infinite"></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A55">AquaTerra design audit · canonical direction: Playground (1d) · v1.0</span>
+        <a href="AquaTerra - Playground.dc.html" style="margin-left:auto;font-family:'NeutralFace',sans-serif;font-weight:800;font-size:12px;padding:8px 14px;border:2px solid #0A0A0A;border-radius:999px;background:#FFC700" style-hover="transform:translate(-2px,-2px);box-shadow:3px 3px 0 #0A0A0A">↗ live prototype</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

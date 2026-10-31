@@ -1,0 +1,31 @@
+/* Celebration particles. Transform and opacity only; each piece is removed with its burst (components/CelebrationLayer.tsx).
+   The renderer is never mounted under prefers-reduced-motion (lib/delight.ts), and this rule is the second guard. */
+.fx-origin { position: fixed; width: 0; height: 0; z-index: 9999; pointer-events: none; }
+.fx-piece { position: absolute; left: 0; top: 0; width: var(--size); height: var(--size); margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2); opacity: 0; will-change: transform, opacity; }
+
+.fx-confetti { background: var(--tone); border-radius: 2px; animation: fx-confetti 1.5s cubic-bezier(.2, .6, .3, 1) both; }
+.fx-confetti.is-round { border-radius: 999px; }
+@keyframes fx-confetti {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0) scale(.6); }
+  30%  { opacity: 1; transform: translate(calc(var(--dx) * .75), calc(var(--up) * -1)) rotate(calc(var(--rot) * .4)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--fall)) rotate(var(--rot)) scale(.8); }
+}
+
+.fx-heart, .fx-star { fill: var(--tone); }
+.fx-heart { animation: fx-heart 1.5s ease-out both; }
+@keyframes fx-heart {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.3) rotate(0); }
+  15%  { opacity: 1; transform: translate(calc(var(--dx) * .3), calc(var(--up) * -.2)) scale(1.15) rotate(var(--rot)); }
+  60%  { opacity: 1; transform: translate(calc(var(--dx) * -.4), calc(var(--up) * -.65)) scale(1) rotate(calc(var(--rot) * -.6)); }
+  100% { opacity: 0; transform: translate(calc(var(--dx) * .5), calc(var(--up) * -1)) scale(.8) rotate(0); }
+}
+
+.fx-star { animation: fx-star 1.1s ease-out both; }
+@keyframes fx-star {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.2) rotate(0); }
+  20%  { opacity: 1; transform: translate(calc(var(--dx) * .55), calc(var(--up) * .55)) scale(1.25) rotate(calc(var(--rot) * .4)); }
+  70%  { opacity: 1; transform: translate(var(--dx), var(--up)) scale(1) rotate(calc(var(--rot) * .8)); }
+  100% { opacity: 0; transform: translate(calc(var(--dx) * 1.1), calc(var(--up) * 1.1)) scale(.4) rotate(var(--rot)); }
+}
+
+@media (prefers-reduced-motion: reduce) { .fx-origin { display: none; } }

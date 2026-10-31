@@ -1,0 +1,44 @@
+/* Extracted from OpeningsStrip.tsx's inline <style> block(s) (Phase 1.3). */
+
+        .aq-openings-strip {
+          overflow: hidden; white-space: nowrap;
+          border-top: var(--hair-2); border-bottom: var(--hair-2);
+          background: var(--pink); padding: 10px 0;
+        }
+        .aq-openings-strip-track {
+          display: inline-block; animation: aq-openings-marquee 26s linear infinite;
+        }
+        /* WCAG 2.2.2: :hover alone is not a pause mechanism a keyboard or touch
+           user can reach. :focus-within pauses the strip while a chip is tabbed to. */
+        .aq-openings-strip:hover .aq-openings-strip-track,
+        .aq-openings-strip:focus-within .aq-openings-strip-track { animation-play-state: paused; }
+        .aq-openings-strip-track a {
+          display: inline-flex; align-items: center; padding: 0 22px;
+          font-family: var(--display); font-weight: 800; font-size: 15px;
+          color: #0A0A0A; text-decoration: none; letter-spacing: -0.01em;
+        }
+        .aq-openings-strip-track a:hover { text-decoration: underline; }
+        .aq-openings-strip-dot {
+          display: inline-block; width: 6px; height: 6px; background: #0A0A0A;
+          border-radius: 50%; margin-right: 10px; flex-shrink: 0;
+        }
+        @keyframes aq-openings-marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          /* The scroll fallback belongs on the CLIPPING PARENT, not the track.
+             `.aq-openings-strip-track` is the wide flex row being translated;
+             giving IT overflow-x does nothing, because it is not the element
+             doing the clipping. So with the animation stopped, every opening
+             past the first screen-width was simply cut off and unreachable -
+             a reduced-motion visitor could not see them at all.
+             Matches RelatedTicker.css, which puts it on the parent. */
+          .aq-openings-strip { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+          .aq-openings-strip::-webkit-scrollbar { display: none; }
+          .aq-openings-strip-track { animation: none; }
+          /* The duplicated set exists only to make the loop seamless. With no
+             loop it is just every opening listed twice. */
+          .aq-openings-strip-track [data-dupe='true'] { display: none; }
+        }
+      

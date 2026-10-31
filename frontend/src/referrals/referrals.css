@@ -1,0 +1,414 @@
+/* ── Referrals — section 15 ─────────────────────────────────────────────────
+   Design reference AQ Referrals.dc.html, cards R1 to R4. Covers `/invite`
+   (InvitePage + InviteComposer + MyInvites), the sign-in block
+   (ReferralInviteBanner) and the leader panel (ReferralsDeskPanel).
+
+   Every colour, radius and shadow comes from styles/tokens.css. No new hues,
+   no new fonts. NeutralFace is caps-only, so the lowercase display type on
+   this page is Eina01 800 and never `text-transform: lowercase` on the
+   display face.
+
+   Two rules worth stating because breaking them is what got them written:
+     • Every fixed-height 999px pill here carries `white-space: nowrap`.
+     • The mono label sitting on a saturated fill uses SOLID var(--ink), never
+       an alpha of it. rgba(10,10,10,.6) on welfare green is 2.79:1.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.aq-ref-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.aq-ref-kicker {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.aq-ref-title {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(30px, 8vw, 44px);
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+
+.aq-ref-lede {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ── cards ────────────────────────────────────────────────────────────────── */
+.aq-ref-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 16px;
+  border: var(--bd);
+  border-radius: var(--r-card);
+  background: var(--card);
+}
+
+.aq-ref-h {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -.025em;
+  color: var(--ink);
+}
+
+.aq-ref-h2 {
+  margin: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.aq-ref-fine {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.aq-ref-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ── fields ───────────────────────────────────────────────────────────────── */
+.aq-ref-select,
+.aq-ref-note {
+  width: 100%;
+  min-height: 44px;                          /* the tap-target floor */
+  padding: 11px 12px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  font-family: var(--eina);
+  font-size: 16px;                           /* the iOS focus-zoom floor */
+  color: var(--ink);
+}
+
+.aq-ref-note { resize: vertical; line-height: 1.5 }
+
+.aq-ref-select:focus-visible,
+.aq-ref-note:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+.aq-ref-count {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  text-align: right;
+}
+
+.aq-ref-count.is-over { color: var(--danger); font-weight: 700 }
+
+/* ── buttons ──────────────────────────────────────────────────────────────── */
+.aq-ref-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  border: var(--bd);
+  background: var(--card);
+  font-family: var(--eina);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;                       /* fixed height + 999px radius */
+  text-decoration: none;
+}
+
+.aq-ref-btn[disabled] { opacity: .5; cursor: not-allowed }
+
+.aq-ref-btn:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px }
+
+.aq-ref-btn-primary {
+  background: var(--welfare);
+  font-weight: 800;
+  box-shadow: var(--shadow-cta);
+}
+
+.aq-ref-btn-ghost { background: var(--bg) }
+
+.aq-ref-btn-quiet {
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  background: transparent;
+}
+
+/* ── the minted link ──────────────────────────────────────────────────────── */
+.aq-ref-linkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+}
+
+.aq-ref-linkrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aq-ref-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--code);
+  font-size: 11.5px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.aq-ref-linkmeta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* nowrap pins each pill's width, so the row must be able to wrap. Nothing here
+   is `flex: 0 0 auto` at the end of an overflowing row. */
+.aq-ref-linkactions { display: flex; flex-wrap: wrap; gap: 8px }
+
+/* ── the badge ────────────────────────────────────────────────────────────── */
+.aq-ref-badgeline {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.aq-ref-tier {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink);                         /* solid, never an alpha */
+  white-space: nowrap;
+}
+
+/* The dashed live marker. Rule 4: never render a figure with no source.
+   audit-ok: dashed - the live marker (00.12). */
+.aq-ref-live {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ── the invite list ──────────────────────────────────────────────────────── */
+.aq-ref-empty {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.aq-ref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aq-ref-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+}
+
+/* Per-row busy, never desk-wide. Only the acting row dims. */
+.aq-ref-row.is-busy { opacity: .55 }
+.aq-ref-row.is-expired { border-color: var(--line-2) }
+.aq-ref-row.is-expired .aq-ref-rowtitle { color: var(--ink-3) }
+
+.aq-ref-rowhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aq-ref-rowtitle {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.aq-ref-state {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.aq-ref-rownote {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* The four steps. NON-INTERACTIVE on purpose: `referrals` UPDATE is
+   is_director(), so a member cannot move their own referral to accepted, and
+   a control here would imply they could. Non-interactive chrome has no
+   44px minimum. */
+.aq-ref-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.aq-ref-step {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: var(--r-pill);
+  border: var(--hair-2);   /* was 1.5px dashed var(--line-2) - 00.12 */
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.aq-ref-step.is-on {
+  border: 1.5px solid var(--ink);
+  background: var(--welfare);
+  color: var(--ink);                         /* solid on a saturated fill */
+}
+
+.aq-ref-rowfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aq-ref-meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.aq-ref-rowactions { display: flex; flex-wrap: wrap; gap: 6px }
+
+/* ── the sign-in block ────────────────────────────────────────────────────── */
+.aq-ref-invite {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: var(--bd);
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+}
+
+.aq-ref-invite-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  background: var(--lemon);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);                         /* solid on a saturated fill */
+  white-space: nowrap;
+}
+
+.aq-ref-invite-body {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+@media (min-width: 1025px) {
+  .aq-ref-page { padding: 40px 24px 64px }
+  .aq-ref-card { padding: 22px 20px }
+}

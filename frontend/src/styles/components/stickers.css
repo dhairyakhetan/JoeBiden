@@ -1,0 +1,178 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   The sticker pack — redesign section 11.
+   Owned by `components/Sticker.tsx`, which imports this file the way
+   `AQNav.tsx` imports `AQNav.css`. Nothing here touches v6.css or tokens.css.
+
+   A sticker is a die-cut object: an SVG path drawn twice, once as a white
+   `stroke-width: 11` keyline and once filled with the hue, under a
+   drop-shadow. That edge plus shadow is what makes it read as applied rather
+   than drawn.
+
+   Stickers are RATIONED: one per card, at most three per viewport, rotated
+   between -11 and +9 degrees, breaking an edge. The component enforces the
+   rotation range and the deep-notch rule; this file gives the placement
+   helpers so breaking an edge is one class rather than a bespoke `position`
+   in every consuming file.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.aq-sticker {
+  --stk-size-req: 118px;
+  --stk-size: min(var(--stk-size-req), 160px);
+  --stk-rotate: -8deg;
+  position: relative;
+  display: inline-block;
+  width: var(--stk-size);
+  flex-shrink: 0;
+  /* `rotate` and `translate` are the individual transform properties, kept
+     separate on purpose so the placement helpers can offset a sticker and the
+     entrance can still animate `transform: scale()` without either clobbering
+     the other. */
+  rotate: var(--stk-rotate);
+  filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.35));
+  /* Decorative by default and never in front of a tap target. A sticker that
+     carries information does so as real text in the DOM, not as a hit area. */
+  pointer-events: none;
+  line-height: 1;
+}
+
+.aq-sticker-stage {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+.aq-sticker--square .aq-sticker-stage { aspect-ratio: 1; }
+.aq-sticker--wide .aq-sticker-stage   { aspect-ratio: 200 / 64; }
+
+.aq-sticker-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* the keyline is stroked centred on the path, so half of it sits outside */
+  overflow: visible;
+  display: block;
+}
+
+/* The type layer. Its padding IS the shape's measured safe area, set inline
+   from `SAFE` in `lib/stickerShapes.ts`. Never override it with a second box:
+   nesting a percentage width inside an already-inset box compounds the inset,
+   which is how star4's mark once rendered at 6%. */
+.aq-sticker-type {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Mark-only stickers: ZERO padding, mark at 40%. */
+.aq-sticker-type--mark {
+  padding: 0 !important;
+}
+.aq-sticker-mark {
+  width: 40%;
+  display: block;
+}
+
+/* ── type roles ───────────────────────────────────────────────────────── */
+/* NeutralFace is caps-only: it has no lowercase glyphs, so `shout` is the
+   only role allowed to use it and it is never `text-transform: lowercase`. */
+
+.aq-sticker-word {
+  display: block;
+  color: inherit;
+}
+.aq-sticker-word--shout {
+  font-family: 'NeutralFace', sans-serif;
+  font-weight: 900;
+  font-size: calc(var(--stk-size) * 0.155);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.aq-sticker-word--spoken {
+  font-family: 'Eina01', sans-serif;
+  font-weight: 800;
+  font-size: calc(var(--stk-size) * 0.135);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+.aq-sticker-word--status {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: calc(var(--stk-size) * 0.082);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+.aq-sticker-word--quote {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: calc(var(--stk-size) * 0.14);
+  line-height: 1.05;
+}
+.aq-sticker-word--signature {
+  font-family: 'Caveat', cursive;
+  font-size: calc(var(--stk-size) * 0.17);
+  line-height: 1;
+}
+
+/* A numeral sticker: one number, one unit, nothing else. */
+.aq-sticker-num {
+  display: block;
+  font-family: 'NeutralFace', sans-serif;
+  font-weight: 900;
+  font-size: calc(var(--stk-size) * 0.24);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.aq-sticker-unit {
+  display: block;
+  margin-top: calc(var(--stk-size) * 0.02);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: calc(var(--stk-size) * 0.072);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ── placement helpers ────────────────────────────────────────────────── */
+/* Breaking an edge is the point of the device. These position a sticker on a
+   `position: relative` parent so it overlaps a photo edge or block seam by
+   roughly a third, which is the documented maximum. Never over body copy. */
+
+.aq-sticker--pin {
+  position: absolute;
+  z-index: 2;
+}
+.aq-sticker--tl { top: 0;    left: 0;   translate: -32% -32%; }
+.aq-sticker--tr { top: 0;    right: 0;  translate: 32% -32%; }
+.aq-sticker--bl { bottom: 0; left: 0;   translate: -32% 32%; }
+.aq-sticker--br { bottom: 0; right: 0;  translate: 32% 32%; }
+
+/* ── motion ───────────────────────────────────────────────────────────── */
+/* Entrance only: scale from .6 with a spring, 340ms. No idle loop, no hover
+   wobble. They are stickers, not toys. */
+
+.aq-sticker--enter {
+  animation: stkIn 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) 1 both;
+}
+
+@keyframes stkIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aq-sticker--enter { animation: none !important; }
+}
+
+/* ── phone ────────────────────────────────────────────────────────────── */
+/* 88 to 160px desktop, 72 to 132px phone. The cap is applied here rather than
+   asking every call site to pass two sizes. */
+
+@media (max-width: 600px) {
+  .aq-sticker { --stk-size: min(var(--stk-size-req), 132px); }
+}

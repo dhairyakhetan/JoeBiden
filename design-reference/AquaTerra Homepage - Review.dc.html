@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'NeutralFace';src:url('assets/fonts/NeutralFace-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'NeutralFace';src:url('assets/fonts/NeutralFace-Bold.woff2') format('woff2');font-weight:700 900;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'Eina01';src:url('assets/fonts/Eina01-Bold.ttf') format('truetype');font-weight:700 900;font-display:swap}
+:root{
+  --bg:#F4EFE0;--bg-2:#EDE6D0;--bg-3:#E2D9BD;--ink:#0A0A0A;--ink-2:#2A2A28;--ink-3:#5A5A55;
+  --line:rgba(0,0,0,0.18);--line-2:rgba(0,0,0,0.32);--card:#FFFFFF;
+  --mint:#1B8A5A;--pink:#FF4D8C;--lemon:#FFC700;--tomato:#FF4D2E;--sky:#3DA9FC;--grape:#7E5BFF;
+  --display:'NeutralFace',system-ui,sans-serif;--sans:'NeutralFace',system-ui,sans-serif;
+  --eina:'Eina01','NeutralFace',system-ui,sans-serif;--serif:'Instrument Serif','Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E7E0CE;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ── canvas scaffold ── */
+.dv-turn{padding:56px 60px 48px}
+.dv-thd{display:flex;align-items:baseline;gap:12px;margin:0 0 8px}
+.dv-tid{font:700 11px/1 'JetBrains Mono',monospace;padding:4px 9px;background:#0A0A0A;color:#fff;border-radius:6px;text-decoration:none}
+.dv-tname{font:800 20px/1.1 var(--display);color:#0A0A0A;letter-spacing:-0.02em}
+.dv-note{max-width:840px;margin:0 0 34px;background:#fff;border:2px solid #0A0A0A;border-radius:18px;box-shadow:5px 5px 0 0 #0A0A0A;padding:22px 26px}
+.dv-note h4{font:800 13px/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--tomato);margin:0 0 12px}
+.dv-note p{font:400 15px/1.6 var(--eina);color:var(--ink-2);margin:0 0 10px;text-wrap:pretty}
+.dv-note b{font-weight:700;color:var(--ink)}
+.dv-opts{display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:12px;scroll-margin-top:20px;max-width:100%}
+.dv-olabel{display:flex;align-items:baseline;gap:10px;font:400 13px/1.4 var(--eina);color:var(--ink-3);max-width:960px}
+.dv-oid{font:700 12px/1 'JetBrains Mono',monospace;padding:4px 9px;background:rgba(0,0,0,.1);color:#0A0A0A;border-radius:6px;text-decoration:none;flex:none}
+.dv-opt:target .dv-oid{background:var(--pink);color:#0A0A0A}
+.dv-olabel b{color:var(--ink);font:800 14px/1.2 var(--display)}
+.dv-next{margin:30px 0 0;max-width:840px;font:400 14px/1.7 var(--eina);color:var(--ink-3)}
+.dv-next a{font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 8px;background:rgba(0,0,0,.08);border-radius:6px;color:#0A0A0A}
+
+/* ══════════ SHARED HOMEPAGE SKELETON ══════════ */
+.hp{width:960px;max-width:100%;position:relative;overflow:hidden;border-radius:22px;background:var(--frame-bg,var(--bg));color:var(--ink);border:2px solid #0A0A0A;box-shadow:6px 6px 0 0 #0A0A0A;font-family:var(--sans)}
+.hp::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:40;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* nav */
+.hpnav{position:relative;z-index:5;padding:16px 18px 4px}
+.hpnav-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.hplogo{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-0.03em;background:rgba(255,255,255,.62);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 14px -2px rgba(0,0,0,.08)}
+.hpstar{display:inline-block;width:15px;height:15px;background:var(--accent,var(--mint));clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.hppills{justify-self:center;display:flex;align-items:center;gap:5px}
+.hplink{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;font-weight:600;font-size:13px;border-radius:999px;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 14px -2px rgba(0,0,0,.06);transition:transform .16s cubic-bezier(.2,0,0,1),background .16s}
+.hplink:hover{transform:translateY(-2px);background:rgba(255,255,255,.92)}
+.hplink.on{background:var(--ink);color:var(--frame-bg,var(--bg))}
+.hpacts{display:flex;align-items:center;gap:7px}
+.hpicon{width:36px;height:36px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.6);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 14px -2px rgba(0,0,0,.06);color:var(--ink);transition:transform .16s}
+.hpicon:hover{transform:translateY(-2px)}
+.hpicon svg{width:16px;height:16px}
+
+/* shell */
+.shell{position:relative;z-index:2;display:grid;grid-template-columns:210px minmax(0,1fr) 234px;gap:18px;padding:14px 18px 30px;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:15px}
+
+/* cards */
+.railcard{background:var(--rail-bg,var(--bg-2));border:var(--rail-bd,none);box-shadow:var(--rail-sh,none);border-radius:var(--rail-r,20px);padding:16px;display:flex;flex-direction:column;gap:11px}
+.rail-h{display:flex;align-items:center;justify-content:space-between}
+.joincard{border-radius:var(--rail-r,20px);padding:18px;display:flex;flex-direction:column;align-items:flex-start;gap:9px;background:var(--join-bg,#0A0A0A);color:var(--join-fg,#fff);border:var(--join-bd,none);box-shadow:var(--join-sh,none)}
+.join-h{font-family:var(--ttl-font,var(--display));font-weight:800;font-size:24px;line-height:1.02;letter-spacing:-0.03em}
+.join-p{font-family:var(--eina);font-size:12.5px;line-height:1.5;color:var(--join-sub,rgba(255,255,255,.62));margin:2px 0 4px}
+
+/* category grid */
+.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.cattile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 8px 11px;border:1.5px solid transparent;border-radius:14px;background:var(--tile-bg,var(--bg-2));color:var(--tile-fg,var(--ink));transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .18s;position:relative}
+.cattile:hover{transform:translateY(-2px)}
+.cattile svg{width:20px;height:20px;color:var(--tile-ic,var(--cc,var(--mint)))}
+.cattile.on{background:var(--cc);color:#0A0A0A;transform:scale(1.03)}
+.cattile.on svg{color:#0A0A0A}
+.cattile b{font-family:var(--display);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1}
+
+/* feed head + compose */
+.feedhead{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:2px 2px 0}
+.feedtitle{font-family:var(--ttl-font,var(--display));font-weight:800;font-size:40px;line-height:.95;letter-spacing:-0.04em;margin:0}
+.scriptv{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent,var(--mint))}
+.sub{font-family:var(--eina);font-size:12.5px;color:var(--ink-3);margin:5px 0 0}
+.feedacts{display:flex;gap:6px}
+.compose{display:flex;align-items:center;gap:11px;padding:12px 13px;background:var(--rail-bg,var(--bg-2));border:var(--rail-bd,none);box-shadow:var(--rail-sh,none);border-radius:var(--rail-r,20px)}
+.composeinp{flex:1;text-align:left;color:var(--ink-3);font-size:13.5px;background:var(--bg);border-radius:13px;padding:11px 14px;font-family:var(--eina)}
+
+/* feed card */
+.fcard{background:var(--card);border:var(--fcard-bd,2px solid var(--ink));box-shadow:var(--fcard-sh,4px 4px 0 0 var(--ink));border-radius:var(--fcard-r,20px);overflow:visible;transition:transform .18s cubic-bezier(.2,0,0,1),box-shadow .18s}
+.fcard:hover{transform:var(--fcard-hover,translate(-2px,-2px));box-shadow:var(--fcard-hsh,6px 7px 0 0 var(--ink))}
+.fhead{display:flex;align-items:center;gap:10px;padding:13px 15px 7px}
+.fmeta{flex:1;min-width:0}
+.fname{font-family:var(--name-font,var(--display));font-weight:800;font-size:14px;line-height:1.1}
+.fmedia{position:relative;margin:0 15px;border-radius:14px;overflow:hidden;aspect-ratio:16/10}
+.fmedia img{width:100%;height:100%;object-fit:cover}
+.fbody{padding:11px 16px 2px}
+.ftitle{font-family:var(--eina);font-weight:800;font-size:17px;line-height:1.28;letter-spacing:-0.01em;margin:0 0 5px}
+.fsnip{font-family:var(--eina);font-size:14px;line-height:1.6;color:var(--ink-2);margin:0}
+.flink{display:inline-flex;align-items:center;gap:6px;margin-top:11px;padding:6px 13px;background:var(--bg-2);border:1.5px solid var(--line-2);border-radius:999px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink)}
+.ffoot{display:flex;align-items:center;gap:4px;padding:6px 11px 8px;border-top:1px dashed var(--line);margin-top:11px}
+.act{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:10px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink-3);transition:transform .15s,background .12s,color .12s}
+.act:hover{background:var(--bg-2);color:var(--ink)}
+.act svg{width:15px;height:15px}
+.act.like:hover{color:var(--tomato)}
+
+/* openings + events rows */
+.oprow{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px dashed var(--line)}
+.oprow:last-child{border-bottom:none}
+.opdot{width:8px;height:8px;border-radius:50%;flex:none}
+.opttl{flex:1;font-family:var(--eina);font-weight:700;font-size:13px;line-height:1.15}
+.opmeta{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+.evrow{display:flex;gap:0;border-radius:13px;overflow:hidden;border:1.5px solid var(--line)}
+.evdate{padding:9px 11px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:48px;color:#0A0A0A}
+.evdate b{font-family:var(--display);font-weight:900;font-size:22px;line-height:1}
+.evdate span{font-family:var(--mono);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;opacity:.72}
+.evinfo{flex:1;padding:9px 11px;background:var(--bg-2);min-width:0}
+.evttl{font-family:var(--display);font-weight:700;font-size:12.5px;line-height:1.2;margin-bottom:3px}
+
+/* atoms */
+.avatar{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:var(--display);font-weight:800;font-size:13px;flex:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.avatar:hover{transform:scale(1.08) rotate(-4deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;font-family:var(--sans);font-weight:600;font-size:13px;border:var(--btn-bd,2px solid var(--ink));border-radius:999px;background:var(--card);color:var(--ink);transition:transform .13s,box-shadow .13s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--btn-hsh,3px 3px 0 0 var(--ink))}
+.btn:active{transform:scale(.96)}
+.btn-sm{padding:7px 13px;font-size:12px}
+.btn-primary{background:var(--accent,var(--mint));color:#0A0A0A}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1.5px solid var(--ink);border-radius:999px;font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;background:transparent;transition:transform .16s cubic-bezier(.34,1.56,.64,1)}
+.chip:hover{transform:translateY(-2px) rotate(-2deg)}
+.chip.on{background:var(--lemon);color:#0A0A0A;box-shadow:2px 2px 0 0 var(--ink)}
+.chip svg{width:12px;height:12px}
+.cat{background:var(--cc);color:#0A0A0A;border-color:transparent}
+.cat-welfare{--cc:var(--mint)}.cat-events{--cc:var(--pink)}.cat-labs{--cc:var(--lemon)}.cat-ops{--cc:var(--sky)}.cat-content{--cc:var(--grape)}.cat-all{--cc:var(--ink)}
+.sticker{display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:10.5px;padding:6px 12px;border-radius:999px;background:var(--lemon);color:#0A0A0A;transform:rotate(-3deg);white-space:nowrap;letter-spacing:.02em}
+.st-tomato{background:var(--tomato);color:#fff}.st-mint{background:var(--mint);color:#fff}.st-sky{background:var(--sky);color:#0A0A0A}.st-lemon{background:var(--lemon);color:#0A0A0A}.st-pink{background:var(--pink);color:#0A0A0A}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.mut{color:var(--ink-3)}.xs{font-size:11px}.up{text-transform:uppercase;letter-spacing:.05em}.bb{font-weight:700}
+
+/* keyframes */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wob{0%,100%{transform:rotate(-3deg)}25%{transform:rotate(2deg) translateY(-2px)}50%{transform:rotate(-1deg)}75%{transform:rotate(3deg) translateY(-1px)}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@keyframes burst{0%{transform:scale(1)}35%{transform:scale(1.5)}55%{transform:scale(.9)}75%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* ══════════ VARIANT: CURRENT (baseline, deliberately shows the drift) ══════════ */
+.hp[data-variant="cur"]{--accent:var(--mint);--ttl-font:var(--display)}
+.hp[data-variant="cur"] .fcard{--fcard-bd:2px solid var(--ink);--fcard-sh:4px 4px 0 0 var(--ink);--fcard-hover:translate(-2px,-2px)}
+.hp[data-variant="cur"] .railcard,.hp[data-variant="cur"] .compose{--rail-bg:#fff;--rail-sh:0 1px 2px rgba(0,0,0,.04),0 10px 26px -8px rgba(0,0,0,.12);--rail-bd:none}
+.hp[data-variant="cur"] .joincard{--join-bg:#fff;--join-fg:var(--ink);--join-sub:var(--ink-3);--join-sh:0 1px 2px rgba(0,0,0,.04),0 10px 26px -8px rgba(0,0,0,.12)}
+.hp[data-variant="cur"] .joincard .st-mint{background:var(--mint)}
+/* muddy category mapping — events/labs/ops all collapse to the same blue */
+.hp[data-variant="cur"] .cat-events,.hp[data-variant="cur"] .cat-labs,.hp[data-variant="cur"] .cat-ops{--cc:var(--sky)}
+.hp[data-variant="cur"] .cat-welfare,.hp[data-variant="cur"] .cat-content{--cc:var(--mint)}
+.hp[data-variant="cur"] .btn-primary{--accent:var(--mint)}
+
+/* ══════════ VARIANT: TIGHTENED SCRAPBOOK (1b) ══════════ */
+.hp[data-variant="tight"]{--frame-bg:var(--bg);--accent:var(--mint);--ttl-font:var(--display)}
+.hp[data-variant="tight"] .fcard,.hp[data-variant="tight"] .railcard,.hp[data-variant="tight"] .compose{--fcard-bd:2px solid var(--ink);--fcard-sh:4px 4px 0 0 var(--ink);--rail-bd:2px solid var(--ink);--rail-sh:4px 4px 0 0 var(--ink);--rail-bg:#fff}
+.hp[data-variant="tight"] .joincard{--join-bd:2px solid var(--ink);--join-sh:4px 4px 0 0 var(--ink)}
+.hp[data-variant="tight"] .fcard{animation:cardIn .4s cubic-bezier(.2,0,0,1) both}
+.hp[data-variant="tight"] .fcard:nth-of-type(2){animation-delay:.08s}
+.hp[data-variant="tight"] .sticker{animation:wob 3.6s ease-in-out infinite}
+.hp[data-variant="tight"] .hpstar{animation:spin 14s linear infinite}
+.hp[data-variant="tight"] .cattile{border:1.5px solid var(--ink);background:#fff}
+.hp[data-variant="tight"] .cattile:hover{transform:translateY(-2px);box-shadow:3px 3px 0 0 var(--ink)}
+
+/* ══════════ VARIANT: WARM EDITORIAL (1c) ══════════ */
+.hp[data-variant="editorial"]{--frame-bg:#F7F2E6;--accent:var(--mint);--ttl-font:var(--serif);--name-font:var(--eina)}
+.hp[data-variant="editorial"] .feedtitle{font-style:italic;font-weight:400;font-size:52px;letter-spacing:-0.01em}
+.hp[data-variant="editorial"] .join-h{font-family:var(--serif);font-style:italic;font-weight:400;font-size:29px}
+.hp[data-variant="editorial"] .ftitle{font-family:var(--serif);font-style:italic;font-weight:400;font-size:23px;letter-spacing:0}
+.hp[data-variant="editorial"] .scriptv{color:var(--mint)}
+.hp[data-variant="editorial"] .fcard{--fcard-bd:1px solid rgba(0,0,0,.1);--fcard-sh:0 1px 3px rgba(0,0,0,.05),0 20px 44px -24px rgba(0,0,0,.4);--fcard-r:24px;--fcard-hover:translateY(-3px);--fcard-hsh:0 1px 3px rgba(0,0,0,.05),0 26px 50px -22px rgba(0,0,0,.4)}
+.hp[data-variant="editorial"] .railcard,.hp[data-variant="editorial"] .compose{--rail-bg:transparent;--rail-bd:1px solid rgba(0,0,0,.1);--rail-sh:none;--rail-r:20px}
+.hp[data-variant="editorial"] .joincard{--join-bg:#0A0A0A;--join-fg:#fff;--join-sub:rgba(255,255,255,.6);--rail-r:20px}
+.hp[data-variant="editorial"] .hplink,.hp[data-variant="editorial"] .hplogo,.hp[data-variant="editorial"] .hpicon{box-shadow:none;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.06)}
+.hp[data-variant="editorial"] .fcard{animation:fadeUp .5s ease both}
+.hp[data-variant="editorial"] .fcard:nth-of-type(2){animation-delay:.1s}
+.hp[data-variant="editorial"] .cattile{background:transparent;border:1px solid rgba(0,0,0,.1)}
+.hp[data-variant="editorial"] .cattile b{font-family:var(--eina);text-transform:none;font-weight:600;font-size:12px;letter-spacing:0}
+/* categories become quiet dots on chips */
+.hp[data-variant="editorial"] .cat{background:transparent;color:var(--ink-3);border:none;padding-left:0}
+.hp[data-variant="editorial"] .cat::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cc);margin-right:6px}
+.hp[data-variant="editorial"] .btn{--btn-bd:1px solid var(--ink);--btn-hsh:0 8px 20px -8px rgba(0,0,0,.35)}
+.hp[data-variant="editorial"] .btn:hover{transform:translateY(-2px)}
+.hp[data-variant="editorial"] .sticker{background:transparent;color:var(--ink-3);font-family:var(--mono);font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;transform:none;padding:0}
+
+/* ══════════ VARIANT: PLAYGROUND (1d) ══════════ */
+.hp[data-variant="play"]{--frame-bg:var(--bg);--accent:var(--pink);--ttl-font:var(--display)}
+.hp[data-variant="play"] .fcard,.hp[data-variant="play"] .railcard,.hp[data-variant="play"] .compose{--fcard-bd:3px solid var(--ink);--fcard-sh:6px 6px 0 0 var(--ink);--rail-bd:3px solid var(--ink);--rail-sh:6px 6px 0 0 var(--ink);--rail-bg:#fff}
+.hp[data-variant="play"] .joincard{--join-bd:3px solid var(--ink);--join-sh:6px 6px 0 0 var(--pink);--join-bg:#0A0A0A}
+.hp[data-variant="play"] .fcard:nth-of-type(1){transform:rotate(-.8deg)}
+.hp[data-variant="play"] .fcard:nth-of-type(2){transform:rotate(.7deg)}
+.hp[data-variant="play"] .fcard:hover{transform:rotate(0deg) translate(-2px,-3px)}
+.hp[data-variant="play"] .feedtitle{font-size:46px}
+.hp[data-variant="play"] .feedtitle .scriptv{color:var(--pink)}
+.hp[data-variant="play"] .sticker{animation:wob 2.8s ease-in-out infinite}
+.hp[data-variant="play"] .hpstar{animation:spin 9s linear infinite}
+.hp[data-variant="play"] .avatar{box-shadow:0 0 0 2px var(--ink)}
+.hp[data-variant="play"] .cattile{background:var(--cc);color:#0A0A0A;border:2px solid var(--ink);box-shadow:2px 2px 0 0 var(--ink)}
+.hp[data-variant="play"] .cattile svg{color:#0A0A0A}
+.hp[data-variant="play"] .cattile:hover{transform:translateY(-2px) rotate(-2deg)}
+.hp[data-variant="play"] .fcardtop{height:6px;margin:-1px -1px 0;background:var(--cc,var(--pink))}
+.hp[data-variant="play"] .marquee{display:flex}
+.hp[data-variant="play"] .btn-primary{--accent:var(--pink)}
+.hp[data-variant="play"] .chip.on{background:var(--pink)}
+
+/* marquee ticker (only shown in play) */
+.marquee{display:none;position:relative;z-index:3;margin:8px 18px 0;overflow:hidden;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:8px 0;background:var(--lemon)}
+.marq-track{display:flex;gap:0;white-space:nowrap;width:max-content;animation:marq 20s linear infinite}
+.marq-track span{display:inline-flex;align-items:center;gap:16px;padding:0 16px;font-family:var(--display);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#0A0A0A}
+
+@media(max-width:1000px){.dv-turn{padding:32px 20px}.dv-opts{gap:32px}}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Homepage — consistency &amp; fun review</span></div>
+
+  <div class="dv-note">
+    <h4>What's actually broken</h4>
+    <p>The homepage carries <b>three overlapping design systems</b> — the current "Y2K brutal scrapbook" (<span class="mono">v6.css</span>), a leftover forest-green system (<span class="mono">aq-design-system.css</span>), and a global override layer that strips the bold 2px-ink borders + hard offset-shadows off some cards while leaving them on others. So <b>brutalist feed cards sit next to soft floaty rail cards</b> on the same screen. Categories are muddy too: events, labs and ops all resolve to the same blue.</p>
+    <p><b>1a</b> is today, recreated faithfully so the drift is visible. <b>1b–1d</b> keep the exact same skeleton and content — only the design language changes — so you can judge each direction on equal footing. Every option fixes consistency; they differ in <i>how much fun</i> and <i>where</i>.</p>
+  </div>
+
+  <div class="dv-opts">
+
+    <!-- ─────────── 1a CURRENT ─────────── -->
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a><b>Current, recreated</b> — hard feed cards vs. soft floating rails; the two eras clash. Baseline.</div>
+      <div class="dv-card">
+        <div class="hp" data-variant="cur">
+          <nav class="hpnav"><div class="hpnav-in">
+            <a class="hplogo"><span class="hpstar"></span>aquaterra</a>
+            <div class="hppills">
+              <a class="hplink on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>home</a>
+              <a class="hplink">projects</a><a class="hplink">teams</a><a class="hplink">blog</a><a class="hplink">about</a>
+            </div>
+            <div class="hpacts">
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+              <button class="btn btn-primary btn-sm">apply →</button>
+            </div>
+          </div></nav>
+
+          <div class="shell">
+            <aside class="col">
+              <div class="joincard">
+                <span class="sticker st-mint">★ kolkata, 2021</span>
+                <div class="join-h">join the <span class="scriptv" style="color:var(--mint)">chaos</span>.</div>
+                <p class="join-p">2 min to apply. 24 hrs to hear back. free forever.</p>
+                <a class="btn btn-primary btn-sm">join the work →</a>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">browse</span><span class="mono xs mut">212 posts</span></div>
+                <div class="catgrid">
+                  <div class="cattile cat-all on" style="--cc:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 13.9 2 9.4h7.6z"/></svg><b>all</b></div>
+                  <div class="cattile cat-events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4l14 4-14 4"/></svg><b>events</b></div>
+                  <div class="cattile cat-welfare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg><b>welfare</b></div>
+                  <div class="cattile cat-labs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>labs</b></div>
+                  <div class="cattile cat-ops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></svg><b>ops</b></div>
+                  <div class="cattile cat-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><b>content</b></div>
+                </div>
+              </div>
+            </aside>
+
+            <main class="col">
+              <div class="feedhead">
+                <div><h1 class="feedtitle">the <span class="scriptv">feed</span>.</h1><p class="sub">everything · latest · 212 posts</p></div>
+                <div class="feedacts"><button class="chip on">latest</button><button class="chip">trending</button></div>
+              </div>
+              <div class="compose">
+                <div class="avatar" style="background:var(--grape)">KA</div>
+                <button class="composeinp">what did you make today?</button>
+                <button class="btn btn-primary btn-sm">+ post</button>
+              </div>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--mint)">AS</div><div class="fmeta"><div class="fname">ananya sen</div><div class="mono xs mut">la martiniere · welfare · 2h ago</div></div><span class="chip cat cat-welfare">welfare</span></header>
+                <div class="fmedia"><img src="assets/img/food-distribution.jpeg" alt="food distribution drive"><span class="sticker st-tomato" style="position:absolute;top:12px;right:12px;transform:rotate(8deg)">★ hot</span></div>
+                <div class="fbody"><p class="fsnip">fed 40+ street dogs across ballygunge before sunrise today. one very good boy would not stop following the food cart 🐕 whole crew showed up at 5am — worth every minute.</p></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>128</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>14</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--sky)">RM</div><div class="fmeta"><div class="fname">rehan mullick</div><div class="mono xs mut">the heritage · events · 5h ago</div></div><span class="chip cat cat-events">events</span></header>
+                <div class="fbody"><h3 class="ftitle">paradox 4.0 — the brief is live</h3><p class="fsnip">6 teams. 2 months. one dangerously ambitious spreadsheet. read the brief, pick a lane 👇</p><a class="flink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>notion.so/paradox4</a></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>43</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>8</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+            </main>
+
+            <aside class="col">
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">openings</span><span class="mono xs mut">2</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--grape)"></span><span class="opttl">video editor <span class="opmeta">· content</span></span><span class="mut">→</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--mint)"></span><span class="opttl">field volunteer <span class="opmeta">· welfare</span></span><span class="mut">→</span></div>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">upcoming</span><span class="mono xs mut">3</span></div>
+                <div class="evrow"><div class="evdate" style="background:var(--mint)"><b>08</b><span>jun</span></div><div class="evinfo"><div class="evttl">dog feeding drive, ballygunge</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--sky)"><b>14</b><span>jun</span></div><div class="evinfo"><div class="evttl">teaching workshop, tiljala</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--pink)"><b>21</b><span>jun</span></div><div class="evinfo"><div class="evttl">paradox 4.0 kick-off</div><span class="mono xs mut">events team</span></div></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────── 1b TIGHTENED SCRAPBOOK ─────────── -->
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a><b>Tightened Scrapbook</b> — commit fully to the brutalist DNA: every surface gets the 2px ink border + hard shadow, one clear color per category, springy motion. Consistent &amp; fun.</div>
+      <div class="dv-card">
+        <div class="hp" data-variant="tight">
+          <nav class="hpnav"><div class="hpnav-in">
+            <a class="hplogo"><span class="hpstar"></span>aquaterra</a>
+            <div class="hppills">
+              <a class="hplink on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>home</a>
+              <a class="hplink">projects</a><a class="hplink">teams</a><a class="hplink">blog</a><a class="hplink">about</a>
+            </div>
+            <div class="hpacts">
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+              <button class="btn btn-primary btn-sm">apply →</button>
+            </div>
+          </div></nav>
+
+          <div class="shell">
+            <aside class="col">
+              <div class="joincard">
+                <span class="sticker st-mint">★ kolkata, 2021</span>
+                <div class="join-h">join the <span class="scriptv" style="color:var(--lemon)">chaos</span>.</div>
+                <p class="join-p">2 min to apply. 24 hrs to hear back. free forever.</p>
+                <a class="btn btn-primary btn-sm">join the work →</a>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">browse</span><span class="mono xs mut">212 posts</span></div>
+                <div class="catgrid">
+                  <div class="cattile cat-all on" style="--cc:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 13.9 2 9.4h7.6z"/></svg><b>all</b></div>
+                  <div class="cattile cat-events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4l14 4-14 4"/></svg><b>events</b></div>
+                  <div class="cattile cat-welfare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg><b>welfare</b></div>
+                  <div class="cattile cat-labs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>labs</b></div>
+                  <div class="cattile cat-ops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></svg><b>ops</b></div>
+                  <div class="cattile cat-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><b>content</b></div>
+                </div>
+              </div>
+            </aside>
+
+            <main class="col">
+              <div class="feedhead">
+                <div><h1 class="feedtitle">the <span class="scriptv">feed</span>.</h1><p class="sub">everything · latest · 212 posts</p></div>
+                <div class="feedacts"><button class="chip on">latest</button><button class="chip">trending</button></div>
+              </div>
+              <div class="compose">
+                <div class="avatar" style="background:var(--grape)">KA</div>
+                <button class="composeinp">what did you make today?</button>
+                <button class="btn btn-primary btn-sm">+ post</button>
+              </div>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--mint)">AS</div><div class="fmeta"><div class="fname">ananya sen</div><div class="mono xs mut">la martiniere · welfare · 2h ago</div></div><span class="chip cat cat-welfare">welfare</span></header>
+                <div class="fmedia"><img src="assets/img/food-distribution.jpeg" alt="food distribution drive"><span class="sticker st-tomato" style="position:absolute;top:12px;right:12px">★ hot</span></div>
+                <div class="fbody"><p class="fsnip">fed 40+ street dogs across ballygunge before sunrise today. one very good boy would not stop following the food cart 🐕 whole crew showed up at 5am — worth every minute.</p></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>128</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>14</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--sky)">RM</div><div class="fmeta"><div class="fname">rehan mullick</div><div class="mono xs mut">the heritage · events · 5h ago</div></div><span class="chip cat cat-events">events</span></header>
+                <div class="fbody"><h3 class="ftitle">paradox 4.0 — the brief is live</h3><p class="fsnip">6 teams. 2 months. one dangerously ambitious spreadsheet. read the brief, pick a lane 👇</p><a class="flink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>notion.so/paradox4</a></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>43</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>8</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+            </main>
+
+            <aside class="col">
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">openings</span><span class="mono xs mut">2</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--grape)"></span><span class="opttl">video editor <span class="opmeta">· content</span></span><span class="mut">→</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--mint)"></span><span class="opttl">field volunteer <span class="opmeta">· welfare</span></span><span class="mut">→</span></div>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">upcoming</span><span class="mono xs mut">3</span></div>
+                <div class="evrow"><div class="evdate" style="background:var(--mint)"><b>08</b><span>jun</span></div><div class="evinfo"><div class="evttl">dog feeding drive, ballygunge</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--lemon)"><b>14</b><span>jun</span></div><div class="evinfo"><div class="evttl">teaching workshop, tiljala</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--pink)"><b>21</b><span>jun</span></div><div class="evinfo"><div class="evttl">paradox 4.0 kick-off</div><span class="mono xs mut">events team</span></div></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────── 1c WARM EDITORIAL ─────────── -->
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a><b>Warm Editorial</b> — drop the hard shadows, lean into paper + Instrument Serif, generous space and quiet category dots. Premium, trustworthy, calm fun.</div>
+      <div class="dv-card">
+        <div class="hp" data-variant="editorial">
+          <nav class="hpnav"><div class="hpnav-in">
+            <a class="hplogo"><span class="hpstar"></span>aquaterra</a>
+            <div class="hppills">
+              <a class="hplink on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>home</a>
+              <a class="hplink">projects</a><a class="hplink">teams</a><a class="hplink">blog</a><a class="hplink">about</a>
+            </div>
+            <div class="hpacts">
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+              <button class="btn btn-primary btn-sm">apply →</button>
+            </div>
+          </div></nav>
+
+          <div class="shell">
+            <aside class="col">
+              <div class="joincard">
+                <span class="sticker">since 2021 · kolkata</span>
+                <div class="join-h">join the <span class="scriptv" style="color:var(--mint)">chaos</span>.</div>
+                <p class="join-p">2 min to apply. 24 hrs to hear back. free forever.</p>
+                <a class="btn btn-primary btn-sm">join the work →</a>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">browse</span><span class="mono xs mut">212 posts</span></div>
+                <div class="catgrid">
+                  <div class="cattile cat-all on" style="--cc:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 13.9 2 9.4h7.6z"/></svg><b>all</b></div>
+                  <div class="cattile cat-events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4l14 4-14 4"/></svg><b>events</b></div>
+                  <div class="cattile cat-welfare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg><b>welfare</b></div>
+                  <div class="cattile cat-labs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>labs</b></div>
+                  <div class="cattile cat-ops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></svg><b>ops</b></div>
+                  <div class="cattile cat-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><b>content</b></div>
+                </div>
+              </div>
+            </aside>
+
+            <main class="col">
+              <div class="feedhead">
+                <div><h1 class="feedtitle">the <span class="scriptv">feed</span></h1><p class="sub">everything · latest · 212 posts</p></div>
+                <div class="feedacts"><button class="chip on">latest</button><button class="chip">trending</button></div>
+              </div>
+              <div class="compose">
+                <div class="avatar" style="background:var(--grape)">KA</div>
+                <button class="composeinp">what did you make today?</button>
+                <button class="btn btn-primary btn-sm">+ post</button>
+              </div>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--mint)">AS</div><div class="fmeta"><div class="fname">ananya sen</div><div class="mono xs mut">la martiniere · 2h ago</div></div><span class="chip cat cat-welfare">welfare</span></header>
+                <div class="fmedia"><img src="assets/img/food-distribution.jpeg" alt="food distribution drive"><span class="sticker" style="position:absolute;top:12px;left:14px;background:#0A0A0A;color:#fff;padding:4px 9px">trending</span></div>
+                <div class="fbody"><p class="fsnip">fed 40+ street dogs across ballygunge before sunrise today. one very good boy would not stop following the food cart. whole crew showed up at 5am — worth every minute.</p></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>128</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>14</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+              <article class="fcard">
+                <header class="fhead"><div class="avatar" style="background:var(--sky)">RM</div><div class="fmeta"><div class="fname">rehan mullick</div><div class="mono xs mut">the heritage · 5h ago</div></div><span class="chip cat cat-events">events</span></header>
+                <div class="fbody"><h3 class="ftitle">Paradox 4.0 — the brief is live</h3><p class="fsnip">6 teams. 2 months. one dangerously ambitious spreadsheet. read the brief, pick a lane.</p><a class="flink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>notion.so/paradox4</a></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>43</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>8</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+            </main>
+
+            <aside class="col">
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">openings</span><span class="mono xs mut">2</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--grape)"></span><span class="opttl">video editor <span class="opmeta">· content</span></span><span class="mut">→</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--mint)"></span><span class="opttl">field volunteer <span class="opmeta">· welfare</span></span><span class="mut">→</span></div>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">upcoming</span><span class="mono xs mut">3</span></div>
+                <div class="evrow"><div class="evdate" style="background:var(--mint)"><b>08</b><span>jun</span></div><div class="evinfo"><div class="evttl">dog feeding drive, ballygunge</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--bg-3);color:var(--ink)"><b>14</b><span>jun</span></div><div class="evinfo"><div class="evttl">teaching workshop, tiljala</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--bg-3);color:var(--ink)"><b>21</b><span>jun</span></div><div class="evinfo"><div class="evttl">paradox 4.0 kick-off</div><span class="mono xs mut">events team</span></div></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────── 1d PLAYGROUND ─────────── -->
+    <div class="dv-opt" id="1d">
+      <div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a><b>Playground</b> — fun turned up: color-blocked tiles, tilted cards with colored caps, a running marquee and wobbling stickers. Most expressive / anti-design.</div>
+      <div class="dv-card">
+        <div class="hp" data-variant="play">
+          <nav class="hpnav"><div class="hpnav-in">
+            <a class="hplogo"><span class="hpstar"></span>aquaterra</a>
+            <div class="hppills">
+              <a class="hplink on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>home</a>
+              <a class="hplink">projects</a><a class="hplink">teams</a><a class="hplink">blog</a><a class="hplink">about</a>
+            </div>
+            <div class="hpacts">
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+              <button class="hpicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+              <button class="btn btn-primary btn-sm">apply →</button>
+            </div>
+          </div></nav>
+
+          <div class="marquee"><div class="marq-track"><span>★ 1,200 volunteers ✦ 450 drives ✦ 4,000 trees ✦ 15,000 meals ★ 1,200 volunteers ✦ 450 drives ✦ 4,000 trees ✦ 15,000 meals&nbsp;&nbsp;</span><span>★ 1,200 volunteers ✦ 450 drives ✦ 4,000 trees ✦ 15,000 meals ★ 1,200 volunteers ✦ 450 drives ✦ 4,000 trees ✦ 15,000 meals&nbsp;&nbsp;</span></div></div>
+
+          <div class="shell">
+            <aside class="col">
+              <div class="joincard">
+                <span class="sticker st-lemon">★ kolkata, 2021</span>
+                <div class="join-h">join the <span class="scriptv" style="color:var(--lemon)">chaos</span>.</div>
+                <p class="join-p">2 min to apply. 24 hrs to hear back. free forever.</p>
+                <a class="btn btn-primary btn-sm">join the work →</a>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">browse</span><span class="mono xs mut">212 posts</span></div>
+                <div class="catgrid">
+                  <div class="cattile cat-all on" style="--cc:var(--lemon)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 13.9 2 9.4h7.6z"/></svg><b>all</b></div>
+                  <div class="cattile cat-events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4l14 4-14 4"/></svg><b>events</b></div>
+                  <div class="cattile cat-welfare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg><b>welfare</b></div>
+                  <div class="cattile cat-labs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>labs</b></div>
+                  <div class="cattile cat-ops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></svg><b>ops</b></div>
+                  <div class="cattile cat-content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><b>content</b></div>
+                </div>
+              </div>
+            </aside>
+
+            <main class="col">
+              <div class="feedhead">
+                <div><h1 class="feedtitle">the <span class="scriptv">feed</span>.</h1><p class="sub">everything · latest · 212 posts</p></div>
+                <div class="feedacts"><button class="chip on">latest</button><button class="chip">trending</button></div>
+              </div>
+              <div class="compose">
+                <div class="avatar" style="background:var(--grape)">KA</div>
+                <button class="composeinp">what did you make today?</button>
+                <button class="btn btn-primary btn-sm">+ post</button>
+              </div>
+              <article class="fcard">
+                <div class="fcardtop" style="background:var(--mint)"></div>
+                <header class="fhead"><div class="avatar" style="background:var(--mint)">AS</div><div class="fmeta"><div class="fname">ananya sen</div><div class="mono xs mut">la martiniere · welfare · 2h ago</div></div><span class="chip cat cat-welfare">welfare</span></header>
+                <div class="fmedia"><img src="assets/img/food-distribution.jpeg" alt="food distribution drive"><span class="sticker st-tomato" style="position:absolute;top:12px;right:12px">★ hot</span></div>
+                <div class="fbody"><p class="fsnip">fed 40+ street dogs across ballygunge before sunrise today. one very good boy would not stop following the food cart 🐕 whole crew showed up at 5am — worth every minute.</p></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="var(--tomato)" stroke="var(--tomato)" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>128</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>14</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+              <article class="fcard">
+                <div class="fcardtop" style="background:var(--pink)"></div>
+                <header class="fhead"><div class="avatar" style="background:var(--sky)">RM</div><div class="fmeta"><div class="fname">rehan mullick</div><div class="mono xs mut">the heritage · events · 5h ago</div></div><span class="chip cat cat-events">events</span></header>
+                <div class="fbody"><h3 class="ftitle">paradox 4.0 — the brief is live</h3><p class="fsnip">6 teams. 2 months. one dangerously ambitious spreadsheet. read the brief, pick a lane 👇</p><a class="flink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>notion.so/paradox4</a></div>
+                <footer class="ffoot"><button class="act like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z"/></svg>43</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></svg>8</button><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8h16v-8M12 3v13M7 8l5-5 5 5"/></svg></button><span style="flex:1"></span><button class="act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button></footer>
+              </article>
+            </main>
+
+            <aside class="col">
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">openings</span><span class="sticker st-pink" style="font-size:9px;padding:3px 8px">2 open</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--grape)"></span><span class="opttl">video editor <span class="opmeta">· content</span></span><span class="mut">→</span></div>
+                <div class="oprow"><span class="opdot" style="background:var(--mint)"></span><span class="opttl">field volunteer <span class="opmeta">· welfare</span></span><span class="mut">→</span></div>
+              </div>
+              <div class="railcard">
+                <div class="rail-h"><span class="mono xs up bb">upcoming</span><span class="mono xs mut">3</span></div>
+                <div class="evrow"><div class="evdate" style="background:var(--mint)"><b>08</b><span>jun</span></div><div class="evinfo"><div class="evttl">dog feeding drive, ballygunge</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--lemon)"><b>14</b><span>jun</span></div><div class="evinfo"><div class="evttl">teaching workshop, tiljala</div><span class="mono xs mut">welfare team</span></div></div>
+                <div class="evrow"><div class="evdate" style="background:var(--pink)"><b>21</b><span>jun</span></div><div class="evinfo"><div class="evttl">paradox 4.0 kick-off</div><span class="mono xs mut">events team</span></div></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="dv-next"><b>Where to next?</b> &nbsp;Try: <a href="#1b">1b</a> "make the hover shadows springier" · <a href="#1c">1c</a> "show me this on a HOD desk / admin table" · <a href="#1d">1d</a> "tone the marquee down, keep the tilts" · or "blend <a href="#1b">1b</a>'s borders with <a href="#1c">1c</a>'s serif headlines" · or "pick <a href="#1c">1c</a> and apply it to the feed + profile too".</p>
+</section>
+</x-dc>
+</body>
+</html>

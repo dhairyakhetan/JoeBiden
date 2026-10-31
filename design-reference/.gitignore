@@ -1,0 +1,3 @@
+# Local-only: font copies staged for rendering the .dc.html prototypes in a
+# headless browser (duplicates of frontend/public/fonts). Not source.
+assets/

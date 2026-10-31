@@ -1,0 +1,258 @@
+/* ━━━ ROLES & PERMISSIONS — the capability matrix ━━━━━━━━━━━━━━━━━━━━━━━━━━
+   A desk surface, so it follows the `.admin` scope's rounded-minimalism
+   tokens: hairline borders, the 32/22/14 radius spine, soft lifts. No 2px ink
+   borders and no hard offset shadows here (CLAUDE.md: "do not restore 3px ink
+   borders, 20px radii or hard offset shadows" on director/*).
+
+   The table is a real <table> rather than a grid of divs: it is genuinely
+   tabular (capability x role), and the semantics carry the whole thing for a
+   screen reader - each checkbox's row header and column header name it without
+   any extra markup.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.rp-readonly {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border: var(--hair-2);
+  border-radius: var(--r-inner);
+  background: var(--bg-2);
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* The matrix is 7 columns wide and cannot usefully reflow on a phone, so it
+   scrolls inside its own container rather than making the page scroll
+   sideways. `overscroll-behavior-x: contain` stops a horizontal swipe here
+   from triggering the browser's back gesture - the same rule every other
+   horizontal scroller in this app carries. */
+.rp-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: var(--hair-2);
+  border-radius: var(--r-outer);
+  background: var(--card);
+}
+
+.rp-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Below this the capability column stops being readable; the container
+     scrolls instead of the text wrapping to one word per line. */
+  min-width: 660px;
+}
+
+.rp-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--card);
+  border-bottom: var(--hair-2);
+  padding: 12px 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+.rp-th-cap {
+  text-align: left;
+  padding: 12px 14px;
+  vertical-align: top;
+  /* Roughly half the table: the label plus its hint is the only column with
+     real prose in it. */
+  width: 46%;
+}
+
+.rp-th-role {
+  text-align: center;
+  white-space: nowrap;
+}
+.rp-role-name { display: inline-block; }
+
+/* Group heading rows ("Desks", "Actions"). A <th scope="colgroup"> so the
+   grouping is announced rather than being a purely visual break. */
+.rp-group-row th {
+  text-align: left;
+  padding: 14px 14px 8px;
+  border-top: var(--hair);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  background: var(--bg-2);
+}
+.rp-table tbody:first-of-type .rp-group-row th { border-top: none; }
+
+.rp-table tbody tr + tr .rp-th-cap,
+.rp-table tbody tr + tr .rp-cell {
+  border-top: var(--hair);
+}
+
+.rp-cap-label {
+  display: block;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.rp-cap-hint {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--eina);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  text-wrap: pretty;
+}
+
+.rp-cell {
+  text-align: center;
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+
+/* The checkbox itself is visually hidden but still the real focus target and
+   the real click target - the visible box is its sibling, so the whole thing
+   stays a native checkbox for keyboard and screen-reader users rather than a
+   div pretending. */
+.rp-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px: the tap-target floor. The visible box is smaller, the target is not. */
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.rp-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  cursor: pointer;
+}
+.rp-toggle input:disabled { cursor: not-allowed; }
+
+.rp-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  /* The one documented small-radius exception on the desk is the 18px
+     checkbox's 6px corner; this is the same idea at 24px, so it stays on the
+     scale at --r-tight rather than inventing a new value. */
+  border-radius: var(--r-tight);
+  border: var(--hair-3);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--paper);
+  transition: background 0.14s var(--ease-out), border-color 0.14s var(--ease-out);
+}
+
+.rp-cell.is-on .rp-box {
+  background: var(--welfare-ink);
+  border-color: var(--welfare-ink);
+  /* Solid ink on a saturated fill, never an alpha - the tick has to survive
+     on the green. */
+  color: var(--paper);
+}
+
+.rp-toggle input:focus-visible + .rp-box {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* Disabled AND unticked: genuinely not in force, so fade it. */
+.rp-toggle input:disabled + .rp-box {
+  opacity: 0.45;
+}
+
+/* Disabled AND ticked - the whole Super Admin column, and every cell on a
+   read-only view. Fading these was actively misleading: a pale tick reads as
+   "off" at a glance when it means "on, and permanently so". It stays fully
+   solid; the ring below is what says "you cannot change this", and the title
+   attribute carries the reason. */
+.rp-cell.is-on .rp-toggle input:disabled + .rp-box {
+  opacity: 1;
+  /* A hairline halo instead of a fade: present, deliberate, not interactive. */
+  box-shadow: 0 0 0 3px var(--bg-2);
+}
+
+.rp-cell.is-busy .rp-box {
+  opacity: 0.5;
+}
+
+/* A capability the database will not serve to this role. Deliberately NOT a
+   disabled checkbox: an unticked box invites a click that would do nothing.
+   A dash reads as "not applicable here", which is what it is. */
+.rp-cell-blocked { color: var(--ink-3); }
+.rp-lock {
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+  line-height: 44px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-3);
+  opacity: 0.6;
+  cursor: help;
+}
+
+.rp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+.rp-foot-note {
+  margin: 0;
+  font-family: var(--eina);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.rp-foot-note strong { color: var(--ink); }
+
+.rp-explainer {
+  margin-top: 22px;
+  padding: clamp(18px, 3vw, 26px);
+}
+.rp-explainer-h {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15.5px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.rp-explainer-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-family: var(--eina);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.rp-explainer-list strong { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-box { transition: none; }
+}

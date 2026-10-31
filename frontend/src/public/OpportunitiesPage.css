@@ -1,0 +1,192 @@
+/* 05.5 - the section header introducing the openings fan: a hairline rule,
+   centred, then a serif title with one italic coloured phrase, then the lede
+   in Eina. A new section ahead of the fan - the page's own dark hero above it
+   (leader controls, manage-view toggle, deep-link support) is out of this
+   file's design turn and stays as-is. */
+.op-section-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto clamp(24px, 4vw, 36px);
+}
+.op-section-rule {
+  width: 44px;
+  height: 1px;
+  background: rgba(10,10,10,0.28);
+  margin: 0 auto 18px;
+}
+.op-section-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(26px, 4.4vw, 40px);
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+.op-section-lede {
+  font-family: var(--eina);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* ── 05.4 - the fanned hand ────────────────────────────────────────────────
+   Mobile-first: a plain vertical stack (no rotation, no negative margins, no
+   hover - touch has no hover, so a fan that depends on straighten-on-hover to
+   be readable cannot ship on a phone). The horizontal fan only exists from
+   760px up. */
+.op-fan {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0 auto clamp(28px, 5vw, 40px);
+  max-width: 480px;
+}
+.op-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  box-shadow: var(--lift-1);
+}
+.op-card:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* The panel is the part a neighbour's card is allowed to cover - title and
+   meta live in the lower band below it, which the fan's -26px margin never
+   reaches (verified by measuring rects at 1280px, not by eye). Roles never
+   carry a picture, so it holds the team name on the category's fill instead of
+   an empty image slot. */
+.op-card-panel {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+  border-radius: var(--r-inner);
+  height: 104px; flex: none; padding: 14px 16px;
+  background: var(--rc, var(--welfare));
+  color: var(--ink);
+}
+.op-card-panel::after {
+  content: ""; position: absolute; right: -26px; bottom: -30px; width: 96px; height: 96px;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.10); pointer-events: none;
+}
+/* Per-role look (lib/openingLook.ts). The default disc is the rule above; the others swap the shape. */
+.op-card-panel::after { right: auto; bottom: auto; left: calc(var(--ox, 80%) - 48px * var(--os, 1)); top: calc(var(--oy, 70%) - 48px * var(--os, 1)); width: calc(96px * var(--os, 1)); height: calc(96px * var(--os, 1)); }
+.op-card-panel[data-look="stripes"]::after { border-radius: var(--r-inner); background: repeating-linear-gradient(135deg, rgba(10,10,10,0.12) 0 6px, transparent 6px 14px); }
+.op-card-panel[data-look="dots"]::after { background: radial-gradient(rgba(10,10,10,0.2) 28%, transparent 30%) 0 0 / 14px 14px; border-radius: var(--r-inner); }
+.op-card-panel[data-look="grid"]::after { border-radius: var(--r-tight); background: linear-gradient(rgba(10,10,10,0.14) 1px, transparent 1px) 0 0 / 16px 16px, linear-gradient(90deg, rgba(10,10,10,0.14) 1px, transparent 1px) 0 0 / 16px 16px; }
+.op-card-panel[data-look="wedge"]::after { border-radius: 0; background: rgba(10,10,10,0.10); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+.op-card-team {
+  position: relative; z-index: 1;
+  font-family: var(--display); font-weight: 900; font-size: 19px; line-height: 1.05; letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+.op-card-commit {
+  position: relative; z-index: 1; align-self: flex-start;
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  background: rgba(10,10,10,0.82); color: var(--bg); padding: 3px 9px; border-radius: var(--r-pill);
+}
+/* Horizontal inset must clear the fan's own -26px overlap margin, or the
+   claim above is false by construction: with 8px here + the card's own
+   10px (--pad-card), title/meta sat only 18px in from each edge - 8px
+   INSIDE the 26px strip a winning neighbour is allowed to paint over. An
+   elementFromPoint hit-test sweep (not a screenshot - the fan reads fine in
+   one while eating a title, per this file's own warning) confirmed real,
+   if small, coverage of the title/meta's outer edge at rest, worse on the
+   hover/focus-within card that jumps to z-index 3 and briefly de-rotates
+   over its neighbour. 26px here (+10px card padding = 36px total) clears
+   the 26px margin outright; swept every card at rest and each of the 5
+   individually focused (elementFromPoint grid over every .op-card-title
+   and .op-card-meta box, all 5x6 combinations) with zero coverage left. */
+.op-card-lower {
+  padding: 14px 26px 6px;
+}
+.op-card-meta {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ink-3);
+  /* A label, not a headline: it read louder than the role title it sits above (seen in a 2026-10-20 visual pass). */
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.op-card-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1.12;
+  color: var(--ink);
+}
+
+@media (min-width: 760px) {
+  .op-fan {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+    max-width: none;
+  }
+  .op-card {
+    width: 212px;
+    flex: none;
+    transform-origin: bottom center;
+    box-shadow: 0 8px 24px -12px rgba(10,10,10,0.3);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .op-card + .op-card { margin-left: -26px; }
+  .op-card:nth-child(1) { transform: rotate(-7deg); }
+  .op-card:nth-child(2) { transform: rotate(-3deg); }
+  .op-card:nth-child(3) { transform: rotate(1deg);  z-index: 2; }
+  .op-card:nth-child(4) { transform: rotate(5deg); }
+  .op-card:nth-child(5) { transform: rotate(9deg); }
+}
+/* Hover/focus straighten-and-lift, motion allowed only. */
+@media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .op-card:hover, .op-card:focus-within {
+    transform: rotate(0deg) translateY(-10px);
+    z-index: 3;
+    box-shadow: 0 16px 40px -14px rgba(10,10,10,0.42);
+  }
+}
+/* Reduced motion: rotations stay (composition), the straighten-and-lift is
+   removed, and :focus-within applies only the z-index so a keyboard user's
+   focused card still comes to the front. */
+@media (min-width: 760px) and (prefers-reduced-motion: reduce) {
+  .op-card:focus-within { z-index: 3; }
+}
+
+.op-fan-more {
+  display: block;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--welfare-ink);
+  text-decoration: none;
+  margin: 0 auto clamp(32px, 6vw, 48px);
+}
+
+/* Empty state: a single full-width cream well, never five empty cards. */
+.op-fan-empty {
+  background: var(--bg-2);
+  border-radius: var(--r-outer);
+  padding: clamp(28px, 5vw, 40px) 24px;
+  text-align: center;
+  color: var(--ink-3);
+  font-family: var(--mono);
+  font-size: 13px;
+  margin: 0 auto clamp(28px, 5vw, 40px);
+  max-width: 480px;
+}
+
+/* Loading: three cards where the fan will be, so the page does not jump when the roles land. */
+.op-skels { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 0 auto 28px; max-width: 1040px; }
+.op-skel { height: 190px; border-radius: var(--r-outer); }
+

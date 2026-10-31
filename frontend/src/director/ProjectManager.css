@@ -1,0 +1,318 @@
+/* Project manager desk - chrome + table styling.
+   Originally extracted from ProjectManager.tsx's inline <style> block (Phase
+   1.3); stage 3A folded the table's inline `style` objects in here too, so the
+   desk's look lives in the cascade instead of winning it by inline specificity.
+   Shared with ProjectModal (`.pm-ghost-btn`, `.pm-obj-chip`, `.pm-label` …) -
+   this file is the single source of truth for those. */
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.pm-ghost-btn {
+  background: var(--hod-surface-1); border: 1px solid var(--hod-border);
+  border-radius: var(--hod-radius-sm); padding: 8px 18px; cursor: pointer;
+  font-family: var(--sans); font-size: 13px; font-weight: 600; min-height: 40px;
+  color: var(--hod-ink-2); transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.pm-ghost-btn:hover { color: var(--hod-ink); background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.pm-ghost-btn:active { opacity: 0.8; }
+
+.pm-icon-btn {
+  padding: 4px 10px; font-size: 11px; font-weight: 700; min-width: 40px;
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+}
+.pm-icon-danger {
+  color: var(--hod-danger);
+  border-color: color-mix(in srgb, var(--hod-danger) 40%, transparent);
+}
+.pm-new-btn { border-radius: var(--r-tight); font-weight: 700; }
+.pm-rowacts { display: flex; gap: 6px; }
+
+/* ── Status pill (draft ⇄ live). Muted tint + saturated text - the same
+   adm-badge success/warn vocabulary the rest of the HoD desk uses, not the
+   public site's bright sticker fill. ─────────────────────────────────────── */
+.pm-status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 4px 11px; border-radius: 999px; border: 1px solid transparent; cursor: pointer;
+  transition: transform 0.1s var(--ease-out), filter 0.12s;
+}
+.pm-status-pill.is-draft {
+  background: color-mix(in srgb, var(--lemon) 22%, transparent);
+  color: color-mix(in srgb, var(--lemon) 55%, var(--ink));
+}
+.pm-status-pill.is-live {
+  background: color-mix(in srgb, var(--welfare) 18%, transparent);
+  color: color-mix(in srgb, var(--welfare) 60%, var(--ink));
+}
+.pm-status-pill:hover { filter: brightness(0.94); }
+.pm-status-pill:active { transform: scale(0.96); }
+.pm-status-pill:disabled { opacity: 0.5; cursor: wait; }
+
+/* ── Featured star ───────────────────────────────────────────────────────── */
+.pm-star-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--line-2);
+  background: var(--card); color: var(--ink-3);
+  cursor: pointer; font-size: 14px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform 0.1s var(--ease-out), background 0.15s, border-color 0.15s, color 0.15s;
+}
+/* --pink is light enough that white glyph on it measured 3.14:1. Darkening the
+   fill (not the glyph) keeps the "starred" state unmistakably pink while the
+   ★ clears AA. */
+.pm-star-btn.is-on {
+  background: color-mix(in srgb, var(--pink) 72%, black);
+  border-color: color-mix(in srgb, var(--pink) 72%, black);
+  color: #fff;
+}
+.pm-star-btn:hover { border-color: var(--pink); }
+.pm-star-btn:active { transform: scale(0.88); }
+.pm-star-btn:disabled { opacity: 0.5; cursor: wait; }
+
+/* ── Stats bar - one flat strip with hairline dividers instead of four
+   separate floating cards adrift with a Refresh button. ──────────────────── */
+.pm-statbar {
+  display: flex; align-items: stretch; flex-wrap: wrap;
+  background: var(--hod-surface-1); border: 1px solid var(--hod-border); border-radius: var(--hod-radius);
+  box-shadow: var(--hod-shadow-sm);
+  margin-bottom: 20px; overflow: hidden;
+}
+.pm-stat {
+  padding: 14px 24px; border-right: 1px solid var(--line-2);
+  display: flex; flex-direction: column; gap: 4px; justify-content: center;
+}
+.pm-stat-label { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); }
+.pm-stat-val { font-family: var(--display); font-size: 26px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.pm-statbar .pm-ghost-btn { border: none; border-radius: 0; align-self: stretch; }
+
+/* ── Toolbar filter chrome ───────────────────────────────────────────────── */
+.pm-filter-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+  align-self: center; white-space: nowrap;
+}
+.pm-filter-sep {
+  width: 1px; align-self: stretch; min-height: 20px;
+  background: var(--line-2); margin: 0 4px; flex: none;
+}
+/* Category chip - shared by this desk's objective filter row AND the modal's
+   category picker. Lives here (not ProjectModal.css) because ProjectModal.css
+   only loads once a modal has mounted; the filter row needs it immediately. */
+.pm-obj-chip {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  padding: 7px 13px; border-radius: 999px; border: 1.5px solid; cursor: pointer;
+  transition: transform 0.1s var(--ease-out), border-color 0.15s;
+}
+.pm-obj-chip:hover { border-color: var(--ink); }
+.pm-obj-chip:active { transform: scale(0.96); }
+
+/* Objective chips keep their own category colour (the generic `.adm-pill`
+   can't express it), but sit in the shared toolbar filter slot. */
+.pm-obj-filter { font-size: 10px; padding: 5px 12px; background: var(--card); border-color: var(--line-2); color: var(--ink-2); }
+/* OBJ_COLORS is a mixed-lightness palette, so white-on-raw-colour is only
+   safe for its darker entries. Darkening the fill guarantees the white label
+   clears AA for every objective. */
+.pm-obj-filter.is-active {
+  background: color-mix(in srgb, var(--oc) 78%, black);
+  border-color: color-mix(in srgb, var(--oc) 78%, black);
+  color: #fff;
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────── */
+.pm-tablecard { overflow: hidden; }
+.pm-tablewrap { overflow-x: auto; overscroll-behavior-x: contain; }
+.pm-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; font-family: var(--sans); }
+/* Redesign 06.1: was a solid `var(--ink)` bar (white-on-black brutalist
+   header) - the desk's chrome dropped that language for a soft hairline
+   surface. A muted tint + a hairline rule underneath reads as the header
+   without reintroducing a hard black band. */
+.pm-headrow { background: var(--hod-surface-2); border-bottom: var(--hod-border-w) solid var(--hod-border); }
+.pm-th {
+  padding: 11px 14px; text-align: left;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--hod-ink-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pm-th-c { text-align: center; }
+
+.pm-row { border-bottom: 1px solid var(--line-2); cursor: pointer; }
+/* Row hover tints with the ROW'S OWN category colour (via --pm-accent, set
+   per-row inline) instead of one generic mint tint for every row. */
+.pm-row:hover { background: color-mix(in srgb, var(--pm-accent) 7%, transparent); }
+.pm-accent-cell { padding: 0; }
+
+.pm-td { padding: 8px 14px; }
+.pm-td-tight { padding: 8px 10px; }
+.pm-td-clip { overflow: hidden; }
+.pm-td-c { text-align: center; }
+.pm-td-num { text-align: center; font-size: 12px; }
+.pm-td-date { white-space: nowrap; color: var(--ink-2); font-size: 12px; overflow: hidden; text-overflow: ellipsis; }
+.pm-dash { color: var(--ink-3); font-size: 11px; }
+
+.pm-thumb {
+  width: 44px; height: 34px; object-fit: cover; border-radius: 7px; display: block;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.pm-thumb-empty {
+  background: var(--line-2); display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--ink-3);
+}
+
+/* Row content stays flat and legible - never rotated, never decorative. */
+.pm-title { font-weight: 600; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-sub-slug { font-family: var(--code); }
+/* The objective colour arrives as `--tc` (set inline from OBJ_COLORS). It is a
+   mixed palette - some entries are dark (#255c3b) and some light (#e08c3c) - so
+   neither a fixed black nor a fixed white text colour clears WCAG AA across all
+   of them (measured 3.17–3.85:1 when the raw colour was used as the background
+   under near-black text). Tinting the background toward white and darkening the
+   text is safe for ANY input colour, and matches `.stamp`/`.cat-card-head`. */
+.pm-tag {
+  background: color-mix(in srgb, var(--tc, var(--line-2)) 15%, white);
+  color: color-mix(in srgb, var(--tc, var(--ink)) 45%, black);
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px; display: inline-block; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;
+}
+.pm-tablefoot {
+  padding: 10px 16px; border-top: 1px solid var(--line-2);
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+}
+
+@media (max-width: 600px) {
+  .pm-stat { flex: 1 1 40%; padding: 12px 16px; }
+  .pm-statbar .pm-ghost-btn { flex: 1 1 100%; min-height: 44px; }
+  .pm-filter-sep { display: none; }
+
+  /* 44px touch-target floor (WCAG 2.5.5 / the desk's phone rule). These
+     desk-local controls sat at 25–40px and were missed by the shared
+     `.btn`/`.iconbtn` floor in director.css. */
+  .pm-star-btn,
+  .pm-icon-btn,
+  .pm-ghost-btn { min-width: 44px; min-height: 44px; }
+  .pm-star-btn { width: 44px; height: 44px; }
+  .pm-status-pill,
+  .pm-obj-chip,
+  .pm-obj-filter { min-height: 44px; height: auto; padding-block: 12px; box-sizing: border-box; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION 25 · THE PHONE
+   ──────────────────────────────────────────────────────────────────────────
+   This desk had already had a careful pass and its seven recorded fixes stand
+   untouched: table-layout fixed + colgroup, the 60-row cap, the accent column
+   over zebra, the desk-language status pill, the star as a real button, one
+   shared stylesheet with the modal, and `.select()` on every write.
+
+   What was missing was a phone. Nine fixed columns total roughly 750px and
+   that does not become 390px by scrolling. The table survives unchanged from
+   1025px up; below it the same rows render as cards. There is deliberately no
+   third layout in between.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.pm-ledger { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+
+@media (min-width: 1025px) {
+  .pm-ledger { display: none; }
+}
+@media (max-width: 1024px) {
+  /* The wrapper stays in the tree so the shell border still never scrolls
+     away; only the table inside it goes. */
+  .pm-tablewrap { display: none; }
+}
+
+.pm-lcard {
+  position: relative;
+  /* Redesign 06.1: was a hard 2px ink border - the desk moved to the same
+     hairline every card's own outer edge uses (--hair-2). */
+  border: var(--hair-2);
+  /* 06.0 item 2: --r-card (26px, and a literal 26px fallback) is off every
+     scale this redesign uses. The outer radius is the token to read. */
+  border-radius: var(--r-outer);
+  background: var(--card); padding: 12px 14px;
+  /* Same lookup, same `Others` fallback, same signal as the table's 5px accent
+     <td> - just carried as an inset shadow at a different width. */
+  box-shadow: inset 5px 0 0 0 var(--pm-accent, var(--line-2));
+}
+
+/* Band 1: identity. This is the only part of the card that takes the tap, and
+   it opens the edit modal exactly as the table row does. */
+.pm-lcard-ident {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 0 0 0 8px; margin: 0; border: 0; background: none;
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+  min-height: 44px;
+}
+.pm-lcard-thumb {
+  width: 52px; height: 52px; flex: none; object-fit: cover;
+  border-radius: var(--r-tight); border: var(--hair-2); display: block;
+}
+.pm-lcard-thumb.is-empty {
+  display: flex; align-items: center; justify-content: center;
+  border-style: dashed; border-color: color-mix(in srgb, var(--ink) 34%, transparent);
+  background: var(--bg-2); color: var(--ink-3);
+}
+.pm-lcard-ident-text { display: block; min-width: 0; flex: 1 1 auto; }
+.pm-lcard-title {
+  display: block; font-family: var(--display); font-weight: 800; font-size: 15px;
+  line-height: 1.25; color: var(--ink); text-wrap: pretty;
+}
+.pm-lcard-ident .pm-sub {
+  display: flex; align-items: center; gap: 4px; white-space: normal;
+}
+
+/* Band 2: facts. Objective, date, volunteers, star. */
+.pm-lcard-facts {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  margin-top: 10px; padding-left: 8px;
+}
+.pm-lcard-fact {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--ink-3);
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+
+/* Band 3: the controls, below a 2px rule. Every one of them already calls
+   stopPropagation in the table; here they simply sit outside the tappable
+   region, so opting out is visible rather than only true. */
+.pm-lcard-acts {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 12px; padding-top: 12px; padding-left: 8px;
+  border-top: var(--hair);
+}
+.pm-lcard-spacer { flex: 1 1 auto; min-width: 0; }
+.pm-lcard-acts .pm-status-pill { min-height: 38px; white-space: nowrap; }
+.pm-lcard-facts .pm-star-btn { width: 38px; height: 38px; margin-left: auto; }
+.pm-lcard-acts .iconbtn { min-width: 44px; min-height: 44px; }
+
+/* A draft's public page exists at that slug unpublished. Dimming the link and
+   keeping the href is the only way to check it before publishing; hiding it
+   would remove the check entirely. */
+.iconbtn.is-dim { opacity: 0.45; }
+.iconbtn.is-dim:hover { opacity: 1; }
+
+/* The stat strip: 2 by 2 with hairline dividers, refresh as a footer button. */
+@media (max-width: 1024px) {
+  .pm-statbar { display: grid; grid-template-columns: 1fr 1fr; }
+  .pm-stat { border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); }
+  .pm-stat:nth-child(2n) { border-right: 0; }
+  .pm-refresh {
+    grid-column: 1 / -1; width: 100%; min-height: 42px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border-radius: 0; border: 0; white-space: nowrap;
+  }
+}
+@media (min-width: 1025px) {
+  .pm-refresh {
+    margin-left: auto; align-self: center; margin-right: 14px;
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Each filter axis gets its own labelled row; only the separator is dropped.
+     Both `.pm-filter-label` strings stay. */
+  .pm-filter-label { flex: 1 1 100%; margin-top: 6px; }
+  .pm-new-btn { width: 100%; justify-content: center; min-height: 46px; border-radius: 999px; }
+  .pm-showmore { width: 100%; min-height: 44px; border-radius: 999px; white-space: nowrap; }
+  .pm-ledger { padding: 10px; }
+}

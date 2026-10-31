@@ -1,0 +1,144 @@
+/* AquaTerra - shared utility overrides. Imported LAST by main.tsx, so it has
+   the final word in the cascade; keep that in mind before adding anything
+   here that a route stylesheet might legitimately want to override.
+//
+   Tailwind v4 and the whole Paradox theme USED to live at the top of this
+   file. They now live in src/paradox/tailwind.css, imported by ParadoxRoot
+   (which is lazy()), so /paradox pays for them and nobody else does - they
+   were ~45% of the render-blocking entry stylesheet on every AquaTerra page
+   for utilities only paradox/** uses. See that file for the full reasoning,
+   including the two keyframes (`pop`, `wiggle`) that were silently
+   overriding styles/v6.css's versions app-wide from here. */
+
+/* Custom keyframes for utility classes */
+@keyframes aq-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes aq-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+/* Wire up the Tailwind-style class used by Modal.tsx */
+.animate-slide-up { animation: aq-slide-up 0.22s var(--ease-out); }
+.animate-fade-in { animation: aq-fade-in 0.22s var(--ease-out); }
+@keyframes aq-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Screen-reader-only. For content that must exist in the document for
+   assistive tech or crawlers but has no place in the visual design - not for
+   hiding things you simply don't want seen (use [hidden] for that).
+   The clip-path + 1px box technique keeps it focusable and readable by AT,
+   unlike display:none or visibility:hidden. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skeleton loader. Per changelog/11-system-states.md §11.2: background is the
+   next cream step up, not a black-alpha wash (that reads grey-blue on the
+   paper ground) - background was --surface-2 (rgba(0,0,0,.06)), now --bg-2.
+   border-radius written as --r-inner (its 00.1 concentric-scale name) rather
+   than --r-sm, the value it happens to alias today, so this rule tracks the
+   scale's intent rather than one of its current aliases. Reduced motion:
+   covered by the app-wide `*, *::before, *::after` catch-all in v6.css
+   (animation-duration -> 0.01ms), so the pulse stops and the block stays -
+   no separate rule needed here. */
+.skeleton {
+  background: var(--bg-2);
+  border-radius: var(--r-inner);
+  animation: aq-pulse 2s ease-in-out infinite;
+}
+
+/* Card hover lift - explicit properties (not transition: all) */
+.card-hover { transition: transform 0.12s var(--ease-out), box-shadow 0.12s var(--ease-out); }
+.card-hover:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.card-hover:active { transform: scale(0.98); }
+
+/* Mobile-quality polish applied globally -
+   - Font smoothing for crisper text on macOS / iOS
+   - Suppress iOS blue tap overlay
+   - text-wrap balance on display headings, pretty on body copy
+   - Tabular numerals for any dynamically-updating numbers */
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3, h4 { text-wrap: balance; }
+p { text-wrap: pretty; }
+[data-tabular], .tabular-nums, time, .stat-value { font-variant-numeric: tabular-nums; }
+
+/* Contextual icon animation (Principle 7) - both icons live in the DOM
+   simultaneously, one absolute-positioned, and we cross-fade between
+   them with scale + blur. Values per the skill mandate: scale 0.25 → 1,
+   opacity 0 → 1, blur 4px → 0. var(--ease-out) matches the
+   "snappy but soft" easing used everywhere else. */
+.aq-icon-swap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+.aq-icon-swap-frame {
+  position: absolute;
+  inset: 0;
+  transition:
+    transform 220ms var(--ease-out),
+    opacity   220ms var(--ease-out),
+    filter    220ms var(--ease-out);
+}
+.aq-icon-swap-frame.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+.aq-icon-swap-frame.is-hidden {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aq-icon-swap-frame { transition: opacity 80ms linear; transform: none; filter: none; }
+}
+
+/* DELETE (00.15): this rule drew a SQUARE 1px outline across the ROUNDED
+   corners of every photo in the product - `outline` does not follow
+   `border-radius`, so it was a visible defect at the 32/22px radii this
+   pass introduces (merely subtle at the old 14px). Photos are meant to sit
+   inside a `var(--r-inner)`-clipped `overflow: hidden` container instead.
+   `.no-outline` had no separate rule of its own to keep or delete (it only
+   ever existed as the negation inside this selector); its className is
+   still applied on a handful of <img> elements (three in AQNav.tsx, one in
+   RegisterPage.tsx) as a harmless no-op now that there is nothing for it to
+   opt out of.
+   MISMATCH/gap: the matching duplicate rules 00.15 also names
+   (`.feed-card-media img { outline: ... }` and its `[data-theme="light"]`
+   partner) live in styles/routes/feed.css, out of this file's scope -
+   not touched here, left for the wave that owns that file. */
+
+/* iOS long-press on content images opens the "Save Image" / "Share…" sheet,
+   which is rarely intended for in-app feed content. Opt out per element with
+   className="no-long-press" or by adding data-no-long-press. */
+.no-long-press,
+[data-no-long-press] {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* The Paradox @theme block and its keyframes (marquee, bob, bobR, ssFloat,
+   pop, wiggle, floatY, pulseRing, spin) moved to src/paradox/tailwind.css.
+   AquaTerra does not depend on the copies that were here. It still defines
+   its own `spin` and `marquee` in styles/v6.css; `pop` and `wiggle` were
+   removed from there by the rounded-minimalism pass (00.13) after grep
+   confirmed neither had any remaining call site outside paradox. */

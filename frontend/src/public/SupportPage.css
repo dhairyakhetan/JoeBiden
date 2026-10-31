@@ -1,0 +1,7 @@
+/* The four ways to help: one column on a phone, two-by-two on a tablet, one row of four on a wide screen. It used to be an
+   auto-fill grid, which put three on the first row and one orphan on the second at desktop width. */
+.sp-ways { display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 640px)  { .sp-ways { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1180px) { .sp-ways { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* equal-height cards: the wrapper stretches with the row, so the card fills it */
+.sp-ways > div > .card { height: 100%; }

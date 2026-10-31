@@ -1,0 +1,496 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   THE FOOTER — sections 1, 3 and 4 (the bento's own rules live in
+   AQFooter.css, next to `.aq-footer-link`, for the equal-specificity reason
+   documented there).
+
+   Ground: the whole card is `--ink`, so every text colour here is one of the
+   six documented paper-on-ink ladder rungs (tokens.css `--nav-fg*`), which
+   floor at 0.55 / 5.6:1. Text on a saturated fill is full-opacity ink.
+
+   Radii: 999 / 32 / 22 / 14 and nothing else. Concentric — the card is 32,
+   its bento tiles are 22 with 16px padding, chips inside them are 14.
+
+   Deleted here, per §14.7: every hard offset shadow and 2/3px ink border on
+   panels and rows (the offset survives only on the CTA and on stickers,
+   which draw their own), every torn/taped divider, and every `outline` on a
+   footer image (`outline` ignores `border-radius`, so it draws a square
+   across every rounded corner — 00.15).
+
+   This file, AQFooter.css and HiStrip.css are only ever imported by
+   AQFooter.tsx / HiStrip.tsx, both of which are lazy — none of these bytes
+   may appear in the critical `index-*.css` chunk.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.aq-footer {
+  background: var(--ink);
+  color: #fff;
+  /* Geometry is the parent `.container`'s: a CSS max-width here cannot be
+     trusted, because Tailwind ships its own `.container` utility that
+     overrides ours at >=1536px viewports and silently drifts the footer's
+     border off the page's content edge. */
+  width: auto;
+  max-width: none;
+  /* ── 2026-09-07 · the density pass ────────────────────────────────────────
+     Measured before this pass: 1683px of a 3086px document at 1440 (54.6% of
+     the whole page), and 2428px — three phone viewports — at 375. The footer
+     renders on every route, so on a short route it WAS the page. Nothing here
+     removes a destination or a section (§14.5); the section rhythm, the tile
+     padding, the orbit and the link gaps each give back a little. */
+  margin: 20px 0;
+  border-radius: var(--r-outer);
+  padding: 30px 34px 26px;
+  overflow: hidden;
+}
+@media (max-width: 900px) { .aq-footer { padding-left: var(--page-px); padding-right: var(--page-px); } }
+@media (max-width: 620px) { .aq-footer { margin: 16px 0; border-radius: var(--r-inner); padding: 22px var(--page-px) 22px; } }
+/* The wrapper supplies the horizontal gutter only — its own vertical padding
+   would stack with the footer's margin. */
+.aq-footer-frame { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+/* Desktop: the footer runs end to end. The frame drops its gutter and width cap, the ink band loses its side margins and
+   rounded corners, and the content is inset by --foot-px instead (the orbit's bleed uses the same variable, so the bubbles
+   still break the composition's edge). Below 901px the card keeps its inset, rounded look. */
+@media (min-width: 901px) {
+  .aq-footer-frame { max-width: none !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .aq-footer { --foot-px: max(34px, calc((100vw - var(--frame-max)) / 2 + var(--page-px))); margin: 20px 0 0; border-radius: 0; padding-left: var(--foot-px); padding-right: var(--foot-px); }
+  .aq-orbit-bleed { margin-left: calc(-1 * var(--foot-px)); margin-right: calc(-1 * var(--foot-px)); }
+  /* pages with the floating contents island reserve 96px under the page for it; put that inside the ink instead of leaving a cream strip below the footer */
+  body.has-toc-island { padding-bottom: 0 !important; }
+  body.has-toc-island .aq-footer { padding-bottom: calc(26px + 96px); }
+}
+
+/* One gutter: the footer's content edge is the page's (the frame's margin plus --page-px), so the footer lines up with every
+   page above it. Measured 2026-10-20 before this: footer 72px, nav 80px, page content 104px at 1440. Container units follow
+   the real frame width (no scrollbar skew where they are supported); the 100vw form above is the fallback. */
+@supports (width: 1cqw) {
+  @media (min-width: 901px) {
+    .aq-footer-frame { container-type: inline-size; }
+    .aq-footer { --foot-px: max(34px, calc((100cqw - var(--frame-max)) / 2 + var(--page-px))); }
+  }
+}
+
+/* A page whose last block is a dark bleed section (Teams) ran into the footer's 20px top margin, which showed the cream page
+   background as a thin stripe between two dark blocks (seen in a 2026-10-20 visual pass). Butt them together instead. */
+@media (min-width: 901px) {
+  main:has(> .route-enter > .bleed-under-nav:last-child) + .aq-footer-frame .aq-footer { margin-top: 0; }
+}
+
+.aq-footer-in { width: 100%; }
+
+/* ━━━ 1 · THE HI BUBBLES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Eight circular windows onto ONE decoded reel, orbiting the wordmark.
+   `.aq-orbit-bleed` cancels the card's own side padding so the outermost
+   bubbles can break the composition's edge; `overflow: hidden` on the orbit
+   is what guarantees a bleeding bubble can never widen the page.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-orbit-bleed { margin: 0 -34px 18px; }
+@media (max-width: 900px) { .aq-orbit-bleed { margin: 0 calc(-1 * var(--page-px)) 14px; } }
+
+/* The orbit is the single cheapest place to give height back: the bubbles are
+   positioned in PERCENTAGES, so shortening the block tightens the cluster
+   around the wordmark rather than breaking the composition, and the outermost
+   bubbles keep bleeding past the edge exactly as authored. */
+.aq-orbit {
+  position: relative;
+  min-height: 214px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+@media (max-width: 900px) { .aq-orbit { min-height: 180px; } }
+@media (max-width: 620px) { .aq-orbit { min-height: 152px; } }
+
+/* The one decoder. It must stay in the DOM and stay paintable — `display:
+   none` and `visibility: hidden` both stop decode in some engines, and a
+   decoded frame is the whole point — but it is never what the reader looks
+   at: 2px at 1% opacity in the orbit's bottom-left corner, behind
+   everything, inert to pointer and keyboard, and clipped by the orbit's own
+   `overflow: hidden` besides. Every frame on screen is a canvas blit of it. */
+.aq-orbit-src {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 2px; height: 2px;
+  opacity: 0.01;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.aq-orbit-ring { position: absolute; inset: 0; }
+
+.aq-bubble {
+  position: absolute;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  /* ── THE ALWAYS-ON BASE LAYER ────────────────────────────────────────────
+     The poster slice for this frame: eight frames across one 2560x320 still,
+     so 800% wide, and the inline `background-position` picks the frame.
+     This is not a "before the video loads" nicety — it is the floor. The
+     canvas that sits on top of it is transparent until the reel has a
+     decodable frame, and the review reproduced exactly that state after a
+     jump-scroll (`getImageData` on a bubble centre returning [0,0,0,0]). An
+     empty canvas must therefore never be able to mean an empty circle, so the
+     still is painted on the bubble ITSELF and the canvas is a transparent
+     overlay on it — under reduced motion, before decode, after an autoplay
+     block, and on any device that refuses the reel entirely.
+     `background-color` is the last-resort ground for the same reason: if the
+     JPEG itself 404s, the bubble is still a disc and not a hole. */
+  background-color: var(--nav-well, rgba(244, 239, 224, 0.07));
+  background-image: url('/hi/hi-reel.jpg');
+  background-size: 800% 100%;
+  background-repeat: no-repeat;
+  /* Hairline, not a 2px ink border — an ink border on an ink ground draws
+     nothing anyway, and §14.7 deletes the ink borders on panels. */
+  box-shadow: 0 0 0 1px rgba(244, 239, 224, 0.14);
+  /* JS writes `transform` here (translate(-50%,-50%) + the drift), so the
+     centring lives in the loop, not in a competing CSS transform. */
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  pointer-events: none;
+  user-select: none;
+}
+/* Transparent overlay on the poster still — never an opaque layer of its own,
+   or an empty canvas would black out the disc underneath it. */
+.aq-bubble canvas { width: 100%; height: 100%; display: block; background: transparent; }
+
+.aq-bubble--lg { width: 108px; height: 108px; }
+.aq-bubble--md { width: 84px;  height: 84px;  }
+.aq-bubble--sm { width: 62px;  height: 62px;  }
+@media (max-width: 900px) {
+  .aq-bubble--lg { width: 86px; height: 86px; }
+  .aq-bubble--md { width: 66px; height: 66px; }
+  .aq-bubble--sm { width: 50px; height: 50px; }
+}
+@media (max-width: 620px) {
+  .aq-bubble--lg { width: 66px; height: 66px; }
+  .aq-bubble--md { width: 52px; height: 52px; }
+  .aq-bubble--sm { width: 40px; height: 40px; }
+}
+
+/* The centre the bubbles orbit. Decorative — the same word is real text in
+   the closing bar — so it is aria-hidden and cannot be selected. */
+.aq-orbit-word {
+  position: relative;
+  z-index: 2;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(38px, 9.2vw, 118px);
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+  text-align: center;
+  color: var(--nav-fg);            /* 1.00 paper on ink · 15.6:1 */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ━━━ 3 · THE MANIFESTO (absorbs the §14.4 CTA) ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-manifesto {
+  border-top: var(--hair-inv);
+  padding: 26px 0 28px;
+  text-align: center;
+}
+@media (max-width: 620px) { .aq-manifesto { padding: 20px 0 22px; } }
+
+/* ── the `aq is —` eyebrow ───────────────────────────────────────────────────
+   Owner asked for this line literally, and it is also load-bearing type: the
+   footer went 118px wordmark → 44px figure → a cliff straight to 13px, with
+   NOTHING between. This is one of the three new 18–28px rungs (eyebrow 22,
+   tile headings 20, lede 17). House voice: lowercase, plain, no full stop —
+   the em dash is the sentence handing off to the headline under it.
+   NeutralFace has no lowercase glyphs, so this is Eina, never `--display`. */
+.aq-mf-eyebrow {
+  margin: 0 0 8px;
+  font-family: var(--eina);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--nav-fg-soft);       /* 0.60 · 6.5:1 — above the 0.55 floor */
+}
+@media (max-width: 620px) { .aq-mf-eyebrow { font-size: 18px; margin-bottom: 6px; } }
+
+.aq-mf-line {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(30px, 4.6vw, 52px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--nav-fg);            /* 15.6:1 */
+}
+/* The house device: exactly one italic serif word, in welfare.
+   accent-lint-ok: `.aq-footer` sets `background: var(--ink)`, so this word sits
+   on #0A0A0A, not cream - the static checker cannot follow a ground set on an
+   ancestor in another rule and assumes light. Measured on #0A0A0A: --welfare
+   4.55:1, --welfare-ink 3.20:1. The "partner" swap makes it WORSE here, and at
+   clamp(30px,4.6vw,52px)/900 this is large text (3:1 floor) which 4.55 clears
+   with room. Do not swap. */
+.aq-mf-em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  /* accent-lint-ok: the footer manifesto sits on the ink slab (#0A0A0A), measured --welfare 4.55:1 vs --welfare-ink 3.20:1, and at clamp(30px,4.6vw,52px)/900 this is large text against a 3:1 floor - the partner swap measures worse. Reasoning was already written above this rule; it lacked the pragma only because a checker bug (fixed 2026-09-10) was silently swallowing it. */
+  color: var(--welfare);
+}
+/* Sticker glyphs sitting inline between the words. The pack's own minimum is
+   72px; the wrapper re-drives `--stk-size-req` down on small screens rather
+   than scaling the element, so the sticker's own rotation is untouched. A
+   sticker is the one place in this footer where a hard offset/drop shadow
+   survives (§14.7 / 00.6) — the component draws it itself. */
+.aq-mf-glyph {
+  display: inline-block;
+  vertical-align: -0.28em;
+  margin: 0 2px;
+  line-height: 0;
+}
+@media (max-width: 760px) { .aq-mf-glyph .aq-sticker { --stk-size-req: 84px; } }
+@media (max-width: 420px) { .aq-mf-glyph .aq-sticker { --stk-size-req: 72px;   /* the pack's own floor */ } }
+
+/* ── the sticker microtype ───────────────────────────────────────────────────
+   `stickers.css:102` sizes a `status` word at `calc(var(--stk-size) * 0.082)`.
+   At the 72px this footer asked for, "est 2021" and "student run" computed to
+   5.904px — texture, not a word. DESIGN.md §3 specifies exactly three sticker
+   text sizes: 9 / 11 / 15px.
+
+   That ratio is SHARED — `feed/cards/family03Records.tsx` is the other status
+   consumer — so the shared sheet is not the place to fix it, and re-driving
+   `--stk-size-req` alone cannot fix it at every width either: the size that
+   lands the ratio on 9px (110px) is a glyph big enough to cost ~60px of
+   footer height inline in the headline, and the two narrower breakpoints
+   would still compute under 7px. So the word is PINNED to a flat 9px here —
+   a documented rung at every width — and `--stk-size-req` is then free to be
+   chosen for the composition. Local override, footer scope only. */
+.aq-mf-glyph .aq-sticker-word--status { font-size: 9px; }
+
+.aq-mf-lede {
+  margin: 0 auto 18px;
+  max-width: 460px;
+  /* the third new rung — was 14.5px, a half-step off the 13px links */
+  font: 400 17px/1.5 var(--eina);
+  color: var(--nav-fg-dim);        /* 0.78 · 9.4:1 */
+  text-wrap: pretty;
+}
+@media (max-width: 620px) { .aq-mf-lede { font-size: 15px; margin-bottom: 14px; } }
+
+.aq-mf-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: var(--r-pill);
+  background: var(--welfare);
+  color: var(--ink);               /* ink on welfare · 4.55:1 — never lighten the fill */
+  border: var(--bd-ink);
+  box-shadow: var(--sh);
+  text-decoration: none;
+  font: 800 15px var(--eina);
+  transition: transform 0.18s var(--ease-pop), box-shadow 0.18s;
+}
+.aq-mf-cta:hover { transform: translate(-1px, -1px); box-shadow: var(--sh-lg); }
+.aq-mf-cta:active { transform: scale(0.96); box-shadow: var(--sh-pressed); }
+.aq-mf-cta:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* ━━━ 4 · THE CLOSING BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   The footer card is ink throughout, so the closing bar is separated by a
+   hairline rather than by a second, darker fill — there is no colour below
+   #0A0A0A in the token set, and 14.0's first invariant is "no new colours".
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.aq-close {
+  border-top: var(--hair-inv);
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.aq-close-id { display: flex; align-items: center; gap: 10px; }
+.aq-foot-disc {
+  width: 34px; height: 34px;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  display: grid; place-items: center;
+  flex: none;
+}
+/* 22px, object-fit: contain — the square stamp, never the 1332x225 wordmark
+   (02.4). No `outline`: it would draw a square across the disc. */
+.aq-foot-disc img { width: 22px; height: 22px; object-fit: contain; display: block; }
+.aq-foot-brand-word {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--nav-fg);            /* 15.6:1 */
+}
+
+.aq-close-soc { display: flex; align-items: center; gap: 8px; }
+.aq-soc {
+  display: inline-flex; align-items: center;
+  min-height: 44px;                /* the 44px floor applies to these too */
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  background: var(--nav-well, rgba(244, 239, 224, 0.07));
+  font-family: var(--mono);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--nav-fg-strong);     /* 0.82 on the well · ~10.4:1 */
+  text-decoration: none;
+  transition: color .13s, background .13s;
+}
+.aq-soc:hover { color: var(--nav-fg); text-decoration: underline; text-underline-offset: 3px; }
+.aq-soc:focus-visible {
+  /* DESIGN.md §2: 3px grape at offset 2, everywhere. This had drifted to 2px
+     welfare here and on the two rules in AQFooter.css. The ring is a system
+     invariant, not a per-surface choice. */
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* Two mono uppercase lines at 9px/700, per §14.6. Every string here is one
+   that already ships — nothing recombined, nothing invented. */
+.aq-close-legal {
+  display: flex; flex-direction: column; gap: 4px;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 9px; font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nav-fg-faint);      /* 0.55 — THE FLOOR · 5.6:1 */
+}
+.aq-close-n { color: var(--paper); }
+@media (max-width: 760px) {
+  .aq-close { justify-content: flex-start; }
+  .aq-close-legal { text-align: left; }
+}
+
+/* ━━━ print. A printed page needs the links and the legal line, nothing else. */
+@media print {
+  /* .aq-letter joins them: it is the warmest thing in the footer and the
+     least useful on paper. */
+  .aq-orbit-bleed, .aq-manifesto, .aq-letter, .aq-close-soc { display: none !important; }
+}
+
+/* ━━━ prefers-reduced-motion removes every animation this footer adds ━━━━━━
+   AQFooter.tsx already declines to render the <video> or the canvases and
+   never starts the rAF loop; these rules are the belt-and-braces for the
+   transitions that live only in the stylesheet. Sticker rotation stays —
+   13.4: rotation is composition, not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .aq-bubble { transform: translate(-50%, -50%) !important; }
+  .aq-mf-cta, .aq-soc { transition: none !important; }
+  .aq-mf-cta:hover, .aq-mf-cta:active { transform: none !important; }
+}
+
+/* ── §14 · the letter ───────────────────────────────────────────────────────
+   Asked for in the 2026-09-11 walkthrough, designed, approved as an artifact,
+   and then never built until now.
+
+   It is the one block in the footer that inverts back to the cream ground.
+   Everything above it sits on ink, so the letter reads as something handed to
+   you rather than more chrome, and the inversion is what earns it the last
+   slot before the closing bar. */
+.aq-letter {
+  margin: clamp(40px, 6vw, 64px) 0 0;
+  padding: clamp(28px, 5vw, 44px);
+  border-radius: var(--r-outer);
+  background: var(--paper);
+  /* Ink on cream here, NOT the footer's paper-on-ink ramp: this card is a
+     light ground sitting inside a dark one, so it takes the light-ground
+     partners or every line of it would fail contrast. */
+  color: var(--ink);
+  text-align: center;
+}
+
+.aq-letter-open {
+  margin: 0 0 18px;
+  font-family: var(--eina);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink-2);
+}
+
+.aq-letter-body {
+  max-width: 52ch;
+  margin: 0 auto 18px;
+  font-family: var(--eina);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.aq-letter-body:last-of-type { margin-bottom: 0; }
+.aq-letter-body em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.aq-letter-sign {
+  margin: 26px 0 0;
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-weight: 500;
+  /* The one piece of handwriting on the public site. A signature is the only
+     thing it should ever be. */
+  font-size: clamp(28px, 4vw, 34px);
+  line-height: 1.1;
+  /* accent-lint-ok: --welfare-ink is the hue's TEXT partner (5.4:1 on cream),
+     which is exactly the case it exists for - this card is a light ground. */
+  color: var(--welfare-ink);
+}
+
+@media (max-width: 620px) {
+  .aq-letter { margin-top: 32px; }
+  .aq-letter-open, .aq-letter-body { font-size: 14.5px; line-height: 1.75; }
+}
+
+/* The Paradox card shares the letter's edges (its own 12px side padding made it 12px narrower) and is a row: the words on
+   the left, the button on the right, on every width. */
+.aq-footer .px-banner { padding: 12px 0 18px; }
+/* air under the last link before the manifesto's rule: the longest column ran into it */
+.aq-footer .aq-foot-links { margin-bottom: clamp(24px, 3vw, 32px); }
+.aq-footer .px-banner__card {
+  max-width: none;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 24px;
+}
+.aq-footer .px-banner__card > :not(.px-banner__cta) { grid-column: 1; justify-self: start; }
+.aq-footer .px-banner__cta { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
+
+/* ── phone: the letter and the Paradox card read as ONE card (owner, 2026-10-20) ─────────────────────────────────────
+   Measured at 390: the letter was 471px and the Paradox card 203px, with a gap and a second rounded edge between them.
+   Here the letter keeps its cream card, the Paradox card becomes its dark base strip (title left, button right), the
+   sticker line and the sub line fold away (the title and button say it), and the letter itself tightens. Nothing is
+   removed from the desktop footer, where they stay two blocks. */
+@media (max-width: 620px) {
+  .aq-letter {
+    margin-top: 24px;
+    padding: 22px 20px 20px;
+    border-radius: var(--r-inner) var(--r-inner) 0 0;
+  }
+  .aq-letter-open, .aq-letter-body { font-size: 14px; line-height: 1.65; }
+  .aq-letter-body { margin-bottom: 12px; }
+  .aq-letter-sign { margin-top: 16px; font-size: 28px; }
+
+  .aq-footer .px-banner { padding: 0; }
+  .aq-footer .px-banner__card {
+    margin: 0;
+    padding: 14px 20px 16px;
+    border-radius: 0 0 var(--r-inner) var(--r-inner);
+    border-top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 14px;
+  }
+  .aq-footer .px-banner__sticker, .aq-footer .px-banner__sub { display: none; }
+  .aq-footer .px-banner__title { margin: 0; }
+  .aq-footer .px-banner__cta { align-self: center; justify-self: end; }
+  /* the closing bar gets its air back now that the card above it is flush */
+  .aq-footer .px-banner + .aq-footer-in { margin-top: 22px; }
+}

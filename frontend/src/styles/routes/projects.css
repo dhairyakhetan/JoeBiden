@@ -1,0 +1,860 @@
+/* Route-scoped: Projects PAGES ONLY (public/PublicProjectsPage.tsx,
+   PublicProjectDetailPage.tsx - both lazy-loaded routes). The `.pcard*`
+   project-card rules live here (moved back from v6.css): their only consumer,
+   PostStreamCard.tsx, is imported solely by the lazy PublicProjectsPage, so they
+   are route-only, not eager-shell. See the bottom of this file. */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   THE ARCHIVE — changelog/10-projects.md · sticky rail, mixed-shape
+   masonry, scroll-revealed search (design turn 19a) + drive detail as
+   stacked bands (19b). Read PublicProjectsPage.tsx's top comment and this
+   file's PR notes before touching this block: the live page is built on a
+   unified `post_feed_view` stream (posts + mirrored welfare_projects/blogs/
+   job_openings), not a `welfare_projects`-only query the way 10.0 assumes,
+   so "shape by data" below reads `source_stat` (post_feed_view's mirror of
+   welfare_projects.key_statistic) rather than querying welfare_projects
+   directly. See PostStreamCard.tsx for the shape-selection logic itself.
+
+   Radii in this block are ONLY 999 / 32 / 22 / 14, plus the 6px notch
+   exception from 17.2 - never the route's older --r-card(26)/--r-sm(20)
+   pair, which predate this redesign pass and are now off-scale. */
+
+/* ─── Toolbar: title · count pill · contributor initials · sort pill ─── */
+.arch-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.arch-toolbar-title {
+  font-family: var(--display); font-weight: 800; font-size: 15px; letter-spacing: -0.02em;
+}
+.arch-count-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 40px; background: var(--card); border: var(--hair-2);
+  border-radius: var(--r-pill); padding: 0 13px;
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.arch-toolbar-spacer { flex: 1; }
+/* Real, non-fabricated cluster: initials-avatars hashed from the authors
+   actually present on the current page of results (lib/uiHelpers'
+   hashColor/getInitials - 15.2 says reuse these, never hand-roll). Not an
+   `author_avatar` image: that column isn't in this query's select() list,
+   and adding it would be exactly the "query gained a column" ACCEPTANCE.md
+   D forbids for a purely decorative cluster. */
+.arch-avatars { display: flex; align-items: center; }
+.arch-avatar {
+  width: 28px; height: 28px; border-radius: var(--r-pill);
+  display: grid; place-items: center;
+  font-family: var(--eina); font-weight: 800; font-size: 10px; color: #0A0A0A;
+  box-shadow: 0 0 0 2px var(--bg);
+  flex-shrink: 0;
+}
+.arch-avatar + .arch-avatar { margin-left: -9px; }
+.arch-avatar--more { background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 9px; }
+.arch-sort-pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 40px; padding: 0 14px;
+  border-radius: var(--r-pill); background: var(--card); border: var(--hair-2);
+  font-family: var(--eina); font-weight: 700; font-size: 11.5px; color: var(--ink);
+  white-space: nowrap;
+  /* Static, not a control: "Everything, newest first" is the ONLY sort mode
+     the underlying query offers (fixed .order('created_at desc')), and
+     10-projects.md's own approved-copy list carries this exact string. A
+     functional multi-mode sort would need new .order() variants this file
+     wasn't asked to design - see the PR notes. */
+}
+
+/* ─── Scroll-revealed search ─────────────────────────────────────────────
+   10.1: appears once the grid's top passes the viewport top, detected via
+   IntersectionObserver on a sentinel (never a scroll listener), frosted,
+   translating in from -100% with opacity. Reachable without scrolling via
+   `.arch-search-skip`, a header icon that scrolls-and-focuses it. */
+/* In-flow, not absolute: an absolutely positioned sentinel needs a positioned
+   ancestor to make `top:0` mean "the top of the section it sits in" - neither
+   `.container` nor the archive `<section>` sets `position`, so it fell back
+   to the initial containing block and rendered at y=0 of the WHOLE PAGE.
+   Confirmed live: `.arch-search` computed `is-visible` at scrollY 0, before
+   any scroll at all, because the sentinel was already "above the viewport"
+   from the first paint - the search bar was permanently revealed instead of
+   scroll-triggered. Letting it sit in normal flow (it is 1x1px either way)
+   places it exactly where the JSX comment says - just above the grid. */
+.arch-search-sentinel { height: 1px; width: 1px; pointer-events: none; }
+/* One source of truth for "how far under the fixed nav a pinned thing rests",
+   shared by the search bar and the rail below so the two can't drift apart.
+   Declared on `.archive-stick` (the archive <section> in PublicProjectsPage)
+   rather than :root, because tokens.css is the redesign lead's file. */
+.archive-stick { --arch-stick-top: calc(var(--nav-h) + 6px); }
+.arch-search {
+  position: sticky; top: var(--arch-stick-top); z-index: 9;
+  display: flex; align-items: center; gap: 9px;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  /* Was blur(20px) - a `position: sticky` element recomposites its backdrop
+     filter every scroll frame while it tracks the viewport, and 20px is the
+     heaviest blur radius on this route (the two other backdrop-filters here
+     are 14px/10px). Reported as general scroll stutter on this page; this is
+     the one GPU-cost knob that's safe to turn down with no real visual loss
+     - matched to this route's own smaller precedents rather than guessed. */
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: var(--r-pill);
+  padding: 7px 7px 7px 18px;
+  margin: 0 var(--page-px, 24px) 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), var(--lift-3);
+  transform: translateY(-130%);
+  opacity: 0;
+  /* The resting state is not just "invisible": before this, the bar kept
+     `pointer-events: auto` and stayed hit-testable while translated up over
+     the top of the grid, so an opacity-0 pill swallowed clicks on the first
+     row of tiles (confirmed live: elementFromPoint at the bar's centre
+     returned the bar, not the tile beneath it, at every desktop width).
+     `visibility` is transitioned alongside opacity so it only flips at the
+     END of the hide, leaving the fade intact. */
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.32s var(--ease-out), opacity 0.28s var(--ease-out), visibility 0.32s;
+}
+.arch-search.is-visible { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto; }
+.arch-search-input {
+  flex: 1; min-width: 0; border: none; background: transparent; outline: none;
+  font-family: var(--eina); font-size: 16px; /* 16px floor: no iOS zoom-on-focus */
+  color: var(--ink);
+  /* See the mobile chip scroller's own comment: a phone's own text-inflation
+     heuristic (not reproducible in this file's tested Chromium viewports) can
+     silently render text larger than this font-size on a narrow column. The
+     placeholder ("search N drives") is exactly the kind of short line in a
+     fixed-height pill that symptom targets, so it's neutralized here too. */
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
+.arch-search-input::placeholder { color: var(--ink-3); }
+.arch-search-clear {
+  font-family: var(--mono); font-size: 8.5px; font-weight: 800; text-transform: uppercase;
+  color: var(--ink-3); background: var(--bg); border: none; border-radius: var(--r-pill);
+  padding: 6px 11px; white-space: nowrap; cursor: pointer; flex-shrink: 0;
+}
+.arch-search-go {
+  width: 40px; height: 40px; border-radius: var(--r-pill); background: var(--ink);
+  border: none; display: grid; place-items: center; flex-shrink: 0; cursor: pointer;
+}
+/* The always-visible trigger: a plain icon button beside the toolbar title,
+   so a keyboard user reaches search in ONE tab stop instead of tabbing past
+   the hero, the team ticker and the featured bento first. */
+.arch-search-skip {
+  width: 40px; height: 40px; border-radius: var(--r-pill);
+  background: var(--card); border: var(--hair-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--ink); flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* "It appears without the translate - visibility still changes, because
+     that is state, not decoration" (10.1). */
+  .arch-search { transition: opacity 0.2s linear, visibility 0.2s; transform: none; }
+}
+
+/* ─── Sticky rail (>= 900px) ─────────────────────────────────────────────
+   DirectoryPage.tsx (named in the brief as the rail's reference) turned out
+   to hold no rail pattern at all - it's a four-entrance wayfinding map with
+   bars/slabs, not a sticky filter sidebar - so this is built fresh from
+   10.1's own literal spec instead of borrowed. Counts are OMITTED: verified
+   live there is no grouped-category-count RPC or view and PostgREST has no
+   bare GROUP BY, so per 10.1's own fallback ("if a grouped count is not
+   available, render the rail without counts") this never fires six queries
+   to fake it. */
+.arch-shell { display: block; }
+.arch-grid { display: block; }
+.arch-rail {
+  display: none; /* shown at >=900px only, see below */
+  flex-direction: column;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+  padding: 10px; box-shadow: var(--lift-1);
+  /* Pinned BELOW both fixed things above it, never at a bare `top: 14px`.
+     14px is the nav pill's own `top` (v6.css `.aq-nav{ padding: 14px ... }`),
+     so a rail pinned there parks its head *inside* the pill's box: the nav is
+     `position: fixed; z-index: 50` and the rail only makes a z-auto stacking
+     position inside the page, so the pill painted over the rail's first 54px
+     - "the archive" title and the "N written up" count - at every width >=
+     900px. Measured live before this fix at 1800/1440/1024: rail rect top 14,
+     nav pill rect bottom 68, i.e. a 54px overlap on every one.
+     The offset is the pinned search bar's footprint, not a magic number:
+     --arch-stick-top (nav-h + 6) + the bar's 56px height + its 14px bottom
+     margin, so the rail comes to rest exactly one gap under the pinned bar
+     instead of behind it. Both pin at the same moment (the bar reveals as the
+     grid's top passes the nav), so they can never disagree. */
+  position: sticky; top: calc(var(--arch-stick-top) + 70px);
+}
+/* This block must come AFTER the base `.arch-rail{ display:none }` rule above:
+   equal-specificity rules resolve by source order regardless of which is
+   inside a media query, so with the base rule declared later (as it was
+   before this fix) its unconditional `display:none` always beat this
+   media query's `display:flex`, even above 900px - the rail, and by
+   extension every one of 10.1's "sticky rail" requirements, silently never
+   rendered at any viewport width. Confirmed live via computed-style
+   inspection: `.arch-rail` reported `display: none` at 1280px before this
+   reorder, which also collapsed the masonry into the grid's first
+   (236px) track instead of its intended 976px one, since a `display:none`
+   child is removed from grid auto-placement entirely. */
+@media (min-width: 900px) {
+  .arch-grid { display: grid; grid-template-columns: 236px minmax(0,1fr); gap: 14px; align-items: start; }
+  .arch-rail { display: flex; }
+  .arch-rail-mobile { display: none; }
+}
+/* Sidebar removed per owner request (2026-09-12) - the filter rail read as
+   redundant chrome. `.arch-grid--no-rail` (set alongside `.arch-grid` at
+   the one call site that dropped the `<aside>`) cancels the two-column
+   layout above and keeps the horizontal chip row - previously mobile-only
+   - as the one filter UI at every width, rather than leaving desktop with
+   no way to filter by category at all. `.arch-rail`/`.arch-rail-*` rules
+   above are dead for this page now but left in place: nothing else in the
+   repo currently references them, but deleting CSS on a guess is worse
+   than an unused rule. */
+.arch-grid--no-rail { display: block; }
+.arch-grid--no-rail .arch-rail-mobile { display: block; }
+.arch-rail-head { padding: 12px 10px 14px; }
+.arch-rail-title { font-family: var(--display); font-weight: 900; font-size: 17px; letter-spacing: -0.03em; line-height: 1; text-transform: lowercase; }
+.arch-rail-sub { font-family: var(--mono); font-size: 9px; font-weight: 800; color: var(--ink-3); margin-top: 5px; text-transform: uppercase; }
+.arch-rail-rows { display: flex; flex-direction: column; gap: 2px; }
+.arch-rail-row {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 0 13px; border-radius: var(--r-inner);
+  border: none; background: transparent; cursor: pointer; width: 100%;
+  font-family: var(--eina); font-size: 12.5px; font-weight: 600; color: var(--ink);
+  box-sizing: border-box; text-align: left;
+}
+.arch-rail-dot { width: 6px; height: 6px; border-radius: var(--r-pill); flex-shrink: 0; }
+.arch-rail-label { flex: 1; min-width: 0; }
+.arch-rail-row.is-active {
+  background: var(--ink); color: var(--bg); font-weight: 800;
+}
+.arch-rail-row.is-active .arch-rail-dot { background: var(--bg) !important; }
+.arch-rail-hr { display: block; height: 1px; background: rgba(10,10,10,0.08); margin: 10px 13px; border: none; }
+.arch-rail-stat {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  background: var(--bg); border: none; border-radius: var(--r-inner);
+  padding: 11px 12px; cursor: pointer; text-align: left;
+  font-family: var(--eina); color: var(--ink);
+}
+.arch-rail-stat.is-active { background: var(--ink); color: var(--bg); }
+.arch-rail-stat-n { font-family: var(--display); font-size: 20px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.arch-rail-stat-label { flex: 1; font-family: var(--mono); font-size: 8.5px; font-weight: 700; color: var(--ink-3); line-height: 1.4; text-transform: uppercase; }
+.arch-rail-stat.is-active .arch-rail-stat-label { color: color-mix(in srgb, var(--bg) 65%, transparent); }
+.arch-rail-foot { padding: 0 10px 8px; }
+.arch-rail-kicker { font-family: var(--mono); font-size: 8.5px; font-weight: 800; color: var(--ink-3); margin-bottom: 9px; text-transform: uppercase; }
+
+/* Mobile/tablet rail: the horizontal pill scroller (below 900px this IS the
+   rail, not a lesser version of it - 10.1: "below 900px the rail becomes a
+   horizontal pill scroller above the grid"). overscroll-behavior-x:contain
+   matches the same rule already applied to the desk's filter scroller
+   (UX-GAPS.md's "must not be cleaned up" list) so a swipe here can't trigger
+   a browser back-navigation and lose the in-progress filter state. */
+.arch-rail-mobile-scroll {
+  display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain;
+  scrollbar-width: none; padding-bottom: 2px;
+  /* Fade the trailing edge so the last chip reads as "more this way, swipe"
+     rather than a hard cut that looks like a layout bug (QA screenshot flagged
+     the last chip as apparently clipped). Purely visual - overflow-x:auto
+     above is what actually makes the row scrollable; this only signals it. */
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+}
+.arch-rail-mobile-scroll::-webkit-scrollbar { display: none; }
+/* Real phones (not this file's tested Chromium viewports) can boost inline
+   text size independent of the CSS font-size on narrow columns; that alone
+   can push a short pill label past its box. Neutralized on every text leaf
+   in this scroller and the sticky search/rail row - zero visual change on a
+   browser that doesn't do this, pure insurance where it does. */
+.arch-rail-mobile-scroll .chip { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (min-width: 900px) { .arch-rail-mobile { display: none; } }
+
+/* ─── Masonry: CSS columns, never a JS library (invariant 6 / 10.1) ───── */
+.arch-masonry { column-count: 3; column-gap: 12px; }
+.arch-masonry > * { break-inside: avoid; margin-bottom: 12px; display: block; }
+@media (max-width: 899px) { .arch-masonry { column-count: 2; } }
+@media (max-width: 619px) { .arch-masonry { column-count: 1; } }
+/* Search mode renders a flat, relevance-ordered list - order carries meaning
+   there (10.1: columns "must not be used for anything where order carries
+   meaning"), so it drops to a single column deliberately, not as a bug. */
+.arch-masonry.is-search { column-count: 1; }
+
+/* Column-shaped skeletons at real tile heights (three columns, three rough
+   heights) rather than a uniform grid that reflows into masonry once data
+   lands - 06.7 / 01.17's "page jumping" defect, applied here. */
+.arch-skel-cols { columns: 3; column-gap: 12px; }
+@media (max-width: 899px) { .arch-skel-cols { columns: 2; } }
+@media (max-width: 619px) { .arch-skel-cols { columns: 1; } }
+.arch-skel {
+  break-inside: avoid; margin-bottom: 12px; border-radius: var(--r-outer);
+  background: var(--bg-2); animation: aq-pulse 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .arch-skel { animation: none; } }
+
+/* ─── Tile shells ─────────────────────────────────────────────────────── */
+.arch-tile-wrap { position: relative; }
+.arch-tile {
+  position: relative; display: block; overflow: hidden;
+  border-radius: var(--r-outer); background: var(--card); border: var(--hair-2);
+  box-shadow: var(--lift-1); text-decoration: none; color: var(--ink);
+  transition: box-shadow 0.18s var(--ease-out);
+}
+.arch-tile:hover { box-shadow: var(--lift-2); }
+.arch-tile:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* Photo tiles (tall photo-with-statistic, and the shorter photo-only shape).
+   Height varies with the source image (min/max clamp) rather than a forced
+   aspect-ratio, which is what gives the masonry real column-height variety. */
+.arch-tile--photo { background: var(--ink); }
+
+/* ── Item 3.2: the two shapes added 2026-09-11 ─────────────────────────────
+   The archive was 486 of 548 tiles on one shape (89%). These split it on two
+   facts the data already carried and the tile was discarding: three-or-more
+   photos, and a turnout well above the median four. Both reuse the photo
+   shell entirely - same image, scrim, category chip, title and meta - and
+   change only what the tile LEADS with. */
+
+/* A shoot, not a snapshot. Two plates peek out behind the photo so the tile
+   reads as a stack before the count is read. `overflow: hidden` on
+   `.arch-tile` would clip them, so they sit INSIDE the tile's box and are
+   inset from its edges rather than offset outside it. */
+.arch-tile--set { position: relative; }
+/* NO negative offsets here. `.arch-tile` is `overflow: hidden`, so a plate
+   translated above the tile's box is silently clipped to nothing - which is
+   exactly what the first version of this did, caught by measuring the plates'
+   rects against the tile's (top -12 and -6, both outside). The plates instead
+   occupy the tile's own first 14px, each showing a 7px sliver above the photo,
+   and the photo is pushed down to make room. */
+.arch-set-plate {
+  position: absolute; left: 8px; right: 8px; height: 40px;
+  border-radius: var(--r-outer) var(--r-outer) 0 0;
+  background: var(--card); border: var(--hair-2); border-bottom: none;
+  pointer-events: none;
+}
+.arch-set-plate--1 { top: 7px; opacity: 0.92; }
+.arch-set-plate--2 { top: 0; left: 16px; right: 16px; opacity: 0.55; }
+.arch-tile--set .arch-tile-img { margin-top: 14px; }
+.arch-set-count {
+  position: absolute; top: 25px; right: 11px; z-index: 1;
+  background: rgba(10,10,10,.72); color: var(--nav-fg);
+  border-radius: var(--r-pill); padding: 4px 9px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.04em; white-space: nowrap;
+}
+
+/* A big turnout. The headcount is the story, so it is set at display scale
+   above the title rather than as one more line of meta. */
+.arch-turnout { display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px; }
+.arch-turnout-n {
+  font-family: var(--display); font-weight: 900; font-size: 30px; line-height: 0.9;
+  color: var(--nav-fg); letter-spacing: -0.02em;
+}
+.arch-turnout-l {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: rgba(244,239,224,.72);
+}
+.arch-tile-img { width: 100%; height: auto; min-height: 170px; max-height: 380px; object-fit: cover; display: block; }
+/* The two-stop scrim, verbatim from 10.1 - never a flat tint/opacity/filter. */
+.arch-tile-scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(10,10,10,.88) 0%, rgba(10,10,10,.42) 44%, rgba(10,10,10,.06) 100%);
+}
+.arch-tile-cat {
+  position: absolute; top: 11px; left: 11px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--cc, var(--welfare)); color: #0A0A0A;
+  border-radius: var(--r-pill); padding: 5px 11px;
+  font-family: var(--display); font-weight: 900; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+  box-shadow: 0 0 0 3px rgba(10,10,10,.5); /* die-cut keyline against the photo, per 13.1 */
+}
+/* Alternate placement/tilt for the two most common photo shapes - a corner
+   badge that never moves, on 65% of the archive's tiles, is exactly the
+   "one shape repeated" complaint this file's shape-by-data system already
+   fixed once for tile SHAPE; this fixes the same complaint for this one
+   chip within a shape. Top-right + a slight tilt instead of top-left flat. */
+.arch-tile-cat--alt {
+  left: auto; right: 11px;
+  transform: rotate(-3deg);
+}
+.arch-tile-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 14px; }
+.arch-tile-stat {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+  font-family: var(--display); font-weight: 900; font-size: clamp(20px, 3.4vw, 34px); line-height: 0.94;
+  letter-spacing: -0.045em; color: var(--paper); font-variant-numeric: tabular-nums;
+  /* One consistent size, not a 34px/8.5px number+unit split - key_statistic
+     is plain text with no reliable number/unit boundary (see PR notes: a
+     40-row live sample included full sentences like "20 cookies were
+     distributed..." with no short unit to isolate). Found 2026-09-12: an
+     unbounded font-size + no line cap let a long sentence ("15 KIDS TAUGHT
+     NOUNS, PRONOUNS AND VERBS.") grow tall enough to collide with
+     .arch-tile-cat pinned at the tile's top - clamped to a responsive size
+     and capped at 3 lines (ellipsis) so the stat can never outgrow the tile.
+     text-wrap: pretty dropped - meaningless together with a hard line-clamp. */
+}
+/* NeutralFace, not Eina (2026-09-18). Headings are NeutralFace on every other
+   page - measured: /  16 of 16, /about 17 of 18, /directory 10 of 11 - and this
+   page was the one exception, with 20 archive titles in Eina 700. That is what
+   made /projects read as a different site.
+
+   NeutralFace is CAPS-ONLY, verified rather than assumed: "handwriting" and
+   "HANDWRITING" both measure 751px in it, a ratio of exactly 1.000, where Eina
+   gives 563 vs 733. So this renders the title in capitals - which is the point,
+   since it now matches the mono kicker above it and the mono meta below it.
+
+   It is the FONT rendering capitals, not `text-transform`, so the DOM text stays
+   "Smile Notes Campaign". Screen readers, the accessible name and anything
+   reading textContent are unaffected; only the glyphs change. */
+.arch-tile-title {
+  display: block; font-family: var(--display); font-weight: 700; font-size: 13.5px; line-height: 1.32;
+  color: var(--paper); margin-top: 9px;
+}
+.arch-tile-meta {
+  display: block; font-family: var(--mono); font-size: 8.5px; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--paper); /* full paper opacity over a photo - composite is unpredictable (15.7) */
+  margin-top: 7px;
+}
+
+/* Cream well tile - statistic, no photo. */
+.arch-tile--well { padding: 10px; }
+.arch-well-inner { background: var(--bg); border-radius: var(--r-inner); padding: 18px 16px; }
+.arch-well-stat {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+  font-family: var(--display); font-weight: 900; font-size: clamp(22px, 3.8vw, 40px); line-height: 0.94;
+  letter-spacing: -0.05em; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.arch-well-body { padding: 12px 8px 4px; }
+.arch-well-title { display: block; font-family: var(--eina); font-weight: 700; font-size: 14px; line-height: 1.3; letter-spacing: -0.015em; }
+.arch-well-meta { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+
+/* Serif quote tile - short body, no photo. Hue = the row's own category
+   colour (CAT_COLORS), never a random pick, so the tile still carries real
+   classification rather than decoration. */
+.arch-tile--quote { background: var(--qc, var(--lemon)); padding: 20px 18px; }
+.arch-quote-kicker { display: block; font-family: var(--mono); font-size: 8.5px; font-weight: 800; color: #0A0A0A; text-transform: uppercase; }
+.arch-quote-body { margin: 11px 0 0; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 19px; line-height: 1.42; color: #0A0A0A; text-wrap: pretty; }
+.arch-quote-foot { display: inline-flex; align-items: center; gap: 7px; margin-top: 14px; background: rgba(10,10,10,.1); border-radius: var(--r-pill); padding: 6px 11px; }
+.arch-quote-init { width: 20px; height: 20px; border-radius: var(--r-pill); background: #0A0A0A; display: grid; place-items: center; font-family: var(--eina); font-weight: 800; font-size: 8px; color: var(--paper); flex-shrink: 0; }
+.arch-quote-name { font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: rgba(10,10,10,.8); }
+
+/* Ink link tile - a blog write-up. Border-left + kicker dot carry the
+   post's own category hue (--qc, set inline per PostStreamCard.tsx) so a
+   run of write-ups doesn't read as one repeated block - see the comment
+   at that render site. */
+.arch-tile--link { background: var(--ink); padding: 18px 16px; border-left: 3px solid var(--qc, var(--welfare)); }
+.arch-link-kicker { display: inline-flex; align-items: center; gap: 7px; background: rgba(244,239,224,.1); border-radius: var(--r-pill); padding: 6px 11px; margin-bottom: 13px; }
+.arch-link-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--qc, var(--welfare)); flex-shrink: 0; }
+.arch-link-kicker span { font-family: var(--mono); font-size: 8px; font-weight: 800; color: rgba(244,239,224,.72); text-transform: uppercase; }
+/* Same change, same reason, as .arch-tile-title above. */
+.arch-link-title { display: block; font-family: var(--display); font-weight: 700; font-size: 15px; line-height: 1.3; letter-spacing: -0.015em; color: var(--paper); }
+.arch-link-meta { display: block; font-family: var(--mono); font-size: 8.5px; font-weight: 700; color: rgba(244,239,224,.55); margin-top: 9px; text-transform: uppercase; }
+
+/* Two more write-up layouts (variant b/c), chosen deterministically per row -
+   see PostStreamCard.tsx. Same tokens/background as the base tile, different
+   ordering and emphasis so a run of write-ups doesn't read as one shape. */
+.arch-tile--link-b .arch-link-meta { margin-top: 0; margin-bottom: 10px; }
+.arch-link-title--serif { font-family: var(--serif, Georgia, serif); font-style: italic; font-weight: 600; font-size: 16.5px; }
+.arch-link-kicker--bare { background: none; padding: 0; margin-top: 13px; margin-bottom: 0; }
+.arch-link-kicker--bare span { color: var(--qc, var(--welfare)); }
+
+.arch-tile--link-c { display: flex; flex-direction: column; }
+.arch-link-dot--big { width: 9px; height: 9px; margin-bottom: 12px; }
+.arch-tile--link-c .arch-link-title { order: 1; }
+.arch-link-kicker--inline { background: none; padding: 0; margin-top: 11px; margin-bottom: 0; order: 2; }
+
+/* ─── Hover preview (10.1) ────────────────────────────────────────────────
+   Absolutely positioned BELOW the tile's own box (top:100%) rather than an
+   in-flow reveal, so a hover/focus never changes the masonry column's
+   height/reflow - it floats over whatever sits below it in that column for
+   as long as the pointer/focus stays, then disappears. Desktop pointer
+   devices only; a touch tap opens the detail page directly, "which is the
+   better outcome anyway" (10.1). :focus-within is not optional - it is the
+   ONLY way a keyboard user ever sees this content. */
+.arch-hover {
+  position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; z-index: 5;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-outer);
+  padding: 10px; box-shadow: var(--lift-3);
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: opacity 0.16s var(--ease-out), transform 0.16s var(--ease-out), visibility 0.16s;
+  pointer-events: none;
+}
+@media (hover: hover) and (min-width: 900px) {
+  .arch-tile-wrap:hover .arch-hover,
+  .arch-tile-wrap:focus-within .arch-hover {
+    opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+  }
+}
+.arch-hover-row { display: flex; align-items: center; gap: 9px; padding: 0 4px; }
+.arch-hover-meta { flex: 1; min-width: 0; font-family: var(--mono); font-size: 8px; font-weight: 700; color: var(--ink-3); text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .arch-hover { transition: opacity 0.12s linear; } }
+
+/* ─── Empty (filtered) state ─────────────────────────────────────────────
+   10's own states section: "at 2,031 rows the only empty state is an
+   over-filtered one, so the action is the point" - EmptyState's `action`
+   slot carries the clear-filter control (wired in PublicProjectsPage.tsx). */
+.arch-empty-filter { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--ink-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-tile { transition: none; }
+}
+
+/* ━━━ PROJECTS GRID (PublicProjectsPage) ━━━ */
+.grid-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+/* (Featured ticker removed - featured projects now use the editorial
+   hover-reveal list in components/FeaturedReveal.tsx, self-styled.) */
+
+
+/* ━━━ Projects featured band — smart bento ━━━
+   Was a fixed .feat-grid (1 lead + 2 mini) reading the WRONG featured flag
+   (posts.featured, ~8 rows); rebuilt into a varied-size scrapbook bento driven
+   by the real welfare_projects.featured set (23 rows) the desk's Projects tab
+   toggles. Every tile keeps the shared .proj-feat-* internals (cover / scrim /
+   kick pill / title); only their SIZE changes, via the nth-child rhythm below —
+   a 2x2 hero + a 2x1 wide, everything else 1x1, which packs into a clean
+   rectangle at the counts we render (grid-auto-flow: dense backfills 1x1 gaps). */
+/* Section 05b: the bento is PHONE-FIRST. Two columns, the hero tile spanning
+   both at 16/10, then two 1:1 tiles, then the CTA spanning both. The 4-column
+   rhythm with the hero at 2x2 returns at >= 1025 (see the media queries at the
+   end of this block). Sizes come from aspect ratios rather than a fixed
+   `grid-auto-rows`, so a tile never has to be told a pixel height. */
+.pbento {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: dense;
+  gap: 10px;
+}
+.pbento-tile {
+  position: relative; display: block; overflow: hidden;
+  /* A cute bento reads as a grid of little cards, not photo tiles butted
+     together - --r-inner (22) on the small tiles instead of the sharper
+     --r-tight (14) they used before, and a colored ring (--fk, the same
+     category hue already piped in for the kicker pill) instead of a plain
+     ink hairline, so each tile visibly belongs to its own category. */
+  border: 2px solid var(--fk, var(--line)); border-radius: var(--r-inner);
+  box-shadow: var(--lift-1); text-decoration: none;
+  aspect-ratio: 1;
+  transition: box-shadow .18s var(--ease-out), transform .18s var(--ease-out);
+}
+/* Retokenized per 10-projects.md's radius floor (999/32/22/14, +6 notch
+   exception only): the hero tile takes the outer radius. Hover on the small
+   tiles gets a playful alternating tilt + lift ("bento" should feel like a
+   box of little treats, not a strict photo grid) - the hero stays untilted
+   (00.5's "cards no longer move on hover" holds for the one true anchor
+   tile; the small tiles are the ones earning the personality here). */
+.pbento-tile:nth-child(1) { grid-column: span 2; aspect-ratio: 16 / 10; border-radius: var(--r-outer); }
+.pbento-tile:not(:nth-child(1)):hover { transform: translateY(-3px); }
+.pbento-tile:not(:nth-child(1)):nth-child(even):hover { transform: translateY(-3px); }
+.pbento-tile:hover { box-shadow: var(--lift-2); z-index: 2; }
+.pbento-tile:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; z-index: 2; }
+/* The hero's corner sticker - "★ featured", a static CSS badge (not the
+   dynamic Sticker.tsx component: that component hard-caps at 3-per-viewport
+   and one-per-card by design, and this band already sits above a card
+   stream that may carry its own stickers - see Sticker.tsx's own header
+   comment on why a repeating grid can't safely use it). One badge, on the
+   one hero tile, is the cute accent without touching that budget. */
+.pbento-hero-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 10px; border-radius: 999px;
+  background: var(--paper); border: var(--hair-2);
+  box-shadow: var(--lift-1);
+  font-family: var(--mono); font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--ink);
+  transform: rotate(4deg);
+}
+/* "see all" CTA - a 56px pill spanning the row. Was a dashed border; 00.12
+   keeps dashed for exactly two "provisional, not real" cases and a CTA link
+   isn't one of them, so it's a hairline now, same as every other card edge. */
+.pbento-cta {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  height: 56px; padding: 0 16px; text-align: center; text-decoration: none;
+  cursor: pointer; font: inherit; color: var(--ink);
+  border: var(--hair-2); border-radius: var(--r-inner); background: transparent;
+  white-space: nowrap;
+  transition: box-shadow .18s var(--ease-out), background .18s;
+}
+.pbento-cta:hover { box-shadow: var(--lift-2); background: var(--bg-2); }
+.pbento-cta:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.pbento-cta-n { font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1; letter-spacing: -0.03em; }
+.pbento-cta-label { font-family: var(--eina); font-weight: 800; font-size: 13px; text-transform: none; letter-spacing: 0; }
+.proj-feat-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.proj-feat-noimg { display: block; }
+/* The canonical two-stop scrim (10.1 / 15.7) - every photo tile on this route
+   uses this exact gradient, never a flat tint/opacity/filter. Paper measures
+   14.2:1 on the .88 stop. Was a two-stop ramp with a different easing
+   (.82/.10); unified onto the one formula the redesign specifies everywhere
+   else on this page (.arch-tile-scrim) so the featured band and the archive
+   grid don't carry two different "photo card" contrast treatments. */
+.proj-feat-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,.88) 0%, rgba(10,10,10,.42) 44%, rgba(10,10,10,.06) 100%); }
+.proj-feat-body { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 18px; z-index: 1; }
+/* No-image fallback - a flat solid-colour fill with the text pinned to the
+   bottom (like the photo cards) left a tall block of empty colour above the
+   text with nothing to justify it (a photo fills that space; a flat tint
+   doesn't). Centering the body in the available height instead spreads the
+   text across the card so it doesn't read as "padding that needs cutting". */
+.proj-feat-lead.no-img .proj-feat-scrim,
+.proj-feat-mini.no-img .proj-feat-scrim,
+.pbento-tile.no-img .proj-feat-scrim { display: none; }
+.proj-feat-lead.no-img .proj-feat-body,
+.proj-feat-mini.no-img .proj-feat-body,
+.pbento-tile.no-img .proj-feat-body {
+  position: static; height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.proj-feat-kick {
+  display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em; color: #0A0A0A;
+  background: var(--fk, var(--accent)); padding: 3px 8px; border-radius: 999px; margin-bottom: 8px;
+}
+/* text-shadow floor: guarantees the white title stays legible even where a pale
+   cover photo shows through the top of the scrim. */
+.proj-feat-title { font-family: var(--display); font-weight: 900; letter-spacing: -0.02em; line-height: 1.05; color: #fff; margin: 0; font-size: clamp(20px, 2.4vw, 28px); text-wrap: balance; text-shadow: 0 1px 12px rgba(0,0,0,.55), 0 1px 2px rgba(0,0,0,.5); }
+.proj-feat-title-sm { font-size: clamp(15px, 1.8vw, 18px); }
+.proj-feat-by { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.82); text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+/* Desktop: back to the 4-column rhythm with the hero at 2x2. Rows are square
+   cells so the 2x2 hero reads as a true square block. */
+@media (min-width: 1025px) {
+  .pbento { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .pbento-tile { aspect-ratio: 1; }
+  .pbento-tile:nth-child(1) { grid-column: span 2; grid-row: span 2; aspect-ratio: 1; }
+  /* The hero is built to sit beside four tiles. With fewer featured drives the right half used to stay empty (seen in a
+     2026-10-20 visual pass with three), so the tiles that exist stretch to fill that 2x2 block:
+       hero + 1  -> the one tile fills it,  hero + 2  -> two tall tiles,  hero + 3  -> a wide tile over two small ones. */
+  /* (the 'see all' button is a child of the grid too, so tiles are counted by :has, never by :last-child) */
+  .pbento:has(> .pbento-tile:nth-child(2)):not(:has(> .pbento-tile:nth-child(3))) > .pbento-tile:nth-child(2) { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+  .pbento:has(> .pbento-tile:nth-child(3)):not(:has(> .pbento-tile:nth-child(4))) > .pbento-tile:nth-child(n+2) { grid-row: span 2; aspect-ratio: auto; }
+  .pbento:has(> .pbento-tile:nth-child(4)):not(:has(> .pbento-tile:nth-child(5))) > .pbento-tile:nth-child(2) { grid-column: span 2; aspect-ratio: 2 / 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pbento-tile, .pbento-cta { transition: none; }
+  .pbento-tile:hover { transform: none; }
+}
+
+
+/* A `.proj-title`/`.proj-meta` pair used to live here, marked "project card
+   meta (PublicProjectDetailPage)". It was dead: this file is imported
+   AFTER PublicProjectDetailPage.css by that page, so on equal specificity
+   its 15px rule never wins over PublicProjectDetailPage.css's real 56px
+   hero title - two conflicting definitions of the same class in the same
+   bundle, with only one ever reachable. Deleted rather than left as a trap
+   for the next person to "fix" the title size here and wonder why nothing
+   changes on screen. See PublicProjectDetailPage.css for the live rule.
+
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Directory team chips - a slick left-to-right ticker of the 8 teams
+   (replaced the node web + big department cards; minimal vertical space).
+   Each chip carries its vertical's hue via --tc; hover fills + lifts.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.dir-team-chips {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  /* Audit rule 19: without this, swiping the chips past their end hands the
+     gesture to the browser and navigates back. Matches .arch-rail-mobile-scroll. */
+  overscroll-behavior-x: contain;
+  padding: 4px 2px 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  /* Same trailing fade as .arch-rail-mobile-scroll below - the last chip
+     ("ShikshAQ") otherwise reads as clipped rather than "scroll for more". */
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+}
+.dir-team-chips::-webkit-scrollbar { display: none; }
+/* Section 05b: a 44px pill (these chips are navigation, so the tap-target floor
+   applies), 2px ink, and a 9px hue dot in place of the emoji glyph. Fixed
+   height + 999px radius, so `white-space: nowrap` is mandatory. The hue is
+   still `dept.color`, the department's LITERAL token, so the chips here and the
+   cards on /about are the same eight names in the same eight hues. */
+.dir-team-chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: var(--bd);
+  background: var(--card);
+  box-shadow: none;
+  scroll-snap-align: start;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.14s var(--ease-pop), box-shadow 0.14s, background 0.14s;
+}
+.dir-team-chip:hover,
+.dir-team-chip:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-cta);
+  background: var(--tc, var(--welfare));
+}
+.dir-team-chip-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--tc, var(--welfare));
+  border: 1.5px solid var(--ink);
+  flex-shrink: 0;
+}
+.dir-team-chip-marker { font-family: var(--mono); font-size: 11px; color: var(--ink-2); margin-left: 2px; }
+/* The marker convention, printed under the row. It used to live only in a
+   `title` attribute, which a touch device never shows. */
+.pfeat-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 28px; padding: 0 11px;
+  border: var(--bd); border-radius: 999px;
+  background: var(--lemon); color: var(--ink);
+  font-family: var(--eina); font-weight: 800; font-size: 11px;
+  box-shadow: var(--shadow-cta);
+  transform: rotate(2deg);
+  white-space: nowrap;
+}
+.pfeat-note { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); }
+.dir-chip-legend {
+  margin: 9px 0 0;
+  font-family: var(--mono); font-size: 8.5px; line-height: 1.6;
+  color: var(--ink-3);
+}
+@media (prefers-reduced-motion: reduce) { .dir-team-chip { transition: none; } }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Relocated from critical v6.css (CSS-bundle-size pass). Route-only:
+   consumed by the lazy PublicProjectsPage / PublicProjectDetailPage.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Floating glass filter bar ──────────────────────────────────────────────
+   Any sticky in-page section (e.g. the projects filter) adopts the nav's
+   liquid-glass pill look: a centred, rounded, backdrop-blurred capsule that
+   floats over scrolling content instead of a hard full-width L-to-R chunk. */
+.aq-floating-filter {
+  position: sticky;
+  top: calc(var(--nav-h) + 6px);
+  z-index: 9;
+  padding: 8px var(--page-px, 24px);
+  pointer-events: none; /* let clicks pass through the transparent gutter */
+}
+.aq-floating-filter-inner {
+  pointer-events: auto;
+  max-width: 1120px; margin: 0 auto;
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: var(--bd);
+  box-shadow: none;
+  padding: 11px;
+}
+@media (max-width: 760px) {
+  /* The archive search field measured 226x24 at 390px (audit 2026-09-17,
+     responsiveness P2). Its font-size is already 16px so iOS will not zoom, but
+     24px of height is a poor target for the primary way to search 548 drives,
+     and it is under even WCAG 2.5.8 AA's 24px once you account for the row it
+     shares. The font-size stays where it is; only the hit area grows, so the
+     pill's look is unchanged while the tappable box reaches the 44px floor the
+     rest of the app uses below 760px (v6.css:2310). */
+  .arch-search-input { min-height: 44px; }
+
+  .aq-floating-filter { padding: 6px 10px; }
+  .aq-floating-filter-inner {
+    border-radius: var(--r-card); padding: 11px;
+    /* cheaper blur on mobile - this bar is sticky and re-rasterises on scroll */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: box-shadow 0.25s ease;
+  }
+
+  /* Collapsing sticky search. On mobile the field, the controls, and the chip
+     row each take a full-width line - so the controls lay out across the width
+     instead of squashing into a narrow column beside the field (which clipped).
+     Once the bar pins under the nav it shrinks to just the field (.is-collapsed);
+     tapping it re-expands the controls (.is-focus). */
+  .aq-filter-search { flex: 1 1 100% !important; }
+  .aq-filter-search input { width: 100% !important; }
+  .aq-filter-extras { flex: 1 1 100% !important; }
+
+  /* NOTE: still animates max-height + margin-top, which are layout properties.
+     The clean fix is the grid-template-rows 0fr->1fr technique used in
+     QuickLinksPage.css, but that needs the collapsing content wrapped in a
+     single grid child — these two elements hold their controls as direct
+     flex children, so switching would restructure the filter bar's markup.
+     Left as-is deliberately; it collapses once on scroll, not per frame. */
+  .aq-filter-extras, .aq-filter-chips {
+    overflow: hidden;
+    transition: max-height 0.32s var(--ease-out), opacity 0.22s ease, margin-top 0.32s var(--ease-out);
+  }
+  /* Caps sit above the natural wrapped height so the expanded state never clips;
+     they only matter as the from-value of the collapse animation. */
+  .aq-filter-extras { max-height: 220px; }
+  .aq-filter-chips  { max-height: 76px; }
+  .aq-floating-filter-inner.is-collapsed .aq-filter-extras,
+  .aq-floating-filter-inner.is-collapsed .aq-filter-chips {
+    max-height: 0; opacity: 0; margin-top: 0; pointer-events: none;
+  }
+
+  /* Focus mode - lift the pill a touch while it's expanded from a tap. */
+  .aq-floating-filter-inner.is-focus { box-shadow: var(--shadow-cta); }
+}
+
+/* Category chips in the filter bar. `.chip` is a shared v6.css rule with many
+   other consumers, so the 44px tap-target floor is applied SCOPED to this bar
+   rather than by editing the global. Fixed height + 999px, and `.chip` already
+   carries `white-space: nowrap`. */
+.aq-filter-chips .chip {
+  height: 44px; padding: 0 16px;
+  border: var(--bd);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  text-transform: none; letter-spacing: 0;
+}
+.aq-filter-chips .chip.chip-active {
+  background: var(--ink) !important; color: var(--paper) !important;
+  font-weight: 800; box-shadow: none;
+}
+/* `.chip-active` in v6.css sets `background: var(--accent) !important`, so the
+   ink fill this section specifies needs the same weight to land. */
+
+/* Search field and the clear-filters control. */
+.aq-filter-search .aq-filter-search-input {
+  height: 44px; border: var(--bd); border-radius: 999px;
+  background: var(--card); box-shadow: none;
+  padding-left: 36px;
+}
+.aq-filter-extras .aq-filter-clear {
+  height: 44px; padding: 0 14px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  border-radius: 999px; border: 2px solid var(--line-2);
+  background: var(--bg-2); color: var(--ink-2);
+  cursor: pointer; white-space: nowrap;
+}
+
+/* Hero. 52px on a phone, clamp(56px, 7vw, 92px) at >= 1025. */
+.dir-hero-h1 {
+  font-family: var(--display); font-weight: 900;
+  font-size: 52px; line-height: 0.88; letter-spacing: -0.05em;
+  margin: 12px 0; color: var(--paper); text-wrap: balance;
+}
+.dir-hero-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px;
+}
+@media (min-width: 601px)  { .dir-hero-stats { grid-template-columns: repeat(4, auto); justify-content: start; gap: clamp(20px, 4vw, 32px); } }
+@media (min-width: 1025px) { .dir-hero-h1 { font-size: clamp(56px, 7vw, 92px); } }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   The old `.pcard*` project-card rules that lived here (components/
+   PostStreamCard.tsx's previous "white brutalist card, photo top + text
+   body below" shape) were retired by changelog/10-projects.md: the card is
+   rewritten as the shape-by-data tile system in the "THE ARCHIVE" block near
+   the top of this file (`.arch-tile*`), matching the redesign's tile-shape
+   table (photo+statistic / statistic-only / photo-only / short-body /
+   blog-link). `.pcard*` had exactly one consumer and it no longer renders
+   them, so the rules were deleted rather than left dead (00.13/README rule
+   9's "delete dead CSS" spirit) - see PostStreamCard.tsx.
+   ───────────────────────────────────────────────────────────────────────── */

@@ -1,0 +1,146 @@
+/* One-off motion, site-wide: how things arrive, open, close and change (the endless loops are in loops.css).
+   Entrances animate `translate` / `rotate` / `scale` (not `transform`), so each element keeps its own tilt, and use
+   fill-mode backwards, so press / hover nudges work again as soon as the entrance ends. All off under reduced motion. */
+:root,:host{--settle:cubic-bezier(0.32,0.72,0,1);--spring:cubic-bezier(0.34,1.56,0.64,1)}
+
+@keyframes fadeIn{from{opacity:0}}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes cascade{from{opacity:0;translate:0 8px}}
+
+/* backdrops behind popups */
+.fade-in{animation:fadeIn 200ms ease-out both}
+.fade-out{animation:fadeOut 160ms ease-in both}
+
+/* an article's cover drops onto its wire (unless it flies in from its card, lib/cardFlight.js); the text rises after */
+.hero-drop{animation:heroDrop 800ms cubic-bezier(0.22,1,0.36,1) both}
+@keyframes heroDrop{0%{transform:translateY(-160px) rotate(-7deg);opacity:0}45%{opacity:1}62%{transform:translateY(6px) rotate(2deg)}82%{transform:translateY(-2px) rotate(-1deg)}100%{transform:translateY(0) rotate(0)}}
+.rise-in{animation:articleRise 450ms cubic-bezier(0.22,1,0.36,1) 150ms both}
+@keyframes articleRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* profile cards (and other hanging cards that open): drop onto the clip, bounce, settle; lift off to close */
+.card-drop{transform-origin:50% 0;animation:cardDrop 440ms var(--settle) backwards}
+@keyframes cardDrop{0%{opacity:0;translate:0 -28px;rotate:-4deg;scale:.96}55%{opacity:1;translate:0 5px;rotate:1deg;scale:1}80%{translate:0 -2px;rotate:-.4deg}100%{translate:0 0;rotate:0deg}}
+.card-lift{transform-origin:50% 0;animation:cardLift 170ms ease-in forwards}
+@keyframes cardLift{to{opacity:0;translate:0 -14px;rotate:2deg;scale:.97}}
+/* …their contents follow in a quick cascade */
+.card-drop > :not(.no-cascade){animation:cascade 320ms var(--settle) backwards}
+.card-drop > :nth-child(2){animation-delay:40ms}
+.card-drop > :nth-child(3){animation-delay:70ms}
+.card-drop > :nth-child(4){animation-delay:100ms}
+.card-drop > :nth-child(5){animation-delay:130ms}
+.card-drop > :nth-child(6){animation-delay:160ms}
+.card-drop > :nth-child(7){animation-delay:190ms}
+.card-drop > :nth-child(8){animation-delay:220ms}
+.card-drop > :nth-child(n+9){animation-delay:250ms}
+
+/* photo viewers: fade in, the photo drops into place, the controls rise after; fade out to close */
+.viewer-in{animation:fadeIn 220ms ease-out both}
+.viewer-in .viewer-stage{animation:stageDrop 460ms var(--settle) 40ms backwards}
+@keyframes stageDrop{0%{opacity:0;translate:0 -26px;scale:.96}60%{opacity:1;translate:0 4px;scale:1}100%{translate:0 0}}
+.viewer-in .viewer-bits{animation:cascade 360ms var(--settle) 180ms backwards}
+.viewer-in .viewer-bits + .viewer-bits{animation-delay:230ms}
+.viewer-out{animation:fadeOut 180ms ease-in both}
+.viewer-out .viewer-stage{animation:stageOut 180ms ease-in both}
+@keyframes stageOut{to{translate:0 14px;scale:.97}}
+
+/* phone menu: the cards drop onto the wire one by one as the sheet slides in */
+.menu-sheet.is-open .menu-card{animation:menuDrop 440ms var(--settle) backwards}
+.menu-sheet.is-open li:nth-child(1) .menu-card{animation-delay:110ms}
+.menu-sheet.is-open li:nth-child(2) .menu-card{animation-delay:160ms}
+.menu-sheet.is-open li:nth-child(3) .menu-card{animation-delay:210ms}
+.menu-sheet.is-open li:nth-child(4) .menu-card{animation-delay:260ms}
+.menu-sheet.is-open li:nth-child(5) .menu-card{animation-delay:310ms}
+.menu-sheet.is-open li:nth-child(6) .menu-card{animation-delay:360ms}
+@keyframes menuDrop{0%{opacity:0;translate:0 -22px}60%{opacity:1;translate:0 4px}100%{translate:0 0}}
+.menu-sheet.is-open .here-note{animation:fadeIn 300ms ease-out 560ms backwards}
+
+/* words game: the new word pops onto the cloud, options cascade in, the right one bounces, a wrong one shakes;
+   the verdict / score fade up, the "psst." hint fades in slower */
+.w-reveal{animation:wordsRise 260ms var(--settle) both}
+@keyframes wordsRise{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+.w-hint{animation:hintIn 900ms ease-out both}
+@keyframes hintIn{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+.word-pop{animation:wordPop 380ms var(--spring) backwards}
+@keyframes wordPop{from{opacity:0;scale:.8}}
+.w-in > *{animation:cascade 300ms var(--settle) backwards}
+.w-in > :nth-child(2){animation-delay:50ms}
+.w-in > :nth-child(3){animation-delay:100ms}
+.w-right{animation:rightPop 380ms var(--spring)}
+@keyframes rightPop{40%{scale:1.035}}
+.w-wrong{animation:wrongShake 380ms ease-in-out}
+@keyframes wrongShake{20%{translate:-6px 0}40%{translate:5px 0}60%{translate:-3px 0}80%{translate:2px 0}}
+
+/* buttons that switch state fade between their colours */
+.legend-chip{transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+
+/* a writer's articles (/articles?by=…): the filter bar slides in, the "by …" tapes slap on */
+.slide-in{animation:slideIn 360ms var(--settle) backwards}
+@keyframes slideIn{from{opacity:0;translate:-14px 0}}
+.tape-slap{animation:tapeSlap 380ms var(--spring) 220ms backwards}
+@keyframes tapeSlap{from{opacity:0;scale:1.5;rotate:14deg}}
+
+/* text blocks that arrive with a page (404, crash card) */
+.cascade-in > *{animation:cascade 360ms var(--settle) backwards}
+.cascade-in > :nth-child(2){animation-delay:60ms}
+.cascade-in > :nth-child(n+3){animation-delay:120ms}
+
+/* blocks rising into place as they first scroll into view (lib/reveal.js) */
+.reveal{opacity:0;translate:0 36px}
+.reveal.shown{opacity:1;translate:0 0;transition:opacity .55s ease,translate .8s cubic-bezier(.2,.9,.25,1)}
+.reveal .stagger > *{opacity:0;translate:0 14px}
+.reveal.shown .stagger > *{opacity:1;translate:0 0;transition:opacity .45s ease,translate .6s cubic-bezier(.2,.9,.25,1);transition-delay:calc(var(--i,0) * 90ms + 250ms)}
+
+/* the games card turning to its next game (shared/GameCard.jsx) */
+.game-in{animation:gameIn 460ms cubic-bezier(.2,.9,.25,1) both}
+@keyframes gameIn{from{opacity:0;translate:14px 0}}
+
+@media (prefers-reduced-motion: reduce){
+.game-in,.fade-in,.fade-out,.card-drop,.card-drop > *,.card-lift,.viewer-in,.viewer-in .viewer-stage,.viewer-in .viewer-bits,.viewer-out,.viewer-out .viewer-stage,
+.menu-sheet.is-open .menu-card,.menu-sheet.is-open .here-note,.word-pop,.w-in > *,.w-right,.w-wrong,.w-reveal,.w-hint,.slide-in,.tape-slap,.cascade-in > *,.hero-drop,.rise-in{animation:none !important}
+.legend-chip{transition:none}
+}
+
+/* Page to page (lib/animatedHistory.js sets html[data-tn-nav] to into / next / prev / back / page during the swap).
+   Inside AQ's website these ::view-transition rules can't work from the shadow root: src/styles/document.css
+   carries a copy (keep the two in step).
+   The header is its own layer, so it holds still while the pages move under it. */
+header.site-header{view-transition-name:site-header}
+::view-transition-group(site-header){animation-duration:320ms}
+::view-transition-old(root),::view-transition-new(root){animation-duration:420ms;animation-fill-mode:both}
+/* The swap itself is only a crossfade: each page brings its own motion (the article's cover drops in or flies out of
+   its card and the text rises; home's card flies back), so moving the whole page as well played everything twice. */
+html[data-tn-nav]::view-transition-old(root){animation:vtOut 220ms ease-out both}
+html[data-tn-nav]::view-transition-new(root){animation:vtIn 260ms ease-out both}
+@keyframes vtOut{to{opacity:0}}
+@keyframes vtIn{from{opacity:0}}
+/* the header isn't crossfaded; the new one simply takes over (and glides its logo over when the back link comes or
+   goes, web/WebHeader.jsx, phone/PhoneHeader.jsx), so the old logo never ghosts */
+::view-transition-old(site-header){animation:none;opacity:0}
+::view-transition-new(site-header){animation:none}
+/* Phone layout ↔ web layout, when the window is resized across 900px (lib/layoutMode.js sets html[data-tn-layout]
+   during the swap): the old layout fades back, the new one settles in. The header crossfades with the rest. */
+html[data-tn-layout] header.site-header,:host([data-tn-layout]) header.site-header{view-transition-name:none}
+html[data-tn-layout]::view-transition-old(root){animation:vtLayOut 240ms ease-in both}
+html[data-tn-layout]::view-transition-new(root){animation:vtLayIn 420ms cubic-bezier(.2,.9,.25,1) 60ms both}
+@keyframes vtLayOut{to{opacity:0;transform:scale(.98)}}
+@keyframes vtLayIn{from{opacity:0;transform:scale(1.02)}}
+@media (prefers-reduced-motion: reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none !important}}
+
+/* "back to home": no underline; it lifts a little when hovered */
+.lift-link{display:inline-flex;transition:transform 200ms var(--settle)}
+.lift-link:hover,.lift-link:focus-visible{transform:translateY(-4px)}
+@media (prefers-reduced-motion: reduce){.lift-link{transition:none}}
+/* /editions (pages/EditionsPage.jsx): a back issue's tile lifts; an article line underlines */
+.ed-tile{transition:translate 200ms var(--settle)}
+@media (hover:hover){.ed-tile:hover{translate:0 -5px}.ed-line:hover{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:3px;text-underline-offset:4px}}
+.ed-tile:focus-visible{translate:0 -5px}
+@media (prefers-reduced-motion: reduce){.ed-tile{transition:none}}
+
+/* member card badge: a small crest in the bottom-right corner; its line slides out beside it on hover / tap */
+.card-badge{position:absolute;right:14px;bottom:16px;z-index:2;display:flex;align-items:center;gap:6px;padding:4px;border:0;background:transparent;cursor:default;-webkit-tap-highlight-color:transparent}
+.card-badge img{display:block;width:24px;height:auto;transition:transform 220ms var(--spring)}
+.card-badge span{font-family:'Federant','Caveat',serif;font-size:19px;line-height:1;color:var(--ink);white-space:nowrap;opacity:0;transform:translateX(8px) rotate(-4deg);transition:opacity 200ms ease,transform 260ms var(--settle);pointer-events:none}
+.card-badge:hover span,.card-badge:focus span{opacity:1;transform:rotate(-4deg)}
+.card-badge:hover img,.card-badge:focus img{transform:scale(1.15) rotate(-6deg)}
+.card-badge:focus-visible{outline:2px dashed var(--purple);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.card-badge span,.card-badge img{transition:none}}

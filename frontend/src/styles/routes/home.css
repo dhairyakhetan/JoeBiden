@@ -1,0 +1,1094 @@
+/* Route-scoped: Home page (public/HomePage.tsx). Extracted from v6.css (Phase 1.1). */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   THE CONCENTRIC RADIUS SCALE (01-home-feed.md) - updated from the section
+   14/16/17 scale this comment used to describe (14/16/18/20/24/26/999,
+   several of them untokenised). That scale is retired on this page: every
+   radius here now resolves to one of exactly four values -
+
+     999  pills          = --r-pill
+      32  outer cards    = --r-outer   (rail cards, the compose card)
+      22  inner layer    = --r-inner   (rows/tiles/wells one padding step
+                                         inside a --r-outer card - browse
+                                         tiles, quick-link tiles, role rows,
+                                         notice-board hero/stubs, the compose
+                                         row, the ink stat tiles)
+      14  tight          = --r-tight   (nothing on THIS page currently needs
+                                         it, but it's the scale's third rung)
+
+   A radius that is not 999, 32, 22 or 14 on this page is a bug.
+   Borders are `var(--hair-2)` (a 1px hairline, not the old 2px `--bd`) on
+   rail cards; individual rows/tiles are borderless, carrying their hue as a
+   tint instead.
+
+   BREAKPOINTS ARE THE PROJECT'S THREE (section 16 / guardrails 2): phone to
+   600, tablet 601 to 1024, desktop 1025 and up. This file previously switched
+   at 1100, 900, 760 and 640, which is why the left rail appeared and
+   disappeared twice between a phone and a laptop.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* --r-row / --r-rail (16 / 24) DELETED per 01.1: both were "values with no
+   token" the file's own comment above used to admit to. --r-row's two
+   consumers (.rail-evrow, deleted below in 01.7's restructure, and
+   .rail-role) and --r-rail's one consumer (the .home-shell .rail-card
+   override, deleted in 01.2) now read var(--r-inner)/var(--r-outer) directly
+   - two names for one number is how the radius spread happened. */
+
+/* home-3col / home-side / side-link DELETED per 01.1: grepped `home-3col`
+   across src/** - no callers. A second, competing three-column definition
+   (280px minmax(0,620px) 320px, gap 24px, max-width 1280px) that had drifted
+   away from .home-shell below and existed only to confuse the next reader. */
+
+
+/* ━━━ HOME 3-COL LAYOUT ━━━ */
+.home-shell {
+  /* Same frame as .container (--frame-max + --page-px), so the rails line up
+     with the film strip, the footer card and every other page. It used to be
+     max-width:1320 with 20px padding, which put the home content edge 24px
+     outside everything else on the site — the feed and rails read as shifted. */
+  max-width: var(--frame-max);
+  margin: 0 auto;
+  padding: 24px var(--page-px) 64px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: flex-start;
+}
+.home-left, .home-right { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 86px; }
+.home-center { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.home-mobile-cats { display: none; flex-wrap: wrap; }
+
+/* The rails carry the brand too.
+   ──────────────────────────────────────────────────────────────────────────
+   These were once `background: var(--bg-2)` with no border and no shadow at
+   all, while the feed card in the middle column carried a hard ink offset -
+   the home grid is `260px | 1fr | 300px`, so 560 of 1280px (44% of the
+   frame) had no visible card surface on it, and the page read as a zine
+   column pasted into generic social-app chrome.
+
+   01.2 flattens this further still: no hard offset (the spec's short list of
+   surfaces allowed to keep one is quick-link tiles, the active browse tile,
+   Post, and the hi/wish buttons - a rail card is none of them), a hairline
+   border instead of 2px ink, and a soft `--lift-1` instead of a hard-offset
+   shadow. The card surface itself is what keeps the rails from disappearing
+   into the paper column; the offset was never load-bearing for that. */
+.rail-card {
+  background: var(--card);
+  border: var(--hair-2);
+  box-shadow: var(--lift-1);
+  border-radius: var(--r-outer);
+  padding: var(--pad-card);
+  display: flex; flex-direction: column; gap: 8px;
+}
+/* home-shell .rail-card DELETED per 01.2: its three declarations
+   (background: #fff, border-radius: var(--r-rail), box-shadow: none) had
+   become identical to the base rule above once --r-rail resolved to the same
+   32px --r-outer already in use - pure noise, and #fff was a raw hex where
+   var(--card) belongs. */
+.rail-h { display: flex; align-items: center; justify-content: space-between; }
+/* Every rail card now has a header, and they used to be four different
+   hand-rolled inline blocks (marginBottom 12 or 14 on .rail-h, one per card)
+   rather than the "three" 01.2 counted - a fourth, identical copy shipped on
+   the member-of-the-month card the same day this pass was written against a
+   different snapshot. Normalised here instead of restated per call site. */
+.rail-card > .rail-h { padding: 6px var(--pad-inner) 12px; margin: 0; }
+
+/* Section 17, tap targets: the rail header links ("edit →", "all") were 14px
+   tall. 44px of hit area, absorbed by a negative margin so the header row's
+   visual height does not move. */
+.rail-h-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -14px 0;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+}
+/* Only the button restates its colour; the two "all" links keep whatever
+   .linktab gives them, which is what they had before. */
+/* --welfare as `color` on the cream rail is 3.48:1 (DESIGN.md §2: an accent
+   hue is a FILL, never text on cream). --welfare-ink is the same hue darkened
+   until it passes: 5.38:1 on --bg. */
+button.rail-h-link { color: var(--welfare-ink); }
+a.rail-h-link { text-decoration: none; }
+
+/* Section 17: the profile row is the button, and it says so. */
+.rail-id-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .16s var(--ease-pop);
+}
+/* tapScale is always {scale: 0.96} on this project - lib/motion.ts sets it for
+   framer-motion and this is the CSS half of the same value. */
+.rail-id-row:active { transform: scale(0.96); }
+@media (prefers-reduced-motion: reduce) {
+  .rail-id-row { transition: none; }
+  .rail-id-row:active { transform: none; }
+}
+/* MISMATCH found and fixed, not named by 01.3: `.rail-id` zeroed the card's
+   own padding, invisibly, because the wrapper's inline `padding: 14` (deleted
+   per 01.3) always won over it. Removing that inline style would otherwise
+   have exposed a flush, unpadded ink card - not the spacious hero 01.3 draws.
+   Dropped so the base `.rail-card` padding (var(--pad-card)) applies here
+   like every other rail card. `overflow: hidden` stays: harmless, and a safe
+   clip for the hero tile's own bleeding circle. */
+.rail-id { overflow: hidden; }
+/* rail-id-cover / rail-id-body DELETED per 01.3: grepped - LeftRail renders
+   neither. Dead since before this pass. */
+.rail-id-name { font-family: var(--display); font-weight: 900; font-size: 19px; letter-spacing: -0.035em; line-height: 1; color: var(--paper); margin-top: 4px; }
+/* The hero column (likes) is wider than its two siblings - posts/teams are
+   counts of what the member did administratively, likes is the one number
+   that reflects other people responding to them, which is why it is the
+   subject (01.3). */
+.rail-id-stats {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: var(--pad-inner);
+  padding: 0;
+  border-top: none;
+  margin-top: 0;
+}
+.rail-id-stats > div {
+  display: block;
+  border-radius: var(--r-inner);
+  padding: 13px 12px;
+  background: rgba(244,239,224,0.09);
+}
+.rail-id-stats > div.is-hero {
+  background: var(--tomato);
+  position: relative;
+  overflow: hidden;
+}
+/* The one bleeding shape on this card: a circle, ink at 11%, cropped by the tile. */
+.rail-id-stats > div.is-hero::after {
+  content: "";
+  position: absolute;
+  right: -26px; bottom: -30px;
+  width: 96px; height: 96px;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.11);
+  pointer-events: none;
+}
+.rail-id-stats b {
+  display: block;
+  font-family: var(--display);
+  font-size: 24px; font-weight: 900; line-height: 1;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+  position: relative;
+}
+.rail-id-stats > div.is-hero b { font-size: 30px; color: var(--ink); }
+.rail-id-stats span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: rgba(244,239,224,0.55);
+  margin-top: 6px;
+  position: relative;
+}
+.rail-id-stats > div.is-hero span { color: rgba(10,10,10,0.66); }
+
+/* MISMATCH found and fixed, not named by 01.9: this whole block (.launchtile,
+   .launchgrid and a FIRST, dead `.rail-quicklink-grid` selector bundled onto
+   it) had no caller anywhere in src/** (grepped) - dead since before this
+   pass. Left in place it would have silently collided with the real
+   `.rail-quicklink-grid` 01.9 asks for below (same class name, conflicting
+   3-column definition, source order deciding the winner). Deleted outright
+   rather than reconciled. */
+
+/* ── Recently viewed / featured drives horizontal scrollers (1:1 Playground) ── */
+.recent {
+  display: flex; gap: 10px; overflow-x: auto; overflow-y: visible;
+  padding: 8px 8px 12px; margin: -8px -8px 0; scrollbar-width: none;
+  /* overscroll-behavior-x per README's scroller rule (the same one cited at
+     .home-new-strip below) - without it a horizontal swipe that runs out of
+     strip drags the whole page sideways on iOS. */
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+}
+.recent::-webkit-scrollbar { display: none; }
+/* 2026-09-10: this rail sits in the SAME column as the migrated .aqc feed
+   cards, so its 2px ink borders, 14px/9px radii and hard-offset hover were the
+   most directly visible Era-A/Era-B clash left on the signed-in home. Hairline
+   + the spine's tight rung + a soft lift, matching the cards beside it. The
+   hover keeps its translate; only the growing ink shadow goes. */
+.recentcard {
+  flex: 0 0 auto; width: 180px; display: flex; gap: 9px; align-items: center;
+  padding: 9px; background: var(--card); border: var(--hair-2); border-radius: var(--r-tight);
+  scroll-snap-align: start; text-decoration: none; color: var(--ink);
+  transition: transform .14s, box-shadow .14s;
+}
+.recentcard.lift:hover { transform: translate(-2px,-2px); box-shadow: var(--lift-2); }
+.recentthumb {
+  width: 40px; height: 40px; border-radius: var(--r-tight); flex: none; display: grid;
+  place-items: center; font-family: var(--mono); font-size: 15px; color: var(--ink);
+  border: var(--hair-2); overflow: hidden;
+}
+.recentthumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Trending hashtags (right rail, 1:1 Playground) ── */
+.trend { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 2px dashed var(--line); }
+.trend:last-child { border-bottom: none; }
+.trend-rank { font-family: var(--mono); font-size: 11px; color: var(--ink-3); width: 16px; }
+.trend-tag { flex: 1; font-family: var(--display); font-weight: 700; font-size: 13px; }
+.trend-c { font-family: var(--mono); font-size: 10px; color: var(--ink-3); background: var(--bg-2); padding: 2px 7px; border-radius: 999px; }
+
+/* ── Right-rail card headers, shared across every rail card (01.7) ── */
+.rail-card-title {
+  font-family: var(--display);
+  font-size: 14px; font-weight: 800; letter-spacing: -0.02em;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+/* Shared empty-state line - was three identical inline style objects
+   (notice board, open roles' sibling text, and the old evrow empty state). */
+.rail-empty { font-family: var(--mono); font-size: 11px; color: var(--ink-3); padding: 8px 0; }
+
+/* ── Notice board: a hero card with a peeking stack (01.7) ──
+   rail-evrow / rail-evrow-cap / rail-evrow-info / rail-evrow-title /
+   rail-evrow-meta DELETED: grepped, the notice board was their only caller. */
+.rail-notice-hero {
+  position: relative; display: block; overflow: hidden;
+  border-radius: var(--r-inner);
+  padding: 15px;
+  text-decoration: none;
+  background: var(--cc);
+}
+.rail-notice-hero::after {           /* the one bleeding shape */
+  content: ""; position: absolute; right: -32px; top: -36px;
+  width: 112px; height: 112px; border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.10); pointer-events: none;
+}
+.rail-notice-hero > * { position: relative; }
+.rail-notice-eyebrow {
+  font-family: var(--mono); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  /* .rail-notice-hero's ground is `var(--cc)` at FULL saturation. DESIGN.md
+     §2: text on a saturated accent fill is always full-opacity ink - an alpha
+     of ink on teal/grape/welfare lands under 4.5:1 at 9px. */
+  color: var(--ink);
+}
+.rail-notice-title {
+  font-family: var(--display); font-size: 18px; font-weight: 900;
+  letter-spacing: -0.03em; line-height: 1.1; margin-top: 9px;
+  color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.rail-notice-meta {
+  font-family: var(--mono); font-size: 10px; margin-top: 8px;
+  /* Same saturated ground as .rail-notice-eyebrow above - full ink. */
+  color: var(--ink);
+}
+/* The stack. Each stub is pulled up under the card above it and only its
+   bottom edge shows, so three pins read as a deck of three. */
+.rail-notice-stub {
+  display: block; height: 22px;
+  margin: -9px 9px 0;
+  border-radius: 0 0 var(--r-inner) var(--r-inner);
+  background: color-mix(in srgb, var(--cc) 22%, transparent);
+}
+.rail-notice-stub + .rail-notice-stub { height: 19px; margin: -9px 18px 0; }
+/* Dot indicator under the stack - decoration, not a control. One dot per
+   rendered pin (never more, since 3 is the pin-modal's own cap): the active
+   one is wide and ink (whichever pin the arrows/swipe brought to the front),
+   the rest are narrow and faint. Was `:first-child` when the hero could only
+   ever be pin 1; now the hero rotates, so the active dot is a class instead
+   of a fixed position. */
+.rail-notice-dots { display: flex; gap: 4px; margin-top: 10px; }
+.rail-notice-dots span { display: block; width: 6px; height: 4px; border-radius: var(--r-pill); background: rgba(10,10,10,0.2); transition: width 0.14s var(--ease-out), background 0.14s var(--ease-out); }
+.rail-notice-dots span.is-active { width: 20px; background: var(--ink); }
+
+/* Desktop arrow navigation (section 2: the deck was touch-swipe-only, which
+   left a mouse/trackpad visitor with no way to step past pin 1). Gated the
+   same way `.arch-hover` gates its own desktop-only affordance in
+   projects.css: `hover: hover` + `pointer: fine`, so a touchscreen never
+   renders a control that duplicates the swipe it already has. */
+.rail-notice-deck { position: relative; }
+.rail-notice-arrow {
+  display: none;
+  position: absolute; top: 32px; z-index: 3;
+  width: 26px; height: 26px;
+  align-items: center; justify-content: center;
+  border: none; border-radius: 999px; cursor: pointer;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: var(--ink);
+  font-size: 15px; line-height: 1;
+  box-shadow: 0 2px 8px rgba(10,10,10,0.16);
+  transition: background 0.14s, transform 0.14s;
+}
+.rail-notice-arrow:hover { background: #fff; }
+.rail-notice-arrow:active { transform: scale(0.92); }
+.rail-notice-arrow-prev { left: 8px; }
+.rail-notice-arrow-next { right: 8px; }
+@media (hover: hover) and (pointer: fine) {
+  .rail-notice-arrow { display: inline-flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-notice-arrow { transition: none; }
+}
+
+/* Open-roles row - a tinted pill-row; the first is a hero card (01.8). */
+.rail-role {
+  display: flex; align-items: center; gap: 11px;
+  min-height: 44px; padding: 13px 14px;
+  border-radius: var(--r-inner);          /* 22, was var(--r-row) = 16 */
+  border: none;                            /* was var(--bd) = 2px solid ink */
+  background: color-mix(in srgb, var(--rc, var(--accent)) 22%, transparent);
+  text-decoration: none;
+  transition: background 0.16s var(--ease-out);
+}
+.rail-role:hover  { background: color-mix(in srgb, var(--rc, var(--accent)) 30%, transparent); transform: none; }
+.rail-role:active { transform: scale(0.98); }
+.rail-role.is-hero {
+  display: block; position: relative; overflow: hidden;
+  padding: 14px 15px;
+  background: var(--rc);
+}
+.rail-role.is-hero::after {
+  content: ""; position: absolute; right: -30px; bottom: -34px;
+  width: 104px; height: 104px; border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.10); pointer-events: none;
+}
+.rail-role.is-hero .rail-role-title {
+  font-family: var(--display); font-size: 17px; font-weight: 900;
+  letter-spacing: -0.03em; line-height: 1.14;
+  white-space: normal;                     /* the hero may wrap to two lines */
+  position: relative;
+}
+.rail-role.is-hero .rail-role-meta { color: rgba(10,10,10,0.66); position: relative; }
+/* closing-soon sticker, hero only, only inside a 7-day window (01.8) */
+/* In the flow, above the title, never over it: it used to sit absolutely at the top right and collided with a long or
+   wrapped title on the narrow rail (seen in a 2026-10-20 visual pass). */
+.rail-role-sticker {
+  position: relative; display: inline-flex; margin: 0 0 9px;
+  transform: rotate(-2deg);
+  background: var(--tomato);
+}
+.rail-role { position: relative; }
+.rail-role-link { color: inherit; text-decoration: none; display: block; }
+.rail-role-link::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-inner); }
+.rail-role:focus-within { outline: 3px solid var(--grape); outline-offset: 2px; }
+.rail-role-link:focus-visible { outline: none; }
+.quick-apply.quick-apply-rail { margin: 0; min-height: 36px; padding: 0 13px; font-size: 11px; flex: none; align-self: center; }
+.rail-role.is-hero .quick-apply-rail { margin-top: 12px; position: relative; }
+.rail-role-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.rail-role-body { flex: 1; min-width: 0; }
+/* Eina, not NeutralFace (01.8): NeutralFace is caps-only, so a role title set
+   in it renders as shouting - AQNav.css already notes this same problem. */
+.rail-role-title { font-family: var(--eina); font-weight: 700; font-size: 14px; color: var(--ink); line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* --rc-ink, not --rc: the raw hue fails 4.5:1 as glyph colour on a light/
+   tinted ground (same accessibility note as the browse tiles' --cc-ink,
+   01.5/01.8) - set per category at the call site. Falls back to --ink-3 for
+   the one caller (member-of-the-month) that predates this pass and doesn't
+   set it. */
+.rail-role-meta { font-family: var(--mono); font-size: 10px; color: var(--rc-ink, var(--ink-3)); margin-top: 3px; text-transform: uppercase; letter-spacing: .03em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* rail-role-arrow (the plain "→" glyph) DELETED per 01.8, replaced by the
+   32px circle below. */
+.rail-role-go {
+  width: 32px; height: 32px; border-radius: var(--r-pill);
+  background: var(--card); display: grid; place-items: center; flex: none;
+}
+/* MISMATCH found and fixed, not named by 01.8: the member-of-the-month card
+   (added the same day, after this changelog file was written) reuses
+   `.rail-role` and rendered the now-deleted plain arrow glyph. Its call site
+   was moved onto the same `.rail-role-go` circle instead of leaving a stray
+   unstyled "→" text node once this rule disappeared. */
+.rail-role-go svg { transform: rotate(180deg); }
+.rail-role.is-hero .rail-role-go { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rail-role { transition: none; }
+}
+.livedot { width: 8px; height: 8px; border-radius: 50%; background: var(--welfare); box-shadow: 0 0 0 0 rgba(27,138,90,.5); animation: aqLiveDot 1.8s ease-in-out infinite; }
+@keyframes aqLiveDot { 0%,100% { box-shadow: 0 0 0 0 rgba(27,138,90,.5); } 50% { box-shadow: 0 0 0 5px rgba(27,138,90,0); } }
+@media (prefers-reduced-motion: reduce) { .livedot { animation: none; } }
+
+/* ── Category tile grid (01.5) ── */
+.rail-cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 66px;
+  gap: var(--pad-inner);
+}
+.rail-cat-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0;
+  padding: 11px 13px;
+  border: none;
+  border-radius: var(--r-inner);
+  background: color-mix(in srgb, var(--cc) 22%, transparent);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.18s var(--ease-out), transform 0.14s var(--ease-out);
+}
+.rail-cat-tile:hover  { background: color-mix(in srgb, var(--cc) 30%, transparent); transform: none; }
+.rail-cat-tile:active { transform: scale(0.96); }
+/* labs is the one hue that needs more alpha to read at all - #FFC700 at 22%
+   over cream is almost invisible. This is not a special case for taste, it is
+   luminance: lemon is the only accent lighter than the paper it sits on. */
+.rail-cat-tile.cat-labs { background: color-mix(in srgb, var(--c-labs) 30%, transparent); }
+.rail-cat-tile.cat-labs:hover { background: color-mix(in srgb, var(--c-labs) 38%, transparent); }
+.rail-cat-tile.is-hero {
+  background: var(--cc);              /* full saturation - one hero per card */
+  color: var(--ink);
+}
+.rail-cat-tile.is-hero::after {       /* the one bleeding shape */
+  content: "";
+  position: absolute;
+  left: -20px; top: -32px;
+  width: 88px; height: 88px;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.10);
+  pointer-events: none;
+}
+.rail-cat-tile.cat-all { --cc: var(--welfare); }
+/* The "All" tile spans both columns and reads as a bar - it is the reset,
+   not a peer of the five verticals. */
+.rail-cat-tile.cat-all {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+}
+.rail-cat-tile.cat-all .rail-cat-tile-icon { display: none; }
+.rail-cat-tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  color: var(--cc-ink, var(--cc));
+}
+.rail-cat-tile.is-hero .rail-cat-tile-icon { color: var(--ink); }
+/* This matters for accessibility, not looks: the raw hues fail 4.5:1 as glyph
+   colour on a light ground (tokens.css documents each measurement); the
+   *-ink partners are the same hue darkened until they pass. */
+.rail-cat-tile.cat-welfare    { --cc-ink: var(--welfare-ink); }
+.rail-cat-tile.cat-events     { --cc-ink: var(--sky-ink); }
+.rail-cat-tile.cat-labs       { --cc-ink: var(--lemon-ink); }
+.rail-cat-tile.cat-operations { --cc-ink: var(--ops); }      /* #12909C already clears AA */
+.rail-cat-tile.cat-content    { --cc-ink: var(--grape-ink); }
+.rail-cat-tile-icon svg { width: 19px; height: 19px; }
+.rail-cat-tile-label {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+/* rail-cat-tile-badge DELETED per 01.5: read as a notification badge on a
+   filter, and got clipped by overflow:hidden at the old scale(1.04). The
+   count now lives only in the "All" bar's right slot, below. */
+/* The count rides the "All" bar, which is a 22% tint normally but takes
+   `background: var(--cc)` at FULL saturation when it is the hero tile. An
+   alpha of ink covered neither ground safely (DESIGN.md §2: never a raw alpha
+   of ink on cream, always full ink on a saturated fill), so each ground gets
+   the colour that is measured for it: --ink-3 is the 4.6:1 muted floor on the
+   tint, full ink on the hue. */
+.rail-cat-count { font-size: 11.5px; font-weight: 800; color: var(--ink-3); }
+.rail-cat-tile.is-hero .rail-cat-count { color: var(--ink); }
+
+/* ── App launcher grid ── */
+.rail-launcher-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+.rail-launcher-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 8px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--tile-bg, var(--bg-2));
+  border: 1.5px solid transparent;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.rail-launcher-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--tile-color, var(--welfare))33;
+  border-color: var(--tile-color, var(--welfare))55;
+}
+.rail-launcher-tile:active { transform: scale(0.96); }
+.rail-launcher-icon {
+  display: inline-flex;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--tile-color, var(--welfare));
+  transition: transform 0.18s;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+.rail-launcher-icon svg { width: 22px !important; height: 22px !important; }
+.rail-launcher-tile:hover .rail-launcher-icon { transform: scale(1.18) rotate(-5deg); }
+.rail-launcher-label {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  line-height: 1;
+}
+.rail-launcher-director .rail-launcher-icon { font-style: normal; font-size: 16px; }
+
+.rail-logout-btn {
+  margin-top: 12px;
+  width: 100%;
+  /* Section 17: 44px. It was a 33px row. */
+  min-height: 44px;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background 0.14s, color 0.14s;
+}
+.rail-logout-btn:hover { background: var(--bg-2); color: var(--ink); }
+
+.rail-trend { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+.rail-trend button {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 10px; border-radius: var(--r-inner);
+  background: transparent; border: none; cursor: pointer;
+  font-family: var(--sans); transition: background .15s;
+}
+.rail-trend button:hover { background: var(--bg-3); }
+.rail-trend-rank { font-size: 11px; color: var(--ink-3); width: 18px; }
+.rail-trend-tag { flex: 1; text-align: left; font-weight: 700; font-size: 14px; color: var(--ink); }
+.rail-trend-count { font-family: var(--mono); font-size: 11px; color: var(--ink-3); background: var(--bg-3); padding: 2px 7px; border-radius: 999px; }
+
+.rail-follow { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.rail-follow li { display: flex; align-items: center; gap: 8px; }
+.rail-follow-row { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; padding: 4px; border-radius: var(--r-inner); background: transparent; border: none; cursor: pointer; text-align: left; }
+.rail-follow-row:hover { background: var(--bg-3); }
+.rail-follow-meta { min-width: 0; flex: 1; }
+.rail-follow-name { font-weight: 700; font-size: 13px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.rail-events { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.rail-events li { display: flex; align-items: center; gap: 12px; padding: 6px 4px; }
+.rail-event-date { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: var(--r-tight); background: var(--welfare); color: #0A0A0A; flex-shrink: 0; }
+.rail-event-date b { font-family: var(--display); font-size: 18px; line-height: 1; font-weight: 800; }
+.rail-event-date span { font-size: 9px; letter-spacing: 0.08em; }
+.rail-event-meta { min-width: 0; flex: 1; }
+.rail-event-title { font-weight: 700; font-size: 13px; line-height: 1.2; }
+
+/* The rail colophon ("aquaterra · open access · v7 · made with care") is
+   deliberately lowercase editorial voice, not a label. --mono is NeutralFace
+   and caps-only, so it stays on --code to keep that voice. `.rail-foot.mono`
+   because the element carries both classes at equal specificity. */
+.rail-foot { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 4px; }
+.rail-foot.mono { font-family: var(--code); }
+
+/* center column header */
+.home-feed-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 4px 4px 0; }
+/* 52px, larger than the old desktop value, and larger still on the phone
+   below (01.11) - the moticket/Weezy reference: the page title is the
+   loudest thing on a phone screen with nothing competing with it in a single
+   column. */
+.home-feed-title { font-size: 52px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; margin: 0; }
+/* ── the compose row ──────────────────────────────────────────────────────
+   SECTION 16's one rule: card internals never change between breakpoints,
+   only the container does. This card used to break it at the 600/601
+   boundary with three phone-only overrides fighting `!important`. The phone
+   rules are now gone (01.12/01.18) and this ONE declaration is what renders
+   at every width: --pad-card (10px) padding, --r-outer (32px) radius, flat
+   (no hard offset - the spec's short list of surfaces that may keep one is
+   quick-link tiles, the active browse tile, Post, and the hi/wish buttons,
+   and this card is none of them). The former direct children (avatar, prompt,
+   buttons) now sit inside `.home-compose-row`, a cream --r-inner (22px)
+   inset, so the concentric rule holds one layer down. */
+.home-compose {
+  display: flex; align-items: center;
+  padding: var(--pad-card);
+  border-radius: var(--r-outer);
+  box-shadow: none;
+}
+/* The inner row: cream inset in a white card, so the concentric rule holds -
+   the card's direct children used to have no 22px layer at all (01.12). */
+.home-compose-row {
+  display: flex; align-items: center; gap: 11px;
+  background: var(--bg);
+  border-radius: var(--r-inner);
+  padding: 9px 9px 9px 12px;
+  width: 100%;
+}
+.home-compose-row:active { background: var(--bg-2); }
+/* 2026-09-11 closing audit: the two icon buttons in this row (add a photo, add
+   a link) measured 40x44 - correct height, four short on width. They are the
+   entry point to posting, so they take the app-wide floor. Width only; the
+   height was already right, and the row's own height does not change. */
+.home-compose-row .btn { min-width: 44px; }
+.home-compose-input {
+  /* Fixed height, `flex: 1 1 auto` with `min-width: 0` is what keeps nowrap
+     from pushing Post out of the row. It now sits ON the cream row rather
+     than being its own inset, so it reads as plain text, not a filled pill. */
+  flex: 1 1 auto; min-width: 0;
+  text-align: left; color: var(--ink-3); font-size: 14.5px; cursor: pointer;
+  min-height: 46px; padding: 0;
+  background: transparent; border: none; border-radius: 0;
+  font-family: var(--eina);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 40px, not 44: the row holds an avatar, a flexible prompt and three
+   controls, and 3x44 plus gaps overflows a 375px card - the same considered
+   trade the feed footer documents. Still clears WCAG 2.5.8 AA (24px). Do not
+   "fix" this to 44 without removing a control. */
+.home-compose-icon {
+  width: 40px; height: 40px; min-width: 40px; padding: 0;
+  border-radius: var(--r-pill);
+  background: var(--card);
+  border: none; box-shadow: none;
+  display: grid; place-items: center;
+}
+/* The stream. Rule 1's gutter: paper between every card, and the single reason
+   poster works as a feed rather than only as a hero. Was a flat 12px. */
+.home-feed-list { display: flex; flex-direction: column; gap: var(--poster-gutter); }
+
+/* ━━━ RESPONSIVE · the project's three tiers ━━━
+   D7, the three-pane app shell, IS this page. Only the CONTAINER changes
+   across the tiers: no card, tile or row in this file changes its padding,
+   radius or type size at a boundary, which is section 16's one rule for all
+   seven compositions. Desktop 1025+ keeps three panes, tablet 601 to 1024
+   drops the right rail, phone 600 and below drops both.
+
+   THREE THINGS BELOW ARE NOT CARD INTERNALS AND ARE ALLOWED TO MOVE, so that
+   the claim above stays literally true rather than nearly true:
+     · `.home-feed-title` 44 -> 36. The page's h2, not a card.
+     · `.home-feed-list` gap 12 -> 14 and the gutter paddings. Container.
+     · `.home-center .aqg-grid` row 72 -> 84 at 1025, at the very bottom of
+       this file. That one IS a tile height, and it is the exception section
+       16's own D4 row writes down: "the row unit changes with the breakpoint,
+       the span numbers do not." Nothing inside a tile changes with it. */
+@media (max-width: 1024px) {
+  .home-shell { grid-template-columns: 250px minmax(0, 1fr); padding: 20px var(--page-px) 56px; }
+  .home-right { display: none; }
+}
+/* ━━━ ONE 600px block, not five (01.18) ━━━
+   There used to be four separate `@media (max-width: 600px)` blocks here
+   (plus a fifth for `.home-feed-actions`) written at different times,
+   several repeating the same selector with different values and fighting
+   each other with `!important` (UX-GAPS bug #13). Merged into one, keeping
+   every declaration that actually won that fight, and dropping the
+   `!important`s that only existed to beat a sibling block in THIS file.
+
+   `.home-feed-list`'s `gap`/`padding` no longer need `!important`: the cross-
+   file fight with `styles/routes/feed.css` (a `.feed-card`/list-shell
+   stylesheet this pass does not own) is reconciled onto this same 600px
+   breakpoint with the same `var(--poster-gutter)` value, so it no longer
+   matters which file wins the cascade. */
+@media (max-width: 600px) {
+  .home-shell {
+    grid-template-columns: 1fr;
+    padding: 0 0 80px;
+    gap: 0;
+  }
+  .home-left, .home-right { display: none; }
+  .home-center { padding: 0; gap: var(--poster-gutter); }
+  /* .home-feed-head carries its own horizontal gutter once .home-shell's own
+     padding is stripped above. */
+  .home-feed-head { padding: 16px var(--page-px) 2px; }
+  /* Larger than the 44px desktop value on purpose (01.11) - the moticket/
+     Weezy reference: the page title is the loudest thing on a phone screen
+     with nothing competing with it in one column. clamp()'d rather than a
+     flat 56px so it cannot wrap to three lines on a 320px phone. */
+  .home-feed-title { font-size: clamp(44px, 14vw, 56px); }
+  /* .home-center is a flex column with its own gap between every direct
+     child (this, .home-feed-head, .home-mobile-cats all are direct
+     children), so a vertical margin here would stack ON TOP of that gap,
+     doubling the space versus every other gap in the same stack - horizontal
+     only. */
+  .home-compose { margin: 0 var(--page-px); }
+  .home-feed-list { padding: 0 var(--page-px); gap: var(--poster-gutter); }
+  /* Horizontal rails (recently-viewed, featured drives) need the page gutter so
+     their -8px bleed margin sits INSIDE the gutter instead of overflowing the
+     viewport (was a 9px horizontal-scroll bug at 375px). Not a .home-center
+     flex child (it's inside the feed list), so it needs its own margin too. */
+  .home-rail { padding-left: var(--page-px); padding-right: var(--page-px); margin-bottom: 14px; }
+  .home-mobile-cats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    padding-left: var(--page-px);
+    padding-right: var(--page-px);
+    scrollbar-width: none;
+  }
+  .home-mobile-cats::-webkit-scrollbar { display: none; }
+  /* Phones drop the latest/trending/openings sort row: the feed already
+     defaults to latest and the category chips below handle filtering, so the
+     row is redundant and only crowds the header on a small screen. */
+  .home-feed-actions { display: none; }
+}
+
+/* MISMATCH found and fixed, not named by 01.12: this used to be its own
+   `@media (max-width: 600px)` block hiding the compose row's photo/link
+   buttons on phones ("the compose modal still offers both"). 01.12 deletes
+   it outright - at 40px each (down from 44) the three compose-row controls
+   now fit a 375px card without hiding two of them, and hiding them left the
+   phone's only route to photo-attach as the modal. */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 17 · the two additions at the top of the centre column
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* The ink hi block. AdaptiveGrid ships its own scoped .aqg* stylesheet and is
+   not edited here; these rules only place it in the column. It is the ONE ink
+   block on the screen. */
+.home-center > .aqg-block { margin-bottom: 0; }
+
+/* D4, the dashboard bento: "the row unit changes with the breakpoint, the span
+   numbers do not." The grid keeps its four columns and every recipe's spans at
+   every size, so a span of 2 stays exactly twice a span of 1; only the row
+   grows in the wider centre pane, from 72 to the 84 section 17 asks for.
+   72px stays the phone and tablet unit and is not a value to re-derive: 58px
+   was measured before the tile label was legible and clipped 13 of 16 tiles. */
+@media (min-width: 1025px) {
+  .home-center .aqg-grid { grid-auto-rows: 84px; }
+}
+
+/* Section 17, meta type: one voice for every piece of meta on the page.
+   The string itself is frozen. */
+.home-feed-meta {
+  margin: 6px 0 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* End of the feed: Bhoot, then the frozen sticker and line. */
+.home-feed-end { text-align: center; padding: 30px 0 0; }
+.home-feed-end .aq-mc { display: inline-block; margin-bottom: 8px; }
+
+/* The "pick one" die-cut on the browse card. A type pill with the pack's white
+   keyline, not an image. Fixed height + 999px radius, so it carries nowrap.
+
+   It sits INLINE beside the word "browse", which is where AQ Home Cleanup
+   draws it. The first pass hung it off the card's top edge at `position:
+   absolute; top: -9px`, which needed `.rail-cats { overflow: visible }` to
+   escape the card and put a rotated pill across a 2px ink border. Inline needs
+   neither, and the pack's keyline reads against the card's own white rather
+   than against the paper column behind it. Hue is welfare, per the canvas. */
+.rail-cats-h { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+.rail-cats-sticker {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  transform: rotate(-2.5deg);
+  /* Lemon, not welfare (01.5) - welfare green means "the welfare vertical"
+     everywhere else in the product, and this die-cut is not about welfare.
+     Lemon is the sticker colour per 00.8. The keyline system (--keyline-bg /
+     box-shadow: var(--keyline)) is replaced by the plain ink border + hard
+     offset 00.8 standardises for every sticker. */
+  background: var(--lemon);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 0 var(--ink);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Section 01.9, quick links: originally six entries/six hues; trimmed to
+   four (Projects/Teams/Blog/Members - About and Open Roles dropped, see
+   HomePage.tsx's RAIL_QUICK_LINKS comment) by the redesign follow-up, which
+   is also why `is-wide`/`is-hero` are gone below - four plain tiles need no
+   full-width row, they lay out as a clean 2x2 on this grid's own 2-column
+   default.
+   REDESIGN (section 3, rail consolidation): this card used to be its own
+   `.rail-card` in the right rail, sized on a different scale (4 columns,
+   82px rows, 13px padding) than the "browse" category grid it sat nowhere
+   near - two visually distinct tile systems doing the same job. It now
+   shares a single card with `.rail-cat-grid` in the left rail, so it is
+   re-tokened onto THAT grid's exact numbers (2 columns, 66px rows, 11/13px
+   padding) rather than getting its own new scale - one grid, one rhythm,
+   just two different tile groups inside it. `.rail-quicklink` already used
+   the same recipe as `.rail-cat-tile` (color-mix tint, --r-inner) - only the
+   grid's own measurements needed to change. */
+.rail-quicklink-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 66px;
+  gap: var(--pad-inner);
+}
+.rail-quicklink {
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: 0;
+  min-height: 44px;
+  padding: 11px 13px;
+  border-radius: var(--r-inner);
+  border: none;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--qc) 22%, transparent);
+  text-decoration: none;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+.rail-quicklink svg { width: 20px; height: 20px; color: var(--qc-ink); }
+/* rail-quicklink-dot DELETED per 01.9: the tile's own tint now carries the
+   hue, so a dot of the same hue on that tint was redundant.
+   rail-quicklink.is-wide / .is-hero (+ its ::after bleed shape and its
+   accent-lint-ok pragma for the ink-ground lemon icon) DELETED with the
+   trim above: grepped, the old "About" hero tile was their only caller. */
+
+
+/* Section 17, tap targets, the rest of the page.
+   `.btn-sm` is `padding: 6px 12px; font-size: 12px` in v6.css, which measures
+   about 30px tall. Four of them render on this page - "view all openings →",
+   "load more →", the guest rail's "Join the work →" and the compose row's
+   camera/link/Post cluster - and every one of them is a real control. The
+   floor is set once, here, scoped to this page so no other surface moves.
+   AQ Home Cleanup draws these at 46 and 52; 44 is the guardrail minimum and
+   the padding above already carries them past it once the floor applies. */
+.home-shell .btn.btn-sm { min-height: 44px; }
+/* Excludes the two 40px compose icon buttons (01.12) - they are the
+   documented exception, not a floor to raise. */
+.home-compose .btn-sm:not(.home-compose-icon) { min-width: 44px; }
+
+/* Two inline links live inside a sentence in the centre column: "retry" in the
+   feed error and "Join AquaTerra →" in the sample-preview notice. Same
+   treatment the rail header links got - 44px of hit area, absorbed by a
+   negative margin, so neither notice grows a row taller. */
+.home-inline-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -14px 0;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ── the hi block's mascot ────────────────────────────────────────────────
+   Section 17's cast table: Nolen sits in the hi block, idle. Section 14 adds
+   that the pose becomes `sleep` on the break recipe; HomePage passes that.
+
+   AdaptiveGrid is imported, never modified, so the mascot goes through the one
+   free child slot the host exposes and is positioned from here. It is placed
+   BELOW the recipe pill rather than beside the greeting's first line, because
+   the pill already owns `top: 14px; right: 14px` and section 14 puts the
+   mascot at the top right of the text column. `.aqg-head` gets the matching
+   right padding so a long name wraps instead of running under it. */
+.home-center .aqg-head { padding-right: 70px; }
+.home-hi-mascot {
+  position: absolute;
+  top: 46px;
+  right: 15px;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  .home-center .aqg-head { padding-right: 64px; }
+  .home-hi-mascot { top: 42px; right: 12px; }
+}
+
+/* ─── FR11 · member of the month, the narrow-viewport instance ──────────────
+   The card lives in the right rail on desktop. `.home-right` is
+   `display: none` at <= 1024px (and again, folded into the single merged
+   600px block, at <= 600px), so on every tablet and phone that mount is
+   simply gone - and the phone is where
+   most members read this page. `<MemberOfMonthCard/>` is therefore mounted a
+   second time inside `.home-center`, wrapped in this class, which is the exact
+   mirror of the rail's own breakpoint: hidden wherever the rail is visible,
+   visible wherever the rail is not. Exactly one of the two ever paints, so
+   there is never a duplicate card on screen.
+
+   No new colours, fonts or radii here - the card itself is `.rail-card` plus
+   `.rail-role`, unchanged from the rail. The only thing this rule does is
+   decide which of the two copies is on screen, plus the horizontal gutter the
+   phone layout strips from `.home-center` (same `var(--page-px)` the sibling
+   `.home-feed-head` reinstates for itself at that width). */
+/* .home-mom-narrow REMOVED 2026-09-14 (owner request): the home-page MoM
+   card (both this narrow-viewport instance and its desktop rail sibling) is
+   gone - see public/HomePage.tsx's removal note. A MoM pick now auto-posts
+   to the feed instead. */
+
+/* ─── 22.4 · Member of the Month, surfaced ─ moved to components/MomLemonCard.css (2026-10-13):
+   the card renders on the profile and team pages, which never load this home-route file, so a
+   cold visit there showed it unstyled. */
+
+/* ─── 22.3 · new this week ────────────────────────────────────────────────
+   A horizontal strip of fixed 96px cards. `overflow-x: auto` - NEVER hidden
+   - plus box-sizing: border-box on every card, scroll-snap and
+   overscroll-behavior-x: contain, per README.md's "fixed width + padding =
+   overflow" rule (this exact strip is that rule's own worked example: at
+   content-box, a 96px card with 12px 10px padding actually occupies 116px,
+   so three would overflow a 336px row and the third card's "Say hi" - the
+   whole reason the section exists - would be clipped and unreachable at the
+   6-card cap). Verify with scrollWidth vs clientWidth, not by eye. */
+.newweek-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  padding: 2px;
+  margin: 0 -2px;
+  scrollbar-width: none;
+}
+.newweek-row::-webkit-scrollbar { display: none; }
+.newweek-card {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 96px;
+  padding: 12px 10px;
+  border-radius: var(--r-inner);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  scroll-snap-align: start;
+}
+.newweek-avatar { width: 44px; height: 44px; font-size: 15px; flex-shrink: 0; }
+.newweek-name {
+  width: 100%;
+  font-family: var(--eina);
+  font-weight: 700;
+  font-size: 11.5px;
+  line-height: 1.2;
+  color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.newweek-school {
+  width: 100%;
+  font-size: 9px;
+  color: var(--ink-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Extra specificity over .chip/.chip-active (v6.css) rather than fighting
+   source order - only padding/font-size/width are overridden, the 38px
+   min-height (already an accepted, documented exception elsewhere) is kept
+   as-is, not shrunk further. */
+.newweek-card .newweek-hi { width: 100%; justify-content: center; padding: 0 8px; font-size: 11px; text-decoration: none; }
+
+/* ─── The rail's ink CTA pill (01.8) ─────────────────────────────────────
+   Shared by "view all openings →" (right rail) and the feed's own
+   "load more →" sentinel-button, which is why it lives here rather than
+   inside the open-roles card comment block above. */
+.rail-card-cta {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%;
+  min-height: 44px; margin-top: var(--pad-inner);
+  border-radius: var(--r-pill);
+  background: var(--ink); color: var(--paper);
+  border: none; box-shadow: none;
+  font-family: var(--mono); font-size: 11px; font-weight: 800;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+.rail-card-cta:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   I-18 · HOME LOAD ANIMATION - "chips, posts and profiles burst into the air
+   and fall into place" (MASTER-PLAN.md), pure CSS, no library.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Reduced in scope on purpose, per the design doc's own later call: the
+   performance audit flags `/` as the app's heaviest eager-load route
+   (HomeRoute eagerly imports a 1,600+-line HomePage), so this ships as CSS
+   keyframes only - "achievable but simpler than the reference: fewer
+   objects, no physics."
+
+   Scoped to the RAIL chrome this file owns - the profile/join card, the
+   notice/roles/quick-link cards, the browse tiles and the mobile category
+   chips ("chips... and profiles", literally). It deliberately does NOT reach
+   into the feed cards ("posts"): those are `feed/cards/*` /
+   `styles/routes/feed.css` territory (15-post-cards.md), out of this file's
+   scope, and they already carry their own independent entrance
+   (`feedCardIn` in feed.css) - unmodified here.
+
+   Motion floor #2 (MASTER-PLAN.md): text paints first, motion second. Every
+   target below is decorative chrome, never the masthead/greeting/post text,
+   so the feed's first legible frame is never gated on this animation. */
+@keyframes aq-burst-in {
+  from { opacity: 0; transform: translateY(14px) rotate(var(--burst-rot, -3deg)) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+}
+.home-left > .rail-card,
+.home-right > .rail-card,
+.rail-cat-grid > .rail-cat-tile,
+.home-mobile-cats > .chip {
+  animation: aq-burst-in 0.46s var(--ease-pop) both;
+}
+.home-left > .rail-card:nth-of-type(1)  { --burst-rot: -2deg; animation-delay: 0ms; }
+.home-left > .rail-card:nth-of-type(2)  { --burst-rot: 2deg;  animation-delay: 90ms; }
+.home-right > .rail-card:nth-of-type(1) { --burst-rot: 2deg;  animation-delay: 60ms; }
+.home-right > .rail-card:nth-of-type(2) { --burst-rot: -2deg; animation-delay: 150ms; }
+.home-right > .rail-card:nth-of-type(3) { --burst-rot: 2deg;  animation-delay: 240ms; }
+.home-right > .rail-card:nth-of-type(4) { --burst-rot: -2deg; animation-delay: 330ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(1) { --burst-rot: -4deg; animation-delay: 40ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(2) { --burst-rot: 3deg;  animation-delay: 80ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(3) { --burst-rot: -3deg; animation-delay: 120ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(4) { --burst-rot: 4deg;  animation-delay: 160ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(5) { --burst-rot: -3deg; animation-delay: 200ms; }
+.rail-cat-grid > .rail-cat-tile:nth-child(6) { --burst-rot: 3deg;  animation-delay: 240ms; }
+.home-mobile-cats > .chip:nth-child(1) { --burst-rot: -3deg; animation-delay: 20ms; }
+.home-mobile-cats > .chip:nth-child(2) { --burst-rot: 3deg;  animation-delay: 55ms; }
+.home-mobile-cats > .chip:nth-child(3) { --burst-rot: -3deg; animation-delay: 90ms; }
+.home-mobile-cats > .chip:nth-child(4) { --burst-rot: 3deg;  animation-delay: 125ms; }
+.home-mobile-cats > .chip:nth-child(5) { --burst-rot: -3deg; animation-delay: 160ms; }
+.home-mobile-cats > .chip:nth-child(6) { --burst-rot: 3deg;  animation-delay: 195ms; }
+/* Motion floor #1: reduced motion KILLS this, it does not merely shorten it -
+   every target jumps straight to its settled state. */
+@media (prefers-reduced-motion: reduce) {
+  .home-left > .rail-card,
+  .home-right > .rail-card,
+  .rail-cat-grid > .rail-cat-tile,
+  .home-mobile-cats > .chip {
+    animation: none;
+  }
+}

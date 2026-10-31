@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <!-- ── Perf: warm the API origin early. Fonts (Instrument Serif, JetBrains
+         Mono, Caveat) are self-hosted @font-face declarations in v6.css now
+         (Phase 1.2) — no more Google Fonts stylesheet requests, so the
+         fonts.googleapis.com / fonts.gstatic.com preconnects are gone too.
+         DM Sans and DM Mono were never referenced anywhere in the codebase
+         (--sans/--display use the self-hosted NeutralFace) and have been
+         dropped entirely rather than trimmed. ── -->
+    <link rel="preconnect" href="https://hzowuwffjqtgszecngpe.supabase.co" />
+    <link rel="dns-prefetch" href="https://hzowuwffjqtgszecngpe.supabase.co" />
+    <!-- Perf: the above-the-fold display/body faces are otherwise discovered only
+         after v6.css finishes downloading and parsing, causing a late font swap.
+         Preload just the three faces used above the fold on first paint. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/NeutralFace-Regular.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/NeutralFace-Bold.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Eina01-Regular.woff2" crossorigin />
+    <!-- ── Structured Data ── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "additionalType": "https://schema.org/NGO",
+      "name": "NGO AquaTerra",
+      "alternateName": "AquaTerra",
+      "description": "Youth-led, change-driven NGO focused on climate action and community welfare. Student-run organization based in Kolkata creating environmental and social impact with over 1,300 active volunteers.",
+      "url": "https://www.ngoaquaterra.com",
+      "logo": "https://www.ngoaquaterra.com/logo.png",
+      "foundingDate": "2021",
+      "slogan": "We create change now - hands dirty, hearts full, youth united",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "Registration Number",
+        "value": "AAFTT2300ME20251"
+      },
+      "founder": [
+        { "@type": "Person", "name": "Krish Goenka", "jobTitle": "Founder" },
+        {
+          "@type": "Person",
+          "name": "Kanishk Agarwal",
+          "jobTitle": "Co-founder",
+          "description": "Interaction Designer, Content Production Cinematographer",
+          "sameAs": [
+            "https://www.instagram.com/kanxshkag",
+            "https://www.linkedin.com/in/kanishk-agarwal-a1a414218/"
+          ]
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kolkata",
+        "addressRegion": "West Bengal",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "ngo.aquaterra@gmail.com",
+        "url": "https://www.ngoaquaterra.com/contact"
+      },
+      "email": "ngo.aquaterra@gmail.com",
+      "sameAs": [
+        "https://www.instagram.com/ngo.aquaterra/",
+        "https://in.linkedin.com/company/aquaterrango"
+      ],
+      "knowsAbout": [
+        "Environmental Conservation", "Youth Empowerment", "Community Welfare",
+        "Climate Action", "Educational Workshops", "Tree Planting", "Stray Animal Care"
+      ],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Environmental Education Workshops", "description": "Free environmental education workshops for children and students" },
+          "price": "0", "priceCurrency": "INR"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Tree Planting Drives", "description": "Community tree planting initiatives" },
+          "price": "0", "priceCurrency": "INR"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Volunteer Opportunities", "description": "Join our network of 1,300+ active volunteers" },
+          "price": "0", "priceCurrency": "INR"
+        }
+      ]
+    }
+    </script>
+
+    <!-- WebSite + SearchAction — enables a Google sitelinks search box and
+         declares the canonical site entity. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AquaTerra",
+      "alternateName": "NGO AquaTerra",
+      "url": "https://www.ngoaquaterra.com",
+      "publisher": { "@type": "Organization", "name": "NGO AquaTerra", "url": "https://www.ngoaquaterra.com" }
+    }
+    </script>
+    <!-- No SearchAction here on purpose. It used to declare a sitelinks search
+         box pointing at /search?q= — a route that robots.txt Disallows for *
+         and for all 14 named AI bots, AND that App.tsx wraps in
+         <ProtectedRoute requireActive>, so a logged-out visitor is bounced.
+         Declaring a search entry point Google cannot crawl and the public
+         cannot use gets dropped at best and reads as an inconsistency signal
+         at worst. If a genuinely public search route is ever built, add this
+         back and un-Disallow the route in the same change. -->
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "NGO AquaTerra Impact Metrics",
+      "description": "Comprehensive impact statistics from NGO AquaTerra's welfare and environmental projects",
+      "creator": { "@type": "Organization", "name": "NGO AquaTerra" },
+      "measurementTechnique": "Project tracking and community engagement metrics",
+      "variableMeasured": [
+        { "@type": "PropertyValue", "name": "Welfare Drives Written Up",    "value": "540+",   "unitText": "projects" },
+        { "@type": "PropertyValue", "name": "Educational Workshops",        "value": "3,500+", "unitText": "children reached" },
+        { "@type": "PropertyValue", "name": "Trees Planted",                "value": "4,000+", "unitText": "trees and saplings" },
+        { "@type": "PropertyValue", "name": "Medical Checkups",             "value": "1,600+", "unitText": "checkups in Sunderbans" },
+        { "@type": "PropertyValue", "name": "Food Distribution",            "value": "15,000+","unitText": "bananas donated" }
+      ]
+    }
+    </script>
+
+    <!-- (Per-article structured data is injected at runtime on each blog page,
+         not templated here — static {{placeholders}} are invalid markup.) -->
+
+    <!-- Microsoft Clarity — ANONYMOUS VISITORS ONLY (decided 2026-09-18).
+
+         Clarity records full session replays. Most signed-in users here are
+         students and a large share are minors, so replays of them reading
+         their own profile, the feed or the HoD desk must not leave the site.
+         Anonymous funnel data is what actually informs the public pages, and
+         that is what this keeps.
+
+         supabase-js persists its session at localStorage["sb-<ref>-auth-token"]
+         with the default storage adapter, and that is readable here, before
+         React boots — so the tag is simply never inserted for a signed-in
+         visitor. Matched by pattern rather than by hardcoded project ref so it
+         survives a project change.
+
+         If localStorage is unreachable (private mode, blocked site data) this
+         skips Clarity as well. A session cannot persist there either, so the
+         only cost is a little anonymous data, and the failure mode stays
+         privacy-first rather than recording someone we could not identify.
+
+         Signing in WITHIN a session never reloads the page, so the tag would
+         already be running. AuthContext calls clarity('stop') on sign-in to
+         cover that. -->
+    <script type="text/javascript">
+      (function () {
+        var signedIn;
+        try {
+          signedIn = false;
+          for (var n = 0; n < localStorage.length; n++) {
+            var k = localStorage.key(n);
+            if (k && /^sb-.+-auth-token$/.test(k)) { signedIn = true; break; }
+          }
+        } catch (e) {
+          signedIn = true;
+        }
+        if (signedIn) return;
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v8xi8sv15p");
+      })();
+    </script>
+
+    <!-- Facebook Domain Verification -->
+    <meta name="facebook-domain-verification" content="1infir1qpt7wqwmgto7zejjrqfisho" />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Favicon. Single <link rel="icon"> tag on purpose: the route-based
+         favicon switcher below does `document.querySelector('link[rel="icon"]')`
+         (first match only), so a second <link rel="icon"> would silently stop
+         being updated on /paradox navigation. favicon-48.png is the one sized
+         PNG anything still points at (site.webmanifest's icons array); the
+         16/32 siblings this comment used to also name were unreferenced
+         anywhere in the app and were deleted, SEO audit 2026-09-24. -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Theme color — matches paper-bold background; JS in AQNav updates dynamically -->
+    <meta name="theme-color" id="aq-theme-color" content="#F4EFE0" />
+    <!-- This site is light-only: cream paper, ink type, and a palette that has
+         no dark counterpart. Without this, a phone in dark mode renders every
+         UA-drawn widget dark against that cream - the date picker's calendar,
+         checkboxes, select menus, scrollbars - and Chrome on Android applies
+         its auto-dark theme to the whole page, which inverts artwork that was
+         chosen for its colour. Declared as meta as well as CSS so it applies
+         before the stylesheet arrives and there is no flash. -->
+    <meta name="color-scheme" content="light" />
+
+    <!-- SEO — default (homepage). Per-route titles/descriptions are set at
+         runtime by the useMeta hook on each page. Canonical domain is
+         ngoaquaterra.com (matches robots.txt, sitemap.xml & structured data). -->
+    <title>AquaTerra | Student-Led Community & NGO in Kolkata</title>
+    <meta name="description" content="AquaTerra: a student-led community and NGO in Kolkata where 1,300+ teenagers take ownership of real welfare, climate & education projects, build leadership skills, and create social impact. Join our ecosystem today." />
+    <meta name="keywords" content="AquaTerra, NGO Kolkata, student NGO, student community Kolkata, ROOTS, ShikshAQ, youth welfare, climate action, tree planting, volunteer Kolkata" />
+    <!-- NO DEFAULT CANONICAL, deliberately (audit 2026-09-17).
+         There used to be a hardcoded canonical here pointing at the bare origin,
+         which existed mainly as a substitution anchor for prerender-meta.mjs. The
+         cost was that EVERY route the prerenderer does not cover shipped it
+         verbatim - /post/:uuid, /member/:uuid, /opportunities/:id,
+         /teams/:uuid/sub/:slug and all of /paradox/* - telling any crawler that
+         does not run JS that those pages ARE the homepage.
+         Now: prerendered routes get a self-referencing canonical injected at the
+         end of the head by prerender-meta.mjs (injectHead), useMeta sets one at
+         runtime for JS consumers, and anything else self-canonicalises, which is
+         the correct default.
+         Do not write the head closing tag literally in this comment: injectHead
+         searches for it, and an occurrence in prose once swallowed the tag. -->
+
+    <!-- Open Graph. og-meadow.jpg is a real 1200×630 brand asset in public/
+         (the AquaTerra meadow render). Per-route og:title/og:description are
+         overridden per page (build-time for static routes via prerender-meta,
+         runtime via useMeta); og:image is the shared default. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AquaTerra" />
+    <meta property="og:title" content="AquaTerra | started in Kolkata. got out of hand." />
+    <meta property="og:description" content="1,300+ students running real welfare, climate & education projects. Student-led since 2021. DARPAN certified. zero fees." />
+    <meta property="og:image" content="https://www.ngoaquaterra.com/og-meadow.jpg" />
+    <meta property="og:image:secure_url" content="https://www.ngoaquaterra.com/og-meadow.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AquaTerra — student-led NGO, Kolkata" />
+    <meta property="og:url" content="https://www.ngoaquaterra.com" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AquaTerra | started in Kolkata. got out of hand." />
+    <meta name="twitter:description" content="1,300+ students. real welfare, climate & education projects. student-run since 2021. zero fees." />
+    <meta name="twitter:image" content="https://www.ngoaquaterra.com/og-meadow.jpg" />
+    <meta name="twitter:image:alt" content="AquaTerra — student-led NGO, Kolkata" />
+
+    <!-- PWA / mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AquaTerra" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Dynamic favicon switcher for aq/paradox sections -->
+    <script>
+      (function() {
+        const updateFavicon = () => {
+          const path = window.location.pathname;
+          const faviconLink = document.querySelector('link[rel="icon"]');
+          const manifestLink = document.querySelector('link[rel="manifest"]');
+          const themeColor = document.querySelector('meta[name="theme-color"]');
+
+          if (path.startsWith('/paradox')) {
+            if (faviconLink) faviconLink.href = '/paradox/favicon.svg';
+            if (manifestLink) manifestLink.href = '/paradox/site.webmanifest';
+            if (themeColor) themeColor.content = '#FF4338';
+          } else {
+            if (faviconLink) faviconLink.href = '/favicon.png';
+            if (manifestLink) manifestLink.href = '/site.webmanifest';
+            if (themeColor) themeColor.content = '#F4EFE0';
+          }
+        };
+
+        // Update on initial load
+        updateFavicon();
+
+        // Update on route changes (for SPA navigation)
+        window.addEventListener('popstate', updateFavicon);
+
+        // Listen for history changes
+        const originalPushState = window.history.pushState;
+        window.history.pushState = function(...args) {
+          originalPushState.apply(window.history, args);
+          updateFavicon();
+        };
+      })();
+    </script>
+
+    <!-- (Instrument Serif, JetBrains Mono, and Caveat are self-hosted @font-face
+         declarations in v6.css now (Phase 1.2) — see public/fonts/. The
+         Paradox-only faces (Boldonse, Bricolage Grotesque, and a wider Caveat
+         weight range) still load on demand from paradox/ParadoxRoot, unchanged.) -->
+
+    <!-- AquaTerra always uses the paper/beige light theme -->
+    <script>
+      document.documentElement.setAttribute('data-theme', 'light');
+      try { localStorage.removeItem('aq-theme'); } catch(e) {}
+    </script>
+    <style>
+      /* Prevent flash of unstyled content */
+      html { background: #F4EFE0; }
+
+      /* Screen-reader only utility */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* ── First-paint skeleton ──────────────────────────────────────────────
+         Sits over scripts/prerender-meta.mjs's real crawlable <body> (the
+         semantic h1/p/nav SEO content that lives inside #root until React
+         mounts) so a person gets a branded loading moment instead of a bare
+         bullet list on a slow connection, while a non-JS crawler underneath
+         still reads the real text untouched. `position: fixed` anchors it to
+         the viewport directly rather than depending on #root becoming a
+         positioning context — #root stays untouched (no `position` rule
+         added to it), so this cannot change the containing block of any
+         `position: absolute` element the real app renders later. `createRoot
+         (root).render()` in main.tsx replaces every child of #root on mount
+         (prerender-meta.mjs's own file header: "not a hydration source"), so
+         this disappears the instant React takes over — nothing here needs to
+         remove it manually. Kept in this render-blocking inline <style> tag
+         (not the external bundle) so it paints before any network request
+         beyond this document, and duplicated per generated page rather than
+         shared, because index.html is the template prerender-meta.mjs clones. */
+      .pr-skel {
+        position: fixed; inset: 0; z-index: 2147483647;
+        display: flex; flex-direction: column;
+        background: #F4EFE0;
+        overflow: hidden;
+      }
+      .pr-skel-nav {
+        display: flex; align-items: center; gap: 18px;
+        height: 70px; padding: 0 24px;
+        border-bottom: 1px solid rgba(10,10,10,0.08);
+        flex-shrink: 0;
+      }
+      .pr-skel-dot { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; }
+      .pr-skel-pill { height: 15px; border-radius: 999px; }
+      .pr-skel-pill:last-child { margin-left: auto; width: 84px !important; height: 34px; border-radius: 999px; }
+      .pr-skel-main {
+        max-width: 720px; margin: 0 auto; width: 100%;
+        padding: min(22vh, 180px) 24px 0;
+        display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+        box-sizing: border-box;
+      }
+      .pr-skel-brand {
+        display: flex; align-items: center; gap: 9px;
+        margin-bottom: 6px;
+      }
+      .pr-skel-live {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #1B8A5A;
+        animation: pr-blink 1.8s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+      .pr-skel-word {
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-weight: 800; font-size: 13px; letter-spacing: 0.14em;
+        color: #0A0A0A; opacity: 0.55;
+      }
+      .pr-skel-bar { display: block; height: 22px; border-radius: 7px; }
+      .pr-skel-bar-xl { height: 42px; border-radius: 10px; }
+      .pr-skel-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+      .pr-skel-chip { display: block; width: 92px; height: 36px; border-radius: 999px; }
+
+      .pr-skel-dot, .pr-skel-pill, .pr-skel-bar, .pr-skel-chip {
+        background: linear-gradient(100deg,
+          rgba(10,10,10,0.07) 30%, rgba(10,10,10,0.14) 50%, rgba(10,10,10,0.07) 70%);
+        background-size: 200% 100%;
+        animation: pr-shimmer 1.5s ease-in-out infinite;
+      }
+      @keyframes pr-shimmer { 0% { background-position: 150% 0; } 100% { background-position: -50% 0; } }
+      @keyframes pr-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+      @media (max-width: 600px) {
+        .pr-skel-main { padding-top: 14vh; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pr-skel-dot, .pr-skel-pill, .pr-skel-bar, .pr-skel-chip {
+          animation: none; background: rgba(10,10,10,0.1);
+        }
+        .pr-skel-live { animation: none; opacity: 0.8; }
+      }
+    </style>
+  </head>
+  <body class="noise">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,653 @@
+/* Extracted from CreatePostModal.tsx's inline <style> block(s) (Phase 1.3).
+   Rebuilt for redesign section 03 (post detail and the create-post modal).
+   Used only by CreatePostModal.tsx. */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Shell ────────────────────────────────────────────────────────────────
+   Bottom sheet up to 1024px, centred 560px modal from 1025px.
+   The sheet is a flex column: fixed header, scrolling body, sticky bar.
+
+   `.aq-modal-overlay` (v6.css) was REMOVED from the overlay's className rather
+   than kept alongside this rule: it pins align-items:center / padding:20px at
+   the same specificity with a 560px breakpoint of its own, so which one won
+   would depend on stylesheet order. `.cp-overlay` replaces it outright. */
+.cp-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0;
+}
+
+.cp-sheet {
+  display: flex; flex-direction: column;
+  width: 100%; max-width: 100%;
+  max-height: 92dvh;
+  /* 03.2.1: SET background var(--card), padding var(--pad-card) both sides,
+     box-shadow the soft lift below, border none - DELETE the 2px ink border
+     and the hard ink offset shadow this used to carry. */
+  background: var(--card);
+  border: none;
+  border-radius: 32px 32px 0 0;
+  padding: var(--pad-card) var(--pad-card) 0;
+  box-shadow: 0 -8px 32px -12px rgba(10,10,10,0.16);
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.cp-grab {
+  width: 52px; height: 5px; flex-shrink: 0;
+  border-radius: var(--r-pill);
+  background: rgba(10, 10, 10, 0.22);
+  margin: 0 auto 12px;
+  white-space: nowrap;
+}
+
+@media (min-width: 1025px) {
+  /* 03.2.1: desktop backdrop rgba(10,10,10,.45), sheet becomes a centred
+     card at --r-outer on all four corners with the --lift-4 soft shadow. */
+  .cp-overlay { align-items: center; padding: 20px; background: rgba(10,10,10,0.45); }
+  .cp-sheet {
+    max-width: 560px;
+    max-height: 90dvh;
+    border: none;
+    border-radius: var(--r-outer);
+    box-shadow: var(--lift-4);
+    padding-top: var(--pad-card);
+  }
+  .cp-grab { display: none; }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+/* 03.2.1: a close button, then a flexible spacer, then the draft-state
+   readout. The title/sub-label takes the flexible middle - the surface
+   still needs to say what it is, and there is no mock guidance to drop it. */
+.cp-head {
+  flex-shrink: 0;
+  padding: 0 16px; display: flex; align-items: center; gap: 10px;
+}
+.cp-head-title {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--display); font-weight: 900; font-size: 20px;
+  letter-spacing: -0.035em; color: var(--ink); line-height: 1;
+}
+.cp-head-sub {
+  display: block; margin-top: 4px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+}
+.cp-close {
+  flex-shrink: 0;
+  /* 03.2.1: a 38px close button on var(--bg). */
+  width: 38px; height: 38px;
+  border: none; border-radius: var(--r-pill);
+  background: var(--bg); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: transform 0.13s var(--ease-out), background 0.13s;
+}
+.cp-close:hover { background: var(--bg-3); }
+.cp-close:active { transform: scale(0.96); }
+
+/* ─── Draft-state readout (03.2.2) - a state span, not a button. Renders
+   only when a draft genuinely exists in storage; new copy, cleared for
+   shipping by README's 2026-09-05 bulk copy approval. ─────────────────── */
+.composer-draftstate {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 38px; padding: 0 14px; flex-shrink: 0;
+  border-radius: var(--r-pill); background: var(--bg);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+  white-space: nowrap;
+}
+.composer-draftstate::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--welfare); flex-shrink: 0;
+}
+
+/* ─── Scrolling body ─────────────────────────────────────────────────────── */
+.cp-body {
+  flex: 1 1 auto; min-height: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 14px 16px 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.cp-field { display: block; }
+
+.cp-label {
+  display: block; margin-bottom: 6px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+}
+.cp-label-opt { font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+/* ─── Category / mode chip rows ──────────────────────────────────────────── */
+.cp-chiprow {
+  display: flex; gap: 6px;
+  overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.cp-chiprow::-webkit-scrollbar { display: none; }
+.cp-chiprow--wrap { flex-wrap: wrap; overflow-x: visible; }
+
+.cp-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 38px; padding: 0 13px; flex-shrink: 0;
+  border: var(--bd); border-radius: var(--r-pill);
+  background: transparent;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  color: var(--ink); cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.18s var(--ease-pop, cubic-bezier(.34,1.56,.64,1)), background 0.14s;
+}
+.cp-chip:hover { transform: translateY(-2px); }
+.cp-chip:active { transform: scale(0.96); }
+.cp-chip[aria-checked="true"], .cp-chip[aria-pressed="true"] { font-weight: 800; }
+.cp-chip--ink[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.cp-chip svg { flex-shrink: 0; display: block; }
+
+/* The chip row is a fixed-height 999px pill row, so it must be able to
+   shrink: the label beside it never takes the leftover space. */
+.cp-chip-line { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cp-chip-line > .mono { flex: 1 1 auto; min-width: 0; }
+
+/* ─── Category suggestion row (03.2.5) ────────────────────────────────────
+   mono "suggested" label -> the suggested chip pre-selected (full fill,
+   handled by the existing .cp-chip[aria-checked] rule above) -> up to 2
+   hairline alternates with a hue dot -> a "more" chip revealing the rest.
+   Mismatch, reported not guessed: 03.2.5 says "the full six" / "KEEP all
+   six category labels" - lib/categories.ts's live, DB-constrained list has
+   exactly FIVE (events/welfare/content/operations/labs). Built against the
+   real five; see feed/composer/suggestCategory.ts. */
+.cp-suggest-label {
+  flex: none; align-self: center;
+  font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3);
+}
+.cp-chip--alt { border-style: dashed; }
+.cp-chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cp-chip--more { color: var(--ink-3); border-style: dashed; }
+
+/* ─── Posting-as card ────────────────────────────────────────────────────── */
+.cp-as {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 9px 12px;
+  border: var(--hair-2); border-radius: var(--r-inner); background: var(--card);
+}
+.cp-as-name { font-family: var(--eina); font-weight: 800; font-size: 13px; color: var(--ink); line-height: 1.15; }
+.cp-as-sub { font-family: var(--mono); font-size: 9px; color: var(--ink-3); }
+.cp-as-action {
+  flex-shrink: 0; background: none; border: none; padding: 0 2px;
+  min-height: 44px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  color: var(--welfare-ink); cursor: pointer; white-space: nowrap;
+}
+
+/* ─── Inputs ─────────────────────────────────────────────────────────────── */
+.cp-input,
+.cp-sheet select.cp-input {
+  width: 100%; box-sizing: border-box;
+  height: 48px; padding: 0 15px;
+  border: var(--bd); border-radius: var(--r-pill);
+  background: var(--card);
+  font-family: var(--eina); font-size: 16px; font-weight: 600;
+  color: var(--ink); outline: none;
+  transition: border-color 0.15s;
+}
+.cp-input--sm { height: 44px; padding: 0 13px; font-size: 16px; font-weight: 500; }
+.cp-input:focus, .cp-textarea:focus { border-color: var(--welfare-ink); }
+.cp-fieldset:focus-within > .cp-input,
+.cp-fieldset:focus-within > .cp-textarea { border-color: var(--welfare-ink); }
+
+.cp-textarea {
+  width: 100%; box-sizing: border-box;
+  border: var(--hair-2); border-radius: var(--r-inner);
+  background: var(--card); padding: 13px;
+  min-height: 104px; resize: vertical;
+  font-family: var(--eina); font-size: 16px; line-height: 1.6;
+  color: var(--ink); outline: none;
+  transition: border-color 0.15s;
+}
+.cp-textarea--teaser { min-height: 64px; }
+
+/* 03.2.4: the MAIN body field looks like nothing at all - the thing being
+   written is the largest, plainest text on the sheet. 19px clears the 16px
+   iOS zoom floor and is the biggest type in the composer on purpose. Only
+   the primary post body uses this; the blog teaser/welfare-location fields
+   above keep their normal bordered .cp-textarea/.cp-input look - 03.2.4
+   names "the body field", not every textarea in the sheet. */
+.cp-body-textarea {
+  display: block; width: 100%; box-sizing: border-box;
+  border: none; background: transparent; padding: 4px 0;
+  font-family: var(--eina); font-weight: 400; font-size: 19px; line-height: 1.45;
+  color: var(--ink); resize: none; outline: none;
+  text-wrap: pretty; overflow: hidden;
+}
+.cp-body-textarea::placeholder { color: var(--ink-3); }
+
+.cp-count {
+  display: block; margin-top: 5px; text-align: right;
+  font-family: var(--code); font-size: 9px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.cp-count--over { color: var(--rust); }
+
+.cp-hint {
+  margin: 6px 0 0;
+  font-family: var(--mono); font-size: 9px; line-height: 1.55;
+  color: var(--welfare-ink);
+}
+.cp-note {
+  margin: 7px 0 0;
+  font-family: var(--mono); font-size: 9px; line-height: 1.6;
+  color: var(--ink-3);
+}
+.cp-note b { color: var(--ink); font-weight: 700; }
+
+/* ─── Grouped card (welfare details, drive details, the ask) ─────────────── */
+.cp-group {
+  border: var(--hair-2); border-radius: var(--r-inner); background: var(--card);
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.cp-group-head {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink);
+}
+.cp-group-head svg { flex-shrink: 0; display: block; }
+.cp-pair { display: flex; gap: 10px; flex-wrap: wrap; }
+.cp-pair > * { flex: 1 1 160px; min-width: 0; }
+.cp-pair > .cp-pair-fixed { flex: 0 0 132px; }
+
+/* ─── The `more` panel wells (03.2.6) ──────────────────────────────────────
+   Five wells share this base: background var(--bg), border-radius
+   var(--r-inner), 12px 14px padding, a mono uppercase label. Sticker (well
+   3) does not ship - `posts` carries no sticker column, confirmed live. */
+.cp-well { background: var(--bg); border-radius: var(--r-inner); padding: 12px 14px; }
+.cp-well + .cp-well { margin-top: 10px; }
+.cp-well-label {
+  display: block; margin-bottom: 8px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+}
+/* -not- an alpha of ink (00.15 / invariant 7): rgba(10,10,10,.35) is 2.30:1
+   and fails; --ink-3 is the real 4.6:1 muted floor on cream. */
+.cp-well-label .cp-label-opt { color: var(--ink-3); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+/* Well 1 - title, with the length bar (03.2.6.1). No DB length constraint
+   exists on posts.title (confirmed live - it is unconstrained text, not a
+   capped varchar), so 100 is a UI-only soft cap, not a discovered fact -
+   picked to match the mock and to give "a short, punchy headline" a real
+   ceiling. Flagged here, not silently presented as a schema fact. */
+.cp-well-title-input {
+  width: 100%; border: none; background: transparent; padding: 0; outline: none;
+  font-family: var(--eina); font-weight: 700; font-size: 17px; letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.cp-well-title-input::placeholder { color: var(--ink-3); }
+.cp-title-bar-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.cp-title-bar-track { flex: 1 1 auto; height: 4px; border-radius: var(--r-pill); background: rgba(10,10,10,0.1); overflow: hidden; }
+.cp-title-bar-fill { height: 100%; background: var(--welfare); border-radius: var(--r-pill); transition: background 0.15s, width 0.1s; }
+.cp-title-bar-fill.is-over { background: var(--danger); }
+.cp-title-bar-count { flex: none; font-family: var(--code); font-size: 9.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.cp-title-bar-count.is-over { color: var(--danger-ink); font-weight: 700; }
+
+/* Well 2 - tag members. Chips with a 24px avatar at the left end + name +
+   remove; the trailing control is a pill reading "@" + "search" (still a
+   real, directly-typable input - not a click-to-expand trigger, since
+   nothing in the live composer has that interaction today). */
+.cp-well-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.cp-well-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 8px 0 4px; max-width: 100%;
+  background: var(--card); border-radius: var(--r-pill);
+  font-family: var(--eina); font-size: 12px; font-weight: 700; color: var(--ink);
+  white-space: nowrap;
+}
+.cp-well-chip-avatar { width: 24px; height: 24px; font-size: 9px; flex-shrink: 0; }
+.cp-well-chip > span { overflow: hidden; text-overflow: ellipsis; }
+.cp-well-chip-rm {
+  position: relative; flex-shrink: 0;
+  width: 18px; height: 18px; border: none;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.1);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink);
+}
+.cp-well-chip-rm::after { content: ''; position: absolute; inset: -13px; }
+.cp-well-search {
+  display: flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 14px;
+  background: var(--card); border-radius: var(--r-pill);
+}
+.cp-well-search-at { font-family: var(--mono); font-weight: 700; color: var(--ink-3); flex-shrink: 0; }
+.cp-well-search input {
+  flex: 1 1 auto; min-width: 0; border: none; background: transparent; outline: none;
+  /* 16px, not 13: the iOS Safari focus-zoom floor every other field in this
+     file already carries (.cp-input, .cp-textarea). This one was missed, and
+     the composer is a full-screen sheet on a phone - zooming it pushes the
+     send dock off-screen, and iOS does not zoom back out on blur. */
+  font-family: var(--eina); font-size: 16px; color: var(--ink);
+}
+.cp-well-search input::placeholder { color: var(--ink-3); }
+
+/* Well 4 - post to (team). A pill with a hue dot and the team name. */
+.cp-well-team-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 14px;
+  background: var(--card); border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 13px; color: var(--ink);
+}
+.cp-well-team-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Well 5 - link. 52px --r-tight thumb in --tomato, title, mono host, remove. */
+.cp-well-link { display: flex; align-items: center; gap: 10px; }
+.cp-well-link-thumb {
+  width: 52px; height: 52px; flex-shrink: 0; border-radius: var(--r-tight);
+  background: var(--tomato); color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.cp-well-link-body { flex: 1 1 auto; min-width: 0; }
+.cp-well-link-title {
+  width: 100%; border: none; background: transparent; padding: 0; outline: none;
+  font-family: var(--eina); font-weight: 700; font-size: 13px; color: var(--ink);
+  margin-bottom: 2px;
+}
+.cp-well-link-title::placeholder { color: var(--ink-3); }
+.cp-well-link-host {
+  font-family: var(--code); font-size: 10px; color: var(--ink-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;
+}
+.cp-well-link-rm {
+  position: relative; flex-shrink: 0;
+  width: 32px; height: 32px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.08); color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.cp-well-link-rm::after { content: ''; position: absolute; inset: -6px; }
+
+/* ─── Stat rows ──────────────────────────────────────────────────────────── */
+.cp-stats { display: flex; flex-direction: column; gap: 7px; }
+.cp-stat-row { display: flex; gap: 7px; align-items: center; }
+.cp-stat-row > .cp-stat-num { flex: 0 0 88px; width: 88px; }
+.cp-stat-row > .cp-stat-label { flex: 1 1 auto; min-width: 0; }
+.cp-stat-num { font-family: var(--display); font-weight: 900; font-size: 15px; text-align: center; }
+
+.cp-iconbtn {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  border: var(--bd); border-radius: var(--r-pill);
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink); white-space: nowrap; position: relative;
+}
+/* 40px is the design's visible size; the pseudo-element takes the hit area
+   to 44x44 without letting the glyph dominate the row. */
+.cp-iconbtn::after { content: ''; position: absolute; inset: -2px; }
+.cp-iconbtn:active { transform: scale(0.96); }
+
+.cp-add {
+  align-self: flex-start;
+  height: 38px; padding: 0 13px;
+  border: var(--hair-3); border-radius: var(--r-pill);   /* was 2px dashed - 00.12, this is a button, not a dropzone */
+  background: transparent;
+  font-family: var(--eina); font-weight: 700; font-size: 12px;
+  color: var(--ink-3); cursor: pointer; white-space: nowrap;
+  position: relative;
+}
+.cp-add::after { content: ''; position: absolute; inset: -3px 0; }
+.cp-add:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ─── Attachments row (03.2.3) ────────────────────────────────────────────
+   A flex row of fixed 74x74 tiles, not the 3-column grid this used to be -
+   scrolls horizontally rather than wrapping/shrinking (README's "fixed
+   width + padding = overflow" rule: box-sizing:border-box + overflow-x:auto,
+   never hidden). The trailing add button is the same 74x74 box on --bg. */
+.cp-photos {
+  display: flex; gap: var(--pad-inner);
+  overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+  padding-bottom: 2px; /* room for the corner badge's shadow ring */
+}
+.cp-photos::-webkit-scrollbar { display: none; }
+.cp-photo {
+  position: relative; flex: none;
+  width: 74px; height: 74px; box-sizing: border-box;
+  border-radius: var(--r-tight); overflow: hidden; background: var(--paper-dark);
+}
+.cp-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cp-photo-rm {
+  position: absolute; top: 4px; right: 4px;
+  width: 22px; height: 22px;
+  border: none; border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.55); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--paper); white-space: nowrap;
+}
+/* inset -11 takes 22 + 22 = 44px of hit area. */
+.cp-photo-rm::after { content: ''; position: absolute; inset: -11px; }
+.cp-cover-badge {
+  position: absolute; bottom: 4px; left: 4px;
+  height: 17px; display: inline-flex; align-items: center; padding: 0 6px;
+  border-radius: var(--r-pill); background: rgba(10, 10, 10, 0.75);
+  font-family: var(--mono); font-size: 7px; font-weight: 700;
+  color: var(--paper); white-space: nowrap;
+}
+/* Swap-with-previous (03.2.3's named simpler alternative to full drag
+   reorder - image 1 is the card's hero/LCP element, so reordering matters,
+   but a pointer-events drag implementation is a lot of new surface for one
+   file). Sits bottom-right so it never collides with the top-right remove
+   or the bottom-left cover badge. Absent on tile 0 - nothing precedes it. */
+.cp-photo-swap {
+  position: absolute; bottom: 4px; right: 4px;
+  width: 22px; height: 22px; border: none; cursor: pointer;
+  border-radius: var(--r-pill); background: rgba(10,10,10,0.55); color: var(--paper);
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+}
+.cp-photo-swap::after { content: ''; position: absolute; inset: -11px; }
+/* Per-thumbnail status badge, 19px, top-right (03.2.3). The app uploads the
+   whole batch at submit time, not per-file as each is staged (feedService.
+   uploadImages resolves once for the batch, see CreatePostModal.tsx) - so
+   "uploading"/"failed" are BATCH states shown on every staged tile at once,
+   not real per-file progress. There is no reachable per-file "done" state
+   between a successful batch upload and the sheet auto-closing, so that
+   badge is not built - see the PR notes. */
+.cp-photo-badge {
+  position: absolute; top: -4px; right: -4px;
+  width: 19px; height: 19px; border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--card);
+  display: flex; align-items: center; justify-content: center;
+}
+/* audit-ok: dashed - 03.x specifies a dashed ring in --ink-3 for UPLOADING. */
+.cp-photo-badge--uploading { background: var(--card); border: 2px dashed var(--ink-3); }
+.cp-photo-badge--failed { background: var(--danger); color: var(--paper); border: none; cursor: pointer; font-family: var(--eina); font-weight: 800; font-size: 11px; }
+.cp-photo.is-failed { opacity: 0.5; }
+.cp-photo-busy {
+  position: absolute; inset: 0;
+  background: rgba(244, 239, 224, 0.35);
+}
+.cp-spin {
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(10, 10, 10, 0.25); border-top-color: var(--ink);
+  border-radius: var(--r-pill);
+  animation: spin 0.8s linear infinite;
+}
+.cp-photo-badge .cp-spin { width: 10px; height: 10px; border-width: 1.5px; }
+/* audit-ok: dashed - the photo DROPZONE tile. */
+.cp-photo-add {
+  flex: none; width: 74px; height: 74px; box-sizing: border-box;
+  border: 2px dashed rgba(10, 10, 10, 0.35); border-radius: var(--r-tight);
+  background: var(--bg); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.cp-photo-add:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ─── Tagged-people pills ────────────────────────────────────────────────── */
+.cp-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.cp-tagpill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 6px 0 10px;
+  border: var(--bd); border-radius: var(--r-pill); background: var(--card);
+  font-family: var(--eina); font-size: 12px; font-weight: 700; color: var(--ink);
+  white-space: nowrap; max-width: 100%;
+}
+.cp-tagpill > span { overflow: hidden; text-overflow: ellipsis; }
+.cp-tagpill-rm {
+  position: relative; flex-shrink: 0;
+  width: 20px; height: 20px; border: none;
+  border-radius: var(--r-pill); background: rgba(10, 10, 10, 0.1);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+}
+/* inset -12 takes 20 + 24 = 44px of hit area. */
+.cp-tagpill-rm::after { content: ''; position: absolute; inset: -12px; }
+
+/* ─── Document rows ──────────────────────────────────────────────────────── */
+.cp-doc {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 12px;
+  border: var(--hair-2); border-radius: var(--r-inner); background: var(--card);
+}
+.cp-doc-name { font-family: var(--eina); font-weight: 700; font-size: 12.5px; color: var(--ink); }
+.cp-doc-size { font-family: var(--mono); font-size: 8.5px; color: var(--ink-3); }
+.cp-doc-rm {
+  position: relative; flex-shrink: 0;
+  width: 32px; height: 32px; border: none;
+  border-radius: var(--r-pill); background: rgba(10, 10, 10, 0.08);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+}
+/* inset -6 takes 32 + 12 = 44px of hit area. */
+.cp-doc-rm::after { content: ''; position: absolute; inset: -6px; }
+
+/* ─── Publish chips + review pill ────────────────────────────────────────── */
+.cp-publish { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.cp-flat-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 38px; padding: 0 12px;
+  border: 2px solid rgba(10, 10, 10, 0.2); border-radius: var(--r-pill);
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-3);
+  white-space: nowrap;
+}
+.cp-flat-pill svg { flex-shrink: 0; display: block; }
+
+/* ─── Error card ─────────────────────────────────────────────────────────── */
+.cp-err {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 13px;
+  border: var(--hair-2); border-radius: var(--r-inner);
+  background: var(--rust); color: var(--paper);
+}
+.cp-err-text { flex: 1 1 auto; min-width: 0; font-family: var(--eina); font-weight: 700; font-size: 13px; }
+.cp-err svg { flex-shrink: 0; display: block; }
+.cp-err-x {
+  position: relative; flex-shrink: 0;
+  width: 32px; height: 32px; border: none; background: rgba(244, 239, 224, 0.16);
+  border-radius: var(--r-pill); color: var(--paper); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.cp-err-x::after { content: ''; position: absolute; inset: -6px; }
+
+/* ─── Review notice ──────────────────────────────────────────────────────── */
+.cp-review {
+  border-left: 2px solid var(--line-2); padding-left: 12px;
+  font-family: var(--eina); font-size: 12.5px; color: var(--ink-3); line-height: 1.5;
+}
+
+/* ─── Sticky bottom bar - the ink dock (03.1) ─────────────────────────────
+   The one place a row of controls sits on ink rather than paper, so the
+   sheet above it can be a blank page. CSS below is 03.1's block verbatim. */
+.cp-bar {
+  flex-shrink: 0;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+.aq-dock {
+  display: flex; align-items: center; gap: 4px;
+  background: var(--ink);
+  border-radius: var(--r-pill);
+  padding: var(--pad-inner);
+}
+.aq-dock-btn {
+  position: relative;
+  width: 42px; height: 42px; flex: none;
+  border: none; background: transparent;
+  border-radius: var(--r-pill);
+  display: grid; place-items: center; cursor: pointer;
+  color: rgba(244,239,224,0.72);          /* 7.9:1 on ink — passes AA for a glyph */
+}
+.aq-dock-btn:hover  { background: rgba(244,239,224,0.07); color: var(--paper); }
+.aq-dock-btn:active { transform: scale(0.94); }
+.aq-dock-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.aq-dock-btn.is-primary { background: rgba(244,239,224,0.10); color: var(--paper); }
+.aq-dock-btn-count {
+  position: absolute; top: -2px; right: -2px;
+  min-width: 15px; height: 15px; padding: 0 3px;
+  border-radius: var(--r-pill); background: var(--welfare); color: var(--ink);
+  font-family: var(--code); font-size: 8px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--ink);
+}
+.aq-dock-text {
+  min-height: 42px; padding: 0 13px; flex: none;
+  border: none; background: transparent; cursor: pointer;
+  border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 11.5px;
+  color: rgba(244,239,224,0.72);
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.aq-dock-text:hover { background: rgba(244,239,224,0.07); color: var(--paper); }
+.aq-dock-meta {
+  flex: 1; text-align: center; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--mono); font-size: 10px;
+  color: rgba(244,239,224,0.55);   /* .50 was below the paper ladder floor */
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+/* The shortcut it names needs a hardware keyboard, so it is desktop-only.
+   Hidden, not deleted: the Cmd/Ctrl+Enter handler still runs everywhere. */
+.cp-kbd { display: none; }
+@media (min-width: 1025px) {
+  .cp-kbd {
+    display: inline; flex-shrink: 0;
+    font-family: var(--code); font-size: 9px; letter-spacing: 0.04em;
+    color: rgba(244,239,224,0.55); white-space: nowrap;   /* was .50, below the floor */
+  }
+}
+/* The send button is the one hard-offset object on the dock. */
+.aq-dock-send {
+  width: 46px; height: 46px; flex: none; box-sizing: border-box;
+  border-radius: var(--r-pill);
+  background: var(--welfare); color: var(--ink);
+  border: var(--bd-ink);                  /* 2px solid ink */
+  box-shadow: var(--sh);                  /* 3px 3px 0 ink */
+  display: grid; place-items: center; cursor: pointer;
+  transition: transform 0.1s var(--ease-out), box-shadow 0.1s;
+}
+.aq-dock-send:hover  { transform: translate(-1px,-1px); box-shadow: var(--sh-lg); }
+.aq-dock-send:active { transform: scale(0.96); box-shadow: var(--sh-pressed); }
+.aq-dock-send:disabled { opacity: 0.45; transform: none; box-shadow: var(--sh); cursor: default; }
+.aq-dock-send--wide {
+  width: auto; min-height: 46px; padding: 0 20px;
+  font-family: var(--eina); font-weight: 800; font-size: 13.5px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  white-space: nowrap;
+}
+.aq-dock-send.is-error { background: var(--rust); color: var(--paper); }
+
+/* No narrow-width wrap fallback needed for the dock (unlike the old
+   independent round buttons it replaced): .aq-dock-meta is the row's only
+   flexible child (flex:1; min-width:0) and shrinks to an ellipsis before
+   anything fixed-width is forced to wrap, down to a 320px frame. */
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-chip, .cp-close, .aq-dock-btn, .aq-dock-text, .aq-dock-send, .cp-iconbtn { transition: none; }
+  .cp-chip:hover { transform: none; }
+  .aq-dock-send:hover { transform: none; }
+  .cp-spin { animation: none; }
+}

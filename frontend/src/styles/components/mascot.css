@@ -1,0 +1,319 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   The mascot system — redesign section 09.
+   Owned by `components/Mascot.tsx` (formerly `AQMascot.tsx`), which imports this file the way
+   `AQNav.tsx` imports `AQNav.css`. Nothing here is registered in v6.css or
+   tokens.css: both are shared, high-collision files.
+
+   Every part is a border-radius box. No image, no SVG, no icon font.
+   Colours are `var(--…)` token references passed in as `--mc-hue`; this file
+   introduces no hue of its own beyond #FFFFFF eye whites, which section 09
+   fixes as white "independent of the body hue" so a light-bodied character
+   stays readable.
+
+   Motion contract: every idle animation declared below is switched off in the
+   single `prefers-reduced-motion: reduce` block at the bottom of this file,
+   and each pose's base (unanimated) state IS its static end state. Do not add
+   a keyframe without adding it to that block.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.aq-mc {
+  --mc-hue: var(--welfare);
+  --mc-s: 64px;
+  --mc-blink: 0s;
+  position: relative;
+  display: inline-block;
+  width: var(--mc-s);
+  height: var(--mc-s);
+  flex-shrink: 0;
+  /* Decorative geometry must never eat a tap meant for the control behind or
+     beside it. Section 09 renders aria-hidden by default for the same reason. */
+  pointer-events: none;
+  overflow: visible;
+  line-height: 0;
+}
+
+.aq-mc--26  { --mc-s: 26px; }
+.aq-mc--44  { --mc-s: 44px; }
+.aq-mc--64  { --mc-s: 64px; }
+.aq-mc--110 { --mc-s: 110px; }
+
+/* The stage carries the pose animation. The figure carries the anatomy, so a
+   pose can be swapped without touching a single part. */
+.aq-mc-stage,
+.aq-mc-figure {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: visible;
+}
+
+/* ── body ─────────────────────────────────────────────────────────────── */
+
+.aq-mc-body {
+  position: absolute;
+  inset: 0;
+  background: var(--mc-hue);
+}
+.aq-mc-body--round { border-radius: 999px; }
+.aq-mc-body--tall  { border-radius: 999px 999px 44% 44%; }
+.aq-mc-body--squat { border-radius: 46% 46% 999px 999px; }
+.aq-mc-body--wide  { border-radius: 40% 40% 999px 999px; }
+.aq-mc-body--heavy { border-radius: 999px 999px 40% 40%; }
+
+/* ── limbs and antenna ────────────────────────────────────────────────── */
+
+.aq-mc-arm {
+  position: absolute;
+  top: 46%;
+  width: 20%;
+  height: 9%;
+  border-radius: 999px;
+  background: var(--mc-hue);
+}
+.aq-mc-arm--l { left: -9%; }
+.aq-mc-arm--r { right: -9%; }
+
+.aq-mc-foot {
+  position: absolute;
+  bottom: -7%;
+  width: 20%;
+  height: 14%;
+  border-radius: 0 0 999px 999px;
+  background: var(--mc-hue);
+}
+.aq-mc-foot--l { left: 22%; }
+.aq-mc-foot--r { right: 22%; }
+
+.aq-mc-ant-stalk {
+  position: absolute;
+  left: 50%;
+  top: -16%;
+  width: calc(var(--mc-s) * 0.062);
+  height: 18%;
+  background: var(--mc-hue);
+  transform: translateX(-50%);
+}
+.aq-mc-ant-ball {
+  position: absolute;
+  left: 50%;
+  top: -24%;
+  width: 16%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--mc-hue);
+  transform: translateX(-50%);
+}
+
+/* ── eyes ─────────────────────────────────────────────────────────────── */
+
+.aq-mc-eye {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aq-mc-pupil {
+  width: 52%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+/* two / worried */
+.aq-mc-eye--two-l     { left: 20%; top: 28%; width: 22%; }
+.aq-mc-eye--two-r     { left: 58%; top: 28%; width: 22%; }
+/* three */
+.aq-mc-eye--three-l   { left: 14%; top: 30%; width: 19%; }
+.aq-mc-eye--three-c   { left: 40%; top: 22%; width: 19%; }
+.aq-mc-eye--three-r   { left: 66%; top: 30%; width: 19%; }
+/* one */
+.aq-mc-eye--one       { left: 34%; top: 26%; width: 32%; }
+/* wide-set */
+.aq-mc-eye--wide-l    { left: 12%; top: 26%; width: 24%; }
+.aq-mc-eye--wide-r    { left: 64%; top: 26%; width: 24%; }
+/* worried: same boxes as two, pupils on the floor */
+.aq-mc-eye--worried-l { left: 20%; top: 30%; width: 22%; align-items: flex-end; }
+.aq-mc-eye--worried-r { left: 58%; top: 30%; width: 22%; align-items: flex-end; }
+.aq-mc-eye--worried-l .aq-mc-pupil,
+.aq-mc-eye--worried-r .aq-mc-pupil { margin-bottom: 12%; }
+
+/* closed, for `sleep`. A line, not a lidded eye: it reads at 26px. */
+.aq-mc-lid {
+  position: absolute;
+  top: 36%;
+  width: 22%;
+  height: calc(var(--mc-s) * 0.046);
+  border-radius: 999px;
+  background: var(--ink);
+}
+.aq-mc-lid--l { left: 20%; }
+.aq-mc-lid--r { left: 58%; }
+
+/* ── mouths ───────────────────────────────────────────────────────────── */
+
+.aq-mc-mouth--grin,
+.aq-mc-mouth--teeth {
+  position: absolute;
+  left: 34%;
+  top: 60%;
+  width: 32%;
+  height: 16%;
+  border-radius: 0 0 999px 999px;
+  background: var(--ink);
+  overflow: hidden;
+}
+.aq-mc-tooth {
+  position: absolute;
+  top: 0;
+  width: 22%;
+  height: 38%;
+  background: #FFFFFF;
+}
+.aq-mc-tooth--l { left: 20%; }
+.aq-mc-tooth--r { left: 50%; }
+
+.aq-mc-mouth--smile {
+  position: absolute;
+  left: 36%;
+  top: 62%;
+  width: 28%;
+  height: 14%;
+  border: calc(var(--mc-s) * 0.047) solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 999px 999px;
+}
+
+.aq-mc-mouth--o {
+  position: absolute;
+  left: 44%;
+  top: 62%;
+  width: 12%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.aq-mc-mouth--flat {
+  position: absolute;
+  left: 38%;
+  top: 66%;
+  width: 24%;
+  height: calc(var(--mc-s) * 0.062);
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+/* ── the load bar ─────────────────────────────────────────────────────── */
+/* `load` replaces the page spinner: fast bob plus a 4px indeterminate bar. */
+
+.aq-mc-bar {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--mc-s) * -0.22);
+  transform: translateX(-50%);
+  width: 96%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.15);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.aq-mc-bar i {
+  display: block;
+  width: 46%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--rust);
+  animation: mcBarSlide 1.4s ease-in-out infinite;
+}
+
+/* ── confetti, for `cheer` only ───────────────────────────────────────── */
+
+.aq-mc-confetti {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.aq-mc-confetti i {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: calc(var(--mc-s) * 0.09);
+  height: calc(var(--mc-s) * 0.09);
+  border-radius: 2px;
+  opacity: 0;
+  animation: mcConfetti 0.72s cubic-bezier(0.2, 0.7, 0.3, 1) 1 both;
+}
+
+/* ── poses ────────────────────────────────────────────────────────────── */
+
+.aq-mc-p-idle .aq-mc-stage    { animation: mcBob 2.6s ease-in-out 4; } /* ~10s of bobbing, then it rests: a mascot that never stops is chrome, not character */
+.aq-mc-p-load .aq-mc-stage    { animation: mcFastBob 0.9s ease-in-out infinite; }
+.aq-mc-p-sleep .aq-mc-stage   { animation: mcBreathe 4s ease-in-out infinite; }
+/* stumped ships as TWO runs then stops, never a loop. */
+.aq-mc-p-stumped .aq-mc-stage { animation: mcWobble 0.6s ease-in-out 2 both; }
+/* cheer ships as ONE run then stops, never a loop. */
+.aq-mc-p-cheer .aq-mc-stage   { animation: mcPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1 both; }
+.aq-mc-p-peek .aq-mc-stage    { animation: mcPeekIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1 both; }
+/* blink runs on the pupils only, never the body, and is staggered per
+   instance from the seed so a row of avatars never blinks in unison. */
+.aq-mc-p-blink .aq-mc-pupil {
+  animation: mcBlink 4.2s infinite;
+  animation-delay: var(--mc-blink);
+  transform-origin: 50% 50%;
+}
+/* follow's travel is applied by the component as an inline transform on the
+   stage, with its own .42s spring. Nothing to declare here beyond the ease. */
+.aq-mc-p-follow .aq-mc-stage {
+  transition: transform 0.42s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* peek enters from the nearest screen edge, so the direction is a modifier
+   rather than a second pose. */
+.aq-mc--peek-left.aq-mc-p-peek .aq-mc-stage  { animation-name: mcPeekInLeft; }
+
+@keyframes mcBob      { 0%, 100% { transform: translateY(0); }   50% { transform: translateY(-5px); } }
+@keyframes mcFastBob  { 0%, 100% { transform: translateY(0); }   50% { transform: translateY(-4px); } }
+@keyframes mcBreathe  { 0%, 100% { transform: scale(1); }        50% { transform: scale(1.04); } }
+@keyframes mcWobble   { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
+@keyframes mcPop      { 0% { transform: scale(0.6); opacity: 0; } 60% { transform: scale(1.12); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes mcPeekIn      { from { transform: translateX(46%); }  to { transform: translateX(0); } }
+@keyframes mcPeekInLeft  { from { transform: translateX(-46%); } to { transform: translateX(0); } }
+@keyframes mcBlink    { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+@keyframes mcBarSlide { 0% { transform: translateX(-105%); } 100% { transform: translateX(215%); } }
+@keyframes mcConfetti {
+  0%   { opacity: 1; transform: translate(-50%, 0) rotate(0); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--mc-cx)), var(--mc-cy)) rotate(220deg); }
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────── */
+/* All eight poses collapse to their static end state. The mascot still
+   renders. Every keyframe declared above appears here; a pose whose base
+   state is not its end state (peek, cheer) reaches that end state because
+   the animation's start value is the offset one, not the base value. */
+
+@media (prefers-reduced-motion: reduce) {
+  .aq-mc-p-idle .aq-mc-stage,
+  .aq-mc-p-load .aq-mc-stage,
+  .aq-mc-p-sleep .aq-mc-stage,
+  .aq-mc-p-stumped .aq-mc-stage,
+  .aq-mc-p-cheer .aq-mc-stage,
+  .aq-mc-p-peek .aq-mc-stage,
+  .aq-mc--peek-left.aq-mc-p-peek .aq-mc-stage,
+  .aq-mc-p-blink .aq-mc-pupil,
+  .aq-mc-bar i,
+  .aq-mc-confetti i {
+    animation: none !important;
+  }
+  .aq-mc-p-follow .aq-mc-stage {
+    transition: none !important;
+    transform: none !important;
+  }
+  /* the bar keeps a readable resting fill rather than a sliding one */
+  .aq-mc-bar i { width: 46%; }
+  /* confetti is pure motion; with motion off there is nothing left to show */
+  .aq-mc-confetti { display: none; }
+}

@@ -1,0 +1,88 @@
+/* Breadcrumb trail. Deliberately quiet — it's orientation, not a destination,
+   so it sits below the nav in the visual hierarchy and never competes with the
+   page's own h1. */
+
+.crumbs {
+  padding: 0 var(--page-px, 24px);
+  max-width: var(--frame-max, 1200px);
+  margin: 0 auto;
+}
+
+.crumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.crumbs a {
+  color: var(--ink-3);
+  text-decoration: none;
+  /* 11px text lays out ~15px tall; the trail is a row of real navigation
+     targets, so each one clears the WCAG 2.5.8 AA 24px floor. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 2px;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .crumbs a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--welfare);
+  }
+}
+
+/* The global `*:focus-visible` rule owns the focus ring's colour, width and
+   radius (DESIGN.md §2; v6.css carries the note). This used to restate all
+   three - a different hue, and a 3px radius the global rule explicitly warns
+   against re-adding. Only the OFFSET is overridden now, because the trail's
+   links sit tight against their separators and 2px reads better than the
+   global value; that is the same narrow override AQNav.css already uses. */
+.crumbs a:focus-visible {
+  outline-offset: 2px;
+}
+
+.crumbs-sep {
+  color: var(--ink-3);
+  opacity: 0.45;
+  padding: 0 7px;
+  user-select: none;
+}
+
+/* The current page. Same size, more weight, no affordance — it reads as
+   "you are here" rather than as a link that happens to be dead. */
+.crumbs-here {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 2px;
+  color: var(--ink);
+}
+
+/* On a phone the trail can outgrow the viewport. Let it scroll on its own
+   rather than wrapping into three ragged rows above the headline. */
+@media (max-width: 560px) {
+  .crumbs ol {
+    flex-wrap: nowrap;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .crumbs ol::-webkit-scrollbar { display: none; }
+  .crumbs li { flex: none; }
+}

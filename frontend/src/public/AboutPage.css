@@ -1,0 +1,791 @@
+/* Route-scoped: public/AboutPage.tsx only.
+   Rebuilt for redesign section 05, restructured by section 26. Every rule here
+   is consumed by AboutPage.tsx; nothing else imports this file.
+
+   Two dead rules were deleted in this pass:
+     @keyframes hero-float-a   - zero references in src/ (the hero floats it was
+                                 written for went into flow in section 05, and
+                                 out of the hero entirely in section 26)
+     .about-photo-grid         - the class it targets does not exist anywhere in
+                                 src/; the photo grid it belonged to was removed
+                                 long before this section. */
+
+/* ── SECTION RHYTHM ───────────────────────────────────────────────────────
+   One value for "the space a full-width band puts above and below itself".
+
+   MEASURED BEFORE THIS, at 570px: this page produced 27 vertical gaps of 40px
+   or more, using SEVENTEEN distinct values - 41, 42, 43, 44, 47, 50, 54, 56,
+   58, 61, 77, 81, 99, 108, 128, 136, 196. Ten of them sit between 41 and 61,
+   which no eye can tell apart as intent; they read as a number typed afresh
+   each time. 1,759px of the page's 9,934px, 18% of its height, was boundary.
+
+   The bands were the cause. Seven near-identical clamps expressed one idea:
+     clamp(28px, 6vw, 64px)   clamp(32px, 6vw, 64px)   clamp(28px, 7vw, 60px)
+     clamp(28px, 6vw, 56px)   clamp(30px, 5vw, 56px)   clamp(34px, 6vw, 64px)
+     clamp(24px, 4vw, 40px)
+   Each band then met the next with `.container`'s own 16px top and bottom
+   stacked on top, so a boundary was assembled from four or five independent
+   decisions and landed wherever they summed.
+
+   One token instead. The floor and ceiling are the median of what was already
+   there, so the page keeps its weight and loses the noise; --ab-band-tight is
+   for a band that closes into a related one rather than a new subject.
+
+   If a band wants a different figure, it needs a reason written next to it -
+   that is the whole point of these being named. */
+:root {
+  --ab-band: clamp(28px, 6vw, 60px);
+  --ab-band-tight: clamp(20px, 4vw, 40px);
+}
+
+
+/* The spinning EST. JUNE 2021 textPath badge. Desktop-only (see AboutPage.tsx's
+   !isMobile gate) and killed under reduced motion at the bottom of this file. */
+@keyframes badge-spin { to { transform: rotate(360deg); } }
+
+/* ─────────────────────────────────────────────────────────────
+   STICKER PILLS
+   `.sticker` in v6.css carries `box-shadow: none !important; border: none
+   !important`, so section 05's "2px ink + var(--shadow-cta)" pill cannot be
+   expressed by restyling it without an !important war in a file this section
+   does not own. `.ab-pill` is the About page's own pill vocabulary instead.
+   Fixed height + 999px radius, so `white-space: nowrap` is mandatory.
+   ───────────────────────────────────────────────────────────── */
+.ab-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 30px; padding: 0 12px;
+  border: var(--bd); border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 800; font-size: 11.5px;
+  letter-spacing: 0.01em; color: var(--ink);
+  background: var(--card);
+  box-shadow: var(--shadow-cta);
+  white-space: nowrap;
+}
+.ab-pill-welfare { background: var(--welfare); color: var(--ink); }
+.ab-pill-lemon   { background: var(--lemon);   color: var(--ink); }
+.ab-pill-sky     { background: var(--sky);     color: var(--ink); }
+/* Ink on #C4185C is 3.42:1 and fails AA; paper on it is 5.03:1. The branch is
+   not written here at all any more: `--on-<fill>` in styles/tokens.css is the
+   one place the answer lives, and `lib/onFill.ts` computes the same answer for
+   the TS side. This rule just names a fill and reads its partner. */
+.ab-pill-pink    { background: var(--pink-ink); color: var(--on-pink-ink); }
+.ab-pill-ink     { background: var(--ink); color: var(--on-ink); }
+/* Outline variant for the hero's third sticker, which sits on the ink block. */
+.ab-pill-ghost {
+  background: transparent; color: var(--paper);
+  border: 2px solid rgba(244,239,224,.35); box-shadow: none;
+}
+.ab-pill-r-3 { transform: rotate(-3deg); }
+.ab-pill-r-2 { transform: rotate(-2deg); }
+.ab-pill-r-1 { transform: rotate(-1deg); }
+.ab-pill-r2  { transform: rotate(2deg); }
+.ab-pill-r3  { transform: rotate(3deg); }
+.ab-pill-r6  { transform: rotate(6deg); }
+
+/* ─────────────────────────────────────────────────────────────
+   HERO. One ink block, intrinsic height, no scroll scrubbing.
+   ───────────────────────────────────────────────────────────── */
+.ab-hero {
+  position: relative; overflow: hidden;
+  background: var(--ink); color: var(--paper);
+  padding: var(--ab-band) 0;
+}
+.ab-hero-grid {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.ab-hero-inner {
+  position: relative; z-index: 5;
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+  width: 100%; max-width: var(--frame-max); margin: 0 auto;
+  padding: 0 var(--page-px);
+}
+/* changelog/09-about.md's hero copy (kicker / headline / lead / stickers),
+   replacing the three giant stacked words this section drew for the earlier
+   restyle (removed below - dead the moment .ab-hero-words stopped rendering
+   them). Left-aligned, not centred: a body paragraph reads badly centred,
+   and the design source sets this copy flush left. */
+.ab-kicker-onink {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--nav-fg-faint);
+}
+.ab-hero-h1 {
+  margin: 14px 0 0; font-family: var(--display); font-weight: 900;
+  font-size: clamp(40px, 12vw, 68px); line-height: 0.9; letter-spacing: -0.045em;
+  text-transform: uppercase; color: var(--paper); text-wrap: balance;
+}
+.ab-hero-h1-em {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  /* accent-lint-ok: .ab-hero (the parent) is background: var(--ink); measured in-browser the ground here is #0A0A0A, where --welfare is 4.55:1 and --welfare-ink only 3.20:1. */
+  text-transform: none; letter-spacing: -0.01em; color: var(--welfare);
+}
+.ab-hero-lead {
+  margin: 18px 0 0; max-width: 480px;
+  font-family: var(--eina); font-size: 15.5px; line-height: 1.6;
+  color: var(--nav-fg-strong); text-wrap: pretty;
+}
+.ab-hero-stickers {
+  display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-start;
+  margin-top: 20px;
+}
+.ab-hero-scroll {
+  margin-top: 22px; display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--paper) 60%, transparent);
+}
+.ab-hero-scroll-dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--welfare); display: inline-block;
+}
+
+/* Desktop-only decor: the spinning badge and the two hand-drawn arrows. */
+.ab-hero-badge { position: absolute; right: clamp(24px, 6%, 120px); bottom: 24px; z-index: 30; }
+/* Moved off an inline `animation:` so the reduced-motion rule at the bottom of
+   this file can actually stop it. An inline style is unreachable from CSS. */
+.ab-badge-spin { animation: badge-spin 12s linear infinite; }
+.ab-hero-arrow { position: absolute; width: 80px; height: 80px; z-index: 2; pointer-events: none; }
+.ab-hero-arrow-mint  { left: clamp(16px, 4%, 90px);  bottom: 40px; }
+.ab-hero-arrow-lemon { right: clamp(16px, 4%, 90px); top: 40px; }
+
+@media (min-width: 1025px) {
+  .ab-hero-h1 { font-size: clamp(68px, 8vw, 116px); }
+  .ab-hero-lead { font-size: 18px; max-width: 580px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MARQUEE BAND. 36px, 2px ink rules, tick 26s.
+   `.marquee-track`'s duration is `var(--marquee-speed) !important` in v6.css,
+   so 26s is set as the variable rather than as a competing declaration.
+   ───────────────────────────────────────────────────────────── */
+.ab-marquee { --marquee-speed: 26s; }
+.ab-marquee .marquee {
+  height: 36px; padding: 0; display: flex; align-items: center;
+  border-top: var(--bd); border-bottom: var(--bd);
+}
+.ab-marquee .marquee-track { font-size: 13px; font-weight: 900; }
+.ab-marquee .marquee-track > span { padding: 0 14px; }
+.ab-marquee .marquee-track .dot { width: 7px; height: 7px; }
+
+/* ─────────────────────────────────────────────────────────────
+   THE TOTALS BAND (section 26.2). `real work. / real impact.` and its eyebrow
+   moved here from the head of the story section and now sit on ink, after the
+   chapters instead of before them.
+
+   changelog/09-about.md REMOVED the four-tile stat grid that used to render
+   here (`.ab-stats`/`.ab-stat*`, deleted below with it): drives / kids /
+   saplings / bananas now live in the new manifesto's position 03, stated more
+   completely (it adds medical checkups and the resolved drives receipt) and
+   earlier in the page, so keeping a second copy here would have broken this
+   file's own "every claim keeps its exact wording and gets ONE home" rule
+   instead of following it.
+   ───────────────────────────────────────────────────────────── */
+.ab-story-h {
+  font-family: var(--display); font-weight: 900;
+  font-size: clamp(34px, 6vw, 72px); line-height: 0.9;
+  letter-spacing: -0.045em; margin: 0 0 10px; text-transform: uppercase;
+  color: var(--ink);
+}
+.ab-story-h-em {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  text-transform: none; font-size: 0.85em; color: var(--welfare-ink);
+}
+.ab-story-eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  margin: 0 0 28px;
+}
+.ab-story-lead { font-family: var(--serif); font-size: 25px; line-height: 1.2; margin: 14px 0 0; }
+.ab-story-p { font-size: 14px; line-height: 1.65; margin: 12px 0 0; color: var(--ink-2); }
+
+.ab-totals-wrap { padding: var(--ab-band) var(--page-px) var(--ab-band-tight); }
+.ab-totals {
+  border: var(--bd); border-radius: var(--r-md);
+  background: var(--ink); color: var(--paper);
+  padding: clamp(20px, 4vw, 32px) clamp(18px, 3vw, 26px);
+}
+/* The heading and eyebrow keep their strings; only their ground changed. */
+.ab-story-h-onink { color: var(--paper); }
+/* `--welfare-ink` is tuned for text on PAPER (3.20:1 on ink). The bright hue
+   is 4.55:1 on ink, so the ink variant of this heading takes it. */
+.ab-story-h-em-onink { color: var(--welfare); }
+.ab-story-eyebrow-onink { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+/* Registration, Paradox 3.0 and the zero-donations band, below the heading. */
+.ab-totals-cards { margin-top: 14px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+.ab-para-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ab-para-n {
+  font-family: var(--display); font-weight: 900; font-size: 28px;
+  line-height: 1; letter-spacing: -0.03em; color: var(--ink);
+}
+.ab-para-s { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--ink-2); white-space: nowrap; }
+
+/* Moved out of the hero, where it floated over the headline type, to sit beside
+   the registration it qualifies. Both strings unchanged. Mono on a welfare
+   fill, so BOTH labels are solid ink - `rgba(10,10,10,.6)` here is 2.79:1. */
+.ab-zero {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap;
+  padding: 14px 16px; border: var(--bd); border-radius: var(--r-card);
+  background: var(--welfare);
+}
+/* Eina01 800, not NeutralFace: `donations` is lowercase and NeutralFace has no
+   lowercase glyphs (it would render "DONATIONS" and change the copy). */
+.ab-zero-k {
+  font-family: var(--eina); font-weight: 800; font-size: 22px;
+  letter-spacing: -0.02em; color: var(--ink); white-space: nowrap;
+}
+.ab-zero-s { font-family: var(--code); font-size: 9.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+@media (min-width: 601px) {
+  .ab-totals-cards { grid-template-columns: 1fr 1fr; }
+  .ab-zero { grid-column: 1 / -1; }
+}
+@media (min-width: 1025px) {
+  .ab-totals-cards { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .ab-zero { grid-column: auto; }
+}
+
+@media (min-width: 1025px) {
+  .ab-story-lead { font-size: clamp(28px, 3.2vw, 38px); }
+  .ab-story-p { font-size: 16px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   WHAT AQUATERRA ACTUALLY IS - four entries, each with a 3px hue rule.
+   ───────────────────────────────────────────────────────────── */
+.ab-what {
+  border: var(--bd); border-radius: var(--r-md); background: var(--card);
+  padding: 20px 18px; box-shadow: none;
+}
+/* The story section's ecosystem paragraph, moved here verbatim: it enumerates
+   the very items this list names. */
+.ab-what-intro { margin: 10px 0 0; }
+.ab-what-list { margin-top: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+.ab-what-row { display: flex; gap: 10px; }
+.ab-what-rule { width: 3px; flex-shrink: 0; border-radius: 999px; background: var(--wc, var(--welfare)); }
+.ab-what-label { display: block; font-family: var(--eina); font-weight: 800; font-size: 13.5px; color: var(--ink); }
+.ab-what-detail { display: block; margin: 3px 0 0; font-family: var(--eina); font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+@media (min-width: 601px) { .ab-what-list { grid-template-columns: 1fr 1fr; gap: 16px 22px; } }
+
+/* ─────────────────────────────────────────────────────────────
+   VALUE CARDS - radius 26, unrotated, 2px ink.
+   ───────────────────────────────────────────────────────────── */
+/* The story section's "core logic" paragraph, moved here verbatim: it is the
+   thesis these four values state. */
+.ab-values-intro { margin: 0 0 18px; max-width: 720px; }
+.ab-values { display: grid; grid-template-columns: 1fr; gap: 9px; }
+.ab-value {
+  border: var(--bd); border-radius: var(--r-card); padding: 16px;
+  color: var(--ink); box-shadow: none; transform: none;
+}
+/* Mono index on a saturated fill: solid ink, no alpha. */
+.ab-value-n { font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: 0.07em; color: var(--ink); }
+.ab-value-t { font-family: var(--display); font-weight: 900; font-size: 24px; line-height: 1; letter-spacing: -0.035em; margin: 8px 0 0; }
+/* Solid ink, no alpha and no --ink-2 — same rule as .ab-value-n three lines
+   above, which this had drifted from. These four cards sit on SATURATED
+   ACCENT FILLS, and changelog/README.md §7 is explicit: "Text on an accent
+   fill is FULL-OPACITY var(--ink). Never an alpha of it." --ink-2 (#2A2A28)
+   on --welfare (#1B8A5A) measures 3.31:1 at 13px/400 — below the 4.5:1 floor.
+   The other three fills happened to survive it (lemon 9.19, pink 4.58, sky
+   5.67); welfare is the darkest of the four and did not. --ink restores all
+   four to the fills' documented ratios in DESIGN.md §2. */
+.ab-value-s { font-family: var(--eina); font-size: 13px; line-height: 1.55; margin: 8px 0 0; color: var(--ink); }
+@media (min-width: 601px)  { .ab-values { grid-template-columns: 1fr 1fr; gap: 14px; } }
+@media (min-width: 1025px) {
+  .ab-values { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ab-value { padding: 24px; }
+  .ab-value-t { font-size: clamp(22px, 2.2vw, 30px); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   THE SIX CHAPTERS (section 26.1). Replaces the timeline's 56px discs with
+   11px mono captions - the smallest type on the page - with one full-size band
+   per milestone, in array order. Each band carries ONLY facts its own
+   milestone string carries.
+   ───────────────────────────────────────────────────────────── */
+.ab-chapters-wrap {
+  padding: var(--ab-band) var(--page-px);
+  background: var(--bg-2);
+  border-top: 2px dashed var(--line); border-bottom: 2px dashed var(--line);
+}
+.ab-chapters-head {
+  align-items: flex-end; justify-content: space-between;
+  margin: 12px 0 22px; flex-wrap: wrap; gap: 12px;
+}
+.ab-chapters {
+  list-style: none; margin: 0; padding: 0;
+  border: var(--bd); border-radius: var(--r-md); overflow: hidden;
+  background: var(--paper);
+}
+.ab-chapter { padding: 20px 18px; border-bottom: var(--bd); }
+.ab-chapter:last-child { border-bottom: 0; }
+/* 2023 is the only chapter that admits a bad year, so it is the only band on
+   ink. */
+.ab-chapter-ink { background: var(--ink); color: var(--paper); padding: 26px 18px; }
+.ab-chapter-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.ab-chapter-y {
+  font-family: var(--display); font-weight: 900; font-size: 52px;
+  line-height: 0.9; letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.ab-chapter-k {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ink-3); white-space: nowrap;
+}
+.ab-chapter-ink .ab-chapter-k { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+.ab-chapter-t {
+  margin: 11px 0 0; font-family: var(--eina); font-weight: 800;
+  font-size: 20px; line-height: 1.25; letter-spacing: -0.015em;
+  color: var(--ink); text-wrap: pretty;
+}
+/* 2023's line is promoted per 26.1. It is set in Eina01 800, not the spec's
+   NeutralFace: the string is lowercase and NeutralFace is caps-only, so
+   NeutralFace would render it as "DIPPED. RECOVERED. ..." and change the copy. */
+.ab-chapter-t-big {
+  font-size: 27px; line-height: 1.12; letter-spacing: -0.02em;
+  color: var(--paper); margin-top: 13px;
+}
+.ab-chapter-extra { margin-top: 13px; }
+/* The story lead reads at 25px as a section opener; inside a chapter it sits
+   under a 20px milestone line, so it steps down rather than outranking it. */
+.ab-chapter .ab-story-lead { font-size: 19px; margin-top: 0; }
+
+/* 2021: the founders block, lifted verbatim from the standalone card. */
+.ab-founders {
+  margin-top: 13px; padding: 14px 15px;
+  border: var(--bd); border-radius: var(--r-sm); background: var(--card);
+}
+.ab-founders-q { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.3; margin: 8px 0 0; color: var(--ink-2); }
+.ab-founders-a { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 6px 0 0; }
+
+/* 2024: Crftd's description card, lifted out of "what AquaTerra actually is".
+   Same hue-rule vocabulary as the list it came from. */
+.ab-lift {
+  display: flex; gap: 10px; padding: 12px 14px;
+  border: var(--bd); border-radius: var(--r-sm); background: var(--card);
+}
+.ab-lift-rule { width: 3px; flex-shrink: 0; border-radius: 999px; background: var(--wc, var(--welfare)); }
+
+/* 2025: two venture NAMES only. Their description cards stay in "what
+   AquaTerra actually is". Fixed-height 999px pills, so nowrap is mandatory. */
+.ab-chapter-pills { display: flex; gap: 7px; flex-wrap: wrap; }
+.ab-name-pill {
+  display: inline-flex; align-items: center; height: 32px; padding: 0 13px;
+  border: var(--bd); border-radius: var(--r-pill);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+  color: var(--ink); white-space: nowrap;
+}
+
+/* 2026: the only place the live member count (displayCount(ORG_FACTS.membersTotal),
+   currently "1,300+") renders as a statistic - a pre-existing note fixed here
+   after the org-facts pass swapped this tile off the literal "1,200+" it
+   originally described. */
+.ab-chapter-tiles { display: flex; gap: 8px; }
+.ab-chapter-tile {
+  flex: 1 1 auto; min-width: 0;
+  padding: 12px 13px; border: var(--bd); border-radius: var(--r-sm);
+}
+.ab-chapter-tile-n {
+  display: block; font-family: var(--display); font-weight: 900;
+  font-size: 26px; line-height: 1; letter-spacing: -0.03em; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+/* Mono label on a saturated fill: solid ink, never an alpha. */
+.ab-chapter-tile-k {
+  display: block; margin-top: 4px; font-family: var(--mono); font-size: 8.5px;
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+}
+
+@media (min-width: 1025px) {
+  .ab-chapter { display: flex; align-items: flex-start; gap: 28px; padding: 28px 32px; }
+  .ab-chapter-ink { padding: 34px 32px; }
+  .ab-chapter-head { flex: 0 0 190px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .ab-chapter-y { font-size: 68px; }
+  .ab-chapter-body { flex: 1 1 auto; min-width: 0; }
+  .ab-chapter-t { margin-top: 0; font-size: 24px; }
+  .ab-chapter-t-big { font-size: 34px; }
+  .ab-chapter .ab-story-lead { font-size: 22px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DEPARTMENT CARDS - radius 24, no stagger, 44px avatar disc.
+   Source stays lib/departments.DEPARTMENTS; the disc hue is that entry's
+   LITERAL `color`, never a CAT_COLORS lookup (5 keys for 8 departments
+   collided three onto teal and two onto grape).
+   ───────────────────────────────────────────────────────────── */
+/* 3.2: was `grid-template-columns: 1fr 1fr`, which was correct while the
+   children were cards. They are full-width rows now, so a 2-column grid put
+   each row in a half-width cell that its own `width: 100%` then overflowed -
+   the page grew to 538px against a 390px viewport. One column, and the rows
+   space themselves with their own margin. */
+.ab-depts { display: block; }
+.ab-dept {
+  text-align: left; border: var(--bd); border-radius: var(--r-inner);
+  background: var(--card); padding: 14px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 9px;
+  min-height: 44px; transform: none; box-shadow: none;
+  transition: transform 0.14s var(--ease-pop), box-shadow 0.14s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ab-dept:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-cta); }
+}
+.ab-dept:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.ab-dept-av {
+  width: 44px; height: 44px; border: var(--bd); border-radius: 999px;
+  display: inline-grid; place-items: center;
+  font-family: var(--display); font-weight: 900; font-size: 14px;
+  color: var(--ink); white-space: nowrap;
+}
+/* Human Resources sits on --ink-2; ink initials on ink are unreadable. */
+.ab-dept-av-onink { color: var(--paper); }
+.ab-dept-n { font-family: var(--eina); font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--ink); }
+.ab-dept-s { font-family: var(--mono); font-size: 8.5px; font-weight: 700; line-height: 1.5; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); }
+@media (min-width: 601px)  { .ab-depts { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
+@media (min-width: 1025px) { .ab-depts { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+
+/* ─────────────────────────────────────────────────────────────
+   NOTE CARDS (registration and Paradox 3.0, both now in the totals band; the
+   standalone founders card is deleted and its contents live in chapter 2021),
+   then the CTA block.
+   ───────────────────────────────────────────────────────────── */
+.ab-note { border: var(--bd); border-radius: var(--r-card); padding: 18px 16px; box-shadow: none; }
+.ab-cta {
+  position: relative; overflow: hidden; text-align: center;
+  border: var(--bd); border-radius: 32px;
+  background: var(--ink); color: var(--paper);
+  padding: clamp(26px, 5vw, 56px) clamp(18px, 4vw, 40px);
+}
+.ab-cta-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+.ab-cta-inner { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────────────────────
+   Reduced motion. Section 05 removes the scroll scrubbing and the float
+   loops outright, so what is left to silence is the badge and the hover lift.
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ab-dept { transition: none; }
+  .ab-dept:hover { transform: none; }
+  .ab-badge-spin { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Tastemaker study, 2026-09-05 — the collage devices.
+   References: Sand Studio (stickers inside the sentence) and Radical Futures
+   (torn-paper seams, one-hue-per-row). Structure only: the palette and the
+   five type families are locked and nothing here introduces a colour.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── 3.1 the manifesto ──────────────────────────────────────────────────
+   The founders quote, promoted to manifesto scale with a sticker standing in
+   for the punctuation between its two halves. Eina01 800, not NeutralFace:
+   the string is lowercase and NeutralFace has no lowercase glyphs, so setting
+   it in the display face would silently render "WHY WHY NOT." */
+.ab-manifesto {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 10px 0 6px;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: clamp(34px, 8vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+/* The sticker is punctuation, so it must not add to the line box the way a
+   40px block would. It sits on the optical centre of the lowercase x-height. */
+.ab-manifesto .aq-sticker {
+  flex: 0 0 auto;
+  position: relative;
+  top: -0.04em;
+}
+@media (min-width: 1025px) {
+  .ab-manifesto { font-size: clamp(48px, 4.4vw, 68px); }
+}
+
+/* ── 3.2 departments as one-hue-per-row ─────────────────────────────────
+   WAS a grid of cards, each with a 44px initials disc in the department hue.
+   Now a full-width row whose LEFT EDGE is the hue, so eight saturated fills
+   read as one system instead of eight competing tiles. --dept is set inline
+   from lib/departments.ts's literal token, per department. */
+.ab-dept-row {
+  display: flex;
+  /* flex-direction is explicit: the base `.ab-dept` sets `column`, which is
+     what made these stack and centre when the class was a card. */
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 16px 14px 18px;
+  border: var(--bd);
+  border-left: 10px solid var(--dept);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  cursor: pointer;
+  transition: transform 0.14s var(--ease-out), background 0.14s;
+}
+.ab-dept-row + .ab-dept-row { margin-top: 8px; }
+@media (hover: hover) and (pointer: fine) {
+  .ab-dept-row:hover { transform: translateX(3px); background: var(--bg-2); }
+}
+.ab-dept-row:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.ab-dept-row .ab-dept-n {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--eina);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--ink);
+}
+.ab-dept-row .ab-dept-s {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* Solid, never an alpha: a mono label this small has to clear AA on paper. */
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.ab-dept-row .ab-dept-go { flex: 0 0 auto; color: var(--ink-3); font-weight: 800; }
+.ab-dept-row:hover .ab-dept-go { color: var(--ink); }
+/* Human Resources' token is --ink-2. As a 10px left edge that is fine, so the
+   old ink-on-ink initials problem the `is-onink` class existed for is gone;
+   the class is kept as a hook in case a future department needs it. */
+@media (prefers-reduced-motion: reduce) {
+  .ab-dept-row { transition: none; }
+  .ab-dept-row:hover { transform: none; }
+}
+
+/* ── 3.3 the torn seam ──────────────────────────────────────────────────
+   ONE seam, not the three the study proposed, and the reason is worth keeping:
+
+   A torn edge is only visible where the two sides are DIFFERENT COLOURS - it
+   works by letting the section above bleed down over the section below in an
+   uneven line. The study called for three seams (hero to story, chapters to
+   totals, totals to CTA) because Radical Futures separates full-bleed hue
+   BANDS, where every seam is a colour boundary.
+
+   About has exactly one such boundary. `.ab-hero` is a full-bleed ink section;
+   `.ab-totals` and `.ab-cta` are ink CARDS sitting on the paper page, each with
+   its own radius and border. Tearing between chapters and totals, or between
+   totals and CTA, would have drawn paper on paper: a real DOM element, a real
+   mask, and nothing visible on screen.
+
+   So: hero to story only. Adding the other two would have been two invisible
+   seams and a device that stops meaning "a new chapter starts here".
+
+   Drawn as an SVG data URI rather than clip-path, because the seam has to sit
+   ON TOP of the section below it in that section's own colour, and clip-path
+   would cut the element rather than draw an edge. `--torn` is the colour of
+   the section ABOVE the seam.
+
+   UPDATED by changelog/09-about.md: there are now TWO such boundaries, not
+   one. The manifesto section it adds (`.ab-positions-wrap`, below) is a
+   SECOND full-bleed block, inserted between the marquee and the six chapters.
+   That is still consistent with the reasoning above - the manifesto is a
+   full-bleed section like the hero, not an ink CARD like `.ab-totals`/
+   `.ab-cta` - it just means the "hero to story only" conclusion is now
+   "hero-adjacent bands only": marquee (--welfare) tears into the manifesto
+   (--ink), and the manifesto tears into the six chapters exactly as the hero
+   used to (`.ab-chapters-wrap` needed no change at all - ink is still
+   literally what precedes it, now via the manifesto instead of the hero three
+   sections up). The quote band 09-about.md also adds is deliberately NOT a
+   third full-bleed boundary - see its own comment in AboutPage.tsx for why it
+   is a rounded card instead, matching `.ab-totals`/`.ab-cta`. */
+.ab-torn {
+  position: relative;
+  --torn: var(--bg);
+}
+.ab-torn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 14px;
+  pointer-events: none;
+  background-color: var(--torn);
+  /* One irregular repeating tear. The mask is what makes it a tear rather than
+     a zigzag: the fill is the section colour and the mask removes the bottom
+     in an uneven line. */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='14' preserveAspectRatio='none'%3E%3Cpath d='M0 0h180v6.2l-9 1.9-11-3.1-8 4.4-13-2.2-10 3.6-12-1.4-9 3.9-11-2.6-8 1.8-12-3.3-10 4.1-13-1.7-9 2.9-11-3.4-8 2.2-9-2.6V0z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='14' preserveAspectRatio='none'%3E%3Cpath d='M0 0h180v6.2l-9 1.9-11-3.1-8 4.4-13-2.2-10 3.6-12-1.4-9 3.9-11-2.6-8 1.8-12-3.3-10 4.1-13-1.7-9 2.9-11-3.4-8 2.2-9-2.6V0z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-size: 180px 14px;
+  mask-size: 180px 14px;
+}
+/* The seam under the ink hero (and, since 09-about.md, under the manifesto
+   too) tears in ink. */
+.ab-torn-ink { --torn: var(--ink); }
+/* The seam under the marquee tears in --welfare (`color="mint"` on the
+   `<Marquee>` above resolves to that token - see v6Shared.tsx/v6.css's
+   `.marquee-mint`). Used on the manifesto's own top edge, where the section
+   immediately above is the marquee, not the ink hero three sections up. */
+.ab-torn-welfare { --torn: var(--welfare); }
+
+/* ── 3.4 the manifesto, on ink (changelog/09-about.md) ───────────────────
+   Full-bleed like `.ab-hero`, using the same `--page-px`/`--frame-max`
+   content-width convention so its heading and list line up with the hero's
+   left edge above it. Row background is the literal `rgba(244,239,224,.07)`
+   the design source uses, not `var(--nav-well)` - that token does not exist
+   (styles/tokens.css's own nav-tokens comment says the 02.2 nav-STRUCTURAL
+   tokens including `--nav-well` were deliberately NOT added), and "no new
+   colours outside tokens.css" rules out inventing it here. */
+.ab-positions-wrap {
+  position: relative;
+  background: var(--ink); color: var(--paper);
+  padding: var(--ab-band) 0;
+}
+.ab-positions-head, .ab-positions-list {
+  width: 100%; max-width: var(--frame-max); margin: 0 auto; padding-inline: var(--page-px);
+}
+.ab-positions-list {
+  list-style: none; padding: 0 var(--page-px); margin-top: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ab-position {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(244,239,224,.07); border-radius: var(--r-sm);
+  padding: 18px 16px;
+}
+.ab-position-n {
+  flex: none; font-family: var(--display); font-weight: 900;
+  font-size: 26px; line-height: 0.9; font-variant-numeric: tabular-nums;
+}
+.ab-position-body { flex: 1 1 auto; min-width: 0; }
+/* Sentence case, not uppercase - per §09.3.2 these are sentences, not labels.
+   Two things had to change from a literal reading of the spec line
+   ("900 19px/1.14 var(--display)"), both already-known traps in this exact
+   codebase:
+     1. `--eina`, not `var(--display)` - NeutralFace has no lowercase glyphs
+        at all (v6.css says so in at least four places), so sentence-case text
+        set in it doesn't just look wrong, it SILENTLY RE-CAPITALISES, which is
+        exactly what "not uppercase" rules out in the same spec line. Weight
+        800, not 900: Eina has a real 800 cut; NeutralFace's own comment notes
+        900 does nothing extra over 700 on that family (no Black cut exists),
+        which is moot here anyway since this isn't NeutralFace any more.
+     2. AboutPage.tsx renders this as a `<p>`, not an `<h3>` - v6.css's global
+        `h1,h2,h3.. {font-family:var(--display) !important}` rule would have
+        overridden #1 right back to NeutralFace regardless of what this rule
+        says, `!important` and all. `.ab-chapter-t` already routes around the
+        identical wall the same way, one section down. */
+.ab-position-t {
+  margin: 0 0 8px; font-family: var(--eina); font-weight: 800;
+  font-size: 19px; line-height: 1.3; letter-spacing: -0.015em;
+  color: var(--nav-fg); text-wrap: pretty;
+}
+.ab-position-p {
+  margin: 0; font-family: var(--eina); font-size: 14px; line-height: 1.6;
+  color: var(--nav-fg-strong);
+}
+/* Position 03's 2x2 stat grid: radius 14 inside the row's radius 22(--r-sm is
+   20, the closest step on this project's 20/26/999 radius scale) - the
+   concentric rule holding one more level than usual. */
+.ab-position-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px;
+}
+.ab-position-tile { background: rgba(244,239,224,.07); border-radius: 14px; padding: 11px 12px; }
+.ab-position-tile-n {
+  display: block; font-family: var(--display); font-weight: 900; font-size: 22px;
+  line-height: 1; color: var(--nav-fg); font-variant-numeric: tabular-nums;
+}
+.ab-position-tile-k {
+  display: block; margin-top: 5px; font-family: var(--mono); font-size: 8px;
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--nav-fg-faint);
+}
+/* The resolved drives receipt. The design source drew a lemon "awaiting
+   confirmation" alert box in this exact slot - kept the same rounded-well
+   treatment now that there is a real number to show instead of a warning. */
+.ab-position-receipt {
+  display: flex; align-items: baseline; gap: 8px; margin-top: 6px;
+  background: rgba(244,239,224,0.1); border-radius: 14px; padding: 10px 12px;
+}
+/* PRE-EXISTING, REPORTED NOT FIXED (tracked in scripts/accent-lint-baseline.json). Two stacked paper tints
+   (0.07 then 0.10) over the ink positions slab give a measured ground of
+   #302F2D, on which --welfare is 3.06:1 and --welfare-ink 2.42:1 — BOTH under
+   the floor, so neither the hue nor its ink partner fixes this and DESIGN.md
+   forbids inventing a third. Left as the better of the two and reported to the
+   redesign lead; the real fix is the double tint, which is a token/structure
+   decision, not a colour swap. */
+.ab-position-receipt-n { font-family: var(--display); font-weight: 900; font-size: 19px; color: var(--welfare); font-variant-numeric: tabular-nums; }
+.ab-position-receipt-k { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--nav-fg-soft); }
+.ab-position-note { margin: 10px 0 0; font-family: var(--eina); font-size: 12.5px; line-height: 1.55; color: var(--nav-fg-soft); }
+.ab-position-reg {
+  display: inline-block; margin-top: 11px;
+  background: rgba(244,239,224,0.1); border-radius: 14px; padding: 8px 12px;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--nav-fg); letter-spacing: 0.04em;
+}
+@media (min-width: 1025px) {
+  .ab-position-n { font-size: 30px; }
+  .ab-position-t { font-size: 21px; }
+}
+
+/* ── 3.5 the quote band (changelog/09-about.md) ──────────────────────────
+   A rounded welfare card, not a full-bleed hue band - see the "3.3 the torn
+   seam" note above for why a third full-bleed boundary was deliberately not
+   added. Same decorative-circle device as `.ab-cta`'s grid overlay: a soft
+   dark circle bleeding off one corner, sized down for a shorter card. */
+.ab-quote {
+  position: relative; overflow: hidden;
+  background: var(--welfare); border-radius: var(--r-md);
+  padding: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 32px);
+}
+.ab-quote-dot {
+  position: absolute; right: -40px; top: -40px; width: 170px; height: 170px;
+  border-radius: 999px; background: rgba(10,10,10,.07); pointer-events: none;
+}
+.ab-quote-t {
+  position: relative; margin: 0; max-width: 720px;
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(22px, 3.6vw, 32px); line-height: 1.36;
+  color: var(--ink); text-wrap: pretty;
+}
+.ab-quote-k {
+  position: relative; margin: 16px 0 0; font-family: var(--mono);
+  font-size: 9px; font-weight: 800; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink);
+}
+
+/* Phone: the name and the stat stop competing for one line.
+   At 390px "Welfare Projects" and "8 SUNDARBANS TRIPS, 4,000+ SAPLINGS" do not
+   both fit on a row, and the stat was overrunning the name. Trimming either is
+   not an option - the rule is that if the copy does not fit, the component is
+   the wrong shape. So on phone the row becomes a two-row grid: text stacked in
+   column 1, arrow spanning column 2. It stays one row from 601px up, where
+   both strings fit. */
+@media (max-width: 600px) {
+  .ab-dept-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'name go'
+      'stat go';
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 2px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .ab-dept-row .ab-dept-n { grid-area: name; }
+  .ab-dept-row .ab-dept-s { grid-area: stat; white-space: normal; }
+  .ab-dept-row .ab-dept-go { grid-area: go; align-self: center; }
+}

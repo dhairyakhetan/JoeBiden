@@ -1,0 +1,159 @@
+/* DEV ONLY. See VariationsGallery.tsx.
+   Every value here reads a token. No colour is introduced. */
+
+.vg-page { background: var(--bg); min-height: 100dvh; padding: 24px var(--page-px, 16px) 96px; }
+.vg-page-head { max-width: 720px; margin: 0 auto 28px; }
+.vg-page-head h1 {
+  font-family: var(--display); font-weight: 900; font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: -0.04em; line-height: 0.95; margin: 0 0 10px; color: var(--ink);
+}
+.vg-page-head p { font-family: var(--eina); font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 0; }
+
+.vg-grid { display: grid; gap: 20px; max-width: 1600px; margin: 0 auto; }
+@media (min-width: 860px)  { .vg-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1500px) { .vg-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.vg-panel { background: var(--card); border-radius: var(--r-md); padding: 16px; }
+.vg-head { margin-bottom: 16px; }
+.vg-tag {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
+  border-radius: 999px; background: var(--ink); color: var(--paper);
+  font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.vg-name { font-family: var(--eina); font-weight: 800; font-size: 17px; margin: 8px 0 4px; color: var(--ink); }
+.vg-rule { font-family: var(--eina); font-size: 12px; line-height: 1.5; color: var(--ink-3); margin: 0; }
+.vg-stage { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── the specimen, unstyled-by-rule defaults ─────────────────────────────
+   Everything below is the SHARED shape. Each variation then adds or removes
+   only the outline. */
+.vg-card { background: var(--card); border-radius: var(--r-card); padding: 12px; }
+.vg-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.vg-cat {
+  display: inline-flex; align-items: center; height: 24px; padding: 0 10px;
+  border-radius: 999px; background: var(--welfare); color: var(--ink);
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap;
+}
+.vg-meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+.vg-card-t { font-family: var(--eina); font-weight: 800; font-size: 16px; margin: 0 0 4px; color: var(--ink); }
+.vg-card-b { font-family: var(--eina); font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: 0 0 8px; }
+/* Stands in for the concentric photo: 8px inset, radius 18. */
+.vg-photo {
+  height: 92px; margin: 8px; border-radius: var(--r-photo);
+  background: linear-gradient(135deg, var(--bg-3), var(--bg-2));
+}
+.vg-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
+.vg-stat { display: inline-flex; align-items: baseline; gap: 5px; }
+.vg-stat b { font-family: var(--display); font-weight: 900; font-size: 20px; color: var(--ink); }
+.vg-stat i {
+  font-family: var(--mono); font-style: normal; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
+}
+
+.vg-rows { display: flex; flex-direction: column; gap: 6px; }
+.vg-row {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 52px; padding: 10px 12px;
+  border-left: 8px solid var(--dept);
+  border-radius: var(--r-sm); background: var(--card);
+}
+.vg-row-n { flex: 1 1 auto; min-width: 0; font-family: var(--eina); font-weight: 800; font-size: 14px; color: var(--ink); }
+.vg-row-s {
+  flex: 0 0 auto; font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap;
+}
+.vg-row-go { flex: 0 0 auto; color: var(--ink-3); font-weight: 800; }
+
+.vg-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vg-chip {
+  display: inline-flex; align-items: center; height: 34px; padding: 0 14px;
+  border-radius: 999px; background: var(--card); color: var(--ink);
+  font-family: var(--eina); font-size: 12.5px; font-weight: 700;
+  white-space: nowrap; cursor: pointer; border: none;
+}
+.vg-chip.is-on { background: var(--ink); color: var(--paper); }
+.vg-btn {
+  display: inline-flex; align-items: center; height: 38px; padding: 0 16px;
+  border-radius: 999px; border: none; cursor: pointer;
+  font-family: var(--eina); font-size: 13px; font-weight: 800;
+  white-space: nowrap; background: var(--bg-2); color: var(--ink);
+}
+.vg-btn-primary { background: var(--welfare); color: var(--ink); }
+
+/* ── the desk table ──────────────────────────────────────────────────────
+   Deliberately the same in all four panels except for the outline rule, so the
+   "clean versatile tabular" question is legible on its own. No per-row border,
+   no zebra, one hairline under the header, tabular figures, a 3px status edge. */
+.vg-table-wrap { background: var(--card); border-radius: var(--r-sm); overflow: hidden; }
+.vg-table { width: 100%; border-collapse: collapse; font-family: var(--eina); font-size: 12.5px; }
+.vg-table th {
+  text-align: left; padding: 9px 10px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+  border-bottom: 1.5px solid var(--line-2);
+  white-space: nowrap;
+}
+.vg-table td { padding: 11px 10px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+.vg-table tbody tr:last-child td { border-bottom: none; }
+.vg-table tbody tr { position: relative; }
+/* The hue is a 3px status edge, not a row fill. */
+.vg-table tbody tr td:first-child { box-shadow: inset 3px 0 0 0 transparent; }
+.vg-table tbody tr[data-status='pending']  td:first-child { box-shadow: inset 3px 0 0 0 var(--lemon); }
+.vg-table tbody tr[data-status='approved'] td:first-child { box-shadow: inset 3px 0 0 0 var(--welfare); }
+.vg-table tbody tr[data-status='rejected'] td:first-child { box-shadow: inset 3px 0 0 0 var(--rust); }
+.vg-td-n { font-weight: 700; color: var(--ink); }
+.vg-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.vg-status {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
+  border-radius: 999px; font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; color: var(--ink);
+}
+.vg-status.is-pending  { background: var(--lemon); }
+.vg-status.is-approved { background: var(--welfare); }
+.vg-status.is-rejected { background: var(--rust); color: var(--paper); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   THE VARIABLE: where the ink outline is allowed.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── A · outline as emphasis ────────────────────────────────────────────
+   Only the primary CTA, the active pill, and one hero element per screen.
+   Everything else separates by fill and radius alone. */
+.vg-a .vg-card { box-shadow: 0 0 0 1px var(--line); }
+.vg-a .vg-btn-primary { border: var(--bd); }
+.vg-a .vg-chip.is-on { border: var(--bd); }
+.vg-a .vg-table-wrap { box-shadow: 0 0 0 1px var(--line); }
+
+/* ── B · outline by layer depth ─────────────────────────────────────────
+   The page-level container keeps the outline; the content inside it drops it. */
+.vg-b .vg-card { border: var(--bd); }
+.vg-b .vg-card .vg-cat,
+.vg-b .vg-card .vg-photo { border: none; }
+.vg-b .vg-rows { border: var(--bd); border-radius: var(--r-md); padding: 8px; background: var(--card); }
+.vg-b .vg-row { background: var(--bg); }
+.vg-b .vg-table-wrap { border: var(--bd); }
+.vg-b .vg-btn-primary { border: var(--bd); }
+
+/* ── C · outline by surface temperature ─────────────────────────────────
+   On paper: outlined. On a hue or ink fill: no outline, the fill separates. */
+.vg-c .vg-card,
+.vg-c .vg-rows .vg-row,
+.vg-c .vg-table-wrap { border: var(--bd); }
+.vg-c .vg-chip { border: var(--bd); }
+.vg-c .vg-chip.is-on { border-color: var(--ink); }
+.vg-c .vg-cat,
+.vg-c .vg-btn-primary,
+.vg-c .vg-status { border: none; }
+
+/* ── today · 2px ink on everything ──────────────────────────────────────── */
+.vg-now .vg-card,
+.vg-now .vg-row,
+.vg-now .vg-chip,
+.vg-now .vg-btn,
+.vg-now .vg-cat,
+.vg-now .vg-photo,
+.vg-now .vg-status,
+.vg-now .vg-table-wrap { border: var(--bd); }
+.vg-now .vg-card { box-shadow: var(--shadow-cta); }

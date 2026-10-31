@@ -1,0 +1,7 @@
+/* Route-scoped: mobile nav bar (components/AQNav.tsx).
+   NOTE (Part 0.1 fix): these rules were folded back into critical v6.css -
+   AQNav is an eager shell component (imported non-lazily by PublicLayout.tsx
+   and DashboardLayout.tsx), so filing its mobile styles as a "route" sheet
+   just meant Vite hoisted them into the entry bundle anyway while this file
+   shipped as dead weight alongside it. Kept as an empty file (rather than
+   deleted) so AQNav.tsx's existing import doesn't need touching. */

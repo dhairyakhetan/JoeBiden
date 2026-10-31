@@ -1,0 +1,472 @@
+# robots.txt — https://www.ngoaquaterra.com
+# ─────────────────────────────────────────────────────────────────────────────
+# Public content is crawlable; member/auth/admin areas are fenced off below.
+# CSS, JS, fonts and images are intentionally NOT blocked — blocking them
+# breaks render-based indexing.
+
+User-agent: *
+Allow: /
+
+# ── Community platform — members only ────────────────────────────────────────
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+
+# /member/ is deliberately CRAWLABLE for search engines, for exactly the reason
+# /post/ is (spelled out below) — and every /member/:uuid now carries
+# robots=noindex (see src/profile/PublicProfilePage.tsx). Disallow prevents
+# crawling, not indexing: a profile linked from an Instagram bio or a WhatsApp
+# group can still be indexed as a bare URL, and a URL Google may not fetch is
+# one whose own noindex it can never read. Allowing the crawl is what lets the
+# STRONGER exclusion apply. These are real students, many of them minors, so
+# the stronger exclusion is the one we want.
+# The AI-crawler groups below deliberately KEEP /member/ disallowed — training
+# data is a separate question from indexing.
+
+# /post/ is deliberately CRAWLABLE for search engines, and that is not an
+# oversight. These are permalinks - they get shared into WhatsApp, Instagram
+# and group chats, so they pick up external links whether we like it or not.
+# A robots-disallowed URL that is linked externally can still be indexed as a
+# bare URL, and because it is never fetched, Google never sees the page's own
+# instructions. Allowing the crawl is what lets those instructions apply:
+#   - mirrored posts (blog/project/opening -> post) carry rel=canonical to
+#     their real home, so ranking signal consolidates there instead of being
+#     split across 555 duplicate URLs;
+#   - member-authored posts carry robots=noindex, which is a STRONGER
+#     exclusion than Disallow, not a weaker one.
+# The AI-crawler blocks below deliberately KEEP /post/ disallowed - that is
+# about training data, which is a separate question from indexing.
+# See the canonical/indexation block in src/feed/PostPage.tsx.
+
+# ── Auth & flow pages — no indexing needed ───────────────────────────────────
+Disallow: /login
+Disallow: /_login
+Disallow: /register
+Disallow: /auth
+Disallow: /pending
+Disallow: /rejected
+Disallow: /brand
+
+# ── Paradox member/admin ─────────────────────────────────────────────────────
+Disallow: /paradox/register
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Disallow: /paradox/winners
+Disallow: /paradox/ticket
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AI / LLM crawlers — explicitly welcomed to PUBLIC content.
+#
+# AquaTerra is a public-good student NGO and benefits from being citable in AI
+# answers, so the major assistant/crawler agents are allowed on the same public
+# surface as everyone else. /llms.txt gives them a clean structured summary.
+#
+# IMPORTANT (robots.txt spec): a crawler obeys ONLY its own most-specific
+# User-agent group and does NOT inherit the `User-agent: *` rules above. So each
+# bot below repeats the same member/auth/admin Disallow fence — otherwise a
+# named bot would be free to crawl private areas. The trailing `Allow: /` is the
+# public-content grant.
+#
+# TO BLOCK A BOT: change that bot's `Allow: /` line to `Disallow: /`. One line,
+# one bot. (For the training-opt-out tokens Google-Extended / Applebot-Extended,
+# `Disallow: /` means "don't use our content for model training".)
+# ─────────────────────────────────────────────────────────────────────────────
+
+User-agent: GPTBot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: OAI-SearchBot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: ChatGPT-User
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: ClaudeBot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Claude-User
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Claude-Web
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: PerplexityBot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Perplexity-User
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: CCBot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Applebot-Extended
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Amazonbot
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+# Bytespider (ByteDance/TikTok) is aggressive and often ignores robots. Left
+# ALLOWED for parity; flip the line below to Disallow: / if it causes load.
+User-agent: Bytespider
+Disallow: /feed
+Disallow: /profile
+Disallow: /notifications
+Disallow: /saved
+Disallow: /my-posts
+Disallow: /settings
+Disallow: /search
+Disallow: /director
+Disallow: /choose-team
+Disallow: /calendar
+Disallow: /yearbook
+Disallow: /roles
+Disallow: /invite
+Disallow: /drive
+Disallow: /member/
+Disallow: /post/
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /paradox/admin
+Disallow: /terrathon/admin
+Disallow: /terrathon/t
+Disallow: /paradox/scores
+Disallow: /paradox/updates
+Allow: /
+
+# ── Discovery ────────────────────────────────────────────────────────────────
+Sitemap: https://www.ngoaquaterra.com/sitemap.xml
+# Structured LLM guide: https://www.ngoaquaterra.com/llms.txt
+Host: www.ngoaquaterra.com

@@ -1,0 +1,230 @@
+-- ============================================================================
+-- Simulated seed data + performance pass — 2026-09-10
+-- STATUS: **APPLIED** to the community project (hzowuwffjqtgszecngpe) via the
+--         Supabase MCP connector on 2026-09-10. Verify live before trusting
+--         this header; migration paper trails in this repo have drifted before.
+-- ============================================================================
+--
+-- This file documents what was applied and, more importantly, HOW TO REMOVE IT.
+-- It is a record, not a script to re-run: re-running the seed would duplicate
+-- rows, because the inserts are not idempotent.
+--
+--
+-- ── PART 1 · PERFORMANCE ────────────────────────────────────────────────────
+--
+-- Applied as three migrations:
+--   perf_fk_indexes_and_arcade_initplan
+--   perf_consolidate_permissive_policies_part1
+--   perf_consolidate_permissive_policies_part2_hot_tables
+--
+-- Supabase performance advisor, before -> after:
+--   unindexed_foreign_keys          5  -> 0
+--   auth_rls_initplan               1  -> 0
+--   multiple_permissive_policies   75  -> 0
+--   unused_index                   36  -> 41   (the 5 new FK indexes; expected,
+--                                               they have not served traffic yet)
+--
+-- (a) Five FKs into `members` had no covering index. Added:
+--       member_of_the_month_periods_closed_by_idx
+--       member_of_the_month_periods_opened_by_idx
+--       profile_notes_deleted_by_idx
+--       role_capability_notes_updated_by_idx
+--       wishes_author_id_idx
+--
+-- (b) `arcade_scores_insert_own` called auth.uid() unwrapped, re-evaluating it
+--     per row. Now `(select auth.uid())`, so it becomes a once-per-statement
+--     InitPlan. Predicate otherwise unchanged.
+--
+-- (c) 75 duplicate-permissive-policy findings collapsed to zero. The 75 was the
+--     same policy pairs counted once per role (anon, authenticated,
+--     authenticator, dashboard_user, supabase_privileged_role); the real work
+--     was ~20 merges of two shapes:
+--
+--       SHAPE 1 — a `FOR ALL` admin policy overlapping a `FOR SELECT` read
+--       policy, so every read evaluated both. Split the ALL into explicit
+--       INSERT/UPDATE/DELETE and, where the ALL policy was the only thing
+--       granting an admin their read, OR'd that into the surviving SELECT.
+--       (arcade_trivia_questions, desk_sops, desk_todos, post_categories,
+--        post_tags, yearbook_entries)
+--
+--       SHAPE 2 — two or three permissive policies on the same command, which
+--       Postgres already ORs together. Merged into one disjunction; exactly
+--       equivalent, not an approximation.
+--       (members, posts, post_images, post_documents, team_members,
+--        team_join_requests, member_of_the_month, profile_notes)
+--
+--     The subtlety worth remembering: an UPDATE policy that omits WITH CHECK
+--     reuses its USING expression as the check, and Postgres ORs the USINGs
+--     together and the WITH CHECKs together *separately*. So the faithful merge
+--     is (A.using OR B.using) for USING and (A.check OR B.check) for WITH CHECK.
+--     Every merged UPDATE policy below therefore states WITH CHECK explicitly.
+--
+--     `team_members` was the one genuine redundancy: "Directors can update team
+--     members" was `is_director()`, and "Team leads can update their team
+--     members" was `(is_director() OR is_team_lead(team_id))`, which already
+--     subsumed it. The merge is the second policy alone.
+--
+-- VERIFIED by role simulation inside rolled-back transactions, per role:
+--   anon            1317 active members, 0 non-active leaked,
+--                    586 published posts, 0 unpublished leaked,
+--                    3 live profile_notes, 0 soft-deleted leaked
+--   active member   1317 members, 0 leaked; 586 posts, 0 unpublished leaked;
+--                    30 trivia questions, 0 inactive leaked;
+--                    0 desk_todos / sops / certificate_requests (director-only)
+--   pending member  1318 = the 1317 active PLUS their own pending row, and
+--                    exactly 1 pending row visible (no other applicant leaked)
+--   hod             all 1379 members, 586 posts, 3 join requests
+--   super_admin     everything, including the 1 inactive trivia question and
+--                    the 1 soft-deleted profile note
+--
+--   Write paths (plain member, all rolled back):
+--     updates OWN member row          ALLOWED   (correct)
+--     updates OTHER member rows       BLOCKED   (correct)
+--     deletes OTHERS' posts           BLOCKED   (correct)
+--     updates published posts         BLOCKED   (correct)
+--
+--   The one merge that changed an expression rather than just OR-ing two
+--   (`trivia_read_active` gained `OR is_super_admin()`) is proven in BOTH
+--   directions: a deliberately-inactive seeded question is invisible to a plain
+--   member and visible to a super_admin.
+--
+--
+-- ── PART 2 · SIMULATED SEED ─────────────────────────────────────────────────
+--
+-- 160 rows across 24 tables. Every row is prefixed `[SIM]` in its main text
+-- column where it has one, and — the part that actually matters — every row's
+-- primary key is recorded in `public.sim_seed_registry`.
+--
+-- WHY A REGISTRY AND NOT JUST A TEXT MARKER: several seeded tables
+-- (referral_clicks, arcade_scores, contact_access_log) have no free-text column
+-- to mark, and a marker can be edited by the app afterwards. The registry
+-- records exactly what was created, so teardown removes exactly that and
+-- nothing else. `del_order` handles the FKs between seeded rows
+-- (referral_clicks -> referrals, member_of_the_month -> periods): teardown
+-- deletes in descending del_order, children before parents.
+--
+-- WHAT WAS DELIBERATELY *NOT* SEEDED, and why:
+--   * welfare_projects, blogs, job_openings — each carries a mirror trigger
+--     (welfare_project_publish_mirror / blog_publish_mirror /
+--     job_opening_publish_mirror) that turns a row into a PUBLISHED post
+--     visible to all 1,317 active members. Nothing in this seed goes near them.
+--   * notifications — real members would see them.
+--   * posts — a simulated PUBLISHED post is user-visible content on a real
+--     organisation's site. (Superseded in part: the Part 3 addendum below does
+--     seed posts, but only ever pending_review / rejected / scheduled, which
+--     the public feed cannot match. No published post was created.)
+--   Consequence: the seed populates internal and command-desk surfaces only.
+--   The public site is byte-for-byte unaffected.
+--
+-- WHOSE ACTIONS THESE ARE: every member-attributed row references member_id 29
+-- or 30 (both Kanishk Agarwal's own accounts) — never a real student. Faking a
+-- like, a wall note or a "member of the month" citation for someone else would
+-- misrepresent a real person's actions.
+--
+-- Seeded (table: rows):
+--   aq_contacts 10 | arcade_scores 12 | arcade_trivia_questions 1
+--   certificate_requests 6 | client_error_logs 6 | collaboration_submissions 6
+--   contact_access_log 6 | contact_submissions 8 | desk_sops 4 | desk_todos 8
+--   drive_attendance 10 | member_activity 10 | member_breaks 3
+--   member_education 4 | member_of_the_month 3 | member_of_the_month_periods 4
+--   points_ledger 8 | profile_notes 4 | referral_clicks 8 | referrals 4
+--   role_capability_notes 12 | sops 12 | wishes 6 | yearbook_entries 5
+--
+--
+-- ── TO REMOVE EVERY SEEDED ROW ──────────────────────────────────────────────
+--
+--     select * from public.sim_seed_teardown();
+--
+-- It returns one row per table with the number deleted, looks each table's
+-- primary key up from the catalogue rather than hardcoding it, and clears the
+-- registry as it goes. It was proven before the real seed ran: two canary rows
+-- were inserted, registered, torn down, and both the table and the registry
+-- returned to zero.
+--
+-- The teardown removes DATA ONLY. It does not touch Part 1 — the indexes and
+-- the consolidated policies are intended to stay.
+--
+-- To also remove the bookkeeping itself once the seed is gone:
+--     drop function if exists public.sim_seed_teardown();
+--     drop table if exists public.sim_seed_registry;
+--
+--
+-- ── NOT A BUG, WRITTEN DOWN SO IT IS NOT "FIXED" LATER ──────────────────────
+--
+-- `/director/roles` renders "permission denied for table role_capability_notes"
+-- under the `?dev=super_admin` preview. That flag fakes the role in the client
+-- but there is no real Supabase session, so the request goes out as `anon`, and
+-- `anon` has no SELECT grant on that table. `authenticated` does, and a real
+-- signed-in super_admin reads all 42 rows (verified by role simulation).
+-- Granting `anon` SELECT here would be a genuine leak of internal policy notes.
+-- The same limitation applies to every other director-only table in preview.
+--
+-- `aq_contacts` returns 0 rows to a direct select for EVERY role, including
+-- super_admin. That is deliberate: policy `aq_contacts_no_direct_select` is
+-- `USING (false)`, and the intended read path is the SECURITY DEFINER
+-- `get_aq_contacts()`, which returns the rows to a super_admin and raises
+-- "not authorised to read the contacts archive" for a plain member. Both
+-- verified.
+-- ============================================================================
+
+-- ============================================================================
+-- ADDENDUM (same day) · PART 3 · the post graph, and a real leak it exposed
+-- ============================================================================
+--
+-- 37 further rows seeded, hanging off five NEW posts owned by members 29/30
+-- with status pending_review / rejected / scheduled - never 'published'. That
+-- keeps them out of the public feed while finally giving the moderation queue
+-- something to moderate: all 586 real posts are already published, so that desk
+-- had never had a row in it.
+--
+--   posts 5 | post_categories 5 | post_images 6 | post_documents 1
+--   post_tags 5 | likes 6 | comments 3 | saved_posts 3 | post_approvals 1
+--   follows 2
+--
+-- Verified anon still sees exactly 586 posts and 0 of the simulated ones, both
+-- directly and through post_feed_view.
+--
+--
+-- ── THE LEAK (pre-existing, now fixed) ──────────────────────────────────────
+-- Migration: comments_and_likes_follow_post_visibility
+--
+-- `comments` and `likes` both had `SELECT USING (true)` - readable by anyone,
+-- with no relationship to whether the parent post is visible. Every other post
+-- child table (post_images, post_documents, post_tags, post_categories) already
+-- gates on post visibility, so this was an inconsistency rather than a design.
+--
+-- The practical leak: a comment on a post still in `pending_review`, or on one
+-- a director has `rejected`, is member-written text about deliberately
+-- non-public content, and it was readable straight off /rest/v1/comments by an
+-- anonymous caller. Likes leaked the weaker fact of who engaged with one.
+--
+-- WHY IT SURVIVED THIS LONG, and why it is easy to miss:
+--   1. Every one of the 586 real posts is `published`, so "all comments" and
+--      "comments on visible posts" returned the same set. The seed created the
+--      app's first ever unpublished posts, which is what made it observable.
+--   2. The obvious test hides it. Joining comments to posts and filtering on
+--      `p.status <> 'published'` returns 0 rows - not because nothing leaks,
+--      but because the join applies posts' own RLS and removes the unpublished
+--      parent first. The leak only appears when `comments` is read ALONE.
+--      Measured: `select count(*) from comments where body like '[SIM]%'` as
+--      anon returned 3 before the fix and 0 after.
+--
+-- Both policies now use the same predicate as the merged posts_select, so the
+-- three cannot drift apart again:
+--     exists (select 1 from posts p where p.post_id = <child>.post_id
+--               and (p.status = 'published'
+--                    or p.author_id = get_current_member_id()
+--                    or is_director()))
+--
+-- VERIFIED, anon before -> after:  comments 4 -> 1, of which simulated 3 -> 0;
+--                                  likes 12 -> 6; posts 586 -> 586 (unchanged).
+--           director after:        comments 4, likes 12, 5-row moderation
+--                                  queue, 6 post images - full access intact.
+--
+-- Post-change timings (as director): feed view 28.7ms, get_aq_contacts 7.0ms,
+-- member-of-the-month 6.4ms, drive attendance 6.0ms, sops 5.1ms, role notes
+-- 3.7ms, certificate requests 3.4ms, comments 2.3ms, moderation queue 1.5ms.
+--
+-- Catalogue check after all of the above: ZERO table+command combinations in
+-- `public` have more than one permissive policy.
+-- ============================================================================

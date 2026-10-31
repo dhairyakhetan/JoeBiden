@@ -1,0 +1,270 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Guided demos (changelog/19-guided-demos.md). Loaded only by files under
+   src/demo/ - never imported from the real app tree, so none of this can
+   affect a real page.
+
+   Z-INDEX NOTE: 19.2's own CSS block uses z-index 2 (spotlight) / 3 (card),
+   correct for the STANDALONE mock it was authored against, where nothing
+   else on the page had a stacking context. The real app does (a sticky nav,
+   Toast/Confirm portals at 10000) - so the values here are raised well
+   above those instead, while keeping the exact technique 19.2 specifies:
+   one box-shadow, on the real node, dim and cutout as the same property.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.demo-spotlit {
+  position: relative !important;
+  z-index: 10020 !important;
+  box-shadow:
+    0 0 0 4px rgba(255, 199, 0, .55),
+    0 0 0 9999px rgba(10, 10, 10, .42) !important;
+}
+.demo-spotlit--pulse { animation: demoSpotlightPulse 1.6s ease-in-out infinite; }
+@keyframes demoSpotlightPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255, 199, 0, .55), 0 0 0 9999px rgba(10, 10, 10, .42); }
+  50%      { box-shadow: 0 0 0 7px rgba(255, 199, 0, .78), 0 0 0 9999px rgba(10, 10, 10, .42); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-spotlit--pulse { animation: none; }
+}
+
+/* ── The ribbon - persistent, non-dismissible, role="status" ────────────── */
+.demo-ribbon {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 10040;
+  display: flex; align-items: center; gap: 9px;
+  min-height: 40px;
+  padding: 8px 14px;
+  background: var(--lemon);
+  color: var(--ink);
+}
+.demo-ribbon-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--ink); flex: none; }
+.demo-ribbon-text {
+  font-size: 9px; font-weight: 800; letter-spacing: .06em;
+  color: var(--ink);
+  min-width: 0;
+}
+.demo-ribbon-role { font-weight: 800; }
+.demo-ribbon-progress { flex: 1; text-align: right; font-size: 10px; font-weight: 700; color: var(--ink); padding-right: 4px; }
+.demo-ribbon-leave {
+  flex: none;
+  min-height: 36px; padding: 0 13px;
+  border-radius: 999px; border: none; cursor: pointer;
+  background: rgba(10, 10, 10, .14);
+  font-family: var(--eina); font-weight: 800; font-size: 11px;
+  color: var(--ink);
+}
+.demo-ribbon-leave:hover { background: rgba(10, 10, 10, .22); }
+.demo-ribbon-leave:focus-visible, .demo-btn:focus-visible, .demo-card a:focus-visible {
+  outline: 3px solid var(--grape); outline-offset: 2px;
+}
+
+/* Two copy widths sharing the exact 19-approved text - CSS swaps them, so
+   there is never a JS resize listener recomputing which string to show. */
+.demo-ribbon-long { display: none; }
+@media (min-width: 761px) {
+  .demo-ribbon-short { display: none; }
+  .demo-ribbon-long { display: inline; }
+}
+
+/* Body padding so real page content (and the real nav) isn't hidden under
+   the fixed ribbon. */
+.demo-page-shell { padding-top: 40px; }
+
+/* ── HoD flows only: DemoFlowPage.tsx toggles this class for exactly the
+   lifetime of a role-borrowed flow's mount. The real /director/* screens
+   these three flows demo never show the public front-end's nav/footer/
+   mobile bar (DashboardLayout.tsx skips all three) - but DemoRoute.tsx
+   wraps EVERY flow in PublicLayout, which always renders them. Found by
+   measuring the live page, not by inspecting CSS: AQNav's own 64px is
+   taller than the ribbon's 40px, so without this a ~24px sliver of the
+   public nav showed between the ribbon and the admin desk. `!important` is
+   necessary only for #main-content's padding - PublicLayout sets it inline
+   (`style={{paddingTop:'var(--nav-h,70px)'}}`), and an inline style beats
+   any class selector at equal specificity otherwise. Scoped to this one
+   body class, which only exists while a HoD flow is mounted, so nothing
+   about a real page is touched. */
+body.demo-hod-flow .aq-nav,
+body.demo-hod-flow .aq-footer-frame,
+body.demo-hod-flow .aq-bottom-bar,
+body.demo-hod-flow .aq-bottom-bar-spacer {
+  display: none !important;
+}
+body.demo-hod-flow #main-content {
+  padding-top: 0 !important;
+}
+
+/* ── The coach card ───────────────────────────────────────────────────────
+   Phone: bottom sheet reusing 03.2.1's shell shape. Desktop: a floating ink
+   card. 19.2 places the desktop card "in the right column, below the
+   spotlit element" - the real pages this demo spotlights don't all have
+   that column (HomePage's grid differs per breakpoint), so a fixed
+   bottom-right floating card stands in for it: same ink surface, same
+   position relative to the viewport regardless of which real layout is
+   underneath, same distance from the spotlight fight it never causes. */
+.demo-card {
+  position: fixed;
+  z-index: 10030;
+  left: 0; right: 0; bottom: 0;
+  background: var(--card);
+  border-radius: 32px 32px 0 0;
+  padding: var(--pad-card);
+  box-shadow: 0 -8px 32px -12px rgba(10, 10, 10, .3);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @media (max-width: 760px) {
+    .demo-card { animation: demoSheetSlideUp .28s var(--ease-out); }
+  }
+}
+@keyframes demoSheetSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.demo-card:focus { outline: none; }
+
+.demo-card-progress { display: flex; align-items: center; gap: 9px; padding: 8px 8px 12px; }
+.demo-card-dots { display: flex; gap: 4px; flex: 1; }
+.demo-card-dot { width: 20px; height: 4px; border-radius: 999px; background: rgba(10, 10, 10, .16); }
+.demo-card-dot.is-filled { background: var(--ink); }
+.demo-card-count { font-size: 9.5px; font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.demo-card-title {
+  margin: 0 0 8px; padding: 0 8px;
+  font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1.12;
+  letter-spacing: -0.025em; color: var(--ink); text-wrap: pretty;
+}
+.demo-card-body {
+  margin: 0; padding: 0 8px;
+  font-family: var(--eina); font-size: 14.5px; line-height: 1.58; color: var(--ink-2);
+  text-wrap: pretty;
+}
+.demo-card-actions { display: flex; gap: 6px; margin-top: 16px; padding: 0 8px; }
+.demo-btn {
+  min-height: 46px; padding: 0 15px;
+  border-radius: 22px; border: none; cursor: pointer;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px;
+}
+.demo-btn--primary { flex: 1; background: var(--ink); color: var(--paper); font-weight: 800; font-size: 13px; }
+.demo-btn:disabled { opacity: .5; cursor: default; }
+.demo-card-hint {
+  margin: 10px 0 4px; padding: 0 8px;
+  text-align: center; font-size: 8.5px; font-weight: 800; color: var(--ink-3);
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.demo-card--lost { max-width: 420px; margin: 0 auto; border-radius: var(--r-outer); }
+
+/* Declared AFTER every base .demo-card-* rule above on purpose - equal
+   specificity, so cascade order is what makes the dark-card colors win at
+   this width instead of the base (light-card) colors silently overriding
+   them regardless of viewport. Found 2026-09-08: this block used to sit
+   BEFORE the base rules, so .demo-card-body rendered near-invisible
+   var(--ink-2) text on the dark ink card on every desktop demo run - same
+   bug class as the footer's link-row regression earlier this session. */
+@media (min-width: 761px) {
+  .demo-card {
+    left: auto; bottom: 24px; right: 24px;
+    width: 360px;
+    background: var(--ink);
+    border-radius: var(--r-outer);
+    box-shadow: var(--lift-4, 0 20px 48px -16px rgba(10,10,10,.4));
+  }
+  /* CoachMark.tsx flips this on whenever the card's own bottom-right
+     footprint would sit on top of the spotlit control (this flow's own
+     send button lives in the composer's bottom-right dock) - a real
+     pointer can't click through the card, so the two must never overlap. */
+  .demo-card.demo-card--top {
+    top: calc(var(--nav-h, 70px) + 24px); bottom: auto;
+  }
+  .demo-card-title { color: var(--paper); }
+  .demo-card-body { color: rgba(244, 239, 224, .82); }
+  .demo-card-count { color: rgba(244, 239, 224, .55) !important; }
+  .demo-card-dot { background: rgba(244, 239, 224, .24); }
+  .demo-card-dot.is-filled { background: var(--paper); }
+  .demo-card-hint { color: rgba(244, 239, 224, .55) !important; }
+  .demo-btn { background: rgba(244, 239, 224, .1); color: var(--paper); }
+  .demo-btn--primary { background: var(--welfare); color: var(--ink); }
+}
+
+/* ── Launcher & end card share a little vocabulary with the card above ──── */
+.demo-launcher { max-width: 640px; margin: 0 auto; padding: 48px var(--page-px) 96px; }
+.demo-launcher-card {
+  background: var(--ink); border-radius: var(--r-outer);
+  padding: 24px 20px; color: var(--paper);
+}
+.demo-kicker { font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .06em; color: rgba(244,239,224,.55); text-transform: uppercase; }
+.demo-launcher-headline {
+  margin: 14px 0 0; font-family: var(--display); font-weight: 900; font-size: 34px; line-height: .96;
+  letter-spacing: -.04em; color: var(--paper);
+}
+.demo-launcher-headline em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--welfare-ink); text-transform: none; }
+.demo-launcher-lede { margin: 14px 0 0; font-family: var(--eina); font-size: 14.5px; line-height: 1.6; color: rgba(244,239,224,.82); text-wrap: pretty; }
+
+.demo-flow-list { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
+.demo-flow-row {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 44px; padding: 14px;
+  border-radius: 22px; background: rgba(244,239,224,.07);
+  text-decoration: none; cursor: pointer; border: none; width: 100%; text-align: left;
+  font-family: var(--eina);
+}
+.demo-flow-row:hover { background: rgba(244,239,224,.12); }
+.demo-flow-row[disabled], .demo-flow-row.is-soon { opacity: .5; cursor: default; }
+.demo-flow-row[disabled]:hover, .demo-flow-row.is-soon:hover { background: rgba(244,239,224,.07); }
+.demo-flow-hue { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; flex: none; color: var(--ink); }
+.demo-flow-name { display: block; font-weight: 800; font-size: 14px; color: var(--paper); }
+.demo-flow-meta { display: block; font-family: var(--mono); font-size: 9.5px; color: rgba(244,239,224,.55); margin-top: 3px; }
+.demo-flow-arrow { flex: none; color: rgba(244,239,224,.55); }
+.demo-flow-more {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; border: none; cursor: pointer; padding: 14px; min-height: 44px; width: 100%;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px; color: rgba(244,239,224,.82);
+}
+
+.demo-end {
+  /* A full takeover, not an in-flow section - without this it rendered
+     AFTER the whole backdrop feed in document order, so "flow completed"
+     was only visible after scrolling past everything HomePage renders.
+     Fixed + its own opaque background replaces the view outright, the way
+     the end card is meant to read: the walkthrough is over, not one more
+     card in a scroll. */
+  position: fixed; inset: 0; z-index: 10035;
+  overflow-y: auto;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px var(--page-px) 64px;
+}
+.demo-end-card {
+  width: 100%; max-width: 480px;
+  background: var(--welfare); border-radius: var(--r-outer);
+  padding: 28px 22px; position: relative; overflow: hidden;
+}
+.demo-end-badge {
+  display: inline-block; background: var(--ink); color: var(--paper);
+  border-radius: 999px; padding: 6px 13px; font-family: var(--display); font-weight: 900;
+  font-size: 9px; letter-spacing: .05em; text-transform: uppercase;
+  transform: rotate(-2.5deg); margin-bottom: 14px;
+}
+.demo-end-headline {
+  margin: 0 0 12px; font-family: var(--display); font-weight: 900; font-size: 30px; line-height: .96;
+  letter-spacing: -.035em; color: var(--ink);
+}
+.demo-end-body { margin: 0; font-family: var(--eina); font-size: 14.5px; line-height: 1.6; color: var(--ink); text-wrap: pretty; }
+.demo-end-actions { position: relative; display: flex; flex-direction: column; gap: 6px; margin-top: 20px; }
+.demo-end-primary {
+  display: flex; align-items: center; justify-content: center; min-height: 50px;
+  border-radius: 22px; background: var(--ink); color: var(--paper); text-decoration: none;
+  font-family: var(--eina); font-weight: 800; font-size: 13.5px; border: none; cursor: pointer;
+}
+.demo-end-secondary-row { display: flex; gap: 6px; }
+/* README invariant 7's "overlay counts as lightening the fill" case (19's
+   States section, verbatim): rgba(10,10,10,.34) OVER --welfare, with PAPER
+   text - not ink on rgba(10,10,10,.1), which measures 3.87:1 on this fill. */
+.demo-end-secondary {
+  flex: 1; display: flex; align-items: center; justify-content: center; min-height: 46px;
+  border-radius: 22px; background: rgba(10, 10, 10, .34); color: var(--paper); text-decoration: none;
+  font-family: var(--eina); font-weight: 700; font-size: 12.5px; border: none; cursor: pointer;
+}
+
+@media (max-width: 375px) {
+  .demo-launcher-headline { font-size: 30px; }
+}

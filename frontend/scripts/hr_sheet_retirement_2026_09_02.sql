@@ -1,0 +1,130 @@
+-- ============================================================================
+-- ✅ ALL APPLIED live 2026-09-02 via the Supabase MCP connector.
+--
+-- Migrations, in order:
+--   1. aq_contacts_and_subteam_2026_09_02
+--   2. get_aq_contacts_with_access_log_2026_09_02
+--   3. auto_populate_contacts_on_approval_2026_09_02
+--   4. revoke_execute_on_trigger_functions_2026_09_02
+--
+-- Paper trail only. The live database is the source of truth — this project
+-- has been burned four times by trusting a checked-in .sql (job_applications,
+-- the members PII lockdown, yearbook_entries, and a same-day rollback of
+-- UPDATE(email); see security_fixes_2026_09_02.sql).
+--
+-- The DATA import that fills these tables is NOT run yet. It lives at
+-- scripts/hr-import/import-hr-workbooks.mjs, defaults to a dry run, and needs
+-- SUPABASE_SERVICE_ROLE_KEY. See "STILL TO RUN" at the bottom.
+-- ============================================================================
+
+
+-- ── Corrected workbook shapes (measured, not assumed) ──────────────────────
+--
+-- The planning notes had these badly wrong. Real figures from
+-- scripts/hr-import/inspect-workbooks.mjs on 2026-09-02:
+--
+--   COMMUNITY AQUATERRA / Sheet1     1,955 rows   (planned: 2,360)
+--     name 99% · phone 98% · email 64% · school 86% · class 86% · insta 28%
+--   AquaTerra Core Records / Main       46 rows   (planned: ~997)  ← the CORE team
+--   Cross Departmental (10 sheets)     244 rows   (planned: ~400)
+--     HR 8 · COLLABS 9 · PROJECTS 100 · EVENTS 5 · Media-Insta 62 ·
+--     Media-Blogs 10 · Media-LinkedIn 9 · SHIKSHAQ 2 · ROOTS 2 · VENTURES 37
+--   AQ Dept-wise Goals (12 sheets)   ~89 tasks after dedupe
+--
+-- THE MOST IMPORTANT CORRECTION: **phone is the join key, not email.**
+-- 98% of community rows carry a phone; only 64% carry an email. Matching on
+-- email — the join key used everywhere else in this codebase — would have
+-- silently dropped a third of the archive.
+
+
+-- ── 1. aq_contacts + team_members.sub_team ─────────────────────────────────
+--
+-- COMMUNITY AQUATERRA becomes an ARCHIVE, not members. The user's decision:
+-- "Roster = approved members. The sheet becomes an AQ Contacts archive."
+-- Importing 1,955 contact rows into `members` would have inflated a
+-- 1,369-row roster by ~2.4x with people who can never sign in.
+--
+-- The four points columns are stored VERBATIM in points_note, never summed
+-- here. Points become real only in points_ledger, and only for a contact that
+-- resolves to an actual member.
+--
+-- team_members.sub_team: the Cross-Departmental TEAMS column (11 distinct
+-- values on the PROJECTS tab alone) lands as a free-text label on the
+-- membership, per the user's decision that departments are the only real team
+-- level and the sub-team column is "noise".
+
+
+-- ── 2. get_aq_contacts() — the ONLY read path ──────────────────────────────
+--
+-- The user's decision was "HR and directors, with an access log". An access
+-- log you can bypass with a direct SELECT is not an access log, so:
+--   * aq_contacts has `for select using (false)` — NO client role can read it
+--     directly, not even a director.
+--   * get_aq_contacts() is SECURITY DEFINER, checks is_director() OR
+--     is_super_admin() in its own body, and writes a community_audit_logs row
+--     BEFORE returning any data.
+--   * The log records the search term and the row count, NOT the rows —
+--     logging the PII in order to protect the PII would be self-defeating.
+--
+-- Same rule as member_directory_view: the authorization check inside the
+-- function body MUST survive any edit, or this becomes a public export of
+-- ~1,955 people's phone numbers.
+--
+-- VERIFY:
+--   select has_function_privilege('anon','public.get_aq_contacts(text,integer,integer)','EXECUTE');
+--   -- expect false
+
+
+-- ── 3. Approval auto-populates the archive ─────────────────────────────────
+--
+-- This is the centrepiece of retiring the sheet. Previously, approving a
+-- member required someone on HR to remember to type their details into
+-- COMMUNITY AQUATERRA.xlsx by hand. That manual step is precisely why the
+-- sheet (1,955) and `members` (1,369) disagree and neither can be trusted.
+--
+-- trg_sync_contact_on_member_approval fires on members.status -> 'active',
+-- links an existing archive row by normalised phone (then email), or creates
+-- one, and audits either way. AFTER trigger, so a failure cannot block an
+-- approval.
+--
+-- VERIFY (after the next real approval):
+--   select action, details from community_audit_logs
+--    where action = 'contact_synced_on_approval' order by created_at desc limit 5;
+
+
+-- ── 4. Trigger functions are no longer callable as RPCs ────────────────────
+--
+-- Supabase exposes every public function at /rest/v1/rpc/<name>. Fourteen
+-- trigger functions were reachable that way, several SECURITY DEFINER and
+-- mutating posts/members. Nothing in the app calls them — verified against
+-- every `.rpc('…')` call site in src/. EXECUTE revoked from anon,
+-- authenticated and public.
+--
+-- Revoking does NOT stop the triggers: proven empirically on a throwaway
+-- table before applying (revoked function, trigger still fired, probe
+-- dropped). Postgres checks EXECUTE on direct calls, not on trigger firing.
+
+
+-- ============================================================================
+-- STILL TO RUN — the data import itself
+-- ============================================================================
+-- The schema above is live but EMPTY. To fill it:
+--
+--   cd frontend
+--   node scripts/hr-import/import-hr-workbooks.mjs                # dry run
+--   SUPABASE_SERVICE_ROLE_KEY=... \
+--     node scripts/hr-import/import-hr-workbooks.mjs --write      # apply
+--
+-- The service-role key is required and is NOT in .env — the anon key cannot
+-- write these tables and, since the PII lockdown, cannot even read
+-- members.email/phone to do the matching. Get it from
+-- Supabase → Project Settings → API → service_role. Do not commit it.
+--
+-- Dry-run output on 2026-09-02 (without a key, so matching was skipped):
+--   contacts  upsert  1,937  aq_contacts        (18 rows skipped: no name)
+--   teams     upsert    166  member_preauth
+--   teams     skip       48  no member match and no email — nothing to key on
+--   sops      insert     89  sops
+-- Re-run the dry run WITH the key before writing: the match counts are the
+-- number that actually matters, and they were 0 in that run.
+-- ============================================================================

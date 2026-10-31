@@ -1,0 +1,34 @@
+{
+  "_README": [
+    "OUTSTANDING VIOLATIONS — real defects, deliberately NOT fixed, not exempt.",
+    "",
+    "These are genuine failures of DESIGN.md §2. This is a DEBT LEDGER, not an",
+    "exemption model. The linter prints every entry loudly on each run and the",
+    "list only ever shrinks. An empty \"outstanding\" array is the goal state.",
+    "",
+    "2026-09-07: the eleven entries deferred during the accent-token sweep (their",
+    "files were held by other agents at the time) are DRAINED. Eight took the",
+    "one-token swap var(--welfare) -> var(--welfare-ink); the other three turned",
+    "out to be on an ink ground the static checker cannot resolve, where the swap",
+    "measured WORSE, and became documented `accent-lint-ok:` pragmas instead:",
+    "  HomePage.tsx:297 (.rail-join, background: var(--ink)) — welfare 4.55 vs",
+    "    welfare-ink 3.20 on #0A0A0A",
+    "  footer.css:201 (.aq-footer, background: var(--ink)) — same pair",
+    "  routes/home.css:821 (.rail-quicklink.is-hero, background: var(--ink)) —",
+    "    lemon 12.65 vs lemon-ink 3.36 on #0A0A0A",
+    "That trap is the whole reason this ledger's stated ratios must never be",
+    "trusted on their own: ALWAYS measure the real composited ground first.",
+    "",
+    "What remains below is the one entry that is genuinely not fixable by a token",
+    "swap. Do not 'fix' it — the swap measures worse there too."
+  ],
+  "outstanding": [
+    {
+      "file": "src/public/AboutPage.css",
+      "line": 728,
+      "token": "var(--welfare)",
+      "ratio": "3.06 on #302F2D",
+      "owner": "ground is the dark #302F2D receipt slab, not cream - the checker cannot resolve it. Both --welfare (3.06) and --welfare-ink (2.42) are under the floor there, so the ink swap measures WORSE. Real fix is the double-tint structure decision, already reported to the redesign lead; see the comment above the rule."
+    }
+  ]
+}

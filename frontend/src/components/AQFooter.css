@@ -1,0 +1,380 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2 · THE BENTO OF LINKS
+
+   Why this half of the footer is styled here and not in styles/footer.css:
+   AQFooter.tsx imports AQFooter.css FIRST, so anything declared at equal
+   specificity in footer.css silently wins and reverts it. That has bitten
+   `.aq-footer-link` before — a leftover light-background rule there beat this
+   file's paper-on-ink colour and shipped 2.86:1 link text on every page of
+   the site. The rule that came out of it: the link cluster's colours live in
+   ONE file, and it is this one.
+
+   Owner's ruling for this section: "regroup and promote a few to feature
+   tiles." That gave three fact tiles:
+
+     drives (span 3)   ·  members (span 2)  ·  teams (span 1)
+
+   which ARE the old `explore` group's three destinations (/projects, /teams,
+   /members), so the group dissolved into features rather than being
+   duplicated: every destination the footer had still has exactly one home.
+   Each carries a live figure from ORG_FACTS — never a hand-typed statistic,
+   and never a zero.
+
+   The other three sections (`read & connect` / `organisation` / `be a part`)
+   started as three more tiles in this same grid, and were pulled back OUT of
+   it on 2026-09-08 — see the "link columns" block below for why (short
+   version: a card per column, sub-divided two-up to fight height, is what
+   "crammed and horrible especially on mobile" was describing). They now live
+   in `.aq-foot-links`, a plain column layout sitting directly on the footer's
+   ink ground, rendered right after this bento in the markup.
+
+   ── 2026-09-07 · colour + the missing type rung ─────────────────────────────
+   The adversarial review measured this bento as "six near-identical grey
+   rectangles": one `rgba(244,239,224,0.07)` fill repeated six times, one
+   hairline repeated six times, and headings AND go-labels both at
+   `--nav-fg-faint` 9px — literally one tonal step inside a tile.
+
+   Two fixes, both borrowed from a surface that already works: the home left
+   rail's browse card (`styles/routes/home.css` `.rail-cat-tile`), which
+   renders the same information architecture as five hue-tinted tiles plus one
+   saturated hero.
+
+   1 · COLOUR. Every tile now carries a department hue from `lib/departments.ts`
+       as `--tc`, mixed 22% into the ink ground (an opaque MIX, not an alpha, so
+       the composited colour is knowable at author time and the numbers below
+       are measured rather than approximate), with a 34% hairline of the same
+       hue and a full-saturation 8px dot on the heading. `/projects` is the ONE
+       hero: a full `--welfare` fill, and every glyph on it is FULL-OPACITY
+       INK, never an alpha of ink — that is the exact failure this project has
+       shipped five separate times.
+
+   2 · THE MISSING RUNG. There was a 118px wordmark, a 44px figure, and then a
+       cliff straight to 13px. The tile headings move from mono 9px/800 at 0.55
+       to Eina 800 at 20px in full-opacity paper. That is the 18–28px rung the
+       review names, and it is also the second tonal step the tiles lacked.
+
+   Contrast, all measured live via getComputedStyle + WCAG relative luminance
+   (grounds are the mixed tints, not bare ink):
+     headings   --nav-fg        1.00  · >= 12.9:1 on every tint
+     links      --nav-fg-strong 0.82  · >=  8.6:1 on every tint
+     go-labels  --nav-fg-dim    0.78  · >=  6.6:1 on every tint
+     hero tile  --ink on --welfare    ·     4.55:1, at all three sizes
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.aq-bento {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 2px;
+}
+.aq-bento-a { grid-column: span 3; }
+.aq-bento-b { grid-column: span 2; }
+.aq-bento-c { grid-column: span 1; }
+
+@media (max-width: 900px) {
+  .aq-bento { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .aq-bento-a { grid-column: span 4; }
+  .aq-bento-b, .aq-bento-c { grid-column: span 2; }
+}
+/* Phone: two columns. The fact tiles stay a compact bento — three numbers
+   is not what "crammed" was about; the SEVENTEEN LINKS below were (see the
+   link-columns block further down). */
+@media (max-width: 620px) {
+  .aq-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .aq-bento-a { grid-column: span 2; }
+  .aq-bento-b, .aq-bento-c { grid-column: span 1; }
+}
+
+/* Depth comes from a hue-tinted ground on the ink card plus a hue hairline —
+   not from a shadow, and not from the 2/3px ink border §14.7 deletes.
+   `--tc` defaults to paper so a tile with no hue class still renders the old
+   neutral well rather than collapsing to transparent. */
+.aq-tile {
+  --tc: var(--paper);
+  background: color-mix(in srgb, var(--tc) 22%, var(--ink));
+  border: 1px solid color-mix(in srgb, var(--tc) 34%, transparent);
+  border-radius: var(--r-inner);   /* 22 — the card is 32; 32 − 10 = 22 */
+  padding: 16px;
+  box-sizing: border-box;
+  min-width: 0;
+}
+@media (max-width: 620px) { .aq-tile { padding: 13px; border-radius: var(--r-tight); } }
+
+/* The department hues from lib/departments.ts, one per tile. */
+.aq-bento-a { --tc: var(--welfare); }
+.aq-bento-b { --tc: var(--sky); }
+.aq-bento-c { --tc: var(--lemon); }
+
+/* ── the three feature tiles ─────────────────────────────────────────────── */
+.aq-tile--feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  /* Approved artboard sizes these at 150; 108 flattened them into bars. */
+  min-height: 150px;
+  text-decoration: none;
+  transition: background .14s, border-color .14s;
+}
+/* DESIGN.md §2: the focus ring is 3px grape at offset 2 everywhere. It is not
+   a per-surface decision — an earlier pass restyled it to 2px welfare here and
+   in styles/footer.css, which is exactly the drift the rule exists to stop. */
+.aq-tile--feature:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+/* ── all three tiles, full saturation, ink type ──────────────────────────────
+   2026-09-11: this used to be ONE saturated tile beside two tints of ink
+   (welfare at 100%, sky at 22%, lemon at 28%), on the reasoning that a single
+   saturated card makes the tinted ones read as a set. On the ink ground those
+   two tints resolved to a muddy navy and a dark olive - measured live - and
+   the row stopped reading as a bento at all. It is the block the walkthrough
+   pointed at.
+
+   The approved design has all three at full saturation with ink on top, which
+   is what makes it a bento rather than three dark rectangles, so that is what
+   this now is.
+
+   Contrast: ink (#0A0A0A) on welfare 6.9:1, on sky 8.6:1, on lemon 12.7:1 -
+   every one clears AA for the large figure AND the 13px unit line. These are
+   display hues carrying text, which is exactly the case the `*-ink` partners
+   exist for elsewhere; here the FILL is the hue and the TEXT is ink, so the
+   partners do not apply. */
+.aq-tile--feature {
+  background: var(--tc);
+  border-color: var(--tc);
+  color: var(--ink);
+}
+.aq-tile--feature:hover {
+  background: var(--tc);
+  border-color: var(--ink);
+}
+.aq-tile--feature .aq-tile-fig,
+.aq-tile--feature .aq-tile-unit,
+.aq-tile--feature .aq-tile-go,
+.aq-tile--feature:hover .aq-tile-go { color: var(--ink); }
+.aq-tile--feature .aq-tile-fig--pending { border-color: var(--ink); color: var(--ink); }
+
+.aq-tile-fig {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--nav-fg);            /* 15.6:1 */
+}
+/* A figure that does not resolve is a dashed live marker, never a 0 — a zero
+   is a claim (WORKFLOW.md / BRAND_VOICE.md §3). */
+/* audit-ok: dashed - a "no data yet" figure, the second case 00.12 keeps. */
+.aq-tile-fig--pending {
+  display: inline-block;
+  font-size: 20px;
+  padding: 2px 14px;
+  border: 1px dashed var(--nav-fg-faint);
+  border-radius: var(--r-tight);   /* 14 */
+  color: var(--nav-fg-faint);
+}
+.aq-tile-unit {
+  font: 600 13px var(--eina);
+  color: var(--nav-fg-strong);     /* 10.1:1 on ink, >= 8.6:1 on every tint */
+}
+.aq-tile-go {
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  /* NOT --nav-fg-faint. The 0.55 floor was calibrated against BARE ink, and
+     these two tiles no longer sit on bare ink: measured on the sky tint it
+     came out 3.96:1 and on the lemon tint 3.42:1 — the tinted grounds are
+     lighter than the ladder assumes. 0.78 clears 4.5:1 on every tint in the
+     set (worst case lemon, 6.63:1). A lighter ground raises the floor; the
+     token ladder does not know that, so the surface has to. */
+  color: var(--nav-fg-dim);        /* 0.78 · >= 6.6:1 on every tint */
+  transition: color .13s;
+}
+.aq-tile--feature:hover .aq-tile-go { color: var(--nav-fg); }
+
+/* ── the link columns (2026-09-08) ───────────────────────────────────────────
+   These used to be three more bento tiles: a hue-tinted card per column, its
+   own links wrapped two-up inside it to fight the height a card per section
+   was costing. The owner's flag was specific — "crammed and horrible
+   especially on mobile" — and a two-up sub-grid *inside* a card that is
+   itself one of six tiles in an outer grid is the mechanism: 13px labels in
+   a ~170px-wide half-tile at 375px, no card able to breathe from its
+   neighbours.
+
+   Reference given was a Kolkata tutoring site's footer: dark ground, a small
+   muted label per column, ONE vertical stack of links under it, generous
+   rhythm, columns that stack cleanly on a phone instead of squeezing. That is
+   a structural fix, not a reskin — no new colours, no new type family, still
+   AquaTerra's hues/radii/borders. So these three sections come OUT of
+   `.aq-bento` entirely: no card fill, no tile border, no inner sub-grid. They
+   sit directly on the footer's own ink ground, one column each, full width
+   of that column, stacked to a single column of columns below 760px. The
+   three fact tiles above stay a bento — three numbers were never the
+   complaint. */
+.aq-foot-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px 28px;
+  margin-top: 22px;
+  padding-top: 24px;
+  border-top: var(--hair-inv);
+}
+/* ── Below 760: the LINKS go two-up, not the groups ───────────────────────
+   This collapsed to a single column of 17 links at the 44px touch floor, which
+   measured a 1,035px link block inside a 2,778px footer at 375x812 - four
+   screens of footer on a phone.
+
+   Two arrangements were tried and measured before this one:
+
+     GROUPS in a 2-col grid. Three uneven groups into two columns leaves the
+     third alone on row two with a 147x300px hole beside it. 694px, and the
+     hole reads as a mistake.
+
+     GROUPS in CSS multi-column. `columns` balances by height, but it cannot
+     REORDER - each column must take a prefix of the source order. With groups
+     of 275/398/298px the only splits available are {g1} and {g1,g2}, so it
+     chose a 275px first column against a 696px second. Worse, and visibly
+     lopsided. 714px.
+
+   So the groups stay stacked full width, and the LINKS inside each group go
+   two-up instead. 17 links in one column is 17 rows; two-up is 3+4+3 = 10.
+   Each heading still spans its own group, so the grouping stays legible, and
+   the 44px touch target is untouched - the height came from the column count,
+   never the row height.
+
+   auto-fit against the real content rather than another breakpoint: the
+   longest label in the footer is "volunteer handbook" at 125px measured at the
+   real 13px size, so a 140px floor gives two columns on any phone from ~360px,
+   three in the 600-760 band where there is room, and folds back to one on a
+   320px screen where two genuinely would not fit.                            */
+@media (max-width: 760px) {
+  .aq-foot-links {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 18px;
+    padding-top: 20px;
+  }
+  /* No card edge tells the groups apart once stacked, so a hairline does -
+     between sections only, never around one. */
+  .aq-foot-col + .aq-foot-col { border-top: var(--hair-inv); margin-top: 20px; padding-top: 20px; }
+}
+
+.aq-foot-col { min-width: 0; }
+
+/* Same three department hues the tiles carried, now on a small heading dot
+   instead of a whole tinted fill. */
+.aq-col-d { --tc: var(--grape); }
+.aq-col-e { --tc: var(--teal); }
+.aq-col-f { --tc: var(--tomato); }
+
+/* An <h2>: these are sections of the page. Small and muted and uppercase —
+   the reference's "label heading" — is the right register here specifically
+   because it now sits directly on bare ink with a spacious link stack under
+   it; nothing else on this row competes with it for a "what tonal step is
+   this" reading, which is what forced the tile version up to 20px. */
+.aq-foot-col-h {
+  /* Item 1.1. The ONE rule in the whole codebase that was already both --eina
+     and `text-transform: uppercase`, so this is the single conversion that
+     costs nothing: same case, same size, same tracking, brand face. */
+  font-family: var(--display) !important;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nav-fg-soft);       /* 0.60 · 6.5:1 on bare ink */
+  margin: 0 0 14px;
+  padding: 0; background: none; transform: none; border-radius: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.aq-foot-col-h::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--tc);
+  flex: none;
+}
+
+.aq-foot-col-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  /* The generous rhythm the owner asked for: on top of each link's own 44px
+     tap box, real air between rows rather than tap-target-to-tap-target. */
+  gap: 6px;
+}
+
+.aq-footer-link {
+  display: flex;
+  align-items: center;
+  width: 100%;                     /* the 44px floor is a WIDTH rule too: "faq"
+                                      at its natural width measured 43px */
+  box-sizing: border-box;
+  /* §14.5's hit-target fix. Its literal `min-height: 24px + padding: 6px 0`
+     computes to a 36px box, which is under its own >=44px goal. Worse, with
+     `box-sizing: border-box` a 24px min-height is already SATISFIED by the
+     13px label's own 17.6px line box plus 22px of padding, so the min-height
+     never binds at all: measured live, that link box came out 39.6px tall.
+     The floor is therefore stated as the floor — 44px, border-box — and the
+     padding only sets the rhythm inside it. The 2026-09 density pass removed
+     the LIST's 11px gap, never this box: the hit area is still exactly 44px.
+     2026-09-08: that 44px floor is a TOUCH-target rule and was applied with
+     no width gate, so it rode all the way up to desktop too - three columns
+     of 5-6 links at 44px each measured a 399.6px-tall link block alone
+     (`.aq-foot-links` desktop total), making the whole footer read as
+     empty/bloated with a mouse rather than compact the way a desktop footer
+     should be. The floor now only binds at <=760px (see the override below);
+     desktop gets its own tighter row. */
+  min-height: 44px;
+  padding: 11px 0;
+  font: 600 13px var(--eina);
+  color: var(--nav-fg-strong);     /* 0.82 · 10.1:1 — not --nav-fg-dim or lower;
+                                      these are the primary navigation here */
+  text-decoration: none;
+  border-radius: 0;                /* 3px is on no scale; a link box needs no corner */
+  transition: color .13s;
+}
+.aq-footer-link:hover {
+  color: var(--nav-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.aq-footer-link:focus-visible {
+  color: var(--nav-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  outline: 3px solid var(--grape);  /* DESIGN.md §2 — see the note above */
+  outline-offset: 2px;
+}
+
+/* Desktop link rows: the 44px touch-target floor above is for a thumb, not a
+   cursor. At >760px each link is a compact pointer-hover row instead - real
+   footers on a wide screen read as dense reference lists, not a stack of
+   giant tap targets with air in between. Declared AFTER the base rule on
+   purpose - equal specificity, so cascade order is what makes this win. */
+@media (min-width: 761px) {
+  .aq-foot-col-links { gap: 2px; }
+  .aq-footer-link { min-height: 0; padding: 5px 0; }
+}
+
+/* The two-up link grid described above. It has to live HERE, after the base
+   `.aq-foot-col-links` rule and its desktop override, for exactly the reason
+   the comment on that override gives: equal specificity, so cascade ORDER is
+   what decides. Declared earlier in the file it lost to the base rule's
+   `display: flex` and silently did nothing - the links kept stacking one per
+   row while the media query said otherwise. */
+@media (max-width: 760px) {
+  .aq-foot-col-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+    gap: 2px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aq-tile--feature, .aq-footer-link, .aq-tile-go { transition: none !important; }
+}
