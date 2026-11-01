@@ -16,7 +16,7 @@ const db = supabaseCommunity as any
 /** The column ships in scripts/disco_diwali_instagram_2026_10_24.sql. Until that runs, say so instead of a bare Postgres error. */
 function igError(e: any): Error {
   const msg = String(e?.message ?? '')
-  return /instagram|ig_close_friend|\bdob\b/i.test(msg) && /column|schema cache/i.test(msg)
+  return /instagram|ig_close_friend|name_changed|\bdob\b/i.test(msg) && /column|schema cache/i.test(msg)
     ? new Error('Instagram, Close Friends and date of birth need the database update (scripts/disco_diwali_instagram_2026_10_24.sql). Save without them, or run it first.')
     : e
 }
@@ -62,6 +62,8 @@ export interface NewDiscoReg {
   dob?: string | null
   /** Already added to Close Friends. Left out of the insert unless true. */
   igCloseFriend?: boolean
+  /** Name was changed after booking. Left out of the insert unless true. */
+  nameChanged?: boolean
   phase: string
   amount: number | null
   /** A cash walk-in is paid, stamped "cash" in the notes and ticked in on the spot. */
@@ -87,6 +89,7 @@ export async function addDiscoReg(input: NewDiscoReg): Promise<DiscoReg> {
         ...(input.instagram ? { instagram: input.instagram } : {}),
         ...(input.dob ? { dob: input.dob } : {}),
         ...(input.igCloseFriend && input.instagram ? { ig_close_friend: true } : {}),
+        ...(input.nameChanged ? { name_changed: true } : {}),
         phase: input.phase,
         amount: input.amount,
         paid: true,
@@ -105,7 +108,7 @@ export async function addDiscoReg(input: NewDiscoReg): Promise<DiscoReg> {
 
 export async function updateDiscoReg(
   id: string,
-  patch: Partial<Pick<DiscoReg, 'name' | 'phone' | 'school' | 'instagram' | 'ig_close_friend' | 'dob' | 'phase' | 'amount' | 'paid' | 'attended' | 'notes'>>,
+  patch: Partial<Pick<DiscoReg, 'name' | 'phone' | 'school' | 'instagram' | 'ig_close_friend' | 'name_changed' | 'dob' | 'phase' | 'amount' | 'paid' | 'attended' | 'notes'>>,
 ): Promise<void> {
   const { data, error } = await db
     .from('disco_diwali_registrations')

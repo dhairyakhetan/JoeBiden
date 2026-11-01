@@ -72,7 +72,7 @@ function EditModal({ reg, phases, onClose, onSave }: {
   onSave: (patch: Partial<DiscoReg>) => Promise<boolean>
 }) {
   const [f, setF] = useState({
-    name: reg.name, phone: reg.phone, school: reg.school ?? '', instagram: reg.instagram ?? '', dob: reg.dob ?? '', closeFriend: !!reg.ig_close_friend, phase: reg.phase,
+    name: reg.name, phone: reg.phone, school: reg.school ?? '', instagram: reg.instagram ?? '', dob: reg.dob ?? '', closeFriend: !!reg.ig_close_friend, nameChanged: !!reg.name_changed, phase: reg.phase,
     amount: reg.amount?.toString() ?? '', paid: reg.paid, notes: reg.notes ?? '',
   })
   const [saving, setSaving] = useState(false)
@@ -90,7 +90,7 @@ function EditModal({ reg, phases, onClose, onSave }: {
     setSaving(true)
     const n = f.amount.trim() === '' ? null : parseInt(f.amount, 10)
     const ok = await onSave({
-      name: f.name.trim(), phone: f.phone.trim(), school: f.school.trim() || null, instagram: normaliseInstagram(f.instagram).handle, dob: cleanDobNote(f.dob), ig_close_friend: !!normaliseInstagram(f.instagram).handle && f.closeFriend, phase: f.phase,
+      name: f.name.trim(), phone: f.phone.trim(), school: f.school.trim() || null, instagram: normaliseInstagram(f.instagram).handle, dob: cleanDobNote(f.dob), ig_close_friend: !!normaliseInstagram(f.instagram).handle && f.closeFriend, name_changed: f.nameChanged, phase: f.phase,
       amount: n !== null && Number.isFinite(n) && n >= 0 ? n : null, paid: f.paid, notes: f.notes.trim() || null,
     })
     setSaving(false)
@@ -111,6 +111,10 @@ function EditModal({ reg, phases, onClose, onSave }: {
           <label className="tt-label" htmlFor="dd-e-name">Name</label>
           <input id="dd-e-name" className="tt-input" required value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
         </div>
+        <label className="tt-check">
+          <input type="checkbox" checked={f.nameChanged} onChange={(e) => setF({ ...f, nameChanged: e.target.checked })} />
+          <span>Name changed after booking</span>
+        </label>
         <div>
           <label className="tt-label" htmlFor="dd-e-phone">Phone</label>
           <input id="dd-e-phone" className="tt-input" type="tel" inputMode="tel" required value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} />
@@ -170,6 +174,7 @@ function TicketCard({ reg, phases, onClose, onCopyMessage }: {
   const p = phases.find((x) => x.key === reg.phase)
   const rows: Array<[string, string]> = [
     ['Name', reg.name],
+    ['Name changed', reg.name_changed ? 'Yes' : 'No'],
     ['Phone', prettyPhone(reg.phone)],
     ...(reg.instagram ? [['Instagram', `@${reg.instagram}${reg.ig_close_friend ? ' (in close friends)' : ' (not yet in close friends)'}`] as [string, string]] : []),
     ...(reg.dob ? [['Date of birth', reg.dob] as [string, string]] : []),
@@ -275,7 +280,7 @@ function DiscoDeskInner() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
 
-  const [form, setForm] = useState({ name: '', phone: '', school: '', instagram: '', dob: '', closeFriend: false })
+  const [form, setForm] = useState({ name: '', phone: '', school: '', instagram: '', dob: '', closeFriend: false, nameChanged: false })
   // null means "follow whichever phase is live"; set once the admin picks one by hand.
   const [formPhase, setFormPhase] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
@@ -396,11 +401,11 @@ function DiscoDeskInner() {
     setAdding(true)
     try {
       const row = await addDiscoReg({
-        name, phone, school: form.school.trim() || null, instagram: ig.handle, dob: cleanDobNote(form.dob), igCloseFriend: form.closeFriend && !!ig.handle, phase: effectivePhase,
+        name, phone, school: form.school.trim() || null, instagram: ig.handle, dob: cleanDobNote(form.dob), igCloseFriend: form.closeFriend && !!ig.handle, nameChanged: form.nameChanged, phase: effectivePhase,
         amount: p?.amount ?? null, cashWalkIn, createdBy: adminName,
       })
       setRegs((r) => [row, ...r])
-      setForm({ name: '', phone: '', school: '', instagram: '', dob: '', closeFriend: false })
+      setForm({ name: '', phone: '', school: '', instagram: '', dob: '', closeFriend: false, nameChanged: false })
       if (cashWalkIn) {
         success('Checked in', `${row.name} · ${row.dd_id} · cash`)
       } else {
@@ -636,6 +641,10 @@ function DiscoDeskInner() {
               <label className="tt-label" htmlFor="dd-name">Name</label>
               <input id="dd-name" className="tt-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="full name" />
             </div>
+            <label className="tt-check" style={{ flex: '0 0 auto', alignSelf: 'flex-end', minHeight: 44 }}>
+              <input type="checkbox" checked={form.nameChanged} onChange={(e) => setForm({ ...form, nameChanged: e.target.checked })} />
+              <span>Name changed</span>
+            </label>
             <div style={{ flex: '1 1 150px' }}>
               <label className="tt-label" htmlFor="dd-phone">Phone</label>
               <input id="dd-phone" className="tt-input" type="tel" inputMode="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91 …" />

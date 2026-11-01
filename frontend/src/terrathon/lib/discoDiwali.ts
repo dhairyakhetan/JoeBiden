@@ -19,6 +19,8 @@ export interface DiscoReg {
   instagram?: string | null
   /** Whether they have been added to the account's Instagram Close Friends list. A to-do the desk ticks off. */
   ig_close_friend?: boolean
+  /** The name on the ticket was changed after booking. Defaults to false; absent on a database that has not run the name_changed migration. */
+  name_changed?: boolean
   /** Date of birth as yyyy-mm-dd. Optional personal data; some guests are minors. */
   dob?: string | null
   /** The `key` of a DiscoPhase. Free-form so an admin can add phases. */
