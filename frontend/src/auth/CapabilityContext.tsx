@@ -76,7 +76,15 @@ export function CapabilityProvider({ children }: { children: ReactNode }) {
     }
   }, [role])
 
-  useEffect(() => { void refresh() }, [refresh])
+  // `ready` must not outlive the role it was computed for. While the member is
+  // still loading, role is null and refresh() settles ready=true over an EMPTY
+  // matrix; when the role then arrives, can() would answer from that empty
+  // matrix (everything enabled) until the real fetch lands. Dropping ready on
+  // every role change makes gates (DeskCapabilityGate) wait for the fetch.
+  useEffect(() => {
+    setReady(false)
+    void refresh()
+  }, [refresh, role])
 
   const can = useCallback(
     (capabilityKey: string) => effectiveCan(matrix, capabilityKey, role),

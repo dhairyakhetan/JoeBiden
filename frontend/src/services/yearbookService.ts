@@ -4,6 +4,7 @@ import { getCachedMemberId } from '../lib/authCache'
 import { resizeForUpload } from '../lib/resizeImage'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { logAction } from '../lib/auditLog'
 
 export interface YearbookEntry {
   id: number
@@ -19,6 +20,14 @@ export interface YearbookEntry {
   memberName?: string
   memberAvatarUrl?: string
   memberUuid?: string
+}
+
+/** Headline counts for the desk. `waiting` is invited-and-not-yet-answered, so skipped rows are not counted as invited. */
+export function yearbookCounts(entries: Array<{ status: YearbookEntry['status'] }>) {
+  const submitted = entries.filter(e => e.status === 'submitted').length
+  const skipped = entries.filter(e => e.status === 'skipped').length
+  const waiting = entries.filter(e => e.status === 'invited').length
+  return { total: entries.length, submitted, skipped, waiting }
 }
 
 function mapRow(row: any): YearbookEntry {
@@ -39,6 +48,31 @@ function mapRow(row: any): YearbookEntry {
 }
 
 const yearbookServiceImpl = {
+  /** Nudge someone who was invited and has not answered. Only valid while still 'invited'. */
+  async remindMember(entry: { id: number; memberId: number; editionYear: number }): Promise<void> {
+    const { data, error } = await (supabaseCommunity as any)
+      .from('yearbook_entries').select('id, status').eq('id', entry.id).maybeSingle()
+    if (error) throw logSupabaseError('yearbookService.remindMember', error)
+    if (!data || data.status !== 'invited') throw new Error('This invite has already been answered or removed. Refresh the list.')
+    await notificationService.create({
+      memberId: entry.memberId,
+      type: 'system',
+      title: `a reminder: your ${entry.editionYear} yearbook entry`,
+      subtitle: 'pick a photo and write a one-line quote - it takes a minute.',
+      link: '/yearbook',
+    })
+    logAction('yearbook_invite_reminded', 'member', entry.memberId, { editionYear: entry.editionYear, entryId: entry.id })
+  },
+
+  /** Withdraw an invite that was never answered. Refuses to delete a submitted or skipped entry. */
+  async removeInvite(entry: { id: number; memberId: number; editionYear: number }): Promise<void> {
+    const { data, error } = await (supabaseCommunity as any)
+      .from('yearbook_entries').delete().eq('id', entry.id).eq('status', 'invited').select('id')
+    if (error) throw logSupabaseError('yearbookService.removeInvite', error)
+    if (!data || data.length === 0) throw new Error('Could not remove that invite: it was already answered, or you may not have permission.')
+    logAction('yearbook_invite_removed', 'member', entry.memberId, { editionYear: entry.editionYear, entryId: entry.id })
+  },
+
   /**
    * The HoD/HR desk's invite list for one edition, newest invite first.
    *
@@ -102,6 +136,7 @@ const yearbookServiceImpl = {
       }).catch(() => {})
     ))
 
+    logAction('yearbook_members_invited', 'yearbook_entry', undefined, { editionYear, count: toInvite.length, memberIds: toInvite })
     return { invited: toInvite.length, alreadyInvited: already.size }
   },
 

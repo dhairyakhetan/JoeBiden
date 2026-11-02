@@ -42,6 +42,10 @@ export default function DeskCapabilityGate({
   if (!ready) return null
 
   if (!can(`desk.${deskKey}`)) {
+    // `requiredRole` here is NOT a requirement: in the 'capability' variant
+    // PermissionDenied prints it as "turned off for <role>", so the viewer's own
+    // role label is exactly what that sentence needs. (Audit D5 read it as
+    // "requires HoD"; the variant's copy does not say that.)
     return <PermissionDenied variant="capability" requiredRole={getRoleLabel(member?.role)} />
   }
 

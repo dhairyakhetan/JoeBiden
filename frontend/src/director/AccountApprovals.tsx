@@ -1,7 +1,8 @@
 import Img from '../components/Img'
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Link, useOutletContext } from 'react-router-dom'
-import directorService, { PendingMember, RejectedMember } from '../services/directorService'
+import { Link } from 'react-router-dom'
+import directorService, { PendingMember, RejectedMember, isAlreadyDecided } from '../services/directorService'
+import { cursorFromLast, appendUnique } from '../services/keysetCursor'
 import {
   useModalA11y,
   AdminLayout, AdminTabHeader, DataToolbar, FilterPill, EmptyLedger,
@@ -14,8 +15,12 @@ import { useAuth } from '../auth/AuthContext'
 import { isSuperAdmin as isSuperAdminRole } from '../lib/roles'
 import { I } from '../components/v6Shared'
 import { ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import type { DirectorContext } from './DirectorDashboard'
 import { getInitials, hashColor } from '../lib/uiHelpers'
+import DuplicatePhones from './DuplicatePhones'
+import { createRequestTokens } from './memberDirectoryRules'
+import {
+  SEARCH_DEBOUNCE_MS, buildFilters, contactedFilterForView, headerCount, isFiltered, mergeGrades, normalizeGrade,
+} from './accountApprovalsQuery'
 // `.adm-sort` lives here (shared admin-desk primitive, despite the filename -
 // TeamManagement/MemberOfMonth/CategoryManagement already reuse it the same
 // way MemberDirectory does), not in a dedicated AccountApprovals stylesheet.
@@ -96,40 +101,38 @@ const rejectedAgo = (dateStr: string) => {
 const AccountApprovals = () => {
   const { member: currentMember } = useAuth()
   const toast = useToast()
-  const isSuperAdmin = isSuperAdminRole(currentMember?.role)
   // Set on /director/roles. True unless a super admin has switched
   // "Approve or reject accounts" off for this role; it can only narrow what the
   // members UPDATE policy already permits, never widen it.
   const canDecide = useCan('action.approve_member')
-  // Scope-aware empty copy: the desk knows which categories this director
-  // actually holds, so "nothing waiting" never claims global emptiness.
-  const { myCategories } = useOutletContext<DirectorContext>()
-  // Account approvals aren't category-scoped moderation (unlike posts) - the
-  // members-table UPDATE policy grants any director/hod/super_admin write
-  // access here (see directorService.approveMember), so any HoD/Director
-  // should be able to reach this desk, not just ones assigned "operations".
+  // Account approvals are HR / super admin only (since 2026-09-12) and are not
+  // team-scoped, so there is no per-desk scope to describe in the empty state.
 
   const [hasAccess, setHasAccess] = useState<boolean | null>(null)
   const [members, setMembers] = useState<PendingMember[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [search, setSearch] = useState('')
   const [gradeFilter, setGradeFilter] = useState<'all' | string>('all')
   const [sortBy, setSortBy] = useState<PendingSortBy>('oldest')
-  const [totalPending, setTotalPending] = useState<number | null>(null)
-  /** Exact totals for the pending/contacted split - see
+  /** Every grade in the pending queue (separate query), so the pills never shrink to what is loaded. */
+  const [allGrades, setAllGrades] = useState<string[]>([])
+  /** A filter-change refetch: keeps the toolbar mounted (and the search box focused), unlike the first load. */
+  const [isFetching, setIsFetching] = useState(false)
+  /** The search text the server has been asked about: `search` after a ~250 ms pause. */
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  /** Exact totals for the pending/contacted split under the ACTIVE search and grade - see
    *  directorService.getPendingContactedCounts's own doc comment for why
    *  `rows.length` (whatever's been paginated in) is not good enough here. */
   const [contactedCounts, setContactedCounts] = useState<{ notContacted: number; contacted: number } | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
-  // Pending/contacted/all read the SAME queue (`members`), just filtered by
-  // `contactedAt` client-side - `rejected` is the one genuinely different
-  // Supabase view with its own pagination. `view` picks which is on screen.
-  const [view, setView] = useState<'pending' | 'contacted' | 'all' | 'rejected'>('pending')
+  // Pending/contacted/all read the same view; the contacted split, search and
+  // grade are all applied by the server (see accountApprovalsQuery.ts).
+  // `rejected` is the one genuinely different Supabase view with its own pagination.
+  const [view, setView] = useState<'pending' | 'contacted' | 'all' | 'rejected' | 'duplicates'>('pending')
   const [markingContacted, setMarkingContacted] = useState<number | null>(null)
   const [rejected, setRejected] = useState<RejectedMember[]>([])
   const [isLoadingRejected, setIsLoadingRejected] = useState(false)
@@ -156,37 +159,86 @@ const AccountApprovals = () => {
     setHasAccess(isSuperAdminRole(currentMember?.role))
   }, [currentMember?.role])
 
-  const fetchMembers = async (pageNum: number, append = false) => {
-    if (append) setIsLoadingMore(true); else { setIsLoading(true); setLoadError(null) }
+  // Server-side filters for the active view. Held in a ref so the async fetchers
+  // below always read the latest, never a stale closure.
+  const filters = useMemo(() => buildFilters(debouncedSearch, gradeFilter), [debouncedSearch, gradeFilter])
+  const contactedFilter = contactedFilterForView(view)
+  const queryRef = useRef({ filters, contactedFilter })
+  queryRef.current = { filters, contactedFilter }
+  const pageTokens = useRef(createRequestTokens()).current
+  const countTokens = useRef(createRequestTokens()).current
+  const activePageToken = useRef(0)
+  const firstLoadDone = useRef(false)
+
+  // First page when `append` is false; otherwise the next page AFTER the last
+  // row held (keyset). Approving or rejecting removes a row server-side, so an
+  // offset of page*20 skipped the sign-ups that slid up into the gap.
+  // A first-page fetch takes a new token; any response (first page or "load
+  // more") that is no longer the latest query is dropped, so a slow answer to
+  // an earlier keystroke can never overwrite a newer one.
+  const fetchMembers = async (append = false) => {
+    const { filters: f, contactedFilter: c } = queryRef.current
+    const token = append ? activePageToken.current : pageTokens.next()
+    if (!append) activePageToken.current = token
+    if (append) setIsLoadingMore(true)
+    else {
+      if (firstLoadDone.current) setIsFetching(true); else setIsLoading(true)
+      setLoadError(null)
+    }
     try {
-      const result = await directorService.getPendingApprovals({ page: pageNum, limit: 20 })
+      const after = append ? cursorFromLast(members, m => m.createdAt, m => m.memberId) : null
+      const result = await directorService.getPendingApprovals({
+        limit: 20, after, search: f.search, classGrade: f.classGrade, contacted: c,
+      })
+      if (!pageTokens.isLatest(token)) return
       if (result.success) {
-        if (append) setMembers(prev => [...prev, ...result.data]); else setMembers(result.data)
+        if (append) setMembers(prev => appendUnique(prev, result.data, m => m.memberId)); else setMembers(result.data)
         setHasMore(result.pagination.hasNextPage)
-        // The header counted `rows.length`, which is one PAGE, not the queue.
-        // With 27 pending the sidebar badge read 27 and the header right next
-        // to it read 20 — so a director could clear the visible list believing
-        // they were done while seven sign-ups sat on page two.
-        setTotalPending(result.pagination.totalItems ?? null)
       }
     } catch (err: any) {
+      if (!pageTokens.isLatest(token)) return
       const msg = err?.message || err?.error_description || 'Something went wrong.'
       if (!append) setLoadError(msg)
       toast.error(`Could not load pending approvals - ${msg}`)
       console.error('[AccountApprovals] fetchMembers error:', err)
     }
-    finally { setIsLoading(false); setIsLoadingMore(false) }
+    finally {
+      if (pageTokens.isLatest(token)) {
+        if (!append) firstLoadDone.current = true
+        setIsLoading(false); setIsLoadingMore(false); setIsFetching(false)
+      }
+    }
   }
 
   const refreshContactedCounts = async () => {
+    const token = countTokens.next()
     try {
-      setContactedCounts(await directorService.getPendingContactedCounts())
+      const counts = await directorService.getPendingContactedCounts({
+        search: queryRef.current.filters.search, classGrade: queryRef.current.filters.classGrade,
+      })
+      if (countTokens.isLatest(token)) setContactedCounts(counts)
     } catch { /* header falls back to rows.length below - not worth a toast for a count */ }
   }
 
+  // Debounce typing so each keystroke is not a round trip.
   useEffect(() => {
-    if (hasAccess === true) { fetchMembers(1); refreshContactedCounts() }
+    const t = setTimeout(() => setDebouncedSearch(search), SEARCH_DEBOUNCE_MS)
+    return () => clearTimeout(t)
+  }, [search])
+
+  // One effect for access, tab (contacted split), settled search and grade.
+  // `filters` is memoised on the normalised values, so whitespace-only edits
+  // do not refetch.
+  useEffect(() => {
+    if (hasAccess === true) { fetchMembers(); refreshContactedCounts() }
     else if (hasAccess === false) setIsLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAccess, filters, contactedFilter])
+
+  // The grade pill list comes from its own query, once.
+  useEffect(() => {
+    if (hasAccess !== true) return
+    directorService.getPendingGrades().then(setAllGrades).catch(() => { /* pills fall back to loaded rows */ })
   }, [hasAccess])
 
   const fetchRejected = async (pageNum: number, append = false) => {
@@ -197,6 +249,7 @@ const AccountApprovals = () => {
         if (append) setRejected(prev => [...prev, ...result.data]); else setRejected(result.data)
         setRejectedHasMore(result.pagination.hasNextPage)
         setTotalRejected(result.pagination.totalItems ?? null)
+        setRejectedPage(pageNum)
         setRejectedLoaded(true)
       }
     } catch (err: any) {
@@ -215,8 +268,8 @@ const AccountApprovals = () => {
   }, [view, hasAccess, rejectedLoaded])
 
   const grades = useMemo(
-    () => Array.from(new Set(members.map(m => m.classGrade).filter(Boolean) as string[])).sort(),
-    [members],
+    () => mergeGrades(allGrades, [...members.map(m => m.classGrade), normalizeGrade(gradeFilter)]),
+    [allGrades, members, gradeFilter],
   )
 
   // Memoized so useRowSelection's identity-based reset doesn't fire every render.
@@ -224,15 +277,11 @@ const AccountApprovals = () => {
   // left, so the three compose the way a spreadsheet's filter-then-sort does -
   // narrowing never fights the ordering, and vice versa.
   const rows = useMemo<Row[]>(() => {
-    const term = search.trim().toLowerCase()
+    // Search, grade and the contacted split are applied by the server. The
+    // contacted check stays here only so a row marked contacted moves out of
+    // the pending tab immediately, before any refetch.
     const filtered = members
-      // 'pending' = not yet contacted, 'contacted' = reached out and still
-      // undecided, 'all' = every pending_approval row regardless. All three
-      // read the same `members` fetch above - only `rejected` is a separate
-      // query, handled entirely by `rejectedRows` below.
       .filter(m => view === 'pending' ? !m.contactedAt : view === 'contacted' ? !!m.contactedAt : true)
-      .filter(m => gradeFilter === 'all' || m.classGrade === gradeFilter)
-      .filter(m => !term || m.fullName.toLowerCase().includes(term) || m.email.toLowerCase().includes(term))
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -253,9 +302,9 @@ const AccountApprovals = () => {
       }
     })
     return sorted.map(m => ({ ...m, id: String(m.memberId) }))
-  }, [members, search, gradeFilter, sortBy, view])
+  }, [members, sortBy, view])
 
-  const isNarrowed = gradeFilter !== 'all' || search.trim() !== ''
+  const narrowed = isFiltered(filters)
 
   const selection = useRowSelection(rows)
 
@@ -293,6 +342,14 @@ const AccountApprovals = () => {
         removedRef.current.delete(row.id)
         refreshContactedCounts()
       } catch (e) {
+        if (isAlreadyDecided(e)) {
+          // Already decided elsewhere: the row is gone for good. Do not put it
+          // back, and say so instead of the generic failure toast.
+          removedRef.current.delete(row.id)
+          toast.info('already decided.', (e as Error).message)
+          refreshContactedCounts()
+          return
+        }
         restore(row.id)
         throw e
       }
@@ -355,10 +412,16 @@ const AccountApprovals = () => {
       const doneIds = new Set(
         targets.filter((_, i) => results[i].status === 'fulfilled').map(t => t.memberId),
       )
+      const goneIds = new Set(
+        targets.filter((_, i) => { const r = results[i]; return r.status === 'rejected' && isAlreadyDecided(r.reason) }).map(t => t.memberId),
+      )
       const failed = targets.length - doneIds.size
-      setMembers(prev => prev.filter(m => !doneIds.has(m.memberId)))
+      setMembers(prev => prev.filter(m => !doneIds.has(m.memberId) && !goneIds.has(m.memberId)))
       selection.clear()
-      if (doneIds.size > 0) refreshContactedCounts()
+      if (doneIds.size > 0 || goneIds.size > 0) refreshContactedCounts()
+      // The rejected tab was loaded before this reject: mark it stale so the
+      // next visit refetches instead of showing the old list.
+      if (doneIds.size > 0) { setRejectedLoaded(false); setRejectedPage(1) }
 
       if (failed === 0) {
         toast.success(doneIds.size === 1
@@ -403,66 +466,52 @@ const AccountApprovals = () => {
             the document has no heading at all and a screen reader has
             nothing to announce on arrival. Same visual treatment. */}
         <h1 className="h-display" style={{ fontSize: 40, margin: 0 }}>access restricted.</h1>
-        <p className="muted" style={{ marginTop: 12 }}>only HoDs, directors, and super admins can review member applications.</p>
+        <p className="muted" style={{ marginTop: 12 }}>only HR and super admins can review member applications.</p>
         <Link to="/director" className="btn btn-primary" style={{ marginTop: 20, display: 'inline-flex' }}>back to dashboard</Link>
       </div>
     )
   }
 
-  const scopeNote = isSuperAdmin
-    ? 'across every category'
-    : myCategories.length > 0
-      ? `in your ${myCategories.join(' + ')} desk`
-      : 'in your desk'
-
-  const emptyMessage = members.length === 0
-    ? `nothing waiting ${scopeNote} - nice work`
+  const emptyMessage = narrowed
+    ? 'nothing matches that search'
     : view === 'contacted'
       ? 'nobody contacted yet'
-      : 'nothing matches that search'
+      : 'nothing waiting - nice work'
 
   return (
     <AdminLayout>
       <div className="route-enter" style={{ paddingBottom: 96, maxWidth: 880 }}>
-        {/* Filtered → the narrowed count is the useful number. Unfiltered →
-            the whole queue, so this agrees with the sidebar badge beside it.
-            `pending`/`contacted` don't have their own server-side total
-            (one fetch backs all three of pending/contacted/all, split only
-            by `contactedAt` client-side) - `all`'s count is exact
-            (`totalPending`, unaffected by the contacted split), the other
-            two count what's actually loaded so far. */}
+        {/* Counts come from the server for the active search and grade, so the
+            header agrees with the list however much of it has been loaded. */}
         <AdminTabHeader
           label="Approvals"
           title="Account approvals"
-          count={view === 'rejected'
+          count={view === 'duplicates'
+            ? undefined
+            : view === 'rejected'
             ? (search.trim() ? rejectedRows.length : (totalRejected ?? rejectedRows.length))
-            : isNarrowed
-              ? rows.length
-              : view === 'all'
-                ? (totalPending ?? rows.length)
-                : view === 'pending'
-                  ? (contactedCounts?.notContacted ?? rows.length)
-                  : (contactedCounts?.contacted ?? rows.length)}
+            : headerCount(view, contactedCounts, rows.length)}
           subtitle={
             view === 'pending' ? 'Review pending member sign-ups.'
             : view === 'contacted' ? "Reached out, still deciding."
             : view === 'all' ? 'Every pending sign-up, contacted or not.'
+            : view === 'duplicates' ? 'Live accounts that share a phone number, so HR can reach the people involved.'
             : 'Applications turned down, and why.'
           }
         />
 
-        {/* pending/contacted/all read the SAME queue and are just a client
-            filter on it; rejected is a genuinely different Supabase view
-            with its own pagination. Strings are
-            unchanged. */}
+        {/* pending/contacted/all read the same view with a server-side contacted
+            split; rejected is a genuinely different Supabase view
+            with its own pagination. Strings are unchanged. */}
         <div className="adm-seg" role="group" aria-label="Queue" style={{ marginBottom: 12 }}>
           <button type="button" className={view === 'pending' ? 'is-active' : ''} aria-pressed={view === 'pending'} onClick={() => setView('pending')}>pending</button>
           <button type="button" className={view === 'contacted' ? 'is-active' : ''} aria-pressed={view === 'contacted'} onClick={() => setView('contacted')}>contacted</button>
           <button type="button" className={view === 'all' ? 'is-active' : ''} aria-pressed={view === 'all'} onClick={() => setView('all')}>all</button>
           <button type="button" className={view === 'rejected' ? 'is-active' : ''} aria-pressed={view === 'rejected'} onClick={() => setView('rejected')}>rejected</button>
+          <button type="button" className={view === 'duplicates' ? 'is-active' : ''} aria-pressed={view === 'duplicates'} onClick={() => setView('duplicates')}>shared phones</button>
         </div>
 
-        <DataToolbar
+        {view !== 'duplicates' && <DataToolbar
           search={search}
           onSearch={setSearch}
           searchPlaceholder="Search name or email…"
@@ -484,9 +533,11 @@ const AccountApprovals = () => {
               ))}
             </div>
           )}
-        </DataToolbar>
+        </DataToolbar>}
 
-      {view === 'rejected' ? (
+      {view === 'duplicates' ? (
+        <DuplicatePhones />
+      ) : view === 'rejected' ? (
         rejectedError ? (
           <AdminErrorState message={`Could not load rejected accounts - ${rejectedError}`} onRetry={() => fetchRejected(1)} />
         ) : isLoadingRejected ? (
@@ -538,7 +589,7 @@ const AccountApprovals = () => {
             ))}
             {rejectedHasMore && (
               <div style={{ padding: 16, textAlign: 'center' }}>
-                <button onClick={() => { const p = rejectedPage + 1; setRejectedPage(p); fetchRejected(p, true) }} disabled={isLoadingMoreRejected} className="btn btn-sm adm-loadmore">
+                <button onClick={() => fetchRejected(rejectedPage + 1, true)} disabled={isLoadingMoreRejected} className="btn btn-sm adm-loadmore">
                   {isLoadingMoreRejected ? 'loading...' : 'load more →'}
                 </button>
               </div>
@@ -546,11 +597,13 @@ const AccountApprovals = () => {
           </>
         )
       ) : loadError ? (
-        <AdminErrorState message={`Could not load pending approvals - ${loadError}`} onRetry={() => fetchMembers(1)} />
+        <AdminErrorState message={`Could not load pending approvals - ${loadError}`} onRetry={() => fetchMembers()} />
+      ) : isFetching ? (
+        <AdminSkeleton rows={5} />
       ) : rows.length === 0 ? (
         <EmptyLedger
           message={emptyMessage}
-          sub={members.length === 0 ? 'New sign-ups land here the moment they register.' : 'Try a different name, email, or class filter.'}
+          sub={!narrowed ? 'New sign-ups land here the moment they register.' : 'Try a different name, email, or class filter.'}
         />
       ) : (
         <>
@@ -646,7 +699,7 @@ const AccountApprovals = () => {
           ))}
           {hasMore && (
             <div style={{ padding: 16, textAlign: 'center' }}>
-              <button onClick={() => { const p = page + 1; setPage(p); fetchMembers(p, true) }} disabled={isLoadingMore} className="btn btn-sm">
+              <button onClick={() => fetchMembers(true)} disabled={isLoadingMore} className="btn btn-sm">
                 {isLoadingMore ? 'loading...' : 'load more →'}
               </button>
             </div>
@@ -654,7 +707,7 @@ const AccountApprovals = () => {
         </>
       )}
 
-      {view !== 'rejected' && (
+      {view !== 'rejected' && view !== 'duplicates' && (
         <BulkActionBar count={selection.count} onClear={selection.clear} busy={isRejecting}>
           {canDecide && <button className="btn btn-sm adm-approve" onClick={handleBulkApprove}>approve selected</button>}
           {canDecide && <button className="btn btn-sm adm-reject" onClick={() => { setRejectingBulk(true); setRejectingMember(null); setRejectionNote('') }}>reject selected</button>}

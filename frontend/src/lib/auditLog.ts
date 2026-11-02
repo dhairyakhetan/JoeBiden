@@ -11,13 +11,16 @@ import { supabaseCommunity } from './supabaseCommunity'
 // own create() - a failed audit write must never block the action it is
 // merely recording. Callers do not await this in any way that could delay
 // their own success path; they just call it and move on.
-export function logAction(action: string, entityType?: string, entityId?: number, details?: Record<string, unknown>): void {
+// entityUuid is for entities keyed by a uuid (e.g. job_application); pass
+// entityId undefined for those and the row is keyed by entity_uuid instead.
+export function logAction(action: string, entityType?: string, entityId?: number, details?: Record<string, unknown>, entityUuid?: string): void {
   supabaseCommunity
     .rpc('log_action' as never, {
       p_action: action,
       p_entity_type: entityType ?? null,
       p_entity_id: entityId ?? null,
       p_details: details ?? null,
+      p_entity_uuid: entityUuid ?? null,
     } as never)
     .then(({ error }: any) => {
       if (error) console.warn('[auditLog] failed to record', action, error)

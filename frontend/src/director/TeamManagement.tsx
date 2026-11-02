@@ -19,12 +19,19 @@ import { CAT_COLORS, count } from '../lib/uiHelpers'
 import Field from '../components/Field'
 import { CATEGORY_SLUGS } from '../lib/categories'
 import { useConfirm } from '../components/Confirm'
+import { useAuth } from '../auth/AuthContext'
+import { isSuperAdmin as isSuperAdminRole } from '../lib/roles'
 import { PencilSquareIcon, TrashIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 // Was hardcoded independently here and in directorService.ts's
 // getCategoryAssignments(), the two silently drifting out of sync with
 // each other. Both now import the one canonical list from lib/categories.ts.
 const CATEGORIES: readonly string[] = CATEGORY_SLUGS
+
+/** Toast title for the half-failed create: the team row is in, the creator's own
+ *  membership is not. */
+const createdButNotJoinedMessage = (teamName: string) =>
+  `${teamName} was created, but we couldn’t add you to it.`
 
 type Team = { uuid: string; name: string; category: string; description: string; memberCount: number; logoUrl?: string; bannerUrl?: string }
 
@@ -42,7 +49,10 @@ function TeamFormModal({
   const isNew = !team
   const [name, setName]       = useState(team?.name || '')
   const [desc, setDesc]       = useState(team?.description || '')
-  const [cat, setCat]         = useState(team?.category || 'welfare')
+  // Categories are retired from the form, but teams.category is NOT NULL with a
+  // CHECK on the five legacy values, so keep the existing value on edit and use
+  // the old default on create. Never shown, never editable here.
+  const cat = team?.category || 'welfare'
   const [saving, setSaving]   = useState(false)
   // The team picture. Only sent on save when it differs from what loaded, so
   // saving a rename never rewrites (or clears) a picture someone else set.
@@ -67,7 +77,6 @@ function TeamFormModal({
 
   const handleSave = async () => {
     if (!name.trim()) { setError('Team name is required'); return }
-    if (!cat) { setError('pick a category.'); return }
     // Teams publish immediately with no review queue - both tiers hard-block.
     if ((await checkText(name)).severity !== 'clean' || (await checkText(desc)).severity !== 'clean') {
       setError(BLOCK_MESSAGE); toastError(BLOCK_MESSAGE); return
@@ -83,39 +92,51 @@ function TeamFormModal({
         if (result.success) {
           // Auto-add the creator to the roster. 'lead' retired 2026-09-15
           // (owner decision: directors/HoDs are the only leadership tier,
-          // team-scoped or otherwise - see
-          // scripts/retire_lead_role_2026_09_15.sql) - the creator is
-          // already a director/HoD to have reached this desk at all, so a
-          // plain 'member' row here grants nothing extra and loses nothing.
-          const { data: { session } } = await supabaseCommunity.auth.getSession()
-          if (session?.user) {
-            // get_own_member() (SECURITY DEFINER RPC), not a raw
-            // `.eq('auth_uid', ...)` filter - `authenticated` lost SELECT on
-            // members.auth_uid (scripts/members_pii_lockdown_stage2_revoke.sql),
-            // so that filter throws and silently skipped the auto-assign below.
-            const { data: creatorMember } = await supabaseCommunity
-              .rpc('get_own_member' as never)
-              .maybeSingle()
+          // team-scoped or otherwise) - the creator is already a director/HoD
+          // to have reached this desk at all, so a plain 'member' row here
+          // grants nothing extra and loses nothing.
+          //
+          // From here the team EXISTS. If adding the creator fails we must not
+          // say "could not create team" (a retry would make a duplicate), so
+          // this step has its own catch, reports the real state, and closes the
+          // form instead of leaving Create armed.
+          try {
+            const { data: { session } } = await supabaseCommunity.auth.getSession()
+            if (session?.user) {
+              // get_own_member() (SECURITY DEFINER RPC), not a raw
+              // `.eq('auth_uid', ...)` filter - `authenticated` lost SELECT on
+              // members.auth_uid (scripts/members_pii_lockdown_stage2_revoke.sql).
+              const { data: creatorMember } = await supabaseCommunity
+                .rpc('get_own_member' as never)
+                .maybeSingle()
 
-            if (creatorMember) {
-              const { data: newTeam } = await supabaseCommunity
-                .from('teams')
-                .select('team_id')
-                .eq('uuid', result.data.team.uuid)
-                .single()
+              if (creatorMember) {
+                const { data: newTeam } = await supabaseCommunity
+                  .from('teams')
+                  .select('team_id')
+                  .eq('uuid', result.data.team.uuid)
+                  .single()
 
-              if (newTeam?.team_id) {
-                await supabaseCommunity
-                  .from('team_members')
-                  .insert({
-                    team_id: newTeam.team_id,
-                    member_id: (creatorMember as any).member_id,
-                    role: 'member',
-                    is_active: true,
-                  })
-                  .throwOnError()
+                if (newTeam?.team_id) {
+                  await supabaseCommunity
+                    .from('team_members')
+                    .insert({
+                      team_id: newTeam.team_id,
+                      member_id: (creatorMember as any).member_id,
+                      role: 'member',
+                      is_active: true,
+                    })
+                    .throwOnError()
+                }
               }
             }
+          } catch (addErr: any) {
+            toastError(
+              createdButNotJoinedMessage(name.trim()),
+              (addErr?.message || 'adding you to it failed.') + ' Open the team to add yourself.',
+            )
+            onSaved(); onClose()
+            return
           }
         }
       } else {
@@ -180,36 +201,6 @@ function TeamFormModal({
             )}
           </Field>
 
-          {/* Category — a button group, so role="group" rather than a label. */}
-          <div role="group" aria-labelledby="tm-cat-cap">
-            <span id="tm-cat-cap" style={labelSt}>Category <span style={{ color: 'var(--danger)' }} aria-hidden>*</span></span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {CATEGORIES.map(c => {
-                const cc = CAT_COLORS[c] || 'var(--welfare)'
-                return (
-                  <button
-                    key={c} onClick={() => setCat(c)}
-                    className="btn btn-sm"
-                    aria-pressed={cat === c}
-                    style={{
-                      background: cat === c ? cc : 'var(--hod-surface-1, var(--card))',
-                      color: 'var(--ink)',
-                      // 44, not 36: an inline minHeight beats the desk's
-                      // ≤600px tap-target rule, and these category chips are
-                      // the only way to set a team's category.
-                      borderRadius: 999, minHeight: 44, whiteSpace: 'nowrap',
-                      fontFamily: 'var(--mono)', fontWeight: cat === c ? 800 : 600,
-                      textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.04em',
-                    }}
-                  >
-                    {cat !== c && <span className="adm-swatch" style={{ ['--sw' as any]: cc }} aria-hidden />}
-                    {c}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
           {/* Description */}
           <Field label={<>Description <span style={{ opacity: 0.5, fontWeight: 400 }}>(shown on team page)</span></>} labelStyle={labelSt}>
             {id => (
@@ -273,15 +264,20 @@ export default function TeamManagement() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const confirm = useConfirm()
   const { success, error: toastError } = useToast()
+  const { member: currentMember } = useAuth()
+  // Deleting a team is a hard delete (members, scopes pointing at it go too), so
+  // it is super admin / HR only in the UI. Mirrors who should hold the power.
+  const canDeleteTeam = isSuperAdminRole(currentMember?.role)
 
   // CLAUDE.md's strict convention: every destructive action goes through the
   // shared `useConfirm()`. This desk used to hand-roll its own delete dialog -
   // a second confirm implementation. `holdMs` is kept: Confirm.tsx's own
   // docstring names delete-a-team as one of exactly three hold call sites.
   const handleDeleteTeam = async (team: Team) => {
+    if (!canDeleteTeam) { toastError('only a super admin or HR can delete a team.'); return }
     const ok = await confirm({
       title: 'delete team?',
-      body: `This will permanently delete ${team.name} and remove all members from it. Posts are not deleted.`,
+      body: `This permanently deletes ${team.name}. Everyone is taken off its roster, and any HoD scope that points at this team is removed too. This cannot be undone. Posts are not deleted.`,
       confirmLabel: 'delete it',
       danger: true,
       holdMs: 1200,
@@ -402,9 +398,11 @@ export default function TeamManagement() {
                     <button className="adm-actpill" onClick={() => setEditing(team)} title="Edit team">
                       <PencilSquareIcon width={13} height={13} strokeWidth={2} aria-hidden /> edit
                     </button>
-                    <button className="adm-actpill is-danger" disabled={deletingId === team.uuid} onClick={() => handleDeleteTeam(team)} title="Delete team">
-                      <TrashIcon width={13} height={13} strokeWidth={2} aria-hidden /> delete
-                    </button>
+                    {canDeleteTeam && (
+                      <button className="adm-actpill is-danger" disabled={deletingId === team.uuid} onClick={() => handleDeleteTeam(team)} title="Delete team">
+                        <TrashIcon width={13} height={13} strokeWidth={2} aria-hidden /> {deletingId === team.uuid ? 'deleting…' : 'delete'}
+                      </button>
+                    )}
                   </AdminRowActions>
                 </>
               }

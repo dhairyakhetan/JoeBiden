@@ -2,6 +2,8 @@ import './VolunteerApplications.css'
 import { useState, useEffect, useCallback, Fragment, useRef } from 'react'
 import { supabaseCommunity as supabase } from '../lib/supabaseCommunity'
 import { useToast } from '../components/Toast'
+import { useConfirm } from '../components/Confirm'
+import { logAction } from '../lib/auditLog'
 import { sanitizeFilterTerm } from '../lib/pgrestEscape'
 import {
   AdminLayout, AdminTabHeader, DataToolbar, EmptyLedger,
@@ -46,6 +48,7 @@ function useIsDeskTable(): boolean {
 
 export default function VolunteerApplications() {
   const { success, error: toastError } = useToast()
+  const confirm = useConfirm()
   const [apps, setApps] = useState<VolApp[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -78,6 +81,11 @@ export default function VolunteerApplications() {
   const [copied, setCopied] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const loadingMoreRef = useRef(false)
+  // Bumped on every fresh (non-append) load. A response whose generation is no
+  // longer current belongs to an old filter and is dropped, so a filter change
+  // during a load-more can never append old-filter rows.
+  const genRef = useRef(0)
+  const pageRef = useRef(1)
   const PAGE = 20
 
   // Refs so fetchApps always reads the latest filter values without needing to be recreated
@@ -95,6 +103,8 @@ export default function VolunteerApplications() {
     // grammar and would 400 (or worse, reshape) the request.
     const currentSearch = sanitizeFilterTerm(searchRef.current.toLowerCase())
     const currentLabelFilter = labelFilterRef.current
+    if (!append && retry === 0) genRef.current += 1
+    const gen = genRef.current
 
     if (!append) setLoading(true)
     setError(null); setAppendError(null)
@@ -116,6 +126,7 @@ export default function VolunteerApplications() {
       if (currentSearch)                query = query.or(`full_name.ilike.%${currentSearch}%,email.ilike.%${currentSearch}%`)
 
       const { data, error: err, count } = await query
+      if (gen !== genRef.current) return // superseded by a newer filter/reload
       if (err) throw err
       const slice = (data || []) as VolApp[]
       const rowTotal = count ?? 0
@@ -125,6 +136,7 @@ export default function VolunteerApplications() {
       setHasMore(pg * PAGE < rowTotal)
       setLoading(false)
     } catch (e: any) {
+      if (gen !== genRef.current) return
       const msg: string = e?.message || String(e)
       // Supabase auth-lock contention (realtime + fetch racing on startup) - transient, retry
       if (retry < 3 && (msg.includes('stole') || msg.toLowerCase().includes('lock'))) {
@@ -137,7 +149,7 @@ export default function VolunteerApplications() {
     }
   }, []) // stable reference - reads filter state from refs above
 
-  useEffect(() => { setPage(1); setSelected(new Set()); fetchApps(1) }, [filter, search, labelFilter, fetchApps])
+  useEffect(() => { setPage(1); pageRef.current = 1; setSelected(new Set()); fetchApps(1) }, [filter, search, labelFilter, fetchApps])
 
   // Infinite scroll: fire next page when sentinel enters the viewport
   useEffect(() => {
@@ -146,11 +158,11 @@ export default function VolunteerApplications() {
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && !loadingMoreRef.current) {
         loadingMoreRef.current = true
-        setPage(p => {
-          const next = p + 1
-          fetchApps(next, true).finally(() => { loadingMoreRef.current = false })
-          return next
-        })
+        // Side effect out of the setState updater (it ran twice under StrictMode).
+        const next = pageRef.current + 1
+        pageRef.current = next
+        setPage(next)
+        fetchApps(next, true).finally(() => { loadingMoreRef.current = false })
       }
     }, { rootMargin: '120px' })
     observer.observe(el)
@@ -182,13 +194,16 @@ export default function VolunteerApplications() {
     }
   }
 
-  const loadNew = () => { setNewCount(0); setPage(1); fetchApps(1) }
+  const loadNew = () => { setNewCount(0); setPage(1); pageRef.current = 1; fetchApps(1) }
 
   const markReviewed = async (id: number, reviewed: boolean) => {
     setMarkingId(id)
-    const { error: err } = await supabase.from('volunteer_applications').update({ reviewed }).eq('id', id)
+    const { data: upd, error: err } = await supabase.from('volunteer_applications').update({ reviewed }).eq('id', id).select('id')
     setMarkingId(null)
-    if (err) { setError(`Failed to update - ${err.message}`); toastError('that didn’t save.', err.message); return }
+    if (err || !upd || upd.length === 0) {
+      const msg = err?.message || 'no row was updated (check permissions)'
+      setError(`Failed to update - ${msg}`); toastError('that didn’t save.', msg); return
+    }
     setApps(prev => prev.map(a => a.id === id ? { ...a, reviewed } : a))
     success(reviewed ? 'Marked as reviewed' : 'Marked as not reviewed')
   }
@@ -243,29 +258,35 @@ export default function VolunteerApplications() {
     setBatchWorking(true)
     setBatchFailure(null)
     const ids = Array.from(selected)
+    const before = new Map(apps.filter(a => selected.has(a.id)).map(a => [a.id, a.vol_label ?? null]))
     setApps(prev => prev.map(a => selected.has(a.id) ? { ...a, vol_label: label } : a))
-    // Was fire-and-forget: the update errors were never inspected, so a failed
-    // batch looked identical to a successful one. Check every result, surface
-    // any failure, and confirm success.
+    // .select('id') so a policy that filters the row out (zero rows, no error)
+    // counts as a failure instead of looking like success.
     const results = await Promise.all(ids.map(id =>
-      supabase.from('volunteer_applications').update({ vol_label: label } as any).eq('id', id)
+      supabase.from('volunteer_applications').update({ vol_label: label } as any).eq('id', id).select('id')
     ))
-    const failed = results.filter(r => r.error).length
+    const failedIds = ids.filter((_, i) => results[i].error || !results[i].data || results[i].data!.length === 0)
     setSelected(new Set())
     setBatchWorking(false)
-    if (failed > 0) {
-      toastError(`${failed} of ${ids.length} couldn't be updated`, 'Refresh to see the current state.')
-      // The toast is gone in five seconds. This panel is the only standing
-      // signal that some of the rows the person is looking at were patched
-      // optimistically and are now wrong.
-      setBatchFailure(`${failed} of ${ids.length} couldn't be updated. Refresh to see the current state.`)
-      fetchApps(page)
+    if (failedIds.length > 0) {
+      // Roll the rows that did not save back to what they were, then reload
+      // from page 1 so the list is the database's truth.
+      setApps(prev => prev.map(a => failedIds.includes(a.id) ? { ...a, vol_label: before.get(a.id) ?? null } : a))
+      toastError(`${failedIds.length} of ${ids.length} couldn't be updated`, 'The list has been reloaded.')
+      setBatchFailure(`${failedIds.length} of ${ids.length} couldn't be updated. The list was reloaded to show the current state.`)
+      setPage(1); pageRef.current = 1
+      fetchApps(1)
     } else {
       success(label ? `Labelled ${ids.length} as "${label}"` : `Cleared labels on ${ids.length}`)
     }
   }
 
   const exportXLS = async () => {
+    if (!(await confirm({
+      title: 'Export applicants?',
+      body: 'This downloads a spreadsheet with names, emails and phone numbers. Keep it private and delete it when you are done. The export is recorded in the activity log.',
+      confirmLabel: 'Export',
+    }))) return
     setExporting(true)
     setError(null)
     try {
@@ -290,6 +311,9 @@ export default function VolunteerApplications() {
       a.download = `aq-vol-apps-${filter}${labelSlug}-${new Date().toISOString().slice(0, 10)}.xls`
       a.click()
       URL.revokeObjectURL(a.href)
+      logAction('volunteer_applications_exported', 'volunteer_applications', undefined, {
+        rows: (data || []).length, review_filter: filter, label_filter: labelFilter ?? 'all', searched: !!q,
+      })
       success('exported.')
     } catch (e: any) {
       const msg = e?.message || String(e)
@@ -311,7 +335,7 @@ export default function VolunteerApplications() {
           label="Recruitment"
           title="Volunteer applications"
           count={total}
-          subtitle="Historical volunteer-interest leads - the public intake form is retired (join is Google sign-in)."
+          subtitle="Volunteer-interest leads for outreach. New members join through Google sign-in; this list is for following up with people who showed interest."
           actions={liveOn ? (
             <span className="mono vol-live" title="Live - edits appear automatically">
               <span className="vol-live-dot" />live

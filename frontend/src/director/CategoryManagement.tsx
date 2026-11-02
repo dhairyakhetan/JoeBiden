@@ -20,8 +20,8 @@ const CategoryManagement = () => {
   const isSuperAdmin = isSuperAdminRole(member?.role)
 
   const [directors, setDirectors] = useState<Director[]>([])
-  // Team scopes (teams-as-categories, slice 2). Loaded on their own so a
-  // failure here never takes the five-category desk down with it.
+  // Team scopes. Loaded on their own so a failure here never takes the
+  // HoD list down with it.
   const [scopeTeams, setScopeTeams] = useState<ScopeTeam[]>([])
   const [scopeAssignments, setScopeAssignments] = useState<ScopeAssignments>({})
   const [scopeError, setScopeError] = useState<string | null>(null)
@@ -120,7 +120,7 @@ const CategoryManagement = () => {
         {isLoading ? (
           <AdminSkeleton rows={4} />
         ) : loadError ? (
-          <AdminErrorState message={`Could not load category assignments - ${loadError}`} onRetry={() => { setIsLoading(true); fetchData() }} />
+          <AdminErrorState message={`Could not load HoDs - ${loadError}`} onRetry={() => { setIsLoading(true); fetchData() }} />
         ) : (
           <>
             {/* Directors list */}
@@ -132,7 +132,7 @@ const CategoryManagement = () => {
               {visibleDirectors.length === 0 ? (
                 <EmptyLedger
                   message={search ? 'nothing matches that search' : 'no HoDs found'}
-                  sub={search ? 'Try a different name or category.' : 'Assignable HoDs will appear here.'}
+                  sub={search ? 'Try a different name, email or team.' : 'HoDs you can assign to teams will appear here.'}
                 />
               ) : visibleDirectors.map(director => (
                 <div key={director.memberId} className="cat-row">
@@ -156,7 +156,10 @@ const CategoryManagement = () => {
                   </div>
 
                   {/* Teams this HoD moderates (director_scopes). */}
-                  {(teamsByMember.get(director.memberId) ?? []).length === 0 && (
+                  {/* A plain HoD only reads their OWN scope rows (RLS), so for every
+                      other HoD "no teams" would be a lie: say it for HR / super
+                      admin, and for the viewer's own row. */}
+                  {(teamsByMember.get(director.memberId) ?? []).length === 0 && (isSuperAdmin || director.memberId === member?.member_id) && (
                     <span className="cat-none">No teams assigned: sees the whole queue</span>
                   )}
                   {(teamsByMember.get(director.memberId) ?? []).length > 0 && (

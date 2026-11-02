@@ -270,13 +270,27 @@ const notificationServiceImpl = {
    * team_invite/team_join_accepted/system) to leaders, and re-checks the
    * internal-link rule server-side. Direct INSERT is revoked once this ships. */
   async create(input: CreateNotificationInput) {
+    try {
+      await this.createOrThrow(input)
+    } catch (e: any) {
+      // Notifications are non-critical - never throw out of a write path.
+      console.warn('[notification] create failed:', e?.message)
+    }
+  },
+
+  /**
+   * The throwing twin of create(), for the one place where the notification IS
+   * the action (a director's "ask for more detail" note): there, a swallowed
+   * failure would toast success over nothing. Returns false when the send was
+   * skipped because the recipient is the signed-in member, true when the row
+   * was written, and throws if the RPC refuses.
+   */
+  async createOrThrow(input: CreateNotificationInput): Promise<boolean> {
     // Skip self-notifications (no point notifying yourself about your own action).
     const me = await getCachedMemberId()
-    if (me && me === input.memberId) return
+    if (me && me === input.memberId) return false
 
-    // Cast: `create_notification` isn't in the generated RPC types yet (the fn
-    // is created by security_hardening_2026_07.sql). Regenerate database.types.ts
-    // after applying that migration to drop this cast.
+    // Cast: `create_notification` isn't in the generated RPC types yet.
     const { error } = await (supabaseCommunity as any).rpc('create_notification', {
       p_member_id: input.memberId,
       p_type: input.type,
@@ -285,8 +299,8 @@ const notificationServiceImpl = {
       p_full_note: input.fullNote ?? null,
       p_link: input.link ?? null,
     })
-    // Notifications are non-critical - never throw out of a write path.
-    if (error) console.warn('[notification] create failed:', error.message)
+    if (error) throw new Error(error.message || 'The notification could not be sent.')
+    return true
   },
 }
 

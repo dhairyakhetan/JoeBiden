@@ -3,6 +3,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useToast } from '../components/Toast'
 import { isDemoShadowActive } from '../demo/runtime/demoShadow'
+import { UndoQueue, idSetKey, pruneSelection, toggleSelection } from './adminKitLogic'
 import { useModalA11y, MODAL_FOCUSABLE } from '../hooks/useDialog'
 import {
   EllipsisHorizontalIcon,
@@ -437,44 +438,47 @@ export function AdminRow({
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   3.3 - useRowSelection: shift-click range select, clears on refetch.
+   3.3 - useRowSelection: shift-click range select, pruned when rows leave.
    ═══════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Last known shift-key state, for callers that cannot hand `toggle` the event
+ * (their row component only exposes `onSelect()`). Tracked from the document
+ * rather than read from the deprecated `window.event`. An explicit second
+ * argument to `toggle` always wins over this.
+ */
+let shiftHeld = false
+if (typeof document !== 'undefined') {
+  const track = (e: MouseEvent | KeyboardEvent | PointerEvent) => { shiftHeld = e.shiftKey }
+  document.addEventListener('pointerdown', track, true)
+  document.addEventListener('click', track, true)
+  document.addEventListener('keydown', track, true)
+  document.addEventListener('keyup', track, true)
+}
+
 export function useRowSelection<T extends { id: string }>(items: T[]) {
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set())
   const lastIndex = useRef<number | null>(null)
   const itemsRef = useRef(items)
+  // Synced after render (effects run in order, so this precedes the prune below).
+  useEffect(() => { itemsRef.current = items })
 
-  // Clear stale selection whenever the items array's IDENTITY changes (a new
-  // fetch/refetch/route change gives a brand-new array reference) - this
-  // deliberately does NOT compare ids, so a fresh fetch that happens to
-  // return the same rows still clears, which is the safer default (a stale
-  // "selected" id silently surviving a refetch is worse than an extra click).
-  // itemsRef is synced here too (after render, not during) so `toggle`'s
-  // closure always reads the latest list without a render-phase ref write.
+  // Keyed on the SET of ids, not the array's identity. A load-more appends rows
+  // and keeps every old id, so the selection survives it; a refetch that drops
+  // a row (approved, rejected, filtered out) prunes just that id. Pruning, not
+  // clearing: a selected id for a row nobody can see must never reach a bulk
+  // action, and everything still visible keeps its tick.
+  const idKey = idSetKey(items.map(it => it.id))
   useEffect(() => {
-    itemsRef.current = items
-    setSelected(new Set())
+    setSelected(prev => pruneSelection(prev, itemsRef.current.map(it => it.id)))
     lastIndex.current = null
-  }, [items])
+  }, [idKey])
 
   const toggle = useCallback((id: string, shiftKey?: boolean) => {
-    const list = itemsRef.current
-    const idx = list.findIndex(it => it.id === id)
-    setSelected(prev => {
-      const next = new Set(prev)
-      if (shiftKey && lastIndex.current != null && idx !== -1) {
-        const [lo, hi] = lastIndex.current < idx ? [lastIndex.current, idx] : [idx, lastIndex.current]
-        const shouldSelect = !prev.has(id)
-        for (let i = lo; i <= hi; i++) {
-          const rowId = list[i]?.id
-          if (!rowId) continue
-          if (shouldSelect) next.add(rowId); else next.delete(rowId)
-        }
-      } else {
-        if (next.has(id)) next.delete(id); else next.add(id)
-      }
-      return next
-    })
+    const ids = itemsRef.current.map(it => it.id)
+    const idx = ids.indexOf(id)
+    const anchor = lastIndex.current
+    setSelected(prev => toggleSelection(prev, ids, id, anchor, !!shiftKey))
     if (idx !== -1) lastIndex.current = idx
   }, [])
 
@@ -490,8 +494,9 @@ export function useRowSelection<T extends { id: string }>(items: T[]) {
   const isSelected = useCallback((id: string) => selected.has(id), [selected])
 
   return {
-    selected,
-    toggle: (id: string) => toggle(id, (window.event as MouseEvent | undefined)?.shiftKey),
+    selected: selected as Set<string>,
+    /** `shiftKey` should be the click event's; when omitted the document's last seen shift state is used. */
+    toggle: (id: string, shiftKey?: boolean) => toggle(id, shiftKey ?? shiftHeld),
     toggleAll,
     clear,
     isSelected,
@@ -508,58 +513,71 @@ export function useRowSelection<T extends { id: string }>(items: T[]) {
    the list. The caller is responsible for optimistically updating its own
    list state when `run()` is called and for reverting it if `undo()` fires;
    this just decides when the real network `action()` actually goes out.
+
+   Undo only works while the write has not gone out. Once the window closed
+   the write is in flight and may well succeed, so a late Undo is a no-op with
+   a toast saying so (the caller's `undo` is NOT called and the row is not
+   put back). The timing lives in adminKitLogic.ts's UndoQueue, tested there.
    ═══════════════════════════════════════════════════════════════════════ */
 export function useUndoableAction<T>({
-  action, undo, label, windowMs = 5000,
+  action, undo, label, windowMs = 5000, failureMessage,
 }: {
   action: (item: T) => Promise<void>
   undo: (item: T) => Promise<void>
   label: (item: T) => string
   windowMs?: number
+  /** Headline of the error toast when the write fails. Defaults to a neutral one, so a reject does not read as an approval. */
+  failureMessage?: string | ((item: T) => string)
 }) {
   const toast = useToast()
   const [pending, setPending] = useState<Set<string>>(new Set())
-  // The settle fn is stored WITH its timer so unmount can run it rather than
-  // only being able to throw it away - see the unmount effect below.
-  const timers = useRef<Map<string, { timer: ReturnType<typeof setTimeout>; settle: () => Promise<void> }>>(new Map())
 
   const keyOf = (item: T): string => {
     const anyItem = item as any
     return anyItem?.id != null ? String(anyItem.id) : JSON.stringify(item)
   }
 
+  // Latest callbacks, read at fire time, so the queue (created once) never runs a stale closure.
+  const latest = useRef({ action, undo, label, failureMessage, toast, windowMs })
+  useEffect(() => { latest.current = { action, undo, label, failureMessage, toast, windowMs } })
+
+  const queueRef = useRef<UndoQueue<T> | null>(null)
+  if (queueRef.current === null) {
+    queueRef.current = new UndoQueue<T>({
+      windowMs: () => latest.current.windowMs,
+      keyOf,
+      settle: async item => {
+        const cur = latest.current
+        try {
+          await cur.action(item)
+        } catch {
+          // `label(item)` reads like a success statement ("X approved") - it's
+          // written for the pending/undo toast, not a failure, so it goes in
+          // the detail line and the headline names what failed.
+          const f = cur.failureMessage
+          const headline = typeof f === 'function' ? f(item) : (f ?? 'that didn’t go through - please retry.')
+          cur.toast.error(headline, cur.label(item))
+        }
+      },
+      onChange: () => setPending(queueRef.current!.pendingKeys()),
+    })
+  }
+
   const run = useCallback((item: T) => {
     const key = keyOf(item)
-    setPending(prev => new Set(prev).add(key))
-
-    const settle = async () => {
-      timers.current.delete(key)
-      try {
-        await action(item)
-      } catch {
-        // `label(item)` reads like a success statement ("X approved") - it's
-        // written for the pending/undo toast, not a failure. Reusing it
-        // verbatim as the error detail read as "DIDN'T GO THROUGH. / X
-        // approved" side by side, which looked like a contradiction rather
-        // than an explanation of what failed.
-        toast.error('approval didn’t go through - please retry.', label(item))
-      } finally {
-        setPending(prev => { const next = new Set(prev); next.delete(key); return next })
-      }
-    }
-
-    const timer = setTimeout(settle, windowMs)
-    timers.current.set(key, { timer, settle })
+    queueRef.current!.schedule(item)
 
     toast.action(label(item), {
       label: 'Undo',
       onClick: async () => {
-        const t = timers.current.get(key)
-        if (t) { clearTimeout(t.timer); timers.current.delete(key) }
-        setPending(prev => { const next = new Set(prev); next.delete(key); return next })
+        if (queueRef.current!.cancel(key) === 'too-late') {
+          toast.info('too late to undo - that has already gone through.')
+          return
+        }
         try { await undo(item) } catch { toast.error('couldn’t undo that.') }
       },
     }, { duration: windowMs })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action, undo, label, windowMs, toast])
 
   /*
@@ -571,40 +589,27 @@ export function useUndoableAction<T>({
    *
    *   - The DEMO must cancel. Its walkthrough completes a step the moment the
    *     undo toast appears, so a flow can be torn down mid-window - and
-   *     teardown is exactly when `demoShadow` uninstalls. `settle` is async,
-   *     so a flushed `await action(item)` would resume AFTER the synchronous
-   *     cleanup chain and land on the real database, as the real signed-in
-   *     member, from a walkthrough that promises it touches nothing.
+   *     teardown is exactly when `demoShadow` uninstalls. A flushed
+   *     `await action(item)` would resume AFTER the synchronous cleanup chain
+   *     and land on the real database, as the real signed-in member, from a
+   *     walkthrough that promises it touches nothing.
    *
-   *   - The REAL DESK must flush. This effect used to cancel unconditionally,
-   *     and the comment here admitted the cost in as many words: "a moderator
-   *     who approves someone and navigates away inside 5 seconds now loses
-   *     that approval, having been told it happened." That is not a
-   *     theoretical cost. It happened on 2026-09-12: a member was approved,
-   *     the row left the queue, the toast said so, and `members` still read
-   *     status='pending_approval' with a null `approved_at`. Silent data loss
-   *     on the desk's single most consequential action.
+   *   - The REAL DESK must flush. Cancelling unconditionally cost a real
+   *     approval on 2026-09-12: a member was approved, the row left the queue,
+   *     the toast said so, and `members` still read status='pending_approval'.
+   *     Silent data loss on the desk's single most consequential action.
    *
+   * Either way every timer is cleared here, so nothing fires AFTER unmount on
+   * its own schedule: armed writes run now (flush) or are dropped (sandbox).
    * `isDemoShadowActive()` is a synchronous module-level flag, so it is exact
-   * at cleanup time rather than a guess. Cancel when the sandbox is installed,
-   * flush otherwise - both callers get what they need, and neither pays the
-   * other's price.
-   *
-   * `settle` calls `setPending` after unmount; that is a no-op in React 18+,
-   * not a warning. Its error toast still renders: the ToastProvider is
-   * app-level and outlives the desk tab.
+   * at cleanup time. The error toast of a flushed write still renders: the
+   * ToastProvider is app-level and outlives the desk tab. A later click on the
+   * stale Undo toast finds nothing armed and reports "too late".
    */
   useEffect(() => {
-    const map = timers.current
-    return () => {
-      const armed = [...map.values()]
-      map.clear()
-      const sandboxed = isDemoShadowActive()
-      armed.forEach(({ timer, settle }) => {
-        clearTimeout(timer)
-        if (!sandboxed) void settle()
-      })
-    }
+    const queue = queueRef.current!
+    queue.revive()
+    return () => { queue.dispose(!isDemoShadowActive()) }
   }, [])
 
   return { run, pending }

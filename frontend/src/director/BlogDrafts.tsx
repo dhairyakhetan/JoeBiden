@@ -26,29 +26,33 @@
 // over the cascade, which is what forced earlier tabs to be reworked.
 //
 // 20.12: "draft / published toggle, and a preview that renders 12.2's real
-// layout." Reported, not guessed around - blogService.ts has no unpublish /
-// listPublished call, only the one-way publishDraft below, and this file's
-// RULES forbid adding a new Supabase call shape to invent one. The existing
-// publish/schedule control (the checkmark button) is therefore the desk's
-// only draft<->published control. The preview half IS fixed here: see the
+// layout." Both halves now exist. The publish/schedule control (the checkmark
+// button) moves a draft live, the "live and scheduled" tab lists essays that are
+// live (blogService.listLive) and its unpublish button puts one back in drafts
+// (blogService.unpublishBlog, 2 Nov 2026). The preview half: see the
 // "preview live page" link below.
 // ──────────────────────────────────────────────────────────────────────────
 
 import Img from '../components/Img'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { listDrafts, publishDraft, setDraftCover, deleteDraft, type BlogDraft } from '../services/blogService'
+import { listDrafts, listLive, unpublishBlog, publishDraft, setDraftCover, deleteDraft, type BlogDraft, type LiveBlog } from '../services/blogService'
 import feedService from '../services/feedService'
 import { useToast } from '../components/Toast'
 import { useConfirm } from '../components/Confirm'
+import { useCan } from '../auth/CapabilityContext'
+import { isAlreadyDecided } from '../services/directorServiceTypes'
 import { AdminLayout, AdminTabHeader, EmptyLedger, AdminSkeleton, AdminErrorState } from './adminKit'
 import {
-  ChevronDownIcon, ChevronUpIcon, CheckIcon, TrashIcon, PhotoIcon, ArrowTopRightOnSquareIcon,
+  ChevronDownIcon, ChevronUpIcon, CheckIcon, TrashIcon, PhotoIcon, ArrowTopRightOnSquareIcon, ArrowUturnLeftIcon,
 } from '@heroicons/react/24/outline'
 
 export default function BlogDrafts() {
-  const { success, error: toastError } = useToast()
+  const { success, error: toastError, info } = useToast()
   const confirm = useConfirm()
+  // Set on /director/roles; they narrow, never widen, what RLS permits.
+  const canPublish = useCan('action.moderate_post')
+  const canDelete = useCan('action.delete_post')
 
   const [rows, setRows] = useState<BlogDraft[]>([])
   const [loading, setLoading] = useState(true)
@@ -66,16 +70,21 @@ export default function BlogDrafts() {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [uploadTargetId, setUploadTargetId] = useState<number | null>(null)
 
+  // 'live' view: essays that are published or scheduled, with an unpublish action.
+  const [view, setView] = useState<'drafts' | 'live'>('drafts')
+  const [liveRows, setLiveRows] = useState<LiveBlog[]>([])
+
   const load = useCallback(async () => {
     setLoading(true); setLoadError(null)
     try {
-      setRows(await listDrafts())
+      if (view === 'live') setLiveRows(await listLive())
+      else setRows(await listDrafts())
     } catch (e: any) {
       setLoadError(e?.message || 'Could not load blog drafts.')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [view])
 
   useEffect(() => { load() }, [load])
 
@@ -119,6 +128,7 @@ export default function BlogDrafts() {
   }
 
   const onPublish = async (row: BlogDraft) => {
+    if (!canPublish) return
     const when = (scheduleAt[row.id] ?? '').trim()
     const scheduled = !!when
     if (scheduled && new Date(when).getTime() <= Date.now()) {
@@ -136,16 +146,27 @@ export default function BlogDrafts() {
 
     setBusyId(row.id)
     try {
-      await publishDraft(row.id, { publishAt: scheduled ? new Date(when).toISOString() : null })
+      // A cover URL typed but never saved is still the leader's intent: send it
+      // along so publishing does not silently drop it. Only when it differs
+      // from what is already on the row.
+      const typedCover = (coverDraft[row.id] ?? '').trim()
+      const featuredImage = typedCover && typedCover !== (row.featured_image ?? '') ? typedCover : null
+      await publishDraft(row.id, { featuredImage, publishAt: scheduled ? new Date(when).toISOString() : null })
       setRows(prev => prev.filter(r => r.id !== row.id))
       success(scheduled ? 'Scheduled ✓' : 'Published ✓',
               scheduled ? 'It will appear on the blog automatically.' : `Live at /blog/${row.slug}`)
     } catch (e: any) {
-      toastError('couldn’t publish that.', e?.message)
+      if (isAlreadyDecided(e)) {
+        setRows(prev => prev.filter(r => r.id !== row.id))
+        info('already handled.', e.message)
+      } else {
+        toastError('couldn’t publish that.', e?.message)
+      }
     } finally { setBusyId(null) }
   }
 
   const onDelete = async (row: BlogDraft) => {
+    if (!canDelete) return
     const ok = await confirm({
       title: 'Delete this draft?',
       // Soft delete (posts.deleted_at), same as every other post deletion here.
@@ -163,17 +184,108 @@ export default function BlogDrafts() {
       setRows(prev => prev.filter(r => r.id !== row.id))
       success('draft deleted.')
     } catch (e: any) {
-      toastError('couldn’t delete that.', e?.message)
+      if (isAlreadyDecided(e)) {
+        setRows(prev => prev.filter(r => r.id !== row.id))
+        info('already handled.', e.message)
+      } else {
+        toastError('couldn’t delete that.', e?.message)
+      }
     } finally { setBusyId(null) }
   }
+
+  const onUnpublish = async (row: LiveBlog) => {
+    if (!canPublish) return
+    const ok = await confirm({
+      title: 'Take this essay back to drafts?',
+      body: row.status === 'scheduled'
+        ? `"${row.headliner}" will not go live on its date. It returns to drafts with its text and cover kept, and the author is told.`
+        : `"${row.headliner}" comes off the blog right away. It returns to drafts with its text and cover kept, and the author is told.`,
+      confirmLabel: 'Move to drafts',
+      danger: true,
+    })
+    if (!ok) return
+    setBusyId(row.id)
+    try {
+      await unpublishBlog(row.id)
+      setLiveRows(prev => prev.filter(r => r.id !== row.id))
+      success('back in drafts.', 'It is off the public blog.')
+    } catch (e: any) {
+      if (isAlreadyDecided(e)) {
+        setLiveRows(prev => prev.filter(r => r.id !== row.id))
+        info('already handled.', e.message)
+      } else {
+        toastError('couldn’t move that to drafts.', e?.message)
+      }
+    } finally { setBusyId(null) }
+  }
+
+  const tabs = (
+    <div role="tablist" aria-label="Blog view" style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+      {(['drafts', 'live'] as const).map(v => (
+        <button
+          key={v}
+          role="tab"
+          aria-selected={view === v}
+          className={view === v ? 'btn btn-sm btn-primary' : 'btn btn-sm'}
+          onClick={() => setView(v)}
+        >
+          {v === 'drafts' ? 'drafts' : 'live and scheduled'}
+        </button>
+      ))}
+    </div>
+  )
+
+  const liveList = (
+    <div className="card" style={{ padding: 0 }}>
+      {liveRows.map(row => {
+        const busy = busyId === row.id
+        const when = row.status === 'scheduled' ? row.scheduled_for : row.published_at
+        return (
+          <div key={row.id} className="panel-h">
+            <div className="qrow">
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="qname">{row.headliner}</div>
+                <div className="qsub">
+                  {row.written_by || 'unknown author'}
+                  {when ? ` · ${row.status === 'scheduled' ? 'goes live' : 'live since'} ${new Date(when).toLocaleDateString()}` : ''}
+                </div>
+              </div>
+              <span className="qtag" style={{ '--cc': row.status === 'scheduled' ? 'var(--tomato)' : 'var(--welfare)' } as React.CSSProperties}>
+                {row.status === 'scheduled' ? 'scheduled' : 'live'}
+              </span>
+              <Link
+                to={`/blog/${row.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
+                {row.status === 'scheduled' ? 'preview' : 'preview live page'} <ArrowTopRightOnSquareIcon width={13} height={13} strokeWidth={1.8} aria-hidden />
+              </Link>
+              <button
+                className="iconbtn no"
+                disabled={busy || !canPublish}
+                onClick={() => onUnpublish(row)}
+                aria-label="Unpublish"
+                title={canPublish ? 'Unpublish (back to drafts)' : 'You do not have permission to unpublish'}
+              >
+                <ArrowUturnLeftIcon width={17} height={17} strokeWidth={2} aria-hidden />
+              </button>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
 
   return (
     <AdminLayout>
       <AdminTabHeader
         title="Blog Drafts"
         subtitle="Blogs submitted from the composer. Add a cover, then publish or schedule."
-        count={rows.length}
+        count={view === 'live' ? liveRows.length : rows.length}
       />
+      {tabs}
 
       {/* One shared hidden input, targeted per-row via uploadTargetId/
           fileInputRef - avoids mounting fourteen separate file inputs. */}
@@ -190,6 +302,10 @@ export default function BlogDrafts() {
         <AdminSkeleton rows={3} />
       ) : loadError ? (
         <AdminErrorState message={loadError} onRetry={load} />
+      ) : view === 'live' ? (
+        liveRows.length === 0
+          ? <EmptyLedger message="Nothing live or scheduled." sub="Published and scheduled essays show up here." />
+          : liveList
       ) : rows.length === 0 ? (
         <EmptyLedger
           message="No blog drafts waiting."
@@ -246,10 +362,10 @@ export default function BlogDrafts() {
                   </button>
                   <button
                     className="iconbtn ok"
-                    disabled={busy}
+                    disabled={busy || !canPublish}
                     onClick={() => onPublish(row)}
                     aria-label="Publish"
-                    title={hasCover
+                    title={!canPublish ? 'You do not have permission to publish' : hasCover
                       ? 'Publish or schedule'
                       : 'Publish or schedule (no cover: the card will be text-only)'}
                   >
@@ -257,10 +373,10 @@ export default function BlogDrafts() {
                   </button>
                   <button
                     className="iconbtn no"
-                    disabled={busy}
+                    disabled={busy || !canDelete}
                     onClick={() => onDelete(row)}
                     aria-label="Delete draft"
-                    title="Delete draft"
+                    title={canDelete ? 'Delete draft' : 'You do not have permission to delete'}
                   >
                     <TrashIcon width={17} height={17} strokeWidth={2} aria-hidden />
                   </button>

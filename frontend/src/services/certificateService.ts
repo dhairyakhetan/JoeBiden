@@ -1,6 +1,8 @@
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { logAction } from '../lib/auditLog'
+import notificationService from './notificationService'
 
 /**
  * certificateService - hours derivation + certificate/LoR/LoV requests
@@ -55,7 +57,34 @@ const mapRequest = (row: any): CertificateRequest => ({
   memberName: row.member?.full_name,
 })
 
+/** Thrown by decide() when the request is no longer pending (another tab or HR got there first). */
+export class AlreadyDecidedError extends Error {
+  readonly code = 'ALREADY_DECIDED'
+  constructor() { super('Someone has already decided this request. The list has been refreshed.') }
+}
+
+const DOC_NAME: Record<DocType, string> = { certificate: 'certificate', lor: 'letter of recommendation', lov: 'letter of volunteering' }
+
+/** Plain-language notice for the requester after a decision. */
+export function decisionNotice(docType: DocType, status: 'issued' | 'declined', note?: string | null) {
+  const doc = DOC_NAME[docType]
+  if (status === 'issued') {
+    return { title: `Your ${doc} is ready`, subtitle: 'The team has approved your request. HR will send the document to you directly.', fullNote: note?.trim() || undefined }
+  }
+  return { title: `Your ${doc} request was declined`, subtitle: note?.trim() ? `Reason: ${note.trim()}` : 'Ask HR if you would like to know more.', fullNote: note?.trim() || undefined }
+}
+
 const certificateServiceImpl = {
+  /** Count of requests waiting for a decision, for the desk's sidebar badge. */
+  async getPendingCount(): Promise<number> {
+    const { count, error } = await (supabaseCommunity as any)
+      .from('certificate_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'pending')
+    if (error) throw logSupabaseError('certificateService.getPendingCount', error)
+    return count ?? 0
+  },
+
   /**
    * Hours are "derived, like the balance" (§4) - never stored. Sums
    * checkout-checkin across here/left rows, falling back to the drive's own
@@ -169,14 +198,23 @@ const certificateServiceImpl = {
       .from('certificate_requests')
       .update({ status, decision_note: decisionNote?.trim() || null, decided_by: decidedBy ?? null, decided_at: new Date().toISOString() })
       .eq('id', id)
+      // Only a still-pending request can be decided: a stale tab must not flip
+      // an issued certificate to declined (or the reverse).
+      .eq('status', 'pending')
       // certificate_requests has two FKs into members (member_id, decided_by),
-      // so the embed must name the constraint explicitly - PostgREST can't
-      // infer which relationship "members(...)" means and 400s with
-      // "more than one relationship was found" otherwise.
+      // so the embed must name the constraint explicitly.
       .select('*, member:members!certificate_requests_member_id_fkey(full_name)')
-      .single()
+      .maybeSingle()
     if (error) throw logSupabaseError('certificateService.decide', error)
-    return { success: true, data: mapRequest(data) }
+    if (!data) throw new AlreadyDecidedError()
+    const mapped = mapRequest(data)
+    logAction(status === 'issued' ? 'certificate_issued' : 'certificate_declined', 'certificate_request', id, {
+      docType: mapped.docType, member: mapped.memberName,
+    })
+    const notice = decisionNotice(mapped.docType, status, decisionNote)
+    // Fire-and-forget by design: a failed notice must not undo the decision.
+    void notificationService.create({ memberId: mapped.memberId, type: 'system', ...notice, link: '/profile' })
+    return { success: true, data: mapped }
   },
 }
 

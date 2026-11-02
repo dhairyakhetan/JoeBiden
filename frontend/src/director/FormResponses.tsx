@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { withRetry } from '../lib/asyncUtils'
 import { COLLAB_TYPES } from '../public/CollaborationsPage'
@@ -9,6 +9,8 @@ import {
 } from './adminKit'
 import { getCached, setCached } from '../lib/swrCache'
 import { useToast } from '../components/Toast'
+import { logAction } from '../lib/auditLog'
+import { splitBulkResult, revertRows } from './formResponsesLogic'
 import {
   ChevronDownIcon, ChevronUpIcon, ExclamationCircleIcon,
 } from '@heroicons/react/24/outline'
@@ -123,6 +125,7 @@ function Field({ label, value, href }: { label: string; value: string; href?: st
   )
 }
 
+const PAGE_SIZE = 200
 const COLLAB_CACHE_KEY = 'aq_form_collabs_v1'
 const CONTACT_CACHE_KEY = 'aq_form_contacts_v1'
 
@@ -160,16 +163,20 @@ export default function FormResponses() {
   // gone in five seconds; this panel stays beside the row that changed back.
   const [writeError, setWriteError] = useState<string | null>(null)
   const [bulkOpen, setBulkOpen] = useState(false)
+  // True table sizes (the first page is capped, so the loaded length is not the total).
+  const [totals, setTotals] = useState<{ collab: number | null; contact: number | null }>({ collab: null, contact: null })
+  const [loadingMore, setLoadingMore] = useState(false)
+  const collabsRef = useRef(collabs); collabsRef.current = collabs
+  const contactsRef = useRef(contacts); contactsRef.current = contacts
   const isPhone = useIsPhone()
 
   useEffect(() => {
     let active = true
     ;(async () => {
       const [c, k] = await withRetry(async () => Promise.all([
-        // Bounded: these tables only grow - cap at the 200 most recent rather
-        // than shipping the full history to the browser on every desk visit.
-        supabase.from('collaboration_submissions').select('*').order('created_at', { ascending: false }).limit(200),
-        supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).limit(200),
+        // Bounded first page; older rows come in through "load older" below.
+        supabase.from('collaboration_submissions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(0, PAGE_SIZE - 1),
+        supabase.from('contact_submissions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(0, PAGE_SIZE - 1),
       ]))
       if (!active) return
       // Both failing usually means the tables don't grant read access yet.
@@ -198,11 +205,13 @@ export default function FormResponses() {
         if (!c.error) {
           const nextCollabs = (c.data as CollabRow[] | null) ?? []
           setCollabs(nextCollabs)
+          setTotals(t => ({ ...t, collab: c.count ?? nextCollabs.length }))
           setCached(COLLAB_CACHE_KEY, nextCollabs)
         }
         if (!k.error) {
           const nextContacts = (k.data as ContactRow[] | null) ?? []
           setContacts(nextContacts)
+          setTotals(t => ({ ...t, contact: k.count ?? nextContacts.length }))
           setCached(CONTACT_CACHE_KEY, nextContacts)
         }
         const partial = !!c.error || !!k.error
@@ -221,29 +230,65 @@ export default function FormResponses() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadKey])
 
-  const updateStatus = async (row: Row, status: SubmissionStatus) => {
-    const key = `${kind}:${row.id}`
+  const loadOlder = async () => {
     const table = kind === 'collab' ? 'collaboration_submissions' : 'contact_submissions'
-    const prevCollabs = collabs
-    const prevContacts = contacts
-    const nextCollabs = prevCollabs.map(c => c.id === row.id ? { ...c, status } : c)
-    const nextContacts = prevContacts.map(c => c.id === row.id ? { ...c, status } : c)
+    const have = kind === 'collab' ? collabsRef.current.length : contactsRef.current.length
+    setLoadingMore(true)
+    try {
+      const { data, error: e } = await supabase.from(table).select('*').order('created_at', { ascending: false }).range(have, have + PAGE_SIZE - 1)
+      if (e) throw e
+      if (kind === 'collab') {
+        const more = ((data as CollabRow[]) ?? []).filter(r => !collabsRef.current.some(x => x.id === r.id))
+        setCollabs(prev => [...prev, ...more])
+      } else {
+        const more = ((data as ContactRow[]) ?? []).filter(r => !contactsRef.current.some(x => x.id === r.id))
+        setContacts(prev => [...prev, ...more])
+      }
+    } catch (e: any) {
+      toast.error('couldn’t load older enquiries.', e?.message || 'try again.')
+    } finally {
+      setLoadingMore(false)
+    }
+  }
+
+  const applyStatus = (k: Kind, ids: number[], status: SubmissionStatus) => {
+    const set = new Set(ids)
+    if (k === 'collab') setCollabs(prev => prev.map(c => set.has(c.id) ? { ...c, status } : c))
+    else setContacts(prev => prev.map(c => set.has(c.id) ? { ...c, status } : c))
+  }
+  const revert = (k: Kind, prev: Map<number, string>, ids: number[]) => {
+    if (k === 'collab') setCollabs(cur => revertRows(cur, prev, ids) as CollabRow[])
+    else setContacts(cur => revertRows(cur, prev, ids) as ContactRow[])
+  }
+  // Sync the session cache from the LATEST list (not a snapshot taken before an await).
+  const syncCache = (k: Kind) => {
+    setTimeout(() => {
+      if (k === 'collab') setCached(COLLAB_CACHE_KEY, collabsRef.current)
+      else setCached(CONTACT_CACHE_KEY, contactsRef.current)
+    }, 0)
+  }
+
+  const updateStatus = async (row: Row, status: SubmissionStatus) => {
+    const k = kind
+    const key = `${k}:${row.id}`
+    const table = k === 'collab' ? 'collaboration_submissions' : 'contact_submissions'
+    const previous = new Map([[row.id, row.status as string]])
 
     setBusy(prev => new Set(prev).add(key))
     setWriteError(null)
-    if (kind === 'collab') setCollabs(nextCollabs); else setContacts(nextContacts)
+    applyStatus(k, [row.id], status)
 
     // .select('id') + 0-row check so a silently-denied write (e.g. missing RLS
     // UPDATE grant) surfaces as an error instead of a false-success toast.
     const { data: updated, error: e } = await supabase.from(table).update({ status }).eq('id', row.id).select('id')
     setBusy(prev => { const next = new Set(prev); next.delete(key); return next })
     if (e || !updated || updated.length === 0) {
-      if (kind === 'collab') setCollabs(prevCollabs); else setContacts(prevContacts)
+      revert(k, previous, [row.id])
       toast.error('status didn’t change.', e?.message || 'You may not have permission.')
       setWriteError(`${row.title}: status didn’t change. ${e?.message || 'You may not have permission.'}`)
     } else {
-      if (kind === 'collab') setCached(COLLAB_CACHE_KEY, nextCollabs)
-      else setCached(CONTACT_CACHE_KEY, nextContacts)
+      syncCache(k)
+      logAction('enquiry_status_changed', k === 'collab' ? 'collaboration_submission' : 'contact_submission', row.id, { from: row.status, to: status })
       setWriteError(null)
       toast.success('status updated.')
     }
@@ -293,30 +338,37 @@ export default function FormResponses() {
   const bulkSetStatus = async (status: SubmissionStatus) => {
     const targets = rows.filter(r => selection.isSelected(`${kind}:${r.id}`))
     if (targets.length === 0) return
+    const k = kind
     const ids = targets.map(t => t.id)
+    const previous = new Map(targets.map(t => [t.id, t.status as string]))
     selection.clear()
-    const table = kind === 'collab' ? 'collaboration_submissions' : 'contact_submissions'
-    const prevCollabs = collabs, prevContacts = contacts
-    const nextCollabs = collabs.map(c => ids.includes(c.id) ? { ...c, status } : c)
-    const nextContacts = contacts.map(c => ids.includes(c.id) ? { ...c, status } : c)
+    const table = k === 'collab' ? 'collaboration_submissions' : 'contact_submissions'
     setBulkBusy(true)
     setWriteError(null)
-    if (kind === 'collab') setCollabs(nextCollabs); else setContacts(nextContacts)
+    applyStatus(k, ids, status)
     const { data: updated, error: e } = await supabase.from(table).update({ status }).in('id', ids).select('id')
     setBulkBusy(false)
-    if (e || !updated || updated.length === 0) {
-      if (kind === 'collab') setCollabs(prevCollabs); else setContacts(prevContacts)
+    // Per-row truth: only the rows the database confirmed keep the new status.
+    const { ok, failed } = splitBulkResult(ids, e ? [] : (updated as Array<{ id: number }> | null))
+    if (failed.length > 0) revert(k, previous, failed)
+    syncCache(k)
+    for (const id of ok) {
+      logAction('enquiry_status_changed', k === 'collab' ? 'collaboration_submission' : 'contact_submission', id, { from: previous.get(id), to: status, bulk: true })
+    }
+    if (ok.length === 0) {
       toast.error('couldn’t update those.', e?.message || 'You may not have permission.')
-      setWriteError(`${targets.length} rows changed back. ${e?.message || 'You may not have permission.'}`)
+      setWriteError(`${failed.length} rows changed back. ${e?.message || 'You may not have permission.'}`)
+    } else if (failed.length > 0) {
+      toast.error(`${ok.length} updated, ${failed.length} didn’t save.`, 'The ones that failed were put back.')
+      setWriteError(`${ok.length} of ${ids.length} updated. ${failed.length} changed back because they didn’t save.`)
     } else {
-      if (kind === 'collab') setCached(COLLAB_CACHE_KEY, nextCollabs); else setCached(CONTACT_CACHE_KEY, nextContacts)
-      toast.success(`Marked ${targets.length} ${status}`)
+      toast.success(`Marked ${ok.length} ${status}`)
     }
   }
 
   const tabs: { key: Kind; label: string; count: number }[] = [
-    { key: 'collab', label: 'Collaborations', count: collabs.length },
-    { key: 'contact', label: 'Contact', count: contacts.length },
+    { key: 'collab', label: 'Collaborations', count: totals.collab ?? collabs.length },
+    { key: 'contact', label: 'Contact', count: totals.contact ?? contacts.length },
   ]
 
   return (
@@ -325,7 +377,7 @@ export default function FormResponses() {
         label="Enquiries"
         title="Form responses"
         subtitle="Collaboration requests and contact messages from the public site."
-        count={collabs.length + contacts.length}
+        count={(totals.collab ?? collabs.length) + (totals.contact ?? contacts.length)}
       />
 
       {/* The kind tabs swap the DATA SOURCE - two different tables with two
@@ -496,6 +548,18 @@ export default function FormResponses() {
           )
         })
       )}
+
+      {!loading && !error && (() => {
+        const total = kind === 'collab' ? totals.collab : totals.contact
+        const have = kind === 'collab' ? collabs.length : contacts.length
+        if (total == null || have >= total) return null
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0', gap: 10, alignItems: 'center' }}>
+            <span className="mono xs muted">showing {have} of {total}</span>
+            <button className="btn btn-sm" disabled={loadingMore} onClick={loadOlder}>{loadingMore ? 'loading…' : 'load older'}</button>
+          </div>
+        )
+      })()}
 
       {/* Two irreversible bulk verbs plus a count chip and a clear button do
           not fit 390px, so on a phone they collapse to one control opening a

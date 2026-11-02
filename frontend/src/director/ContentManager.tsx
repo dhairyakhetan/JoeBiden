@@ -24,6 +24,8 @@ import {
 } from './adminKit'
 import { useConfirm } from '../components/Confirm'
 import { useCan } from '../auth/CapabilityContext'
+import { useAuth } from '../auth/AuthContext'
+import { logAction } from '../lib/auditLog'
 import { useToast } from '../components/Toast'
 import { CAT_COLORS, timeAgo } from '../lib/uiHelpers'
 
@@ -82,6 +84,11 @@ const ContentManager = () => {
   const confirm = useConfirm()
   // /director/roles capability. Can only narrow the posts DELETE policy.
   const canDeletePost = useCan('action.delete_post')
+  // Moderation actions (verdicts, status, edit, pin, feature) narrow the same way.
+  const canModerate = useCan('action.moderate_post')
+  const { member: me } = useAuth()
+  const [rejecting, setRejecting] = useState<ManagedPost | null>(null)
+  const [rejectReason, setRejectReason] = useState('')
   const toast = useToast()
   const isPhone = useIsPhone()
   const isDesk = useIsDesk()
@@ -213,13 +220,20 @@ const ContentManager = () => {
 
   const flash = (msg: string, isErr = false) => { if (isErr) toast.error(msg); else toast.success(msg) }
 
+  const denyModerate = () => { toast.error('you don’t have permission to moderate posts.', 'ask a super admin to re-enable it on /director/roles.') }
+
   const handleSaveEdit = async (post: ManagedPost) => {
+    if (!canModerate) { denyModerate(); return }
     if (!editBody.trim()) return
     setIsSaving(true)
     try {
       await feedService.updatePost(post.uuid, { body: editBody.trim() })
       setPosts(prev => prev.map(p => p.postId === post.postId ? { ...p, body: editBody.trim() } : p))
       setEditingId(null)
+      // Editing someone else's words is a staff action worth a trace.
+      if (!me?.uuid || me.uuid !== post.authorUuid) {
+        logAction('post_edited_by_staff', 'post', post.postId, { author: post.authorName })
+      }
       flash(`Post by ${post.authorName} updated.`)
     } catch (e: any) {
       flash(e?.message ?? 'Failed to update post.', true)
@@ -235,6 +249,7 @@ const ContentManager = () => {
     setDeletingId(post.postId)
     try {
       await feedService.deletePost(post.uuid)
+      logAction('post_deleted_by_staff', 'post', post.postId, { author: post.authorName })
       setPosts(prev => prev.filter(p => p.postId !== post.postId))
       setTotal(t => t - 1)
       flash(`Post deleted.`)
@@ -244,8 +259,13 @@ const ContentManager = () => {
     finally { setDeletingId(null) }
   }
 
-  const handleStatusChange = async (post: ManagedPost, newStatus: string) => {
+  const handleStatusChange = async (post: ManagedPost, newStatus: string, reason?: string) => {
     if (newStatus === post.status) return
+    if (!canModerate) { denyModerate(); return }
+    // Rejecting needs a reason the author will read: collect it first.
+    if (newStatus === 'rejected' && reason === undefined) {
+      setRejectReason(''); setRejecting(post); return
+    }
     // Moving off 'scheduled' cancels the timed publish and there is no way to
     // restore it from any screen - confirm before a stray <select> change wipes it.
     if (post.status === 'scheduled') {
@@ -261,6 +281,15 @@ const ContentManager = () => {
     }
     setStatusChangingId(post.postId)
     try {
+      // Approve / reject go through directorService, which stamps the reviewer,
+      // writes the audit row and tells the author.
+      if (newStatus === 'rejected' || (newStatus === 'published' && post.status !== 'scheduled')) {
+        if (newStatus === 'rejected') await directorService.rejectPost(post.postId, reason ?? '')
+        else await directorService.approvePost(post.postId)
+        setPosts(prev => prev.map(p => p.postId === post.postId ? { ...p, status: newStatus, scheduledFor: null } : p))
+        flash(newStatus === 'rejected' ? 'Post rejected. The author has been told why.' : 'Post approved. The author has been told.')
+        return true
+      }
       // Build a real audit-trail update: stamp reviewer + timestamp, and clear
       // rejection_note when transitioning out of 'rejected'.
       const reviewerId = await directorService.getCurrentMemberId()
@@ -288,6 +317,7 @@ const ContentManager = () => {
         .update(baseUpdate)
         .eq('post_id', post.postId)
       if (error) throw error
+      logAction('post_status_changed', 'post', post.postId, { from: post.status, to: newStatus })
 
       setPosts(prev => prev.map(p => p.postId === post.postId
         ? { ...p, status: newStatus, scheduledFor: newStatus === 'scheduled' ? p.scheduledFor : null }
@@ -305,6 +335,7 @@ const ContentManager = () => {
   }
 
   const handleTogglePin = async (post: ManagedPost) => {
+    if (!canModerate) { denyModerate(); return }
     setPinningId(post.postId)
     try {
       const newPinned = !post.pinned
@@ -320,6 +351,7 @@ const ContentManager = () => {
   // Feature/unfeature on the Projects page's "featured drives" band - separate
   // from pin (notice board). Requires posts_featured_flag_2026_07.sql.
   const handleToggleFeature = async (post: ManagedPost) => {
+    if (!canModerate) { denyModerate(); return }
     setFeaturingId(post.postId)
     try {
       const newFeatured = !post.featured
@@ -368,6 +400,8 @@ const ContentManager = () => {
   }
 
   const verdict = async (post: ManagedPost, newStatus: 'published' | 'rejected') => {
+    if (!canModerate) { denyModerate(); return }
+    if (newStatus === 'rejected') { setRejectReason(''); setRejecting(post); return }
     const ok = await handleStatusChange(post, newStatus)
     // 12a - advance to the next item after a decision. The decided row stays
     // in the rail until the next refetch, so an undo can restore it in place.
@@ -417,11 +451,11 @@ const ContentManager = () => {
       <Link to={`/post/${post.uuid}`} className="adm-actpill">
         view <ArrowTopRightOnSquareIcon width={13} height={13} strokeWidth={1.8} aria-hidden />
       </Link>
-      <button type="button" className="adm-actpill"
+      {canModerate && <button type="button" className="adm-actpill"
         onClick={() => { setEditingId(post.postId); setEditBody(post.body) }}>
         <PencilSquareIcon width={13} height={13} strokeWidth={1.8} aria-hidden />edit
-      </button>
-      {post.status === 'published' && (
+      </button>}
+      {canModerate && post.status === 'published' && (
         <button
           type="button"
           className={'adm-actpill' + (post.pinned ? ' is-on' : '')}
@@ -436,7 +470,7 @@ const ContentManager = () => {
       )}
       {/* Feature on the Projects page - distinct from pin (notice board).
           Only meaningful for published posts. */}
-      {post.status === 'published' && (
+      {canModerate && post.status === 'published' && (
         <button
           type="button"
           className={'adm-actpill' + (post.featured ? ' is-on' : '')}
@@ -455,15 +489,17 @@ const ContentManager = () => {
           {featuringId === post.postId ? 'saving…' : post.featured ? 'featured' : 'feature'}
         </button>
       )}
-      <button
-        type="button"
-        className="adm-actpill is-danger"
-        onClick={() => handleDelete(post)}
-        disabled={deletingId === post.postId}
-      >
-        <TrashIcon width={13} height={13} strokeWidth={1.8} aria-hidden />
-        {deletingId === post.postId ? 'deleting…' : 'delete'}
-      </button>
+      {canDeletePost && (
+        <button
+          type="button"
+          className="adm-actpill is-danger"
+          onClick={() => handleDelete(post)}
+          disabled={deletingId === post.postId}
+        >
+          <TrashIcon width={13} height={13} strokeWidth={1.8} aria-hidden />
+          {deletingId === post.postId ? 'deleting…' : 'delete'}
+        </button>
+      )}
     </>
   )
 
@@ -472,7 +508,7 @@ const ContentManager = () => {
       <select
         value={post.status}
         onChange={e => handleStatusChange(post, e.target.value)}
-        disabled={statusChangingId === post.postId}
+        disabled={statusChangingId === post.postId || !canModerate}
         aria-label={`Status of the post by ${post.authorName}`}
       >
         {post.status === 'scheduled' && <option value="scheduled">scheduled</option>}
@@ -712,25 +748,25 @@ const ContentManager = () => {
 
               <div className="cm-verdicts">
                 <button type="button" className="cm-verdict is-approve"
-                  disabled={statusChangingId === current.postId}
+                  disabled={statusChangingId === current.postId || !canModerate}
                   onClick={() => verdict(current, 'published')}>
                   approve <span className="cm-keycap">A</span>
                 </button>
                 <button type="button" className="cm-verdict"
-                  disabled={statusChangingId === current.postId}
+                  disabled={statusChangingId === current.postId || !canModerate}
                   onClick={() => verdict(current, 'rejected')}>
                   ask for changes <span className="cm-keycap">R</span>
                 </button>
-                <button type="button" className="cm-verdict is-ghost"
+                {canModerate && <button type="button" className="cm-verdict is-ghost"
                   onClick={() => { setEditingId(current.postId); setEditBody(current.body) }}>
                   edit body
-                </button>
+                </button>}
                 <span style={{ flex: 1 }} />
-                <button type="button" className="cm-verdict is-danger"
+                {canDeletePost && <button type="button" className="cm-verdict is-danger"
                   disabled={deletingId === current.postId}
                   onClick={() => handleDelete(current)}>
                   delete
-                </button>
+                </button>}
               </div>
 
               {editingId === current.postId && (
@@ -775,10 +811,10 @@ const ContentManager = () => {
     <AdminLayout wide>
       <div style={{ paddingBottom: 60 }}>
         <AdminTabHeader
-          label="Content"
-          title="Content manager"
+          label="Posts"
+          title="All posts"
           count={total}
-          subtitle="Edit, delete, or change the status of any post."
+          subtitle="Every post on the feed: approve or reject, edit, pin, feature or delete."
         />
 
         {/* Controls - one shared toolbar (search + status pills), replacing the
@@ -798,6 +834,26 @@ const ContentManager = () => {
         ) : posts.length === 0 ? (
           emptyState
         ) : isDesk && !isPhone ? deck : cards}
+
+      <BottomSheet open={!!rejecting} onClose={() => { if (statusChangingId == null) setRejecting(null) }} title="Reject this post?">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <p className="adm-note">{rejecting?.authorName} gets a notification with your reason. Be kind and specific.</p>
+          <textarea className="cm-editor" rows={4} value={rejectReason} autoFocus
+            onChange={e => setRejectReason(e.target.value)} placeholder="What should they change?" />
+          <div className="cm-editor-acts">
+            <button type="button" onClick={() => setRejecting(null)} disabled={statusChangingId != null}>cancel</button>
+            <button type="button" className="is-save" disabled={!rejectReason.trim() || statusChangingId != null}
+              onClick={async () => {
+                if (!rejecting) return
+                const target = rejecting
+                const ok = await handleStatusChange(target, 'rejected', rejectReason.trim())
+                if (ok) { setRejecting(null); moveDeck(1) }
+              }}>
+              {statusChangingId != null ? 'rejecting…' : 'reject post'}
+            </button>
+          </div>
+        </div>
+      </BottomSheet>
       </div>
     </AdminLayout>
   )

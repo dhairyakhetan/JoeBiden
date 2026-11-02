@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useModalA11y } from '../hooks/useDialog'
 import { useToast } from '../components/Toast'
 import teamService from '../services/teamService'
+import notificationService from '../services/notificationService'
 
 /**
  * Assign one member to teams, from the Members desk — walkthrough item 4.4.
@@ -88,6 +89,18 @@ export default function MemberTeamsDialog({ memberId, memberName, onClose, onCou
     })
     try {
       await teamService.setMembership(team.teamId, memberId, next)
+      // Audit: the team_membership_audit_log trigger already writes
+      // TEAM_MEMBER_ADDED / _RESTORED / _REMOVED with the acting leader, so no
+      // app-side row here. The member is told, fire-and-forget (create never
+      // throws and skips self-notifications). 'system' is leader-gated in the
+      // RPC, which is fine: only leaders reach this dialog.
+      void notificationService.create({
+        memberId,
+        type: 'system',
+        title: next ? `You were added to ${team.name}` : `You were taken off ${team.name}`,
+        subtitle: next ? 'A leader added you from the members desk.' : 'A leader changed your teams from the members desk.',
+        link: '/teams',
+      })
       toastSuccess(next ? `${memberName} added to ${team.name}` : `${memberName} taken off ${team.name}`)
     } catch (e: any) {
       setOnTeams(p => {

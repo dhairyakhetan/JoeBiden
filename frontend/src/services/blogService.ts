@@ -1,6 +1,10 @@
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { logAction } from '../lib/auditLog'
+import { notificationService } from './notificationService'
+import { AlreadyDecidedError } from './directorServiceTypes'
+import { LIVE_STATUSES, unpublishPatch, unpublishAlreadyChangedMessage, unpublishNotice } from './blogUnpublish'
 
 // Long-form (blog) writes.
 //
@@ -261,34 +265,118 @@ export async function publishDraft(
 
   const patch = publicationFor(opts.publishAt ?? new Date().toISOString())
 
+  // Guarded on status: a draft someone else already published, scheduled or
+  // deleted must not be re-published, and its author must not be told twice.
   const { data, error } = await db
     .from('posts')
     .update(patch)
     .eq('post_id', id)
-    .select('post_id,slug')
+    .eq('status', 'pending_review')
+    .is('deleted_at', null)
+    .select('post_id,slug,title,author_id')
   if (error) throw logSupabaseError('blogService.publishDraft', error)
-  if (!data || data.length === 0) {
-    throw new Error("Couldn't publish this blog - you may not have permission.")
+  if (!data || data.length === 0) throw await explainDraftNoop(id, "Couldn't publish this blog - you may not have permission.")
+
+  const row = data[0] as { post_id: number; slug: string; title: string | null; author_id: number | null }
+  const scheduled = !!opts.publishAt && patch.status === 'scheduled'
+  logAction(scheduled ? 'blog_scheduled' : 'blog_published', 'post', id, {
+    slug: row.slug, ...(scheduled ? { publishAt: opts.publishAt } : {}),
+  })
+  if (row.author_id) {
+    notificationService.create({
+      memberId: row.author_id,
+      type: 'post_approved',
+      title: scheduled ? 'Your essay is scheduled' : 'Your essay is live',
+      subtitle: scheduled
+        ? `"${row.title ?? 'Your essay'}" will go live on ${new Date(opts.publishAt as string).toLocaleDateString()}.`
+        : `"${row.title ?? 'Your essay'}" is now on the blog.`,
+      link: `/blog/${row.slug}`,
+    })
   }
-  return data[0] as { post_id: number; slug: string }
+  return { post_id: row.post_id, slug: row.slug }
+}
+
+/** An essay currently public or waiting on its date. */
+export interface LiveBlog extends BlogDraft {
+  status: 'published' | 'scheduled'
+  published_at: string | null
+  scheduled_for: string | null
+}
+
+/** Published and scheduled essays, newest first (not deleted). Leader read, same policy as listDrafts. */
+export async function listLive(): Promise<LiveBlog[]> {
+  const { data, error } = await db
+    .from('posts')
+    .select('post_id,slug,title,article_body,article,category,created_at,status,published_at,scheduled_for,post_images(blob_url,display_order)')
+    .eq('source_kind', KIND)
+    .in('status', [...LIVE_STATUSES])
+    .is('deleted_at', null)
+    .order('published_at', { ascending: false, nullsFirst: true })
+  if (error) throw logSupabaseError('blogService.listLive', error)
+  return ((data || []) as (DraftRow & { status: 'published' | 'scheduled'; published_at: string | null; scheduled_for: string | null })[])
+    .map(r => ({ ...draftFromPost(r), status: r.status, published_at: r.published_at, scheduled_for: r.scheduled_for }))
+}
+
+/**
+ * Take a live or scheduled essay back to drafts (pending_review). Cover and text
+ * stay. Guarded on status so a row someone else already changed updates nothing and
+ * raises AlreadyDecidedError. posts has no mirror trigger; the public list, post
+ * page, sitemap and prerender all filter status = 'published', so it leaves the
+ * public site as soon as this lands.
+ */
+export async function unpublishBlog(id: number) {
+  const { data, error } = await db
+    .from('posts')
+    .update(unpublishPatch())
+    .eq('post_id', id)
+    .in('status', [...LIVE_STATUSES])
+    .is('deleted_at', null)
+    .select('post_id,slug,title,author_id')
+  if (error) throw logSupabaseError('blogService.unpublishBlog', error)
+  if (!data || data.length === 0) {
+    const { data: now } = await db.from('posts').select('status,deleted_at').eq('post_id', id).maybeSingle()
+    const msg = unpublishAlreadyChangedMessage(now)
+    if (msg) throw new AlreadyDecidedError(msg)
+    throw new Error("Couldn't take this essay back to drafts - you may not have permission.")
+  }
+  const row = data[0] as { post_id: number; slug: string; title: string | null; author_id: number | null }
+  logAction('blog_unpublished', 'post', id, { slug: row.slug })
+  if (row.author_id) {
+    const n = unpublishNotice(row.title)
+    notificationService.create({ memberId: row.author_id, type: 'system', title: n.title, subtitle: n.subtitle, link: '/my-posts' })
+  }
+  return { post_id: row.post_id, slug: row.slug }
+}
+
+/** Why a status-guarded draft update touched nothing: already handled, or not allowed. */
+async function explainDraftNoop(id: number, permissionMessage: string): Promise<Error> {
+  const { data } = await db.from('posts').select('status,deleted_at').eq('post_id', id).maybeSingle()
+  if (data && (data.deleted_at || data.status !== 'pending_review')) {
+    return new AlreadyDecidedError(
+      data.deleted_at ? 'This draft was already deleted.' : `This draft was already dealt with (it is now "${data.status}"). Refresh the list.`,
+    )
+  }
+  return new Error(permissionMessage)
 }
 
 /**
  * Set/replace a draft's cover without publishing it.
  *
- * A cover is `post_images` at display_order 0, so replacing one means deleting
- * the old row rather than updating a column. `null` clears it.
+ * A cover is `post_images` at display_order 0. Replacing it is insert-first:
+ * the new cover is inserted, and only once that has landed is the old one
+ * removed. A failed insert therefore leaves the old cover untouched (the old
+ * delete-then-insert lost it). `null` clears it.
  */
 export async function setDraftCover(id: number, url: string | null) {
-  const { error: delError } = await db
-    .from('post_images')
-    .delete()
-    .eq('post_id', id)
-    .eq('display_order', 0)
-  if (delError) throw logSupabaseError('blogService.setDraftCover', delError)
+  if (!url) {
+    const { error: clearError } = await db.from('post_images').delete().eq('post_id', id).eq('display_order', 0)
+    if (clearError) throw logSupabaseError('blogService.setDraftCover', clearError)
+    logAction('blog_cover_changed', 'post', id, { cleared: true })
+    return true
+  }
 
-  if (!url) return true
-
+  // post_images has no unique (post_id, display_order) and no UPDATE policy,
+  // so the swap is: insert the new cover at 0, then delete every OTHER row at 0.
   const { data, error } = await db
     .from('post_images')
     .insert({
@@ -303,6 +391,20 @@ export async function setDraftCover(id: number, url: string | null) {
     .select('image_id')
   if (error) throw logSupabaseError('blogService.setDraftCover', error)
   if (!data || data.length === 0) throw new Error("Couldn't save the cover image.")
+  const newImageId = (data[0] as { image_id: number }).image_id
+
+  const { error: delError } = await db
+    .from('post_images')
+    .delete()
+    .eq('post_id', id)
+    .eq('display_order', 0)
+    .neq('image_id', newImageId)
+  if (delError) {
+    // Two covers at order 0 would be ambiguous: undo the insert so the old one stays the cover.
+    await db.from('post_images').delete().eq('image_id', newImageId)
+    throw logSupabaseError('blogService.setDraftCover', delError)
+  }
+  logAction('blog_cover_changed', 'post', id, { cleared: false })
   return true
 }
 
@@ -315,10 +417,21 @@ export async function deleteDraft(id: number) {
     .from('posts')
     .update({ deleted_at: new Date().toISOString() })
     .eq('post_id', id)
-    .select('post_id')
+    .is('deleted_at', null)
+    .select('post_id,title,author_id')
   if (error) throw logSupabaseError('blogService.deleteDraft', error)
-  if (!data || data.length === 0) {
-    throw new Error("Couldn't delete this draft - you may not have permission.")
+  if (!data || data.length === 0) throw await explainDraftNoop(id, "Couldn't delete this draft - you may not have permission.")
+
+  const row = data[0] as { post_id: number; title: string | null; author_id: number | null }
+  logAction('blog_draft_deleted', 'post', id, { title: row.title })
+  if (row.author_id) {
+    notificationService.create({
+      memberId: row.author_id,
+      type: 'system',
+      title: 'Your essay draft was removed',
+      subtitle: `"${row.title ?? 'Your essay'}" was removed from the blog desk by a leader.`,
+      link: '/my-posts',
+    })
   }
   return true
 }

@@ -54,7 +54,7 @@
    looked like. Same defect, same fix as `.mem-search input` on the public
    members page; this one covers every desk that has a search. */
 .adm-search input { flex: 1; align-self: stretch; border: none; outline: none; background: transparent; font-size: 15px; color: var(--ink); min-width: 0; }
-.adm-toolbar-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.adm-toolbar-filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-width: 0; max-width: 100%; } .adm-toolbar-filters > .adm-hscroll { min-width: 0; max-width: 100%; }
 .adm-toolbar-actions { display: flex; gap: 8px; align-items: center; margin-left: auto; }
 
 /* ── Filter pill - calmed brand chip ── */

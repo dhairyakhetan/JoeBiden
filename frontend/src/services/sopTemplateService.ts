@@ -1,6 +1,7 @@
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { logAction } from '../lib/auditLog'
 
 /**
  * sopTemplateService - the `sop_templates` copy-to-clipboard WhatsApp script
@@ -68,12 +69,14 @@ const sopTemplateServiceImpl = {
       .single()
 
     if (error) throw logSupabaseError('sopTemplateService.update', error)
+    logAction('whatsapp_template_edited', 'sop_template', id, { label: input.label.trim() })
     return { success: true, data: mapRow(data) }
   },
 
   async remove(id: number) {
     const { error } = await supabaseCommunity.from('sop_templates').delete().eq('id', id)
     if (error) throw logSupabaseError('sopTemplateService.remove', error)
+    logAction('whatsapp_template_deleted', 'sop_template', id)
     return { success: true }
   },
 }

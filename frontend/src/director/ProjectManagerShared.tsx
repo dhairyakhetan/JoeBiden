@@ -16,6 +16,13 @@ export type Project = WelfareProject
 
 export const LIST_COLS = 'id,slug,is_draft,header,featured,objective,location,workshop_date,volunteers,main_image,main_image_alt,key_statistic'
 
+/** A live (non-draft) project with no hero image renders as a blank card in the
+ *  feed, so going live requires one. Shared by the modal and the row toggle. */
+export const HERO_REQUIRED_MESSAGE = 'add a hero image before going live - without one this renders as a blank card in the feed.'
+export function canGoLive(p: { main_image?: string | null }): boolean {
+  return !!(p.main_image && String(p.main_image).trim())
+}
+
 export const OBJECTIVES = [
   'Workshop', 'Feeding Dogs', 'Plantation Drive', 'Distribution Drive',
   'Sundarbans Relief', 'Old Age Home Visit', 'Fundraising Event', 'Others',

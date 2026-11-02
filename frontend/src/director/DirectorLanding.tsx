@@ -40,7 +40,7 @@ import { EmptyLedger } from './adminKit'
  * queue - previously those two desks carried no unread signal anywhere in the UI.
  */
 const DirectorLanding = () => {
-  const { stats, statsError, canApproveMembers, isSuperAdmin, myCategories, scopedPendingPosts } = useOutletContext<DirectorContext>()
+  const { stats, statsError, isSuperAdmin, myCategories, scopedPendingPosts } = useOutletContext<DirectorContext>()
   const { member } = useAuth()
   const { can } = useCapabilities()
 
@@ -54,15 +54,15 @@ const DirectorLanding = () => {
   // getRoleLabel, not a literal, so the 'hr' role reads as "hr" here instead of
   // inheriting super_admin's wording. For super_admin the string is unchanged.
   const scopeLabel = isSuperAdmin
-    ? `acting as · ${getRoleLabel(member?.role).toLowerCase()} · all categories`
+    ? `acting as · ${getRoleLabel(member?.role).toLowerCase()} · all teams`
     : myCategories.length > 0
-      ? `acting as · ${getRoleLabel(member?.role)} · ${myCategories.join(', ')}`
+      ? `acting as · ${getRoleLabel(member?.role)} · teams: ${myCategories.join(', ')}`
       : `acting as · ${getRoleLabel(member?.role)}`
 
   const scopeNote = isSuperAdmin
-    ? 'across every category'
+    ? 'across every team'
     : myCategories.length > 0
-      ? `in your ${myCategories.join(' + ')} desk`
+      ? `for your ${myCategories.join(' + ')} team${myCategories.length === 1 ? '' : 's'}`
       : 'in your desk'
 
   // Redesign 17.2 replaces 06.4.3's stat strip (two totals: approved
@@ -75,7 +75,7 @@ const DirectorLanding = () => {
   // Only real, non-zero queues make the list - an empty list is itself the
   // answer ("nothing waiting"), and is far more useful than five zeroes.
   const todo = ([
-    { show: canApproveMembers && pendingApprovals > 0, count: pendingApprovals, noun: pendingApprovals === 1 ? 'member sign-up' : 'member sign-ups', verb: 'waiting on approval', to: '/director/approvals' },
+    { show: isSuperAdmin && pendingApprovals > 0, count: pendingApprovals, noun: pendingApprovals === 1 ? 'member sign-up' : 'member sign-ups', verb: 'waiting on approval', to: '/director/approvals' },
     { show: pendingPosts > 0, count: pendingPosts, noun: pendingPosts === 1 ? 'post' : 'posts', verb: 'waiting in the review queue', to: '/director/posts' },
     { show: pendingEnquiries > 0, count: pendingEnquiries, noun: pendingEnquiries === 1 ? 'enquiry' : 'enquiries', verb: 'nobody has replied to yet', to: '/director/enquiries' },
     { show: pendingApplications > 0, count: pendingApplications, noun: pendingApplications === 1 ? 'application' : 'applications', verb: 'waiting on a decision', to: '/director/hiring' },
@@ -90,7 +90,7 @@ const DirectorLanding = () => {
   // SAME non-zero predicate `todo` already computes, and the surviving blocks
   // re-balance the row fractions instead of leaving a hole.
   const jigsaw = ([
-    { show: canApproveMembers && pendingApprovals > 0, to: '/director/approvals', n: pendingApprovals, label: 'accounts waiting', cc: 'var(--tomato)' },
+    { show: isSuperAdmin && pendingApprovals > 0, to: '/director/approvals', n: pendingApprovals, label: 'accounts waiting', cc: 'var(--tomato)' },
     { show: pendingPosts > 0, to: '/director/posts', n: pendingPosts, label: 'posts in queue', cc: 'var(--lemon)' },
     { show: pendingEnquiries > 0, to: '/director/enquiries', n: pendingEnquiries, label: 'enquiries', cc: '' },
     { show: pendingApplications > 0, to: '/director/hiring', n: pendingApplications, label: 'applications', cc: 'var(--sky)' },
@@ -108,15 +108,18 @@ const DirectorLanding = () => {
   // to be a third place where `superOnly` was interpreted. This list therefore
   // cannot show a director a desk the route guard would then refuse; the unit
   // test asserts exactly that, for every desk against every role.
-  const visibleGroups = visibleDeskGroups({ role: member?.role, canApproveMembers, can })
+  const visibleGroups = visibleDeskGroups({ role: member?.role, canApproveMembers: isSuperAdmin, can })
 
   const deskCount = visibleGroups.reduce((n, g) => n + g.items.length, 0)
 
-  // Only the two desks the stats object actually counts get a chip. Every
+  // Only the desks the stats object actually counts get a chip (the rail also
+  // counts Certificates, which the landing has no figure for). Every
   // other desk reads `clear`, never a zero and never an invented number.
   const deskCounts: Partial<Record<NavKey, number>> = {
-    approvals: canApproveMembers ? pendingApprovals || undefined : undefined,
+    approvals: isSuperAdmin ? pendingApprovals || undefined : undefined,
     posts: pendingPosts || undefined,
+    hiring: pendingApplications || undefined,
+    enquiries: pendingEnquiries || undefined,
   }
   const needYouCount = Object.values(deskCounts).filter((n): n is number => !!n).length
 
@@ -173,7 +176,7 @@ const DirectorLanding = () => {
         ) : todo.length === 0 ? (
           <EmptyLedger
             message={`nothing waiting ${scopeNote} - nice work`}
-            sub="Approvals and the post queue are all clear."
+            sub="Every queue you can see is clear."
           />
         ) : (
           <div className="ops-jigsaw">

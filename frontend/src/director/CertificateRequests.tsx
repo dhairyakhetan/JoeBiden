@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
-import certificateService, { CertificateRequest, DocType, RequestStatus } from '../services/certificateService'
+import certificateService, { AlreadyDecidedError, CertificateRequest, DocType, RequestStatus } from '../services/certificateService'
 import { generateCertificate, downloadCertificate } from '../components/certificateGenerator'
 import { useToast } from '../components/Toast'
 import { useConfirm } from '../components/Confirm'
@@ -36,7 +36,7 @@ function fmtDate(iso: string | null): string {
   catch { return '' }
 }
 
-function DecideRow({ request, onDecided }: { request: CertificateRequest; onDecided: (r: CertificateRequest) => void }) {
+function DecideRow({ request, onDecided, onStale }: { request: CertificateRequest; onDecided: (r: CertificateRequest) => void; onStale: () => void }) {
   const { member } = useAuth()
   const toast = useToast()
   const confirm = useConfirm()
@@ -73,7 +73,7 @@ function DecideRow({ request, onDecided }: { request: CertificateRequest; onDeci
     if (status === 'issued') {
       const ok = await confirm({
         title: `issue this ${DOC_LABEL[request.docType].toLowerCase()}?`,
-        body: `${request.memberName || 'this member'} will see it marked issued.`,
+        body: `${request.memberName || 'this member'} will be told it is approved. you send the document to them by hand.`,
         confirmLabel: 'issue it',
       })
       if (!ok) return
@@ -82,9 +82,14 @@ function DecideRow({ request, onDecided }: { request: CertificateRequest; onDeci
     try {
       const result = await certificateService.decide(request.id, status, note, member?.member_id)
       onDecided(result.data)
-      toast.success(status === 'issued' ? 'issued' : 'declined')
+      toast.success(status === 'issued' ? 'issued' : 'declined', status === 'issued' ? `now send it to ${request.memberName || 'the member'} by hand.` : undefined)
       setOpen(false)
     } catch (e: any) {
+      if (e instanceof AlreadyDecidedError) {
+        toast.info('already decided.', 'someone else got to this one first. showing the latest.')
+        onStale()
+        return
+      }
       toast.error('couldn’t save that decision.', e?.message || 'try again.')
     } finally {
       setBusy(false)
@@ -103,6 +108,14 @@ function DecideRow({ request, onDecided }: { request: CertificateRequest; onDeci
           </div>
           {request.hoursAtRequest ?? '?'}h &middot; {request.driveCountAtRequest ?? '?'} drives
           {request.dateRangeStart && <> &middot; {fmtDate(request.dateRangeStart)} &ndash; {fmtDate(request.dateRangeEnd)}</>}
+          {request.status === 'issued' && (
+            <div className="qrow" role="note" style={{ marginTop: 8 }}>
+              <span className="qtag" style={{ ['--cc' as any]: 'var(--sky)' }}>send by hand</span>
+              <span className="adm-note">
+                the app does not deliver this. send the document to {request.memberName || 'the member'} yourself.
+              </span>
+            </div>
+          )}
           {request.memberNote && (
             <div className="adm-lcard-facts">
               <span className="adm-note">"{request.memberNote}"</span>
@@ -222,7 +235,7 @@ export default function CertificateRequests() {
           />
         ) : (
           filtered.map(r => (
-            <DecideRow key={r.id} request={r} onDecided={updated => setRequests(prev => prev.map(x => (x.id === updated.id ? updated : x)))} />
+            <DecideRow key={r.id} request={r} onStale={fetchRequests} onDecided={updated => setRequests(prev => prev.map(x => (x.id === updated.id ? updated : x)))} />
           ))
         )}
       </div>

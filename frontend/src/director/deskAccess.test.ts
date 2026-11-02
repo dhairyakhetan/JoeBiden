@@ -15,8 +15,8 @@ import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
 
 const ROLES = ['member', 'lead', 'hod', 'director', 'hr', 'super_admin', undefined, null, '', 'nonsense'] as const
 
-/** What canApproveMembers is in DirectorDashboard/DirectorLanding: hasLeaderAccess(role). */
-const canApprove = (role?: string | null) => hasLeaderAccess(role)
+/** What canApproveMembers is in DirectorDashboard/DirectorLanding: isSuperAdmin(role) (Approvals is a `super` desk). */
+const canApprove = (role?: string | null) => isSuperAdmin(role)
 
 describe('desk access is declared exactly once', () => {
   // 19 until 2026-09-11, when `wall_notes` ("Removed Notes") was deleted on
@@ -103,13 +103,33 @@ describe('the route guard and the nav gate agree, for every desk × every role',
     }
   })
 
-  it('`approvals` is the only desk with an extra nav filter, and it is currently equal to its privilege', () => {
+  it('`approvals` is the only desk with an extra nav filter, and it is equal to its privilege', () => {
     expect(Object.keys(EXTRA_NAV_FILTER)).toEqual(['approvals'])
+    expect(DESK_BY_KEY.approvals.privilege).toBe('super')
     for (const role of ROLES) {
-      // canApproveMembers === hasLeaderAccess === the `leader` privilege, so
-      // the extra filter subtracts nothing today. If it ever narrows, this
-      // fails rather than the nav silently hiding a still-reachable URL.
-      expect(canApprove(role)).toBe(hasLeaderAccess(role))
+      // canApproveMembers === isSuperAdmin === the `super` privilege, so the
+      // extra filter subtracts nothing. A plain HoD must not see the desk.
+      expect(canApprove(role)).toBe(hasLeaderAccess(role) && isSuperAdmin(role))
+      expect(isDeskVisible(DESK_BY_KEY.approvals, { role, canApproveMembers: canApprove(role) })).toBe(canAccessDesk(DESK_BY_KEY.approvals, role))
+    }
+    expect(isDeskVisible(DESK_BY_KEY.approvals, { role: 'hod', canApproveMembers: true })).toBe(false)
+  })
+})
+
+describe('desk copy (2026-11-02 audit)', () => {
+  it('relabels Categories and Content without touching keys or paths', () => {
+    expect(DESK_BY_KEY.categories.label).toBe('Moderation')
+    expect(DESK_BY_KEY.categories.path).toBe('categories')
+    expect(DESK_BY_KEY.content.label).toBe('All posts')
+    expect(DESK_BY_KEY.content.path).toBe('content')
+  })
+
+  it('has no stale blurbs and no em dashes', () => {
+    expect(DESK_BY_KEY.teams.blurb).not.toMatch(/eight/i)
+    expect(DESK_BY_KEY.projects.blurb).not.toMatch(/Drives/)
+    expect(DESK_BY_KEY.volunteer_apps.blurb).not.toMatch(/archive|kept for the record/i)
+    for (const d of DESKS) {
+      expect(d.label + d.blurb).not.toContain('\u2014')
     }
   })
 })

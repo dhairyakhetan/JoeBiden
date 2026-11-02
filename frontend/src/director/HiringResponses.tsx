@@ -14,6 +14,7 @@ import {
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 import { OpeningAnswersDisplay } from '../components/OpeningQuestionBuilder'
 import { useToast } from '../components/Toast'
+import { useConfirm } from '../components/Confirm'
 import WhatsAppTemplates from './WhatsAppTemplates'
 
 // HoD-desk-wide view of every application to every team's job openings - the
@@ -61,6 +62,7 @@ function fmtDate(iso: string): string {
 
 export default function HiringResponses() {
   const { success: toastSuccess, error: toastError } = useToast()
+  const confirm = useConfirm()
   const { myTeamIds, isSuperAdmin } = useOutletContext<DirectorContext>()
   const [openings, setOpenings] = useState<JobOpening[]>([])
   const [appsByOpening, setAppsByOpening] = useState<Record<string, Application[]>>({})
@@ -106,7 +108,7 @@ export default function HiringResponses() {
     return () => { cancelled = true }
   }, [toastError, reloadKey])
 
-  const updateStatus = async (openingId: string, appId: string, status: Application['status'], rejectionReason?: string) => {
+  const updateStatus = async (openingId: string, appId: string, status: Application['status'], rejectionReason?: string): Promise<boolean> => {
     setBusy(prev => new Set(prev).add(appId))
     try {
       await jobOpenings.updateApplicationStatus(appId, status, rejectionReason)
@@ -115,8 +117,10 @@ export default function HiringResponses() {
         [openingId]: prev[openingId].map(a => a.id === appId ? { ...a, status } : a),
       }))
       toastSuccess(`Marked ${status}`)
+      return true
     } catch (e: any) {
       toastError('status didn’t change.', e?.message ?? 'try again.')
+      return false
     } finally {
       setBusy(prev => { const next = new Set(prev); next.delete(appId); return next })
     }
@@ -173,7 +177,10 @@ export default function HiringResponses() {
           toastSuccess(`Marked ${targets.length} rejected`)
         }
       } else if (rejectingApp) {
-        await updateStatus(rejectingApp.openingId, rejectingApp.appId, 'rejected', reason)
+        // updateStatus reports its own failure; keep the modal (and the typed
+        // reason) open so nothing has to be retyped.
+        const ok = await updateStatus(rejectingApp.openingId, rejectingApp.appId, 'rejected', reason)
+        if (!ok) return
       }
       closeRejectModal()
     } catch (e: any) {
@@ -241,6 +248,14 @@ export default function HiringResponses() {
     const skipped = picked.length - targets.length
     if (skipped > 0) toastError(`${skipped} not accepted.`, ACCEPT_BLOCKED_MESSAGE)
     if (targets.length === 0) return
+    if (status === 'accepted') {
+      const ok = await confirm({
+        title: `Accept ${count(targets.length, 'applicant')}?`,
+        body: 'Each person is added to the team and told straight away. You can remove them later from the team page.',
+        confirmLabel: 'Accept',
+      })
+      if (!ok) return
+    }
     selection.clear()
     setBulkBusy(true)
     try {
@@ -429,6 +444,15 @@ export default function HiringResponses() {
                       const next = e.target.value as Application['status']
                       if (next === 'rejected') {
                         setRejectingApp({ openingId: app.opening.id, appId: app.id, name: app.applicant_name || 'this applicant' })
+                      } else if (next === 'accepted') {
+                        void (async () => {
+                          const ok = await confirm({
+                            title: `Accept ${app.applicant_name || 'this applicant'}?`,
+                            body: 'They are added to the team and told straight away.',
+                            confirmLabel: 'Accept',
+                          })
+                          if (ok) updateStatus(app.opening.id, app.id, next)
+                        })()
                       } else {
                         updateStatus(app.opening.id, app.id, next)
                       }

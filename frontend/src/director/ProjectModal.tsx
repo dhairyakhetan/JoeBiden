@@ -8,7 +8,7 @@ import { useConfirm } from '../components/Confirm'
 import { useToast } from '../components/Toast'
 import { withRetry } from '../lib/asyncUtils'
 import {
-  BLANK, cuteSlug, useModalA11y,
+  BLANK, cuteSlug, useModalA11y, canGoLive, HERO_REQUIRED_MESSAGE,
   BasicsTab, ContentTab, ImagesTab, LinksTab,
   type ModalTab, type Project,
 } from './ProjectManagerShared'
@@ -112,9 +112,9 @@ export default function ProjectModal({
     // 57 live projects currently render imageless. Enforced here rather than in
     // the trigger so the author gets told, instead of the project silently
     // never appearing in the feed.
-    if (!form.is_draft && !form.main_image) {
+    if (!form.is_draft && !canGoLive(form)) {
       setTab('images')
-      toast.error('add a hero image before going live - without one this renders as a blank card in the feed.')
+      toast.error(HERO_REQUIRED_MESSAGE)
       return
     }
     // Belt-and-suspenders: the random suffix makes a collision astronomically

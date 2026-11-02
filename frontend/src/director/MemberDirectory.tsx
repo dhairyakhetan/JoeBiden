@@ -17,6 +17,11 @@ import { useToast } from '../components/Toast'
 import '../styles/routes/director-people.css'
 import { getInitials, hashColor } from '../lib/uiHelpers'
 import { isSuperAdmin as isSuperAdminRole, hasLeaderAccess, getRoleLabel } from '../lib/roles'
+import {
+  canArchiveMember, archiveBlockedReason, showDeleteControl, createRequestTokens,
+  isReadOnlyStatusView, showApprovalsLink, statusViewNoun, statusViewSuffix, statusViewEmpty,
+  type DirectoryStatusView,
+} from './memberDirectoryRules'
 import MemberTeamsDialog from './MemberTeamsDialog'
 import MemberBreakDialog from './MemberBreakDialog'
 import BreaksOverview from './BreaksOverview'
@@ -33,7 +38,7 @@ const formatDate = (dateStr: string) => {
 }
 
 // Mirrors adminKit's useIsPhone pattern, inverted: the sheet-style table
-// below needs real desktop width to be legible (7 columns), the card grid
+// below needs real desktop width to be legible (10 columns), the card grid
 // stays the truth below that - not a manual toggle, the breakpoint decides.
 //
 // REDESIGN 2026-09, section 13: the split moved 860 -> 1025 so it lands on the
@@ -103,12 +108,13 @@ type AQRole = 'member' | 'hod' | 'director' | 'super_admin'
    is deliberately narrower than the set of roles that exist (`hr` is set in the
    database, never granted from this desk). */
 
-type RoleFilter = 'all' | AQRole
+type RoleFilter = 'all' | AQRole | 'hr'
 type SortBy = 'role' | 'newest' | 'oldest' | 'name'
 
 const ROLE_FILTERS: { value: RoleFilter; label: string }[] = [
   { value: 'all', label: 'Everyone' },
   { value: 'super_admin', label: 'Super Admins' },
+  { value: 'hr', label: 'HR' },
   { value: 'director', label: 'Directors' },
   { value: 'hod', label: 'HoDs' },
   { value: 'member', label: 'Members' },
@@ -208,7 +214,7 @@ const MemberDirectory = () => {
   /** `deleted` added 2026-09-12 - browsable so a soft-deleted account can be
    *  restored (see handleRestoreDeleted below); distinct from `archived`,
    *  which is a self-reported departure, not an admin removal. */
-  const [statusFilter, setStatusFilter] = useState<'active' | 'archived' | 'deleted'>('active')
+  const [statusFilter, setStatusFilter] = useState<DirectoryStatusView>('active')
   /** Item 3.1 - the member currently being archived/restored, for per-row busy. */
   const [archiving, setArchiving] = useState<number | null>(null)
   /** 2026-09-12 - the member currently being restored from 'deleted'. */
@@ -314,7 +320,7 @@ const MemberDirectory = () => {
   /** Can the current viewer put THIS member on a break - the UI-level mirror
    *  of hr_set_member_break()'s own check. */
   const canBreakMember = (memberId: number) =>
-    isSuperAdmin || myTeamMemberIds === null || myTeamMemberIds.has(memberId)
+    !isReadOnlyStatusView(statusFilter) && (isSuperAdmin || myTeamMemberIds === null || myTeamMemberIds.has(memberId))
 
   /**
    * Write one row to `contact_access_log`, and throw unless it lands.
@@ -390,10 +396,9 @@ const MemberDirectory = () => {
    * The masked contact control, used identically by the desktop sheet and the
    * phone card so the two projections cannot drift into different rules.
    *
-   * Affordance ledger: the mask itself is NOT the control. `reveal` is a
-   * labelled button beside it, and the copy button only appears once the value
-   * is on screen, so there is never a control that acts on something the
-   * leader cannot see. Both are >= 44px on phone via `.mdir-contact-btn`.
+   * Affordance ledger: there is no reveal step any more (the value shows
+   * directly). The copy button is the one control, and it is the logged
+   * extraction event. It is >= 44px on phone via `.mdir-contact-btn`.
    */
   const renderContact = (memberId: number, fullName: string, field: ContactField, value?: string | null) => {
     if (!value) return <span className="mono mdir-contact-none">not on file</span>
@@ -439,22 +444,30 @@ const MemberDirectory = () => {
 
   const debouncedSearch = useDebounce(search, 300)
 
-  const fetchMembers = useCallback(async (pageNum: number, searchQuery: string, role: RoleFilter, sort: SortBy, append = false, status: 'active' | 'archived' | 'deleted' = 'active') => {
-    if (append) setIsLoadingMore(true); else { setIsLoading(true); setLoadError(null) }
+  // Stale-response guard: every call takes a token and only the newest one may
+  // write state. Without it, a slow response for an old search/filter could land
+  // after a newer one and overwrite it, or a load-more for the old filter could
+  // append rows onto the new list.
+  const requestTokens = useRef(createRequestTokens()).current
+  const fetchMembers = useCallback(async (pageNum: number, searchQuery: string, role: RoleFilter, sort: SortBy, append = false, status: DirectoryStatusView = 'active') => {
+    const token = requestTokens.next()
+    if (append) setIsLoadingMore(true); else { setIsLoading(true); setIsLoadingMore(false); setLoadError(null) }
     try {
       const result = await directorService.getMemberDirectory({ page: pageNum, limit: 20, search: searchQuery, role, sort, status })
+      if (!requestTokens.isLatest(token)) return
       if (result.success) {
         if (append) setMembers(prev => [...prev, ...result.data]); else setMembers(result.data)
         setHasMore(result.pagination.hasNextPage)
         setTotalMembers(result.pagination.totalItems)
       }
     } catch (e: any) {
+      if (!requestTokens.isLatest(token)) return
       const msg = e?.message ?? String(e)
       if (!append) setLoadError(msg)
       toast.error('members didn’t load.', msg)
     }
-    finally { setIsLoading(false); setIsLoadingMore(false) }
-  }, [toast])
+    finally { if (requestTokens.isLatest(token)) { setIsLoading(false); setIsLoadingMore(false) } }
+  }, [toast, requestTokens])
 
   /**
    * Item 3.1. Archive someone, or bring them back. A confirm rather than a
@@ -464,6 +477,10 @@ const MemberDirectory = () => {
    */
   const handleArchive = async (member: DirectoryMember) => {
     const goingToArchive = statusFilter !== 'archived'
+    if (goingToArchive) {
+      const blocked = archiveBlockedReason(currentMember?.role, member.role, member.memberId === currentMember?.member_id)
+      if (blocked) { toast.error(blocked + '.'); return }
+    }
     const ok = await confirm({
       title: goingToArchive ? 'Archive this member?' : 'Bring them back?',
       body: goingToArchive
@@ -596,6 +613,8 @@ const MemberDirectory = () => {
   }
 
   const handleRoleChange = async (memberId: number, fullName: string, newRole: AQRole) => {
+    // Capability first: a confirmed change must never silently do nothing.
+    if (!canAssignRole) { toast.error('your role can’t change roles.'); return }
     // Protect: can't change your own role
     if (memberId === currentMember?.member_id) { toast.error("You can't change your own role."); return }
     // Protect: only super_admins can demote another super_admin
@@ -618,7 +637,6 @@ const MemberDirectory = () => {
       danger: newRole === 'super_admin',
     })
     if (!ok) return
-    if (!canAssignRole) return
     setRoleChanging(memberId)
     try {
       await directorService.changeRole(memberId, newRole)
@@ -631,6 +649,7 @@ const MemberDirectory = () => {
 
   const visibleMembers = onBreakOnly ? members.filter(m => isCurrentlyOnBreak(m.breakEnd)) : members
   const canBreakAnyone = hasLeaderAccess(currentMember?.role)
+  const canTeams = hasLeaderAccess(currentMember?.role)
 
   /** Select-all only selects what's currently visible/matching (the active
    *  filters/search) AND in scope for a break (see `canBreakMember`) - never
@@ -654,8 +673,8 @@ const MemberDirectory = () => {
 
   return (
     <AdminLayout wide>
-      {/* No inner maxWidth here (was 940px) - the seven-column desktop sheet
-          (name/email/phone/class/role/joined/actions) was capped narrower
+      {/* No inner maxWidth here (was 940px) - the wide desktop sheet
+          (name/email/phone/instagram/class/school/role/joined/actions) was capped narrower
           than `.adm-layout`'s own container even before AdminLayout's `wide`
           bump, leaving a real, measured strip of unused width to its right
           on every screen wide enough to render the table at all. */}
@@ -667,9 +686,9 @@ const MemberDirectory = () => {
           // be a plain lie while the archive is showing.
           subtitle={`${totalMembers.toLocaleString()} ${
             roleFilter === 'all'
-              ? (statusFilter === 'archived' ? 'people who have left' : statusFilter === 'deleted' ? 'deleted accounts' : 'active members')
+              ? statusViewNoun(statusFilter)
               : ROLE_FILTERS.find(f => f.value === roleFilter)!.label.toLowerCase()
-                + (statusFilter === 'archived' ? ' who have left' : statusFilter === 'deleted' ? ' (deleted)' : '')
+                + statusViewSuffix(statusFilter)
           }`}
         />
 
@@ -710,6 +729,12 @@ const MemberDirectory = () => {
         {/* Deleted accounts - super_admin only, matching who can restore
             them (restore_member()'s own is_super_admin() gate). A plain HoD
             filtering to this would see rows with no working action on them. */}
+        <FilterPill active={statusFilter === 'pending_approval'} onClick={() => setStatusFilter('pending_approval')}>
+          Pending
+        </FilterPill>
+        <FilterPill active={statusFilter === 'suspended'} onClick={() => setStatusFilter('suspended')}>
+          Suspended
+        </FilterPill>
         {isSuperAdmin && (
           <FilterPill active={statusFilter === 'deleted'} onClick={() => setStatusFilter('deleted')}>
             Deleted
@@ -766,14 +791,14 @@ const MemberDirectory = () => {
         />
       ) : visibleMembers.length === 0 ? (
         <EmptyLedger
-          message={search ? 'no results' : onBreakOnly ? 'no one is on a break' : 'no members yet'}
-          sub={search ? 'Try different keywords.' : onBreakOnly ? 'Nobody currently loaded matches.' : 'Approved members will appear here.'}
+          message={search ? 'no results' : onBreakOnly ? 'no one is on a break' : statusViewEmpty(statusFilter).message}
+          sub={search ? 'Try different keywords.' : onBreakOnly ? 'Nobody currently loaded matches.' : statusViewEmpty(statusFilter).sub}
           action={search ? <button type="button" className="btn btn-sm" onClick={() => setSearch('')}>clear search</button> : undefined}
         />
       ) : (
         <>
-          {/* Desktop sheet view (≥860px) - real columns, sortable headers,
-              WhatsApp copy-to-clipboard. The card grid below it is what
+          {/* Desktop sheet view (≥1025px) - real columns, sortable headers,
+              per-field copy buttons that write a contact_access_log row. The card grid below it is what
               phone/tablet actually render (CSS breakpoint, not JS toggle -
               see .mdir-table-wrap / .mdir-grid-wrap in director-people.css). */}
           {isDesktopTable && (
@@ -872,7 +897,8 @@ const MemberDirectory = () => {
                               className="mdir-select"
                               style={{ maxWidth: 130 }}
                               value={member.role || 'member'}
-                              disabled={roleChanging === member.memberId || isSelf || isProtectedAdmin}
+                              disabled={roleChanging === member.memberId || isSelf || isProtectedAdmin || !canAssignRole}
+                              title={!canAssignRole ? 'Your role cannot change roles' : undefined}
                               onChange={e => handleRoleChange(member.memberId, member.fullName, e.target.value as AQRole)}
                               aria-label={`Role for ${member.fullName}`}
                             >
@@ -898,7 +924,7 @@ const MemberDirectory = () => {
                                 break button below - previously reachable only
                                 via long-press/right-click on this row, which
                                 is a fast shortcut, not the only way in. */}
-                            {canBreakMember(member.memberId) && (
+                            {statusFilter !== 'deleted' && canBreakMember(member.memberId) && (
                               <button
                                 type="button"
                                 className="mdir-teamsbtn"
@@ -908,20 +934,73 @@ const MemberDirectory = () => {
                                 break
                               </button>
                             )}
-                            {isSuperAdmin && (
-                              <button
-                                onClick={() => !(isSelf || isProtectedAdmin) && setDeleteTarget({ memberId: member.memberId, fullName: member.fullName, email: member.email })}
-                                disabled={isSelf || isProtectedAdmin}
-                                className="btn btn-sm"
-                                style={{ background: 'none', color: 'var(--ink-3)', minWidth: 32, opacity: (isSelf || isProtectedAdmin) ? 0.3 : 1 }}
-                                title={isSelf ? "You can't delete yourself" : isProtectedAdmin ? 'Only a super admin can delete this account' : 'Delete account'}
-                                aria-label={`Delete ${member.fullName}'s account`}
-                              >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                                  <path d="M4 7h16" /><path d="M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
-                                  <path d="M6 7l1 13a2 2 0 002 2h6a2 2 0 002-2l1-13" /><path d="M10 11v6" /><path d="M14 11v6" />
-                                </svg>
-                              </button>
+                            {isReadOnlyStatusView(statusFilter) ? (
+                              showApprovalsLink(currentMember?.role, statusFilter)
+                                ? <Link to="/director/approvals" className="mdir-teamsbtn">review in Approvals</Link>
+                                : <span className="mono xs muted">{statusFilter === 'pending_approval' ? 'waiting for approval' : 'suspended'}</span>
+                            ) : statusFilter === 'deleted' ? (
+                              <>
+                                <button
+                                  type="button"
+                                  className="mdir-teamsbtn"
+                                  onClick={() => handleRestoreDeleted(member)}
+                                  disabled={restoringDeleted === member.memberId || restartingDeleted === member.memberId}
+                                  aria-busy={restoringDeleted === member.memberId || undefined}
+                                >
+                                  {restoringDeleted === member.memberId ? '…' : 'restore'}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="mdir-teamsbtn"
+                                  onClick={() => handleRestartAsApplicant(member)}
+                                  disabled={restoringDeleted === member.memberId || restartingDeleted === member.memberId}
+                                  aria-busy={restartingDeleted === member.memberId || undefined}
+                                  title="Send back through the apply flow as a fresh applicant - for demo accounts, not real reinstatements."
+                                >
+                                  {restartingDeleted === member.memberId ? '…' : 'restart as applicant'}
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                {canTeams && (
+                                  <button
+                                    type="button"
+                                    className="mdir-teamsbtn"
+                                    onClick={() => setTeamsTarget({ memberId: member.memberId, fullName: member.fullName })}
+                                    title={`Teams for ${member.fullName}`}
+                                  >
+                                    teams
+                                  </button>
+                                )}
+                                {canTeams && (
+                                  <button
+                                    type="button"
+                                    className="mdir-teamsbtn"
+                                    onClick={() => handleArchive(member)}
+                                    disabled={archiving === member.memberId || (statusFilter !== 'archived' && !canArchiveMember(currentMember?.role, member.role, isSelf))}
+                                    aria-busy={archiving === member.memberId || undefined}
+                                    title={(statusFilter !== 'archived' && archiveBlockedReason(currentMember?.role, member.role, isSelf))
+                                      || (statusFilter === 'archived' ? 'Bring them back' : 'They have left AQ')}
+                                  >
+                                    {archiving === member.memberId ? '…' : statusFilter === 'archived' ? 'restore' : 'archive'}
+                                  </button>
+                                )}
+                                {showDeleteControl(currentMember?.role, statusFilter) && (
+                                  <button
+                                    onClick={() => !(isSelf || isProtectedAdmin) && setDeleteTarget({ memberId: member.memberId, fullName: member.fullName, email: member.email })}
+                                    disabled={isSelf || isProtectedAdmin}
+                                    className="btn btn-sm"
+                                    style={{ background: 'none', color: 'var(--ink-3)', minWidth: 32, opacity: (isSelf || isProtectedAdmin) ? 0.3 : 1 }}
+                                    title={isSelf ? "You can't delete yourself" : isProtectedAdmin ? 'Only a super admin can delete this account' : 'Delete account'}
+                                    aria-label={`Delete ${member.fullName}'s account`}
+                                  >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                      <path d="M4 7h16" /><path d="M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                                      <path d="M6 7l1 13a2 2 0 002 2h6a2 2 0 002-2l1-13" /><path d="M10 11v6" /><path d="M14 11v6" />
+                                    </svg>
+                                  </button>
+                                )}
+                              </>
                             )}
                           </div>
                         </td>
@@ -1057,7 +1136,13 @@ const MemberDirectory = () => {
                     either mean nothing or double up on state this view
                     exists to undo, so they're skipped entirely rather than
                     shown disabled. */}
-                {statusFilter === 'deleted' ? (
+                {isReadOnlyStatusView(statusFilter) ? (
+                  showApprovalsLink(currentMember?.role, statusFilter) ? (
+                    <div className="mdir-admin" onClick={e => e.preventDefault()}>
+                      <Link to="/director/approvals" className="mdir-teamsbtn">review in Approvals</Link>
+                    </div>
+                  ) : null
+                ) : statusFilter === 'deleted' ? (
                   <div className="mdir-admin" onClick={e => e.preventDefault()} style={{ display: 'flex', gap: 6 }}>
                     <button
                       type="button"
@@ -1099,10 +1184,9 @@ const MemberDirectory = () => {
                       type="button"
                       className="mdir-teamsbtn"
                       onClick={() => handleArchive(member)}
-                      disabled={archiving === member.memberId || member.memberId === currentMember?.member_id}
-                      title={member.memberId === currentMember?.member_id
-                        ? 'You cannot archive your own account'
-                        : statusFilter === 'archived' ? 'Bring them back' : 'They have left AQ'}
+                      disabled={archiving === member.memberId || (statusFilter !== 'archived' && !canArchiveMember(currentMember?.role, member.role, member.memberId === currentMember?.member_id))}
+                      title={(statusFilter !== 'archived' && archiveBlockedReason(currentMember?.role, member.role, member.memberId === currentMember?.member_id))
+                        || (statusFilter === 'archived' ? 'Bring them back' : 'They have left AQ')}
                     >
                       {archiving === member.memberId ? '…' : statusFilter === 'archived' ? 'restore' : 'archive'}
                     </button>
@@ -1132,7 +1216,7 @@ const MemberDirectory = () => {
                     {isSuperAdmin && (() => {
                       const isSelf = member.memberId === currentMember?.member_id
                       const isProtectedAdmin = isSuperAdminRole(member.role) && !isSuperAdmin
-                      const disabled = roleChanging === member.memberId || isSelf || isProtectedAdmin
+                      const disabled = roleChanging === member.memberId || isSelf || isProtectedAdmin || !canAssignRole
                       return (
                         <select
                           className="mdir-select"
@@ -1141,7 +1225,7 @@ const MemberDirectory = () => {
                           onChange={e => handleRoleChange(member.memberId, member.fullName, e.target.value as AQRole)}
                           aria-label={`Role for ${member.fullName}`}
                           aria-busy={roleChanging === member.memberId || undefined}
-                          title={isSelf ? "You can't change your own role" : isProtectedAdmin ? 'Only a super admin can change this role' : 'Change role'}
+                          title={!canAssignRole ? 'Your role cannot change roles' : isSelf ? "You can't change your own role" : isProtectedAdmin ? 'Only a super admin can change this role' : 'Change role'}
                         >
                           <option value="member">Member</option>
                           <option value="hod">HoD</option>

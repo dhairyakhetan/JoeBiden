@@ -9,7 +9,8 @@ import { withRetry } from '../lib/asyncUtils'
 import {
   AdminLayout, AdminTabHeader, DataToolbar, FilterPill, EmptyLedger, AdminSkeleton, AdminErrorState,
 } from './adminKit'
-import { LIST_COLS, OBJECTIVES, friendlyDbError, type ListProject, type Project } from './ProjectManagerShared'
+import { logAction } from '../lib/auditLog'
+import { LIST_COLS, OBJECTIVES, friendlyDbError, canGoLive, HERO_REQUIRED_MESSAGE, type ListProject, type Project } from './ProjectManagerShared'
 import ProjectModal from './ProjectModal'
 import {
   ArrowPathIcon, CameraIcon, MapPinIcon, PencilSquareIcon,
@@ -41,17 +42,21 @@ export default function ProjectManager() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const confirm = useConfirm()
   const toast = useToast()
-  const abortRef = useRef<AbortController | null>(null)
+  // The query builder takes no AbortSignal, so a sequence number stands in:
+  // only the newest load may write state or the module cache.
+  const loadSeq = useRef(0)
+  const mounted = useRef(true)
+  useEffect(() => () => { mounted.current = false }, [])
 
   const load = useCallback(async () => {
-    abortRef.current?.abort()
-    abortRef.current = new AbortController()
+    const seq = ++loadSeq.current
     setLoading(true)
     setLoadError(null)
     const { data, error } = await withRetry(async () => supabase
       .from('welfare_projects')
       .select(LIST_COLS)
       .order('id', { ascending: false }))
+    if (seq !== loadSeq.current || !mounted.current) return // a newer load owns the result
     if (error) {
       toast.error('projects didn’t load.')
       setLoadError(error.message || 'projects didn’t load.')
@@ -103,11 +108,13 @@ export default function ProjectManager() {
       if (error) { toast.error('Save failed: ' + friendlyDbError(error)); return }
       if (!rows || rows.length === 0) { toast.error("Save failed - you may not have permission to edit this project."); return }
       bustProjectsCache()
+      logAction('project_edited', 'welfare_project', id, { header: rest.header })
       toast.success('Project updated')
     } else {
-      const { error } = await supabase.from('welfare_projects').insert(rest)
+      const { data: created, error } = await supabase.from('welfare_projects').insert(rest).select('id')
       if (error) { toast.error('Create failed: ' + friendlyDbError(error)); return }
       bustProjectsCache()
+      logAction('project_created', 'welfare_project', (created as any)?.[0]?.id, { header: rest.header })
       toast.success('Project created')
     }
     setEditing(null); setAddingNew(false)
@@ -126,6 +133,7 @@ export default function ProjectManager() {
       if (error) { toast.error('Failed: ' + friendlyDbError(error)); return }
       if (!rows || rows.length === 0) { toast.error("couldn't save: you may not have permission."); return }
       bustProjectsCache()
+      logAction(!p.featured ? 'project_featured' : 'project_unfeatured', 'welfare_project', p.id, { header: p.header })
       const updated = projects.map(x => x.id === p.id ? { ...x, featured: !p.featured } : x)
       _listCache = updated; setProjects(updated)
       toast.success(!p.featured ? 'Project featured' : 'Removed from featured')
@@ -136,12 +144,20 @@ export default function ProjectManager() {
 
   const toggleDraft = async (p: ListProject) => {
     if (togglingId === p.id) return
+    const publishing = !!p.is_draft
+    // Same hero-image rule the edit modal enforces: a blank card must not go public.
+    if (publishing && !canGoLive(p)) { toast.error(HERO_REQUIRED_MESSAGE); return }
+    const ok = await confirm(publishing
+      ? { title: 'Publish this write-up?', body: `"${p.header}" becomes public on the Projects page and in the feed.`, confirmLabel: 'Publish' }
+      : { title: 'Move to drafts?', body: `"${p.header}" disappears from the public Projects page until you publish it again.`, confirmLabel: 'Unpublish', danger: true })
+    if (!ok) return
     setTogglingId(p.id)
     try {
       const { data: rows, error } = await supabase.from('welfare_projects').update({ is_draft: !p.is_draft }).eq('id', p.id).select('id')
       if (error) { toast.error('Failed: ' + friendlyDbError(error)); return }
       if (!rows || rows.length === 0) { toast.error("couldn't save: you may not have permission."); return }
       bustProjectsCache()
+      logAction(publishing ? 'project_published' : 'project_unpublished', 'welfare_project', p.id, { header: p.header })
       const updated = projects.map(x => x.id === p.id ? { ...x, is_draft: !p.is_draft } : x)
       _listCache = updated; setProjects(updated)
       toast.success(!p.is_draft ? 'Project moved to drafts' : 'Project published')
@@ -168,6 +184,7 @@ export default function ProjectManager() {
     if (error) { toast.error('Delete failed: ' + friendlyDbError(error)); return }
     if (!rows || rows.length === 0) { toast.error("couldn't delete that: you may not have permission."); return }
     bustProjectsCache()
+    logAction('project_deleted', 'welfare_project', p.id, { header: p.header })
     toast.success('Project deleted')
     const updated = projects.filter(x => x.id !== p.id)
     _listCache = updated; setProjects(updated)

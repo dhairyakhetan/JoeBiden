@@ -1,5 +1,5 @@
 import Img from '../components/Img'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import directorService, { Director, EligibleMember } from '../services/directorService'
 import { useDebounce } from '../hooks/useDebounce'
 import { useAuth } from '../auth/AuthContext'
@@ -12,6 +12,7 @@ import { useConfirm } from '../components/Confirm'
 import { useCan } from '../auth/CapabilityContext'
 import { useToast } from '../components/Toast'
 import { logAction } from '../lib/auditLog'
+import notificationService from '../services/notificationService'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 
 /**
@@ -88,13 +89,25 @@ const DirectorManagement = () => {
     finally { setIsLoading(false) }
   }
 
-  const fetchEligibleMembers = useCallback(async (searchQuery: string) => {
-    setIsLoadingEligible(true)
+  const [eligiblePage, setEligiblePage] = useState(1)
+  const [eligibleHasMore, setEligibleHasMore] = useState(false)
+  const [loadingMoreEligible, setLoadingMoreEligible] = useState(false)
+  const eligibleReq = useRef(0)
+
+  // page 1 replaces the list; later pages append. A newer search supersedes an older response.
+  const fetchEligibleMembers = useCallback(async (searchQuery: string, page = 1) => {
+    const my = ++eligibleReq.current
+    if (page === 1) setIsLoadingEligible(true); else setLoadingMoreEligible(true)
     try {
-      const result = await directorService.getEligibleMembers({ search: searchQuery, limit: 50 })
-      if (result.success) setEligibleMembers(result.data)
-    } catch { toast.error('couldn’t load eligible members.', 'try that search again.') }
-    finally { setIsLoadingEligible(false) }
+      const result: any = await directorService.getEligibleMembers({ search: searchQuery, limit: 50, page })
+      if (my !== eligibleReq.current) return
+      if (result.success) {
+        setEligibleMembers(prev => page === 1 ? result.data : [...prev, ...result.data.filter((m: EligibleMember) => !prev.some(p => p.memberId === m.memberId))])
+        setEligiblePage(page)
+        setEligibleHasMore(!!result.pagination?.hasNextPage)
+      }
+    } catch { if (my === eligibleReq.current) toast.error('couldn’t load eligible members.', 'try that search again.') }
+    finally { if (my === eligibleReq.current) { setIsLoadingEligible(false); setLoadingMoreEligible(false) } }
   }, [toast])
 
   useEffect(() => { fetchDirectors() }, [])
@@ -115,9 +128,15 @@ const DirectorManagement = () => {
           // say so, rather than swallowing it into the console.
           toast.info(`${memberName} promoted, but no default category could be assigned.`, catErr?.message)
         }
-        logAction('MEMBER_PROMOTED_TO_HOD', 'member', memberId, { memberName })
+        // Exactly one human-readable row: promoteToDirector() itself writes none.
+        logAction('member_promoted_to_hod', 'member', memberId, { memberName, by: currentMember?.full_name })
+        void notificationService.create({
+          memberId, type: 'system', title: 'You are now a Head of Department',
+          subtitle: 'You can now moderate and help run the desk. Open the director desk to get started.',
+          link: '/director',
+        })
         toast.success(`${memberName} has been promoted to HoD`)
-        await fetchDirectors(); await fetchEligibleMembers(debouncedSearch)
+        await fetchDirectors(); await fetchEligibleMembers(debouncedSearch, 1)
       }
     } catch (err: any) { toast.error(err?.message ?? 'Failed to promote member') }
     finally { setBusyFor(memberId, false) }
@@ -140,10 +159,15 @@ const DirectorManagement = () => {
     try {
       const result = await directorService.demoteToMember(memberId)
       if (result.success) {
-        logAction('MEMBER_DEMOTED_FROM_HOD', 'member', memberId, { memberName })
+        logAction('member_demoted_from_hod', 'member', memberId, { memberName, by: currentMember?.full_name })
+        void notificationService.create({
+          memberId, type: 'system', title: 'Your Head of Department access has ended',
+          subtitle: 'You are a regular member again. Ask a super admin if you have questions.',
+          link: '/',
+        })
         toast.success(`${memberName} has been demoted to member`)
         await fetchDirectors()
-        if (showEligible) await fetchEligibleMembers(debouncedSearch)
+        if (showEligible) await fetchEligibleMembers(debouncedSearch, 1)
       }
     } catch (err: any) { toast.error(err?.message ?? 'Failed to demote director') }
     finally { setBusyFor(memberId, false) }
@@ -176,7 +200,11 @@ const DirectorManagement = () => {
     try {
       const result = await directorService.changeRole(memberId, newRole)
       if (result.success) {
-        logAction('MEMBER_ROLE_CHANGED', 'member', memberId, { memberName, from: currentRole, to: newRole })
+        // No logAction here: directorService.changeRole() already writes the audit row.
+        void notificationService.create({
+          memberId, type: 'system', title: `Your role is now ${roleLabel}`,
+          subtitle: 'Your access on the desk changed.', link: '/director',
+        })
         toast.success(`${memberName}'s role changed to ${roleLabel}`)
         await fetchDirectors()
       }
@@ -267,6 +295,7 @@ const DirectorManagement = () => {
                 canAssignRole ? (
                   <button
                     onClick={() => handlePromote(member.memberId, member.fullName)}
+                    disabled={busy.has(member.memberId)}
                     className="btn btn-sm adm-approve"
                   >
                     promote
@@ -275,6 +304,14 @@ const DirectorManagement = () => {
               }
             />
           ))}
+          {showEligible && !isLoadingEligible && eligibleHasMore && (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
+              <button className="btn btn-sm" disabled={loadingMoreEligible}
+                onClick={() => fetchEligibleMembers(debouncedSearch, eligiblePage + 1)}>
+                {loadingMoreEligible ? 'loading…' : 'load more'}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -338,6 +375,7 @@ const DirectorManagement = () => {
                       <select
                         value={director.role}
                         onChange={e => handleChangeRole(director.memberId, director.fullName, director.role, e.target.value as 'member' | 'hod' | 'director' | 'super_admin')}
+                        disabled={busy.has(director.memberId)}
                         aria-label={`Role for ${director.fullName}`}
                       >
                         <option value="hod">HoD</option>
@@ -347,6 +385,7 @@ const DirectorManagement = () => {
                     </span>
                     <button
                       className="btn btn-sm adm-reject"
+                      disabled={busy.has(director.memberId)}
                       onClick={() => handleDemote(director.memberId, director.fullName, isTopTier)}
                     >
                       − remove

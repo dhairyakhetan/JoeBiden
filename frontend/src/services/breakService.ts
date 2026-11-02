@@ -126,7 +126,7 @@ const breakServiceImpl = {
     notificationService.create({
       memberId,
       type: 'system',
-      title: 'HR set a break on your account',
+      title: 'A leader set a break on your account',
       subtitle: `${data.start} to ${data.end}${data.note ? ' - ' + data.note : ''}`,
       link: '/profile/me',
     })

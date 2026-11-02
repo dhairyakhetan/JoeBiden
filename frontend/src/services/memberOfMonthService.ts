@@ -1,7 +1,8 @@
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { getCachedMemberId } from '../lib/authCache'
-import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
+import { hasLeaderAccess } from '../lib/roles'
 import { logSupabaseError } from '../lib/errorTracking'
+import { logAction } from '../lib/auditLog'
 import { withFunctionLogging } from '../lib/functionLog'
 import { latestPeriodPerTeam } from './momPicks'
 
@@ -146,6 +147,13 @@ export function formatPeriod(period: string): string {
   return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 }
 
+/** "2026-12-01" -> "1 December". The day a queued pick is announced. */
+export function firstOfMonthLabel(period: string): string {
+  const [y, m] = period.split('-')
+  const d = new Date(Number(y), Number(m) - 1, 1)
+  return `1 ${d.toLocaleDateString('en-GB', { month: 'long' })}`
+}
+
 /** Shift a `YYYY-MM-01` period by `months` (negative goes back). */
 export function shiftPeriod(period: string, months: number): string {
   const [y, m] = period.split('-').map(Number)
@@ -226,9 +234,10 @@ const memberOfMonthServiceImpl = {
 
   /**
    * Which teams the CURRENT signed-in leader may pick a winner for.
-   * super_admin/hr get every active team; a hod/director gets only the
-   * team(s) they hold an active team_members row for (see the migration's
-   * TEAM-SCOPING DECISION). Anyone else gets an empty list.
+   * Since 2 Nov 2026 (can_pick_mom_for_team) any active leader (hod,
+   * director, hr, super_admin) may pick for ANY team, so every active team is
+   * offered. The database still requires the nominee to be an active member
+   * of the chosen team. Anyone else gets an empty list.
    */
   async getPickableTeams(): Promise<PickableTeam[]> {
     const memberId = await getCachedMemberId()
@@ -241,34 +250,13 @@ const memberOfMonthServiceImpl = {
     if (meErr || !me) return []
     if (me.status !== 'active' || !hasLeaderAccess(me.role)) return []
 
-    if (isSuperAdmin(me.role)) {
-      const { data, error } = await supabaseCommunity
-        .from('teams')
-        .select('team_id, uuid, name, category')
-        .eq('is_active', true)
-        .order('name', { ascending: true })
-      if (error) throw logSupabaseError('memberOfMonthService.getPickableTeams', error)
-      return (data || []).map((t: any) => ({ teamId: t.team_id, uuid: t.uuid, name: t.name, category: t.category }))
-    }
-
-    // hod/director — team_members membership is the stand-in for "their
-    // team" (see the migration header for why: it's what the one live hod
-    // actually has, where team_members.role='lead' would leave him with zero).
-    const { data, error } = await db
-      .from('team_members')
-      .select('team:teams(team_id, uuid, name, category)')
-      .eq('member_id', memberId)
+    const { data, error } = await supabaseCommunity
+      .from('teams')
+      .select('team_id, uuid, name, category')
       .eq('is_active', true)
+      .order('name', { ascending: true })
     if (error) throw logSupabaseError('memberOfMonthService.getPickableTeams', error)
-    const seen = new Set<number>()
-    const teams: PickableTeam[] = []
-    for (const row of (data || [])) {
-      const t = row.team
-      if (!t || seen.has(t.team_id)) continue
-      seen.add(t.team_id)
-      teams.push({ teamId: t.team_id, uuid: t.uuid, name: t.name, category: t.category })
-    }
-    return teams.sort((a, b) => a.name.localeCompare(b.name))
+    return (data || []).map((t: any) => ({ teamId: t.team_id, uuid: t.uuid, name: t.name, category: t.category }))
   },
 
   /** Is `period` open for HOD/director picking? super_admin/hr don't need to
@@ -293,6 +281,8 @@ const memberOfMonthServiceImpl = {
       .select('period')
     if (error) throw logSupabaseError('memberOfMonthService.openPeriod', error)
     if (!data || data.length === 0) throw new Error('Could not open this month. You may not have permission.')
+    // Audit (fire-and-forget, never throws). No DB trigger covers this table.
+    logAction('mom_period_opened', 'member_of_the_month_periods', undefined, { period })
   },
 
   /** Close a month — HODs can no longer write new picks for it (they can
@@ -305,6 +295,7 @@ const memberOfMonthServiceImpl = {
       .select('period')
     if (error) throw logSupabaseError('memberOfMonthService.closePeriod', error)
     if (!data || data.length === 0) throw new Error('Could not close this month. You may not have permission.')
+    logAction('mom_period_closed', 'member_of_the_month_periods', undefined, { period })
   },
 
   /**
@@ -385,6 +376,9 @@ const memberOfMonthServiceImpl = {
     if (error) throw logSupabaseError('memberOfMonthService.setPick', error)
     const row = (data || [])[0]
     if (!row) throw new Error("The pick wasn't saved. You may not have permission for this team, the member may not be on its roster, or this month may not be open yet.")
+    logAction('mom_pick_set', 'member_of_the_month', (row as any).id, {
+      period: input.period, teamId: input.teamId, memberId: input.memberId, hasCitation: !!citation,
+    })
     return mapPick(row)
   },
 
@@ -395,9 +389,13 @@ const memberOfMonthServiceImpl = {
       .from('member_of_the_month')
       .delete()
       .eq('id', pickId)
-      .select('id')
+      .select('id, period, team_id, member_id')
     if (error) throw logSupabaseError('memberOfMonthService.clearPick', error)
     if (!data || data.length === 0) throw new Error('Nothing was removed. You may not have permission to clear this pick.')
+    const gone = data[0] as any
+    logAction('mom_pick_cleared', 'member_of_the_month', pickId, {
+      period: gone.period, teamId: gone.team_id, memberId: gone.member_id,
+    })
   },
 
   // ── Winner-facing: the photo-upload step ──────────────────────────────────

@@ -7,8 +7,9 @@ import {
   AdminSkeleton, AdminErrorState, AdminRow, StatusStamp,
 } from './adminKit'
 import { useToast } from '../components/Toast'
+import { useConfirm } from '../components/Confirm'
 import feedService from '../services/feedService'
-import yearbookService, { YearbookEntry } from '../services/yearbookService'
+import yearbookService, { YearbookEntry, yearbookCounts } from '../services/yearbookService'
 import { useDebounce } from '../hooks/useDebounce'
 import { getInitials, hashColor } from '../lib/uiHelpers'
 import { sized } from '../lib/imageUrl'
@@ -28,6 +29,8 @@ const CURRENT_EDITION = new Date().getFullYear()
  */
 export default function YearbookManagement() {
   const toast = useToast()
+  const confirm = useConfirm()
+  const [rowBusy, setRowBusy] = useState<Set<number>>(new Set())
   // Escape, the Tab trap, focus-in/focus-restore and the body scroll-lock for
   // the invite picker, from the app's one shared implementation.
   const pickerRef = useRef<HTMLDivElement | null>(null)
@@ -117,6 +120,30 @@ export default function YearbookManagement() {
     }
   }
 
+  const runRowAction = async (entry: YearbookEntry, kind: 'remind' | 'remove') => {
+    if (kind === 'remove' && !(await confirm({
+      title: 'Remove this invite?',
+      body: `${entry.memberName || 'This member'} will no longer be on the ${CURRENT_EDITION} yearbook list. You can invite them again later.`,
+      confirmLabel: 'Remove', danger: true,
+    }))) return
+    if (kind === 'remind' && !(await confirm({
+      title: 'Send a reminder?',
+      body: `${entry.memberName || 'This member'} gets another notification to finish their entry.`,
+      confirmLabel: 'Send reminder',
+    }))) return
+    setRowBusy(prev => new Set(prev).add(entry.id))
+    try {
+      const ref = { id: entry.id, memberId: entry.memberId, editionYear: entry.editionYear }
+      if (kind === 'remind') { await yearbookService.remindMember(ref); toast.success('reminder sent.') }
+      else { await yearbookService.removeInvite(ref); setEntries(prev => prev.filter(e => e.id !== entry.id)); toast.success('invite removed.') }
+    } catch (e: any) {
+      toast.error(kind === 'remind' ? 'couldn’t send that reminder.' : 'couldn’t remove that invite.', e?.message || 'try again.')
+      if (kind === 'remove') load()
+    } finally {
+      setRowBusy(prev => { const n = new Set(prev); n.delete(entry.id); return n })
+    }
+  }
+
   const openExport = (entry: YearbookEntry) => {
     const photo = entry.useOwnAvatar ? entry.memberAvatarUrl : entry.photoUrl
     setPosterData({
@@ -127,14 +154,15 @@ export default function YearbookManagement() {
   }
 
   const filtered = entries.filter(e => statusFilter === 'all' || e.status === statusFilter)
-  const submittedCount = entries.filter(e => e.status === 'submitted').length
+  const counts = yearbookCounts(entries)
+  const submittedCount = counts.submitted
 
   return (
     <AdminLayout>
       <AdminTabHeader
         label="Yearbook"
         title={`${CURRENT_EDITION} yearbook`}
-        subtitle={`${entries.length} invited · ${submittedCount} submitted`}
+        subtitle={`${counts.total} on the list · ${counts.waiting} waiting · ${submittedCount} submitted${counts.skipped ? ` · ${counts.skipped} skipped` : ''}`}
         actions={<button className="btn btn-sm btn-primary yb-invite" onClick={() => setPickerOpen(true)}>+ invite members</button>}
       />
 
@@ -204,8 +232,14 @@ export default function YearbookManagement() {
                 : entry.status === 'invited' ? 'waiting on them' : undefined
             }
             meta={entry.status === 'submitted' ? <span className="yb-ready">ready to export</span> : ''}
+            busy={rowBusy.has(entry.id)}
             actions={entry.status === 'submitted' ? (
               <button className="btn btn-sm btn-primary yb-export" onClick={() => openExport(entry)}>export →</button>
+            ) : entry.status === 'invited' ? (
+              <div className="adm-rowacts">
+                <button className="btn btn-sm" disabled={rowBusy.has(entry.id)} onClick={() => runRowAction(entry, 'remind')}>remind</button>
+                <button className="btn btn-sm adm-reject" disabled={rowBusy.has(entry.id)} onClick={() => runRowAction(entry, 'remove')}>remove</button>
+              </div>
             ) : undefined}
           />
         ))

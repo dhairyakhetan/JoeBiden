@@ -2,8 +2,10 @@ import Img from '../components/Img'
 import ImageLightbox from '../components/ImageLightbox'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import directorService from '../services/directorService'
+import directorService, { isAlreadyDecided } from '../services/directorService'
 import notificationService from '../services/notificationService'
+import { logAction } from '../lib/auditLog'
+import { cursorFromLast, appendUnique } from '../services/keysetCursor'
 import { Post } from '../services/api'
 import { getCategoryInfo } from '../feed/CategoryFilter'
 import { safeExternalHref } from '../lib/safeUrl'
@@ -38,31 +40,19 @@ type Row = Post & { id: string }
 
 const PostModeration = () => {
   const toast = useToast()
-  // `getPendingPosts` filters by category server-side when scopedCategories
-  // is non-empty (a scoped director's first page previously came back empty
-  // whenever page 1's 20 posts happened to hold none in their category, even
-  // with more pending posts in-scope on later pages - false "all clear").
-  // The client-side filter below stays as a defensive no-op double-check;
-  // createPost/approvePost enforcement is still explicitly out of scope.
+  // `myCategories` holds the NAMES of the teams the leader is assigned to
+  // (director_scopes); it is only a label here. The server narrows the queue
+  // by team (`scopedTeamIds`, see getPendingPosts and lib/postScope.ts).
   const { myCategories, myScopeTeamIds, isSuperAdmin } = useOutletContext<DirectorContext>()
-  // Memoized: a fresh `[]` literal each render would give `rows` a new
-  // identity every render, and useRowSelection clears on items-identity
-  // change - i.e. selection would be impossible to hold.
-  // Slice 4: `myCategories` now holds the NAMES of the teams the director is assigned to, not post
-  // categories, so it is only a label here. Narrowing is by team (scopedTeamIds below).
-  const scopedCategories = useMemo<string[]>(() => [], [])
   const scopeLabels = useMemo(() => (!isSuperAdmin ? myCategories : []), [isSuperAdmin, myCategories])
-  // Teams-as-categories slice 3: posts tagged to the director's teams are in
-  // the queue as well as posts in their categories, so a post can be in scope
-  // while its category is not. The server does the narrowing; the client-side
-  // category double-check below is only valid when there is no team scope.
+  // Memoized: a fresh `[]` each render would give `rows` a new identity and
+  // useRowSelection clears on items-identity change.
   const scopedTeamIds = useMemo(() => (!isSuperAdmin ? myScopeTeamIds : []), [isSuperAdmin, myScopeTeamIds])
   const hasTeamScope = scopedTeamIds.length > 0
 
   const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [search, setSearch] = useState('')
@@ -95,13 +85,21 @@ const PostModeration = () => {
     if (!askingPost || !note) return
     setIsAsking(true)
     try {
-      await notificationService.create({
+      // createOrThrow, not create: here the notification IS the action, so a
+      // failed send must show as a failure instead of a false "sent".
+      const sent = await notificationService.createOrThrow({
         memberId: askingPost.authorId,
         type: 'system',
         title: 'A director asked for more detail on your post',
         fullNote: note,
         link: `/post/${askingPost.uuid}`,
       })
+      if (!sent) {
+        toast.info('that is your own post.', 'there is nobody to ask - edit it or decide it directly.')
+        closeAsk()
+        return
+      }
+      logAction('post_detail_requested', 'post', askingPost.postId, { authorId: askingPost.authorId })
       toast.success('sent.', `${askingPost.authorName} will see your note - the post stays in the queue.`)
       closeAsk()
     } catch (e: any) {
@@ -115,17 +113,20 @@ const PostModeration = () => {
   // the queue itself.
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
 
-  const fetchPosts = async (pageNum: number, append = false) => {
+  // First page when `append` is false; otherwise the next page AFTER the last
+  // row held (keyset). Deciding a post removes it server-side, so an offset of
+  // page*20 skipped the rows that slid up into the gap.
+  const fetchPosts = async (append = false) => {
     if (append) setIsLoadingMore(true); else { setIsLoading(true); setLoadError(null) }
     try {
-      const result = await directorService.getPendingPosts({ page: pageNum, limit: 20, scopeTeamIds: scopedTeamIds })
+      const after = append ? cursorFromLast(posts, p => p.createdAt, p => p.postId) : null
+      const result = await directorService.getPendingPosts({ limit: 20, scopeTeamIds: scopedTeamIds, after })
       if (result.success) {
-        if (append) setPosts(prev => [...prev, ...result.data]); else setPosts(result.data)
+        if (append) setPosts(prev => appendUnique(prev, result.data, p => p.postId)); else setPosts(result.data)
         setHasMore(result.pagination.hasNextPage)
-        // Same defect as AccountApprovals: the header counted one page of 20
-        // and presented it as the size of the queue, disagreeing with the
-        // sidebar badge sitting inches away.
-        setTotalPending(result.pagination.totalItems ?? null)
+        // The header counted one page of 20 and presented it as the size of the
+        // queue. Only the first page carries the exact total; later pages keep it.
+        if (!append) setTotalPending(result.pagination.totalItems ?? null)
       }
     } catch (err: any) {
       const msg = err?.message || err?.error_description || 'Something went wrong.'
@@ -136,32 +137,28 @@ const PostModeration = () => {
     finally { setIsLoading(false); setIsLoadingMore(false) }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- scopedCategories
-  // is stable after the director-desk context loads; re-running this on
-  // every scopedCategories identity change would refetch needlessly.
-  useEffect(() => { fetchPosts(1) }, [])
+  // The scope is stable after the director-desk context loads; re-running on
+  // every identity change would refetch needlessly.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchPosts() }, [])
 
-  // Category pills are scoped: a welfare director must never see an Events
-  // filter, because they can't act on one.
-  const filterCategories = useMemo(() => {
-    const inScope = scopedCategories.length > 0 && !hasTeamScope
-      ? scopedCategories
-      : Array.from(new Set(posts.map(p => p.category)))
-    return inScope.filter(Boolean).sort()
-  }, [scopedCategories, hasTeamScope, posts])
+  // Category pills come from the posts actually in the queue.
+  const filterCategories = useMemo(
+    () => Array.from(new Set(posts.map(p => p.category))).filter(Boolean).sort(),
+    [posts],
+  )
 
   const rows = useMemo<Row[]>(() => {
     const term = search.trim().toLowerCase()
     return posts
-      .filter(p => hasTeamScope || scopedCategories.length === 0 || scopedCategories.includes(p.category))
       .filter(p => catFilter === 'all' || p.category === catFilter)
       .filter(p => !term || (p.body || '').toLowerCase().includes(term) || (p.authorName || '').toLowerCase().includes(term))
       .map(p => ({ ...p, id: String(p.postId) }))
-  }, [posts, scopedCategories, hasTeamScope, catFilter, search])
+  }, [posts, catFilter, search])
 
-  // A category-scoped HoD is always seeing a subset, so their header should
+  // A team-scoped leader is always seeing a subset, so their header should
   // count what they can actually act on, never the global queue.
-  const isNarrowed = catFilter !== 'all' || search.trim() !== '' || scopedCategories.length > 0 || hasTeamScope
+  const isNarrowed = catFilter !== 'all' || search.trim() !== '' || hasTeamScope
 
   const selection = useRowSelection(rows)
 
@@ -187,7 +184,15 @@ const PostModeration = () => {
       try {
         await directorService.approvePost(row.postId)
         removedRef.current.delete(row.id)
+        setTotalPending(t => (t == null ? t : Math.max(0, t - 1)))
       } catch (e) {
+        if (isAlreadyDecided(e)) {
+          // Somebody else got there first: the row is gone for good, so do not
+          // put it back, and say so instead of the generic failure toast.
+          removedRef.current.delete(row.id)
+          toast.info('already decided.', e.message)
+          return
+        }
         restore(row.id)
         throw e
       }
@@ -230,12 +235,18 @@ const PostModeration = () => {
       const doneIds = new Set(
         targets.filter((_, i) => results[i].status === 'fulfilled').map(t => t.postId),
       )
+      // A post someone else already decided is gone from the queue too: drop it
+      // from the list (the failure toast below still counts it as not done by us).
+      const goneIds = new Set(
+        targets.filter((_, i) => { const r = results[i]; return r.status === 'rejected' && isAlreadyDecided(r.reason) }).map(t => t.postId),
+      )
       const failed = targets.length - doneIds.size
       // The rows that went through leave the list, so a retry cannot re-send
       // their notification. useRowSelection clears itself whenever the items
       // array's identity changes, so this setPosts also drops the selection -
       // the moderator re-picks the failures, which is the safe direction.
-      setPosts(prev => prev.filter(p => !doneIds.has(p.postId)))
+      setPosts(prev => prev.filter(p => !doneIds.has(p.postId) && !goneIds.has(p.postId)))
+      setTotalPending(t => (t == null ? t : Math.max(0, t - doneIds.size - goneIds.size)))
       selection.clear()
 
       if (failed === 0) {
@@ -307,7 +318,7 @@ const PostModeration = () => {
         )}
 
       {loadError ? (
-        <AdminErrorState message={`Could not load the post queue - ${loadError}`} onRetry={() => fetchPosts(1)} />
+        <AdminErrorState message={`Could not load the post queue - ${loadError}`} onRetry={() => fetchPosts()} />
       ) : rows.length === 0 ? (
         <EmptyLedger
           message={scopeNote ? `all clear in ${scopeNote}` : 'all clear'}
@@ -463,7 +474,7 @@ const PostModeration = () => {
           })}
           {hasMore && (
             <div style={{ textAlign: 'center', padding: 16 }}>
-              <button onClick={() => { const p = page + 1; setPage(p); fetchPosts(p, true) }} disabled={isLoadingMore} className="btn btn-sm adm-loadmore">
+              <button onClick={() => fetchPosts(true)} disabled={isLoadingMore} className="btn btn-sm adm-loadmore">
                 {isLoadingMore ? 'loading...' : 'load more →'}
               </button>
             </div>

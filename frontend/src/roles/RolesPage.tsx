@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import { useCapabilities } from '../auth/CapabilityContext'
 import { useToast } from '../components/Toast'
@@ -55,8 +55,6 @@ import './RolesPage.css'
  * text is wanted back on screen it is one query away.
  */
 
-type SaveState = { key: string; role: CapabilityRole } | null
-
 export default function RolesPage() {
   const { member } = useAuth()
   const { matrix, refresh, error: matrixError } = useCapabilities()
@@ -68,11 +66,23 @@ export default function RolesPage() {
   // A local mirror so a tick responds instantly; the shared matrix is refreshed
   // from the server afterwards so every other surface in the app agrees.
   const [local, setLocal] = useState(matrix)
-  const [saving, setSaving] = useState<SaveState>(null)
+  // Per-cell pending set (keyed by matrixCellKey): concurrent toggles each keep their own busy state.
+  const [pending, setPending] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [resetting, setResetting] = useState(false)
 
-  useEffect(() => { setLocal(matrix) }, [matrix])
+  // The shared matrix refreshes after every save; keep optimistic values for cells still in flight.
+  const pendingRef = useRef(pending); pendingRef.current = pending
+  const localRef = useRef(local); localRef.current = local
+  useEffect(() => {
+    setLocal(() => {
+      const merged = { ...matrix }
+      for (const k of pendingRef.current) {
+        if (k in localRef.current) merged[k] = localRef.current[k]; else delete merged[k]
+      }
+      return merged
+    })
+  }, [matrix])
   useEffect(() => {
     let cancelled = false
     refresh().finally(() => { if (!cancelled) setLoading(false) })
@@ -94,6 +104,7 @@ export default function RolesPage() {
     if (!isCellTogglable(cap.key, role)) return
 
     const cellKey = matrixCellKey(cap.key, role)
+    if (pendingRef.current.has(cellKey)) return
     const currentlyOn = matrixEnabled(local, cap.key, role)
     const next = !currentlyOn
 
@@ -106,7 +117,7 @@ export default function RolesPage() {
       else copy[cellKey] = false
       return copy
     })
-    setSaving({ key: cap.key, role })
+    setPending(prev => new Set(prev).add(cellKey))
 
     try {
       await roleCapabilityMatrixService.setEnabled(cap.key, role, next, member.member_id)
@@ -124,7 +135,7 @@ export default function RolesPage() {
       })
       toastError("that didn't save.", e?.message)
     } finally {
-      setSaving(null)
+      setPending(prev => { const n = new Set(prev); n.delete(cellKey); return n })
     }
   }, [canEdit, member?.member_id, local, refresh, success, toastError])
 
@@ -207,7 +218,7 @@ export default function RolesPage() {
                         const allowed = ceilingAllows(cap.key, role)
                         const togglable = isCellTogglable(cap.key, role)
                         const on = role === 'super_admin' ? true : matrixEnabled(local, cap.key, role)
-                        const busy = saving?.key === cap.key && saving?.role === role
+                        const busy = pending.has(matrixCellKey(cap.key, role))
                         const reason = lockReason(cap.key, role)
                         const label = `${cap.label} for ${getRoleLabel(role)}`
 

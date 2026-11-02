@@ -4,6 +4,7 @@ import { matrixCellKey, TOP_TIER_NEVER_RESTRICTABLE } from '../lib/capabilities'
 import { isSuperAdmin } from '../lib/roles'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { logAction } from '../lib/auditLog'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // roleCapabilityMatrixService — the real permission engine behind
@@ -132,6 +133,7 @@ const roleCapabilityMatrixServiceImpl = {
       // Zero rows here is the ordinary case: the restriction was never stored,
       // so "enabled" was already true. Only a thrown error is a real failure.
       void data
+      logAction('capability_enabled', 'role_capability', undefined, { capability: capabilityKey, role })
       return
     }
 
@@ -152,6 +154,7 @@ const roleCapabilityMatrixServiceImpl = {
     if (!(data || [])[0]) {
       throw new Error("That change didn't save — you may not have permission to edit permissions.")
     }
+    logAction('capability_disabled', 'role_capability', undefined, { capability: capabilityKey, role })
   },
 
   /** Clear every restriction, returning the whole org to stock permissions. */
@@ -162,7 +165,9 @@ const roleCapabilityMatrixServiceImpl = {
       .eq('enabled', false)
       .select('capability_key')
     if (error) throw logSupabaseError('roleCapabilityMatrixService.resetAll', error)
-    return (data || []).length
+    const n = (data || []).length
+    logAction('capabilities_reset_all', 'role_capability', undefined, { cleared: n })
+    return n
   },
 }
 

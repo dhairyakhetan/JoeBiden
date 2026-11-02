@@ -11,7 +11,7 @@ import { notificationService } from '../services/notificationService'
 import feedService from '../services/feedService'
 import { generateStory, downloadStory } from '../components/StoryGenerator'
 import memberOfMonthService, {
-  currentPeriod, formatPeriod, shiftPeriod, buildMomCsv, downloadCsv,
+  currentPeriod, formatPeriod, firstOfMonthLabel, shiftPeriod, buildMomCsv, downloadCsv,
   type MemberOfMonthPick, type PickCandidate, type PickableTeam, type PeriodState,
 } from '../services/memberOfMonthService'
 import {
@@ -30,19 +30,16 @@ import '../styles/routes/director-people.css'
  * quietly reintroduce that idea through the back door. A leader searches for
  * the member they have in mind (scoped to the team's own roster) and says why.
  *
- * Team scoping: a hod/director sees and can only pick for team(s) they hold
- * an active team_members row for; super_admin/hr can pick for any team AND
- * are the only ones who can open/close a month for picking (see the "this
- * month" panel below) and export the HR CSV. See the migration file's
- * TEAM-SCOPING DECISION comment for why team_members membership (not
- * team_members.role='lead') is what "their team" means here — it's a live,
- * ambiguity-flagged product call, not an incidental implementation detail.
+ * Team scoping (changed 2 Nov 2026): any active leader can pick for ANY
+ * team (the nominee must still be an active member of that team, enforced in
+ * RLS). super_admin/hr are the only ones who can open/close a month for
+ * picking (see the "this month" panel below) and export the HR CSV.
  *
  * The month stepper is what makes this a flow rather than a single button:
  * you can correct last month's pick, and you can queue next month's early
  * (once HR has opened it). A queued future pick is invisible to ordinary
  * members until that month begins — enforced in RLS, not here (see the
- * service header) — and is never notified early either (see handleSave).
+ * service header). A daily database job announces it once the month begins.
  *
  * Chrome comes entirely from the desk's shared vocabulary: `.card` panels,
  * `.panel-h` headers, `.qrow` rows, `.qtag` pills, `.iconbtn` actions. The
@@ -431,7 +428,7 @@ const MemberOfMonth = () => {
                       {periodStateFailed
                         ? 'We couldn’t check whether this month is open - that’s a loading problem, not a closed month. Reload before assuming picking is shut.'
                         : isOpen
-                          ? 'HoDs and directors can pick their team’s winner for this month.'
+                          ? 'HoDs and directors can pick a winner for any team this month.'
                           : 'HoDs and directors can’t pick yet - open this month first. You can still pick for any team yourself while it’s closed.'}
                     </p>
                   </div>
@@ -458,7 +455,7 @@ const MemberOfMonth = () => {
               <>
                 {/* ── Which team ── */}
                 <div className="card" style={{ marginBottom: 16, padding: '16px 18px' }}>
-                  <Field label="Team" labelStyle={labelSt} hint={iAmAdmin ? 'Any active team.' : 'Teams you belong to.'}>
+                  <Field label="Team" labelStyle={labelSt} hint="Any active team.">
                     {(id, describedBy) => (
                       <select
                         id={id}
@@ -635,7 +632,7 @@ const MemberOfMonth = () => {
                     )}
                     {canWriteNow && isFuture && (
                       <p className="adm-note">
-                        {formatPeriod(period)} has not started. Members will not see or be notified of this pick until it does.
+                        Queued: the member is told and the feed post goes up on {firstOfMonthLabel(period)}.
                       </p>
                     )}
                   </div>

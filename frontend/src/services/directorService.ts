@@ -11,6 +11,7 @@ import { POST_FEED_COLS } from './profileService'
 import { CATEGORY_SLUGS } from '../lib/categories'
 import { applyPostScope } from '../lib/postScope'
 import { withFunctionLogging } from '../lib/functionLog'
+import { toDuplicatePhoneRow, type DuplicatePhoneRow } from '../lib/duplicatePhones'
 import {
   DashboardStats,
   PendingMember,
@@ -20,9 +21,88 @@ import {
   CategoryAssignments,
   ScopeAssignments,
   ScopeTeam,
+  AlreadyDecidedError,
+  roleChangeMessage,
 } from './directorServiceTypes'
+import { buildSearchOrFilter, normalizeGrade, mergeGrades } from '../director/accountApprovalsQuery'
+import { keysetOrFilter, trimPage, type KeysetCursor } from './keysetCursor'
 
 export * from './directorServiceTypes'
+
+/** Server-side search / class / contacted filters for the pending_member_approvals view. */
+function applyPendingFilters(
+  q: any,
+  f: { search?: string; classGrade?: string | null; contacted?: 'any' | 'not_contacted' | 'contacted' },
+) {
+  const or = buildSearchOrFilter(f.search ?? '')
+  if (or) q = q.or(or)
+  const grade = normalizeGrade(f.classGrade)
+  if (grade) q = q.eq('class_grade', grade)
+  if (f.contacted === 'not_contacted') q = q.is('contacted_at', null)
+  else if (f.contacted === 'contacted') q = q.not('contacted_at', 'is', null)
+  return q
+}
+
+/** Current status of a member, or null when unreadable. Used only to explain a zero-row decision. */
+async function readMemberStatus(memberId: number): Promise<string | null> {
+  const { data } = await (supabaseCommunity as any)
+    .from('member_directory_view')
+    .select('status')
+    .eq('member_id', memberId)
+    .maybeSingle()
+  return data?.status ?? null
+}
+
+/** Why a status-guarded member update touched nothing: decided already, or not allowed. */
+async function explainMemberNoop(memberId: number, expected: string, what: string): Promise<Error> {
+  const status = await readMemberStatus(memberId)
+  if (status && status !== expected) {
+    return new AlreadyDecidedError(`This ${what} was already dealt with (it is now "${status}"). Refresh the list.`)
+  }
+  return new Error(`The database refused that change. You may not have permission to decide this ${what}.`)
+}
+
+/** Why a status-guarded post update touched nothing. */
+async function explainPostNoop(postId: number): Promise<Error> {
+  const { data } = await supabaseCommunity
+    .from('posts')
+    .select('status, deleted_at')
+    .eq('post_id', postId)
+    .maybeSingle()
+  const row = data as { status?: string; deleted_at?: string | null } | null
+  if (row && (row.deleted_at || row.status !== 'pending_review')) {
+    return new AlreadyDecidedError(
+      row.deleted_at ? 'This post was removed in the meantime.' : `This post was already dealt with (it is now "${row.status}"). Refresh the queue.`,
+    )
+  }
+  return new Error('The database refused that change. You may not have permission to moderate this post.')
+}
+
+/** Team name for a notification line; falls back to a generic word, never throws. */
+async function readTeamName(teamId: number): Promise<string> {
+  try {
+    const { data } = await supabaseCommunity.from('teams').select('name').eq('team_id', teamId).maybeSingle()
+    return (data as any)?.name || 'a team'
+  } catch {
+    return 'a team'
+  }
+}
+
+/** Remove a demoted member's category and team scopes, surfacing a failure instead of ignoring it. */
+async function clearLeaderScopes(memberId: number, where: string): Promise<void> {
+  const [cats, scopes] = await Promise.all([
+    supabaseCommunity.from('director_categories').delete().eq('member_id', memberId),
+    supabaseCommunity.from('director_scopes').delete().eq('member_id', memberId),
+  ])
+  if (cats.error) throw logSupabaseError(where, cats.error)
+  if (scopes.error) throw logSupabaseError(where, scopes.error)
+}
+
+/** Tell a member their role changed. Fire-and-forget; create() never throws. */
+function notifyRoleChange(memberId: number, role: string): void {
+  const msg = roleChangeMessage(role)
+  notificationService.create({ memberId, type: 'system', title: msg.title, subtitle: msg.subtitle, link: msg.link })
+}
 
 const directorServiceImpl = {
   async getCurrentMemberId() {
@@ -78,18 +158,43 @@ const directorServiceImpl = {
     }
   },
 
-  async getPendingApprovals(params: { page?: number; limit?: number }) {
+  /**
+   * `after` switches to keyset paging (rows strictly after that created_at/member_id).
+   * Approving or rejecting removes a row server-side, so offset paging skipped
+   * whatever slid into the gap; the cursor does not care how many rows left.
+   * With `after` set there is no total (it would be the REMAINING count), so
+   * totalItems is 0 and callers keep the total they already have.
+   */
+  async getPendingApprovals(params: {
+    page?: number; limit?: number; after?: KeysetCursor | null
+    /** Name or email, case-insensitive substring. Applied by the server so page two is searchable. */
+    search?: string
+    /** Exact class_grade match. */
+    classGrade?: string | null
+    /** Contacted split; omitted or 'any' = the whole queue. */
+    contacted?: 'any' | 'not_contacted' | 'contacted'
+  }) {
     const page = params.page || 1
     const limit = params.limit || 10
     const offset = (page - 1) * limit
+    const after = params.after ?? null
 
-    const { data, count, error } = await withRetry(async () => supabaseCommunity
-      .from('pending_member_approvals')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: true })
-      .range(offset, offset + limit - 1))
+    const { data: rawData, count, error } = await withRetry(async () => {
+      let q: any = supabaseCommunity
+        .from('pending_member_approvals')
+        .select('*', after ? undefined : { count: 'exact' })
+        .order('created_at', { ascending: true })
+        .order('member_id', { ascending: true })
+      q = applyPendingFilters(q, params)
+      q = after
+        ? q.or(keysetOrFilter('created_at', 'member_id', after)).limit(limit + 1)
+        : q.range(offset, offset + limit - 1)
+      return q
+    })
 
     if (error) throw logSupabaseError('directorService.getPendingApprovals', error)
+    const trimmed = after ? trimPage(rawData || [], limit) : { rows: rawData || [], hasMore: false }
+    const data = trimmed.rows
 
     const mapped = (data || []).map((m: any) => ({
       memberId: m.member_id,
@@ -116,7 +221,7 @@ const directorServiceImpl = {
         totalPages,
         totalItems,
         itemsPerPage: limit,
-        hasNextPage: page < totalPages,
+        hasNextPage: after ? trimmed.hasMore : page < totalPages,
         hasPrevPage: page > 1
       }
     } as PaginatedResponse<PendingMember>
@@ -131,14 +236,29 @@ const directorServiceImpl = {
    * `fetchMembers` comment already documents having fixed once for the
    * unfiltered total - this closes the same gap for the contacted split.
    */
-  async getPendingContactedCounts(): Promise<{ notContacted: number; contacted: number }> {
+  async getPendingContactedCounts(filters?: { search?: string; classGrade?: string | null }): Promise<{ notContacted: number; contacted: number }> {
     const [notContacted, contacted] = await withRetry(async () => Promise.all([
-      supabaseCommunity.from('pending_member_approvals').select('*', { count: 'exact', head: true }).is('contacted_at', null),
-      supabaseCommunity.from('pending_member_approvals').select('*', { count: 'exact', head: true }).not('contacted_at', 'is', null),
+      applyPendingFilters(supabaseCommunity.from('pending_member_approvals').select('*', { count: 'exact', head: true }), filters ?? {}).is('contacted_at', null),
+      applyPendingFilters(supabaseCommunity.from('pending_member_approvals').select('*', { count: 'exact', head: true }), filters ?? {}).not('contacted_at', 'is', null),
     ]))
     if (notContacted.error) throw logSupabaseError('directorService.getPendingContactedCounts', notContacted.error)
     if (contacted.error) throw logSupabaseError('directorService.getPendingContactedCounts', contacted.error)
     return { notContacted: notContacted.count || 0, contacted: contacted.count || 0 }
+  },
+
+  /**
+   * Every class_grade present in the pending queue, sorted. Independent of the
+   * active search or grade filter, so the grade pills never shrink to whatever
+   * has been loaded or filtered. Rows are fetched grade-only (a few bytes each).
+   */
+  async getPendingGrades(): Promise<string[]> {
+    const { data, error } = await withRetry(async () => (supabaseCommunity as any)
+      .from('pending_member_approvals')
+      .select('class_grade')
+      .not('class_grade', 'is', null)
+      .limit(5000))
+    if (error) throw logSupabaseError('directorService.getPendingGrades', error)
+    return mergeGrades([], (data || []).map((r: any) => r.class_grade as string | null))
   },
 
   /** Mark a pending applicant as contacted - HR/a director reached out to
@@ -165,6 +285,9 @@ const directorServiceImpl = {
     const { data, count, error } = await withRetry(async () => (supabaseCommunity as any)
       .from('rejected_member_approvals')
       .select('*', { count: 'exact' })
+      // Newest rejection first, member_id as the tiebreak so pages never repeat or skip.
+      .order('updated_at', { ascending: false })
+      .order('member_id', { ascending: false })
       .range(offset, offset + limit - 1))
 
     if (error) throw logSupabaseError('directorService.getRejectedApprovals', error)
@@ -200,6 +323,19 @@ const directorServiceImpl = {
     } as PaginatedResponse<RejectedMember>
   },
 
+  /**
+   * HR and super admin only: accounts that share a phone number, flat rows
+   * ordered by number. The RPC raises 42501 for anyone else, so this throws
+   * rather than returning an empty list. See
+   * scripts/members_duplicate_phones_hr_2026_11_02.sql.
+   */
+  async getDuplicatePhoneRows(): Promise<DuplicatePhoneRow[]> {
+    const { data, error } = await withRetry(async () =>
+      (supabaseCommunity as any).rpc('get_duplicate_phone_groups'))
+    if (error) throw logSupabaseError('directorService.getDuplicatePhoneRows', error)
+    return (data || []).map(toDuplicatePhoneRow)
+  },
+
   async approveMember(memberId: number) {
     const currentMemberId = await this.getCurrentMemberId()
 
@@ -209,7 +345,10 @@ const directorServiceImpl = {
     // member_directory_view instead (now director/super_admin-gated at the
     // view level, see scripts/members_pii_lockdown_2026_07_29.sql) - safe
     // here since only directors reach this action.
-    const { error } = await supabaseCommunity
+    // Only a still-pending row can be approved: a second click, or another
+    // director's earlier decision, must not flip a rejected account to active
+    // or send a second welcome. Explicit column list on the returned rows.
+    const { data: changed, error } = await supabaseCommunity
       .from('members')
       .update({
         status: 'active',
@@ -217,8 +356,11 @@ const directorServiceImpl = {
         approved_at: new Date().toISOString()
       })
       .eq('member_id', memberId)
+      .eq('status', 'pending_approval')
+      .select('member_id')
 
     if (error) throw logSupabaseError('directorService.approveMember', error)
+    if (!changed || changed.length === 0) throw await explainMemberNoop(memberId, 'pending_approval', 'application')
     logAction('member_approved', 'member', memberId)
 
     const { data } = await (supabaseCommunity as any)
@@ -265,15 +407,18 @@ const directorServiceImpl = {
       .eq('member_id', memberId)
       .maybeSingle()
 
-    const { error } = await supabaseCommunity
+    const { data: changed, error } = await supabaseCommunity
       .from('members')
       .update({
         status: 'rejected',
         rejection_note: rejectionNote
       })
       .eq('member_id', memberId)
+      .eq('status', 'pending_approval')
+      .select('member_id')
 
     if (error) throw logSupabaseError('directorService.rejectMember', error)
+    if (!changed || changed.length === 0) throw await explainMemberNoop(memberId, 'pending_approval', 'application')
     logAction('member_rejected', 'member', memberId, { note: rejectionNote })
 
     // Tell the applicant why - the note rides in full_note so the
@@ -303,16 +448,15 @@ const directorServiceImpl = {
     }
   },
 
-  async getPendingPosts(params: { page?: number; limit?: number; scopeTeamIds?: number[] }) {
+  async getPendingPosts(params: { page?: number; limit?: number; scopeTeamIds?: number[]; after?: KeysetCursor | null }) {
     const page = params.page || 1
     const limit = params.limit || 10
     const offset = (page - 1) * limit
 
-    // categories, when passed, scopes the query server-side to a
-    // category-restricted director's jurisdiction - previously this always
-    // fetched one global page and PostModeration filtered client-side, so a
-    // scoped director's first page could contain zero in-scope posts (false
-    // "all clear") even while later pages held real pending posts.
+    // scopeTeamIds, when passed, scopes the query server-side to a leader's
+    // team jurisdiction, so a scoped leader's first page is never empty while
+    // later pages hold real in-scope posts (false "all clear").
+    const after0 = params.after ?? null
     let query = supabaseCommunity
       .from('post_feed_view')
       // The mapper below reads a strict subset of the shared POST_FEED_COLS
@@ -321,7 +465,7 @@ const directorServiceImpl = {
       // as feedService's POST_DETAIL_COLS/getTrending/getPosts do - the desk
       // queue is the one list view that needs a post's self-reported numbers,
       // other POST_FEED_COLS consumers don't.
-      .select(POST_FEED_COLS + ', stats', { count: 'exact' })
+      .select(POST_FEED_COLS + ', stats', after0 ? undefined : { count: 'exact' })
       .eq('status', 'pending_review')
       // THE MODERATION QUEUE IS MEMBER SUBMISSIONS ONLY (2026-09-11).
       //
@@ -344,12 +488,21 @@ const directorServiceImpl = {
       ? []
       : [...await this.getScopedPendingPostIds(scopeTeamIds), ...await this.getUntaggedPendingPostIds()]
     query = applyPostScope(query as any, [], scopeTeamIds, scopedPostIds) as typeof query
-    const orderedQuery = query
+    // Keyset paging when `after` is given: approving/rejecting removes rows
+    // server-side, so offset paging skipped the ones that slid up. Without a
+    // cursor it is the first page and carries the exact total.
+    const after = params.after ?? null
+    const ordered = (query as any)
       .order('created_at', { ascending: true })
-      .range(offset, offset + limit - 1)
-    const { data, count, error } = await withRetry(async () => orderedQuery)
+      .order('post_id', { ascending: true })
+    const orderedQuery = after
+      ? ordered.or(keysetOrFilter('created_at', 'post_id', after)).limit(limit + 1)
+      : ordered.range(offset, offset + limit - 1)
+    const { data: rawData, count, error } = await withRetry(async () => orderedQuery as Promise<{ data: any[] | null; count: number | null; error: any }>)
 
     if (error) throw logSupabaseError('directorService.getPendingPosts', error)
+    const trimmed = after ? trimPage(rawData || [], limit) : { rows: rawData || [], hasMore: false }
+    const data = trimmed.rows
 
     const mappedPosts = (data || []).map((post: any) => ({
       postId: post.post_id,
@@ -391,7 +544,7 @@ const directorServiceImpl = {
         totalPages,
         totalItems,
         itemsPerPage: limit,
-        hasNextPage: page < totalPages,
+        hasNextPage: after ? trimmed.hasMore : page < totalPages,
         hasPrevPage: page > 1
       }
     } as PaginatedResponse<Post>
@@ -400,7 +553,9 @@ const directorServiceImpl = {
   async approvePost(postId: number) {
     const currentMemberId = await this.getCurrentMemberId()
 
-    const { data, error } = await supabaseCommunity
+    // Guarded on status: a post another moderator already decided (or that was
+    // removed) must not be flipped again, nor re-notify its author.
+    const { data: approved, error } = await supabaseCommunity
       .from('posts')
       .update({
         status: 'published',
@@ -408,10 +563,13 @@ const directorServiceImpl = {
         reviewed_at: new Date().toISOString()
       })
       .eq('post_id', postId)
+      .eq('status', 'pending_review')
       .select('post_id, uuid, author_id, body')
-      .single()
+      .maybeSingle()
 
     if (error) throw logSupabaseError('directorService.approvePost', error)
+    if (!approved) throw await explainPostNoop(postId)
+    const data = approved
     logAction('post_approved', 'post', postId)
 
     // Tell the author their post is live. Non-blocking + self-skip handled
@@ -466,7 +624,7 @@ const directorServiceImpl = {
   async rejectPost(postId: number, rejectionNote: string) {
     const currentMemberId = await this.getCurrentMemberId()
 
-    const { data, error } = await supabaseCommunity
+    const { data: rejected, error } = await supabaseCommunity
       .from('posts')
       .update({
         status: 'rejected',
@@ -475,10 +633,13 @@ const directorServiceImpl = {
         reviewed_at: new Date().toISOString()
       })
       .eq('post_id', postId)
+      .eq('status', 'pending_review')
       .select('post_id, uuid, author_id')
-      .single()
+      .maybeSingle()
 
     if (error) throw logSupabaseError('directorService.rejectPost', error)
+    if (!rejected) throw await explainPostNoop(postId)
+    const data = rejected
     logAction('post_rejected', 'post', postId, { note: rejectionNote })
 
     // Tell the author why it was rejected - the note rides in full_note so
@@ -835,6 +996,15 @@ const directorServiceImpl = {
       .insert({ member_id: memberId, team_id: teamId, assigned_by: currentMemberId })
     if (error) throw logSupabaseError('directorService.assignScope', error)
     logAction('scope_assigned', 'member', memberId, { teamId })
+    // Tell the HoD what changed for their queue. Best effort, never blocks.
+    const teamName = await readTeamName(teamId)
+    notificationService.create({
+      memberId,
+      type: 'system',
+      title: `You now moderate posts for ${teamName}`,
+      subtitle: 'Posts tagged to that team will show up in your post queue.',
+      link: '/director/posts',
+    })
     return { success: true, message: 'Team assigned successfully' }
   },
 
@@ -846,6 +1016,14 @@ const directorServiceImpl = {
       .eq('team_id', teamId)
     if (error) throw logSupabaseError('directorService.unassignScope', error)
     logAction('scope_unassigned', 'member', memberId, { teamId })
+    const teamName = await readTeamName(teamId)
+    notificationService.create({
+      memberId,
+      type: 'system',
+      title: `You no longer moderate posts for ${teamName}`,
+      subtitle: 'Posts tagged to that team will stop showing up in your post queue.',
+      link: '/director/posts',
+    })
     return { success: true, message: 'Team assignment removed' }
   },
 
@@ -1057,6 +1235,8 @@ const directorServiceImpl = {
         'Only an HR or super admin account can change a role.',
       )
     }
+    // The database trigger already records member_role_changed in the audit log.
+    notifyRoleChange(memberId, 'hod')
 
     return {
       success: true,
@@ -1066,9 +1246,9 @@ const directorServiceImpl = {
   },
 
   async demoteToMember(memberId: number) {
-    await supabaseCommunity.from('director_categories').delete().eq('member_id', memberId)
-    await supabaseCommunity.from('director_scopes').delete().eq('member_id', memberId)
-
+    // Role first, scopes after. If the role update is refused, the HoD must
+    // keep their scope: clearing it first left them a HoD with NO scope, which
+    // the queue reads as "unscoped" and shows them everything.
     // Explicit column list, and the role read back - see promoteToDirector.
     const { data, error } = await supabaseCommunity
       .from('members')
@@ -1084,6 +1264,8 @@ const directorServiceImpl = {
         'Only an HR or super admin account can change a role.',
       )
     }
+    await clearLeaderScopes(memberId, 'directorService.demoteToMember')
+    notifyRoleChange(memberId, 'member')
 
     return {
       success: true,
@@ -1093,12 +1275,6 @@ const directorServiceImpl = {
   },
 
   async changeRole(memberId: number, role: 'member' | 'hod' | 'director' | 'super_admin') {
-    // When downgrading to plain member, clean up category assignments
-    if (role === 'member') {
-      await supabaseCommunity.from('director_categories').delete().eq('member_id', memberId)
-      await supabaseCommunity.from('director_scopes').delete().eq('member_id', memberId)
-    }
-
     // Explicit column list, and the role read back - see promoteToDirector.
     const { data, error } = await supabaseCommunity
       .from('members')
@@ -1114,7 +1290,11 @@ const directorServiceImpl = {
         'Only an HR or super admin account can change a role.',
       )
     }
-    logAction('member_role_changed', 'member', memberId, { role })
+    // No app-side audit row: the members trigger already writes member_role_changed
+    // (with old and new role), so logging it here as well doubled every entry.
+    // Downgrading to plain member: clear scopes only AFTER the role change stuck.
+    if (role === 'member') await clearLeaderScopes(memberId, 'directorService.changeRole')
+    notifyRoleChange(memberId, role)
 
     return {
       success: true,
@@ -1146,14 +1326,22 @@ const directorServiceImpl = {
    */
   async setArchived(memberId: number, archived: boolean) {
     const next = archived ? 'archived' : 'active'
-    const { data, error } = await supabaseCommunity
+    // Guarded on the state we are leaving, so a double click or a second
+    // director cannot re-apply the change (and re-notify the member).
+    const guarded = supabaseCommunity
       .from('members')
       .update({ status: next })
       .eq('member_id', memberId)
+    const { data, error } = await (archived ? guarded.neq('status', 'archived') : guarded.eq('status', 'archived'))
       .select('member_id, status')
-      .single()
+      .maybeSingle()
 
     if (error) throw logSupabaseError('directorService.setArchived', error)
+    if (!data) {
+      const status = await readMemberStatus(memberId)
+      if (status === next) throw new AlreadyDecidedError(archived ? 'This member is already archived.' : 'This member is already restored.')
+      throw new Error('The database refused that change. Only a director, HoD, HR or super admin can archive a member.')
+    }
     if (data?.status !== next) {
       throw new Error(
         `The database refused that change: the status is still "${data?.status ?? 'unknown'}". ` +
@@ -1161,6 +1349,15 @@ const directorServiceImpl = {
       )
     }
     logAction(archived ? 'member_archived' : 'member_unarchived', 'member', memberId)
+    notificationService.create({
+      memberId,
+      type: 'system',
+      title: archived ? 'Your AquaTerra membership was archived' : 'Welcome back, your membership was restored',
+      subtitle: archived
+        ? 'You are no longer on the active member lists. Reach out to HR if this is a mistake.'
+        : 'You are back on the active member lists.',
+      link: archived ? undefined : '/feed',
+    })
     return { success: true, message: archived ? 'Member archived' : 'Member restored' }
   },
 
@@ -1221,11 +1418,10 @@ const directorServiceImpl = {
   },
 
   /**
-   * Count of pending posts within a given set of categories - used to scope
-   * the Post Queue nav badge to a category-restricted director's actual
-   * jurisdiction (see PostModeration.tsx's client-side filter). Display-only,
-   * same as that filter: `getPendingPosts`/`approvePost` still aren't
-   * category-enforced server-side.
+   * Count of pending posts in a leader's team scope - used by the Post Queue
+   * nav badge so it matches the queue the leader actually sees (same scoping
+   * as getPendingPosts, via applyPostScope). Returns 0 when there is no team
+   * scope; callers use the global dashboard count in that case.
    */
   async getScopedPendingPostsCount(scopeTeamIds: number[] = []) {
     if (scopeTeamIds.length === 0) return { success: true, data: 0 }

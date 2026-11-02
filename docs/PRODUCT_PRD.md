@@ -134,6 +134,12 @@ same queue; a rejected account must wait 30 days and reapply from scratch.
 **Must hold:**
 - An application is not "complete," and the funnel keeps re-checking this on
   every visit, until both class/grade and a real phone number are on file.
+- One phone number = one account (owner, 2026-11-01). Setting or changing a
+  phone to one another live account already has is blocked, and the member sees
+  the registered email masked. Rejected, deleted and soft-deleted accounts free
+  their number. The 13 groups that already shared a number before the rule are
+  left alone; HR sees them, unmasked, in Approvals under "shared phones"
+  (HR/super-admin only, owner 2026-11-02).
 - A pending applicant can apply to job openings before their own account
   clears. That application shows in the hiring desks straight away, tagged
   "account awaiting approval", and cannot be marked accepted until the
@@ -355,21 +361,21 @@ screen by typing the URL directly).
 
 | # | Desk | Access | What it's for |
 |---|---|---|---|
-| 1 | Approvals | HR/super-admin | Approve or reject new account applications, with an optional rejection note shown to the applicant. |
+| 1 | Approvals | HR/super-admin | Approve or reject new account applications, with an optional rejection note shown to the applicant. A "shared phones" tab lists live accounts that share a phone number (full names, emails and numbers, HR/super-admin only). |
 | 2 | Post Queue | Leader (category-scoped) | Review every member-authored post awaiting moderation; approve/reject individually or in bulk. |
 | 3 | Blog Drafts | Leader | Publish or schedule long-form articles submitted via the composer. |
 | 4 | Members | Leader | Full member directory — role, teams, contact, break status; manage team membership. |
-| 5 | Member of the Month | Leader (own teams) / HR (any team) | Pick one or more honorees per team per month (changed from exactly one on 2026-10-03; the same member can't be picked twice in a team-month); generates a shareable poster automatically. |
+| 5 | Member of the Month | Any HoD or director, HR and super admin, for any team | Pick one or more honorees per team per month (changed from exactly one on 2026-10-03; the same member can't be picked twice in a team-month); generates a shareable poster automatically. A pick saved for a future month is announced (member notice and a feed post under the AquaTerra account) by a daily job at 00:10 IST once the month begins; the nominee must still be an active member of that team. |
 | 6 | Teams | Leader | Create/edit department records (name, category, description, logo, and the team picture shown on the Teams page and each team's page). |
 | 7 | Moderation (was Categories) | Leader | Assign which teams a director/HoD moderates. A HoD's Post Queue is the posts tagged to their teams (a parent department covers the teams inside it) plus any post nobody has tagged; with no team assigned they see the whole queue. Super admin and HR assign; a plain HoD sees only their own. The five fixed categories are retired from moderation. |
 | 8 | Hiring | Leader | Org-wide view of every job application across every team, with outreach templates. |
 | 9 | Enquiries | Leader | Contact-form and collaboration-form submissions with a status pipeline. |
-| 10 | Certificates | HR/super-admin | Issue or decline certificate/LoR/LoV requests, showing the requester's real derived hours. |
+| 10 | Certificates | HR/super-admin | Issue or decline certificate/LoR/LoV requests, showing the requester's real derived hours. A decision cannot be reopened. The requester is notified, and HR sends an issued document to the member by hand (owner decision, 2026-11-02). |
 | 11 | Yearbook | Leader | Invite/search members into the current edition; review submissions. |
-| 12 | Content | HR/super-admin | Edit copy/images on public marketing pages. |
+| 12 | All posts (was Content) | Leader | Every post on the feed, for review and tidying: approve or reject (reject needs a reason and tells the author), edit, pin, feature, delete. Each needs the approve-posts or delete-posts capability and is audited. It is not an editor for public page copy; no such tool is built. |
 | 13 | Drive Write-ups | HR/super-admin | Publish the public-facing story for a completed welfare drive. |
 | 14 | Manage HoDs | HR/super-admin | Promote a member to HoD/director or demote back — with a guard against an admin locking themselves out. |
-| 15 | Vol. Applications | HR/super-admin | Read-only historical archive of the pre-2026 WhatsApp outreach process. |
+| 15 | Vol. Applications | HR/super-admin | The volunteer outreach list: labels, a reviewed mark, a live counter and a spreadsheet export of emails and phones that asks first and is audited. Kept live by owner decision (2026-11-02); not a sign-up path. |
 | 16 | Roles & Permissions | HR/super-admin | Wired capability matrix — see §15. |
 | 17 | Activity Log | HR/super-admin | Audit trail of approvals/rejections/role changes/team-membership changes. |
 | 18 | Product guide | Leader | Every page and desk in plain language, filterable by role, with a map of what connects to what. Generated from the code and rebuilt every session; the same page is not public because it lists staff desks. Added 2026-11-02. |
@@ -528,8 +534,9 @@ Listed here so a review pass treats these as known state, not bugs:
   built in the September 2026 redesign). Replaced by the eight-project
   gallery inside Terra Notes; `/labs` redirects to it. Not a bug that it
   is gone.
-- **The pre-2026 WhatsApp volunteer-outreach process.** Kept read-only for
-  historical record on the Vol. Applications desk; not a live intake path.
+- **The pre-2026 WhatsApp volunteer-outreach process as an intake path.** The
+  Vol. Applications desk stays a live working list (owner, 2026-11-02), but
+  people sign up through Google, not through it.
 
 
 ## 21. Mini games (`/games`)

@@ -535,7 +535,10 @@ const jobOpeningsImpl = {
       .select('id, applicant_id, opening_id')
     if (error) throw logSupabaseError('jobOpenings.updateApplicationStatus', error)
     if (!data || data.length === 0) throw new Error("Couldn't update this application: you may not have permission.")
-    logAction('job_application_status_changed', 'job_application', undefined, { applicationId, status })
+    // job_applications.id is a uuid, so the row is keyed by entity_uuid (entity_id is an integer).
+    logAction('job_application_status_changed', 'job_application', undefined, {
+      applicantId: data[0].applicant_id, openingId: data[0].opening_id, status,
+    }, data[0].id ?? applicationId)
 
     // Tell the applicant when a decision lands (not for pending/reviewed
     // shuffles). Callers are leaders, so the leader-gated `system` type works.

@@ -984,7 +984,7 @@ const teamServiceImpl = {
       subtitle: 'Check out the team page.',
       link: `/teams/${uuid}`,
     })
-    logAction('team_member_added', 'team', team.team_id, { memberId, role: role || 'member' })
+    // Audit row (TEAM_MEMBER_*) is written by the team_membership_audit_log trigger; no app-side duplicate.
 
     return { success: true, message: 'Member added', data: { membership } }
   },
@@ -1017,7 +1017,6 @@ const teamServiceImpl = {
       role: du.role as 'member' | 'lead',
       joinedAt: du.joined_at
     }
-    logAction('team_member_role_changed', 'team', team.team_id, { memberId, role })
 
     return { success: true, message: 'Role updated', data: { membership } }
   },
@@ -1039,7 +1038,6 @@ const teamServiceImpl = {
 
     if (error) throw logSupabaseError('teamService.removeMember', error)
     if (!data || data.length === 0) throw new Error("Couldn't remove this member: you may not have permission.")
-    logAction('team_member_removed', 'team', team.team_id, { memberId })
 
     return { success: true, message: 'Member removed' }
   },
@@ -1113,7 +1111,9 @@ const teamServiceImpl = {
     if (landedErr) throw logSupabaseError('teamService.addMembersToSubTeam', landedErr)
     if ((landed || []).length < teamMemberIds.length) throw new Error(noPermission)
 
-    logAction('team_member_added', 'team', team.team_id, { subTeamId: sub.sub_team_id, memberIds })
+    // Sub-team links have no trigger, so this one is still logged here. The parent-team
+    // membership rows it may add or restore are logged by the team_membership_audit_log trigger.
+    logAction('team_member_subteam_added', 'team', team.team_id, { subTeamId: sub.sub_team_id, memberIds })
     return { added: teamMemberIds.length }
   },
 

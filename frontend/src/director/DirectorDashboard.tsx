@@ -1,10 +1,11 @@
 import './DirectorDashboard.css'
 import '../styles/routes/director.css'
-import { useEffect, useMemo, useRef, useState, Suspense } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, Suspense } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useCapabilities } from '../auth/CapabilityContext'
-import { isSuperAdmin as checkSuperAdmin, hasLeaderAccess, getRoleLabel } from '../lib/roles'
+import { isSuperAdmin as checkSuperAdmin, getRoleLabel } from '../lib/roles'
+import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { GROUP_HUES, visibleDeskGroups } from './deskAccess'
 import type { NavKey } from './deskAccess'
 import { getInitials } from '../lib/uiHelpers'
@@ -41,6 +42,11 @@ export type DirectorContext = {
    * sign-ups. An HoD has no way to tell, and nothing on screen hints at it.
    */
   statsError: boolean
+  /**
+   * Kept for the dev harness and old callers. Equal to `isSuperAdmin`: since 2026-09-12 the
+   * Approvals desk is HR / super admin only, so "can approve" is no longer leader-wide.
+   * Nothing in the desk reads it any more; use `isSuperAdmin`.
+   */
   canApproveMembers: boolean
   isSuperAdmin: boolean
   /** Categories this director is scoped to moderate (empty for super admins - they see everything). */
@@ -60,6 +66,8 @@ export type DirectorContext = {
   myScopeTeamIds: number[]
   /** Pending-post count scoped to `myCategories` (null when unscoped/super admin - fall back to stats.pendingPostReviews). */
   scopedPendingPosts: number | null
+  /** Re-count the rail badges now (e.g. after approving someone). Optional so fixtures need not supply it. */
+  refreshStats?: () => void
 }
 
 /** localStorage key the rail owns for "last opened". Never read or write any other key. */
@@ -110,10 +118,12 @@ const DirectorDashboard = () => {
   const [statsError, setStatsError] = useState(false)
   const [scopedPendingPosts, setScopedPendingPosts] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  // Account approval isn't category-scoped moderation (unlike posts) - any
-  // HoD/Director/super admin can approve members, must mirror
-  // AccountApprovals' own access gate.
-  const canApproveMembers = hasLeaderAccess(member?.role)
+  // Account approval is HR / super admin only (Approvals is a `super` desk since
+  // 2026-09-12; members_guard_privileged_cols enforces it in the database). It is
+  // NOT leader-wide, so a plain HoD must see no approvals count and no link.
+  const canApproveMembers = isSuperAdmin
+  const [pendingCertificates, setPendingCertificates] = useState<number | null>(null)
+  const scopeIdsRef = useRef<number[]>([])
   const [myCategories, setMyCategories] = useState<string[]>([])
   const [myTeamIds, setMyTeamIds] = useState<number[]>([])
   const [myScopeTeamIds, setMyScopeTeamIds] = useState<number[]>([])
@@ -164,6 +174,7 @@ const DirectorDashboard = () => {
           catch (e) { console.error('desk scope (teams) failed, staying unscoped:', e) }
         }
         const scopeIds = scopeTeams.map(t => t.teamId)
+        scopeIdsRef.current = scopeIds
         setMyCategories(scopeTeams.filter(t => t.direct).map(t => t.name))
         setMyScopeTeamIds(scopeIds)
         // The Post Queue badge should match what tapping the tab actually shows.
@@ -192,10 +203,77 @@ const DirectorDashboard = () => {
     fetchData()
   }, [isSuperAdmin])
 
+  // ── Keeping the rail badges fresh. Counts used to load once on mount, so the
+  // numbers went stale the moment a desk acted on a row. They are re-read on
+  // every navigation inside the dashboard, on window focus / tab becoming
+  // visible, and every 60 s while visible. Silent: a failed refresh keeps the
+  // last good numbers and never flips `statsError` (only the first load does).
+  // Throttled to one read per 4 s and never two in flight. ──
+  const refreshing = useRef(false)
+  const lastRefresh = useRef(0)
+  const refreshStats = useCallback(async (force = false) => {
+    if (refreshing.current) return
+    if (!force && Date.now() - lastRefresh.current < 4000) return
+    refreshing.current = true
+    lastRefresh.current = Date.now()
+    try {
+      const [statsResult, scoped, certs] = await Promise.all([
+        directorService.getDashboardStats().catch(() => null),
+        !isSuperAdmin && scopeIdsRef.current.length > 0
+          ? directorService.getScopedPendingPostsCount(scopeIdsRef.current).catch(() => null)
+          : Promise.resolve(null),
+        isSuperAdmin
+          ? supabaseCommunity.from('certificate_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+              .then(res => (res.error ? null : res.count ?? 0), () => null)
+          : Promise.resolve(null),
+      ])
+      if (statsResult?.success) { setStats(statsResult.data); setStatsError(false) }
+      if (scoped?.success) setScopedPendingPosts(scoped.data)
+      if (certs != null) setPendingCertificates(certs)
+      notificationService.getUnreadCount().then(setUnreadCount).catch(() => {})
+    } finally {
+      refreshing.current = false
+    }
+  }, [isSuperAdmin])
+
+  // Navigation inside the dashboard (the first run is the mount fetch's job).
+  const firstPath = useRef(location.pathname)
+  useEffect(() => {
+    if (firstPath.current === location.pathname) return
+    void refreshStats()
+  }, [location.pathname, refreshStats])
+
+  useEffect(() => {
+    const onVisible = () => { if (document.visibilityState === 'visible') void refreshStats() }
+    window.addEventListener('focus', onVisible)
+    document.addEventListener('visibilitychange', onVisible)
+    const id = window.setInterval(() => { if (document.visibilityState === 'visible') void refreshStats(true) }, 60_000)
+    return () => {
+      window.removeEventListener('focus', onVisible)
+      document.removeEventListener('visibilitychange', onVisible)
+      window.clearInterval(id)
+    }
+  }, [refreshStats])
+
+  // Certificates: first count rides the mount fetch's tail.
+  useEffect(() => { if (isSuperAdmin) void refreshStats(true) }, [isSuperAdmin, refreshStats])
+
+  // Approvals badge = EVERYONE waiting (pending_approval), contacted or not.
+  // The Approvals desk opens on its "pending" tab, which shows only people not
+  // yet contacted, so the number can be larger than the first list. That is
+  // deliberate (a contacted applicant is still undecided) and the tooltip says
+  // so. Super admin / HR only; a plain HoD gets no badge at all.
   const counts: Partial<Record<NavKey, number>> = {
-    approvals: stats?.pendingMemberApprovals || undefined,
+    approvals: isSuperAdmin ? stats?.pendingMemberApprovals || undefined : undefined,
     posts: (scopedPendingPosts ?? stats?.pendingPostReviews) || undefined,
+    hiring: stats?.pendingApplications || undefined,
+    enquiries: stats?.pendingEnquiries || undefined,
+    certificates: isSuperAdmin ? pendingCertificates || undefined : undefined,
   }
+  const badgeTitle = (key: NavKey, blurb: string) =>
+    key === 'approvals' && counts.approvals
+      ? `${blurb} The number counts everyone still undecided, including people you have already contacted; the desk opens on those not yet contacted.`
+      : blurb
 
   // The one filter, shared with DirectorLanding and asserted against the route
   // guard in deskAccess.test.ts. Never re-derive this expression locally.
@@ -310,12 +388,12 @@ const DirectorDashboard = () => {
   // getRoleLabel, not a literal, so the 'hr' role reads as "hr" here instead of
   // inheriting super_admin's wording. For super_admin the string is unchanged.
   const scopeLabel = isSuperAdmin
-    ? `acting as · ${getRoleLabel(member?.role).toLowerCase()} · all categories`
+    ? `acting as · ${getRoleLabel(member?.role).toLowerCase()} · all teams`
     : myCategories.length > 0
-      ? `acting as · ${getRoleLabel(member?.role)} · ${myCategories.join(', ')}`
+      ? `acting as · ${getRoleLabel(member?.role)} · teams: ${myCategories.join(', ')}`
       : `acting as · ${getRoleLabel(member?.role)}`
 
-  const ctx: DirectorContext = { stats, statsError, canApproveMembers, isSuperAdmin, myCategories, myTeamIds, myScopeTeamIds, scopedPendingPosts }
+  const ctx: DirectorContext = { stats, statsError, canApproveMembers, isSuperAdmin, myCategories, myTeamIds, myScopeTeamIds, scopedPendingPosts, refreshStats: () => { void refreshStats(true) } }
 
   const groupCount = (g: { items: { key: NavKey }[] }) => g.items.reduce((n, item) => n + (counts[item.key] || 0), 0)
 
@@ -421,7 +499,7 @@ const DirectorDashboard = () => {
                           // (content outranks title in the accname algorithm),
                           // so this reads as a DESCRIPTION rather than
                           // replacing "Approvals" with a sentence.
-                          title={item.blurb}
+                          title={badgeTitle(item.key, item.blurb)}
                           className={({ isActive: active }) => 'ops-rail2-child' + (active ? ' is-active' : '')}
                           onClick={() => setMobileNavOpen(false)}
                           onPointerEnter={onDeskHint(item.key)}
@@ -497,7 +575,7 @@ const DirectorDashboard = () => {
                     <NavLink
                       key={item.key}
                       to={`/director/${item.path}`}
-                      title={item.blurb}
+                      title={badgeTitle(item.key, item.blurb)}
                       className={({ isActive: active }) => 'ops-navsheet-item' + (active ? ' is-active' : '')}
                       style={{ ['--cc' as any]: GROUP_HUES[g.label] }}
                       onClick={() => setMobileNavOpen(false)}

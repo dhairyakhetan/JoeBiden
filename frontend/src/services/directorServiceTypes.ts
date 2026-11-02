@@ -134,3 +134,36 @@ export interface ScopeTeam {
 
 /** Who moderates each team, keyed by `team_id`. Same assignee shape as the category desk. */
 export type ScopeAssignments = Record<number, CategoryAssignment[]>
+
+/**
+ * Thrown when a decision targets a row somebody else (or an earlier click)
+ * already decided. Components show a plain "already decided" message and drop
+ * the row, instead of the generic failure toast, and no notification is sent.
+ */
+export class AlreadyDecidedError extends Error {
+  readonly alreadyDecided = true
+  constructor(message = 'Someone already decided this one.') {
+    super(message)
+    this.name = 'AlreadyDecidedError'
+  }
+}
+
+export function isAlreadyDecided(e: unknown): e is AlreadyDecidedError {
+  return !!e && typeof e === 'object' && (e as any).alreadyDecided === true
+}
+
+/** Plain-language notification text for a member whose role just changed. */
+export function roleChangeMessage(role: string): { title: string; subtitle: string; link?: string } {
+  switch (role) {
+    case 'member':
+      return { title: 'Your role is now Member', subtitle: 'You no longer have leader access in the HoD desk.', link: '/feed' }
+    case 'hod':
+      return { title: 'You are now a HoD', subtitle: 'You can open the HoD desk and help review posts.', link: '/director' }
+    case 'director':
+      return { title: 'You are now a Director', subtitle: 'You can open the HoD desk and help review posts.', link: '/director' }
+    case 'super_admin':
+      return { title: 'You are now a Super admin', subtitle: 'You have full access to the HoD desk.', link: '/director' }
+    default:
+      return { title: 'Your role was updated', subtitle: 'Open your profile to see what changed.', link: '/feed' }
+  }
+}

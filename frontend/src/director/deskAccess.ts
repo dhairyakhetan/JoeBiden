@@ -78,12 +78,14 @@ export type Desk = {
 
 /**
  * `approvals` alone carries an EXTRA nav filter beyond its privilege
- * (`canApproveMembers`, which is itself `hasLeaderAccess`). It is kept as an
- * explicit named exception rather than a second privilege tier because today
- * it is exactly equal to `leader` - the route guard and the nav gate therefore
- * still agree - and the test asserts that equality holds, so if
- * `canApproveMembers` ever narrows, the test fails rather than the nav quietly
- * hiding a desk the URL still opens.
+ * (`canApproveMembers`). Since 2026-09-12 the Approvals desk is `super`
+ * (HR / super admin only), so DirectorDashboard passes
+ * `canApproveMembers = isSuperAdmin(role)`, which is exactly what the `super`
+ * privilege already requires: the filter subtracts nothing the privilege gate
+ * had not already removed, and the route guard and nav gate agree. It stays as
+ * a named exception so the test can assert that equality; if the two ever
+ * diverge the test fails rather than the nav quietly hiding a desk the URL
+ * still opens (or showing one the URL refuses).
  */
 export const EXTRA_NAV_FILTER: Partial<Record<NavKey, 'canApproveMembers'>> = {
   approvals: 'canApproveMembers',
@@ -199,16 +201,21 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { key: 'members', label: 'Members', icon: '◍', path: 'members', privilege: 'leader',
         blurb: 'Every account on AQ, with their role, their teams and their contact details.' },
-      // FR11. Deliberately 'leader': member_of_the_month's write policies are
-      // `is_director()`, the DB twin of hasLeaderAccess, so any
-      // director/HoD/HR can make the pick. Marking it 'super' would hide a
-      // desk the database still lets those roles write to.
+      // FR11. Deliberately 'leader': the desk must open for any director/HoD/HR.
+      // WHO CAN PICK is decided by the DB function can_pick_mom_for_team(team_id).
+      // Since 2026-11-02 (owner: "allow them") any ACTIVE director or HoD may pick
+      // for ANY team, and HR / super admin as before. The nominee must still be an
+      // active member of that team and the period open (unless a super admin picks).
+      // Until then a HoD could pick only for teams they sat on, so a HoD on no team
+      // opened the desk and every pick was refused.
       { key: 'member_of_month', label: 'Member of the Month', icon: '★', path: 'member-of-month', privilege: 'leader',
         blurb: 'Pick the month’s standout and write the citation that goes out with it.' },
       { key: 'teams', label: 'Teams', icon: '▦', path: 'teams', privilege: 'leader',
-        blurb: 'The eight teams: who leads each one, and who is on it.' },
-      { key: 'categories', label: 'Categories', icon: '◫', path: 'categories', privilege: 'leader',
-        blurb: 'Which departments a director or HoD is allowed to moderate.' },
+        blurb: 'Who leads each team, and who is on it.' },
+      // Label is the PRD's "Moderation (was Categories)". Key and path stay
+      // `categories`; only what a person reads changed.
+      { key: 'categories', label: 'Moderation', icon: '◫', path: 'categories', privilege: 'leader',
+        blurb: 'Which team each director or HoD moderates posts for.' },
       // 'drives' (this desk's own standalone nav entry) was deleted
       // 2026-09-12 per owner request - "who leads a drive on the day" moved
       // into `projects`' own edit modal (DriveLeadField in
@@ -243,19 +250,21 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'admin',
     icon: '◆',
     items: [
-      { key: 'content', label: 'Content', icon: '▧', path: 'content', privilege: 'super',
-        blurb: 'The words and pictures on the public pages. Edit them here.' },
+      // Relabelled (owner: relabel, do not rebuild). The desk component and its
+      // `content` key are unchanged; it is the post review desk.
+      { key: 'content', label: 'All posts', icon: '▧', path: 'content', privilege: 'super',
+        blurb: 'Where leaders review and tidy every post on the feed.' },
       // Item 7.7. Renamed from "Projects", which named the same rows as the
       // Drives desk without saying so - a drive and a project are one thing in
       // this org, and the public site already calls them drives ("search 570
       // drives"). The route stays `projects`: the label is what a person
       // reads, the path is a URL nothing about this change should break.
       { key: 'projects', label: 'Drive Write-ups', icon: '▨', path: 'projects', privilege: 'super',
-        blurb: 'Publishing a drive: its photos, its numbers and its story. Running one happens in Drives.' },
+        blurb: 'Publishing a drive: its photos, its numbers and its story.' },
       { key: 'hods', label: 'Manage HoDs', icon: '◆', path: 'directors', privilege: 'super',
         blurb: 'Promote a member to HoD or director, or step one back down.' },
       { key: 'volunteer_apps', label: 'Vol. Applications', icon: '◇', path: 'volunteers', privilege: 'super',
-        blurb: 'The old WhatsApp outreach archive, kept for the record. Signing up happens at /login now.' },
+        blurb: 'The volunteer outreach list: who has been contacted, with labels and an export.' },
       // Moved in from the standalone /roles route (2026-09-08) - was a
       // community-wide transparency page (requireActive, any signed-in
       // member), now super_admin-only per explicit instruction. RLS on

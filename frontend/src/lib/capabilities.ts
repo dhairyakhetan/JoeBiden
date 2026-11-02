@@ -13,7 +13,7 @@
  *
  * `ceiling` is the set of roles the DATABASE will actually serve, mirroring the
  * RLS policy behind that capability (is_director / is_super_admin /
- * is_team_lead). The matrix cannot exceed it, so the page never offers a tick
+ * is_team_lead, which checks team_members.role = 'lead', not members.role). The matrix cannot exceed it, so the page never offers a tick
  * box that would silently do nothing: a cell above a role's ceiling renders as
  * LOCKED, with `lockReason()` explaining which policy is refusing.
  *
@@ -61,10 +61,12 @@ import { LEADER_ROLES, ADMIN_ROLES, isSuperAdmin } from './roles'
  * lockout P1; the tempting broad fix (`isSuperAdmin(role) => return true`) would
  * have silently voided every hr restriction an operator had already set.
  *
- * NOTE: the database constraint still only names `super_admin`. The matching
- * migration is scripts/role_capabilities_hr_never_locked_out_2026_09_17.sql and
- * is NOT YET APPLIED, so this rule is app-side only until it runs. That is a
- * real gap, not a design: see the file header.
+ * The database enforces this too: `role_capabilities_hr_never_locked_out`
+ * (hr / desk.roles / enabled=false is refused) sits beside
+ * `role_capabilities_super_admin_never_restricted` on the live table (checked
+ * against pg_constraint 2026-11-02; migration
+ * scripts/role_capabilities_hr_never_locked_out_2026_09_17.sql). The app-side
+ * rule is kept so the page also shows the cell as locked.
  */
 export const TOP_TIER_NEVER_RESTRICTABLE = new Set<string>(['desk.roles'])
 
@@ -157,11 +159,15 @@ const ACTION_CAPABILITIES: Capability[] = [
   {
     key: 'action.manage_team_roster',
     label: 'Add or remove team members',
-    // is_team_lead() is still referenced by team_members' RLS policy but can
-    // never evaluate true again (the 'lead' role it checks for was retired
-    // 2026-09-15, see scripts/retire_lead_role_2026_09_15.sql) - the real
-    // ceiling is directors/HoDs only now.
-    hint: 'Change a team roster. RLS ceiling: team_members, is_director().',
+    // The members.role 'lead' tier was retired 2026-09-15 (see
+    // scripts/retire_lead_role_2026_09_15.sql), but is_team_lead() does NOT
+    // read members.role: it checks team_members.role = 'lead' for an active
+    // row, which still exists, and live RLS on team_members, job_openings and
+    // job_applications still uses it. So a team's own lead can still change
+    // that team's roster at the database. The ceiling stays LEADER_CEILING
+    // because every role in this matrix that can act is a leader-or-above
+    // account; a team lead who is only a `member` is outside the matrix.
+    hint: 'Change a team roster. RLS ceiling: team_members, is_director() or is_team_lead() for that team.',
     group: 'Actions',
     ceiling: LEADER_CEILING,
     enforcement: 'action',
