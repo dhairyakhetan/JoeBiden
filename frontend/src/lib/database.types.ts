@@ -4233,7 +4233,7 @@ export type Database = {
       teams: {
         Row: {
           banner_url: string | null
-          category: string
+          category: string | null
           created_at: string | null
           created_by: number | null
           description: string | null
@@ -4248,7 +4248,7 @@ export type Database = {
         }
         Insert: {
           banner_url?: string | null
-          category: string
+          category?: string | null
           created_at?: string | null
           created_by?: number | null
           description?: string | null

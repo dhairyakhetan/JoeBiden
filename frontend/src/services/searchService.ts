@@ -278,7 +278,7 @@ async function runSearch(query: string, type: string, limit: number, opts: Searc
               uuid: t.uuid,
               name: t.name,
               description: t.description ?? '',
-              category: t.category,
+              category: t.category ?? '',
               logoUrl: t.logo_url ?? undefined,
               memberCount: t.team_members?.[0]?.count || 0,
             }))

@@ -78,7 +78,7 @@ const DirectorLanding = () => {
     { show: isSuperAdmin && pendingApprovals > 0, count: pendingApprovals, noun: pendingApprovals === 1 ? 'member sign-up' : 'member sign-ups', verb: 'waiting on approval', to: '/director/approvals' },
     { show: pendingPosts > 0, count: pendingPosts, noun: pendingPosts === 1 ? 'post' : 'posts', verb: 'waiting in the review queue', to: '/director/posts' },
     { show: pendingEnquiries > 0, count: pendingEnquiries, noun: pendingEnquiries === 1 ? 'enquiry' : 'enquiries', verb: 'nobody has replied to yet', to: '/director/enquiries' },
-    { show: pendingApplications > 0, count: pendingApplications, noun: pendingApplications === 1 ? 'application' : 'applications', verb: 'waiting on a decision', to: '/director/hiring' },
+    { show: pendingApplications > 0, count: pendingApplications, noun: pendingApplications === 1 ? 'application' : 'applications', verb: isSuperAdmin ? 'waiting on a decision' : 'across all teams waiting on a decision', to: '/director/hiring' },
   ] as const).filter(t => t.show)
 
   // 17.2 Verification 5: "No `0` badge anywhere; no zero in a display-scale
@@ -93,7 +93,7 @@ const DirectorLanding = () => {
     { show: isSuperAdmin && pendingApprovals > 0, to: '/director/approvals', n: pendingApprovals, label: 'accounts waiting', cc: 'var(--tomato)' },
     { show: pendingPosts > 0, to: '/director/posts', n: pendingPosts, label: 'posts in queue', cc: 'var(--lemon)' },
     { show: pendingEnquiries > 0, to: '/director/enquiries', n: pendingEnquiries, label: 'enquiries', cc: '' },
-    { show: pendingApplications > 0, to: '/director/hiring', n: pendingApplications, label: 'applications', cc: 'var(--sky)' },
+    { show: pendingApplications > 0, to: '/director/hiring', n: pendingApplications, label: isSuperAdmin ? 'applications' : 'applications, all teams', cc: 'var(--sky)' },
   ] as const).filter(b => b.show)
   // 17.2's row shape: the leading block is the wide one (1.35fr), the rest are
   // even. A row of one is simply full width.

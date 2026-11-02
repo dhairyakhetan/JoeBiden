@@ -563,6 +563,16 @@ export function useUndoableAction<T>({
     })
   }
 
+  // The write is parked for windowMs so Undo can cancel it. Closing or reloading the tab inside that
+  // window would drop it silently (the applicant stays pending although the row vanished), so ask first.
+  // supabase-js cannot send a keepalive request, so a warning is the honest fix.
+  useEffect(() => {
+    if (pending.size === 0) return
+    const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
+    window.addEventListener('beforeunload', warn)
+    return () => window.removeEventListener('beforeunload', warn)
+  }, [pending])
+
   const run = useCallback((item: T) => {
     const key = keyOf(item)
     queueRef.current!.schedule(item)

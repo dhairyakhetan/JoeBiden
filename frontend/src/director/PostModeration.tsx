@@ -158,7 +158,9 @@ const PostModeration = () => {
 
   // A team-scoped leader is always seeing a subset, so their header should
   // count what they can actually act on, never the global queue.
-  const isNarrowed = catFilter !== 'all' || search.trim() !== '' || hasTeamScope
+  // hasTeamScope is NOT a narrowing here: the server count (totalPending) is already scoped, so
+  // using rows.length would show the loaded page (20) instead of the real total (45).
+  const isNarrowed = catFilter !== 'all' || search.trim() !== ''
 
   const selection = useRowSelection(rows)
 

@@ -1635,7 +1635,7 @@ export default function HomePage() {
                 // changes. Only the text runs are placeholders: a three-line
                 // title and one snippet line, which is the commonest body
                 // shape on the live feed (measured 2026-09).
-                <div key={i} className="feed-card">
+                <div key={i} className="feed-card" aria-hidden="true" style={{ cursor: 'default', pointerEvents: 'none' }}>
                   <div className="feed-card-media" style={{ background: 'var(--bg-2)' }} />
                   <div className="feed-card-head">
                     <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'var(--bg-2)', flexShrink: 0 }} />

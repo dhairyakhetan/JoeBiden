@@ -654,7 +654,7 @@ function App() {
             {/* Director Routes - DirectorDashboard is now a pure layout (topbar +
                 nav strip + <Outlet/>); every desk below is a real route so it
                 deep-links and survives refresh instead of living in tab state. */}
-            <Route path="/director" element={<ProtectedRoute requireDirector><DashboardLayout /></ProtectedRoute>}>
+            <Route path="/director" element={<ProtectedRoute requireDirector requireActive><DashboardLayout /></ProtectedRoute>}>
               <Route element={<DirectorDashboard />}>
                 <Route index element={<DirectorLanding />} />
                 {/* The 18 desks are GENERATED from `DESKS` in

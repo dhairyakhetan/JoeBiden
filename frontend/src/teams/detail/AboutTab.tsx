@@ -208,7 +208,7 @@ export default function AboutTab({
       <div className="team-detail-stats-grid" style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap: isMobile ? 10 : 14 }}>
         {[
           { label: 'Members', value: team.memberCount || 0 },
-          { label: 'Category', value: teamService.getCategoryLabel(team.category) },
+          { label: 'Category', value: teamService.getCategoryLabel(team.category) || 'Team' },
           { label: 'Status', value: 'Active' },
         ].map(stat => (
           <div key={stat.label} className="card" style={{ padding: isMobile ? '14px 12px' : '18px 20px', textAlign: 'center' }}>

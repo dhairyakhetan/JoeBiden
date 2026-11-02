@@ -110,7 +110,7 @@ const mapPick = (r: any): MemberOfMonthPick => ({
   teamId: r.team_id,
   teamUuid: r.team?.uuid ?? '',
   teamName: r.team?.name ?? 'a team',
-  teamCategory: r.team?.category ?? '',
+  teamCategory: r.team?.category || 'welfare',
   memberId: r.member_id,
   memberUuid: r.member?.uuid ?? '',
   memberName: r.member?.full_name ?? 'a member',
@@ -256,7 +256,7 @@ const memberOfMonthServiceImpl = {
       .eq('is_active', true)
       .order('name', { ascending: true })
     if (error) throw logSupabaseError('memberOfMonthService.getPickableTeams', error)
-    return (data || []).map((t: any) => ({ teamId: t.team_id, uuid: t.uuid, name: t.name, category: t.category }))
+    return (data || []).map((t: any) => ({ teamId: t.team_id, uuid: t.uuid, name: t.name, category: t.category ?? '' }))
   },
 
   /** Is `period` open for HOD/director picking? super_admin/hr don't need to

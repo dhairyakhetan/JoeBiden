@@ -1,0 +1,30 @@
+-- ──────────────────────────────────────────────────────────────────────────
+-- Teams no longer need one of the five retired categories (bug tracker request
+-- "all teams should be available as categories and departments", 7 Oct 2026,
+-- slice 5: the last piece).
+--
+-- STATUS: APPLY via the Supabase connector (migration name teams_category_optional).
+--
+-- What it does: drops NOT NULL on teams.category. The existing CHECK
+-- (teams_category_check) is kept: a CHECK passes on NULL, so a team may now have
+-- NO category, and when it has one it must still be one of the five old values.
+-- Nothing is deleted, rewritten or back-filled. The 10 existing teams keep the
+-- value they have. New teams made on the Teams desk are saved with no category.
+--
+-- What it does NOT touch: posts.category, director_categories.category and
+-- welfare_projects.category keep their five-value checks. A post written from a
+-- team with no category is filed as 'welfare', the default the app already used.
+-- Moderation scope for a leader is by the teams they lead
+-- (teamService.getMyDeskTeamIds), then by assigned categories as before.
+--
+-- Live checks after applying:
+--   select is_nullable from information_schema.columns
+--    where table_name='teams' and column_name='category';        -- YES
+--   select count(*) from public.teams where category is not null; -- 10, unchanged
+--   select conname from pg_constraint where conrelid='public.teams'::regclass
+--    and contype='c';                                             -- teams_category_check
+--
+-- Rollback (only valid while no team has a NULL category):
+--   alter table public.teams alter column category set not null;
+-- ──────────────────────────────────────────────────────────────────────────
+alter table public.teams alter column category drop not null;

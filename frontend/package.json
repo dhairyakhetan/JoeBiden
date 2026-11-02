@@ -16,6 +16,7 @@
     "lint": "eslint . && node scripts/lint-accent-tokens.mjs",
     "preview": "vite preview",
     "smoke": "node scripts/smoke.mjs",
+    "ux": "node scripts/ux-harness.mjs",
     "test": "vitest run",
     "lint:accent": "node scripts/lint-accent-tokens.mjs",
     "budget": "node scripts/check-bundle-budget.mjs",

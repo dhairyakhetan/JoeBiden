@@ -425,7 +425,7 @@ const TeamDetailPage = () => {
           kind: 'team',
           id: t.uuid,
           title: t.name,
-          subtitle: teamService.getCategoryLabel(t.category),
+          subtitle: teamService.getCategoryLabel(t.category) || 'Team',
           image: (t as any).logoUrl || undefined,
           href: `/teams/${t.uuid}`,
         })
@@ -908,9 +908,11 @@ const TeamDetailPage = () => {
         <Link to="/teams" className="td-hcap">
           <span aria-hidden>←</span> teams
         </Link>
-        <Link to={`/teams?category=${encodeURIComponent(team.category)}`} className="td-hcap">
-          <span aria-hidden>{deptEmoji}</span> {teamService.getCategoryLabel(team.category)}
-        </Link>
+        {team.category && (
+          <Link to={`/teams?category=${encodeURIComponent(team.category)}`} className="td-hcap">
+            <span aria-hidden>{deptEmoji}</span> {teamService.getCategoryLabel(team.category)}
+          </Link>
+        )}
         {kind && <span className="td-hcap td-hcap--static">{KIND_LABEL[kind]}</span>}
         <span className="td-header-spacer" />
       </div>
@@ -1230,7 +1232,7 @@ const TeamDetailPage = () => {
               are --r-inner rather than --r-outer. */}
           {(suggestLoading || suggestedTeams.length > 0) && (
             <div className="td-more">
-              <h2 className="td-sec-h">more in {teamService.getCategoryLabel(team.category)}</h2>
+              <h2 className="td-sec-h">{team.category ? `more in ${teamService.getCategoryLabel(team.category)}` : 'more teams'}</h2>
               {suggestLoading ? (
                 <div className="td-more-list">
                   {[1, 2, 3].map(i => (
@@ -1274,7 +1276,7 @@ const TeamDetailPage = () => {
           onSuccess={() => { if (canApprovePosts) fetchPendingPosts() }}
           teamUuid={uuid || ''}
           teamName={team.name}
-          teamCategory={team.category}
+          teamCategory={team.category || 'welfare'}
           members={team.members || []}
         />
       )}
@@ -1303,7 +1305,7 @@ const TeamDetailPage = () => {
           storyData={{
             type: 'opening',
             teamName: team.name,
-            teamCategory: team.category,
+            teamCategory: team.category || 'welfare',
             openingTitle: sharingOpening.title,
             description: sharingOpening.description,
             skills: sharingOpening.skills,
@@ -1330,7 +1332,7 @@ const TeamDetailPage = () => {
           opening={editingOpening}
           teamName={team?.name}
           teamUuid={uuid}
-          teamCategory={team?.category}
+          teamCategory={team?.category || 'welfare'}
           member={currentMember ? { fullName: currentMember.full_name || '', role: currentMember.role || 'hod' } : null}
           onClose={() => setEditingOpening(null)}
           onSaved={() => { if (team?.name) fetchOpenings(team.name) }}

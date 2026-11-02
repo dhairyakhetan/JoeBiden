@@ -49,10 +49,10 @@ function TeamFormModal({
   const isNew = !team
   const [name, setName]       = useState(team?.name || '')
   const [desc, setDesc]       = useState(team?.description || '')
-  // Categories are retired from the form, but teams.category is NOT NULL with a
-  // CHECK on the five legacy values, so keep the existing value on edit and use
-  // the old default on create. Never shown, never editable here.
-  const cat = team?.category || 'welfare'
+  // Categories are retired from the form. teams.category is optional since
+  // 2 Nov 2026 (teams_category_optional): keep an existing value on edit, send
+  // none on create. Never shown, never editable here.
+  const cat = team?.category || undefined
   const [saving, setSaving]   = useState(false)
   // The team picture. Only sent on save when it differs from what loaded, so
   // saving a rename never rewrites (or clears) a picture someone else set.
@@ -63,7 +63,7 @@ function TeamFormModal({
   const panelRef = useRef<HTMLDivElement>(null)
   useModalA11y(true, panelRef, onClose, saving)
 
-  const accent = CAT_COLORS[cat] || 'var(--welfare)'
+  const accent = CAT_COLORS[cat || ''] || 'var(--welfare)'
   const labelSt: React.CSSProperties = {
     fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700,
     textTransform: 'uppercase', letterSpacing: '0.06em',
@@ -371,7 +371,7 @@ export default function TeamManagement() {
           return (
             <AdminRow
               key={team.uuid}
-              stamp={<StatusStamp label={team.category} tone="custom" color={accent} />}
+              stamp={<StatusStamp label={team.category || 'team'} tone="custom" color={accent} />}
               primary={
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
                   <div className="adm-avatar is-square" aria-hidden>

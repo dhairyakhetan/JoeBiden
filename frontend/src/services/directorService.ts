@@ -145,6 +145,12 @@ const directorServiceImpl = {
       (supabaseCommunity as any).from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     ]))
 
+    // supabase-js returns { error } instead of throwing. Without this a refused or failed count read as 0,
+    // and the landing said "nothing waiting" (the false all-clear statsError exists to prevent), and
+    // withRetry never saw a failure to retry.
+    const failed = [pending, posts, active, published, contact, collab, applications].find((r: any) => r?.error) as any
+    if (failed?.error) throw logSupabaseError('directorService.getDashboardStats', failed.error)
+
     return {
       success: true,
       data: {

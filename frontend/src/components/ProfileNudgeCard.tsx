@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import type { ChangeEvent, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
@@ -85,6 +85,7 @@ export default function ProfileNudgeCard({ enabled = true, className, onDismisse
   const toast = useToast()
   const confirm = useConfirm()
   const reduced = useReducedMotion()
+  const titleId = useId() // unique per mount: the dev gallery shows several at once
 
   const [phase, setPhase] = useState<Phase>('loading')
   const [ctx, setCtx] = useState<NudgeContext | null>(null)
@@ -328,14 +329,14 @@ export default function ProfileNudgeCard({ enabled = true, className, onDismisse
   return (
     <motion.div
       className={'feed-card pnudge ' + (className ?? '')}
-      aria-labelledby="pnudge-title"
+      aria-labelledby={titleId}
       variants={reduced ? undefined : staggerContainer}
       initial={reduced ? undefined : 'hidden'}
       animate={reduced ? undefined : 'visible'}
     >
       <div className="pnudge-head">
         <div className="pnudge-head-text">
-          <h2 className="pnudge-title" id="pnudge-title">{headline}</h2>
+          <h2 className="pnudge-title" id={titleId}>{headline}</h2>
           <p className="pnudge-sub">{sub}</p>
         </div>
         <button

@@ -61,7 +61,7 @@ export default function FAQPage() {
         {JOINING.map((it, i) => (
           <Reveal key={it.id} delay={Math.min(i * 0.03, 0.4)}>
             <details className="card card-hover" style={{ padding: '16px 18px', cursor: 'pointer' }} open={i === 0}>
-              <summary style={{ fontFamily: 'var(--display)', fontSize: 16, fontWeight: 800, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <summary style={{ minHeight: 44, fontFamily: 'var(--display)', fontSize: 16, fontWeight: 800, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {it.q}
                 <span className="accq" style={{ color: 'var(--welfare-ink)', flexShrink: 0, marginLeft: 12, display: 'inline-block', transition: 'transform 0.16s var(--ease-out)' }}>+</span>
               </summary>
@@ -78,7 +78,7 @@ export default function FAQPage() {
         {INSIDE.map((it, i) => (
           <Reveal key={it.id} delay={Math.min(i * 0.03, 0.4)}>
             <details className="card card-hover" style={{ padding: '16px 18px', cursor: 'pointer' }}>
-              <summary style={{ fontFamily: 'var(--display)', fontSize: 16, fontWeight: 800, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <summary style={{ minHeight: 44, fontFamily: 'var(--display)', fontSize: 16, fontWeight: 800, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {it.q}
                 <span className="accq" style={{ color: 'var(--welfare-ink)', flexShrink: 0, marginLeft: 12, display: 'inline-block', transition: 'transform 0.16s var(--ease-out)' }}>+</span>
               </summary>

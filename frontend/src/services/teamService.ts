@@ -212,7 +212,7 @@ const teamServiceImpl = {
       parentUuid: t.parent_team_id ? uuidById.get(t.parent_team_id) : undefined,
       name: t.name,
       description: t.description,
-      category: t.category,
+      category: t.category ?? '',
       logoUrl: t.logo_url,
       bannerUrl: (t as any).banner_url ?? undefined,
       skills: (t as any).skills ?? [],
@@ -308,7 +308,7 @@ const teamServiceImpl = {
       uuid: d.uuid,
       name: d.name,
       description: d.description ?? '',
-      category: d.category,
+      category: d.category ?? '',
       logoUrl: d.logo_url ?? undefined,
       bannerUrl: (d as any).banner_url ?? undefined,
       skills: (d as any).skills ?? [],
@@ -401,7 +401,7 @@ const teamServiceImpl = {
       parentUuid: t.parent_team_id ? uuidById.get(t.parent_team_id) : undefined,
       name: t.name,
       description: t.description,
-      category: t.category,
+      category: t.category ?? '',
       logoUrl: t.logo_url,
       bannerUrl: t.banner_url ?? undefined,
       skills: t.skills ?? [],
@@ -607,7 +607,7 @@ const teamServiceImpl = {
         uuid: t.uuid,
         name: t.name,
         description: t.description,
-        category: t.category,
+        category: t.category ?? '',
         logoUrl: t.logo_url,
       bannerUrl: (t as any).banner_url ?? undefined,
       skills: (t as any).skills ?? [],
@@ -704,7 +704,7 @@ const teamServiceImpl = {
       .eq('is_active', true)
       .order('name', { ascending: true })
     if (error) throw logSupabaseError('teamService.getTeamOptions', error)
-    return ((data || []) as any[]).map(t => ({ teamId: t.team_id, name: t.name, category: t.category }))
+    return ((data || []) as any[]).map(t => ({ teamId: t.team_id, name: t.name, category: t.category ?? '' }))
   },
 
   /** The `team_id`s a member is actively on. The write-side twin of getTeamsForMember. */
@@ -822,7 +822,7 @@ const teamServiceImpl = {
         uuid: t.uuid,
         name: t.name,
         description: t.description,
-        category: t.category,
+        category: t.category ?? '',
         logoUrl: t.logo_url,
       bannerUrl: (t as any).banner_url ?? undefined,
       skills: (t as any).skills ?? [],
@@ -839,7 +839,8 @@ const teamServiceImpl = {
   async createTeam(data: {
     name: string
     description?: string
-    category: string
+    /** Optional: teams are no longer filed under one of the five retired categories. */
+    category?: string
     logoUrl?: string
     memberIds?: { memberId: number; role?: string }[]
   }): Promise<{ success: boolean; data: { team: Team }; message: string }> {
@@ -850,7 +851,7 @@ const teamServiceImpl = {
       .insert({
         name: data.name,
         description: data.description,
-        category: data.category,
+        ...(data.category ? { category: data.category } : {}),
         logo_url: data.logoUrl,
         created_by: member.member_id
       })
@@ -871,13 +872,13 @@ const teamServiceImpl = {
       if (rosterErr) throw logSupabaseError('teamService.createTeam', rosterErr)
     }
 
-    logAction('team_created', 'team', team.team_id, { name: data.name, category: data.category })
+    logAction('team_created', 'team', team.team_id, { name: data.name, category: data.category ?? null })
 
     const mapped: Team = {
       uuid: team.uuid,
       name: team.name,
       description: team.description ?? '',
-      category: team.category,
+      category: team.category ?? '',
       logoUrl: team.logo_url ?? undefined,
       createdAt: team.created_at ?? new Date().toISOString(),
       createdBy: team.created_by ?? undefined,
@@ -923,7 +924,7 @@ const teamServiceImpl = {
           uuid: team.uuid,
           name: team.name,
           description: team.description ?? '',
-          category: team.category,
+          category: team.category ?? '',
           logoUrl: team.logo_url ?? undefined,
           createdAt: team.created_at ?? new Date().toISOString(),
           memberCount: 0
@@ -936,8 +937,10 @@ const teamServiceImpl = {
     // Read the row back before deleting - once it's gone there is nothing
     // left to name in the log entry (team_id would resolve to nothing).
     const { data: team } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
-    const { error } = await supabaseCommunity.from('teams').delete().eq('uuid', uuid)
+    const { data: gone, error } = await supabaseCommunity.from('teams').delete().eq('uuid', uuid).select('team_id')
     if (error) throw logSupabaseError('teamService.deleteTeam', error)
+    // Zero rows = already deleted by someone else, or refused by RLS. Never toast "Team deleted" for that.
+    if (!gone || gone.length === 0) throw new Error('That team could not be deleted. It may already be gone, or you may not have permission.')
     logAction('team_deleted', 'team', team?.team_id, { name: team?.name })
     return { success: true, message: 'Team deleted' }
   },
@@ -1121,12 +1124,27 @@ const teamServiceImpl = {
     const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
     if (!team) throw new Error('Team not found')
 
-    const inserts = members.map(m => ({
+    // Never rewrite someone who is already active on the team. The upsert below writes `role`, so a
+    // person picked as 'member' who is currently a lead would be silently demoted. Already-active
+    // people are left exactly as they are and count as added (they are on the team).
+    const { data: already, error: alreadyErr } = await supabaseCommunity
+      .from('team_members')
+      .select('member_id')
+      .eq('team_id', team.team_id)
+      .eq('is_active', true)
+      .in('member_id', members.map(m => m.memberId))
+    if (alreadyErr) throw logSupabaseError('teamService.addMembersBulk', alreadyErr)
+    const alreadyIds = new Set((already || []).map((r: any) => r.member_id))
+
+    const inserts = members.filter(m => !alreadyIds.has(m.memberId)).map(m => ({
       team_id: team.team_id,
       member_id: m.memberId,
       role: m.role,
       is_active: true,
     }))
+    if (inserts.length === 0) {
+      return { success: true, message: 'Members added', data: { added: members, failed: [] } }
+    }
 
     // Same zero-row guard as removeMember above. This one additionally reported
     // `failed: []` without ever checking what actually landed, so a fully
@@ -1147,7 +1165,7 @@ const teamServiceImpl = {
     if (error) throw logSupabaseError('teamService.addMembersBulk', error)
     if (!data || data.length === 0) throw new Error("Couldn't add members to this team: you may not have permission.")
 
-    const addedIds = new Set(data.map((r: any) => r.member_id))
+    const addedIds = new Set([...data.map((r: any) => r.member_id), ...alreadyIds])
     const added = members.filter(m => addedIds.has(m.memberId))
     const failed = members.filter(m => !addedIds.has(m.memberId))
 
@@ -1721,7 +1739,7 @@ const teamServiceImpl = {
 
   getCategoryLabel(category: string): string {
     const labels: Record<string, string> = { events: 'Events', welfare: 'Welfare', content: 'Content', operations: 'Operations', labs: 'Labs' }
-    return labels[category] || category
+    return labels[category] || category || ''
   },
 
   getRoleLabel(role: string): string {

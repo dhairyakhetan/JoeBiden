@@ -260,7 +260,7 @@ export default function SearchPage() {
     for (const t of results.teams) {
       out.push({
         key: `team-${t.uuid}`, kind: 'team', href: `/teams/${t.uuid}`,
-        context: t.category, title: t.name,
+        context: t.category || 'team', title: t.name,
         media: t.logoUrl ? { type: 'photo', src: t.logoUrl, alt: '' } : { type: 'glyph', glyph: KIND_GLYPH.team },
         category: t.category,
       })

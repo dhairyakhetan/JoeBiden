@@ -162,35 +162,32 @@ const DirectorDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statsResult = await directorService.getDashboardStats()
+        // Stats, the leader's scope teams and the teams they lead are independent reads. They used to run
+        // one after another (6 to 8 round trips before the shell left its skeleton); now they start together.
+        // Teams-as-categories slice 4: a leader's scope is their TEAMS (director_scopes, plus the teams inside
+        // each). `myCategories` keeps its name because many desks print it as the "acting as" label; it holds
+        // the names of the teams actually assigned. A failed scope or team read leaves the desk UNSCOPED
+        // (never scoped to nothing), so those two are non-fatal; a failed stats read is fatal (statsError).
+        const [statsResult, scopeTeams, ledTeamIds] = await Promise.all([
+          directorService.getDashboardStats(),
+          isSuperAdmin
+            ? Promise.resolve([] as { teamId: number; name: string; direct: boolean }[])
+            : directorService.getMyScopeTeams().catch(e => { console.error('desk scope (teams) failed, staying unscoped:', e); return [] as { teamId: number; name: string; direct: boolean }[] }),
+          isSuperAdmin
+            ? Promise.resolve([] as number[])
+            : teamService.getMyDeskTeamIds().catch(e => { console.error('desk team scope failed, staying unscoped:', e); return [] as number[] }),
+        ])
         if (statsResult.success) setStats(statsResult.data)
-        // Teams-as-categories slice 4: a leader's scope is their TEAMS (director_scopes, plus the
-        // teams inside each). The five categories are no longer read. `myCategories` keeps its
-        // name because many desks print it as the "acting as" label; it now holds the names of the
-        // teams actually assigned. A failed read leaves the desk UNSCOPED (never scoped to nothing).
-        let scopeTeams: { teamId: number; name: string; direct: boolean }[] = []
-        if (!isSuperAdmin) {
-          try { scopeTeams = await directorService.getMyScopeTeams() }
-          catch (e) { console.error('desk scope (teams) failed, staying unscoped:', e) }
-        }
         const scopeIds = scopeTeams.map(t => t.teamId)
         scopeIdsRef.current = scopeIds
         setMyCategories(scopeTeams.filter(t => t.direct).map(t => t.name))
         setMyScopeTeamIds(scopeIds)
+        // super_admin and HR keep the unscoped view: for them myTeamIds stays empty, which reads as unscoped.
+        if (!isSuperAdmin) setMyTeamIds(Array.from(new Set([...ledTeamIds, ...scopeIds])))
         // The Post Queue badge should match what tapping the tab actually shows.
         if (!isSuperAdmin && scopeIds.length > 0) {
           const scoped = await directorService.getScopedPendingPostsCount(scopeIds)
           if (scoped.success) setScopedPendingPosts(scoped.data)
-        }
-        // Item 6.1. Only for non-super leaders: "super_admin and HR keep the
-        // unscoped view" was explicit, so the call is not even made for them
-        // and `myTeamIds` stays empty, which reads as unscoped anyway. Teams they lead plus
-        // their scope.
-        if (!isSuperAdmin) {
-          // Non-fatal: a failure here must leave the desk UNSCOPED (the
-          // pre-6.1 behaviour), never accidentally scoped to nothing.
-          try { setMyTeamIds(Array.from(new Set([...(await teamService.getMyDeskTeamIds()), ...scopeIds]))) }
-          catch (e) { console.error('desk team scope failed, staying unscoped:', e) }
         }
       } catch (error) {
         // Was console.error only. A desk that cannot count its own queues must
@@ -271,7 +268,9 @@ const DirectorDashboard = () => {
     certificates: isSuperAdmin ? pendingCertificates || undefined : undefined,
   }
   const badgeTitle = (key: NavKey, blurb: string) =>
-    key === 'approvals' && counts.approvals
+    key === 'hiring' && counts.hiring && !isSuperAdmin
+      ? `${blurb} The number counts applications across every team; the desk lists only your teams' applications.`
+      : key === 'approvals' && counts.approvals
       ? `${blurb} The number counts everyone still undecided, including people you have already contacted; the desk opens on those not yet contacted.`
       : blurb
 
