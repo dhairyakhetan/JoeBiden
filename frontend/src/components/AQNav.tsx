@@ -644,6 +644,15 @@ export default function AQNav(_props: AQNavProps) {
                       >
                         Tasks
                       </button>
+                      {/* /calendar had no link anywhere in the app (found by the product-guide checker, 2026-11-01). */}
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="menu-item"
+                        onClick={() => { setShowUserMenu(false); navigate('/calendar') }}
+                      >
+                        Calendar
+                      </button>
                       {isDirector && (
                         <button
                           type="button"
@@ -980,7 +989,7 @@ export default function AQNav(_props: AQNavProps) {
           dropdown that opens it) instead of one 22-row wall, and it carries every destination the
           dropdown and the desktop mega menu do, Labs and Live included. */}
       {showMobileMenu && (() => {
-        type Row = { href: string; label: string; pulse?: boolean; onGo?: () => void }
+        type Row = { href: string; label: string; pulse?: boolean; ink?: boolean; onGo?: () => void }
         const closeMenu = () => setShowMobileMenu(false)
         const here = (href: string) => (href === '/terranotes' ? path.startsWith('/terranotes') && !path.startsWith(LABS_HREF) : isActive(href))
         const groups: { title: string; wide?: boolean; rows: Row[] }[] = []
@@ -989,12 +998,15 @@ export default function AQNav(_props: AQNavProps) {
             { href: '/my-posts', label: 'My posts' },
             { href: '/tasks', label: 'Tasks' },
             { href: '/bugs', label: 'Bugs & requests' },
+            { href: '/calendar', label: 'Calendar' },
+            { href: '/invite', label: 'Invite a friend' },
+            { href: '/yearbook', label: 'Yearbook' },
           ]
           if (isDirector) you.unshift({ href: '/director', label: 'HoD desk', pulse: showHodPulse, onGo: () => localStorage.setItem('aq_hod_visited', '1') })
           groups.push({ title: 'you', rows: you })
         }
         const sheet = (hrefs: string[]) => hrefs.map(h => mobileSheetLinks.find(l => l.href === h)!).map(l => ({ href: l.href, label: l.label }))
-        groups.push({ title: 'explore', rows: [...sheet(['/projects', '/teams', '/members', '/blog', '/terranotes', '/games', '/opportunities']), { href: '/live', label: 'AquaTerra Live' }, { href: LABS_HREF, label: 'AQ Labs ’26' }] })
+        groups.push({ title: 'explore', rows: [...sheet(['/projects', '/teams', '/members', '/blog', '/terranotes', '/games', '/opportunities']), { href: '/live', label: 'AquaTerra Live', ink: true }, { href: LABS_HREF, label: 'AQ Labs ’26', ink: true }] })
         groups.push({ title: 'about aquaterra', rows: sheet(['/about', '/volunteer', '/crftd', '/collaborations', '/schools', '/classes', '/faq', '/support', '/contact']) })
         groups.push({ title: 'open books', rows: sheet(['/links', '/accounts', '/equity-policy']) })
         return (
@@ -1021,7 +1033,7 @@ export default function AQNav(_props: AQNavProps) {
                         <Link
                           key={r.href}
                           to={r.href}
-                          className={'aq-draw-link' + (on ? ' on' : '') + (r.pulse !== undefined ? ' aq-draw-hod' : '') + (!r.label.includes(' ') && r.label.length > 10 ? ' aq-draw-wide' : '')}
+                          className={'aq-draw-link' + (on ? ' on' : '') + (r.pulse !== undefined ? ' aq-draw-hod' : '') + (r.ink ? ' aq-draw-ink' : '') + (!r.label.includes(' ') && r.label.length > 10 ? ' aq-draw-wide' : '')}
                           aria-current={on ? 'page' : undefined}
                           onClick={() => { r.onGo?.(); closeMenu() }}
                           // This sheet only opens on a touch viewport: onTouchStart fires on finger-down, ahead of the tap's click.

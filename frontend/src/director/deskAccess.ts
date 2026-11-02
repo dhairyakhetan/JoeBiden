@@ -41,7 +41,7 @@ export type NavKey =
   | 'blogs' | 'posts' | 'approvals' | 'members' | 'categories'
   | 'teams' | 'hods' | 'content' | 'volunteer_apps' | 'projects'
   | 'enquiries' | 'hiring' | 'certificates' | 'yearbook'
-  | 'member_of_month' | 'roles' | 'activity_log'
+  | 'member_of_month' | 'roles' | 'activity_log' | 'guide'
 
 /**
  * The privilege a desk requires.
@@ -274,6 +274,14 @@ export const NAV_GROUPS: NavGroup[] = [
       // if this were 'leader' instead - the nav gate has to agree with that.
       { key: 'activity_log', label: 'Activity Log', icon: '▤', path: 'activity-log', privilege: 'super',
         blurb: 'Who approved, rejected, or changed what, and when.' },
+    ],
+  },
+  {
+    label: 'reference',
+    icon: '◎',
+    items: [
+      { key: 'guide', label: 'Product guide', icon: '◎', path: 'guide', privilege: 'leader',
+        blurb: 'Every page and desk on the site in plain language, who each is for, and a map of what connects to what.' },
     ],
   },
 ]

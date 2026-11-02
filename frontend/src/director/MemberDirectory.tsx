@@ -19,6 +19,7 @@ import { getInitials, hashColor } from '../lib/uiHelpers'
 import { isSuperAdmin as isSuperAdminRole, hasLeaderAccess, getRoleLabel } from '../lib/roles'
 import MemberTeamsDialog from './MemberTeamsDialog'
 import MemberBreakDialog from './MemberBreakDialog'
+import BreaksOverview from './BreaksOverview'
 import { isCurrentlyOnBreak } from '../services/breakService'
 import { useLongPress } from '../hooks/useLongPress'
 // `Field` was only used by the deleted RedeemPointsModal and its two trigger
@@ -751,7 +752,12 @@ const MemberDirectory = () => {
         {' '} in the equity policy that a reveal grants an exception to.
       </p>
 
-      {isLoading ? (
+      {/* "On a break" shows the dedicated view (who is away now, then who has a break booked, with
+          dates) instead of filtering the loaded page: that filter missed anyone not on the page and
+          showed no dates (bug report 2026-10-30). */}
+      {onBreakOnly ? (
+        <BreaksOverview />
+      ) : isLoading ? (
         <AdminSkeleton rows={6} variant="grid" />
       ) : loadError ? (
         <AdminErrorState

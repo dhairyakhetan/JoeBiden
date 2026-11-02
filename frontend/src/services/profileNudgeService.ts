@@ -7,6 +7,7 @@ import {
 } from '../lib/profileNudge'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { asPhoneConflict } from '../lib/phoneConflict'
 
 /**
  * I/O for the in-feed "complete your profile" nudge.
@@ -203,7 +204,16 @@ const profileNudgeServiceImpl = {
       .from('members')
       .update(patch as never)
       .eq('member_id', ctx.memberId)
-    if (error) throw logSupabaseError('profileNudgeService.saveContactNumbers', error)
+    if (error) {
+      // A phone another live account already has: throw the typed error (with
+      // the masked registered email) so the card shows the same message as
+      // registration. Only the member's own number is guarded, never guardian_phone.
+      if (patch.phone) {
+        const conflict = await asPhoneConflict(error, patch.phone)
+        if (conflict) throw conflict
+      }
+      throw logSupabaseError('profileNudgeService.saveContactNumbers', error)
+    }
   },
 }
 

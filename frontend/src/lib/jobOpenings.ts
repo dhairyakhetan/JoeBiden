@@ -4,6 +4,7 @@ import { hasLeaderAccess } from './roles'
 import { notificationService } from '../services/notificationService'
 import { withRetry } from './asyncUtils'
 import { logAction } from './auditLog'
+import { ACCEPT_BLOCKED_MESSAGE } from './applicantGate'
 import { logSupabaseError } from './errorTracking'
 import { withFunctionLogging } from './functionLog'
 
@@ -450,16 +451,9 @@ const jobOpeningsImpl = {
     return !!data
   },
 
-  // `applicant:members!applicant_id(status)` - joined so the HOD-facing
-  // callers below can filter out an application from a member whose OWN
-  // account isn't approved yet (see the filter there for why). Applying is
-  // already possible before approval (RLS's job_applications_auth_insert only
-  // checks applicant_id = self, and OpeningDetailPage gates on isAuthenticated,
-  // not member.status) - the account-approval flow now points pending members
-  // at openings deliberately (2026-09-14) - but a HOD reviewing/accepting
-  // someone whose own AquaTerra account hasn't been approved yet is the wrong
-  // order of operations, so their entry stays invisible to the hiring desks
-  // until `members.status` flips to 'active'.
+  // `applicant:members!applicant_id(status)` is joined so a desk can tag an application whose applicant's OWN account
+  // is not approved yet (lib/applicantGate.ts). Applying is possible before approval, and since 2026-11-01 those
+  // applications are shown, tagged, instead of hidden. Accepting one is still refused: see updateApplicationStatus.
   async getApplications(openingId: string): Promise<any[]> {
     return withRetry(async () => {
       const { data, error } = await (supabaseCommunity as any).from('job_applications')
@@ -467,7 +461,7 @@ const jobOpeningsImpl = {
         .eq('opening_id', openingId)
         .order('created_at', { ascending: false })
       if (error) throw logSupabaseError('jobOpenings.getApplications', error)
-      return (data || []).filter((row: any) => row.applicant?.status === 'active')
+      return data || []
     })
   },
 
@@ -486,10 +480,8 @@ const jobOpeningsImpl = {
         .order('created_at', { ascending: false })
       if (error) throw logSupabaseError('jobOpenings.getApplicationsForOpenings', error)
       for (const row of (data || [])) {
-        // See the header comment above getApplications - same gate, applied
-        // per-row before grouping so a hiring desk viewing many openings at
-        // once never sees a not-yet-approved applicant on any of them.
-        if (row.applicant?.status !== 'active') continue
+        // Not filtered by the applicant's account status any more (see lib/applicantGate.ts): the row carries
+        // `applicant.status` and the desks tag it.
         ;(grouped[row.opening_id] ||= []).push(row)
       }
       return grouped
@@ -519,6 +511,18 @@ const jobOpeningsImpl = {
     // .select('id') + zero-row guard so an RLS-blocked (or no-match) write
     // surfaces as a real error instead of a silent no-op the UI treats as success
     // — matching update()/transition() in this file.
+    // Accepting someone whose own account is not approved yet is still refused (lib/applicantGate.ts): the desks show
+    // those applications, tagged, but an HoD should not clear a person the org has not cleared. Checked here so every
+    // screen is covered, including bulk actions.
+    if (status === 'accepted') {
+      const { data: who, error: whoErr } = await (supabaseCommunity as any)
+        .from('job_applications')
+        .select('applicant:members!applicant_id(status)')
+        .eq('id', applicationId)
+        .maybeSingle()
+      if (whoErr) throw logSupabaseError('jobOpenings.updateApplicationStatus', whoErr)
+      if (who && who.applicant?.status !== 'active') throw new Error(ACCEPT_BLOCKED_MESSAGE)
+    }
     const patch: Record<string, unknown> = { status }
     // Only written on an actual rejection, and never cleared on a later
     // status change - it's a record of why THIS rejection happened, not a

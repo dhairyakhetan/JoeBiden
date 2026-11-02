@@ -13,6 +13,9 @@ import { useConfirm } from '../components/Confirm'
 import { checkText, BLOCK_MESSAGE } from '../lib/profanityFilter'
 import { getInitials } from '../lib/uiHelpers'
 import AvatarCropModal from '../components/AvatarCropModal'
+import { PhoneConflictError, checkPhoneAvailable } from '../lib/phoneConflict'
+import { isPlausiblePhone } from '../lib/profileNudge'
+import PhoneConflictNotice from '../components/PhoneConflictNotice'
 
 // The shared `School` from services/api.ts, not a local restatement of it. The
 // local one existed only so the service result could be force-cast into shape,
@@ -55,6 +58,16 @@ const EditProfilePage = () => {
   const [error, setError] = useState<string | null>(null)
   const [savedMsg, setSavedMsg] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<ProfileField, string>>>({})
+  // One phone number = one account. Checked when the member leaves the phone field (and again on save), so they hear
+  // it next to the number instead of after pressing save. The database trigger is still the real guard.
+  const [phoneConflict, setPhoneConflict] = useState<{ maskedEmail: string | null } | null>(null)
+  const checkPhone = async (): Promise<boolean> => {
+    const phone = formData.phone.trim()
+    if (!phone || phone === savedSnapshot.current.phone.trim() || !isPlausiblePhone(phone)) { setPhoneConflict(null); return true }
+    const r = await checkPhoneAvailable(phone)
+    setPhoneConflict(r.taken ? { maskedEmail: r.maskedEmail } : null)
+    return !r.taken
+  }
   // §16.2's off-switch. `undefined` while unknown (own member row not
   // fetched yet) so the control never renders a wrong resting state.
   const [wallEnabled, setWallEnabled] = useState<boolean | undefined>(undefined)
@@ -211,6 +224,7 @@ const EditProfilePage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    if (name === 'phone') setPhoneConflict(null)
     // Same rule as ContactPage.set(): clear a field's error the instant it's
     // edited. This only ever REMOVES an error blur/submit already set - it
     // never validates on keystroke, which §11.10 explicitly forbids.
@@ -276,6 +290,11 @@ const EditProfilePage = () => {
     }
 
     setIsSaving(true)
+    if (!(await checkPhone())) {
+      document.getElementById('ep-phone')?.focus()
+      setIsSaving(false)
+      return
+    }
     // Bio publishes immediately with no review queue - both tiers hard-block.
     // Shown on the bio field itself (not just the top banner) so the error
     // sits where the problem is.
@@ -305,7 +324,18 @@ const EditProfilePage = () => {
         await refreshMember()
         setTimeout(() => navigate('/profile/me'), 1400)
       } else { setError('profile didn’t save.'); toastError('profile didn’t save.') }
-    } catch (err: any) { const msg = err.response?.data?.message || 'profile didn’t save.'; setError(msg); toastError(msg) }
+    } catch (err: any) {
+      // A phone another live account already has: the full "log in through the
+      // registered email" message, with the masked email, instead of a bare
+      // "didn't save". The phone field itself carries it too.
+      if (err instanceof PhoneConflictError) {
+        setError(err.message)
+        toastError('that phone number is already registered.', err.message)
+        document.getElementById('ep-phone')?.focus()
+      } else {
+        const msg = err.response?.data?.message || 'profile didn’t save.'; setError(msg); toastError(msg)
+      }
+    }
     finally { setIsSaving(false) }
   }
 
@@ -478,7 +508,8 @@ const EditProfilePage = () => {
               </div>
               <div className="aq-field">
                 <label className="aq-field-label" htmlFor="ep-phone">phone</label>
-                <input id="ep-phone" className="aq-field-input" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+91 00000 00000" autoComplete="tel" inputMode="tel" />
+                <input id="ep-phone" className="aq-field-input" name="phone" type="tel" value={formData.phone} onChange={handleChange} onBlur={() => void checkPhone()} placeholder="+91 00000 00000" autoComplete="tel" inputMode="tel" aria-invalid={!!phoneConflict} aria-describedby={phoneConflict ? 'ep-phone-conflict' : undefined} />
+                {phoneConflict && <PhoneConflictNotice id="ep-phone-conflict" maskedEmail={phoneConflict.maskedEmail} />}
               </div>
             </div>
 

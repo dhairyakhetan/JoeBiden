@@ -1,0 +1,7 @@
+/* HoD desk, Product guide: one frame, sized to the desk. Hairline edge and the desk's outer radius, no new colours. */
+.admin .pguide-frame {
+  display: block; width: 100%; height: max(560px, calc(100dvh - 240px));
+  border: var(--hair-2); border-radius: var(--r-outer); background: var(--card);
+  box-shadow: var(--lift-1);
+}
+@media (max-width: 700px) { .admin .pguide-frame { height: max(520px, calc(100dvh - 200px)); border-radius: var(--r-inner); } }

@@ -1,4 +1,5 @@
 import './OpportunitiesPage.css'
+import { isApplicantApproved, AWAITING_APPROVAL_TAG, ACCEPT_BLOCKED_MESSAGE } from '../lib/applicantGate'
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -263,6 +264,7 @@ function ApplicationsModal({ op, onClose }: { op: JobOpening; onClose: () => voi
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
                       <div>
                         <div style={{ fontFamily: 'var(--eina)', fontWeight: 700, fontSize: 15, color: 'var(--ink)' }}>{app.applicant_name}</div>
+                    {!isApplicantApproved(app) && <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 2 }} title={ACCEPT_BLOCKED_MESSAGE}>{AWAITING_APPROVAL_TAG}</div>}
                         <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 2 }}>{app.applicant_email}</div>
                         {app.applicant_phone && <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 2 }}>{app.applicant_phone}</div>}
                         <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-3)', marginTop: 3 }}>
@@ -281,7 +283,7 @@ function ApplicationsModal({ op, onClose }: { op: JobOpening; onClose: () => voi
                       >
                         <option value="pending">Pending</option>
                         <option value="reviewed">Reviewed</option>
-                        <option value="accepted">Accepted</option>
+                        <option value="accepted" disabled={!isApplicantApproved(app)}>Accepted</option>
                         <option value="rejected">Rejected</option>
                       </select>
                     </div>

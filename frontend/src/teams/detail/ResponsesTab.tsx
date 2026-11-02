@@ -3,6 +3,7 @@
 // doesn't have to expand each opening's Openings-tab applicant list one at
 // a time.
 import { useRef, useState } from 'react'
+import { isApplicantApproved, AWAITING_APPROVAL_TAG, ACCEPT_BLOCKED_MESSAGE } from '../../lib/applicantGate'
 import { useModalA11y } from '../../hooks/useDialog'
 import { useToast } from '../../components/Toast'
 import { jobOpenings } from '../../lib/jobOpenings'
@@ -122,6 +123,7 @@ export default function ResponsesTab({
               <div key={app.id} className="card" style={{ padding: isMobile ? 14 : 18 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ fontWeight: 700, fontSize: 14 }}>{app.applicant_name || 'Anonymous'}</div>
+                    {!isApplicantApproved(app) && <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 2 }} title={ACCEPT_BLOCKED_MESSAGE}>{AWAITING_APPROVAL_TAG}</div>}
                   {/* Was an unlabelled ~86x21 select at 10px: under the 44px
                       floor, and 10px triggers iOS Safari's focus zoom. */}
                   <select
@@ -154,7 +156,7 @@ export default function ResponsesTab({
                   >
                     <option value="pending">Pending</option>
                     <option value="reviewed">Reviewed</option>
-                    <option value="accepted">Accepted</option>
+                    <option value="accepted" disabled={!isApplicantApproved(app)}>Accepted</option>
                     <option value="rejected">Rejected</option>
                   </select>
                 </div>

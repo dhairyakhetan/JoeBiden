@@ -7,6 +7,8 @@ import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { directorService } from '../services/directorService'
 import certificateService from '../services/certificateService'
 import { teamService } from '../services/teamService'
+import breakService from '../services/breakService'
+import { todayISO } from '../lib/breakWindows'
 import '../styles/routes/director.css'
 
 /**
@@ -281,6 +283,7 @@ const SCENARIOS: { id: Scenario; label: string; note: string }[] = [
 // Lazy so a desk that fails to mount cannot take the picker down with it.
 import { lazy, Suspense } from 'react'
 const MemberDirectory = lazy(() => import('../director/MemberDirectory'))
+const ProductGuide = lazy(() => import('../director/ProductGuide'))
 const AccountApprovals = lazy(() => import('../director/AccountApprovals'))
 const PostModeration = lazy(() => import('../director/PostModeration'))
 const VolunteerApplications = lazy(() => import('../director/VolunteerApplications'))
@@ -291,6 +294,7 @@ const DirectorLanding = lazy(() => import('../director/DirectorLanding'))
 const DESKS: { id: string; label: string; note: string; el: ReactNode }[] = [
   { id: 'landing', label: 'Desk home', note: 'what needs you today: one slab, one set of counts', el: <DirectorLanding /> },
   { id: 'members', label: 'Members', note: 'the 7-column table and its card fallback — the widest thing on the desk', el: <MemberDirectory /> },
+  { id: 'guide', label: 'Product guide', note: 'the generated guide in a sandboxed frame; it ignores the scenario switch', el: <ProductGuide /> },
   { id: 'approvals', label: 'Approvals', note: 'pending + rejected queues, free-text join reasons', el: <AccountApprovals /> },
   { id: 'posts', label: 'Post Queue', note: 'moderation cards, long bodies, category tags', el: <PostModeration /> },
   { id: 'volunteers', label: 'Vol. Applications', note: 'the other wide table (7 cols)', el: <VolunteerApplications /> },
@@ -402,6 +406,20 @@ export default function DeskSurfaces() {
       }
     }
 
+    // The Members desk's "On a break" view reads breakService, not directorService.
+    // Dates are relative to today so the preview never goes stale.
+    const realBreaks = (breakService as any).listCurrentAndUpcoming
+    const dayOffset = (n: number) => {
+      const d = new Date(); d.setDate(d.getDate() + n)
+      return todayISO(d)
+    }
+    ;(breakService as any).listCurrentAndUpcoming = () => rows([
+      { id: 1, memberId: 11, start: dayOffset(-9), end: dayOffset(4), reason: 'boards', note: 'back for the november drive', fullName: 'Ananya Sen', avatarUrl: null },
+      { id: 2, memberId: 12, start: dayOffset(-2), end: dayOffset(20), reason: 'college exams', note: null, fullName: 'Rohan Das', avatarUrl: null },
+      { id: 3, memberId: 13, start: dayOffset(12), end: dayOffset(21), reason: 'school exams', note: null, fullName: 'Ishita Banerjee', avatarUrl: null },
+      { id: 4, memberId: 11, start: dayOffset(40), end: dayOffset(46), reason: 'family', note: 'wedding', fullName: 'Ananya Sen', avatarUrl: null },
+    ])
+
     // Writes are loud, not silent. A misclick here must not look like it worked.
     for (const name of [
       'changeRole', 'deleteMember', 'restoreDeletedMember', 'restartMemberAsApplicant',
@@ -450,6 +468,7 @@ export default function DeskSurfaces() {
       ;(teamService as any).createTeam = realCreateTeam
       ;(teamService as any).updateTeam = realUpdateTeam
       ;(teamService as any).deleteTeam = realDeleteTeam
+      ;(breakService as any).listCurrentAndUpcoming = realBreaks
     }
   }, [])
 

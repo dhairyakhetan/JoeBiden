@@ -64,6 +64,7 @@ export const DESK_LOADERS: Record<NavKey, DeskLoader> = {
   volunteer_apps: () => import('./VolunteerApplications'),
   roles:          () => import('../roles/RolesPage'),
   activity_log:   () => import('./ActivityLog'),
+  guide:          () => import('./ProductGuide'),
 }
 
 /**

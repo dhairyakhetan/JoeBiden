@@ -372,3 +372,10 @@
    underline and colour, and inline-level layout, which the button rules never had to cancel. */
 a.aq-logo, a.aq-nav-link, a.aq-drop-link:not(.aq-drop-labs):not(.on) { text-decoration: none; color: inherit; text-align: center; } /* :not(.on): the current-page link sets paper text on ink, and this rule (0,3,1 with :not) beat it, leaving ink on ink and an empty black pill (found in a 2026-10-20 visual pass). :not(.aq-drop-labs): the ink block sets its own colour, the old (0,1,1) selector here beat it and left ink text on the ink block */
 a.aq-drop-labs { text-decoration: none; text-align: center; }
+
+/* Full menu: Live and Labs are the same ink blocks the half menu shows them as (bug report 2026-10-29,
+   "does not look like the half menu"). Full width, lemon arrow, no new colours. Kept at the end of the
+   file so the accent-lint ledger's line numbers above stay put. */
+.aq-draw-link.aq-draw-ink { grid-column: 1 / -1; background: var(--ink); color: var(--bg); }
+.aq-draw-link.aq-draw-ink .aq-draw-arrow { color: var(--lemon); opacity: 1; }
+.aq-draw-link.aq-draw-ink:active { background: var(--ink-2); }

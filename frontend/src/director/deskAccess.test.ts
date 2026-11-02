@@ -24,12 +24,12 @@ describe('desk access is declared exactly once', () => {
   // `sops` and `drives` were both deleted (see deskAccess.ts's NavKey). 17
   // from 2026-09-13, when `activity_log` (the community_audit_logs viewer)
   // was added.
-  it('has all 17 desks, with unique keys and unique paths', () => {
-    expect(DESKS).toHaveLength(17)
-    expect(new Set(DESKS.map(d => d.key)).size).toBe(17)
-    expect(new Set(DESKS.map(d => d.path)).size).toBe(17)
-    expect(Object.keys(DESK_BY_KEY)).toHaveLength(17)
-    expect(Object.keys(DESK_BY_PATH)).toHaveLength(17)
+  it('has all 18 desks, with unique keys and unique paths', () => {
+    expect(DESKS).toHaveLength(18)
+    expect(new Set(DESKS.map(d => d.key)).size).toBe(18)
+    expect(new Set(DESKS.map(d => d.path)).size).toBe(18)
+    expect(Object.keys(DESK_BY_KEY)).toHaveLength(18)
+    expect(Object.keys(DESK_BY_PATH)).toHaveLength(18)
   })
 
   it('has no Removed Notes desk', () => {
@@ -77,8 +77,8 @@ describe('desk access is declared exactly once', () => {
     )
   })
 
-  it('NAV_GROUPS is exactly the four groups, and covers every desk once', () => {
-    expect(NAV_GROUPS.map(g => g.label)).toEqual(['queue', 'people', 'intake', 'admin'])
+  it('NAV_GROUPS is exactly the five groups, and covers every desk once', () => {
+    expect(NAV_GROUPS.map(g => g.label)).toEqual(['queue', 'people', 'intake', 'admin', 'reference'])
     expect(NAV_GROUPS.flatMap(g => g.items.map(i => i.key)).sort()).toEqual(DESKS.map(d => d.key).sort())
   })
 })
@@ -126,22 +126,23 @@ describe('the effective access set, spelled out', () => {
   // until 2026-09-12, when `sops` and `drives` (both leader) were deleted:
   // 10 leader + 6 super = 16. Same day, `approvals` moved leader -> super
   // (HR/super_admin-only sign-up approvals): 9 leader + 7 super = 16.
-  it('hod and director each get the 9 leader desks — never the 7 super ones', () => {
+  // 2026-11-02: the Product guide desk (leader) makes it 10 leader + 8 super = 18.
+  it('hod and director each get the 10 leader desks — never the 8 super ones', () => {
     for (const role of ['hod', 'director'] as const) {
       const allowed = DESKS.filter(d => canAccessDesk(d, role))
-      expect(allowed).toHaveLength(9)
+      expect(allowed).toHaveLength(10)
       expect(allowed.every(d => d.privilege === 'leader')).toBe(true)
       const visible = visibleDeskGroups({ role, canApproveMembers: canApprove(role) }).flatMap(g => g.items)
       expect(visible.map(d => d.key).sort()).toEqual(allowed.map(d => d.key).sort())
     }
   })
 
-  it('hr and super_admin each get all 17', () => {
+  it('hr and super_admin each get all 18', () => {
     for (const role of ['hr', 'super_admin'] as const) {
       expect(isSuperAdmin(role)).toBe(true)
-      expect(DESKS.filter(d => canAccessDesk(d, role))).toHaveLength(17)
+      expect(DESKS.filter(d => canAccessDesk(d, role))).toHaveLength(18)
       const visible = visibleDeskGroups({ role, canApproveMembers: canApprove(role) }).flatMap(g => g.items)
-      expect(visible).toHaveLength(17)
+      expect(visible).toHaveLength(18)
     }
   })
 })

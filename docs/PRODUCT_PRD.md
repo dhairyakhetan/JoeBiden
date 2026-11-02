@@ -135,8 +135,11 @@ same queue; a rejected account must wait 30 days and reapply from scratch.
 - An application is not "complete," and the funnel keeps re-checking this on
   every visit, until both class/grade and a real phone number are on file.
 - A pending applicant can apply to job openings before their own account
-  clears, but that application does not reach a HoD's review queue until it
-  does.
+  clears. That application shows in the hiring desks straight away, tagged
+  "account awaiting approval", and cannot be marked accepted until the
+  applicant's own account is approved (reject, review and notes still work).
+  Changed 2026-11-01: until then these were hidden, which left HoDs notified of
+  applications they could not find (22 of 47 on open roles at the time).
 - A rejected account cannot bypass the 30-day wait through any in-app path.
 - Legacy recruitment URLs (`/recruitment`, `/volunteer/apply`) always
   redirect to `/login` rather than 404ing, because the org's Instagram bio
@@ -301,8 +304,8 @@ urgency copy ("N people waiting") anywhere in this flow, by design.
 A lightweight ATS: leaders create openings (title, description, category,
 team, skills, commitment, deadline, optional custom application form with
 text/file/video/url/select question types). The public can apply without an
-approved AquaTerra account — the application simply doesn't reach a HoD's
-queue until the applicant's own account clears. An opening's lifecycle is
+approved AquaTerra account — the application shows to HoDs tagged "account
+awaiting approval" and cannot be accepted until the applicant's own account clears. An opening's lifecycle is
 strictly `open → paused → closed → deleted`; a closed or deleted opening can
 never be reopened. Applicant review happens per-team or org-wide (the
 Hiring desk), always with a reject-with-reason gate.
@@ -342,7 +345,7 @@ proof and date range, auto-approved on creation.
 
 ## 14. Leadership — the HoD/Director desks
 
-All 17 desks live under `/director`, gated first by "is this person a
+All 18 desks live under `/director`, gated first by "is this person a
 leader at all," then by whether the specific desk requires ordinary leader
 access or HR/super-admin access, and further narrowable per-leader by the
 Roles & Permissions desk (§15). **Route-level gating and dashboard tab
@@ -369,6 +372,7 @@ screen by typing the URL directly).
 | 15 | Vol. Applications | HR/super-admin | Read-only historical archive of the pre-2026 WhatsApp outreach process. |
 | 16 | Roles & Permissions | HR/super-admin | Wired capability matrix — see §15. |
 | 17 | Activity Log | HR/super-admin | Audit trail of approvals/rejections/role changes/team-membership changes. |
+| 18 | Product guide | Leader | Every page and desk in plain language, filterable by role, with a map of what connects to what. Generated from the code and rebuilt every session; the same page is not public because it lists staff desks. Added 2026-11-02. |
 
 **Must hold:** every desk's route guard and its nav-tab visibility gate the
 exact same set of roles. Adding a new desk without updating both is a

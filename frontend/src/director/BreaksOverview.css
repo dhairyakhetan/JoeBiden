@@ -1,0 +1,16 @@
+/* Members desk: the "On a break" view. Cards, rows and tags come from the shared
+   .card / .panel-h / .qrow / .qtag classes; this file only lays two cards side
+   by side and sizes the avatar. Hairlines and radii are the desk tokens. */
+.admin .brk-wrap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.admin .brk-card { padding: 8px; }
+.admin .brk-list { list-style: none; margin: 0; padding: 0; }
+.admin .brk-row { align-items: flex-start; }
+.admin .brk-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex: none; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 800; font-size: 12px; color: var(--ink);
+}
+.admin .brk-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.admin .brk-note { margin-top: 4px; font-family: var(--eina); font-size: 12.5px; color: var(--hod-ink-2); text-wrap: pretty; }
+.admin .brk-none { margin: 0; padding: 18px 14px 14px; font-family: var(--eina); font-size: 13.5px; color: var(--hod-ink-2); }
+@media (max-width: 860px) { .admin .brk-wrap { grid-template-columns: minmax(0, 1fr); } }

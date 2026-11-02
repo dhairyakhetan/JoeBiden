@@ -6,6 +6,7 @@ import { Post, PaginatedResponse } from './api'
 import { resizeForUpload } from '../lib/resizeImage'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { asPhoneConflict } from '../lib/phoneConflict'
 
 // Exactly the columns the post mapper below reads - projecting these
 // instead of `*` drops the unused view columns (pinned_title, team_*,
@@ -168,7 +169,15 @@ const profileServiceImpl = {
       .update(updateData)
       .eq('member_id', member.member_id)
 
-    if (error) throw logSupabaseError('profileService.updateProfile', error)
+    if (error) {
+      // A phone another live account already has: typed error with the masked
+      // registered email, so the editor can say exactly what registration says.
+      if (typeof updateData.phone === 'string' && updateData.phone) {
+        const conflict = await asPhoneConflict(error, updateData.phone)
+        if (conflict) throw conflict
+      }
+      throw logSupabaseError('profileService.updateProfile', error)
+    }
     const u = await this.getCurrentMember()
     const school = u.schools as any
 

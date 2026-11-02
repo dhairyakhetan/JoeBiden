@@ -18,6 +18,8 @@ import SignInReceipt from '../components/SignInReceipt'
 import { hasPrintedReceipt } from '../lib/receiptRecord'
 import { useUnsavedChanges } from '../hooks/useUnsavedChanges'
 import { isDirty } from '../lib/unsavedChanges'
+import { checkPhoneAvailable, asPhoneConflict } from '../lib/phoneConflict'
+import PhoneConflictNotice from '../components/PhoneConflictNotice'
 
 // Moved to lib/classOptions.ts so /profile/edit writes from the SAME list.
 
@@ -55,6 +57,12 @@ const RegisterPage = () => {
   // public/ContactPage.tsx uses, including its rule that typing only ever
   // CLEARS an error that blur or submit already set.
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<typeof QUESTIONS[number], string>>>({})
+
+  // One phone number = one account. Set when the number on the phone step
+  // belongs to another live account (RPC pre-check) or the database trigger
+  // refused the write (a race the pre-check could not see). Holds the masked
+  // registered email, or null when the server gave none.
+  const [phoneConflict, setPhoneConflict] = useState<{ maskedEmail: string | null } | null>(null)
 
   // Section 12. The receipt prints ONCE, on the first authenticated render
   // after the member row is filled in, which is this page's step 3.
@@ -148,6 +156,7 @@ const RegisterPage = () => {
     // forbids - it only ever REMOVES a message blur or submit already put
     // there, and can never add one while someone is typing.
     setFieldErrors(fe => (fe[key] ? { ...fe, [key]: undefined } : fe))
+    if (key === 'phone') setPhoneConflict(null)
   }
 
   // The three messages are the app's existing strings, moved from the
@@ -187,7 +196,8 @@ const RegisterPage = () => {
     document.getElementById(key === 'fullName' ? 'reg-name' : 'reg-phone')?.focus()
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    if (isLoading) return
     const field = QUESTIONS[qIndex]
     const msg = validateField(field, formData[field])
     if (msg) {
@@ -202,9 +212,20 @@ const RegisterPage = () => {
     setError(null)
     if (qIndex < QUESTIONS.length - 1) {
       setQIndex(i => i + 1)
-    } else {
-      handleSubmit()
+      return
     }
+    // Phone step: ask before writing, so a taken number is caught on this
+    // screen. Fails open (an RPC error reads as "free"); the trigger is the
+    // real guard and handleSubmit catches it too.
+    setIsLoading(true)
+    const availability = await checkPhoneAvailable(formData.phone)
+    setIsLoading(false)
+    if (availability.taken) {
+      setPhoneConflict({ maskedEmail: availability.maskedEmail })
+      focusField('phone')
+      return
+    }
+    void handleSubmit()
   }
 
   const handleBack = async () => {
@@ -239,6 +260,14 @@ const RegisterPage = () => {
       setShowReceipt(!!member.uuid && !hasPrintedReceipt(member.uuid))
       setStep(3)
     } catch (err: any) {
+      // A taken phone is not a generic failure: send the member back to the
+      // phone step with the same panel the pre-check shows.
+      const conflict = await asPhoneConflict(err, formData.phone)
+      if (conflict) {
+        setPhoneConflict({ maskedEmail: conflict.maskedEmail })
+        setQIndex(QUESTIONS.indexOf('phone'))
+        return
+      }
       // §11.4: "never render a raw error, a stack, or a Postgres message.
       // Log it; show a sentence." This used to put `err.message` straight on
       // screen, which on an RLS failure is a policy name. The existing
@@ -313,7 +342,7 @@ const RegisterPage = () => {
                   value={formData.fullName}
                   onChange={handleChange}
                   onBlur={() => handleBlur('fullName')}
-                  onKeyDown={e => { if (e.key === 'Enter') handleContinue() }}
+                  onKeyDown={e => { if (e.key === 'Enter') void handleContinue() }}
                   aria-invalid={!!fieldErrors.fullName}
                   aria-describedby={fieldErrors.fullName ? 'reg-name-error' : undefined}
                   style={{ marginTop: 4 }}
@@ -389,12 +418,13 @@ const RegisterPage = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     onBlur={() => handleBlur('phone')}
-                    onKeyDown={e => { if (e.key === 'Enter') handleContinue() }}
-                    aria-invalid={!!fieldErrors.phone}
-                    aria-describedby={fieldErrors.phone ? 'reg-phone-error' : undefined}
+                    onKeyDown={e => { if (e.key === 'Enter') void handleContinue() }}
+                    aria-invalid={!!fieldErrors.phone ||!!phoneConflict}
+                    aria-describedby={fieldErrors.phone ? 'reg-phone-error' : phoneConflict ? 'reg-phone-conflict' : undefined}
                   />
                 </div>
                 {fieldErrors.phone && <span id="reg-phone-error" role="alert" className="field-error">{fieldErrors.phone}</span>}
+                {phoneConflict && <PhoneConflictNotice id="reg-phone-conflict" maskedEmail={phoneConflict.maskedEmail} />}
               </>
             )}
           </div>
@@ -442,7 +472,7 @@ const RegisterPage = () => {
             <button
               className="btn btn-primary"
               type="button"
-              onClick={handleContinue}
+              onClick={() => void handleContinue()}
               disabled={isLoading}
               style={{ opacity: isLoading ? 0.55 : 1 }}
             >

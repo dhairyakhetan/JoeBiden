@@ -5,6 +5,7 @@
 // `opening-${id}` DOM id, both still owned by the parent shell - this
 // component just needs to render the right one lit up.
 import { useRef, useState } from 'react'
+import { isApplicantApproved, AWAITING_APPROVAL_TAG, ACCEPT_BLOCKED_MESSAGE } from '../../lib/applicantGate'
 import { useModalA11y } from '../../hooks/useDialog'
 import { Link } from 'react-router-dom'
 import { I } from '../../components/v6Shared'
@@ -291,6 +292,7 @@ export default function OpeningsTab({
                                 <div key={app.id} style={{ padding: '12px 14px', background: 'var(--bg-2)', borderRadius: 'var(--r-tight)', border: '1px solid var(--line)' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
                                     <div style={{ fontWeight: 700, fontSize: 13 }}>{app.applicant_name || 'Anonymous'}</div>
+                    {!isApplicantApproved(app) && <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 2 }} title={ACCEPT_BLOCKED_MESSAGE}>{AWAITING_APPROVAL_TAG}</div>}
                                     {/* Was an unlabelled ~86x21 select at 10px:
                                         under the 44px floor, and 10px triggers
                                         iOS Safari's focus zoom. */}
@@ -324,7 +326,7 @@ export default function OpeningsTab({
                                     >
                                       <option value="pending">Pending</option>
                                       <option value="reviewed">Reviewed</option>
-                                      <option value="accepted">Accepted</option>
+                                      <option value="accepted" disabled={!isApplicantApproved(app)}>Accepted</option>
                                       <option value="rejected">Rejected</option>
                                     </select>
                                   </div>

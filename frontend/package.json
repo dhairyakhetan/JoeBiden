@@ -18,7 +18,9 @@
     "smoke": "node scripts/smoke.mjs",
     "test": "vitest run",
     "lint:accent": "node scripts/lint-accent-tokens.mjs",
-    "budget": "node scripts/check-bundle-budget.mjs"
+    "budget": "node scripts/check-bundle-budget.mjs",
+    "guide": "node scripts/feature-map/generate.mjs",
+    "guide:check": "node scripts/feature-map/generate.mjs --check"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

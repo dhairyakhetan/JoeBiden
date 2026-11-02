@@ -35,6 +35,8 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    // The HoD desk's Product guide imports ../docs/product-guide.html?raw, which sits outside this folder.
+    fs: { allow: [path.resolve(__dirname, '..')] },
   },
   build: {
     // The two entry chunks (index ~745kB, ParadoxRoot ~894kB) were large

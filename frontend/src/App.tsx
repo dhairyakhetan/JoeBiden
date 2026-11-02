@@ -400,6 +400,7 @@ const DESK_ELEMENTS: Record<NavKey, React.ReactElement> = {
   volunteer_apps:   createElement(DESK_LAZY.volunteer_apps),
   roles:            createElement(DESK_LAZY.roles),
   activity_log:     createElement(DESK_LAZY.activity_log),
+  guide:            createElement(DESK_LAZY.guide),
 }
 
 // Paradox 2026 sub-app - lazy: biggest single chunk win (~200KB gzipped)

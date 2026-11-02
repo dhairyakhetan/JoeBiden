@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { isApplicantApproved, AWAITING_APPROVAL_TAG, ACCEPT_BLOCKED_MESSAGE } from '../lib/applicantGate'
 import { useOutletContext } from 'react-router-dom'
 import type { DirectorContext } from './DirectorDashboard'
 import { scopeToMyTeams } from './deskAccess'
@@ -36,6 +37,8 @@ type Application = {
   status: 'pending' | 'reviewed' | 'accepted' | 'rejected'
   created_at: string
   custom_answers?: Record<string, string>
+  /** The applicant's own account, joined by jobOpenings.getApplicationsForOpenings. */
+  applicant?: { status?: string | null } | null
 }
 
 const STATUS_TONE: Record<Application['status'], StampTone> = {
@@ -232,7 +235,11 @@ export default function HiringResponses() {
 
   // Apply one status to every selected applicant at once (triage in bulk).
   const bulkSetStatus = async (status: Application['status']) => {
-    const targets = filtered.filter(a => selection.isSelected(a.id))
+    const picked = filtered.filter(a => selection.isSelected(a.id))
+    // Accepting is refused for accounts that are not approved yet (lib/applicantGate.ts): leave those out and say so.
+    const targets = status === 'accepted' ? picked.filter(a => isApplicantApproved(a)) : picked
+    const skipped = picked.length - targets.length
+    if (skipped > 0) toastError(`${skipped} not accepted.`, ACCEPT_BLOCKED_MESSAGE)
     if (targets.length === 0) return
     selection.clear()
     setBulkBusy(true)
@@ -380,6 +387,11 @@ export default function HiringResponses() {
                         {app.opening.teamName}
                       </span>
                     )}
+                    {!isApplicantApproved(app) && (
+                      <span className="qtag" style={{ ['--cc' as any]: 'var(--sun, var(--ink-3))' }} title={ACCEPT_BLOCKED_MESSAGE}>
+                        {AWAITING_APPROVAL_TAG}
+                      </span>
+                    )}
                   </div>
                   {hasDetail && (
                     <button
@@ -426,7 +438,7 @@ export default function HiringResponses() {
                   >
                     <option value="pending">Pending</option>
                     <option value="reviewed">Reviewed</option>
-                    <option value="accepted">Accepted</option>
+                    <option value="accepted" disabled={!isApplicantApproved(app)}>Accepted</option>
                     <option value="rejected">Rejected</option>
                   </select>
                   <ChevronDownIcon width={12} height={12} strokeWidth={2.2} aria-hidden />

@@ -3,6 +3,7 @@ import { getCachedMemberId } from '../lib/authCache'
 import { notificationService } from './notificationService'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { todayISO, type BreakWithMember } from '../lib/breakWindows'
 
 // Exam breaks — see scripts/member_breaks_2026_08_29.sql (applied live
 // 2026-08-30). A break is NOT churn: nothing on the member's account is
@@ -141,6 +142,47 @@ const breakServiceImpl = {
       .update({ break_start: null, break_end: null, break_reason: null })
       .eq('member_id', memberId)
     if (error) throw logSupabaseError('breakService.endBreakEarly', error)
+  },
+
+  /**
+   * Every break that has not finished yet (end >= today), with the member's
+   * name and photo, for the leader's "on break now / upcoming" view. RLS decides
+   * who is visible: a director or HR sees everyone, a team lead only their own
+   * team, a member only themselves. Pass the result to lib/breakWindows
+   * splitBreaks(). Names come from a second query because `members` is read
+   * column by column and only these two columns are needed.
+   */
+  async listCurrentAndUpcoming(): Promise<BreakWithMember[]> {
+    const { data, error } = await supabaseCommunity
+      .from('member_breaks')
+      .select('id, member_id, start, end, reason, note')
+      .gte('end', todayISO())
+      .order('start', { ascending: true })
+      .limit(500)
+    if (error) throw logSupabaseError('breakService.listCurrentAndUpcoming', error)
+    const rows = (data || []) as any[]
+    const ids = [...new Set(rows.map(r => r.member_id as number))]
+    const names = new Map<number, { fullName: string; avatarUrl: string | null }>()
+    if (ids.length > 0) {
+      const { data: people, error: peopleErr } = await supabaseCommunity
+        .from('members')
+        .select('member_id, full_name, avatar_url')
+        .in('member_id', ids)
+      if (peopleErr) throw logSupabaseError('breakService.listCurrentAndUpcoming', peopleErr)
+      for (const m of (people || []) as any[]) {
+        names.set(m.member_id, { fullName: m.full_name || 'member', avatarUrl: m.avatar_url ?? null })
+      }
+    }
+    return rows.map(r => ({
+      id: r.id,
+      memberId: r.member_id,
+      start: r.start,
+      end: r.end,
+      reason: r.reason,
+      note: r.note ?? null,
+      fullName: names.get(r.member_id)?.fullName ?? 'member',
+      avatarUrl: names.get(r.member_id)?.avatarUrl ?? null,
+    }))
   },
 
   /** The caller's own break history (member_breaks), most recent first. */
