@@ -9,6 +9,8 @@ import { OpeningQuestionFields, useOpeningAnswers } from '../components/OpeningQ
 import { SuccessCheck } from '../components/SuccessCheck'
 import useDialog from '../hooks/useDialog'
 import GatedButton from '../components/GatedButton'
+import NotYetMemberModal from '../components/NotYetMemberModal'
+import { joinGate, canApplyNow } from '../lib/joinGate'
 
 type Member = Database['public']['Tables']['members']['Row']
 
@@ -74,6 +76,18 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  // Not approved yet: no form. Say so, and let a pending member ask to be reminded. A draft they typed before
+  // signing in is kept with the interest, so coming back later costs them nothing.
+  const gate = joinGate(member)
+  if (member && !canApplyNow(gate)) {
+    let draft: { message?: string; customAnswers?: Record<string, unknown> } | undefined
+    try {
+      const raw = sessionStorage.getItem(draftKey)
+      if (raw) { const d = JSON.parse(raw); draft = { message: d.message, customAnswers: d.answers } }
+    } catch { /* no draft is fine */ }
+    return <NotYetMemberModal gate={gate} memberId={member.member_id} target={{ openingId: op.id }} subject={op.title} accent={accent} draft={draft} onClose={onClose} />
   }
 
   return createPortal(

@@ -10,6 +10,9 @@ import ProfileNudgeCard from '../components/ProfileNudgeCard'
 import AdaptiveGrid from '../components/AdaptiveGrid'
 import { GRID_RECIPES, type GridContext, type GridRecipeId } from '../lib/gridRecipes'
 import { StatusStamp } from '../director/adminKit'
+import NotYetMemberModal from '../components/NotYetMemberModal'
+import InterestChip from '../components/InterestChip'
+import openingInterestService from '../services/openingInterestService'
 
 const ChooseTeamPage = lazy(() => import('../onboarding/ChooseTeamPage'))
 const CreatePostModal = lazy(() => import('../feed/CreatePostModal'))
@@ -200,6 +203,7 @@ export default function AuthedSurfaces() {
   // of a harness you scroll through. The button below opens it on demand.
   const [composerOpen, setComposerOpen] = useState(false)
   const [newComposerOpen, setNewComposerOpen] = useState(false)
+  const [notYet, setNotYet] = useState<null | 'pending' | 'rejected'>(null)
   const scenarioRef = useRef<TeamScenario>(teamScenario)
   scenarioRef.current = teamScenario
 
@@ -226,6 +230,10 @@ export default function AuthedSurfaces() {
     const realGetTeam = teamService.getTeam
     const realJoin = (teamService as any).createJoinRequest
     const realGetTeamOptions = teamService.getTeamOptions
+    const realListReady = openingInterestService.listReady
+    const realGetMine = openingInterestService.getMine
+    const realRegister = openingInterestService.register
+    const realSetState = openingInterestService.setState
 
     // Hard offline. Anything that slips a fixture seam fails fast instead of
     // reaching the network — and there is no session, so it could not read
@@ -298,6 +306,15 @@ export default function AuthedSurfaces() {
       throw new Error('[fixture] writes are disabled in the preview harness')
     }
 
+    // Interest fixtures: two ready interests for the feed chip; nothing saved yet for the pop-up; writes succeed in memory.
+    ;(openingInterestService as any).listReady = async () => ([
+      { id: 'i1', state: 'ready', openingId: 'op1', teamId: null, message: null, customAnswers: {}, fromApplication: true, createdAt: '2026-10-20T00:00:00Z', openingTitle: 'Tutor, ShikshAQ', openingStatus: 'open', teamName: 'ShikshAQ', teamUuid: null },
+      { id: 'i2', state: 'ready', openingId: null, teamId: 4, message: null, customAnswers: {}, fromApplication: false, createdAt: '2026-10-21T00:00:00Z', openingTitle: null, openingStatus: null, teamName: 'Events', teamUuid: 'tm-events' },
+    ])
+    ;(openingInterestService as any).getMine = async () => null
+    ;(openingInterestService as any).register = async () => {}
+    ;(openingInterestService as any).setState = async () => {}
+
     setReady(true)
     return () => {
       window.fetch = realFetch
@@ -311,6 +328,10 @@ export default function AuthedSurfaces() {
       teamService.getTeam = realGetTeam
       teamService.getTeamOptions = realGetTeamOptions
       ;(teamService as any).createJoinRequest = realJoin
+      ;(openingInterestService as any).listReady = realListReady
+      ;(openingInterestService as any).getMine = realGetMine
+      ;(openingInterestService as any).register = realRegister
+      ;(openingInterestService as any).setState = realSetState
     }
   }, [])
 
@@ -490,6 +511,24 @@ export default function AuthedSurfaces() {
             </Suspense>
           </Authed>
         </Case>
+      </Group>
+
+      <Group
+        title="6 · not-yet-a-member pop-up and the feed chip"
+        blurb="A member whose sign-up is still pending cannot apply: they get the pop-up and can ask to be reminded. Once approved, the chip sits at the top of their feed. Writes are in-memory only here."
+      >
+        <button type="button" className="devah-switch-btn" data-testid="open-pending" onClick={() => setNotYet('pending')}>open the pop-up (pending member)</button>
+        <button type="button" className="devah-switch-btn" data-testid="open-rejected" onClick={() => setNotYet('rejected')}>open the pop-up (rejected member)</button>
+        <Case component="InterestChip" state="two ready interests (a role, then a team)" note="Yes opens the real apply flow; Not now retires the interest. Navigation is a no-op outside a router position that matches.">
+          <Authed>
+            <InterestChip enabled />
+          </Authed>
+        </Case>
+        {notYet && (
+          <Authed>
+            <NotYetMemberModal gate={notYet} memberId={1} target={{ openingId: 'op1' }} subject="Tutor, ShikshAQ" onClose={() => setNotYet(null)} />
+          </Authed>
+        )}
       </Group>
 
       <footer className="devah-foot devah-end">

@@ -5,6 +5,8 @@ import { notificationService } from '../services/notificationService'
 import { withRetry } from './asyncUtils'
 import { logAction } from './auditLog'
 import { ACCEPT_BLOCKED_MESSAGE } from './applicantGate'
+import { isNotApprovedError, NOT_APPROVED_YET_MESSAGE } from './joinGate'
+import openingInterestService from '../services/openingInterestService'
 import { logSupabaseError } from './errorTracking'
 import { withFunctionLogging } from './functionLog'
 
@@ -384,8 +386,12 @@ const jobOpeningsImpl = {
       })
       if (error) {
         if (error.code === '23505') return { success: false, alreadyApplied: true }
+        // A stale tab got past the screen: the database only lets an approved member apply.
+        if (isNotApprovedError(error)) return { success: false, error: NOT_APPROVED_YET_MESSAGE }
         return { success: false, error: error.message }
       }
+      // They had asked to be reminded about this role: that interest is now an application.
+      void openingInterestService.markApplied(applicantId, { openingId })
 
       // Tell whoever owns this opening a new application landed. job_openings
       // stores no creator member_id (only created_by_name text), so resolve

@@ -12,6 +12,8 @@ import { OpeningQuestionFields, useOpeningAnswers } from '../../components/Openi
 import { SuccessCheck } from '../../components/SuccessCheck'
 import Field from '../../components/Field'
 import { TeamOpening } from './shared'
+import NotYetMemberModal from '../../components/NotYetMemberModal'
+import { joinGate, canApplyNow } from '../../lib/joinGate'
 
 /** The orphan-label style, lifted to a const so both Fields share one copy. */
 const LABEL_ST: React.CSSProperties = {
@@ -96,6 +98,12 @@ export default function ApplyForOpeningModal({
   }
 
   // Portaled to <body>: a fixed overlay inside a transformed ancestor is sized to that ancestor, not the screen.
+  // Not approved yet: no form, a pop-up that offers a reminder instead (lib/joinGate.ts).
+  const gate = joinGate(currentMember)
+  if (currentMember && !canApplyNow(gate)) {
+    return <NotYetMemberModal gate={gate} memberId={currentMember.member_id} target={{ openingId: String(opening.id) }} subject={opening.title} accent={catColor} onClose={onClose} />
+  }
+
   return createPortal(
     <div role="presentation" onClick={submitted ? undefined : onClose} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0 16px 16px' }}>
       <div ref={panelRef} role="dialog" aria-modal="true" aria-label={`Apply for ${opening.title}`} tabIndex={-1} onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 480, background: 'var(--card)', borderRadius: 'var(--r-outer)', padding: 24, border: 'var(--hair-2)', boxShadow: 'var(--lift-4)', outline: 'none' }}>

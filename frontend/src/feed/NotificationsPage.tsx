@@ -27,6 +27,7 @@ const ICON_FOR_TYPE: Record<NotificationType, ReactNode> = {
   team_invite: I.flag(),
   team_join_request: '⤵',
   team_join_accepted: '✓',
+  interest_ready: '★',
   system: '★',
   // changelog/16-profile-wall.md - added so `Record<NotificationType, …>`
   // still covers every member of the union; not part of 08's own restyle.
@@ -52,6 +53,7 @@ const HUE_FOR_TYPE: Record<NotificationType, string> = {
   team_invite: 'var(--grape)',
   team_join_request: 'var(--sky)',
   team_join_accepted: 'var(--welfare)',
+  interest_ready: 'var(--lemon)',
   system: 'var(--ink)',
   wall_note: 'var(--lemon)',
   break_set: 'var(--sky)',

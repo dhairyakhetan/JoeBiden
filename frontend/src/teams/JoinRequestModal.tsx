@@ -5,6 +5,9 @@ import TextArea from '../components/TextArea'
 import Alert from '../components/Alert'
 import teamService from '../services/teamService'
 import { useToast } from '../components/Toast'
+import { useAuth } from '../auth/AuthContext'
+import NotYetMemberModal from '../components/NotYetMemberModal'
+import { joinGate, canApplyNow } from '../lib/joinGate'
 
 interface JoinRequestModalProps {
   isOpen: boolean
@@ -16,6 +19,7 @@ interface JoinRequestModalProps {
 
 const JoinRequestModal = ({ isOpen, onClose, teamName, teamUuid, onSuccess }: JoinRequestModalProps) => {
   const { success: toastSuccess, error: toastError } = useToast()
+  const { member } = useAuth()
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -49,6 +53,12 @@ const JoinRequestModal = ({ isOpen, onClose, teamName, teamUuid, onSuccess }: Jo
     setError(null)
     setSubmitted(false)
     onClose()
+  }
+
+  // Not approved yet: a pop-up that offers a reminder instead of the form (lib/joinGate.ts).
+  const gate = joinGate(member)
+  if (isOpen && member && !canApplyNow(gate)) {
+    return <NotYetMemberModal gate={gate} memberId={member.member_id} target={{ teamUuid }} subject={teamName} onClose={handleClose} />
   }
 
   return (

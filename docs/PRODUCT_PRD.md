@@ -140,12 +140,19 @@ same queue; a rejected account must wait 30 days and reapply from scratch.
   their number. The 13 groups that already shared a number before the rule are
   left alone; HR sees them, unmasked, in Approvals under "shared phones"
   (HR/super-admin only, owner 2026-11-02).
-- A pending applicant can apply to job openings before their own account
-  clears. That application shows in the hiring desks straight away, tagged
-  "account awaiting approval", and cannot be marked accepted until the
-  applicant's own account is approved (reject, review and notes still work).
-  Changed 2026-11-01: until then these were hidden, which left HoDs notified of
-  applications they could not find (22 of 47 on open roles at the time).
+- A member whose own sign-up is still pending CANNOT apply to a role or ask to
+  join a team (owner, 2 Nov 2026; reverses the 1 Nov rule that let them apply).
+  They get a pop-up saying they are not part of AquaTerra yet and can choose
+  "remind me". When HR approves them, one notification goes out and a card at
+  the top of their feed asks "you wanted to join this, still want to?" (Yes opens
+  the real apply flow, Not now retires it). The database enforces it: the apply
+  and join-request tables accept new rows only from active members. The 31
+  applications and 1 join request pending members had already filed were turned
+  into reminders on 2 Nov 2026 (the original rows are kept inside the reminder).
+  A rejected or suspended account also cannot apply and gets no reminder.
+  The hiring desks still tag an application "account awaiting approval" and
+  block "accepted" for it: that now only covers an applicant who was un-approved
+  after applying, and one application a rejected member filed before the change.
 - A rejected account cannot bypass the 30-day wait through any in-app path.
 - Legacy recruitment URLs (`/recruitment`, `/volunteer/apply`) always
   redirect to `/login` rather than 404ing, because the org's Instagram bio

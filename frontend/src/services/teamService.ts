@@ -1,3 +1,5 @@
+import { isNotApprovedError, NOT_APPROVED_YET_MESSAGE } from '../lib/joinGate'
+import openingInterestService from './openingInterestService'
 import { hasLeaderAccess } from '../lib/roles'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { getCachedMemberId, resolveMemberIdFromUuid } from '../lib/authCache'
@@ -1497,7 +1499,11 @@ const teamServiceImpl = {
       .select()
       .single()
 
-    if (error) throw logSupabaseError('teamService.createJoinRequest', error)
+    if (error) {
+      if (isNotApprovedError(error)) throw new Error(NOT_APPROVED_YET_MESSAGE)
+      throw logSupabaseError('teamService.createJoinRequest', error)
+    }
+    void openingInterestService.markApplied(member.member_id, { teamId: team.team_id })
 
     // Tell the team's leads someone wants in. Fire-and-forget - a failed
     // notification must never block the request itself, so the lead lookup

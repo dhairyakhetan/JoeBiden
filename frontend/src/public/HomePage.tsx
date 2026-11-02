@@ -44,6 +44,7 @@ import { APPROVAL_TIME } from '../lib/orgFacts'
 import certificateService from '../services/certificateService'
 import { Mascot } from '../components/Mascot'
 import { FeedBurst } from '../components/BurstReveal'
+import InterestChip from '../components/InterestChip'
 import ProfileNudgeCard from '../components/ProfileNudgeCard'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -1621,6 +1622,9 @@ export default function HomePage() {
                 and retires itself for good after a second dismissal. Ordered
                 AFTER the post-approval team picker, which is a one-time moment;
                 this card is snoozeable and will still be here afterwards. */}
+            {/* A member just approved who had asked to be reminded about a role or team (feed chip). Above the
+                profile nudge: it is the thing they came for. Renders null when there is nothing to ask. */}
+            <InterestChip enabled={isActive} />
             <ProfileNudgeCard enabled={isActive} />
             {loading && displayed.length === 0 ? (
               // Section 01.17: shaped to match the card's new photo-first order

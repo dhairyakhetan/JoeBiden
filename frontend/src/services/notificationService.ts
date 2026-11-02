@@ -28,6 +28,8 @@ export type NotificationType =
   | 'team_invite'
   | 'team_join_request'
   | 'team_join_accepted'
+  /** Written by the database trigger when a member who registered interest is approved (opening_interests). */
+  | 'interest_ready'
   | 'system'
   /** changelog/16-profile-wall.md §16.4. Not in create_notification()'s
    *  leader-only allow-list, so any authenticated member can fire one (the

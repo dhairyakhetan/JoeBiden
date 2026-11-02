@@ -1,0 +1,21 @@
+/* The "you wanted to join this, still want to?" card at the top of the feed (components/InterestChip.tsx).
+   Hairline edge, soft lift, rounded-minimal like every other feed card. Ink text on a tinted fill. */
+.interest-chip {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 14px 16px; margin-bottom: 14px;
+  background: color-mix(in srgb, var(--lemon) 38%, var(--card));
+  border: var(--hair-2); border-radius: var(--r-outer); box-shadow: var(--lift-1);
+  color: var(--ink);
+  animation: interest-chip-in 360ms var(--ease-out, ease-out) both;
+}
+.interest-chip-star {
+  flex: none; width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--lemon); font-size: 16px;
+}
+.interest-chip-text { flex: 1 1 220px; min-width: 0; }
+.interest-chip-kicker { font-family: var(--mono); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
+.interest-chip-title { font-family: var(--display); font-weight: 900; font-size: 17px; letter-spacing: -0.02em; line-height: 1.15; margin-top: 2px; overflow-wrap: anywhere; }
+.interest-chip-more { font-family: var(--eina); font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+.interest-chip-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+@keyframes interest-chip-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .interest-chip { animation: none; } }
