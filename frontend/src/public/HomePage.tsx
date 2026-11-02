@@ -917,6 +917,7 @@ export default function HomePage() {
   const [usingSamplePreview, setUsingSamplePreview] = useState(false)
 
   const isActive = isAuthenticated && member?.status === 'active'
+  const [interestShowing, setInterestShowing] = useState(false)
 
   // Per-tab SWR cache for the page-1 feed so returning to home paints the last
   // posts INSTANTLY (no spinner) while we revalidate in the background. Keyed by
@@ -1624,8 +1625,9 @@ export default function HomePage() {
                 this card is snoozeable and will still be here afterwards. */}
             {/* A member just approved who had asked to be reminded about a role or team (feed chip). Above the
                 profile nudge: it is the thing they came for. Renders null when there is nothing to ask. */}
-            <InterestChip enabled={isActive} />
-            <ProfileNudgeCard enabled={isActive} />
+            <InterestChip enabled={isActive} onVisibleChange={setInterestShowing} />
+            {/* One prompt at a time: the profile nudge waits while the interest chip is showing. */}
+            <ProfileNudgeCard enabled={isActive && !interestShowing} />
             {loading && displayed.length === 0 ? (
               // Section 01.17: shaped to match the card's new photo-first order
               // (01.15.2) - a skeleton whose shape doesn't match what loads

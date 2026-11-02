@@ -116,7 +116,8 @@ const RejectedPage = () => {
         <a href="https://instagram.com/ngo.aquaterra" target="_blank" rel="noopener noreferrer" className="btn">
           talk to us →
         </a>
-        <Link to="/" className="btn">back home →</Link>
+        {/* "/" sends a rejected or suspended account straight back here (HomeRoute), so "back home" did nothing. */}
+        <Link to="/projects" className="btn">see what we do →</Link>
         <button className="btn" onClick={handleLogout}>log out</button>
       </div>
     </div>

@@ -4,6 +4,7 @@
 // this component just renders whatever the parent has already fetched).
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthContext'
 import Img from '../../components/Img'
 import teamService, { TeamDetails } from '../../services/teamService'
 import RelatedTicker, { RelatedTickerItem } from '../../components/RelatedTicker'
@@ -54,6 +55,7 @@ export default function AboutTab({
   isTeamMember: boolean
   onCompose: () => void
 }) {
+  const { isAuthenticated } = useAuth()
   // Section 10 mount, this page: a team's recent-posts strip is a small,
   // curated, multi-author list, not a long chronological feed - plain
   // shapeFeed() only, no composeFeed author-collapse.
@@ -229,13 +231,16 @@ export default function AboutTab({
           </div>
           {team.members.filter((m: any) => hasLeaderAccess(m.orgRole)).map((lead: any, i: number, arr: any[]) => (
             <div key={lead.uuid} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px', borderBottom: i < arr.length - 1 ? '1px dashed var(--line)' : 'none' }}>
-              <div className="avatar" style={{ background: catColor, overflow: 'hidden', width: 42, height: 42, fontSize: 14, flexShrink: 0 }}>
-                {lead.avatarUrl ? <Img ctx="avatar" src={lead.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" /> : initials(lead.fullName)}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--ink)' }}>{lead.fullName}</div>
-                <div className="mono xs muted">{getRoleLabel(lead.orgRole)}</div>
-              </div>
+              {/* The people who run a team are the first people a newcomer wants to reach: link them to their profiles. */}
+              <Link to={`/member/${lead.uuid}`} style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 0, textDecoration: 'none', color: 'inherit' }}>
+                <div className="avatar" style={{ background: catColor, overflow: 'hidden', width: 42, height: 42, fontSize: 14, flexShrink: 0 }}>
+                  {lead.avatarUrl ? <Img ctx="avatar" src={lead.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" /> : initials(lead.fullName)}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--ink)' }}>{lead.fullName}</div>
+                  <div className="mono xs muted">{getRoleLabel(lead.orgRole)}</div>
+                </div>
+              </Link>
               <span className="role role-director" style={{ fontSize: 10, background: catColor, color: '#0A0A0A', borderColor: catColor }}>
                 {getRoleLabel(lead.orgRole).toUpperCase()}
               </span>
@@ -299,6 +304,12 @@ export default function AboutTab({
                   <button type="button" className="btn btn-sm btn-primary" onClick={onRequestJoin}>
                     ask to join {team.name}
                   </button>
+                )}
+                {/* A signed-out visitor read "people who show up and help are always welcome" and was offered nothing. */}
+                {!isAuthenticated && (
+                  <Link to="/login" state={{ from: { pathname: `/teams/${team.uuid}` } }} className="btn btn-sm btn-primary" style={{ minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>
+                    sign in to join {team.name}
+                  </Link>
                 )}
               </div>
             </div>

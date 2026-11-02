@@ -66,6 +66,8 @@ export type DirectorContext = {
   myScopeTeamIds: number[]
   /** Pending-post count scoped to `myCategories` (null when unscoped/super admin - fall back to stats.pendingPostReviews). */
   scopedPendingPosts: number | null
+  /** Certificate requests waiting on HR (super admin / HR only; null until counted). The landing counts them like every other queue. */
+  pendingCertificates?: number | null
   /** Re-count the rail badges now (e.g. after approving someone). Optional so fixtures need not supply it. */
   refreshStats?: () => void
 }
@@ -392,7 +394,7 @@ const DirectorDashboard = () => {
       ? `acting as · ${getRoleLabel(member?.role)} · teams: ${myCategories.join(', ')}`
       : `acting as · ${getRoleLabel(member?.role)}`
 
-  const ctx: DirectorContext = { stats, statsError, canApproveMembers, isSuperAdmin, myCategories, myTeamIds, myScopeTeamIds, scopedPendingPosts, refreshStats: () => { void refreshStats(true) } }
+  const ctx: DirectorContext = { stats, statsError, pendingCertificates, canApproveMembers, isSuperAdmin, myCategories, myTeamIds, myScopeTeamIds, scopedPendingPosts, refreshStats: () => { void refreshStats(true) } }
 
   const groupCount = (g: { items: { key: NavKey }[] }) => g.items.reduce((n, item) => n + (counts[item.key] || 0), 0)
 

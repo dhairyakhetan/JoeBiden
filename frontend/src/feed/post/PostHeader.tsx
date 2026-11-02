@@ -69,8 +69,14 @@ export default function PostHeader({ post, displayTitle, chipMeta, member, isAut
     <div className="pp-head">
       {displayTitle && <h1 className="pp-title">{displayTitle}</h1>}
 
-      {chipMeta.length > 0 && (
+      {(chipMeta.length > 0 || (post.teamUuid && post.teamName)) && (
         <div className="pp-meta-row">
+          {/* A post written for a team links to that team: the feed was a dead end for anyone who liked what a team does. */}
+          {post.teamUuid && post.teamName && (
+            <Link to={`/teams/${post.teamUuid}`} className="pp-chip" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <i>team</i>{post.teamName}
+            </Link>
+          )}
           {chipMeta.map((m, i) => (
             <span key={i} className="pp-chip">
               <i>{m.label}</i>{m.value}

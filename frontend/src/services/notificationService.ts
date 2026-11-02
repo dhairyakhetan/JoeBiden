@@ -30,6 +30,16 @@ export type NotificationType =
   | 'team_join_accepted'
   /** Written by the database trigger when a member who registered interest is approved (opening_interests). */
   | 'interest_ready'
+  /** Your join request was declined. Its own type so the person sees a "declined" row, not an "incoming request" one. */
+  | 'team_join_declined'
+  /** Added to a task. Written by the trigger on task_people (scripts/handoff_notifications_2026_11_02.sql). */
+  | 'task_assigned'
+  /** A bug or feature report of yours was answered (done, a question, nothing to change). Written by a trigger. */
+  | 'bug_update'
+  /** You were made lead of a drive; links to its check-in sheet. Written by a trigger. */
+  | 'drive_role'
+  /** A drive you checked in at was completed and your hours are recorded. Written by a trigger. */
+  | 'drive_done'
   | 'system'
   /** changelog/16-profile-wall.md §16.4. Not in create_notification()'s
    *  leader-only allow-list, so any authenticated member can fire one (the

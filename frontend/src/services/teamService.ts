@@ -1511,19 +1511,18 @@ const teamServiceImpl = {
     // for any member.
     ;(async () => {
       try {
-        const { data: leads } = await supabaseCommunity
-          .from('team_members')
-          .select('member_id')
-          .eq('team_id', team.team_id)
-          .eq('role', 'lead')
-          .eq('is_active', true)
-        await Promise.all((leads || []).map(l =>
+        // team_members.role = 'lead' was retired (the column only allows 'member'), so asking for leads found
+        // nobody and a request notified no one. Leaders are now the HoDs scoped to the team or a parent team
+        // (director_scopes), with HR as the fallback: the team_leader_ids() function resolves them server-side
+        // because a plain member cannot read director_scopes.
+        const leaderIds = await getTeamLeaderIds(team.team_id)
+        await Promise.all(leaderIds.filter(id => id !== member.member_id).map(id =>
           notificationService.create({
-            memberId: l.member_id,
+            memberId: id,
             type: 'team_join_request',
             title: `${(member as any).full_name || 'A member'} requested to join ${team.name}`,
             subtitle: message ? message.slice(0, 140) : undefined,
-            link: `/teams/${uuid}`,
+            link: `/teams/${uuid}?tab=applications`,
           })
         ))
       } catch (e: any) {
@@ -1701,10 +1700,11 @@ const teamServiceImpl = {
           .from('teams').select('uuid, name').eq('team_id', req.team_id).single()
         await notificationService.create({
           memberId: req.member_id,
-          type: 'team_join_request',
+          // Its own type (was 'team_join_request', which showed the declined person the "incoming request" icon).
+          type: 'team_join_declined',
           title: team ? `Your request to join ${team.name} was declined` : 'Your join request was declined',
           subtitle: 'You can explore other teams or apply again later.',
-          link: '/teams',
+          link: team?.uuid ? `/teams/${team.uuid}` : '/teams',
         })
       } catch (e: any) {
         console.warn('[teamService] join-rejected notification failed:', e?.message)
@@ -1771,6 +1771,15 @@ const teamServiceImpl = {
     }
     return colors[role] || 'bg-gray-100 text-gray-800'
   }
+}
+
+/** Who answers for a team: HoDs/directors scoped to it or a parent team, HR if there are none. Never throws. */
+export async function getTeamLeaderIds(teamId: number): Promise<number[]> {
+  try {
+    const { data, error } = await (supabaseCommunity as any).rpc('team_leader_ids', { p_team_id: teamId })
+    if (error) return []
+    return ((data || []) as any[]).map(r => (typeof r === 'number' ? r : Number(Object.values(r)[0]))).filter(n => Number.isFinite(n))
+  } catch { return [] }
 }
 
 export const teamService = withFunctionLogging('teamService', teamServiceImpl)

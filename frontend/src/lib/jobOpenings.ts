@@ -7,6 +7,7 @@ import { logAction } from './auditLog'
 import { ACCEPT_BLOCKED_MESSAGE } from './applicantGate'
 import { isNotApprovedError, NOT_APPROVED_YET_MESSAGE } from './joinGate'
 import openingInterestService from '../services/openingInterestService'
+import { getTeamLeaderIds } from '../services/teamService'
 import { logSupabaseError } from './errorTracking'
 import { withFunctionLogging } from './functionLog'
 
@@ -403,25 +404,22 @@ const jobOpeningsImpl = {
         try {
           const { data: opening } = await supabaseCommunity
             .from('job_openings')
-            .select('title, team_name, created_by_name')
+            .select('title, team_id, team_name, created_by_name')
             .eq('id', openingId)
             .single()
           if (!opening) return
 
-          let recipientIds: number[] = []
-          if (opening.team_name) {
+          // Leaders are the HoDs scoped to the opening's team or a parent team, HR as the fallback
+          // (team_leader_ids). The old lookup asked team_members for role 'lead', which no longer exists,
+          // so an application notified nobody unless a creator name happened to match exactly one member.
+          let teamId: number | null = (opening as any).team_id ?? null
+          if (teamId == null && opening.team_name) {
             const { data: team } = await supabaseCommunity
               .from('teams').select('team_id').eq('name', opening.team_name).maybeSingle()
-            if (team) {
-              const { data: leads } = await supabaseCommunity
-                .from('team_members')
-                .select('member_id')
-                .eq('team_id', team.team_id)
-                .eq('role', 'lead')
-                .eq('is_active', true)
-              recipientIds = (leads || []).map(l => l.member_id)
-            }
+            teamId = team?.team_id ?? null
           }
+          let recipientIds: number[] = teamId != null ? await getTeamLeaderIds(teamId) : []
+          recipientIds = recipientIds.filter(id => id !== applicantId)
           if (recipientIds.length === 0 && opening.created_by_name) {
             const { data: creators } = await supabaseCommunity
               .from('members')
@@ -587,8 +585,14 @@ const jobOpeningsImpl = {
       ;(async () => {
         try {
           const { data: opening } = await supabaseCommunity
-            .from('job_openings').select('title').eq('id', opening_id).single()
+            .from('job_openings').select('title, team_id').eq('id', opening_id).single()
           const title = opening?.title ? `"${opening.title}"` : 'an opening'
+          // Send them to THEIR team (accepted) or the team they applied to (not selected), not a generic list.
+          let teamUuid: string | null = null
+          if ((opening as any)?.team_id) {
+            const { data: t } = await supabaseCommunity.from('teams').select('uuid').eq('team_id', (opening as any).team_id).maybeSingle()
+            teamUuid = (t as any)?.uuid ?? null
+          }
           await notificationService.create({
             memberId: applicant_id,
             type: 'system',
@@ -599,14 +603,14 @@ const jobOpeningsImpl = {
             // so rather than "the team will reach out" — which was the only
             // thing that used to happen.
             subtitle: status === 'accepted'
-              ? "You're on the team. Find it under Teams."
+              ? "You're on the team. Say hello and see what's happening."
               : (rejectionReason?.trim() || 'Thanks for applying - keep an eye out for future openings.'),
             // /opportunities is a list of OTHER people's open roles, which is
             // the wrong place to land someone reading about their own
             // application. Send the accepted member to their teams; leave the
             // rejected one on the openings list, where re-applying is the
             // useful next step.
-            link: status === 'accepted' ? '/teams' : '/opportunities',
+            link: status === 'accepted' ? (teamUuid ? `/teams/${teamUuid}` : '/teams') : (teamUuid ? `/teams/${teamUuid}?tab=openings` : '/opportunities'),
           })
         } catch (e: any) {
           console.warn('[jobOpenings] application-status notification failed:', e?.message)

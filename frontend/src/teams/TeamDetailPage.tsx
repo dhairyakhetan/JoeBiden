@@ -586,6 +586,22 @@ const TeamDetailPage = () => {
     }
   }, [openings, openingsLoading, searchParams, canApply])
 
+  // ?tab=applications|pending|responses|tasks|openings|members: where a notification sends a leader. A gated tab
+  // is only opened once the viewer is known to be allowed it (permissions arrive after the member loads), and only
+  // once, so it never fights a tab the person has since clicked.
+  const tabParamHandledRef = useRef(false)
+  useEffect(() => {
+    if (tabParamHandledRef.current) return
+    const want = searchParams.get('tab')
+    if (!want) { tabParamHandledRef.current = true; return }
+    const open: Record<string, boolean> = {
+      about: true, members: true, openings: true, tasks: true,
+      pending: !!canApprovePosts, applications: !!canManageJoinRequests, responses: !!canManageOpenings,
+    }
+    if (!(want in open)) { tabParamHandledRef.current = true; return }
+    if (open[want]) { tabParamHandledRef.current = true; setActiveTab(want as typeof activeTab) }
+  }, [searchParams, canApprovePosts, canManageJoinRequests, canManageOpenings])
+
   const fetchJoinRequests = async () => {
     if (!uuid) return
     setJoinRequestsLoading(true); setJoinRequestsError(null)

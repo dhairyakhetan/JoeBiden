@@ -40,7 +40,7 @@ import { EmptyLedger } from './adminKit'
  * queue - previously those two desks carried no unread signal anywhere in the UI.
  */
 const DirectorLanding = () => {
-  const { stats, statsError, isSuperAdmin, myCategories, scopedPendingPosts } = useOutletContext<DirectorContext>()
+  const { stats, statsError, isSuperAdmin, myCategories, scopedPendingPosts, pendingCertificates } = useOutletContext<DirectorContext>()
   const { member } = useAuth()
   const { can } = useCapabilities()
 
@@ -48,6 +48,9 @@ const DirectorLanding = () => {
   const pendingPosts = (scopedPendingPosts ?? stats?.pendingPostReviews) || 0
   const pendingEnquiries = stats?.pendingEnquiries || 0
   const pendingApplications = stats?.pendingApplications || 0
+  // Certificate requests are an HR queue the rail already counted but the landing ignored, so an HR person opening
+  // the desk read "nothing waiting" with a certificate waiting.
+  const certsWaiting = isSuperAdmin ? pendingCertificates || 0 : 0
   // Restated here (the layout chrome shows it too) because the landing is
   // where a director orients - "which desk am I reading?" should not require
   // looking back up at the nav.
@@ -78,6 +81,7 @@ const DirectorLanding = () => {
     { show: isSuperAdmin && pendingApprovals > 0, count: pendingApprovals, noun: pendingApprovals === 1 ? 'member sign-up' : 'member sign-ups', verb: 'waiting on approval', to: '/director/approvals' },
     { show: pendingPosts > 0, count: pendingPosts, noun: pendingPosts === 1 ? 'post' : 'posts', verb: 'waiting in the review queue', to: '/director/posts' },
     { show: pendingEnquiries > 0, count: pendingEnquiries, noun: pendingEnquiries === 1 ? 'enquiry' : 'enquiries', verb: 'nobody has replied to yet', to: '/director/enquiries' },
+    { show: certsWaiting > 0, count: certsWaiting, noun: certsWaiting === 1 ? 'certificate request' : 'certificate requests', verb: 'waiting for you to decide', to: '/director/certificates' },
     { show: pendingApplications > 0, count: pendingApplications, noun: pendingApplications === 1 ? 'application' : 'applications', verb: isSuperAdmin ? 'waiting on a decision' : 'across all teams waiting on a decision', to: '/director/hiring' },
   ] as const).filter(t => t.show)
 
@@ -93,6 +97,7 @@ const DirectorLanding = () => {
     { show: isSuperAdmin && pendingApprovals > 0, to: '/director/approvals', n: pendingApprovals, label: 'accounts waiting', cc: 'var(--tomato)' },
     { show: pendingPosts > 0, to: '/director/posts', n: pendingPosts, label: 'posts in queue', cc: 'var(--lemon)' },
     { show: pendingEnquiries > 0, to: '/director/enquiries', n: pendingEnquiries, label: 'enquiries', cc: '' },
+    { show: certsWaiting > 0, to: '/director/certificates', n: certsWaiting, label: 'certificates', cc: 'var(--pink)' },
     { show: pendingApplications > 0, to: '/director/hiring', n: pendingApplications, label: isSuperAdmin ? 'applications' : 'applications, all teams', cc: 'var(--sky)' },
   ] as const).filter(b => b.show)
   // 17.2's row shape: the leading block is the wide one (1.35fr), the rest are
@@ -119,6 +124,7 @@ const DirectorLanding = () => {
     approvals: isSuperAdmin ? pendingApprovals || undefined : undefined,
     posts: pendingPosts || undefined,
     hiring: pendingApplications || undefined,
+    certificates: certsWaiting || undefined,
     enquiries: pendingEnquiries || undefined,
   }
   const needYouCount = Object.values(deskCounts).filter((n): n is number => !!n).length

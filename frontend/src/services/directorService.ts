@@ -375,17 +375,51 @@ const directorServiceImpl = {
       .eq('member_id', memberId)
       .single()
 
-    // Welcome the newly-approved member. Fire-and-forget + non-throwing
-    // (handled inside notificationService.create) - same pattern as
-    // approvePost below. `system` is leader-gated in the RPC, which is fine:
-    // only directors reach this action.
-    notificationService.create({
-      memberId,
-      type: 'system',
-      title: 'Welcome to AquaTerra - your account was approved',
-      subtitle: 'You now have full access to the community.',
-      link: '/feed',
-    })
+    // Tell the newly-approved member, and give the message a next step. Fire-and-forget + non-throwing (handled
+    // inside notificationService.create). `system` is leader-gated in the RPC, which is fine: only directors reach this.
+    //  - If they had registered interest in a role or team while pending, the database trigger has already written
+    //    "You are in. Still want to join?" with a link to it, so a second, generic welcome would only compete with it.
+    //  - Otherwise: no team yet -> send them to pick one (/choose-team); already on a team -> the feed.
+    ;(async () => {
+      try {
+        const [{ count: ready }, { count: teamCount }] = await Promise.all([
+          (supabaseCommunity as any).from('opening_interests').select('id', { count: 'exact', head: true }).eq('member_id', memberId).eq('state', 'ready'),
+          supabaseCommunity.from('team_members').select('member_id', { count: 'exact', head: true }).eq('member_id', memberId).eq('is_active', true),
+        ])
+        if (!ready) {
+          const noTeam = !teamCount
+          await notificationService.create({
+            memberId,
+            type: 'system',
+            title: 'Welcome to AquaTerra - your account was approved',
+            subtitle: noTeam ? 'Next: pick a team and say hello.' : 'Say hello on the feed.',
+            link: noTeam ? '/choose-team' : '/',
+          })
+        }
+      } catch (e: any) {
+        console.warn('[directorService] approval notification failed:', e?.message)
+      }
+    })()
+
+    // Tell whoever invited them. The invite page tracks "signed up / approved" but the referrer was never told.
+    ;(async () => {
+      try {
+        const { data: m } = await supabaseCommunity.from('members').select('referred_by, full_name').eq('member_id', memberId).maybeSingle()
+        const referrer = (m as any)?.referred_by
+        if (referrer && referrer !== memberId) {
+          const first = String((m as any)?.full_name || 'Someone').split(' ')[0]
+          await notificationService.create({
+            memberId: referrer,
+            type: 'system',
+            title: `${first} joined AquaTerra through your invite`,
+            subtitle: 'Thank you for bringing someone in.',
+            link: '/invite',
+          })
+        }
+      } catch (e: any) {
+        console.warn('[directorService] referrer notification failed:', e?.message)
+      }
+    })()
 
     return {
       success: true,

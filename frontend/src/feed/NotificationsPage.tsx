@@ -28,6 +28,11 @@ const ICON_FOR_TYPE: Record<NotificationType, ReactNode> = {
   team_join_request: '⤵',
   team_join_accepted: '✓',
   interest_ready: '★',
+  team_join_declined: '⤴',
+  task_assigned: I.bookmark(),
+  bug_update: '✓',
+  drive_role: I.flag(),
+  drive_done: '♥',
   system: '★',
   // changelog/16-profile-wall.md - added so `Record<NotificationType, …>`
   // still covers every member of the union; not part of 08's own restyle.
@@ -54,6 +59,11 @@ const HUE_FOR_TYPE: Record<NotificationType, string> = {
   team_join_request: 'var(--sky)',
   team_join_accepted: 'var(--welfare)',
   interest_ready: 'var(--lemon)',
+  team_join_declined: 'var(--tomato)',
+  task_assigned: 'var(--sky)',
+  bug_update: 'var(--welfare)',
+  drive_role: 'var(--lemon)',
+  drive_done: 'var(--pink)',
   system: 'var(--ink)',
   wall_note: 'var(--lemon)',
   break_set: 'var(--sky)',
@@ -61,6 +71,8 @@ const HUE_FOR_TYPE: Record<NotificationType, string> = {
 // Ink passes contrast on every one of the fills above except plain --ink
 // itself (system), which needs paper - see tokens.css's measured table.
 const PAPER_ON_HUE: Set<NotificationType> = new Set(['system'])
+
+const PAGE = 100
 
 const FILTER_LABEL: Array<[string, string]> = [
   ['all', 'All'],
@@ -70,7 +82,15 @@ const FILTER_LABEL: Array<[string, string]> = [
   ['tag', '@ Tags'],
   ['follow', '+ Follows'],
   ['new_post', 'New posts'],
+  ['teams', 'Teams'],
+  ['work', 'Work'],
 ]
+
+// Filter chips that cover a group of types rather than one.
+const TYPE_GROUPS: Record<string, Set<string>> = {
+  teams: new Set(['team_invite', 'team_join_request', 'team_join_accepted', 'team_join_declined', 'interest_ready']),
+  work: new Set(['task_assigned', 'drive_role', 'drive_done', 'bug_update']),
+}
 
 // redesign 08.5: "group by day with a mono uppercase today / yesterday /
 // date header." Rows arrive newest-first (notificationService.list()'s own
@@ -158,6 +178,8 @@ export default function NotificationsPage() {
   const toast = useToast()
   const navigate = useNavigate()
   const [filter, setFilter] = useState('all')
+  const [hasMore, setHasMore] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [rows, setRows] = useState<NotificationRow[]>([])
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState<string | null>(null)
@@ -176,8 +198,9 @@ export default function NotificationsPage() {
     setLoading(true)
     setFetchError(null)
     try {
-      const result = await notificationService.list({ limit: 100 })
+      const result = await notificationService.list({ limit: PAGE })
       setRows(result.items)
+      setHasMore(result.items.length >= PAGE)
       setUnreadCount(result.totalUnread)
       // Real like counts are decoration, not blocking content - paint the
       // list first, then patch in the digest once the one batched query
@@ -282,9 +305,20 @@ export default function NotificationsPage() {
     })
   }
 
+  // The list used to stop at the latest 100 with no way further back, while the header count came from the database.
+  const loadOlder = async () => {
+    setLoadingMore(true)
+    try {
+      const result = await notificationService.list({ limit: PAGE, offset: rows.length })
+      setRows(prev => { const seen = new Set(prev.map(r => r.id)); return [...prev, ...result.items.filter(r => !seen.has(r.id))] })
+      setHasMore(result.items.length >= PAGE)
+    } catch { /* leave the button; they can try again */ } finally { setLoadingMore(false) }
+  }
+
   const filtered = useMemo(() => {
     let src = rows
     if (filter === 'unread') src = rows.filter(r => !r.isRead)
+    else if (TYPE_GROUPS[filter]) src = rows.filter(r => TYPE_GROUPS[filter].has(r.type))
     else if (filter !== 'all') src = rows.filter(r => r.type === filter)
     // Re-derive timeAgo each tick so labels stay fresh
     void tick
@@ -486,6 +520,11 @@ export default function NotificationsPage() {
                 </div>
               </div>
             ))
+          )}
+          {hasMore && filter === 'all' && (
+            <div style={{ textAlign: 'center', padding: '8px 0 12px' }}>
+              <button type="button" className="btn btn-sm btn-ghost" style={{ minHeight: 44 }} onClick={loadOlder} disabled={loadingMore}>{loadingMore ? 'Loading…' : 'Load older'}</button>
+            </div>
           )}
         </div>
       )}
