@@ -1,0 +1,15 @@
+/* "Waiting on you": one quiet card at the top of the feed (components/NeedsMeCard.tsx). */
+.needs-me {
+  margin-bottom: 14px; padding: 6px; background: var(--card); border: var(--hair-2);
+  border-radius: var(--r-outer); box-shadow: var(--lift-1); color: var(--ink);
+}
+.needs-me-kicker { font-family: var(--mono); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; padding: 10px 14px 4px; }
+.needs-me-row {
+  display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 14px;
+  border-radius: var(--r-inner); text-decoration: none; color: inherit;
+}
+.needs-me-row:hover { background: var(--bg-2); }
+.needs-me-icon { flex: none; width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; background: var(--lemon); font-size: 13px; font-weight: 800; }
+.needs-me-row.is-urgent .needs-me-icon { background: var(--tomato); }
+.needs-me-text { flex: 1; min-width: 0; font-family: var(--eina); font-size: 14px; line-height: 1.3; overflow-wrap: anywhere; }
+.needs-me-go { flex: none; opacity: 0.5; }

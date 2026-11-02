@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { TeamDetails } from '../../services/teamService'
 import { I } from '../../components/v6Shared'
 import { initials } from './shared'
+import { profilePath } from '../../lib/profilePath'
 import { leadersFirst, isTeamLeader } from './leadership'
 import { getRoleLabel, getRoleClass } from '../../lib/roles'
 
@@ -57,13 +58,13 @@ export default function MembersTab({
                 : null),
             }}
           >
-            <Link to={`/profile/${member.uuid}`} style={{ textDecoration: 'none', display: 'flex' }}>
+            <Link to={profilePath(currentMember?.uuid, member.uuid)} aria-label={`${member.fullName}'s profile`} style={{ textDecoration: 'none', display: 'flex' }}>
               <div className="avatar" style={{ background: catColor, overflow: 'hidden' }}>
                 {member.avatarUrl ? <Img ctx="avatar" src={member.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" /> : initials(member.fullName)}
               </div>
             </Link>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 16 }}>{member.fullName}</div>
+              <Link to={profilePath(currentMember?.uuid, member.uuid)} style={{ fontWeight: 700, fontSize: 16, color: 'inherit', textDecoration: 'none' }}>{member.fullName}</Link>
               {/* Item 5.6. This line used to repeat the role label that the
                   chip immediately to its right already shows - the same fact
                   twice, in one row. The sub-team goes here instead when there

@@ -189,10 +189,16 @@ export default function WallTab({
 
   // Visitor with nothing to show - the tab shouldn't have rendered at all
   // (the caller gates that), but stay safe rather than show a broken board.
-  if (!isOwn && (!wallEnabled || notes.length === 0)) return null
+  if (!isOwn && (!wallEnabled || (notes.length === 0 && !currentMemberUuid))) return null
 
   return (
     <div>
+      {!isOwn && notes.length === 0 && (
+        <div className="card" style={{ padding: '28px 20px', textAlign: 'center' }}>
+          <div className="h-display" style={{ fontSize: 22 }}>be the first to leave {recipientName.split(' ')[0]} a note.</div>
+          <p className="muted" style={{ margin: '8px 0 0' }}>A thank you, a congratulations, a hello. It shows on their wall for everyone to see.</p>
+        </div>
+      )}
       <div className="wall-board">
         {notes.map(note => (
           <WallNote

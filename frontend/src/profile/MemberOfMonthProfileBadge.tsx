@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import memberOfMonthService, { currentPeriod, type MemberOfMonthPick } from '../services/memberOfMonthService'
+import { Link } from 'react-router-dom'
 import MomLemonCard from '../components/MomLemonCard'
 import { useAuth } from '../auth/AuthContext'
 
@@ -53,6 +54,7 @@ export default function MemberOfMonthProfileBadge({ uuid }: { uuid: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {picks.map(p => <MomLemonCard key={p.teamId} mom={p} linkToProfile={false} />)}
+      <Link to="/honours" className="aq-thread-link">all honours →</Link>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Img from '../../components/Img'
 import { getInitials, hashColor, timeAgo } from '../../lib/uiHelpers'
 import { noteTintBackground, labelOnLeft, pillRotation, isLongBody, bodyFontSize } from './wallShape'
@@ -64,12 +65,15 @@ export default function WallNote({
           instead - recency is also the thing 16.1 says CSS-column reordering
           needs to stay legible for. */}
       <div className="wall-note-foot">
-        <span className="wall-note-avatar" aria-hidden="true" style={{ background: hashColor(note.authorName) }}>
-          {note.authorAvatarUrl
-            ? <Img src={note.authorAvatarUrl} alt="" ctx="avatar" referrerPolicy="no-referrer" />
-            : getInitials(note.authorName)}
-        </span>
-        <span className="wall-note-author">{note.authorName}</span>
+        {/* Whoever wrote to you is a person: link them. (A note's author used to be plain text.) */}
+        <Link to={`/member/${note.authorUuid}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 'inherit', textDecoration: 'none', color: 'inherit', minWidth: 0 }}>
+          <span className="wall-note-avatar" aria-hidden="true" style={{ background: hashColor(note.authorName) }}>
+            {note.authorAvatarUrl
+              ? <Img src={note.authorAvatarUrl} alt="" ctx="avatar" referrerPolicy="no-referrer" />
+              : getInitials(note.authorName)}
+          </span>
+          <span className="wall-note-author">{note.authorName}</span>
+        </Link>
         <span className="wall-note-age mono">{timeAgo(note.createdAt)}</span>
         {canRemove && !removing && (
           <button

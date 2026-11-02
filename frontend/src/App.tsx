@@ -266,6 +266,7 @@ const AboutPage              = lazy(ROUTE_LOADERS.about)
 const FAQPage                = lazy(ROUTE_LOADERS.faq)
 const OpportunitiesPage      = lazy(ROUTE_LOADERS.opportunities)
 const OpeningDetailPage      = lazy(() => import('./public/OpeningDetailPage'))
+const HonoursPage            = lazy(() => import('./profile/HonoursPage'))
 const SchoolsPage            = lazy(ROUTE_LOADERS.schools)
 const ClassesPage            = lazy(ROUTE_LOADERS.classes)
 const RootsPage               = lazy(ROUTE_LOADERS.crftd)
@@ -583,6 +584,11 @@ function App() {
             </Route>
             <Route path="/notifications" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<NotificationsPage />} />
+            </Route>
+
+            {/* /honours: every Member of the Month, month by month, with links to the person, the team and their wall. */}
+            <Route path="/honours" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<HonoursPage />} />
             </Route>
 
             <Route path="/saved" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>

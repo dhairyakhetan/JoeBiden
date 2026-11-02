@@ -9,8 +9,10 @@ import { Post, Achievement } from '../services/api'
 import achievementService from '../services/achievementService'
 import { safeExternalHref } from '../lib/safeUrl'
 import followService from '../services/followService'
+import teamService from '../services/teamService'
 import wallService, { WallNote as WallNoteData } from '../services/wallService'
 import WallTab from './wall/WallTab'
+import PeopleListModal from '../components/PeopleListModal'
 import MemberOfMonthProfileBadge from './MemberOfMonthProfileBadge'
 import FeedPostCard from '../feed/FeedPostCard'
 import PhotoCollection from './PhotoCollection'
@@ -135,6 +137,17 @@ export default function PublicProfilePage() {
   const [alongside, setAlongside] = useState<{ uuid: string; fullName: string; avatarUrl?: string; role?: string }[]>([])
   const [alongsideLoading, setAlongsideLoading] = useState(false)
   const isOwn = currentMember?.uuid === uuid
+  const [peopleList, setPeopleList] = useState<null | 'followers' | 'following'>(null)
+  // The viewer's own teams, to say which ones they share with this person (the LinkedIn "mutual connections" cue).
+  const [myTeamUuids, setMyTeamUuids] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    if (!currentMember || isOwn) { setMyTeamUuids(new Set()); return }
+    let live = true
+    teamService.getMyTeams({ limit: 100 })
+      .then(r => { if (live) setMyTeamUuids(new Set((r.data || []).map((t: any) => t.uuid))) })
+      .catch(() => { /* a cue that cannot load simply does not show */ })
+    return () => { live = false }
+  }, [currentMember?.uuid, isOwn])
 
   /* Section 06 step 14, and the page's privacy boundary. `status` is
      'pending' | 'approved' | 'rejected'; only 'approved' is public. This page
@@ -466,6 +479,11 @@ export default function PublicProfilePage() {
                       card matches the own-profile one's chip row instead of
                       showing only the school. No new query: same effect,
                       same state, read a second time. */}
+                  {!isOwn && memberTeams.some(t => myTeamUuids.has(t.uuid)) && (
+                    <span className="mono xs" style={{ width: '100%', fontWeight: 700 }}>
+                      you’re both on {memberTeams.filter(t => myTeamUuids.has(t.uuid)).map(t => t.name).join(', ')}
+                    </span>
+                  )}
                   {memberTeams.map(t => (
                     <Link key={t.uuid} to={`/teams/${t.uuid}`} className="pf-chip">
                       <span className="pf-chip-dot" style={{ background: deptColorForTeamName(t.name) || 'var(--ink-3)' }} aria-hidden="true" />
@@ -495,7 +513,7 @@ export default function PublicProfilePage() {
                       a second fetch this file's rules forbid). `followers` is
                       real and already fetched by followService.getCounts. */}
                   <span className="pf-bento-label" style={{ color: 'var(--tomato-ink)' }}>followers</span>
-                  <b className="pf-bento-figure" style={{ fontSize: 28 }}>{followerCount}</b>
+                  <button type="button" onClick={() => setPeopleList('followers')} aria-label={`See who follows ${displayName}`} style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer', color: 'inherit', textAlign: 'left' }}><b className="pf-bento-figure" style={{ fontSize: 28 }}>{followerCount}</b></button>
                 </div>
               </div>
             </div>
@@ -580,7 +598,9 @@ export default function PublicProfilePage() {
               the same logic). isOwn is possible on THIS page too (a member
               can reach /member/:own-uuid), so the same "renders even at
               zero, own profile only" rule from ProfilePage applies. */}
-          {(isOwn || (wallEnabled && wallNotes.length > 0)) && (
+          {/* Signed-in visitors see the tab even on an empty wall: it is where the first note gets written. Before this,
+              a wall with no notes had no tab and no composer, so no wall could ever start. */}
+          {(isOwn || (wallEnabled && (wallNotes.length > 0 || signedIn))) && (
             <button role="tab" aria-selected={activeTab === 'wall'} className={'tab ' + (activeTab === 'wall' ? 'active' : '')} onClick={() => setActiveTab('wall')}>
               Wall {wallNotes.length > 0 && <span className="count">{wallNotes.length}</span>}
             </button>
@@ -785,7 +805,7 @@ export default function PublicProfilePage() {
                       identity card's hero tiles are now capped at two (04.7),
                       and dropping this figure entirely would delete real,
                       already-fetched data rather than just restyle it. */}
-                  <div><span className="mono xs upper muted">following</span><div style={{ fontWeight: 700 }}>{followingCount}</div></div>
+                  <div><span className="mono xs upper muted">following</span><div style={{ fontWeight: 700 }}><button type="button" onClick={() => setPeopleList('following')} aria-label={`See who ${displayName} follows`} style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer', color: 'inherit', font: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3 }}>{followingCount}</button></div></div>
                 </div>
               </div>
               {memberTeams.length > 0 && (
@@ -821,6 +841,15 @@ export default function PublicProfilePage() {
             />
           )}
         </div>
+
+        {peopleList && uuid && (
+          <PeopleListModal
+            title={peopleList === 'followers' ? 'Followers' : 'Following'}
+            viewerUuid={currentMember?.uuid}
+            load={() => (peopleList === 'followers' ? followService.getFollowers(uuid) : followService.getFollowing(uuid))}
+            onClose={() => setPeopleList(null)}
+          />
+        )}
 
         {/* ── Builders alongside - shared-team peers ── */}
         {(alongsideLoading || alongside.length > 0) && (

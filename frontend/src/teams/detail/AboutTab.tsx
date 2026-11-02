@@ -260,6 +260,7 @@ export default function AboutTab({
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {currentMoMs.map(m => <MomLemonCard key={m.id} mom={m} />)}
           </div>
+          {isAuthenticated && <Link to="/honours" className="aq-thread-link" style={{ display: 'inline-block', marginTop: 10 }}>all honours →</Link>}
         </div>
       )}
 

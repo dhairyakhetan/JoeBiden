@@ -45,6 +45,7 @@ import certificateService from '../services/certificateService'
 import { Mascot } from '../components/Mascot'
 import { FeedBurst } from '../components/BurstReveal'
 import InterestChip from '../components/InterestChip'
+import NeedsMeCard from '../components/NeedsMeCard'
 import ProfileNudgeCard from '../components/ProfileNudgeCard'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -918,6 +919,7 @@ export default function HomePage() {
 
   const isActive = isAuthenticated && member?.status === 'active'
   const [interestShowing, setInterestShowing] = useState(false)
+  const [needsShowing, setNeedsShowing] = useState(false)
 
   // Per-tab SWR cache for the page-1 feed so returning to home paints the last
   // posts INSTANTLY (no spinner) while we revalidate in the background. Keyed by
@@ -1626,8 +1628,10 @@ export default function HomePage() {
             {/* A member just approved who had asked to be reminded about a role or team (feed chip). Above the
                 profile nudge: it is the thing they came for. Renders null when there is nothing to ask. */}
             <InterestChip enabled={isActive} onVisibleChange={setInterestShowing} />
-            {/* One prompt at a time: the profile nudge waits while the interest chip is showing. */}
-            <ProfileNudgeCard enabled={isActive && !interestShowing} />
+            {/* "Waiting on you": tasks, a drive you lead, a fix to confirm. Hidden while the interest chip shows. */}
+            <NeedsMeCard enabled={isActive && !interestShowing} onVisibleChange={setNeedsShowing} />
+            {/* One prompt at a time: the profile nudge waits while either card above is showing. */}
+            <ProfileNudgeCard enabled={isActive && !interestShowing && !needsShowing} />
             {loading && displayed.length === 0 ? (
               // Section 01.17: shaped to match the card's new photo-first order
               // (01.15.2) - a skeleton whose shape doesn't match what loads

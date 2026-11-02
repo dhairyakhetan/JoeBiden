@@ -13,6 +13,10 @@ import { StatusStamp } from '../director/adminKit'
 import NotYetMemberModal from '../components/NotYetMemberModal'
 import InterestChip from '../components/InterestChip'
 import openingInterestService from '../services/openingInterestService'
+import needsMeService from '../services/needsMeService'
+import NeedsMeCard from '../components/NeedsMeCard'
+import memberOfMonthService from '../services/memberOfMonthService'
+import HonoursPage from '../profile/HonoursPage'
 
 const ChooseTeamPage = lazy(() => import('../onboarding/ChooseTeamPage'))
 const CreatePostModal = lazy(() => import('../feed/CreatePostModal'))
@@ -234,6 +238,8 @@ export default function AuthedSurfaces() {
     const realGetMine = openingInterestService.getMine
     const realRegister = openingInterestService.register
     const realSetState = openingInterestService.setState
+    const realLoadNeeds = needsMeService.loadNeeds
+    const realMomList = memberOfMonthService.list
 
     // Hard offline. Anything that slips a fixture seam fails fast instead of
     // reaching the network — and there is no session, so it could not read
@@ -314,6 +320,16 @@ export default function AuthedSurfaces() {
     ;(openingInterestService as any).getMine = async () => null
     ;(openingInterestService as any).register = async () => {}
     ;(openingInterestService as any).setState = async () => {}
+    ;(needsMeService as any).loadNeeds = async () => ([
+      { key: 'tasks-overdue', icon: '!', urgent: true, to: '/tasks', text: '2 tasks are overdue' },
+      { key: 'drive-1', icon: '★', to: '/drive/1/check-in', text: 'You’re running Sundarbans relief drive. Open the check-in sheet' },
+      { key: 'bugs', icon: '✓', to: '/bugs', text: 'A report of yours was marked done. Did it work?' },
+    ])
+    ;(memberOfMonthService as any).list = async () => ([
+      { id: 1, period: '2026-10-01', teamId: 7, teamUuid: 't7', teamName: 'Events', teamCategory: 'events', memberId: 5, memberUuid: 'm5', memberName: 'Aarohi Sen', memberAvatarUrl: null, citation: 'Ran the Disco Diwali stalls with no sleep and a huge smile.', pickedById: 1, pickedByName: 'HR', photoUrl: null, photoUploadedAt: null, createdAt: '2026-10-01T00:00:00Z' },
+      { id: 2, period: '2026-10-01', teamId: 13, teamUuid: 't13', teamName: 'ShikshAQ', teamCategory: 'labs', memberId: 6, memberUuid: 'm6', memberName: 'Dev Mukherjee', memberAvatarUrl: null, citation: null, pickedById: 1, pickedByName: 'HR', photoUrl: null, photoUploadedAt: null, createdAt: '2026-10-01T00:00:00Z' },
+      { id: 3, period: '2026-09-01', teamId: 8, teamUuid: 't8', teamName: 'Welfare Team', teamCategory: 'welfare', memberId: 7, memberUuid: 'm7', memberName: 'Isha Roy', memberAvatarUrl: null, citation: 'Taught every Saturday for three months.', pickedById: 1, pickedByName: 'HR', photoUrl: null, photoUploadedAt: null, createdAt: '2026-09-01T00:00:00Z' },
+    ])
 
     setReady(true)
     return () => {
@@ -332,6 +348,8 @@ export default function AuthedSurfaces() {
       ;(openingInterestService as any).getMine = realGetMine
       ;(openingInterestService as any).register = realRegister
       ;(openingInterestService as any).setState = realSetState
+      ;(needsMeService as any).loadNeeds = realLoadNeeds
+      ;(memberOfMonthService as any).list = realMomList
     }
   }, [])
 
@@ -529,6 +547,18 @@ export default function AuthedSurfaces() {
             <NotYetMemberModal gate={notYet} memberId={1} target={{ openingId: 'op1' }} subject="Tutor, ShikshAQ" onClose={() => setNotYet(null)} />
           </Authed>
         )}
+      </Group>
+
+      <Group
+        title="7 · waiting-on-you card and the honours page"
+        blurb="The feed card that gathers tasks, a drive you lead and a fix to confirm, and the /honours history. Services are stubbed in memory."
+      >
+        <Case component="NeedsMeCard" state="three rows: urgent task, drive lead, bug fix">
+          <Authed><NeedsMeCard enabled /></Authed>
+        </Case>
+        <Case component="HonoursPage" state="two months, three picks, one without a citation">
+          <Authed><HonoursPage /></Authed>
+        </Case>
       </Group>
 
       <footer className="devah-foot devah-end">
