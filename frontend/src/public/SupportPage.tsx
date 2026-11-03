@@ -50,7 +50,7 @@ export default function SupportPage() {
       <section style={{ padding: 'clamp(44px, 8vw, 80px) 0 clamp(32px, 5vw, 56px)', position: 'relative', overflow: 'hidden' }}>
         <Star size={100} color="var(--lemon)" style={{ position: 'absolute', top: 40, right: 80, opacity: 0.6 }} className="spin-slow" />
         <div className="container" style={{ position: 'relative' }}>
-          <span className="sticker sticker-mint wobble sticker--diecut" style={{ marginBottom: 16, display: 'inline-flex', ['--sticker-ground' as string]: 'var(--bg)' }}>★ DARPAN certified NGO</span>
+          <span className="sticker sticker-mint wobble sticker--diecut" style={{ marginBottom: 16, display: 'inline-flex', ['--sticker-ground' as string]: 'var(--bg)' }}>★ Registered charitable trust</span>
           <h1 className="giant" style={{ margin: 0, lineHeight: 0.88 }}>
             support<br />
             <span className="underline-doodle" style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', fontWeight: 400, color: 'var(--welfare-ink)' }}>the work</span>.

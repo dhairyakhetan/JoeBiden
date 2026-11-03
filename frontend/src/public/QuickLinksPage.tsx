@@ -230,7 +230,7 @@ export default function QuickLinksPage() {
 
           <div style={{ marginTop: 34, color: 'var(--ink-3)',
             fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.06em' }}>
-            DARPAN certified NGO · reg AAFTT2300ME20251 · explore everything ↓
+            registered charitable trust · DARPAN ID WB/2025/0745627 · explore everything ↓
           </div>
         </div>
       </section>

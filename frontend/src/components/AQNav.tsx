@@ -978,7 +978,7 @@ export default function AQNav(_props: AQNavProps) {
 
               <div className="aq-mega-foot">
                 <span>© 2026 AquaTerra · kolkata · since 2021</span>
-                <span>DARPAN: AAFTT2300ME20251</span>
+                <span>DARPAN ID: WB/2025/0745627</span>
               </div>
             </div>
           </div>

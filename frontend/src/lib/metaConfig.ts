@@ -27,7 +27,7 @@ export const pageMetadata: Record<string, MetaConfig> = {
   },
   about: {
     title: 'About AquaTerra | 16 Students, One Kolkata NGO',
-    description: `how 16 students in Kolkata built a DARPAN-registered, self-funded NGO. now ${MEMBERS} teenagers running real welfare, climate and education work since June 2021.`,
+    description: `how 16 students in Kolkata built a registered, self-funded NGO. now ${MEMBERS} teenagers running real welfare, climate and education work since June 2021.`,
     image: '',
     path: '/about',
   },

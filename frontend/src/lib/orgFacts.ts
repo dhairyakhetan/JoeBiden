@@ -98,8 +98,10 @@ export interface OrgFacts {
   // ── CONSTANTS — never derived, never recomputed. A human sets these. ─────
   /** 11 June 2021. Not disputed — every source agrees. */
   foundedOn: string
-  /** DARPAN (NITI Aayog) registration number. Not disputed. */
-  darpanReg: string
+  /** Trust registration number of the registered entity (TerraRoots). */
+  trustRegNo: string
+  /** DARPAN (NITI Aayog) portal ID. */
+  darpanId: string
   /** "14–19", per BRAND_VOICE.md §3's audience definition. Two live call
    *  sites said "14-25" before this file existed; that was a copy drift, not
    *  a second real age range in use anywhere else. */
@@ -166,7 +168,8 @@ export const ORG_FACTS: OrgFacts = {
   schoolsRepresented: null,
 
   foundedOn: '2021-06-11',
-  darpanReg: 'AAFTT2300ME20251',
+  trustRegNo: 'AAFTT2300ME20251',
+  darpanId: 'WB/2025/0745627',
   ageRange: '14–19',
   linkedinUrl: 'https://in.linkedin.com/company/aquaterrango',
   paradoxThreeDate: '2024-06',

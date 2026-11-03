@@ -391,10 +391,10 @@ export default function AboutPage() {
           <div className="ab-totals-cards">
             <div className="ab-note" style={{ background: 'var(--card)' }}>
               <div className="mono xs upper muted" style={{ fontWeight: 700, marginBottom: 12 }}>★ registered &amp; certified</div>
-              <div style={{ fontWeight: 800, fontSize: 16, fontFamily: 'var(--eina)' }}>DARPAN certified NGO</div>
-              <div className="mono xs" style={{ marginTop: 5, color: 'var(--ink-2)' }}>Reg. No. AAFTT2300ME20251</div>
+              <div style={{ fontWeight: 800, fontSize: 16, fontFamily: 'var(--eina)' }}>Registered charitable trust</div>
+              <div className="mono xs" style={{ marginTop: 5, color: 'var(--ink-2)' }}>DARPAN ID WB/2025/0745627</div>
               <p style={{ fontSize: 13.5, color: 'var(--ink-2)', lineHeight: 1.6, marginTop: 12 }}>
-                registered under DARPAN, an initiative of NITI Aayog, Govt. of India. self-funded, always - zero donations, zero external funding, since day one.
+                TerraRoots, a charitable trust registered with the Charity Commissioner (trust reg. no. AAFTT2300ME20251), listed on DARPAN, an initiative of NITI Aayog, Govt. of India. self-funded, always - zero donations, zero external funding, since day one.
               </p>
             </div>
 
@@ -443,7 +443,7 @@ export default function AboutPage() {
         <div className="ab-what">
           <div className="mono xs upper muted" style={{ fontWeight: 700 }}>★ what AquaTerra actually is</div>
           <p className="ab-story-p ab-what-intro">
-            AquaTerra does two things. It is a DARPAN-certified NGO, and it is a platform where teenagers in Kolkata run real things themselves.
+            AquaTerra does two things. It is a registered charitable trust, and it is a platform where teenagers in Kolkata run real things themselves.
           </p>
           <RevealGroup className="ab-what-list">
             {[

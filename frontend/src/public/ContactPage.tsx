@@ -342,7 +342,7 @@ export default function ContactPage() {
         {[
           { label: 'Instagram', value: '@ngo.aquaterra', sub: 'fastest response', href: 'https://instagram.com/ngo.aquaterra' },
           { label: 'ShikshAQ', value: '@shikshaq.in', sub: 'tuition platform', href: 'https://instagram.com/shikshaq.in' },
-          { label: 'Registration', value: 'DARPAN: AAFTT2300ME20251', sub: 'govt certified', href: undefined },
+          { label: 'Registration', value: 'DARPAN ID: WB/2025/0745627', sub: 'TerraRoots charitable trust', href: undefined },
         ].map((c, i) => (
           <Reveal key={c.label} delay={i * 0.05}>
             {c.href ? (

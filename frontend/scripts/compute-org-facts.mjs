@@ -110,9 +110,12 @@ const CONSTANTS = {
   // 11 June 2021, per AboutPage.tsx's founding narrative, llms.txt and
   // BRAND_VOICE.md §3.1 (all agree — not a disputed figure).
   foundedOn: '2021-06-11',
-  // DARPAN (NITI Aayog) registration number. Verbatim across index.html,
-  // AboutPage, llms.txt, BRAND_VOICE.md §3.1 — not disputed.
-  darpanReg: 'AAFTT2300ME20251',
+  // Trust registration number of TerraRoots (Charity Commissioner, 23 Jul 2025).
+  // It was labelled "DARPAN" until 3 Nov 2026; the DARPAN portal ID is a separate
+  // number, below. Both from the registration extract the owner supplied.
+  trustRegNo: 'AAFTT2300ME20251',
+  // DARPAN (NITI Aayog) portal ID, active since 31 Jul 2025.
+  darpanId: 'WB/2025/0745627',
   // BRAND_VOICE.md §3's own audience section and the live site's copy target
   // "14-19". Two live call sites (lib/metaConfig.ts's `faq` and `members`
   // descriptions, and lib/faqData.ts's `what-is-aquaterra` handbook entry)
@@ -383,8 +386,10 @@ export interface OrgFacts {
   // ── CONSTANTS — never derived, never recomputed. A human sets these. ─────
   /** 11 June 2021. Not disputed — every source agrees. */
   foundedOn: string
-  /** DARPAN (NITI Aayog) registration number. Not disputed. */
-  darpanReg: string
+  /** Trust registration number of the registered entity (TerraRoots). */
+  trustRegNo: string
+  /** DARPAN (NITI Aayog) portal ID. */
+  darpanId: string
   /** "14–19", per BRAND_VOICE.md §3's audience definition. Two live call
    *  sites said "14-25" before this file existed; that was a copy drift, not
    *  a second real age range in use anywhere else. */
@@ -445,7 +450,8 @@ export const ORG_FACTS: OrgFacts = {
   schoolsRepresented: ${c.schoolsRepresented === null || c.schoolsRepresented === undefined ? 'null' : c.schoolsRepresented},
 
   foundedOn: '${CONSTANTS.foundedOn}',
-  darpanReg: '${CONSTANTS.darpanReg}',
+  trustRegNo: '${CONSTANTS.trustRegNo}',
+  darpanId: '${CONSTANTS.darpanId}',
   ageRange: '${CONSTANTS.ageRange}',
   linkedinUrl: '${CONSTANTS.linkedinUrl}',
   paradoxThreeDate: '${CONSTANTS.paradoxThreeDate}',

@@ -100,7 +100,7 @@ export default function VolunteerHandbookPage() {
         <Burst size={92} color="var(--pink)" style={{ position: 'absolute', bottom: 8, left: '5%', opacity: 0.5 }} />
         <div className="container" style={{ position: 'relative' }}>
           <div className="row gap-2" style={{ marginBottom: 18, flexWrap: 'wrap' }}>
-            <span className="sticker sticker-mint sticker-float sticker--diecut" style={{ ['--sticker-ground' as string]: 'var(--bg)' }}>★ DARPAN certified</span>
+            <span className="sticker sticker-mint sticker-float sticker--diecut" style={{ ['--sticker-ground' as string]: 'var(--bg)' }}>★ Registered charitable trust</span>
             <span className="sticker sticker-lemon wobble sticker--diecut" style={{ ['--sticker-ground' as string]: 'var(--bg)' }}>est 2021</span>
             <span className="sticker sticker--diecut" style={{ ['--sticker-ground' as string]: 'var(--bg)' }}>free · no experience needed</span>
             {/* Rubber-stamp-style accent - reuses the shared .sticker component,
