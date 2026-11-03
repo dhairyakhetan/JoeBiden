@@ -491,7 +491,7 @@ export function BasicsTab({
       {/* Everything else is optional - tucked away until asked for. */}
       <div className="pm-span-2">
         <AdvToggle open={open} onClick={() => toggleAdv('basics')}
-          openLabel="Hide extra details" shutLabel="More details - location, volunteers, stat" />
+          openLabel="Hide extra details" shutLabel="More details: location, volunteers, stats" />
       </div>
 
       {open && (

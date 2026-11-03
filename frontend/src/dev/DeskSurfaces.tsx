@@ -101,6 +101,11 @@ const HiringResponses = import.meta.env.DEV ? lazy(() => import('../director/Hir
 const ActivityLog = import.meta.env.DEV ? lazy(() => import('../director/ActivityLog')) : Placeholder
 const BlogDrafts = import.meta.env.DEV ? lazy(() => import('../director/BlogDrafts')) : Placeholder
 const MemberOfMonth = import.meta.env.DEV ? lazy(() => import('../director/MemberOfMonth')) : Placeholder
+const ProjectManager = import.meta.env.DEV ? lazy(() => import('../director/ProjectManager')) : Placeholder
+const DirectorManagement = import.meta.env.DEV ? lazy(() => import('../director/DirectorManagement')) : Placeholder
+const ContentManager = import.meta.env.DEV ? lazy(() => import('../director/ContentManager')) : Placeholder
+const YearbookManagement = import.meta.env.DEV ? lazy(() => import('../director/YearbookManagement')) : Placeholder
+const CategoryManagement = import.meta.env.DEV ? lazy(() => import('../director/CategoryManagement')) : Placeholder
 const DirectorDashboard = import.meta.env.DEV ? lazy(() => import('../director/DirectorDashboard')) : Placeholder
 
 const DESKS: { id: string; label: string; note: string; el: ReactNode; shell?: boolean }[] = [
@@ -117,6 +122,11 @@ const DESKS: { id: string; label: string; note: string; el: ReactNode; shell?: b
   { id: 'activity', label: 'Activity Log', note: 'audit rows, cron rows hidden by default', el: <ActivityLog /> },
   { id: 'blogs', label: 'Blog Drafts', note: 'drafts and live-and-scheduled', el: <BlogDrafts /> },
   { id: 'mom', label: 'Member of Month', note: 'the team picker and the queued-month note', el: <MemberOfMonth /> },
+  { id: 'projects', label: 'Drive Write-ups', note: 'the drives table and its edit dialog', el: <ProjectManager /> },
+  { id: 'hods', label: 'Manage HoDs', note: 'directors, their scopes and role changes', el: <DirectorManagement /> },
+  { id: 'content', label: 'All posts', note: 'every post, with filters and actions', el: <ContentManager /> },
+  { id: 'yearbook', label: 'Yearbook', note: 'invitations and the year list', el: <YearbookManagement /> },
+  { id: 'categories', label: 'Moderation', note: 'who moderates which teams', el: <CategoryManagement /> },
 ]
 
 const qp = (k: string) => { try { return new URLSearchParams(window.location.search).get(k) } catch { return null } }

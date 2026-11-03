@@ -1053,10 +1053,16 @@
   .admin .adm-header-label { margin-bottom: 4px; }
   .admin .adm-toolbar { margin-bottom: 10px; gap: 6px; }
 
-  /* 6 - modals become full-screen sheets, sticky head + footer actions. */
+  /* 6 - modals: .adm-sheet stays a full-screen sheet; a .modal is a BOTTOM sheet sized to its content (2026-11-03: a
+     one-field "reject" form was a full-screen white page with 70% of it empty), with a sticky head + footer actions. */
   .admin .modal-back,
   .adm-sheet-back { padding: 0; align-items: stretch; }
-  .admin .modal,
+  .admin .modal-back { align-items: end; }
+  .admin .modal {
+    width: 100%; max-width: none; height: auto; max-height: 92dvh;
+    border-radius: var(--r-outer) var(--r-outer) 0 0; border-left: none; border-right: none; border-bottom: none;
+    box-shadow: var(--lift-4); display: flex; flex-direction: column;
+  }
   .adm-sheet {
     width: 100%; max-width: none; height: 100dvh; max-height: 100dvh;
     border-radius: 0; border-left: none; border-right: none;
@@ -2222,3 +2228,88 @@
   border-radius: var(--r-sm, 20px);
 }
 .admin .adm-row.is-approving .adm-row-main { opacity: 0.6; }
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESK POLISH, 3 Nov 2026 (owner: "no padding, improper spacing, bad modals and popups, tables that don't scroll,
+   information that gets cut off"). One block, so the fixes are findable and the contract is stated once.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 1. MODALS: a readable width and real padding. The global `.modal` is `width: 100%` with no maximum, so any dialog
+   that did not set its own width (Teams, Break, both Reject dialogs, Archive, Delete, Yearbook) stretched across the
+   whole desktop screen, and the ones with no `.modal-body` wrapper had their text flush against the left edge. */
+@media (min-width: 601px) { .admin .modal-back { padding: 24px; } }
+.admin .modal { max-width: min(560px, 100%); }
+/* The dialog container takes focus so the keyboard starts inside it; it is not a control, so it gets no focus ring. */
+.admin .modal:focus, .admin .modal:focus-visible { outline: none; }
+/* Form controls and grid children inside a dialog may shrink below their intrinsic width (a date input is ~150px wide on
+   its own), which pushed the second column of a two-up row out past the dialog's edge and cut it off. */
+.admin .modal input, .admin .modal select, .admin .modal textarea { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.admin .modal [style*="grid-template-columns"] > * { min-width: 0; }
+.admin .modal > .panel-h {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 22px; border-bottom: var(--hair); background: var(--hod-surface-1, var(--card));
+}
+.admin .modal:not(:has(> .modal-body)) > :not(.panel-h) { margin-left: 22px; margin-right: 22px; }
+.admin .modal:not(:has(> .modal-body)) > .panel-h + * { margin-top: 14px; }
+.admin .modal:not(:has(> .modal-body)) { padding-bottom: 20px; }
+.admin .modal .modal-head { padding: 16px 22px; }
+.admin .modal .modal-body { padding: 18px 22px 22px; }
+.admin .modal .modal-body .row { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 600px) {
+  .admin .modal:not(:has(> .modal-body)) { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .admin .modal .modal-head, .admin .modal > .panel-h { padding: 14px 18px; }
+  .admin .modal:not(:has(> .modal-body)) > :not(.panel-h) { margin-left: 18px; margin-right: 18px; }
+  .admin .modal .modal-body { padding: 16px 18px calc(20px + env(safe-area-inset-bottom)); }
+}
+
+/* 2. TABLES: wide tables scroll inside their own frame, and the frame SAYS so. A scroll shadow appears on whichever
+   edge has more content (CSS only, no JS), the scrollbar is thin and always styled, and the first column stays pinned so
+   a row never loses whose it is. Before this a table wider than the desk just ended at the edge with the rest unreachable. */
+.admin .mdir-table-wrap, .admin .pm-tablewrap, .admin .vol-tablewrap, .admin .adm-seg {
+  background-color: var(--card);
+  background-image:
+    linear-gradient(to right, var(--card) 30%, rgba(255,255,255,0)),
+    linear-gradient(to left, var(--card) 30%, rgba(255,255,255,0)),
+    radial-gradient(farthest-side at 0 50%, rgba(10,10,10,0.22), rgba(10,10,10,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(10,10,10,0.22), rgba(10,10,10,0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 44px 100%, 44px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.admin .mdir-table th:first-child, .admin .mdir-table td:first-child {
+  position: sticky; left: 0; background: var(--card); z-index: 1; box-shadow: 1px 0 0 var(--line-2);
+}
+.admin .mdir-table thead th:first-child { z-index: 3; background: var(--hod-surface-2); }
+.admin .mdir-table tbody tr:hover td:first-child { background: var(--bg-2); }
+
+/* Narrow columns made long values wrap to eight lines ("A School Whose Name Is Longer Than The Column"): give the free-text
+   columns a floor so the row stays scannable. */
+.admin .mdir-table td:nth-child(5) { min-width: 110px; }
+.admin .mdir-table td:nth-child(6) { min-width: 170px; }
+
+/* 3. FILTER TABS: scroll, never clip. The segmented control squeezed five tabs into a phone-width box and cut each
+   label ("pending" -> "pend"). Now each tab keeps its full label and the row scrolls sideways. */
+.admin .adm-seg { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.admin .adm-seg::-webkit-scrollbar { display: none; }
+.admin .adm-seg > button { flex: 0 0 auto; min-width: max-content; overflow: visible; text-overflow: clip; }
+
+/* 4. ROWS: on a phone a row that cannot fit wraps its actions onto their own line instead of pushing them off-screen
+   (Blog drafts, Member of the Month, Volunteers, Hiring all use .qrow). */
+@media (max-width: 600px) {
+  .admin .qrow { flex-wrap: wrap; row-gap: 8px; padding: 12px 14px; }
+  .admin .qrow > .qmeta { flex: 1 1 180px; }
+  .admin .qacts { flex-wrap: wrap; margin-left: auto; }
+}
+
+/* 5. The consequence note was 9.5px: too small to read on any screen, and it carries what a control actually does. */
+.admin .adm-note { font-size: 11.5px; line-height: 1.55; }
+
+/* 6. A disclosure button's label must wrap, not run off the edge ("More details - location, volunteers, stat" was cut mid-word). */
+@media (max-width: 760px) {
+  .admin .adm-disclose { white-space: normal; text-align: center; line-height: 1.35; padding-top: 9px; padding-bottom: 9px; }
+}

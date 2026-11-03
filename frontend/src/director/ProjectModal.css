@@ -68,7 +68,8 @@
         .pm-ready-item.done .pm-ready-tick { color: var(--welfare-ink); font-weight: 700; }
         /* tab content dot */
         .pm-tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--welfare); margin-left: auto; flex-shrink: 0; }
-        .pm-mobile-ready { margin-left: auto; align-self: center; font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--ink-3); white-space: nowrap; padding-left: 12px; font-variant-numeric: tabular-nums; }
+        /* Pinned to the right edge of the tab row: it scrolled away with the tabs, so on a phone "0/5 ready" was cut off. */
+        .pm-mobile-ready { position: sticky; right: 0; flex: none; background: var(--hod-surface-1); margin-left: auto; align-self: center; font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--ink-3); white-space: nowrap; padding-left: 12px; font-variant-numeric: tabular-nums; }
         .pm-footer-status { margin-right: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
         .pm-tab {
           display: flex; align-items: center; gap: 10px; min-height: 40px;
