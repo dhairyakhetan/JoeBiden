@@ -8,6 +8,7 @@ import {
   maskPhone,
   normalizePhone,
   isPlausiblePhone,
+  isIndianMobile,
   EMPTY_NUDGE_STATE,
   NUDGE_SNOOZE_MS,
   NUDGE_MAX_DISMISSALS,
@@ -210,6 +211,15 @@ describe('maskPhone', () => {
   it('always hides at least two positions', () => {
     expect(maskPhone('123456')).toBe('••3456')
     expect(maskPhone('12345')).toBe('••2345')
+  })
+})
+
+describe('isIndianMobile (C-20)', () => {
+  it('accepts a 10-digit mobile with an optional +91, 91 or 0', () => {
+    for (const ok of ['9876543210', '+91 98765 43210', '919876543210', '09876543210', '6000000000']) expect(isIndianMobile(ok)).toBe(true)
+  })
+  it('rejects 11 digits that are not 0-prefixed, landlines, short and non-mobile starts', () => {
+    for (const bad of ['98765432101', '03322223333', '5876543210', '98765', '', 'ramesh', '+1 202 555 0143']) expect(isIndianMobile(bad)).toBe(false)
   })
 })
 

@@ -150,6 +150,17 @@ same queue; a rejected account must wait 30 days and reapply from scratch.
   applications and 1 join request pending members had already filed were turned
   into reminders on 2 Nov 2026 (the original rows are kept inside the reminder).
   A rejected or suspended account also cannot apply and gets no reminder.
+- A signed-out visitor applies for a role in two steps on one screen (owner,
+  3 Nov 2026): step 1 asks name, phone and email plus the usual answers; step 2
+  is Google sign-in right there. Between the two, the site checks whether the
+  phone or email already belongs to an account. A match says "we found an
+  account for you, sign in to continue"; a number on a different email shows
+  that email masked (for example `ka****@gmail.com`) and never a name. The check
+  is rate-limited and a match never attaches the application to that account:
+  whoever actually signs in is the one who applies. An approved member carries on
+  with the form where they left off. A new or waiting member has the application
+  kept as a reminder and is told HR confirms them first, then the team reaches
+  out. Team join requests (not roles) still send a signed-out visitor to sign in.
   If a visitor presses Apply (or "sign in to join" on a team), signs in and registers, the
   role or team they chose is remembered for the tab and offered on the waiting page
   ("you wanted to join X, remind me?"), with anything they had typed saved too.

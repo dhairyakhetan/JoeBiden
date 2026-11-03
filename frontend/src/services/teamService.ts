@@ -339,7 +339,8 @@ const teamServiceImpl = {
           name: st.name,
           description: st.description ?? undefined,
           memberCount: st.team_member_sub_teams?.[0]?.count || 0,
-        })),
+        }))
+        .filter(isPopulatedSubTeam),
     }
 
     return { success: true, data: { team } }
@@ -420,7 +421,8 @@ const teamServiceImpl = {
           name: st.name,
           description: st.description ?? undefined,
           memberCount: st.team_member_sub_teams?.[0]?.count || 0,
-        })),
+        }))
+        .filter(isPopulatedSubTeam),
     }))
   },
 
@@ -464,7 +466,7 @@ const teamServiceImpl = {
       name: st.name,
       description: st.description ?? undefined,
       memberCount: st.team_member_sub_teams?.[0]?.count || 0,
-    }))
+    })).filter(isPopulatedSubTeam)
   },
 
   /** One sub-department by its parent team + slug (the `?sub=` route param on /teams/:uuid). */
@@ -1790,6 +1792,12 @@ export async function getTeamLeaderIds(teamId: number): Promise<number[]> {
     if (error) return []
     return ((data || []) as any[]).map(r => (typeof r === 'number' ? r : Number(Object.values(r)[0]))).filter(n => Number.isFinite(n))
   } catch { return [] }
+}
+
+/** A sub-team with no members and no description is an empty shell (C-21, 3 Nov 2026): leave it off the team
+ *  pages and lists. Its own URL keeps working, so existing links and a freshly made sub-team still resolve. */
+function isPopulatedSubTeam(st: { memberCount?: number; description?: string | null }): boolean {
+  return (st.memberCount ?? 0) > 0 || Boolean(st.description && st.description.trim())
 }
 
 export const teamService = withFunctionLogging('teamService', teamServiceImpl)

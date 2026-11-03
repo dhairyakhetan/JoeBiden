@@ -226,6 +226,18 @@ export function normalizePhone(raw: string): string {
  * numbers with a +91 / 0 prefix and a guardian may be abroad. Reject only what
  * is obviously not a phone number rather than bouncing a real one.
  */
+/**
+ * A member's OWN phone: an Indian mobile (C-20, 3 Nov 2026). Ten digits starting 6 to 9, with an optional
+ * +91, 91 or 0 in front. An 11-digit number that is not 0-prefixed, a landline or a stray run of digits no
+ * longer passes. Guardian numbers keep the permissive isPlausiblePhone (a guardian may be abroad).
+ */
+export function isIndianMobile(raw: string): boolean {
+  const digits = raw.replace(/\D/g, '')
+  return /^(?:91|0)?[6-9]\d{9}$/.test(digits)
+}
+
+export const INDIAN_MOBILE_HINT = 'enter a 10-digit Indian mobile number (starting 6 to 9). +91 is fine.'
+
 export function isPlausiblePhone(raw: string): boolean {
   const digits = raw.replace(/\D/g, '')
   return digits.length >= 10 && digits.length <= 15

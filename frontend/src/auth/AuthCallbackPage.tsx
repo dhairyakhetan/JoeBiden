@@ -1,4 +1,6 @@
-import { stashWish } from '../lib/pendingWish'
+import { stashWish, clearWish } from '../lib/pendingWish'
+import { readGuestApply, clearGuestApply, markGuestApplied } from '../lib/guestApply'
+import { openingInterestService } from '../services/openingInterestService'
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
@@ -51,11 +53,29 @@ const AuthCallbackPage = () => {
       // A member who is not approved yet cannot apply, so the role or team they were heading for would be lost on the
       // way to /register and /pending. Remember it: the waiting page offers to remind them (lib/pendingWish.ts).
       if (member.status !== 'active') stashWish(from)
-      if (isUnblockableTestAccount(member.email)) navigate(from, { replace: true })
-      else if (!isRegistrationComplete(member)) navigate('/register', { replace: true })
-      else if (member.status === 'active') navigate(from, { replace: true })
-      else if (member.status === 'pending_approval') navigate('/pending', { replace: true })
-      else if (member.status === 'rejected' || member.status === 'suspended' || member.status === 'deleted') navigate('/rejected', { replace: true })
+      const routeNow = () => {
+        if (isUnblockableTestAccount(member.email)) navigate(from, { replace: true })
+        else if (!isRegistrationComplete(member)) navigate('/register', { replace: true })
+        else if (member.status === 'active') navigate(from, { replace: true })
+        else if (member.status === 'pending_approval') navigate('/pending', { replace: true })
+        else if (member.status === 'rejected' || member.status === 'suspended' || member.status === 'deleted') navigate('/rejected', { replace: true })
+      }
+      // A visitor who filled the apply form signed out and signed in from the same screen (lib/guestApply.ts).
+      // An approved member carries on with the form (it reopens prefilled from `from`). Anyone still waiting for
+      // approval cannot apply yet, so the application is kept as an interest: HR confirms them first, then it is
+      // theirs to send, and the waiting page says so. Registering twice is not an error, so a re-run is harmless.
+      const guest = readGuestApply()
+      if (guest && member.status === 'pending_approval') {
+        // The draft stays until /pending has shown its confirmation: /register starts from the name and number in it.
+        openingInterestService
+          .register(member.member_id, { openingId: guest.openingId }, { message: guest.message, customAnswers: guest.answers })
+          .then(() => { markGuestApplied(guest.title); clearWish() })
+          .catch(() => { /* the waiting page still offers "remind me" for the same role */ })
+          .finally(routeNow)
+      } else {
+        if (guest && member.status === 'active') clearGuestApply()
+        routeNow()
+      }
     } else if (!authLoading && !isAuthenticated && !memberLoadFailed) {
       // Genuinely no session (OAuth failed/cancelled, or a direct visit) -
       // nothing to route, send back to the real entry point.

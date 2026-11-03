@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import './ProfileNudgeCard.css'
 import { useToast } from './Toast'
 import profileNudgeService, { type NudgeContext } from '../services/profileNudgeService'
-import { isPlausiblePhone, maskPhone } from '../lib/profileNudge'
+import { isPlausiblePhone, isIndianMobile, INDIAN_MOBILE_HINT, maskPhone } from '../lib/profileNudge'
 
 /*
   The one definition of AquaTerra's "whose number is this?" UX.
@@ -142,8 +142,8 @@ export default function ContactNumberFields() {
   const onSave = async () => {
     if (!ctx) return
     const raw = value.trim()
-    if (!isPlausiblePhone(raw)) {
-      setError('that does not look like a phone number yet.')
+    if (owner === 'guardian' ? !isPlausiblePhone(raw) : !isIndianMobile(raw)) {
+      setError(owner === 'guardian' ? 'that does not look like a phone number yet.' : INDIAN_MOBILE_HINT)
       return
     }
     if (owner === 'guardian' && !ctx.hasGuardianColumn) {

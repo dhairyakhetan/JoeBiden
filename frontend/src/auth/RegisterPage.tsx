@@ -13,12 +13,13 @@ import { useMeta } from '../hooks/useMeta'
 import { pageMetadata } from '../lib/metaConfig'
 import { trackProfileStarted, trackProfileCompleted } from '../lib/funnel'
 import { APPROVAL_TIME } from '../lib/orgFacts'
-import { normalizePhone, isPlausiblePhone, isRegistrationComplete } from '../lib/profileNudge'
+import { normalizePhone, isIndianMobile, INDIAN_MOBILE_HINT, isRegistrationComplete } from '../lib/profileNudge'
 import SignInReceipt from '../components/SignInReceipt'
 import { hasPrintedReceipt } from '../lib/receiptRecord'
 import { useUnsavedChanges } from '../hooks/useUnsavedChanges'
 import { isDirty } from '../lib/unsavedChanges'
 import { checkPhoneAvailable, asPhoneConflict } from '../lib/phoneConflict'
+import { guestPrefill } from '../lib/guestApply'
 import PhoneConflictNotice from '../components/PhoneConflictNotice'
 
 // Moved to lib/classOptions.ts so /profile/edit writes from the SAME list.
@@ -36,9 +37,9 @@ const RegisterPage = () => {
   const [qIndex, setQIndex] = useState(0)
   const QUESTIONS = ['fullName', 'classGrade', 'phone'] as const
   const [formData, setFormData] = useState({
-    fullName: member?.full_name || '',
+    fullName: member?.full_name || guestPrefill()?.name || '',
     classGrade: member?.class_grade || '',
-    phone: member?.phone || '',
+    phone: member?.phone || guestPrefill()?.phone || '',
     joinReason: member?.join_reason || '',
   })
   const [isLoading, setIsLoading] = useState(false)
@@ -175,7 +176,7 @@ const RegisterPage = () => {
   // unreachable number on file.
   const validateField = (key: typeof QUESTIONS[number], value: string): string | undefined => {
     if (!value.trim()) return QUESTION_LABEL[key]
-    if (key === 'phone' && !isPlausiblePhone(value)) return 'that does not look like a phone number yet.'
+    if (key === 'phone' && !isIndianMobile(value)) return INDIAN_MOBILE_HINT
     return undefined
   }
 

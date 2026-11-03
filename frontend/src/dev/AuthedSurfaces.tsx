@@ -11,6 +11,7 @@ import AdaptiveGrid from '../components/AdaptiveGrid'
 import { GRID_RECIPES, type GridContext, type GridRecipeId } from '../lib/gridRecipes'
 import { StatusStamp } from '../director/adminKit'
 import NotYetMemberModal from '../components/NotYetMemberModal'
+import ApplyModal from '../public/ApplyModal'
 import InterestChip from '../components/InterestChip'
 import openingInterestService from '../services/openingInterestService'
 import needsMeService from '../services/needsMeService'
@@ -208,6 +209,7 @@ export default function AuthedSurfaces() {
   const [composerOpen, setComposerOpen] = useState(false)
   const [newComposerOpen, setNewComposerOpen] = useState(false)
   const [notYet, setNotYet] = useState<null | 'pending' | 'rejected'>(null)
+  const [guestApplyOpen, setGuestApplyOpen] = useState(false)
   const scenarioRef = useRef<TeamScenario>(teamScenario)
   scenarioRef.current = teamScenario
 
@@ -542,6 +544,15 @@ export default function AuthedSurfaces() {
             <InterestChip enabled />
           </Authed>
         </Case>
+        <button type="button" className="devah-switch-btn" data-testid="open-guest-apply" onClick={() => setGuestApplyOpen(true)}>open the apply form (signed out: name, phone, email, then Google)</button>
+        {guestApplyOpen && (
+          <ApplyModal
+            op={{ id: 'op1', title: 'Tutor, ShikshAQ', description: 'Teach a small group.', category: 'welfare', teamName: 'ShikshAQ', skills: [], status: 'open', createdByName: 'HR', createdByRole: 'hr', createdAt: '2026-10-01T00:00:00Z', customQuestions: [] } as never}
+            member={null}
+            onClose={() => setGuestApplyOpen(false)}
+            onApplied={() => setGuestApplyOpen(false)}
+          />
+        )}
         {notYet && (
           <Authed>
             <NotYetMemberModal gate={notYet} memberId={1} target={{ openingId: 'op1' }} subject="Tutor, ShikshAQ" onClose={() => setNotYet(null)} />

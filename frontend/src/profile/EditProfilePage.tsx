@@ -15,7 +15,7 @@ import { checkText, BLOCK_MESSAGE } from '../lib/profanityFilter'
 import { getInitials } from '../lib/uiHelpers'
 import AvatarCropModal from '../components/AvatarCropModal'
 import { PhoneConflictError, checkPhoneAvailable } from '../lib/phoneConflict'
-import { isPlausiblePhone } from '../lib/profileNudge'
+import { isPlausiblePhone, isIndianMobile, INDIAN_MOBILE_HINT } from '../lib/profileNudge'
 import PhoneConflictNotice from '../components/PhoneConflictNotice'
 
 // The shared `School` from services/api.ts, not a local restatement of it. The
@@ -288,6 +288,12 @@ const EditProfilePage = () => {
       const order: ProfileField[] = ['fullName', 'bio']
       const firstBad = order.find(k => fe[k])
       if (firstBad) document.getElementById(`ep-${firstBad === 'fullName' ? 'name' : firstBad}`)?.focus()
+      return
+    }
+
+    if (formData.phone.trim() && formData.phone.trim() !== savedSnapshot.current.phone.trim() && !isIndianMobile(formData.phone)) {
+      setFieldErrors(prev => ({ ...prev, phone: INDIAN_MOBILE_HINT }))
+      document.getElementById('ep-phone')?.focus()
       return
     }
 

@@ -744,7 +744,7 @@ async function main() {
   // until the same audit. If you change the shape here, change it there.
   const subTeamRows = await select('sub_teams', {
     table: 'sub_teams',
-    columns: 'slug,name,description,is_active,teams(uuid,name,is_active)',
+    columns: 'sub_team_id,slug,name,description,is_active,teams(uuid,name,is_active)',
     filter: 'is_active=eq.true',
   })
   let subTeamWritten = 0

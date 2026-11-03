@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import PendingWishCard from '../components/PendingWishCard'
+import { readGuestApplied, clearGuestApply } from '../lib/guestApply'
 import { sized } from '../lib/imageUrl'
 import { feedService } from '../services/feedService'
 import { Post } from '../services/api'
@@ -168,6 +169,9 @@ function SkeletonCard({ delay }: { delay: number }) {
 const APPROVAL_COUNTDOWN_SECONDS = 3
 
 const PendingApprovalPage = () => {
+  // A visitor who applied for a role signed out (lib/guestApply.ts): their application is kept, and this says what happens next.
+  const [appliedFor] = useState<string | null>(() => readGuestApplied())
+  useEffect(() => { clearGuestApply() }, [])
   const navigate = useNavigate()
   const { member, isAuthenticated, isLoading: authLoading, refreshMember, logout } = useAuth()
   const [posts, setPosts] = useState<Post[]>([])
@@ -397,6 +401,14 @@ const PendingApprovalPage = () => {
           Since 2 Nov 2026 a pending member cannot apply (the database refuses it, lib/joinGate.ts). They can browse,
           and opening a role offers "remind me", which becomes a card at the top of their feed once they are approved. */}
       <div style={{ padding: 'clamp(24px, 4vw, 40px) var(--page-px) 0', maxWidth: 'var(--frame-max)', margin: '0 auto' }}>
+        {appliedFor && (
+          <div role="status" style={{ background: 'var(--welfare)', color: 'var(--ink)', border: 'var(--hair-2)', borderRadius: 'var(--r-inner)', padding: '14px 18px', marginBottom: 16 }}>
+            <div className="h-display" style={{ fontSize: 22, lineHeight: 1.05, marginBottom: 6 }}>your application for {appliedFor} is saved.</div>
+            <p style={{ margin: 0, fontFamily: 'var(--eina)', fontSize: 14, lineHeight: 1.55 }}>
+              First HR confirms you as part of AquaTerra. Then the team reaches out to you. We will also remind you at the top of your feed.
+            </p>
+          </div>
+        )}
         <PendingWishCard />
         <div className="h-display" style={{ fontSize: 'clamp(24px, 5vw, 32px)', lineHeight: 0.96, marginBottom: 8 }}>
           while you wait,

@@ -1,0 +1,14 @@
+-- ──────────────────────────────────────────────────────────────────────────
+-- Duplicate Member-of-the-Month announcements (handoff C-19, 3 Nov 2026).
+--
+-- STATUS: APPLIED 3 Nov 2026 via the Supabase connector (migration name motm_duplicate_guard_20261103).
+--
+--   1. Posts 867, 870 and 874 were exact repeats of an announcement already live for the same person, team and
+--      month (866 Welfare Sep, 869 Events Sep, 868 Events Oct). Soft-hidden with deleted_at, copied first into
+--      public.posts_backup_motm_20261103. No wording or date was changed. To restore:
+--        update posts set deleted_at = null where post_id in (867, 870, 874);
+--   2. Trigger trg_block_duplicate_motm_post (before insert on posts) refuses a second announcement whose first
+--      line (person, team, month) matches a live one. Different people for the same team and month are allowed:
+--      893/894 (Digital Magazine) and 895/896/898 (Social Media) are NOT duplicates of each other and are left alone.
+-- ──────────────────────────────────────────────────────────────────────────
+-- (the statements are recorded in the migration history under the name above)

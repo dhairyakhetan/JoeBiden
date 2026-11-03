@@ -364,11 +364,17 @@ async function generate() {
     url: DB_URL, key: DB_KEY, table: 'sub_teams',
     // No updated_at on this table - only created_at. Confirmed against the
     // live schema: asking for it 400s and the section silently empties.
-    columns: 'slug,created_at,is_active,teams(uuid,is_active)',
+    columns: 'slug,created_at,is_active,sub_team_id,description,teams(uuid,is_active)',
     filter: 'is_active=eq.true',
   })
+  // Empty shells (no members, no description) are left out of the sitemap (C-21). Their URLs keep working.
+  const subTeamMemberRows = await select('team_member_sub_teams', {
+    url: DB_URL, key: DB_KEY, table: 'team_member_sub_teams', columns: 'sub_team_id',
+  })
+  const populatedSubTeamIds = new Set(subTeamMemberRows.map(r => r.sub_team_id))
   const subTeamEntries = subTeamRows
     .filter(r => r.slug && r.teams?.uuid && r.teams?.is_active)
+    .filter(r => populatedSubTeamIds.has(r.sub_team_id) || (r.description && String(r.description).trim()))
     .map(r => ({
       path: `/teams/${r.teams.uuid}/sub/${r.slug}`,
       changefreq: 'monthly', priority: '0.5',

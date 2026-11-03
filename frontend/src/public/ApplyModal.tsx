@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router-dom'
 import { setAuthIntent, type GateCategory } from '../lib/authIntent'
 import { jobOpenings, JobOpening, CAT_COLORS } from '../lib/jobOpenings'
 import { useToast } from '../components/Toast'
@@ -11,6 +10,7 @@ import useDialog from '../hooks/useDialog'
 import GatedButton from '../components/GatedButton'
 import NotYetMemberModal from '../components/NotYetMemberModal'
 import { joinGate, canApplyNow } from '../lib/joinGate'
+import { guestIdentityProblem, matchGuest, guestCopy, continueWithGoogle, type GuestMatch } from '../lib/guestApply'
 
 type Member = Database['public']['Tables']['members']['Row']
 
@@ -23,7 +23,6 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
   onApplied: () => void
 }) {
   const { error: toastError } = useToast()
-  const navigate = useNavigate()
   const draftKey = `aq_apply_draft_${op.id}`
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -31,6 +30,12 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
   // Known phone and an optional note stay folded away: the common case is one tap on Submit.
   const [editPhone, setEditPhone] = useState(!member?.phone)
   const [showNote, setShowNote] = useState(false)
+  // Signed-out visitors: step 1 collects who they are, step 2 (after `match`) signs them in with Google.
+  const [guestName, setGuestName] = useState('')
+  const [guestEmail, setGuestEmail] = useState('')
+  const [matching, setMatching] = useState(false)
+  const [match, setMatch] = useState<GuestMatch | null>(null)
+  const [signingIn, setSigningIn] = useState(false)
   const accent = CAT_COLORS[op.category] || 'var(--welfare)'
   const questions = op.customQuestions || []
   const { answers, setAnswer, files, setFile, phone, setPhone, phoneMissing, missingRequired, buildCustomAnswers } = useOpeningAnswers(questions)
@@ -56,9 +61,14 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
     if (phoneMissing) { toastError('Phone number is required'); return }
     if (missingRequired) { toastError(`"${missingRequired.label}" is required`); return }
     if (!member) {
-      try { sessionStorage.setItem(draftKey, JSON.stringify({ phone, message, answers })) } catch { /* sign in anyway */ }
-      setAuthIntent({ kind: 'opening', title: op.title, category: op.category as GateCategory, teamName: op.teamName || null })
-      navigate('/login', { state: { from: { pathname: `/opportunities/${op.id}`, search: '?apply=1' } } })
+      const problem = guestIdentityProblem({ name: guestName, phone, email: guestEmail })
+      if (problem) { toastError(problem); return }
+      setMatching(true)
+      try {
+        const m = await matchGuest(phone, guestEmail)
+        if (m.outcome === 'limited') toastError('Too many tries just now.', 'You can still continue with Google below.')
+        setMatch(m)
+      } finally { setMatching(false) }
       return
     }
     setSubmitting(true)
@@ -76,6 +86,19 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const startGoogle = async () => {
+    if (!match) return
+    setSigningIn(true)
+    try { sessionStorage.setItem(draftKey, JSON.stringify({ phone, message, answers })) } catch { /* the guest draft below still carries it */ }
+    setAuthIntent({ kind: 'opening', title: op.title, category: op.category as GateCategory, teamName: op.teamName || null })
+    const { error } = await continueWithGoogle({
+      draft: { openingId: op.id, title: op.title, name: guestName.trim(), email: guestEmail.trim(), phone, message, answers },
+      returnTo: `/opportunities/${op.id}?apply=1`,
+      loginHint: guestCopy(match, op.title).useHint ? guestEmail.trim() : undefined,
+    })
+    if (error) { toastError('Could not reach Google', error); setSigningIn(false) }
   }
 
   // Not approved yet: no form. Say so, and let a pending member ask to be reminded. A draft they typed before
@@ -115,13 +138,51 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
             </p>
             <button className="btn btn-sm btn-primary" style={{ minHeight: 44 }} onClick={onClose}>Close</button>
           </div>
+        ) : !member && match ? (
+          <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {(() => {
+              const c = guestCopy(match, op.title)
+              return (
+                <>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)' }}><strong style={{ color: 'var(--ink)' }}>Step 2 of 2.</strong> Sign in to send.</div>
+                  <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 26, letterSpacing: '-0.03em', lineHeight: 1.05 }}>{c.heading}</div>
+                  <p style={{ fontFamily: 'var(--eina)', fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.6, margin: 0 }}>{c.body}</p>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <button type="button" className="btn btn-primary btn-sm" disabled={signingIn}
+                      style={{ flex: 1, justifyContent: 'center', minHeight: 44, background: accent, borderColor: accent, color: 'var(--ink)' }} onClick={startGoogle}>
+                      {signingIn ? 'Opening Google…' : c.button}
+                    </button>
+                    <button type="button" className="btn btn-sm btn-ghost" style={{ minHeight: 44 }} disabled={signingIn} onClick={() => setMatch(null)}>Back</button>
+                  </div>
+                </>
+              )
+            })()}
+          </div>
         ) : (
           <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Who is applying */}
             {/* Card-inside-a-card well: off-spine 10px -> the 14px tight step. */}
             <div style={{ background: 'var(--bg-2)', borderRadius: 'var(--r-tight)', padding: '10px 14px', fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)' }}>
-              {member ? <>Applying as <strong style={{ color: 'var(--ink)' }}>{member.full_name}</strong></> : <>You sign in with Google when you press send. Your answers are kept.</>}
+              {member ? <>Applying as <strong style={{ color: 'var(--ink)' }}>{member.full_name}</strong></> : <><strong style={{ color: 'var(--ink)' }}>Step 1 of 2.</strong> Tell us who you are. Step 2 is signing in with Google, right here. Your answers are kept.</>}
             </div>
+            {!member && (
+              <div style={{ display: 'grid', gap: 12 }}>
+                <div>
+                  <label htmlFor="apply-name" style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--ink-3)', display: 'block', marginBottom: 6 }}>
+                    Your name <span style={{ color: 'var(--accent-ink)' }}>*</span>
+                  </label>
+                  <input id="apply-name" type="text" required autoComplete="name" value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="Full name"
+                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-2)', border: 'var(--hair-2)', borderRadius: 'var(--r-inner)', fontFamily: 'var(--eina)', fontSize: 16, color: 'var(--ink)', boxSizing: 'border-box' }} />
+                </div>
+                <div>
+                  <label htmlFor="apply-email" style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--ink-3)', display: 'block', marginBottom: 6 }}>
+                    Email <span style={{ color: 'var(--accent-ink)' }}>*</span>
+                  </label>
+                  <input id="apply-email" type="email" required autoComplete="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} placeholder="you@example.com"
+                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-2)', border: 'var(--hair-2)', borderRadius: 'var(--r-inner)', fontFamily: 'var(--eina)', fontSize: 16, color: 'var(--ink)', boxSizing: 'border-box' }} />
+                </div>
+              </div>
+            )}
             {/* Phone */}
             {!editPhone && phone ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)' }}>
@@ -175,7 +236,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
                 /* Primary CTA keeps a hard offset, but only the measured
                    --shadow-cta token (was a hand-rolled 2px 2px 0). */
                 style={{ flex: 1, justifyContent: 'center', gap: 8, minHeight: 44, background: accent, borderColor: accent, color: 'var(--ink)', boxShadow: 'var(--shadow-cta)' }}
-                disabled={submitting}
+                disabled={submitting || matching}
                 reason={
                   phoneMissing ? 'Phone number is required'
                     : missingRequired ? `"${missingRequired.label}" is required`
@@ -184,7 +245,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
                 onClick={submit}
               >
                 {submitting && <span style={{ width: 13, height: 13, border: '2px solid rgba(10,10,10,0.3)', borderTopColor: 'var(--ink)', borderRadius: '50%', animation: 'spin 0.7s linear infinite', flexShrink: 0 }} />}
-                {submitting ? 'Submitting…' : member ? 'Submit application →' : 'Sign in to send →'}
+                {submitting ? 'Submitting…' : matching ? 'Checking…' : member ? 'Submit application →' : 'Continue →'}
               </GatedButton>
               <button className="btn btn-sm btn-ghost" style={{ minHeight: 44 }} onClick={onClose}>Cancel</button>
             </div>
