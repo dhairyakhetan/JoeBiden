@@ -202,9 +202,15 @@ export default function DriveWrap() {
           has neither. Mirrors components/PublicLayout.tsx. */}
       <main id="main-content" tabIndex={-1} style={{ outline: 'none', maxWidth: 480, margin: '0 auto', padding: '20px 16px 60px' }}>
         <h1 className="h-display" style={{ fontSize: 'clamp(22px,5vw,30px)', margin: '0 0 6px' }}>{drive.header}</h1>
-        <Link to={`/drive/${drive.id}/check-in`} className="mono xs muted" style={{ display: 'inline-block', marginBottom: 20 }}>
+        <Link to={`/drive/${drive.id}/check-in`} className="mono xs muted" style={{ display: 'inline-block', marginBottom: drive.slug ? 6 : 20 }}>
           ← back to the sheet
         </Link>
+        {/* Where the work ends up: the wrap used to finish with a toast and no way to see the result. */}
+        {drive.slug && (
+          <Link to={`/projects/${drive.slug}`} className="mono xs muted" style={{ display: 'block', marginBottom: 20 }}>
+            see the public page →
+          </Link>
+        )}
 
         <div className="card" style={{ padding: 20, marginBottom: 20 }}>
           <h2 className="mono xs upper muted" style={{ fontWeight: 700, margin: '0 0 12px' }}>attendance summary</h2>

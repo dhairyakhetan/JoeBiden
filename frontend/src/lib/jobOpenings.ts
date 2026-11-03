@@ -449,6 +449,13 @@ const jobOpeningsImpl = {
     }
   },
 
+  /** The member's own application status for a role (pending, reviewed, accepted, rejected), or null if they have not applied. */
+  async getApplicationStatus(openingId: string, applicantId: number): Promise<string | null> {
+    const { data } = await (supabaseCommunity as any).from('job_applications')
+      .select('status').eq('opening_id', openingId).eq('applicant_id', applicantId).maybeSingle()
+    return data?.status ?? null
+  },
+
   async hasApplied(openingId: string, applicantId: number): Promise<boolean> {
     const { data } = await (supabaseCommunity as any).from('job_applications')
       .select('id').eq('opening_id', openingId).eq('applicant_id', applicantId).maybeSingle()

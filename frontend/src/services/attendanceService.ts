@@ -49,6 +49,8 @@ export interface DriveInfo {
   scheduledEnd: string | null
   driveLeadMemberId: number | null
   attendanceCompletedAt: string | null
+  /** Only from getDrive(): lets the drive pages link to the public page (/projects/<slug>). */
+  slug?: string | null
   // Present only from getDrive() (joined in below) - listDrives already
   // returned this separately before ProjectManager needed the same lookup
   // for a single drive, so getDrive picked up the same join rather than
@@ -91,11 +93,11 @@ const attendanceServiceImpl = {
   async getDrive(welfareProjectId: number) {
     const { data, error } = await (supabaseCommunity as any)
       .from('welfare_projects')
-      .select('id, header, location, workshop_date, scheduled_end, drive_lead_member_id, attendance_completed_at, lead:members!welfare_projects_drive_lead_member_id_fkey(full_name)')
+      .select('id, slug, header, location, workshop_date, scheduled_end, drive_lead_member_id, attendance_completed_at, lead:members!welfare_projects_drive_lead_member_id_fkey(full_name)')
       .eq('id', welfareProjectId)
       .single()
     if (error) throw logSupabaseError('attendanceService.getDrive', error)
-    return { success: true, data: { ...mapDrive(data), leadName: data.lead?.full_name as string | undefined } }
+    return { success: true, data: { ...mapDrive(data), slug: data.slug ?? null, leadName: data.lead?.full_name as string | undefined } }
   },
 
   /** Full roster for one drive, most-recently-touched first. */

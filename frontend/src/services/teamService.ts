@@ -1027,7 +1027,7 @@ const teamServiceImpl = {
   },
 
   async removeMember(uuid: string, memberId: number): Promise<{ success: boolean; message: string }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
     if (!team) throw new Error('Team not found')
 
     // .select() + zero-row guard: PostgREST returns no error and zero rows when
@@ -1043,6 +1043,16 @@ const teamServiceImpl = {
 
     if (error) throw logSupabaseError('teamService.removeMember', error)
     if (!data || data.length === 0) throw new Error("Couldn't remove this member: you may not have permission.")
+
+    // Tell them. Being taken off a team used to be silent: the person kept seeing it until they happened to look.
+    // Non-throwing (notificationService.create), and a person removing themselves is skipped there.
+    void notificationService.create({
+      memberId,
+      type: 'system',
+      title: `You were taken off ${(team as any).name ?? 'a team'}`,
+      subtitle: 'You can still ask to join other teams.',
+      link: '/teams',
+    })
 
     return { success: true, message: 'Member removed' }
   },

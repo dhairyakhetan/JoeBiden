@@ -5,6 +5,8 @@ import { jobOpenings, JobOpening } from '../lib/jobOpenings'
 import { localDateISO } from '../lib/uiHelpers'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
+import { taskService } from './taskService'
+import { relationOf } from '../tasks/taskModel'
 
 // Read-only aggregation for the /calendar surface (handoff/21 §4). Every
 // query here reads data the product already has — no new tables. Per the
@@ -16,6 +18,12 @@ export interface DriveEvent {
   date: string // workshop_date, YYYY-MM-DD
   title: string
   slug: string
+}
+
+export interface TaskDue {
+  id: number
+  date: string // local YYYY-MM-DD of the due moment
+  title: string
 }
 
 export interface BirthdayMember {
@@ -46,6 +54,19 @@ const calendarServiceImpl = {
    *  (plus leads/directors, who don't call this from the calendar). */
   async getMyBreaks(): Promise<MemberBreak[]> {
     return breakService.getMyBreakHistory()
+  },
+
+  /** Tracker tasks due on a date where the viewer is the performer or supervisor, not yet done. Tasks used to appear on
+   *  no date anywhere: the calendar read drives, breaks, openings and birthdays only. */
+  async getMyTaskDues(memberId: number): Promise<TaskDue[]> {
+    const tasks = await taskService.list()
+    const two = (n: number) => String(n).padStart(2, '0')
+    return tasks
+      .filter(t => t.dueAt && t.status !== 'done' && (relationOf(t, memberId) === 'performer' || relationOf(t, memberId) === 'supervisor'))
+      .map(t => {
+        const d = new Date(t.dueAt as string)
+        return { id: t.taskId, date: `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}`, title: t.title }
+      })
   },
 
   /** Openings with a deadline — job_openings.deadline. SOP goal due dates are

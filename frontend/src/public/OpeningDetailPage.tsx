@@ -25,6 +25,9 @@ export default function OpeningDetailPage() {
   const { isAuthenticated, member, isLoading: authLoading } = useAuth()
   const [applyOpen, setApplyOpen] = useState(false)
   const [hasApplied, setHasApplied] = useState(false)
+  // pending | reviewed | accepted | rejected. The page used to say "you applied, the team will reach out" forever, even after
+  // the person had been accepted or declined.
+  const [appStatus, setAppStatus] = useState<string | null>(null)
   // Coming back from sign-in (?apply=1) the form opens by itself: the visitor already said they want this role.
   const [search, setSearch] = useSearchParams()
   const wantsApply = search.get('apply') === '1'
@@ -105,15 +108,16 @@ export default function OpeningDetailPage() {
   const isOpen = op?.status === 'open'
   const opId = op?.id
   useEffect(() => {
-    if (!opId || !isOpen || authLoading) return
+    if (!opId || authLoading) return
     if (!member) {
-      if (wantsApply) { setApplyOpen(true); setSearch({}, { replace: true }) }
+      if (isOpen && wantsApply) { setApplyOpen(true); setSearch({}, { replace: true }) }
       return
     }
-    jobOpenings.hasApplied(opId, member.member_id).then(applied => {
-      setHasApplied(applied)
-      if (wantsApply && !applied) setApplyOpen(true)
-      if (wantsApply) setSearch({}, { replace: true })
+    jobOpenings.getApplicationStatus(opId, member.member_id).then(status => {
+      setHasApplied(!!status)
+      setAppStatus(status)
+      if (isOpen && wantsApply && !status) setApplyOpen(true)
+      if (isOpen && wantsApply) setSearch({}, { replace: true })
     })
   }, [opId, member, isOpen, wantsApply, setSearch, authLoading])
 
@@ -140,8 +144,19 @@ export default function OpeningDetailPage() {
   }
 
   const applyStyle = { background: accent, borderColor: 'var(--ink)', color: 'var(--ink)', boxShadow: 'var(--shadow-cta)', fontWeight: 800, minHeight: 48, fontSize: 16 } as const
-  const applyCta = !isOpen ? null : hasApplied ? (
-    <span className="mono xs" style={{ fontWeight: 800, textTransform: 'uppercase', color: 'var(--ink-2)', minHeight: 48, display: 'inline-flex', alignItems: 'center' }}>
+  const statusLine = { fontWeight: 800, textTransform: 'uppercase', color: 'var(--ink-2)', minHeight: 48, display: 'inline-flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' } as const
+  const applyCta = (appStatus === 'accepted') ? (
+    <span className="mono xs" style={statusLine}>
+      ✓ you’re on the team.
+      <Link to="/teams" className="aq-thread-link">see your teams →</Link>
+    </span>
+  ) : (appStatus === 'rejected') ? (
+    <span className="mono xs" style={statusLine}>
+      not selected this time.
+      <Link to="/opportunities" className="aq-thread-link">see other roles →</Link>
+    </span>
+  ) : !isOpen ? null : hasApplied ? (
+    <span className="mono xs" style={statusLine}>
       ✓ you applied. the team will reach out.
     </span>
   ) : (

@@ -393,6 +393,26 @@ export default function DriveCheckIn() {
         )}
       </main>
 
+      {/* Once the lead completes the drive the bar above used to vanish, taking the only route to the wrap-up with it. */}
+      {canComplete && drive.attendanceCompletedAt && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0,
+          padding: '12px 16px', paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+          background: 'var(--bg)', borderTop: 'var(--hair-2)', boxShadow: 'var(--lift-3)',
+        }}>
+          <div style={{ display: 'flex', gap: 8, maxWidth: 560, margin: '0 auto', width: '100%', flexWrap: 'wrap' }}>
+            <Link to={`/drive/${welfareProjectId}/wrap`} className="btn btn-primary" style={{ flex: 1, minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              wrap up the numbers →
+            </Link>
+            {drive.slug && (
+              <Link to={`/projects/${drive.slug}`} className="btn" style={{ minHeight: 52, display: 'flex', alignItems: 'center' }}>
+                public page
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Sticky bottom action bar */}
       {canComplete && !drive.attendanceCompletedAt && (
         <div style={{

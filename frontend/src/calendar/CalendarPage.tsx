@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useMeta } from '../hooks/useMeta'
-import calendarService, { DriveEvent, BirthdayMember } from '../services/calendarService'
+import calendarService, { DriveEvent, BirthdayMember, type TaskDue } from '../services/calendarService'
 import { MemberBreak } from '../services/breakService'
 import { JobOpening } from '../lib/jobOpenings'
 import { FOUNDED_YEAR } from '../lib/orgFacts'
@@ -21,13 +21,14 @@ import Skeleton from '../components/Skeleton'
 // CLAUDE.md's design-language section. Functional behavior (service calls,
 // the 4-layer toggle, responsive split, business rules) is unchanged.
 
-type LayerKey = 'drives' | 'breaks' | 'deadlines' | 'birthdays'
+type LayerKey = 'drives' | 'breaks' | 'deadlines' | 'birthdays' | 'tasks'
 
 const LAYER_META: Record<LayerKey, { label: string; color: string }> = {
   drives:    { label: 'drives',    color: 'var(--c-welfare)' },
   breaks:    { label: 'my breaks', color: 'var(--grape)' },
   deadlines: { label: 'deadlines', color: 'var(--c-events)' },
   birthdays: { label: 'birthdays', color: 'var(--pink)' },
+  tasks:     { label: 'my tasks',  color: 'var(--sky)' },
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -58,6 +59,7 @@ interface DayEvents {
   breaks: MemberBreak[]
   deadlines: JobOpening[]
   birthdays: (BirthdayMember & { isSelf?: boolean })[]
+  tasks: TaskDue[]
 }
 
 function Dot({ color }: { color: string }) {
@@ -81,11 +83,12 @@ export default function CalendarPage() {
   const [myBreaks, setMyBreaks] = useState<MemberBreak[]>([])
   const [deadlines, setDeadlines] = useState<JobOpening[]>([])
   const [birthdays, setBirthdays] = useState<BirthdayMember[]>([])
+  const [myTasks, setMyTasks] = useState<TaskDue[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
 
   const [layerOn, setLayerOn] = useState<Record<LayerKey, boolean>>({
-    drives: true, breaks: true, deadlines: true, birthdays: true,
+    drives: true, breaks: true, deadlines: true, birthdays: true, tasks: true,
   })
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
 
@@ -99,20 +102,22 @@ export default function CalendarPage() {
         calendarService.getMyBreaks(),
         calendarService.getDeadlines(),
         calendarService.getPublicBirthdays(),
+        member?.member_id ? calendarService.getMyTaskDues(member.member_id) : Promise.resolve([] as TaskDue[]),
       ])
       if (cancelled) return
-      const [d, b, j, bd] = results
+      const [d, b, j, bd, tk] = results
       if (d.status === 'fulfilled') setDrives(d.value)
       if (b.status === 'fulfilled') setMyBreaks(b.value)
       if (j.status === 'fulfilled') setDeadlines(j.value)
       if (bd.status === 'fulfilled') setBirthdays(bd.value)
+      if (tk.status === 'fulfilled') setMyTasks(tk.value)
       if (results.every(r => r.status === 'rejected')) {
         setLoadError("couldn't load the calendar. try refreshing.")
       }
       setLoading(false)
     })()
     return () => { cancelled = true }
-  }, [])
+  }, [member?.member_id])
 
   useEffect(() => load(), [load])
 
@@ -133,6 +138,12 @@ export default function CalendarPage() {
     }
     return m
   }, [deadlines])
+
+  const tasksByDate = useMemo(() => {
+    const m = new Map<string, TaskDue[]>()
+    for (const t of myTasks) { if (!m.has(t.date)) m.set(t.date, []); m.get(t.date)!.push(t) }
+    return m
+  }, [myTasks])
 
   const breaksByDate = useMemo(() => {
     const m = new Map<string, MemberBreak[]>()
@@ -171,10 +182,11 @@ export default function CalendarPage() {
       breaks: layerOn.breaks ? (breaksByDate.get(key) || []) : [],
       deadlines: layerOn.deadlines ? (deadlinesByDate.get(key) || []) : [],
       birthdays: layerOn.birthdays ? (birthdaysByMonthDay.get(`${m}-${d}`) || []) : [],
+      tasks: layerOn.tasks ? (tasksByDate.get(key) || []) : [],
     }
-  }, [layerOn, drivesByDate, breaksByDate, deadlinesByDate, birthdaysByMonthDay])
+  }, [layerOn, drivesByDate, breaksByDate, deadlinesByDate, birthdaysByMonthDay, tasksByDate])
 
-  const totalCount = (ev: DayEvents) => ev.drives.length + ev.breaks.length + ev.deadlines.length + ev.birthdays.length
+  const totalCount = (ev: DayEvents) => ev.drives.length + ev.breaks.length + ev.deadlines.length + ev.birthdays.length + ev.tasks.length
 
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
   const firstWeekday = new Date(viewYear, viewMonth, 1).getDay()
@@ -348,6 +360,7 @@ export default function CalendarPage() {
                           {ev.breaks.length > 0 && <Dot color={LAYER_META.breaks.color} />}
                           {ev.deadlines.length > 0 && <Dot color={LAYER_META.deadlines.color} />}
                           {ev.birthdays.length > 0 && <Dot color={LAYER_META.birthdays.color} />}
+                          {ev.tasks.length > 0 && <Dot color={LAYER_META.tasks.color} />}
                         </div>
                       )}
                     </button>
@@ -403,7 +416,7 @@ export default function CalendarPage() {
 }
 
 function DayPanel({ y, m, d, events }: { y: number; m: number; d: number; events: DayEvents }) {
-  const count = events.drives.length + events.breaks.length + events.deadlines.length + events.birthdays.length
+  const count = events.drives.length + events.breaks.length + events.deadlines.length + events.birthdays.length + events.tasks.length
   return (
     <div className="card" style={{ marginTop: 18, padding: '18px 20px' }}>
       <h3 className="h-display" style={{ fontSize: 20, marginBottom: 12 }}>{MONTH_NAMES[m]} {d}, {y}</h3>
@@ -429,6 +442,12 @@ function DayPanel({ y, m, d, events }: { y: number; m: number; d: number; events
               <Link to={`/opportunities/${j.id}`} style={{ fontWeight: 600, fontSize: 14 }}>{j.title} closes</Link>
             </div>
           ))}
+          {events.tasks.map(t => (
+            <div key={`tk-${t.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Dot color={LAYER_META.tasks.color} />
+              <Link to="/tasks" style={{ fontWeight: 600, fontSize: 14 }}>{t.title} is due</Link>
+            </div>
+          ))}
           {events.birthdays.map(bd => (
             <div key={`bd-${bd.uuid}`} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Dot color={LAYER_META.birthdays.color} />
@@ -449,6 +468,7 @@ function AgendaItems({ events }: { events: DayEvents }) {
     ...events.drives.map(dr => ({ key: `dr-${dr.id}`, color: LAYER_META.drives.color, content: dr.title, to: `/projects/${dr.slug}` })),
     ...events.breaks.map(b => ({ key: `brk-${b.id}`, color: LAYER_META.breaks.color, content: `on a break · ${b.reason}` })),
     ...events.deadlines.map(j => ({ key: `dl-${j.id}`, color: LAYER_META.deadlines.color, content: `${j.title} closes`, to: `/opportunities/${j.id}` })),
+    ...events.tasks.map(t => ({ key: `tk-${t.id}`, color: LAYER_META.tasks.color, content: `${t.title} is due`, to: '/tasks' })),
     ...events.birthdays.map(bd => ({ key: `bd-${bd.uuid}`, color: LAYER_META.birthdays.color, content: bd.isSelf ? 'your birthday' : `${bd.fullName}'s birthday` })),
   ]
   return (

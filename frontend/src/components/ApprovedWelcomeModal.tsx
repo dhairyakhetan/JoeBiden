@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useAuth } from '../auth/AuthContext'
 import { ConfettiBurst } from './ConfettiBurst'
@@ -119,6 +120,15 @@ export default function ApprovedWelcomeModal({ onDismiss }: { onDismiss?: () => 
               >
                 let&apos;s go →
               </button>
+              {/* /choose-team had no link anywhere after approval, so a new member with no team was never pointed at it. */}
+              <Link
+                to="/choose-team"
+                onClick={close}
+                className="btn btn-ghost"
+                style={{ width: '100%', justifyContent: 'center', marginTop: 8, minHeight: 44 }}
+              >
+                pick a team first
+              </Link>
             </motion.div>
           </div>
         </motion.div>

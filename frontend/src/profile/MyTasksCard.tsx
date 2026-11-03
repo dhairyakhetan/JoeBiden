@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import sopService, { type Sop } from '../services/sopService'
 import { useToast } from '../components/Toast'
 import { localDateISO } from '../lib/uiHelpers'
@@ -106,6 +107,8 @@ export default function MyTasksCard() {
           )
         })}
       </ul>
+      {/* Goals from a HoD live here; tasks you track with a team live on /tasks. Neither pointed at the other. */}
+      <Link to="/tasks" className="aq-thread-link" style={{ display: 'inline-block', marginTop: 10 }}>see all your tasks →</Link>
     </section>
   )
 }

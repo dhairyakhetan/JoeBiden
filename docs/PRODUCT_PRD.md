@@ -340,6 +340,30 @@ request/accepted, system, wall note, break set. Repeated like/comment
 notifications on the same target roll up into one digest line rather than
 flooding the list.
 
+Added 2-3 Nov 2026 (overnight "everything connects" pass):
+- **Who answers for a team.** The `lead` role no longer exists (team roles are
+  only `member`), so a join request or application notifies the HoDs and
+  directors scoped to that team or any parent team, and HR when none is
+  scoped (`team_leader_ids()`). The notice opens the team's Applications tab.
+- **Every handoff tells the person.** Accepted applicant: notice links to their
+  team. Declined join request: its own type, links to the team. Approved
+  member: told to pick a team (or say hello), and whoever invited them is
+  thanked. Taken off a team: told. Written but waiting on one database
+  migration: a task you are added to, an answer to your bug or feature report,
+  being made lead of a drive, and a drive completed (to everyone who checked in).
+- **One prompt at the top of the feed at a time.** The "you wanted to join X"
+  card beats the "waiting on you" card (overdue or due-soon tasks, a drive you
+  lead, a fix to confirm), which beats the profile nudge.
+- The Notifications page filters by Teams and Work, and has Load older.
+
+## 11a. Honours (`/honours`)
+
+Every Member of the Month ever announced, month by month, signed-in members
+only. Each card links to the person, their team and their wall ("say
+congratulations"). Reached from the Member of the Month card on a team page and
+on the winner's profile. The home-page rail card stays removed (owner,
+2026-09-14); a future-dated pick stays hidden by the database until its month.
+
 ## 12. Saved posts & follows
 
 `/saved` bookmarks any post/drive/opening, filterable by kind. A real
@@ -347,6 +371,13 @@ follow graph exists for both members and teams (self-follow blocked, no
 duplicate follows) and drives notifications — there is currently no
 dedicated "following feed" view; follows only affect notifications and
 profile context.
+
+Since 3 Nov 2026 the followers and following figures on a public profile open
+a list of people (each a link), a signed-in visitor sees the Wall tab even when
+it is empty so the first note can be written, and a profile says which teams
+you share with the person ("you're both on Events"). Rosters, wall notes and
+the leadership list on a team page all link to the person's profile (your own
+editable one, or everyone else's public one).
 
 ## 13. External achievements
 

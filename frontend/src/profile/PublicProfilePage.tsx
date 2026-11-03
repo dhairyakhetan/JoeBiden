@@ -740,6 +740,10 @@ export default function PublicProfilePage() {
                 <div className="pf-empty-well">
                   <div className="h-display" style={{ fontSize: 28 }}>no activities yet.</div>
                   <p className="muted" style={{ marginTop: 8 }}>{displayName} hasn't been tagged in any drives, events, or workshops yet.</p>
+                  {signedIn && !isOwn && wallEnabled && (
+                    <button type="button" className="aq-thread-link" style={{ marginTop: 10, background: 'none', border: 0, padding: 0, cursor: 'pointer', minHeight: 44 }} onClick={() => setActiveTab('wall')}>leave {displayName.split(' ')[0]} a note →</button>
+                  )}
+                  {isOwn && <Link to="/projects" className="aq-thread-link" style={{ display: 'inline-block', marginTop: 10 }}>find a drive to join →</Link>}
                 </div>
               </div>
             )
@@ -787,6 +791,9 @@ export default function PublicProfilePage() {
               <div className="card">
                 <div className="pf-empty-well">
                   <div className="h-display" style={{ fontSize: 28 }}>no achievements yet.</div>
+                  {signedIn && !isOwn && wallEnabled && (
+                    <button type="button" className="aq-thread-link" style={{ marginTop: 10, background: 'none', border: 0, padding: 0, cursor: 'pointer', minHeight: 44 }} onClick={() => setActiveTab('wall')}>leave {displayName.split(' ')[0]} a note →</button>
+                  )}
                 </div>
               </div>
             )
