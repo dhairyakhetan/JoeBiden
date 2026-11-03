@@ -68,6 +68,8 @@ export default function WelcomeOverlay() {
 
   useEffect(() => {
     if (isLoading || isAuthenticated) return
+    // Home only (C-10, 3 Nov 2026): a shared project or blog link must open on the page, not under a modal.
+    if (pathname !== '/') return
     if (isExcluded(pathname)) return
     let seen = false
     try { seen = localStorage.getItem(SEEN_KEY) === '1' } catch { /* private mode */ }

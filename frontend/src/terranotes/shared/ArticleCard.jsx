@@ -62,7 +62,7 @@ export default function ArticleCard({ article: a, look = 'phone', mark, classNam
         <p style={{ flexShrink: "0", margin: "0", fontFamily: FONT.hand, fontSize: `${dekPx}px`, lineHeight: "1.1", color: "var(--dek)" }}>{a.dek}</p>
         {L.footer && (
           <div style={{ flexShrink: "0", marginTop: "auto", display: "flex", justifyContent: "space-between", fontFamily: FONT.mono, fontSize: "11px", letterSpacing: "1px", textTransform: "uppercase" }}>
-            <span>{a.author === null ? 'Aquaterra' : a.author || '[Author]'}</span>
+            <span>{a.author === null ? 'AquaTerra' : a.author || '[Author]'}</span>
             <span>{`${a.readTime || '[x]'} min read →`}</span>
           </div>
         )}

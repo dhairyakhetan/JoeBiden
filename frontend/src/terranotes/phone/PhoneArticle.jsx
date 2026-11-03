@@ -28,7 +28,7 @@ export default function PhoneArticle({ article: a, next }) {
   const read = useReadProgress(text);
   useReadDepth(a.slug, read.p);
   useLayoutEffect(() => { flyInFromCard(hero.current, true); }, []);
-  useEffect(() => { document.title = `Aquaterra — ${a.title}`; }, [a.title]);
+  useEffect(() => { document.title = `AquaTerra — ${a.title}`; }, [a.title]);
   const tag = tagOf(a), { i, n } = placeOf(a);
   const title = useFitTitle(a.title, 42, 30, 4); // at most four lines
 

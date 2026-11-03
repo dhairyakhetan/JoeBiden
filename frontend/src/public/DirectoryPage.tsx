@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { PUBLIC_DEPARTMENTS as DEPARTMENTS, isDarkDepartmentFill } from '../lib/departments'
-import { CATEGORY_SLUGS } from '../lib/categories'
 import { APPROVAL_TIME, ORG_FACTS, displayCount } from '../lib/orgFacts'
 import { departmentsPhrase, numberWord, yearsPhrase } from '../lib/orgFigures'
 
@@ -350,8 +349,8 @@ export default function DirectoryPage() {
         <section className="dir-entrance" aria-labelledby="dir-h-dept">
           <h2 className="dir-entrance-h" id="dir-h-dept">by department</h2>
           <p className="dir-entrance-sub">
-            {DEPARTMENTS.length} teams, {MEMBERS} people. {CATEGORY_SLUGS.length} category values underneath them,
-            so three teams share labs and two share operations.
+            {DEPARTMENTS.length} teams, {MEMBERS} people. Each team belongs to a wider area of work,
+            and some areas, like labs and operations, are shared by more than one team.
           </p>
           <RevealGroup>
             <ul className="dir-depts">

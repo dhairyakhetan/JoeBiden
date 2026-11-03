@@ -10,7 +10,7 @@ import { ALL_ARTICLES, editionData } from '../editions/index.js';
 //             '/editions/sep26/articles/wetlands/cover.jpg' (the article's own folder: its photos go there too)
 //   alt:      a few words describing the cover (also the placeholder label until there is one)
 //   author:   the writer's name (a member in the edition's team.js also gets their photo in the "words by" box);
-//             null = no writer (no byline, no "words by" box), for pieces from Aquaterra itself
+//             null = no writer (no byline, no "words by" box), for pieces from AquaTerra itself
 //   featured: true = highlighted: a yellow "★ featured" tape on its cards and a yellow shadow
 //   date:     the edition's month, e.g. 'Sep 2026'
 //   readTime: minutes, e.g. '6'

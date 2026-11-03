@@ -12,7 +12,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    console.error('Aquaterra: this page crashed.', error, info.componentStack);
+    console.error('AquaTerra: this page crashed.', error, info.componentStack);
   }
 
   componentDidUpdate(prev) {

@@ -57,7 +57,7 @@ function Lost() {
 
 export default function NotFoundPage({ web }) {
   useEffect(() => {
-    document.title = 'Aquaterra — not found';
+    document.title = 'AquaTerra — not found';
     const robots = Object.assign(document.createElement('meta'), { name: 'robots', content: 'noindex' });
     document.head.appendChild(robots);
     return () => robots.remove();

@@ -9,7 +9,7 @@ import { introSeen } from '../lib/introNotebook.js';
 import { calm } from '../lib/motion.js';
 
 // The opening animation (when: lib/introNotebook.js), over the site while it loads underneath: a notebook slides in
-// spinning, opens on the Aquaterra logo, "TerraNotes" is written in, a CERTIFIED stamp thumps down, and it lifts away
+// spinning, opens on the AquaTerra logo, "TerraNotes" is written in, a CERTIFIED stamp thumps down, and it lifts away
 // after 4.3 s (1.8 s with reduced motion). Skip button, Enter or Space ends it early. Meanwhile the covers and photos
 // start downloading (the covers on screen first; the rest waits for its turn). It's the edition of the page it opens on
 // (an older one's address shows that one): its number and month pressed into the cover and on the stamp. All timings: styles/intro.css.
@@ -72,7 +72,7 @@ export default function IntroNotebook() {
                 <div className="nb-line">notes from where the land meets the water</div>
                 <div className="nb-stamp">
                   <div className="nb-stamp-in">
-                    <div className="nb-stamp-small">Aquaterra · Issue {WORDS[n] || issue}</div>
+                    <div className="nb-stamp-small">AquaTerra · Issue {WORDS[n] || issue}</div>
                     <div className="nb-stamp-big">Certified</div>
                     <div className="nb-stamp-small">Field approved</div>
                   </div>
@@ -83,7 +83,7 @@ export default function IntroNotebook() {
                 <div className="nb-face nb-front">
                   {/* pressed into the cover, not stuck on: a blind-stamped frame, the issue, and a worn foil "Top secret" */}
                   <div className="nb-imprint">
-                    <div className="nb-imp-small">Aquaterra · field notes</div>
+                    <div className="nb-imp-small">AquaTerra · field notes</div>
                     <div className="nb-imp-secret">Top<br />secret</div>
                     <div className="nb-imp-small">do not open before the bell</div>
                     <div className="nb-imp-rule" />
@@ -94,7 +94,7 @@ export default function IntroNotebook() {
                 </div>
                 <div className="nb-face nb-back">
                   <img src={withBase('/brand/aquaterra-globe.webp')} alt="" className="nb-logo" />
-                  <div className="nb-word"><img className="nb-wordmark" src={withBase('/brand/aquaterra-wordmark.webp')} alt="Aquaterra" /></div>
+                  <div className="nb-word"><img className="nb-wordmark" src={withBase('/brand/aquaterra-wordmark.webp')} alt="AquaTerra" /></div>
                 </div>
               </div>
             </div>

@@ -41,7 +41,7 @@ export default function PhoneHeader({ current, edge }) {
           </BackHome>
         )}
         {!home && <span style={{ flexGrow: "1" }} />}
-        <Link ref={logo} to="/" aria-label="Aquaterra — home" style={{ display: "flex", alignItems: "center", gap: "6px", minHeight: "44px", textDecoration: "none", transformOrigin: "0 50%" }}>
+        <Link ref={logo} to="/" aria-label="AquaTerra — home" style={{ display: "flex", alignItems: "center", gap: "6px", minHeight: "44px", textDecoration: "none", transformOrigin: "0 50%" }}>
           {home ? <Logo globe={38} word={22} sub={14} /> : <Logo globe={28} word={16} sub={10} />}
         </Link>
         {home && <span style={{ flexGrow: "1" }} />}

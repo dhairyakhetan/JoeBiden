@@ -65,7 +65,7 @@ export default function SettingsPage() {
     navigate('/login', { replace: true })
   }
 
-  const tabs = ['account', 'profile', 'notifications', 'privacy', 'appearance', 'danger']
+  const tabs = ['account', 'profile', 'privacy', 'appearance', 'danger']
 
   return (
     <div className="route-enter aq-wrap" style={{ paddingTop: 'clamp(28px,5vw,48px)', paddingBottom: 80 }}>
@@ -137,18 +137,6 @@ export default function SettingsPage() {
               <Link to="/profile/edit" className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>
                 edit profile →
               </Link>
-            </div>
-          )}
-          {tab === 'notifications' && (
-            <div className="col gap-3">
-              <h3 className="h-display" style={{ fontSize: 28, margin: 0 }}>alerts.</h3>
-              {/* Honest coming-soon notice - fake toggles removed */}
-              <div className="card" style={{ padding: 20, background: 'var(--bg-2)', border: 'var(--hair)' }}>
-                <div className="mono xs upper muted">Notifications</div>
-                <p style={{ marginTop: 8, fontSize: 14, color: 'var(--ink-2)' }}>
-                  Email and push notifications are coming in a future update. We'll let you know when they're ready.
-                </p>
-              </div>
             </div>
           )}
           {tab === 'privacy' && (

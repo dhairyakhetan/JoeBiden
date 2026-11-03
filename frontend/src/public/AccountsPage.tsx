@@ -400,7 +400,7 @@ export default function AccountsPage() {
                 <div className="acc-cav">
                   <h3>Technology is an investment in what students build</h3>
                   <p>{formatINR(technologyTotal)} on software and hosting. AquaTerra is increasingly about handing students
-                    the experience of building a real startup with a real team: CRFTD, ShikshAq and AQ Labs. That
+                    the experience of building a real startup with a real team: Crftd, ShikshAQ and AQ Labs. That
                     takes tools, and tools cost money.</p>
                 </div>
                 <div className="acc-cav">

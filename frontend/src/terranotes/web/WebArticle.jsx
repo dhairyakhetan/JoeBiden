@@ -28,7 +28,7 @@ export default function WebArticle({ article: a, next }) {
   const read = useReadProgress(text);
   useReadDepth(a.slug, read.p);
   useLayoutEffect(() => { flyInFromCard(hero.current); }, []);
-  useEffect(() => { document.title = `Aquaterra — ${a.title}`; }, [a.title]);
+  useEffect(() => { document.title = `AquaTerra — ${a.title}`; }, [a.title]);
   const tag = tagOf(a), { i, n } = placeOf(a);
   const log = a.body.find((b) => b.log)?.log;
   const title = useFitTitle(a.title, 76, 54, 5); // at most five lines

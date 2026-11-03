@@ -7,7 +7,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/recruitment", "destination": "/login", "permanent": true },
+    { "source": "/recruitment", "destination": "/opportunities", "permanent": true },
     { "source": "/volunteer/apply", "destination": "/login", "permanent": true },
     { "source": "/roots", "destination": "/crftd", "permanent": true },
     { "source": "/everything-we-do", "destination": "/projects", "permanent": true },

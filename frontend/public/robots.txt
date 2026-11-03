@@ -19,7 +19,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 
@@ -98,7 +97,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -125,7 +123,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -152,7 +149,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -179,7 +175,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -206,7 +201,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -233,7 +227,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -260,7 +253,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -287,7 +279,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -314,7 +305,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -341,7 +331,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -368,7 +357,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -395,7 +383,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -422,7 +409,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/
@@ -451,7 +437,6 @@ Disallow: /director
 Disallow: /choose-team
 Disallow: /calendar
 Disallow: /yearbook
-Disallow: /roles
 Disallow: /invite
 Disallow: /drive
 Disallow: /member/

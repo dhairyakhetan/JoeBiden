@@ -185,7 +185,7 @@ export function EndMark({ web }) {
   );
 }
 
-// The "words by" box under the text (not for articles from Aquaterra itself: author null).
+// The "words by" box under the text (not for articles from AquaTerra itself: author null).
 export function AuthorBox({ a, web }) {
   if (a.author === null) return null;
   const who = editionData(a.edition).members.find((m) => m.name === a.author), d = web ? "88px" : "72px";

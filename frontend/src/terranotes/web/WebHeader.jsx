@@ -50,7 +50,7 @@ export default function WebHeader({ wire }) {
       {back && <span ref={link} style={{ display: "flex" }}><BackHome className="lift-link" style={BACK}>← back to home</BackHome></span>}
       {ghost && <span ref={gone} aria-hidden="true" style={{ ...BACK, position: "absolute", left: `${PAD}px`, top: "0", bottom: "0", pointerEvents: "none" }}>← back to home</span>}
       <div ref={group} style={{ display: "flex", alignItems: "center", gap: "24px", ...(back && { position: "absolute", left: "50%", top: "0", bottom: "0", translate: "-50% 0" }) }}>
-        <Link to="/" aria-label="Aquaterra — home" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
+        <Link to="/" aria-label="AquaTerra — home" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
           <Logo globe={46} word={27} sub={15} />
         </Link>
         <WebEditionPicker />

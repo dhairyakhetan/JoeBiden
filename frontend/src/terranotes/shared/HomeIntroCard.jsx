@@ -24,7 +24,7 @@ export default function HomeIntroCard({ web }) {
             <div style={{ marginTop: web ? "-4px" : "-3px", fontFamily: FONT.serif, fontStyle: "italic", fontSize: web ? "25px" : "16px", lineHeight: "1.1", color: "var(--text)" }}>Notes from where the land meets the water.</div>
           </>
         ) : <h1 style={{ margin: "0", fontFamily: FONT.serif, fontWeight: "400", ...S.h1 }}>Notes from where the land meets the water.</h1>}
-        <p style={{ margin: "0", color: "var(--introText)", ...S.p }}>{intro || '[Two or three lines introducing Aquaterra and what Terranotes is for.]'}</p>
+        <p style={{ margin: "0", color: "var(--introText)", ...S.p }}>{intro || '[Two or three lines introducing AquaTerra and what Terranotes is for.]'}</p>
       </div>
       <div style={{ position: "absolute", left: S.knot.left, top: S.knot.top, width: S.knot.size, height: S.knot.size, boxSizing: "border-box", borderRadius: "50%", background: "var(--red)", border: "2px solid var(--ink)" }} />
     </section>

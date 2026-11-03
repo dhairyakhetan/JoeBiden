@@ -53,6 +53,8 @@ export interface PostStreamCardData {
   location?: string
   authorName?: string
   createdAt: string
+  /** The date the drive happened (welfare_projects.workshop_date). Shown instead of createdAt when present. */
+  eventDate?: string
   imageUrl?: string
   color: string
   displayNum: number
@@ -193,7 +195,7 @@ function HoverPreview({ authorName, createdAt }: { authorName?: string; createdA
 }
 
 function PostStreamCard({
-  uuid, category, title, authorName, createdAt, imageUrl, color, displayNum,
+  uuid, category, title, authorName, createdAt, eventDate, imageUrl, color, displayNum,
   sourceType, sourceTitle, sourceSlug, stat, imageCount, volunteers, eager,
 }: PostStreamCardData & { eager?: boolean }) {
   // Hiring posts render as the compact, distinct ticket (same as the feed) -
@@ -204,7 +206,7 @@ function PostStreamCard({
   }
 
   const href = postStreamHref({ uuid, sourceType, sourceSlug })
-  const dateLabel = dateLabelFor(createdAt)
+  const dateLabel = dateLabelFor(eventDate ?? createdAt)
   const catLabel = CAT_LABELS[category] || category
   const shape = pickTileShape({ sourceType, imageUrl, stat, title, imageCount, volunteers })
 

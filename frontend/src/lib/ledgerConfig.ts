@@ -48,7 +48,7 @@ export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   'Refunds issued to participants':
     'Money returned for cancelled entries, duplicate payments and withdrawals.',
   'Technology':
-    'Website hosting, the member database, and the tools behind CRFTD, ShikshAq and AQ Labs.',
+    'Website hosting, the member database, and the tools behind Crftd, ShikshAQ and AQ Labs.',
   'Stationery and small furniture':
     'Printing, stationery, small equipment and workshop supplies.',
   'Bank fees':

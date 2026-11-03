@@ -26,7 +26,7 @@ const lookOf = (n) => {
 const coverOf = (list) => (list.find((a) => a.featured) || list[0])?.cover;
 
 function Frame({ web, children }) {
-  useEffect(() => { document.title = 'Aquaterra — Editions'; }, []);
+  useEffect(() => { document.title = 'AquaTerra — Editions'; }, []);
   if (web) {
     return (
       <div className="web">

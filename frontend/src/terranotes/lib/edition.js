@@ -26,5 +26,5 @@ export function applyLook({ id, look }, el = tnHost() || document.documentElemen
 }
 
 
-// A home page's tab title: the latest edition's is plain "Aquaterra" (inside AQ's website: "Terra Notes | AquaTerra")
-export const homeTitle = (e) => (e.number !== LATEST ? `Aquaterra — ${editionName(e.number)} · ${e.month}` : HOST.embedded ? 'Terra Notes | AquaTerra' : homeHeadline());
+// A home page's tab title: the latest edition's is plain "AquaTerra" (inside AQ's website: "Terra Notes | AquaTerra")
+export const homeTitle = (e) => (e.number !== LATEST ? `AquaTerra — ${editionName(e.number)} · ${e.month}` : HOST.embedded ? 'Terra Notes | AquaTerra' : homeHeadline());

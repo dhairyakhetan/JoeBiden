@@ -14,6 +14,7 @@ import {
 import { fadeInUp, staggerContainer, tapScale } from '../lib/motion'
 import { useToast } from '../components/Toast'
 import Skeleton from '../components/Skeleton'
+import { useMeta } from '../hooks/useMeta'
 import './ChooseTeam.css'
 
 /**
@@ -138,6 +139,7 @@ function openingsForDepartment(dept: Department, teams: LiveTeam[], open: JobOpe
 type Membership = 'none' | 'member' | 'pending'
 
 export default function ChooseTeamPage() {
+  useMeta({ title: 'Choose your team | AquaTerra', description: 'Pick the AquaTerra team you want to start with.', image: '', path: '/choose-team' })
   const { member, refreshMember } = useAuth()
   const navigate = useNavigate()
   const toast = useToast()

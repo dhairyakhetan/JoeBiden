@@ -158,7 +158,7 @@ export default function PrivacyPolicyPage() {
             <h2 className="ep-h">Getting your data out, or deleting it</h2>
             <p className="ep-p">
               Ask and we will do it. Message a director in the app, or email us, and we will confirm
-              within {APPROVAL_TIME}. Deleting your account removes your profile, phone number and
+              {APPROVAL_TIME}. Deleting your account removes your profile, phone number and
               email. Posts you made in a team space may stay as part of that team's record, with
               your name removed on request.
             </p>

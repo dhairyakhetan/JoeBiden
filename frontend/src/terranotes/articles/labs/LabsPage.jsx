@@ -245,7 +245,7 @@ export default function LabsPage({ article: a, web, chapter }) {
   const [still, setStill] = useState(null); // Karyaarth's stills: the one open in the photo viewer
   const [shownStill, stillLeaving] = usePresence(still, 180);
   const ch = web ? null : chapter; // phone: the chapter open (null = the shelf)
-  useEffect(() => { document.title = `Aquaterra — ${a.title}`; }, [a.title]);
+  useEffect(() => { document.title = `AquaTerra — ${a.title}`; }, [a.title]);
   useEffect(() => { flag('tnLabs', ''); return () => flag('tnLabs', null); }, []); // inside AQ: its footer meets the gallery (src/styles/document.css)
   const img = (f, alt = '') => ({ src: `${dir}/${f}`, alt });
   const stills = useMemo(() => STILLS.map((caption, i) => ({ photo: `${dir}/karyaarth/still-${pad2(i + 1)}.webp`, caption, place: `KA ${pad2(i + 1)}` })), [dir]);
@@ -316,7 +316,7 @@ export default function LabsPage({ article: a, web, chapter }) {
       {web
         ? <div aria-hidden="true" style={{ position: "absolute", inset: "0" }}>{prints}</div>
         : <div aria-hidden="true" style={{ position: "relative", width: "350px", height: "200px" }}>{prints}</div>}
-      <div className="m showpill" style={{ marginTop: W("26px", "0"), padding: W("8px 14px", "9px 18px"), fontSize: W("9.5px", "11px"), letterSpacing: W(".18em", ".2em") }}>★ AQ Labs '26 · an Aquaterra showcase</div>
+      <div className="m showpill" style={{ marginTop: W("26px", "0"), padding: W("8px 14px", "9px 18px"), fontSize: W("9.5px", "11px"), letterSpacing: W(".18em", ".2em") }}>★ AQ Labs '26 · an AquaTerra showcase</div>
       <h1 className="lb-title" style={{ margin: W("14px 0 0", "18px 0 0"), gap: W("8px", "18px") }}>
         <span className="d" style={{ fontSize: W("104px", "196px"), color: "#F3EEE4" }}>AQ</span><span className="s" style={{ fontSize: W("106px", "206px"), letterSpacing: "-.02em", color: "#22A26A" }}>Labs</span>
       </h1>

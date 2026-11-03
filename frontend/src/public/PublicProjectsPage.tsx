@@ -110,6 +110,8 @@ type Row = {
   created_at: string
   images: { url?: string; blobUrl?: string; displayOrder?: number }[] | null
   source_type?: string | null
+  /** workshop_date of the linked welfare project (C-12): the date the drive happened, not when the record was made. */
+  event_date?: string | null
   source_title?: string | null
   source_slug?: string | null
   // ADDED for changelog/10-projects.md's shape-by-data tiles (10.0): mirrors
@@ -160,6 +162,7 @@ function toCard(row: Row, displayNum: number): PostStreamCardData {
     title: rowTitle(row.body),
     authorName: row.author_name,
     createdAt: row.created_at,
+    eventDate: row.event_date ?? undefined,
     imageUrl: img?.blobUrl || img?.url || undefined,
     color: CAT_COLORS[row.category] || 'var(--welfare)',
     displayNum,
@@ -172,6 +175,19 @@ function toCard(row: Row, displayNum: number): PostStreamCardData {
     imageCount: Array.isArray(row.images) ? row.images.length : 0,
     volunteers: volunteersFrom(row.stats),
   }
+}
+
+/** Cards used to show the record's created_at ("JUL 2026" on a drive that ran in Dec 2025). Look up the
+ *  real drive date (welfare_projects.workshop_date) for the project rows on screen, in one query. */
+async function attachWorkshopDates(rows: Row[]): Promise<Row[]> {
+  const slugs = Array.from(new Set(rows.filter(r => r.source_type === 'welfare_project' && r.source_slug).map(r => r.source_slug as string)))
+  if (!slugs.length) return rows
+  const { data, error } = await supabaseCommunity.from('welfare_projects').select('slug,workshop_date').in('slug', slugs)
+  if (error || !data) return rows
+  const bySlug = new Map((data as { slug: string; workshop_date: string | null }[]).map(d => [d.slug, d.workshop_date]))
+  return rows.map(r => (r.source_type === 'welfare_project' && r.source_slug && bySlug.get(r.source_slug)
+    ? { ...r, event_date: bySlug.get(r.source_slug) }
+    : r))
 }
 
 function featDate(iso: string): string {
@@ -227,7 +243,7 @@ function FeaturedBandSkeleton() {
 function FeaturedBento({ items, total, onViewAll }: { items: PostStreamCardData[]; total: number; onViewAll: () => void }) {
   const content = items.slice(0, FEATURED_SHOW)
   const remaining = total - content.length
-  const meta = (c: PostStreamCardData) => [c.category, featDate(c.createdAt)].filter(Boolean).join(' · ')
+  const meta = (c: PostStreamCardData) => [c.category, featDate(c.eventDate ?? c.createdAt)].filter(Boolean).join(' · ')
   return (
     <FeaturedBandShell>
         <div className="pbento">
@@ -459,7 +475,7 @@ export default function PublicProjectsPage() {
       const order = new Map(ids.map((id, i) => [id, i]))
       const sorted = (data as unknown as Row[]).slice()
         .sort((a, b) => (order.get(a.uuid) ?? 1e9) - (order.get(b.uuid) ?? 1e9))
-      setFeaturedRows(sorted)
+      setFeaturedRows(await attachWorkshopDates(sorted))
       if (typeof count === 'number') setFeaturedTotal(count)
       setFeaturedLoading(false)
     })().catch(e => {
@@ -602,7 +618,7 @@ export default function PublicProjectsPage() {
     if (error) throw error
     // source_type/source_title exist on post_feed_view at runtime but the
     // generated types are stale for the view, so cast through unknown.
-    const newRows = (data || []) as unknown as Row[]
+    const newRows = await attachWorkshopDates((data || []) as unknown as Row[])
     setRows(prev => replace ? newRows : [...prev, ...newRows])
     if (pageIndex === 0 && count != null) setTotalCount(count)
     setHasMore(newRows.length === PAGE_SIZE)

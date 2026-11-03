@@ -13,7 +13,7 @@ export const TAGS = {
   Essay: { color: '#FF5FA2', ink: '#26268F' },
   Prose: { color: '#12B76A', ink: '#26268F' },
   Poetry: { color: '#3DDCC4', ink: '#26268F' },
-  'Under Aquaterra': { color: '#FFC914', ink: '#26268F' },
+  'Under AquaTerra': { color: '#FFC914', ink: '#26268F' },
 };
 
 // The writers' pieces, as they sent them (a poem keeps its line breaks, \n, inside each stanza; numbered headings keep

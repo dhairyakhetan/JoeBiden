@@ -19,9 +19,26 @@ type Msg =
   | { type: 'claim'; id: string }
   | { type: 'bye'; id: string }
 
-const TAB_ID = (typeof crypto !== 'undefined' && crypto.randomUUID)
+// The id survives a reload of the SAME tab (sessionStorage is per tab and outlives a reload). Before this, a reload
+// got a fresh id, the page that was dying answered the new page's ping with "here", and the new page demoted itself
+// to "open in another tab" (C-16, 3 Nov 2026). Now the new page sees its own old id and is simply the leader again.
+const makeId = () => (typeof crypto !== 'undefined' && crypto.randomUUID)
   ? crypto.randomUUID()
   : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+const TAB_ID = (() => {
+  try {
+    const kept = sessionStorage.getItem('aq-tab-id')
+    if (kept) return kept
+    const fresh = makeId()
+    sessionStorage.setItem('aq-tab-id', fresh)
+    return fresh
+  } catch { return makeId() }
+})()
+
+/** A leader re-announces itself this often, and a follower that has heard nothing for LEADER_STALE_MS takes over
+ *  (the leader was frozen, crashed, or closed without saying goodbye). */
+const HEARTBEAT_MS = 4000
+const LEADER_STALE_MS = 11000
 
 export interface TabLock {
   /** Force this tab to become the active one (used by the "use this tab instead" button). */
@@ -38,6 +55,7 @@ export function createTabLock(onLeaderChange: (isLeader: boolean) => void): TabL
   const channel = new BroadcastChannel('aq-active-tab')
   let isLeader = false
   let leaderKnown = false
+  let lastHeardAt = Date.now()
 
   const announceLeader = () => {
     isLeader = true
@@ -73,12 +91,14 @@ export function createTabLock(onLeaderChange: (isLeader: boolean) => void): TabL
     } else if (msg.type === 'here') {
       if (msg.id !== TAB_ID) {
         leaderKnown = true
+        lastHeardAt = Date.now()
         isLeader = false
         onLeaderChange(false)
       }
     } else if (msg.type === 'claim') {
       if (msg.id !== TAB_ID) {
         leaderKnown = true
+        lastHeardAt = Date.now()
         isLeader = false
         onLeaderChange(false)
       }
@@ -94,13 +114,40 @@ export function createTabLock(onLeaderChange: (isLeader: boolean) => void): TabL
     }
   }
 
+  let reloadedLeader = false
+  try {
+    const at = Number(sessionStorage.getItem('aq-leader-at') || '0')
+    sessionStorage.removeItem('aq-leader-at')
+    reloadedLeader = at > 0 && Date.now() - at < 10000
+  } catch { /* private mode */ }
+  if (reloadedLeader) {
+    channel.postMessage({ type: 'claim', id: TAB_ID } satisfies Msg)
+    announceLeader()
+  }
+
   channel.postMessage({ type: 'ping' } satisfies Msg)
   const electionTimer = setTimeout(() => {
     if (!leaderKnown) announceLeader()
   }, 200)
 
-  const handleUnload = () => channel.postMessage({ type: 'bye', id: TAB_ID } satisfies Msg)
+  const handleUnload = () => {
+    // Remember that this tab was the live one, so if it is a RELOAD the new page takes the lead straight back
+    // instead of being parked behind the other tab that was promoted a moment ago.
+    if (isLeader) { try { sessionStorage.setItem('aq-leader-at', String(Date.now())) } catch { /* private mode */ } }
+    channel.postMessage({ type: 'bye', id: TAB_ID } satisfies Msg)
+  }
   window.addEventListener('beforeunload', handleUnload)
+  // beforeunload does not fire on a phone when the page is frozen or discarded; pagehide does.
+  window.addEventListener('pagehide', handleUnload)
+
+  // Heartbeat: the leader keeps saying so; a follower that stops hearing it promotes itself.
+  const heartbeat = setInterval(() => {
+    if (isLeader) {
+      channel.postMessage({ type: 'here', id: TAB_ID } satisfies Msg)
+    } else if (Date.now() - lastHeardAt > LEADER_STALE_MS) {
+      announceLeader()
+    }
+  }, HEARTBEAT_MS)
 
   return {
     takeOver() {
@@ -109,7 +156,9 @@ export function createTabLock(onLeaderChange: (isLeader: boolean) => void): TabL
     },
     destroy() {
       clearTimeout(electionTimer)
+      clearInterval(heartbeat)
       window.removeEventListener('beforeunload', handleUnload)
+      window.removeEventListener('pagehide', handleUnload)
       channel.close()
     },
   }

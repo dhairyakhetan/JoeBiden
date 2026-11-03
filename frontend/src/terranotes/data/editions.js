@@ -46,7 +46,7 @@ export const editionOf = (n) => EDITIONS.find((e) => e.number === n);
 export const isDraft = (n) => !!editionOf(n)?.draft;
 export const editionName = (n) => `Edition ${String(n).padStart(2, '0')}`;
 // the main page's title (tab, search results, link previews): it names the issue that's on it
-export const homeHeadline = () => `TerraNotes · ${PUBLISHED.find((e) => e.number === LATEST).month} issue · Aquaterra`;
+export const homeHeadline = () => `TerraNotes · ${PUBLISHED.find((e) => e.number === LATEST).month} issue · AquaTerra`;
 export const editionId = (n) => { const [m, y] = editionOf(n).month.split(' '); return m.slice(0, 3).toLowerCase() + y.slice(2); };
 export const editionById = (id) => EDITIONS.find((e) => editionId(e.number) === id);
 export const editionLink = (n) => (n === LATEST ? '/' : `/${editionId(n)}`);

@@ -69,7 +69,7 @@ export default function PhoneMenu({ open, onClose, current = 'home', edge = 'var
       style={{ position: 'fixed', left: '0', right: '0', top: '0', margin: '0 auto', width: '390px', zIndex: '100', background: 'var(--ink)', boxShadow: `-12px 0 0 ${edge}`, transform: `translate3d(${open ? `${dx}px` : 'calc(100% + 16px)'}, 0, 0)`, visibility: open ? 'visible' : 'hidden', transition: dragging ? 'none' : open ? `transform 360ms ${EASE}, visibility 0s` : `transform 300ms ${EASE}, visibility 0s linear 300ms`, willChange: 'transform' }}>
       <nav aria-label="Main menu" className="main-menu" style={{ position: "relative", width: "390px", overflow: "hidden", background: "var(--ink)", color: "var(--page)", fontFamily: FONT.body, display: "flex", flexDirection: "column" }}>
         <div style={{ position: "absolute", left: "18px", top: "16px" }}>
-          <Link to="/" onClick={close} aria-label="Aquaterra — home" style={{ display: "flex", alignItems: "center", gap: "6px", minHeight: "44px", textDecoration: "none" }}>
+          <Link to="/" onClick={close} aria-label="AquaTerra — home" style={{ display: "flex", alignItems: "center", gap: "6px", minHeight: "44px", textDecoration: "none" }}>
             <Logo globe={36} word={21} sub={13} dark />
           </Link>
         </div>

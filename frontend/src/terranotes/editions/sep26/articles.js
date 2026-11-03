@@ -13,7 +13,7 @@ export const TAGS = {
   Dispatch: { color: '#FFD43B', ink: '#18213A' },
   Essay: { color: '#FF6FAE', ink: '#18213A' },
   Prose: { color: '#7FE0A6', ink: '#18213A' },
-  'Under Aquaterra': { color: '#FFD43B', ink: '#18213A' },
+  'Under AquaTerra': { color: '#FFD43B', ink: '#18213A' },
 };
 
 export const ARTICLES = [
@@ -22,13 +22,13 @@ export const ARTICLES = [
     page: 'labs', // its own page: the AQ Labs gallery (src/articles/labs/)
     chapters: LABS_TEAMS.map((t) => t.id), // /articles/labs/photon…
     demos: { 'wisdom-woods': 'wisdom-woods/demo' }, // the Wisdom Woods demo: /articles/labs/wisdom-woods/demo
-    title: 'Under Aquaterra: AQ Labs',
+    title: 'Under AquaTerra: AQ Labs',
     dek: "AquaTerra's student build program",
-    tag: 'Under Aquaterra',
+    tag: 'Under AquaTerra',
     featured: true,
     cover: '/editions/sep26/articles/labs/cover.jpg',
     alt: 'AQ Labs: "summer will never be boring again", over a collage of the teams at work',
-    author: null, // from Aquaterra itself: no byline
+    author: null, // from AquaTerra itself: no byline
     date: 'Sep 2026',
     readTime: '2',
     body: [

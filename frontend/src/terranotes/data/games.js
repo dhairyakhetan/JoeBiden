@@ -12,14 +12,14 @@
 import { LATEST, editionId } from './editions.js';
 
 export const GAMES = [
-  { id: 'snake', name: 'Snake', title: 'Snake, but spooky', line: 'eat the stars. don’t eat yourself.', hint: 'eat the stars', about: 'Snake with a ghost: eat the stars, don’t eat yourself. A mini game in TerraNotes, Aquaterra’s monthly magazine.' },
-  { id: 'float', name: 'Float', title: 'Float, little ghost', line: 'tap to rise. mind the posts.', hint: 'mind the posts', about: 'Tap to float Buddy the ghost between the posts. A mini game in TerraNotes, Aquaterra’s monthly magazine.' },
-  { id: 'fling', name: 'Fling', title: 'Fling, little ghost', line: 'pull back. let go. knock ’em down.', hint: 'knock ’em down', about: 'Fling Buddy at the gremlins’ forts, Angry Birds style: 50 levels. A mini game in TerraNotes, Aquaterra’s monthly magazine.' },
+  { id: 'snake', name: 'Snake', title: 'Snake, but spooky', line: 'eat the stars. don’t eat yourself.', hint: 'eat the stars', about: 'Snake with a ghost: eat the stars, don’t eat yourself. A mini game in TerraNotes, AquaTerra’s monthly magazine.' },
+  { id: 'float', name: 'Float', title: 'Float, little ghost', line: 'tap to rise. mind the posts.', hint: 'mind the posts', about: 'Tap to float Buddy the ghost between the posts. A mini game in TerraNotes, AquaTerra’s monthly magazine.' },
+  { id: 'fling', name: 'Fling', title: 'Fling, little ghost', line: 'pull back. let go. knock ’em down.', hint: 'knock ’em down', about: 'Fling Buddy at the gremlins’ forts, Angry Birds style: 50 levels. A mini game in TerraNotes, AquaTerra’s monthly magazine.' },
 ];
 const OWN = {
   oct26: {
-    snake: { name: 'Chase', title: 'Durga Maa, on the chase', line: 'catch the demons. don’t bite the garland.', hint: 'catch the demons', about: 'Snake with Durga Maa: chase the demons, don’t run into her marigold garland. A mini game in TerraNotes, Aquaterra’s monthly magazine.' },
-    fling: { name: 'Bow', title: 'Bow and arrow', line: 'pull back. aim. knock the demons down.', hint: 'hit the demons', about: 'Draw the bow and knock down the demons’ forts, Angry Birds style: 50 levels. A mini game in TerraNotes, Aquaterra’s monthly magazine.' },
+    snake: { name: 'Chase', title: 'Durga Maa, on the chase', line: 'catch the demons. don’t bite the garland.', hint: 'catch the demons', about: 'Snake with Durga Maa: chase the demons, don’t run into her marigold garland. A mini game in TerraNotes, AquaTerra’s monthly magazine.' },
+    fling: { name: 'Bow', title: 'Bow and arrow', line: 'pull back. aim. knock the demons down.', hint: 'hit the demons', about: 'Draw the bow and knock down the demons’ forts, Angry Birds style: 50 levels. A mini game in TerraNotes, AquaTerra’s monthly magazine.' },
   },
 };
 export const gamesFor = (editionId) => GAMES.map((g) => ({ ...g, ...OWN[editionId]?.[g.id] }));

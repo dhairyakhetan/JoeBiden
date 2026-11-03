@@ -518,7 +518,7 @@ function App() {
                   it's the top of the recruitment funnel. A retired page still
                   needs a redirect for as long as anyone is still handing the URL
                   out. Don't remove this one without checking the bio link first. */}
-              <Route path="/recruitment" element={<Navigate to="/login" replace />} />
+              <Route path="/recruitment" element={<Navigate to="/opportunities" replace />} />
               <Route path="/volunteer/apply" element={<Navigate to="/login" replace />} />
               <Route path="/collaborations" element={<CollaborationsPage />} />
               <Route path="/contact" element={<ContactPage />} />
