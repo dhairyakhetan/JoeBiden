@@ -362,7 +362,8 @@ export function ContactPage() {
       {/* ── WhatsApp group CTA ── */}
       <section className="px-4 sm:px-8 lg:px-12 pb-6">
         <div className="max-w-[1280px] mx-auto">
-          <motion.a
+          {waUrl && (
+<motion.a
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -387,6 +388,7 @@ export function ContactPage() {
             </div>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, flexShrink: 0 }}>Join →</span>
           </motion.a>
+)}
         </div>
       </section>
 

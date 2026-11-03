@@ -522,7 +522,8 @@ export function RegisterPage() {
             </motion.div>
 
             {/* WhatsApp group CTA */}
-            <motion.a
+            {waUrl && (
+<motion.a
               variants={fadeUp}
               href={waUrl}
               target="_blank"
@@ -543,6 +544,7 @@ export function RegisterPage() {
               </div>
               <span className="font-display text-[22px] shrink-0">→</span>
             </motion.a>
+)}
 
             {/* "Any queries?" — three quick contact paths so a registrant
                 with questions never has to dig through the site. */}

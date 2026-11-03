@@ -585,7 +585,8 @@ export function AfterPartyPage() {
               across Paradox (admin "Text on WA", contact page CTA,
               footer ticket modal). */}
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-2 mt-4">
-            <motion.a
+            {waUrl && (
+<motion.a
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -602,6 +603,7 @@ export function AfterPartyPage() {
               <span aria-hidden>★</span>
               <span>Join WhatsApp Group →</span>
             </motion.a>
+)}
             <MotionLink
               to="/paradox/contact"
               whileTap={{ scale: 0.96 }}
@@ -652,7 +654,8 @@ export function AfterPartyPage() {
         className="fixed left-0 right-0 z-40 px-4 sm:px-6 pointer-events-none"
         style={{ bottom: 'max(16px, env(safe-area-inset-bottom))' }}
       >
-        <motion.a
+        {waUrl && (
+<motion.a
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -680,6 +683,7 @@ export function AfterPartyPage() {
           <span>Join WhatsApp Group</span>
           <span aria-hidden style={{ opacity: 0.65, fontSize: '0.85em' }}>→</span>
         </motion.a>
+)}
       </motion.div>
     </div>
   )

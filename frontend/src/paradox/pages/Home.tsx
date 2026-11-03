@@ -961,7 +961,8 @@ function ContactSection() {
         </motion.div>
 
         {/* ── WhatsApp group CTA ── */}
-        <motion.a
+        {waUrl && (
+<motion.a
           href={waUrl} target="_blank" rel="noopener noreferrer"
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -982,6 +983,7 @@ function ContactSection() {
           </div>
           <span className="font-display shrink-0" style={{ fontSize: 20, letterSpacing: '-0.01em' }}>Join →</span>
         </motion.a>
+)}
 
         {/* Footer line */}
         <div className="flex justify-between flex-wrap gap-3 mt-14 pt-6 border-t-[1.5px] border-ink font-mono text-[11px] tracking-[0.06em] opacity-60">

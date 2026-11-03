@@ -438,7 +438,8 @@ function NavOverlay({ current, phase, onClose }: { current: string; phase: Phase
             <span>Register for Paradox →</span>
           </MotionLink>
         )}
-        <motion.a
+        {waUrl && (
+<motion.a
           href={waUrl}
           target="_blank"
           rel="noreferrer"
@@ -457,6 +458,7 @@ function NavOverlay({ current, phase, onClose }: { current: string; phase: Phase
           </svg>
           Join the WhatsApp Group
         </motion.a>
+)}
         <motion.a
           href="https://instagram.com/paradox.twenty26"
           target="_blank"

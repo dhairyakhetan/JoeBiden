@@ -1,28 +1,14 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react'
-import { supabase } from './supabase'
-
-/** Hardcoded fallback — shown immediately while the DB fetch resolves.
- *  Admin can override this at any time via the Settings tab in /paradox/admin.
- *  The DB value (key = 'whatsapp_group_url') takes precedence once loaded.
+/**
+ * The Paradox WhatsApp group invite used to live here (a hard-coded fallback plus an admin-set
+ * value in paradox_site_settings). The link carried attendees' payment confirmations and was public,
+ * so it was removed on 3 Nov 2026 (P-09). Paradox has ended. Every call site renders its WhatsApp
+ * button only when this returns a link, so returning '' hides them all.
+ *
+ * To bring a group link back, share it only after sign-in or ticket purchase, not on a public page.
  */
-export const WHATSAPP_GROUP_FALLBACK = 'https://chat.whatsapp.com/D7zCdGtBZJ80DgASfij5bB'
+export const WHATSAPP_GROUP_FALLBACK = ''
 
 export function useWhatsAppGroup(): string {
-  const [url, setUrl] = useState(WHATSAPP_GROUP_FALLBACK)
-
-  useEffect(() => {
-    supabase
-      .from('paradox_site_settings')
-      .select('value')
-      .eq('key', 'whatsapp_group_url')
-      .single()
-      .then(({ data }) => {
-        if (data?.value && typeof data.value === 'string' && data.value.startsWith('http')) {
-          setUrl(data.value)
-        }
-      })
-  }, [])
-
-  return url
+  return ''
 }
