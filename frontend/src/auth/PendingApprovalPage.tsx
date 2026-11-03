@@ -3,6 +3,7 @@ import './PendingApprovalPage.css'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import PendingWishCard from '../components/PendingWishCard'
 import { sized } from '../lib/imageUrl'
 import { feedService } from '../services/feedService'
 import { Post } from '../services/api'
@@ -392,21 +393,19 @@ const PendingApprovalPage = () => {
         >● account under review. tap to see details</button>
       )}
 
-      {/* ── Open roles - apply while you wait ──
-          The header the owner asked for: this is now the FIRST thing a
-          pending member can act on, not a popup sprung on them after
-          approval. Applying doesn't need an approved account (see the state
-          comment above) - it just doesn't reach a HOD's hiring queue until
-          this member's own account is. */}
+      {/* ── Open roles - look while you wait ──
+          Since 2 Nov 2026 a pending member cannot apply (the database refuses it, lib/joinGate.ts). They can browse,
+          and opening a role offers "remind me", which becomes a card at the top of their feed once they are approved. */}
       <div style={{ padding: 'clamp(24px, 4vw, 40px) var(--page-px) 0', maxWidth: 'var(--frame-max)', margin: '0 auto' }}>
+        <PendingWishCard />
         <div className="h-display" style={{ fontSize: 'clamp(24px, 5vw, 32px)', lineHeight: 0.96, marginBottom: 8 }}>
           while you wait,
           <br />
-          <span style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', color: 'var(--welfare-ink)', fontWeight: 400 }}>apply to an opening</span>
+          <span style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', color: 'var(--welfare-ink)', fontWeight: 400 }}>see what&apos;s open</span>
           <span>.</span>
         </div>
         <p className="muted" style={{ fontSize: 13, marginBottom: 20 }}>
-          you don't have to wait for approval to apply - a director reviews it once your account is approved.
+          you can apply once your account is approved. open a role and tap &ldquo;remind me&rdquo;, and we&apos;ll ask you again the moment you&apos;re in.
         </p>
 
         {openRolesLoading ? (

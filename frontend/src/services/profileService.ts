@@ -53,6 +53,11 @@ export interface MemberProfile {
   /** Defaults to false for every existing member — see the migration's
    *  design-choice note. Opt-in, not opt-out, for the existing base. */
   birthdayPublic?: boolean
+  /** Canonical https://www.linkedin.com/in/<name>. Readable by any signed-in member (column grant), shown on the public profile. */
+  linkedin?: string
+  /** A bare handle. Writable, but NOT readable by other members (the column was closed on purpose, 22 Oct 2026): only the owner's own
+   *  row, read through get_own_member(), carries it. It is shown to the owner and on their CV, never on a public profile. */
+  instagram?: string
 }
 
 export interface NewMemberCard {
@@ -73,6 +78,9 @@ export interface UpdateProfileData {
   schoolId?: number
   birthday?: string | null
   birthdayPublic?: boolean
+  /** Already normalised (lib/socialHandles.ts); null or '' clears it. */
+  linkedin?: string | null
+  instagram?: string | null
 }
 
 const profileServiceImpl = {
@@ -128,7 +136,9 @@ const profileServiceImpl = {
       postCount: 0,
       taggedCount: 0,
       birthday: member.birthday ?? undefined,
-      birthdayPublic: member.birthday_public ?? false
+      birthdayPublic: member.birthday_public ?? false,
+      linkedin: member.linkedin ?? undefined,
+      instagram: member.instagram ?? undefined
     }
 
     return { success: true, data: { member: profile } }
@@ -159,6 +169,8 @@ const profileServiceImpl = {
     if (data.schoolId !== undefined) updateData.school_id = data.schoolId || null
     if (data.birthday !== undefined) updateData.birthday = data.birthday || null
     if (data.birthdayPublic !== undefined) updateData.birthday_public = data.birthdayPublic
+    if (data.linkedin !== undefined) updateData.linkedin = data.linkedin || null
+    if (data.instagram !== undefined) updateData.instagram = data.instagram || null
 
     // No `.select()` chained: PostgREST's update-representation would try to
     // return email/phone in the response, which the authenticated role no
@@ -199,7 +211,9 @@ const profileServiceImpl = {
       postCount: 0,
       taggedCount: 0,
       birthday: u.birthday ?? undefined,
-      birthdayPublic: u.birthday_public ?? false
+      birthdayPublic: u.birthday_public ?? false,
+      linkedin: u.linkedin ?? undefined,
+      instagram: u.instagram ?? undefined
     }
 
     return { success: true, message: 'Profile updated successfully', data: { member: profile } }
@@ -224,7 +238,7 @@ const profileServiceImpl = {
     const signedIn = (await getCachedMemberId()) != null
     const cols =
       'uuid, full_name, avatar_url, bio, role, status, created_at, school_id'
-      + (signedIn ? ', class_grade' : '')
+      + (signedIn ? ', class_grade, linkedin' : '') // both are revoked from anon: naming them logged-out would 403 the whole read
       + ', schools (school_id, uuid, name, short_name, logo_url)'
 
     const { data: member, error } = await supabaseCommunity
@@ -242,6 +256,7 @@ const profileServiceImpl = {
       fullName: m.full_name,
       avatarUrl: m.avatar_url ?? undefined,
       classGrade: m.class_grade ?? undefined,
+      linkedin: m.linkedin ?? undefined,
       bio: m.bio ?? undefined,
       role: (m.role === 'super_admin' ? 'director' : m.role) as 'member' | 'director',
       status: m.status ?? 'active',

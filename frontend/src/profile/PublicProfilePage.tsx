@@ -493,6 +493,11 @@ export default function PublicProfilePage() {
                   {profile.schoolName && (
                     <Link to="/schools" className="pf-chip">{profile.schoolName}</Link>
                   )}
+                  {/* LinkedIn is readable by any signed-in member (column grant) and chosen by the member. Instagram is
+                      deliberately not here: that column is closed to other members. */}
+                  {signedIn && safeExternalHref(profile.linkedin) && (
+                    <a href={safeExternalHref(profile.linkedin)} target="_blank" rel="noopener noreferrer" className="pf-chip">LinkedIn ↗</a>
+                  )}
                 </div>
               </div>
             </div>

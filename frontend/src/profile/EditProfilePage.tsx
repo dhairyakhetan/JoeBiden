@@ -1,3 +1,4 @@
+import { normalizeLinkedIn, normalizeInstagram } from '../lib/socialHandles'
 import Img from '../components/Img'
 import './EditProfilePage.css'
 import { classOptionsFor } from '../lib/classOptions'
@@ -31,7 +32,7 @@ import type { School } from '../services/api'
 // top-of-form banner this file used before, which named no field. `bio`
 // carries the profanity-filter rejection too, once submit resolves it, so
 // the person editing sees the block message where the problem actually is.
-type ProfileField = 'fullName' | 'bio'
+type ProfileField = 'fullName' | 'bio' | 'linkedin' | 'instagram'
 
 const EditProfilePage = () => {
   const navigate = useNavigate()
@@ -43,7 +44,7 @@ const EditProfilePage = () => {
   const avatarSectionRef = useRef<HTMLDivElement>(null)
 
   const [formData, setFormData] = useState({
-    fullName: '', email: '', classGrade: '', phone: '', avatarUrl: '', bio: '', schoolId: '', birthday: ''
+    fullName: '', email: '', classGrade: '', phone: '', avatarUrl: '', bio: '', schoolId: '', birthday: '', linkedin: '', instagram: ''
   })
   // The saved snapshot, so "is there an unsaved change" (11.9 state 10) can
   // be a real diff rather than a `dirty` flag that never resets after save.
@@ -94,7 +95,8 @@ const EditProfilePage = () => {
             fullName: p.fullName || '', email: p.email || '',
             classGrade: p.classGrade || '', phone: p.phone || '',
             avatarUrl: p.avatarUrl || '', bio: p.bio || '',
-            schoolId: p.schoolId?.toString() || '', birthday: p.birthday || ''
+            schoolId: p.schoolId?.toString() || '', birthday: p.birthday || '',
+            linkedin: p.linkedin || '', instagram: p.instagram || ''
           }
           setFormData(next)
           savedSnapshot.current = next
@@ -228,7 +230,7 @@ const EditProfilePage = () => {
     // Same rule as ContactPage.set(): clear a field's error the instant it's
     // edited. This only ever REMOVES an error blur/submit already set - it
     // never validates on keystroke, which §11.10 explicitly forbids.
-    if (name === 'fullName' || name === 'bio') {
+    if (name === 'fullName' || name === 'bio' || name === 'linkedin' || name === 'instagram') {
       setFieldErrors(fe => (fe[name as ProfileField] ? { ...fe, [name]: undefined } : fe))
     }
   }
@@ -298,6 +300,14 @@ const EditProfilePage = () => {
     // Bio publishes immediately with no review queue - both tiers hard-block.
     // Shown on the bio field itself (not just the top banner) so the error
     // sits where the problem is.
+    // LinkedIn and Instagram: normalise what was pasted into the form we store, or say what is wrong with it.
+    const li = normalizeLinkedIn(formData.linkedin)
+    const ig = normalizeInstagram(formData.instagram)
+    if ('error' in li || 'error' in ig) {
+      setFieldErrors(prev => ({ ...prev, linkedin: 'error' in li ? li.error : undefined, instagram: 'error' in ig ? ig.error : undefined }))
+      document.getElementById('error' in li ? 'ep-linkedin' : 'ep-instagram')?.focus()
+      return
+    }
     if ((await checkText(formData.bio)).severity !== 'clean') {
       setFieldErrors(prev => ({ ...prev, bio: BLOCK_MESSAGE }))
       document.getElementById('ep-bio')?.focus()
@@ -315,7 +325,9 @@ const EditProfilePage = () => {
         classGrade: formData.classGrade.trim(), phone: formData.phone.trim(),
         avatarUrl: formData.avatarUrl, bio: formData.bio.trim(),
         schoolId: formData.schoolId ? parseInt(formData.schoolId) : undefined,
-        birthday: formData.birthday || null
+        birthday: formData.birthday || null,
+        linkedin: 'value' in li ? li.value : null,
+        instagram: 'value' in ig ? ig.value : null
       })
       if (result.success) {
         savedSnapshot.current = formData // clears the unsaved-changes guard
@@ -616,6 +628,34 @@ const EditProfilePage = () => {
                 aria-describedby={fieldErrors.bio ? 'ep-bio-error' : undefined}
               />
               {fieldErrors.bio && <span id="ep-bio-error" role="alert" className="aq-field-error">{fieldErrors.bio}</span>}
+            </div>
+
+            <div className="aq-field" data-invalid={fieldErrors.linkedin ? true : undefined}>
+              <label className="aq-field-label" htmlFor="ep-linkedin" style={{ marginBottom: 9, display: 'block' }}>linkedin <span className="muted" style={{ textTransform: 'none', fontWeight: 400 }}>(optional)</span></label>
+              <input
+                id="ep-linkedin" className="aq-field-input" name="linkedin" type="text" inputMode="url" autoComplete="off"
+                value={formData.linkedin} onChange={handleChange as any}
+                placeholder="linkedin.com/in/your-name"
+                aria-invalid={!!fieldErrors.linkedin} aria-describedby="ep-linkedin-note"
+              />
+              <span id="ep-linkedin-note" className="mono xs muted" style={{ display: 'block', marginTop: 6 }}>
+                shown on your profile for other members, and on your CV.
+              </span>
+              {fieldErrors.linkedin && <span role="alert" className="aq-field-error">{fieldErrors.linkedin}</span>}
+            </div>
+
+            <div className="aq-field" data-invalid={fieldErrors.instagram ? true : undefined}>
+              <label className="aq-field-label" htmlFor="ep-instagram" style={{ marginBottom: 9, display: 'block' }}>instagram <span className="muted" style={{ textTransform: 'none', fontWeight: 400 }}>(optional)</span></label>
+              <input
+                id="ep-instagram" className="aq-field-input" name="instagram" type="text" autoComplete="off" autoCapitalize="none"
+                value={formData.instagram} onChange={handleChange as any}
+                placeholder="@your.name"
+                aria-invalid={!!fieldErrors.instagram} aria-describedby="ep-instagram-note"
+              />
+              <span id="ep-instagram-note" className="mono xs muted" style={{ display: 'block', marginTop: 6 }}>
+                only you see this, and it appears on your CV. it is not shown on your public profile.
+              </span>
+              {fieldErrors.instagram && <span role="alert" className="aq-field-error">{fieldErrors.instagram}</span>}
             </div>
 
             {/* §16.2's off-switch. Lives here per §12.10 ("the wall off-

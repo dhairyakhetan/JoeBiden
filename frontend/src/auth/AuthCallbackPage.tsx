@@ -1,3 +1,4 @@
+import { stashWish } from '../lib/pendingWish'
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
@@ -47,6 +48,9 @@ const AuthCallbackPage = () => {
       // See lib/testAccounts.ts - the owner's own demo/test account skips
       // straight to the app regardless of status, so a mid-demo delete never
       // locks them out of the site they're trying to show people.
+      // A member who is not approved yet cannot apply, so the role or team they were heading for would be lost on the
+      // way to /register and /pending. Remember it: the waiting page offers to remind them (lib/pendingWish.ts).
+      if (member.status !== 'active') stashWish(from)
       if (isUnblockableTestAccount(member.email)) navigate(from, { replace: true })
       else if (!isRegistrationComplete(member)) navigate('/register', { replace: true })
       else if (member.status === 'active') navigate(from, { replace: true })

@@ -150,6 +150,9 @@ same queue; a rejected account must wait 30 days and reapply from scratch.
   applications and 1 join request pending members had already filed were turned
   into reminders on 2 Nov 2026 (the original rows are kept inside the reminder).
   A rejected or suspended account also cannot apply and gets no reminder.
+  If a visitor presses Apply (or "sign in to join" on a team), signs in and registers, the
+  role or team they chose is remembered for the tab and offered on the waiting page
+  ("you wanted to join X, remind me?"), with anything they had typed saved too.
   The hiring desks still tag an application "account awaiting approval" and
   block "accepted" for it: that now only covers an applicant who was un-approved
   after applying, and one application a rejected member filed before the change.
@@ -348,8 +351,7 @@ Added 2-3 Nov 2026 (overnight "everything connects" pass):
 - **Every handoff tells the person.** Accepted applicant: notice links to their
   team. Declined join request: its own type, links to the team. Approved
   member: told to pick a team (or say hello), and whoever invited them is
-  thanked. Taken off a team: told. Written but waiting on one database
-  migration: a task you are added to, an answer to your bug or feature report,
+  thanked. Taken off a team: told. A task you are added to, an answer to your bug or feature report,
   being made lead of a drive, and a drive completed (to everyone who checked in).
 - **One prompt at the top of the feed at a time.** The "you wanted to join X"
   card beats the "waiting on you" card (overdue or due-soon tasks, a drive you
