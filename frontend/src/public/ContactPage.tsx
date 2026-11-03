@@ -11,6 +11,7 @@ import { CONTACT_REPLY_TIME } from '../lib/orgFacts'
 import { useUnsavedChanges } from '../hooks/useUnsavedChanges'
 import { isDirty } from '../lib/unsavedChanges'
 import { Reveal, RevealGroup } from '../components/Reveal'
+import { sentRecently, markSent, TRAP_STYLE } from '../lib/formGuard'
 
 // changelog/07-auth-and-contact.md §07.0: the three fields validation can
 // fail on. `subject` is a free `<option>` picker with no wrong answer, so it
@@ -25,6 +26,7 @@ export default function ContactPage() {
   const { info, error: toastError } = useToast()
   const navigate = useNavigate()
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [trap, setTrap] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   // §07.0's field-level errors, lifted from CollaborationsPage.tsx's
@@ -108,6 +110,9 @@ export default function ContactPage() {
       return
     }
     setFieldErrors({})
+    // Honeypot filled: a bot. Look like it worked, send nothing.
+    if (trap) { setSubmitted(true); return }
+    if (sentRecently('contact')) { toastError('You just sent a message.', 'Give it a few seconds before sending another.'); return }
     // No moderation queue exists for this form - both tiers hard-block.
     if ((await checkText(form.message)).severity !== 'clean' || (await checkText(form.subject)).severity !== 'clean') {
       toastError(BLOCK_MESSAGE)
@@ -116,12 +121,15 @@ export default function ContactPage() {
     setLoading(true)
     try {
       // Try saving to supabase, fall back to mailto if table doesn't exist
+      // The table's columns are name, email, phone, role, message (checked live 3 Nov 2026). This used to insert `full_name` and
+      // `subject`, which do not exist, so EVERY submission failed here and fell back to the mail client: the form had never
+      // saved one message. The subject rides at the front of the message.
       const { error: dbErr } = await supabase.from('contact_submissions').insert([{
-        full_name: form.name.trim(),
+        name: form.name.trim(),
         email: form.email.trim(),
-        subject: form.subject || null,
-        message: form.message.trim(),
+        message: (form.subject ? `[${form.subject}] ` : '') + form.message.trim(),
       }])
+      if (!dbErr) markSent('contact')
       if (dbErr) {
         // Graceful fallback: open email client pre-filled.
         //
@@ -201,6 +209,7 @@ export default function ContactPage() {
         // "charm that still reads" reason - this just isn't a surface the
         // instruction covers, so it is left exactly as it was.
         <form noValidate className="card" style={{ maxWidth: 720, padding: 0, overflow: 'hidden', position: 'relative' }} onSubmit={handleSubmit}>
+          <div style={TRAP_STYLE} aria-hidden><label>Website<input tabIndex={-1} autoComplete="off" value={trap} onChange={e => setTrap(e.target.value)} /></label></div>
           {/* Postage-stamp graphic.
               audit-ok: dashed + 4px radius - a stamp perforation, drawn, not UI. */}
           <div aria-hidden style={{
@@ -236,6 +245,7 @@ export default function ContactPage() {
                 <label className="aq-field-label" htmlFor="c-name">from *</label>
                 <input
                   id="c-name"
+                  maxLength={200}
                   className="aq-field-input"
                   placeholder="your name"
                   value={form.name}
@@ -252,6 +262,7 @@ export default function ContactPage() {
                 <label className="aq-field-label" htmlFor="c-email">reply-to *</label>
                 <input
                   id="c-email"
+                  maxLength={254}
                   className="aq-field-input"
                   type="email"
                   placeholder="your@email.com"
@@ -292,6 +303,7 @@ export default function ContactPage() {
               <label className="aq-field-label" htmlFor="c-message">message *</label>
               <textarea
                 id="c-message"
+                maxLength={4000}
                 className="aq-field-input"
                 placeholder="tell us what you need. be as direct as you want."
                 style={{

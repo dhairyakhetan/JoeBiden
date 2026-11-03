@@ -1,6 +1,6 @@
 import { Mascot } from '../components/Mascot'
 import Img from '../components/Img'
-import { CLASS_OPTIONS } from '../lib/classOptions'
+import { CLASS_OPTIONS, MIN_GRADE_NOTE } from '../lib/classOptions'
 import './RegisterPage.css'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -365,6 +365,7 @@ const RegisterPage = () => {
                     name from a label it is pointed at, not from an adjacent
                     <label for>. */}
                 <span id="reg-class-label" className="mono xs upper muted" style={{ fontWeight: 700 }}>school / class</span>
+                <span className="mono xs muted" style={{ display: 'block', marginTop: 4 }}>{MIN_GRADE_NOTE}</span>
                 <div
                   id="reg-class-group"
                   className="reg-chips"

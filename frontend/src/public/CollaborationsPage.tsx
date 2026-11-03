@@ -10,6 +10,7 @@ import { pageMetadata } from '../lib/metaConfig'
 import { Marquee } from '../components/v6Shared'
 import { checkText, BLOCK_MESSAGE } from '../lib/profanityFilter'
 import { Reveal, RevealGroup } from '../components/Reveal'
+import { sentRecently, markSent, TRAP_STYLE } from '../lib/formGuard'
 
 // Exported for director/FormResponses.tsx (§20.6): the enquiries desk's type
 // filter reads this list rather than retyping its own copy of it, so the two
@@ -31,6 +32,7 @@ export default function CollaborationsPage() {
   useMeta(pageMetadata.collaborations)
   useJsonLd('collabs-breadcrumb', breadcrumbLd([['Home', '/'], ['Collaborations', '/collaborations']]))
   const [form, setForm] = useState<Form>({ orgName: '', contactName: '', email: '', phone: '', collabType: '', message: '' })
+  const [trap, setTrap] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
@@ -134,13 +136,17 @@ export default function CollaborationsPage() {
       setFieldErrors({}); setError(BLOCK_MESSAGE); return
     }
     setFieldErrors({})
+    // Honeypot filled: a bot. Look like it worked, send nothing. A repeat inside the cooldown is a double-click or a loop.
+    if (trap) { navigate('/thank-you?from=collab'); return }
+    if (sentRecently('collab')) { setError('You just sent a proposal. Give it a few seconds before sending another.'); return }
     setLoading(true); setError(null)
     const { error: err } = await supabase.from('collaboration_submissions').insert([{
       org_name: form.orgName, contact_name: form.contactName, email: form.email,
       phone: form.phone || null, collab_type: form.collabType || null, message: form.message,
     }])
     setLoading(false)
-    if (err) { setError('submission failed. please try again.'); return }
+    if (err) { setError(/rate_limited/.test(err.message || '') ? 'that is a lot of proposals from one email just now. please try again in an hour.' : 'submission failed. please try again.'); return }
+    markSent('collab')
     // Give the completed proposal a real URL, so it can be counted and so the
     // "what happens next" answer has somewhere to live.
     navigate('/thank-you?from=collab')
@@ -296,22 +302,23 @@ export default function CollaborationsPage() {
               </div>
             )}
             <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={TRAP_STYLE} aria-hidden><label>Website<input tabIndex={-1} autoComplete="off" value={trap} onChange={e => setTrap(e.target.value)} /></label></div>
               <div className="col-fieldpair">
                 <div>
                   <label htmlFor="col-org" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 4 }}>organisation name *</label>
-                  <input id="col-org" autoComplete="organization" className="input" value={form.orgName} onChange={e => set('orgName', e.target.value)} onBlur={() => handleBlur('orgName')} placeholder="your school / org" required aria-invalid={!!fieldErrors.orgName} aria-describedby={fieldErrors.orgName ? 'col-org-error' : undefined} />
+                  <input id="col-org" maxLength={200} autoComplete="organization" className="input" value={form.orgName} onChange={e => set('orgName', e.target.value)} onBlur={() => handleBlur('orgName')} placeholder="your school / org" required aria-invalid={!!fieldErrors.orgName} aria-describedby={fieldErrors.orgName ? 'col-org-error' : undefined} />
                   {fieldErrors.orgName && <span id="col-org-error" role="alert" style={fieldErrSt}>{fieldErrors.orgName}</span>}
                 </div>
                 <div>
                   <label htmlFor="col-contact" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 4 }}>contact name *</label>
-                  <input id="col-contact" className="input" value={form.contactName} onChange={e => set('contactName', e.target.value)} onBlur={() => handleBlur('contactName')} placeholder="your name" required autoComplete="name" aria-invalid={!!fieldErrors.contactName} aria-describedby={fieldErrors.contactName ? 'col-contact-error' : undefined} />
+                  <input id="col-contact" maxLength={200} className="input" value={form.contactName} onChange={e => set('contactName', e.target.value)} onBlur={() => handleBlur('contactName')} placeholder="your name" required autoComplete="name" aria-invalid={!!fieldErrors.contactName} aria-describedby={fieldErrors.contactName ? 'col-contact-error' : undefined} />
                   {fieldErrors.contactName && <span id="col-contact-error" role="alert" style={fieldErrSt}>{fieldErrors.contactName}</span>}
                 </div>
               </div>
               <div className="col-fieldpair">
                 <div>
                   <label htmlFor="col-email" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 4 }}>email *</label>
-                  <input id="col-email" className="input" type="email" value={form.email} onChange={e => set('email', e.target.value)} onBlur={() => handleBlur('email')} placeholder="you@org.com" required autoComplete="email" inputMode="email" aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? 'col-email-error' : undefined} />
+                  <input id="col-email" maxLength={254} className="input" type="email" value={form.email} onChange={e => set('email', e.target.value)} onBlur={() => handleBlur('email')} placeholder="you@org.com" required autoComplete="email" inputMode="email" aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? 'col-email-error' : undefined} />
                   {fieldErrors.email && <span id="col-email-error" role="alert" style={fieldErrSt}>{fieldErrors.email}</span>}
                 </div>
                 <div>
@@ -331,7 +338,7 @@ export default function CollaborationsPage() {
               </div>
               <div>
                 <label htmlFor="col-msg" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 4 }}>message *</label>
-                <textarea id="col-msg" className="textarea" rows={5} value={form.message} onChange={e => set('message', e.target.value)} onBlur={() => handleBlur('message')} placeholder="tell us about your proposal. what do you want to achieve and how does AQ fit?" required aria-invalid={!!fieldErrors.message} aria-describedby={fieldErrors.message ? 'col-msg-error' : undefined} />
+                <textarea id="col-msg" maxLength={4000} className="textarea" rows={5} value={form.message} onChange={e => set('message', e.target.value)} onBlur={() => handleBlur('message')} placeholder="tell us about your proposal. what do you want to achieve and how does AQ fit?" required aria-invalid={!!fieldErrors.message} aria-describedby={fieldErrors.message ? 'col-msg-error' : undefined} />
                 {fieldErrors.message && <span id="col-msg-error" role="alert" style={fieldErrSt}>{fieldErrors.message}</span>}
               </div>
               <div style={{ textAlign: 'right' }}>

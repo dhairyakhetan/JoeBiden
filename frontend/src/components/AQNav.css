@@ -279,6 +279,10 @@
               background: var(--bg); color: var(--ink);
               display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
               animation: aqDrawerIn 0.2s ease;
+              /* C-02 (3 Nov 2026): phone hardening. inset:0 alone can run under the browser's own toolbar on iOS/Android, so
+                 the last links sat out of reach; dvh follows the visible area, the bottom padding clears the home bar. */
+              height: 100vh; height: 100dvh; padding-bottom: max(24px, env(safe-area-inset-bottom));
+              -webkit-overflow-scrolling: touch;
             }
             .aq-draw-hd {
               position: sticky; top: 0; z-index: 1; flex-shrink: 0;

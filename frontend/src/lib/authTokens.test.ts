@@ -48,7 +48,7 @@ describe('count tokens carry canonical figures only', () => {
   })
 
   it('isCanonicalFigure narrows correctly', () => {
-    expect(isCanonicalFigure('1,300+')).toBe(true)
+    expect(isCanonicalFigure(displayCount(ORG_FACTS.membersTotal))).toBe(true)
     expect(isCanonicalFigure('1,301+')).toBe(false)
   })
 

@@ -1,3 +1,5 @@
+import { ORG_FACTS, displayCount } from './orgFacts'
+
 /**
  * Inline tokens for the auth funnel's A6 headline layout.
  *
@@ -34,24 +36,17 @@
  * the headline of the org's most-read signed-out page is exactly how that
  * happens again.
  *
- * '1,300+' and '540+' are `displayCount(ORG_FACTS.membersTotal)` and
- * `displayCount(ORG_FACTS.drivesWrittenUp)` respectively (changelog/21-org-facts.md) —
- * NOT hand-picked. They are copied here as literals rather than computed
- * inline because `CanonicalFigure` is a TypeScript literal-union type (that's
- * what makes an arbitrary number impossible at the type level), and a value
- * returned by a function call can never narrow to a string literal type, only
- * a literal written in source can. `authTokens.test.ts` cross-checks these two
- * against `displayCount(ORG_FACTS.*)` at test time, so a re-run of
- * `compute-org-facts.mjs` that moves either figure enough to change its
- * rounded display fails that test loudly instead of silently going stale here
- * (a stale entry doesn't crash anything — `countToken` just returns `null` and
- * the token quietly vanishes, which is exactly the failure mode the test
- * exists to catch). When that test fails, update the two literals below to
- * match, by hand — do not make this array computed.
+ * The first two are `displayCount(ORG_FACTS.membersTotal)` and `displayCount(ORG_FACTS.drivesWrittenUp)`
+ * (changelog/21-org-facts.md) and COMPUTED, so they follow the numbers when the build refreshes them (owner,
+ * 3 Nov 2026: "numbers should auto update"). They used to be literals kept in step by a test that failed whenever
+ * a figure's rounded display moved, which would have broken CI on every deploy that changed a number.
+ * The cost is that `CanonicalFigure` is now a plain string type instead of a literal union; the runtime guard
+ * (`isCanonicalFigure`, `countToken` returning null) and `authTokens.test.ts` still refuse any figure outside
+ * this list, which is what stops an invented number reaching the headline.
  */
-export const CANONICAL_FIGURES = [
-  '1,300+',
-  '540+',
+export const CANONICAL_FIGURES: readonly string[] = [
+  displayCount(ORG_FACTS.membersTotal),
+  displayCount(ORG_FACTS.drivesWrittenUp),
   '3,500+',
   '4,000+',
   '15,000',
@@ -60,9 +55,9 @@ export const CANONICAL_FIGURES = [
   '300',
   '₹1L+',
   '₹0',
-] as const
+]
 
-export type CanonicalFigure = (typeof CANONICAL_FIGURES)[number]
+export type CanonicalFigure = string
 
 export type TokenKind = 'count' | 'photo'
 

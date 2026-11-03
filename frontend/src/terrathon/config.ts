@@ -48,6 +48,13 @@ export const UPI = {
   payeeName: 'Team AquaTerra',
 }
 
+/**
+ * TerraThon 2026 ran 2 to 4 October 2026 and is over. Registration is closed everywhere: the pages say so, and the
+ * database no longer accepts a registration (terrathon_register has no execute grant for anon or authenticated,
+ * 3 Nov 2026). Flip this and re-grant that function to open the next edition.
+ */
+export const EVENT_OVER = true
+
 export const EVENT = {
   name: 'TerraThon 2026',
   wordmark: 'TERRATHON',

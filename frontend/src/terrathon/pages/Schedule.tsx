@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT } from '../config'
+import { EVENT, EVENT_OVER } from '../config'
 import { SPORT_ORDER, type PublicEvent, type SportSlug } from '../lib/types'
 import { useServerOffset } from '../lib/hooks'
 import { LiveCountdown } from '../components/Countdown'
@@ -380,7 +380,7 @@ export function TerraThonSchedule({ events, loading, error, reload }: Props) {
               WhatsApp group the night before.
             </p>
           </div>
-          <Link to={`${EVENT.base}/register`} className="tt-btn tt-btn--go">Register now</Link>
+          <Link to={`${EVENT.base}/register`} className="tt-btn tt-btn--go">{EVENT_OVER ? 'Registration closed' : 'Register now'}</Link>
         </div>
       )}
     </div>

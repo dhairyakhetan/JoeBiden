@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT, PARTNERS } from '../config'
+import { EVENT, EVENT_OVER, PARTNERS } from '../config'
 import { SPORT_ORDER, type PublicEvent } from '../lib/types'
 import { useServerOffset } from '../lib/hooks'
 import { dayRange, rupees } from '../lib/format'
@@ -251,7 +251,7 @@ export function TerraThonHome({ events, loading, error, reload }: Props) {
                   genuinely closed (not merely "not loaded yet", see
                   `knownAllClosed` above). */}
               <Link to={`${EVENT.base}/register`} className="tt-btn">
-                {knownAllClosed ? 'Join the waitlist' : 'Grab a slot'}
+                {EVENT_OVER ? 'That’s a wrap' : knownAllClosed ? 'Join the waitlist' : 'Grab a slot'}
               </Link>
               <a href="#sports" className="tt-btn tt-btn--quiet">
                 See the sports
@@ -723,7 +723,7 @@ export function TerraThonHome({ events, loading, error, reload }: Props) {
             Under a minute to register. Bring the team details later, on WhatsApp.
           </p>
           <Link to={`${EVENT.base}/register`} className="tt-btn" style={{ minHeight: 'var(--tt-ctl-lg)' }}>
-            Register Here
+            {EVENT_OVER ? 'Registration closed' : 'Register Here'}
           </Link>
         </div>
       </section>

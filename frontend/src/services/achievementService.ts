@@ -5,6 +5,8 @@ import { Achievement, PaginatedResponse } from './api'
 import { logSupabaseError } from '../lib/errorTracking'
 import { withFunctionLogging } from '../lib/functionLog'
 
+const ACHIEVEMENT_COLUMNS = 'achievement_id, member_id, title, description, achievement_date, created_at, updated_at, uuid, achievement_type, achievement_end_date, proof_url, status'
+
 const mapAchievementFromDB = (data: any): Achievement => ({
   achievementId: data.achievement_id,
   uuid: data.uuid,
@@ -91,7 +93,9 @@ const achievementServiceImpl = {
 
     let query = supabaseCommunity
       .from('external_achievements')
-      .select('*', { count: 'exact' })
+      // Named columns, not `*`: the reviewer columns are closed to signed-out readers (C-14), and a member's own
+      // list never showed them.
+      .select(ACHIEVEMENT_COLUMNS, { count: 'exact' })
       .eq('member_id', memberId)
       .order('achievement_date', { ascending: false })
       .range(offset, offset + limit - 1)

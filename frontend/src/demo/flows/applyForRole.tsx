@@ -109,7 +109,7 @@ const flow: DemoFlow = {
     {
       id: 'phone',
       title: 'Add your number.',
-      body: "The team lead uses this to reach you if you're picked - never shared beyond them.",
+      body: "The department's HoD uses this to reach you if you're picked - never shared beyond them.",
       findTarget: () => document.querySelector<HTMLInputElement>('[aria-label^="Apply for"] input[type="tel"]'),
       doItForMe: ({ target }) => setReactFieldValue(target as HTMLInputElement, PHONE_TEXT),
       isComplete: (target) => ((target as HTMLInputElement | null)?.value.trim().length ?? 0) >= 10,
@@ -133,7 +133,7 @@ const flow: DemoFlow = {
     {
       id: 'submit',
       title: 'Now send it.',
-      body: "The team lead sees it immediately and usually replies within a week, either way.",
+      body: "The department's HoD sees it immediately and usually replies within a week, either way.",
       manualHint: 'or tap the arrow yourself',
       // Found by actually submitting and watching it happen: OpeningCard's
       // onApplied callback (onClose + setHasApplied in the SAME synchronous
@@ -161,7 +161,7 @@ const flow: DemoFlow = {
   endCard: {
     kicker: '★ that\'s the whole loop',
     headline: <>you just<br />applied for<br />a role.</>,
-    body: "That's it - no CV, no cover letter. A real team lead reads every application and replies either way, usually within a week.",
+    body: "That's it - no CV, no cover letter. A real HoD reads every application and replies either way, usually within a week.",
   },
 }
 

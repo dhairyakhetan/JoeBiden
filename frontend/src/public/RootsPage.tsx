@@ -27,8 +27,8 @@ const DROPS: Drop[] = [
 
 const CALENDAR: { drop: string; status: 'shipped' | 'live' | 'next'; note: string }[] = [
   { drop: 'Drop 01 · Groundwork', status: 'shipped', note: 'sold out - thank you' },
-  { drop: 'Drop 02 · Kolkata', status: 'live', note: 'shipping now' },
-  { drop: 'Drop 03 · Tote & Caps', status: 'live', note: 'shipping now' },
+  { drop: 'Drop 02 · Kolkata', status: 'live', note: 'order by Instagram DM' },
+  { drop: 'Drop 03 · Tote & Caps', status: 'live', note: 'order by Instagram DM' },
 ]
 
 // These per-line rupee amounts don't correspond to any real drop's price (the
@@ -121,7 +121,7 @@ export default function RootsPage() {
                         rel="noopener noreferrer"
                         className="btn btn-sm btn-primary"
                       >
-                        notify me ↗
+                        order by Instagram DM ↗
                       </a>
                     )}
                   </div>

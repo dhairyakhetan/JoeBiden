@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT } from '../config'
+import { EVENT, EVENT_OVER } from '../config'
 import { SPORT_ORDER, type PublicEvent } from '../lib/types'
 import { isSoundOn, setSoundOn } from '../lib/sound'
 import { rupees } from '../lib/format'
@@ -166,7 +166,7 @@ export function Nav({ events }: { events: PublicEvent[] }) {
               the ask at the top and the closing band makes it at the bottom, and
               both keep the tomato. It stays a full 44px button either way. */}
           <Link to={`${B}/register`} className="tt-btn tt-btn--quiet tt-navcta" style={{ minHeight: 44, padding: '0 22px', fontSize: 'var(--tt-fs-meta)', borderColor: 'var(--tt-hot)' }}>
-            Register Now
+            {EVENT_OVER ? 'That’s a wrap' : 'Register Now'}
           </Link>
           <button
             type="button"
@@ -210,11 +210,6 @@ export function Nav({ events }: { events: PublicEvent[] }) {
             <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginTop: 2 }}>
               <Link to={`${B}/schedule`} className="tt-chip" style={{ textDecoration: 'none' }}>Schedule</Link>
               <Link to={`${B}/contact`} className="tt-chip" style={{ textDecoration: 'none' }}>Contact</Link>
-              {/* Same quiet entry as the footer's, so the desk can be reached
-                  from the menu on a phone without hunting for the page foot. */}
-              <Link to={`${B}/admin`} className="tt-adminlink" onClick={() => setMenu(false)}>
-                Admin
-              </Link>
             </div>
           </nav>
         </div>

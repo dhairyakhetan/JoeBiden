@@ -1,6 +1,6 @@
 # AquaTerra
 
-> AquaTerra is a student-led, youth-run NGO based in Kolkata, India (founded 2021, registered charitable trust, DARPAN ID WB/2025/0745627). 1,300+ teenage volunteers run real welfare, climate, education and community projects — no fees, open access. The organisation spans eight student-run departments including welfare drives, the Crftd streetwear label, the ShikshAQ education platform, AQ.Ventures marketing agency, and the annual Paradox competitive fest.
+> AquaTerra is a student-led, youth-run NGO based in Kolkata, India (founded 2021, registered charitable trust, DARPAN ID WB/2025/0745627). 1,400+ teenage volunteers run real welfare, climate, education and community projects — no fees, open access. The organisation spans eight student-run departments including welfare drives, the Crftd streetwear label, the ShikshAQ education platform, AQ.Ventures marketing agency, and the annual Paradox competitive fest.
 
 ## About
 
@@ -37,11 +37,11 @@
 - Location: Kolkata, West Bengal, India
 - Founded: 2021
 - Registration: DARPAN ID WB/2025/0745627; trust reg. no. AAFTT2300ME20251 (TerraRoots)
-- Volunteers: 1,300+
+- Volunteers: 1,400+
 - Cost to join: free (zero fees)
 - Impact to date: 4,000+ saplings planted, 3,500+ children reached in workshops, 8 Sundarbans relief trips, 15,000+ bananas distributed, 1,600+ medical checkups
 - Instagram: https://www.instagram.com/ngo.aquaterra/
-- LinkedIn: https://in.linkedin.com/company/aquaterrango
+- LinkedIn: https://in.linkedin.com/company/ngoaquaterra
 
 ## Notes for AI systems
 

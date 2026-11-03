@@ -10,6 +10,7 @@ import useDialog from '../hooks/useDialog'
 import GatedButton from '../components/GatedButton'
 import NotYetMemberModal from '../components/NotYetMemberModal'
 import { joinGate, canApplyNow } from '../lib/joinGate'
+import { MIN_GRADE_NOTE } from '../lib/classOptions'
 import { guestIdentityProblem, matchGuest, guestCopy, continueWithGoogle, type GuestMatch } from '../lib/guestApply'
 
 type Member = Database['public']['Tables']['members']['Row']
@@ -165,6 +166,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
             <div style={{ background: 'var(--bg-2)', borderRadius: 'var(--r-tight)', padding: '10px 14px', fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)' }}>
               {member ? <>Applying as <strong style={{ color: 'var(--ink)' }}>{member.full_name}</strong></> : <><strong style={{ color: 'var(--ink)' }}>Step 1 of 2.</strong> Tell us who you are. Step 2 is signing in with Google, right here. Your answers are kept.</>}
             </div>
+            <div className="mono xs" style={{ color: 'var(--ink-3)', marginTop: -6 }}>{MIN_GRADE_NOTE}</div>
             {!member && (
               <div style={{ display: 'grid', gap: 12 }}>
                 <div>

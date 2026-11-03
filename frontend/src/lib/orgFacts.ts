@@ -78,15 +78,15 @@ export interface OrgFacts {
   /** Top-level departments, count(*) where is_active and parent_team_id is null. The figure every
    *  "N departments" sentence reads; render it with numberWord() from lib/orgFigures. */
   departmentsActive: number
-  /** Dog MEALS served across every recorded feeding drive - the sum of the
-   *  per-drive figures in welfare_projects.key_statistic, NOT a count of
-   *  distinct animals. 58 drives around Kolkata necessarily feed overlapping
-   *  street-dog populations, so a distinct-animal claim is unsupportable.
-   *  Pass through displayCount(); never relabel this as "dogs fed". */
+  /** Dog MEALS served across every recorded feeding drive - a sum of the
+   *  per-drive figures in welfare_projects.key_statistic, not a count of
+   *  distinct animals. Pass through displayCount(); never relabel this as
+   *  "dogs fed", which would assert a distinct-animal count the records
+   *  cannot support. */
   dogMealsServed: number
   /** count(distinct school) among active members — BLOCKED, not a query
    *  failure. Checked live 2026-09-05: the `schools` table holds ZERO rows,
-   *  and every one of the 1317 active members has `school_id IS
+   *  and every one of the 1424 active members has `school_id IS
    *  NULL`. The column and the table exist; nothing has ever populated them.
    *  Ships as `null` rather than the honest-but-useless "0 schools
    *  represented" — see WORKFLOW.md's "never a 0, a zero is a claim" rule.
@@ -150,20 +150,14 @@ export interface OrgFacts {
 }
 
 export const ORG_FACTS: OrgFacts = {
-  generatedAt: '2026-09-05T18:21:38.596Z',
+  generatedAt: '2026-11-03T18:18:39.924Z',
 
   drivesWrittenUp: 548,
-  drivesWithPhoto: 491,
-  membersTotal: 1317,
-  postsPublished: 586,
-  teamsActive: 8,
-  // Set to the live count on 2026-10-18 (7: Collabs is hidden, Social Media sits inside Marketing).
-  // The build rewrites this from the database whenever it has the service key.
+  drivesWithPhoto: 488,
+  membersTotal: 1424,
+  postsPublished: 619,
+  teamsActive: 9,
   departmentsActive: 7,
-  // 3,265 = the sum across all 58 dog-feeding drives, every row parsing
-  // cleanly (verified live against the database 2026-09-06). Renders via
-  // displayCount() as "3,200+ dog meals served" - floored, per contract
-  // rule 3 and BRAND_VOICE.md §3's "never round up".
   dogMealsServed: 3265,
   schoolsRepresented: null,
 
@@ -171,17 +165,9 @@ export const ORG_FACTS: OrgFacts = {
   trustRegNo: 'AAFTT2300ME20251',
   darpanId: 'WB/2025/0745627',
   ageRange: '14–19',
-  linkedinUrl: 'https://in.linkedin.com/company/aquaterrango',
+  linkedinUrl: 'https://in.linkedin.com/company/ngoaquaterra',
   paradoxThreeDate: '2024-06',
-  // RETIRED - superseded by the derived `dogMealsServed` above. The claim that
-  // no table backed this was wrong; welfare_projects.key_statistic did all
-  // along. Kept as null so the name still resolves; nothing should read it.
   strayDogsFed: null,
-  // 2,000 kg (two tonnes), set by the project owner as the named human §21.3
-  // requires. LOWER than the 2,500kg previously published - BRAND_VOICE.md §3
-  // is "never invent, round up, or improve a number." Supersedes all three
-  // conflicting repo values (2,500 / 950+ / 1,000). Not derivable: the
-  // key_statistic "kg" rows mix books, clothes, ranges and a child count.
   clothesDistributedKg: 2000,
 
   childrenReached: 3500,

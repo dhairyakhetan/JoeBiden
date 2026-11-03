@@ -492,7 +492,7 @@ const AccountApprovals = () => {
             ? (search.trim() ? rejectedRows.length : (totalRejected ?? rejectedRows.length))
             : headerCount(view, contactedCounts, rows.length)}
           subtitle={
-            view === 'pending' ? 'Review pending member sign-ups.'
+            view === 'pending' ? 'Sign-ups nobody has reached out to yet. The menu badge also counts the ones already contacted: see the contacted tab.'
             : view === 'contacted' ? "Reached out, still deciding."
             : view === 'all' ? 'Every pending sign-up, contacted or not.'
             : view === 'duplicates' ? 'Live accounts that share a phone number, so HR can reach the people involved.'

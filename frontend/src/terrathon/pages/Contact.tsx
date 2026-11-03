@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT, CONTACTS } from '../config'
+import { EVENT, EVENT_OVER, CONTACTS } from '../config'
 import { prettyPhone, waNumber } from '../lib/format'
 import { WhatsAppMark, InstagramMark, PhoneMark, MailMark } from '../components/BrandMarks'
 import { TerraThonFaq } from '../components/Faq'
@@ -234,7 +234,7 @@ export function TerraThonContact() {
           </p>
         </div>
         <Link to={`${EVENT.base}/register`} className="tt-btn" style={{ flexShrink: 0, minHeight: 52 }}>
-          Register Now
+          {EVENT_OVER ? 'Registration closed' : 'Register Now'}
         </Link>
       </div>
 

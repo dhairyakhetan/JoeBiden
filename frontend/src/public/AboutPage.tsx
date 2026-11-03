@@ -1,4 +1,5 @@
 import './AboutPage.css'
+import { useLiveFacts } from '../lib/liveFacts'
 import { useNavigate } from 'react-router-dom'
 import { I, Marquee } from '../components/v6Shared'
 import DynamicIslandTOC from '../components/DynamicIslandTOC'
@@ -32,6 +33,7 @@ import { setAuthIntent } from '../lib/authIntent'
 // and arrows, same scroll cue - only the text layer and its alignment (left,
 // not centred - see .ab-hero-inner in AboutPage.css) changed.
 function HeroSection() {
+  const facts = useLiveFacts()
   const departments = useDepartmentCount()
   return (
     <section className="ab-hero ab-hero--stage bleed-under-nav" data-nav-tint="ink">
@@ -50,10 +52,10 @@ function HeroSection() {
           </div>
           <div className="ab-stage-head-side">
             <p className="ab-hero-lead">
-              16 students, no budget, no experience, and a WhatsApp group. {capitalise(yearsPhrase())} later there are {displayCount(ORG_FACTS.membersTotal)} of us across {departmentsPhrase(departments)}, still student-run, still Kolkata. Here is all of it in one picture: tap a department to open it.
+              16 students, no budget, no experience, and a WhatsApp group. {capitalise(yearsPhrase())} later there are {displayCount(facts.membersTotal)} of us across {departmentsPhrase(departments)}, still student-run, still Kolkata. Here is all of it in one picture: tap a department to open it.
             </p>
             <div className="ab-hero-stickers">
-              <span className="ab-pill ab-pill-welfare ab-pill-r-3">ages {ORG_FACTS.ageRange}</span>
+              <span className="ab-pill ab-pill-welfare ab-pill-r-3">usually {ORG_FACTS.ageRange}</span>
               <span className="ab-pill ab-pill-lemon ab-pill-r2">zero fees</span>
               <span className="ab-pill ab-pill-ghost ab-pill-r-1">darpan registered</span>
             </div>
@@ -71,6 +73,7 @@ function HeroSection() {
 
 // ── Page ──────────────────────────────────────────────────────
 export default function AboutPage() {
+  const facts = useLiveFacts()
   const departments = useDepartmentCount()
   useMeta(pageMetadata.about)
   useJsonLd('about-breadcrumb', breadcrumbLd([['Home', '/'], ['About', '/about']]))
@@ -133,7 +136,7 @@ export default function AboutPage() {
        past chapter would be a new, wrong claim. 2026 is the "now" chapter, so
        its figure is the live one. No other word changed. */
     { y: '2025', t: 'AQ.Ventures and ShikshAQ in the ecosystem.' },
-    { y: '2026', t: `${displayCount(ORG_FACTS.membersTotal)} active members. ShikshAQ live. still student-run. still Kolkata.` },
+    { y: '2026', t: `${displayCount(facts.membersTotal)} active members. ShikshAQ live. still student-run. still Kolkata.` },
   ]
 
   // "chapter one" … "chapter six · now". The only new strings in section 26.
@@ -187,7 +190,7 @@ export default function AboutPage() {
           Every word, the order, and the ★ rhythm are unchanged; `15,000
           BANANAS` keeps its exact wording (no "+", and never "meals"). */}
       <div className="ab-marquee" data-nav-tint="welfare">
-        <Marquee items={['★ KOLKATA BORN', `${displayCount(ORG_FACTS.membersTotal)} ACTIVE MEMBERS`, '★ ZERO DONATIONS EVER', `${displayCount(ORG_FACTS.drivesWrittenUp)} DRIVES`, '★ DARPAN CERTIFIED', `${displayCount(ORG_FACTS.saplingsPlanted)} SAPLINGS`, '★ STUDENT RUN', '15,000 BANANAS']} color="mint" />
+        <Marquee items={['★ KOLKATA BORN', `${displayCount(facts.membersTotal)} ACTIVE MEMBERS`, '★ ZERO DONATIONS EVER', `${displayCount(facts.drivesWrittenUp)} DRIVES`, '★ DARPAN CERTIFIED', `${displayCount(ORG_FACTS.saplingsPlanted)} SAPLINGS`, '★ STUDENT RUN', '15,000 BANANAS']} color="mint" />
       </div>
 
       {/* ── THE MANIFESTO (changelog/09-about.md) ── */}
@@ -245,7 +248,7 @@ export default function AboutPage() {
                       </div>
                     </div>
                     <div className="ab-position-receipt">
-                      <span className="ab-position-receipt-n">{displayCount(ORG_FACTS.drivesWrittenUp)}</span>
+                      <span className="ab-position-receipt-n">{displayCount(facts.drivesWrittenUp)}</span>
                       <span className="ab-position-receipt-k">drives completed</span>
                     </div>
                     <p className="ab-position-note">Bananas, not meals. It isn't a typo.</p>
@@ -356,7 +359,7 @@ export default function AboutPage() {
                 {m.y === '2026' && (
                   <div className="ab-chapter-extra ab-chapter-tiles">
                     <div className="ab-chapter-tile" style={{ background: 'var(--welfare)' }}>
-                      <span className="ab-chapter-tile-n">{displayCount(ORG_FACTS.membersTotal)}</span>
+                      <span className="ab-chapter-tile-n">{displayCount(facts.membersTotal)}</span>
                       <span className="ab-chapter-tile-k">active members</span>
                     </div>
                     <div className="ab-chapter-tile" style={{ background: 'var(--card)' }}>

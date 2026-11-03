@@ -142,7 +142,8 @@ const directorServiceImpl = {
       // non-super-admin director gets a real count here too.
       (supabaseCommunity as any).from('contact_submissions').select('id', { count: 'exact', head: true }).eq('status', 'new'),
       (supabaseCommunity as any).from('collaboration_submissions').select('id', { count: 'exact', head: true }).eq('status', 'new'),
-      (supabaseCommunity as any).from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      // Pending applications on openings that still exist: the Hiring page lists only those, so the badge and the page agree (C-17).
+      (supabaseCommunity as any).from('job_applications').select('id, job_openings!inner(deleted_at)', { count: 'exact', head: true }).eq('status', 'pending').is('job_openings.deleted_at', null),
     ]))
 
     // supabase-js returns { error } instead of throwing. Without this a refused or failed count read as 0,

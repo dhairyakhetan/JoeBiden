@@ -96,6 +96,23 @@ if (catchAll && catchAll.source.includes('?!')) {
   }
 }
 
+// ── 1c. Real 404s (handoff C-06): the router's URLs reach the app, nothing else does ─────────────
+// The catch-all used to hand EVERY unknown path the home page with HTTP 200. Now it is an allow-list built from
+// src/App.tsx (scripts/sync-vercel-rewrites.mjs). Two assertions keep it honest: every top-level route in App.tsx must
+// match it (or that route is a hard 404 in production), and the unknown paths below must NOT match it.
+if (catchAll) {
+  const re = new RegExp('^' + catchAll.source + '$')
+  const { routeSegments } = await import('./sync-vercel-rewrites.mjs')
+  const segments = routeSegments(readFileSync(join(__dir, '../src/App.tsx'), 'utf8'))
+  const unreachable = segments.filter(seg => !re.test('/' + seg) && !re.test('/' + seg + '/x'))
+  if (unreachable.length) {
+    problems.push(`App.tsx routes the SPA rewrite does not reach (they would hard-404): ${unreachable.map(x => '/' + x).join(', ')}.\n      Run: node frontend/scripts/sync-vercel-rewrites.mjs`)
+  }
+  for (const unknown of ['/terms', '/favicon.ico', '/og-image.png', '/manifest.json', '/api/health', '/wp-admin']) {
+    if (re.test(unknown)) problems.push(`The SPA rewrite still matches ${unknown}, which is not a route: it would return 200 with the home page (soft 404).`)
+  }
+}
+
 // ── 2. The exact trap that caused the outage ────────────────────────────────
 if (catchAll && cleanUrls && /\/index\.html$/.test(catchAll.destination || '')) {
   problems.push(

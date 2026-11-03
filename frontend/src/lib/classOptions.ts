@@ -20,6 +20,9 @@
  * the escape hatch last.
  */
 export const CLASS_OPTIONS = [
+  'Class 6',
+  'Class 7',
+  'Class 8',
   'Class 9',
   'Class 10',
   'Class 11',
@@ -32,6 +35,9 @@ export const CLASS_OPTIONS = [
 ] as const
 
 export type ClassOption = (typeof CLASS_OPTIONS)[number]
+
+/** The one rule on who may apply (owner, 3 Nov 2026): Class 6 and above. "14 to 19" is a typical range, not a rule. */
+export const MIN_GRADE_NOTE = 'Open to students in Class 6 and above.'
 
 /**
  * The options to show a member who already has a value stored.

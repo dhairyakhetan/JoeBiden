@@ -1,0 +1,12 @@
+-- ──────────────────────────────────────────────────────────────────────────
+-- Terrathon registration closed at the database (handoff C-05, owner approved, 3 Nov 2026).
+--
+-- STATUS: APPLIED 3 Nov 2026 via the Supabase connector (migration name close_terrathon_registration_20261103).
+--
+-- TerraThon ran 2 to 4 October 2026. Public registration went through the SECURITY DEFINER function
+-- terrathon_register(jsonb), executable by anon and authenticated. That grant is revoked, so no public path can
+-- add a registration (the form also says "that's a wrap" now). The 56 existing registrations are untouched.
+-- To reopen for a future edition: flip EVENT_OVER in src/terrathon/config.ts and
+--   grant execute on function public.terrathon_register(jsonb) to anon, authenticated;
+-- ──────────────────────────────────────────────────────────────────────────
+revoke execute on function public.terrathon_register(jsonb) from anon, authenticated, public;

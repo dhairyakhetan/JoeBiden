@@ -103,6 +103,16 @@ const followServiceImpl = {
 
   /** Follower / following counts for a profile (by UUID). */
   async getCounts(targetUuid: string): Promise<{ followers: number; following: number }> {
+    // Counts come from follow_counts(): it returns numbers only, so the `follows` table itself can be closed to signed-out
+    // readers (C-14, 3 Nov 2026) without a guest losing the figures on a public profile. Falls back to the direct count
+    // if the function is missing, which keeps an older database working.
+    try {
+      const { data, error } = await supabaseCommunity.rpc('follow_counts' as never, { p_member_uuid: targetUuid } as never)
+      const row = (Array.isArray(data) ? data[0] : data) as unknown as { followers?: number; following?: number } | undefined
+      if (!error && row && typeof row.followers === 'number' && typeof row.following === 'number') {
+        return { followers: row.followers, following: row.following }
+      }
+    } catch { /* fall through to the direct count */ }
     const targetId = await resolveMemberIdFromUuid(targetUuid)
     if (!targetId) return { followers: 0, following: 0 }
 

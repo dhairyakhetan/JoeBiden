@@ -34,7 +34,7 @@
 .oh-search-input {
   width: 100%; height: 46px; padding: 0 20px; border-radius: var(--r-pill);
   border: 1px solid rgba(244, 239, 224, 0.28); background: rgba(244, 239, 224, 0.07); color: var(--paper);
-  font-family: var(--eina); font-size: 15px; transition: border-color .15s, background .15s;
+  font-family: var(--eina); font-size: 16px; transition: border-color .15s, background .15s;
 }
 .oh-search-input::placeholder { color: rgba(244, 239, 224, 0.55); }
 .oh-search-input:focus { outline: none; border-color: var(--paper); background: rgba(244, 239, 224, 0.12); }

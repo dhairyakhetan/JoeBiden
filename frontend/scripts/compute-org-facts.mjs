@@ -98,6 +98,14 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL |
 // service keys on purpose), so locally it sees whatever the SHELL exports and
 // usually nothing. Skipping is the normal, correct local outcome.
 const SERVICE_KEY = serviceKey()
+// "Numbers update themselves" (owner, 3 Nov 2026). Every fact below is a count over a table the public site already
+// reads, so the browser's public (anon) key is enough: Vercel always has VITE_SUPABASE_ANON_KEY, which means every
+// deploy refreshes the figures with no secret to set up. The service key, when present, still wins. On the anon path a
+// failure is NEVER fatal (a deploy must not break over a number): it warns and keeps the committed files.
+const ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || ''
+const KEY = SERVICE_KEY || ANON_KEY
+const USING_ANON = !SERVICE_KEY && !!ANON_KEY
+const failExit = () => process.exit(USING_ANON ? 0 : 1)
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────
 // Never derived, never recomputed by this script. Each is either a fixed
@@ -130,7 +138,7 @@ const CONSTANTS = {
   // real, already-in-use URL rather than as null — but the confirmation flag
   // is still open. A human should do one visual check of the live LinkedIn
   // page before this is next touched.
-  linkedinUrl: 'https://in.linkedin.com/company/aquaterrango',
+  linkedinUrl: 'https://in.linkedin.com/company/ngoaquaterra',
   // Month-precision only — no source anywhere states a day. BRAND_VOICE.md
   // §3.3 flags "Jun 2024 (AboutPage card) vs Jun 2025 (master brief)" as
   // NEEDS HUMAN CONFIRMATION. Resolved to 2024 here because that is what BOTH
@@ -722,8 +730,8 @@ async function computeDogMeals(db) {
 }
 
 async function main() {
-  if (!SERVICE_KEY) {
-    console.warn('\n⚠ ORG_FACTS not regenerated: no SUPABASE_SERVICE_ROLE_KEY in this environment.')
+  if (!KEY) {
+    console.warn('\n⚠ ORG_FACTS not regenerated: no SUPABASE_SERVICE_ROLE_KEY or VITE_SUPABASE_ANON_KEY in this environment.')
     console.warn('  Keeping the committed frontend/src/lib/orgFacts.ts exactly as it is.')
     console.warn('  This is expected on a contributor machine or a fork. To regenerate on every')
     console.warn('  Vercel build, add SUPABASE_SERVICE_ROLE_KEY to the Vercel project\'s Production')
@@ -731,28 +739,39 @@ async function main() {
     process.exit(0)
   }
 
-  const db = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false } })
+  const db = createClient(SUPABASE_URL, KEY, { auth: { persistSession: false } })
   console.log(`Computing ORG_FACTS from ${SUPABASE_URL} ...`)
 
   const results = {}
   const errors = []
   for (const [key, table, build] of JOBS) {
     try {
-      const { count, error } = await build(db.from(table).select('*', { count: 'exact', head: true }))
+      // `members` has column-level grants: the public key may not read every column, so `select *` is refused. A count only
+      // needs one readable column.
+      const { count, error } = await build(db.from(table).select(table === 'members' ? 'member_id' : '*', { count: 'exact', head: true }))
       if (error) throw error
       if (typeof count !== 'number') throw new Error('no count returned')
       results[key] = count
       console.log(`   ok   ${key.padEnd(22)} ${count}`)
     } catch (e) {
-      errors.push(`${key}: ${e?.message || e}`)
-      console.error(`   FAIL ${key.padEnd(22)} ${e?.message || e}`)
+      // A diagnostic (leading underscore) the public key cannot compute is not worth failing a deploy over.
+      if (USING_ANON && key.startsWith('_')) { console.warn(`   skip ${key.padEnd(22)} (not readable with the public key)`); continue }
+      errors.push(`${key}: ${e?.message || e?.code || JSON.stringify(e)}`)
+      console.error(`   FAIL ${key.padEnd(22)} ${e?.message || e?.code || JSON.stringify(e)}`)
     }
   }
 
   if (errors.length) {
     console.error(`\n❌ ORG_FACTS generation FAILED (${errors.length} of ${JOBS.length} queries). ` +
       `Leaving the previously-committed orgFacts.ts and index.html in place.\n`)
-    process.exit(1)
+    failExit()
+  }
+
+  // Anon path only: a count the public key can see is only the truth if RLS lets it see every row. If a figure comes
+  // back implausibly low (a policy change hiding rows), keep the committed numbers rather than publish an undercount.
+  if (USING_ANON && ((results.membersTotal ?? 0) < 1000 || (results.drivesWrittenUp ?? 0) < 400)) {
+    console.warn(`\n⚠ ORG_FACTS not regenerated: the public key counted ${results.membersTotal} members and ${results.drivesWrittenUp} drives, which looks like an undercount. Keeping the committed files.\n`)
+    process.exit(0)
   }
 
   // schoolsRepresented stays permanently null until the underlying data
@@ -778,7 +797,7 @@ async function main() {
     console.error(`
 ❌ ORG_FACTS generation FAILED. Leaving the previously-committed orgFacts.ts in place.
 `)
-    process.exit(1)
+    failExit()
   }
 
   const previous = readPreviousComputed(OUT_PATH)
@@ -813,7 +832,7 @@ async function main() {
     }
   } catch (e) {
     console.error(`\n❌ ORG_FACTS generation FAILED while patching index.html: ${e?.message || e}\n`)
-    process.exit(1)
+    failExit()
   }
 
   try {
@@ -825,7 +844,7 @@ async function main() {
     }
   } catch (e) {
     console.error(`\n❌ ORG_FACTS generation FAILED while patching public/llms.txt: ${e?.message || e}\n`)
-    process.exit(1)
+    failExit()
   }
 }
 
@@ -837,6 +856,6 @@ const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv
 if (isMain) {
   main().catch(e => {
     console.error('\n❌ compute-org-facts FAILED:', e)
-    process.exit(1)
+    failExit()
   })
 }

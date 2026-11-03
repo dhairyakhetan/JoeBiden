@@ -300,14 +300,17 @@ async function generate() {
   // ── /projects/:slug ────────────────────────────────────────────────────────
   const projectRows = await select('welfare_projects', {
     url: DB_URL, key: DB_KEY, table: 'welfare_projects',
-    columns: 'slug,created_at', filter: 'is_draft=eq.false',
+    columns: 'slug,created_at,workshop_date', filter: 'is_draft=eq.false',
     order: 'created_at.desc',
   })
+  // created_at is the day the record was imported (381 pages said 2026-05-01), not the day the page's subject happened. The
+  // drive's own date is a real, varied value and is never in the future (isoDate drops a future date); the import date is the
+  // fallback for the rare row with none.
   const projectEntries = projectRows
     .filter(r => r.slug)
     .map(r => ({
       path: `/projects/${encodeURIComponent(r.slug)}`,
-      changefreq: 'yearly', priority: '0.6', lastmod: isoDate(r.created_at),
+      changefreq: 'yearly', priority: '0.6', lastmod: isoDate(r.workshop_date) || isoDate(r.created_at),
     }))
   console.log(`   ✓ ${projectEntries.length} project pages`)
 

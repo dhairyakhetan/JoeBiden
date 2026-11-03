@@ -35,7 +35,7 @@ export const FAQ_DATA: FaqEntry[] = [
   { id: 'fee', q: 'Is there any fee?', a: 'No. AquaTerra is free to join and always will be. We fund ourselves through student-run events and Crftd merchandise. Zero donations, zero fees.', context: 'both', cluster: 'joining' },
 
   // ── FAQ-only ──
-  { id: 'who-can-join', q: 'Who can join?', a: `Students aged ${ORG_FACTS.ageRange}, primarily based in Kolkata. No experience needed. No resume required. Nobody here had one when they started.`, context: 'faq', cluster: 'joining' },
+  { id: 'who-can-join', q: 'Who can join?', a: `Mostly students aged ${ORG_FACTS.ageRange}, primarily based in Kolkata. That range is typical, not a rule: new applicants need to be in Class 6 or above. No experience needed. No resume required. Nobody here had one when they started.`, context: 'faq', cluster: 'joining' },
   { id: 'community-vs-team', q: 'What is the difference between Community AQ and Team AQ?', a: `Community AQ is the full member base (${MEMBERS} people). Anyone can volunteer for welfare drives and community activities. Team AQ (150-200 members) is the active core: selected via application, assigned to specific departments, expected to show up consistently.`, context: 'faq', cluster: 'joining' },
   { id: 'what-will-i-do', q: 'What will I actually do?', a: 'Depends on your department. Events team runs Paradox, Disco Diwali, and Starry Nights. Welfare team runs teaching workshops and Sundarbans relief trips. Social Media team runs the Instagram and content. Collabs team handles school and NGO partnerships. Crftd handles the streetwear brand. You pick what fits you.', context: 'faq', cluster: 'joining' },
   // Approval TIME (the number itself) is deliberately NOT re-typed here -
@@ -47,7 +47,7 @@ export const FAQ_DATA: FaqEntry[] = [
   // - not merged into one 'both' entry, since the handbook's version has
   // real extra detail (community platform access, additional screening for
   // Labs/Director-track) a merge would have silently dropped.
-  { id: 'approval-time', q: 'How long does approval take?', a: `Usually ${APPROVAL_TIME}. An HoD reviews your application personally.`, context: 'faq', cluster: 'joining' },
+  { id: 'approval-time', q: 'How long does approval take?', a: `Usually ${APPROVAL_TIME}. The HR team reviews and accepts every new sign-up. A team or role you apply for is then reviewed by that department's HoD.`, context: 'faq', cluster: 'joining' },
   { id: 'certificate', q: 'Do I get a certificate?', a: 'Yes. HR issues participation certificates based on hours contributed. High contributors and Heads of Departments get Letters of Recommendation. These are real documents, not templates.', context: 'faq', cluster: 'inside' },
   { id: 'multiple-departments', q: 'Can I be part of multiple departments?', a: 'Yes. Many members contribute across departments at the same time. The system is flexible. If you want to run welfare drives and also design Crftd merch, you can.', context: 'faq', cluster: 'inside' },
   // REMOVED 2026-09-04 (decision 12, REDESIGN_FEATURE_REQUESTS.md): the
@@ -64,7 +64,7 @@ export const FAQ_DATA: FaqEntry[] = [
   { id: 'prior-experience', q: 'Do I need prior experience to volunteer?', a: "No. We don't require prior experience, specific skills, or any kind of portfolio. We do ask that you're serious about showing up. We have limited spots and we're looking for people who want to do real work, not pad a resume.", context: 'handbook' },
   { id: 'time-commitment', q: "What's the time commitment?", a: "Minimum 4–6 hours per month. Most active volunteers put in 10–15 hours. Drives are usually on weekends. Virtual coordination happens on WhatsApp throughout the week. We understand you have school and exams - we expect genuine effort and communication when you can't make it.", context: 'handbook' },
   { id: 'what-do-i-get', q: 'What do I get out of it?', a: `Real experience doing real things. You'll work alongside directors who've run hundreds of welfare drives. You'll build relationships with ${MEMBERS} members from across Kolkata's schools. You'll be credited for every project you contribute to. We're not going to tell you it looks good on a college application - it probably does, but that's not why we're here.`, context: 'handbook' },
-  { id: 'approval-process', q: 'How does the approval process work?', a: `Apply via this website. A director reviews your application personally, usually ${APPROVAL_TIME}. If approved, you'll get access to the AquaTerra community platform where you can see all internal posts, team updates, and initiatives. Some departments (especially Labs and Director-track roles) have additional screening.`, context: 'handbook' },
+  { id: 'approval-process', q: 'How does the approval process work?', a: `Sign up on this website. The HR team reviews and accepts every new sign-up, usually ${APPROVAL_TIME}. A team or role you apply for is then reviewed by that department's HoD. If approved, you'll get access to the AquaTerra community platform where you can see all internal posts, team updates, and initiatives. Some departments (especially Labs and Director-track roles) have additional screening.`, context: 'handbook' },
 ]
 
 export function faqFor(page: 'faq' | 'handbook'): FaqEntry[] {

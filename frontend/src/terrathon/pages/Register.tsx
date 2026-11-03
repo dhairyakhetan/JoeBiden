@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT } from '../config'
+import { EVENT, EVENT_OVER } from '../config'
 import { SPORT_ORDER, type PublicEvent, type SportSlug, type RegisterErrorCode } from '../lib/types'
 import { register as submitRegistration } from '../lib/api'
 import { useDraft } from '../lib/hooks'
@@ -109,7 +109,27 @@ const ERROR_COPY: Record<RegisterErrorCode, string> = {
 /** Aliased because the verdict line and the field error both want this text. */
 const TOO_YOUNG_COPY = ERROR_COPY.TOO_YOUNG
 
-export function TerraThonRegister({ events, loading, error, reload }: Props) {
+/** TerraThon is over (config.EVENT_OVER): no form, nothing collected. The database refuses registrations too. */
+export function TerraThonRegister(props: Props) {
+  if (EVENT_OVER) {
+    return (
+      <section className="tt-reg" aria-labelledby="tt-closed-h" style={{ padding: 'var(--tt-sp-8) var(--tt-gutter, 20px)', maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+        <h1 id="tt-closed-h" className="tt-h2-poster" style={{ margin: 0 }}>That’s a wrap.</h1>
+        <p style={{ marginTop: 16, lineHeight: 1.6 }}>
+          {EVENT.name} ran on 2 to 4 October and registration is closed. Thank you to everyone who played, volunteered and cheered.
+          Follow <a href={EVENT.instagram} target="_blank" rel="noreferrer noopener">@aquaterra.live</a> for what comes next.
+        </p>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 24 }}>
+          <Link to={`${EVENT.base}/schedule`} className="tt-btn tt-btn--quiet" style={{ minHeight: 44 }}>See the schedule</Link>
+          <Link to={`${EVENT.base}/contact`} className="tt-btn tt-btn--quiet" style={{ minHeight: 44 }}>Contact</Link>
+        </div>
+      </section>
+    )
+  }
+  return <TerraThonRegisterForm {...props} />
+}
+
+function TerraThonRegisterForm({ events, loading, error, reload }: Props) {
   const { sport: sportParam } = useParams<{ sport?: string }>()
   const [params] = useSearchParams()
   const navigate = useNavigate()

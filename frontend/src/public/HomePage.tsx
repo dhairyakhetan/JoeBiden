@@ -47,6 +47,7 @@ import { FeedBurst } from '../components/BurstReveal'
 import InterestChip from '../components/InterestChip'
 import NeedsMeCard from '../components/NeedsMeCard'
 import ProfileNudgeCard from '../components/ProfileNudgeCard'
+import { supabaseCommunity } from '../lib/supabaseCommunity'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -234,6 +235,13 @@ function FragmentWithDivider({ showDivider, label = '★ trending this month', f
 
 // ─── Left rail ────────────────────────────────────────────────────────────────
 
+/** A readable handle for the profile card: the name in lower case with dashes. Falls back to a short id only
+ *  when there is no name at all (it used to be the first 8 characters of the uuid for everyone). */
+function friendlyHandle(member: { full_name?: string | null; uuid?: string | null }): string {
+  const slug = (member.full_name || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  return slug || member.uuid?.slice(0, 8) || 'member'
+}
+
 function LeftRail({ member, filter, setFilter, postCount, userPostCount, userLikeCount, userTeamCount }: {
   member: any; filter: string; setFilter: (f: string) => void; postCount: number; userPostCount: number | null
   userLikeCount: number | null; userTeamCount: number | null
@@ -261,7 +269,7 @@ function LeftRail({ member, filter, setFilter, postCount, userPostCount, userLik
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="rail-id-name" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{member.full_name || 'you'}</div>
-              <div className="mono xs" style={{ marginTop: 1, color: 'rgba(244,239,224,0.55)' }}>@{member.uuid?.slice(0, 8) || 'member'}</div>
+              <div className="mono xs" style={{ marginTop: 1, color: 'rgba(244,239,224,0.55)' }}>@{friendlyHandle(member)}</div>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ opacity: 1, color: 'rgba(244,239,224,0.55)', flexShrink: 0 }}><polyline points="9 18 15 12 9 6"/></svg>
           </button>
@@ -1091,8 +1099,22 @@ export default function HomePage() {
     profileService.getLifetimeLikes(member.uuid)
       .then(n => setUserLikeCount(n))
       .catch(() => {})
-    teamService.getTeamsForMember(member.uuid)
-      .then(r => { if (r.success) setUserTeamCount(r.data.teams.length) })
+    // "teams" counts the teams you are on AND the ones you look after as a head of department (director_scopes),
+    // once each. It used to show 0 for someone who moderates nine teams (C-18, 3 Nov 2026).
+    Promise.all([
+      teamService.getTeamsForMember(member.uuid),
+      typeof member.member_id === 'number'
+        ? (supabaseCommunity as any).from('director_scopes').select('teams(uuid)').eq('member_id', member.member_id)
+        : Promise.resolve({ data: [] }),
+    ])
+      .then(([r, scopes]) => {
+        if (!r.success) return
+        const ids = new Set<string>(r.data.teams.map((t: { uuid: string }) => t.uuid))
+        for (const row of ((scopes as { data?: { teams?: { uuid?: string } | null }[] })?.data || [])) {
+          if (row?.teams?.uuid) ids.add(row.teams.uuid)
+        }
+        setUserTeamCount(ids.size)
+      })
       .catch(() => {})
     if (typeof member.member_id === 'number') {
       certificateService.getHoursSummary(member.member_id)

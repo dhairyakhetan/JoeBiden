@@ -164,8 +164,9 @@ function CardPaper() {
           />
           <h3 className="jp-block-h">the certificate</h3>
           <p className="jp-block-body">
-            You request it, a director issues it, and that takes {CERTIFICATE_WAIT_TIME}.
-            There is no hour threshold to unlock, and nobody is going to chase you for one.
+            You request it, HR issues it, and that takes {CERTIFICATE_WAIT_TIME}.
+            There is no minimum number of hours. The certificate states the hours you contributed, and HR can decline a
+            request, for example if no hours are logged.
           </p>
         </section>
       </div>

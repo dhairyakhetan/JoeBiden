@@ -21,25 +21,14 @@ import './paradox.css'
 // just nav/footer/routing, and heavy libs (zxing/jsbarcode/matter-js) ride
 // along only with the page that actually uses them. Pages are named exports,
 // hence the `.then(m => ({ default: ... }))` shim.
-const HomePage        = lazy(() => import('./pages/Home').then(m => ({ default: m.HomePage })))
-const EventsPage      = lazy(() => import('./pages/Events').then(m => ({ default: m.EventsPage })))
-const EventDetailPage = lazy(() => import('./pages/EventDetail').then(m => ({ default: m.EventDetailPage })))
-const SchedulePage    = lazy(() => import('./pages/Schedule').then(m => ({ default: m.SchedulePage })))
-const HowToUsePage    = lazy(() => import('./pages/HowToUse').then(m => ({ default: m.HowToUsePage })))
-const TicketPage      = lazy(() => import('./pages/Ticket').then(m => ({ default: m.TicketPage })))
-const UpdatesPage     = lazy(() => import('./pages/Updates').then(m => ({ default: m.UpdatesPage })))
-const SponsorPage     = lazy(() => import('./pages/Sponsor').then(m => ({ default: m.SponsorPage })))
-const AfterPartyPage  = lazy(() => import('./pages/AfterParty').then(m => ({ default: m.AfterPartyPage })))
 const TeamPage        = lazy(() => import('./pages/Team').then(m => ({ default: m.TeamPage })))
-const ScoresPage      = lazy(() => import('./pages/Scores').then(m => ({ default: m.ScoresPage })))
 const StoryPage       = lazy(() => import('./pages/Story').then(m => ({ default: m.StoryPage })))
-const ContactPage     = lazy(() => import('./pages/Contact').then(m => ({ default: m.ContactPage })))
-const VolunteerPage   = lazy(() => import('./pages/Volunteer').then(m => ({ default: m.VolunteerPage })))
 const BlogPage        = lazy(() => import('./pages/Blog').then(m => ({ default: m.BlogPage })))
 const BlogDetailPage  = lazy(() => import('./pages/BlogDetail').then(m => ({ default: m.BlogDetailPage })))
 const AdminLoginPage  = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLoginPage })))
 const AdminPage       = lazy(() => import('./pages/Admin').then(m => ({ default: m.AdminPage })))
 const NotFoundPage    = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFoundPage })))
+const ArchivePage     = lazy(() => import('./pages/Archive').then(m => ({ default: m.ArchivePage })))
 
 // Lightweight in-route loader shown while a page chunk fetches. Uses the
 // global `spin` keyframe (declared in index.css @theme) and Paradox tokens.
@@ -97,26 +86,26 @@ function ParadoxRoutes() {
       {!isAdmin && <Nav />}
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
-          <Route index                       element={<PageWrap><HomePage /></PageWrap>} />
-          <Route path="events"               element={<PageWrap><EventsPage /></PageWrap>} />
-          <Route path="events/:slug"         element={<PageWrap><EventDetailPage /></PageWrap>} />
-          <Route path="schedule"             element={<PageWrap><SchedulePage /></PageWrap>} />
+          <Route index                       element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="events"               element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="events/:slug"         element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="schedule"             element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
           {/* Hidden onboarding page — intentionally not in NAV, footer,
               or sitemap. Reachable only by direct URL: /paradox/how.
               Use this to point friends/squad-mates at the full 5-step
               "how paradox works" flow without explaining it from
               scratch every time. */}
-          <Route path="how"                  element={<PageWrap><HowToUsePage /></PageWrap>} />
+          <Route path="how"                  element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
           <Route path="register"             element={<Navigate to="/paradox" replace />} />
-          <Route path="ticket/:token"        element={<PageWrap withFooter={false}><TicketPage /></PageWrap>} />
-          <Route path="updates"              element={<PageWrap><UpdatesPage /></PageWrap>} />
-          <Route path="sponsor"              element={<PageWrap><SponsorPage /></PageWrap>} />
-          <Route path="afterparty"           element={<PageWrap><AfterPartyPage /></PageWrap>} />
+          <Route path="ticket/:token"        element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="updates"              element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="sponsor"              element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="afterparty"           element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
           <Route path="team"                 element={<PageWrap><TeamPage /></PageWrap>} />
-          <Route path="scores"               element={<PageWrap><ScoresPage /></PageWrap>} />
+          <Route path="scores"               element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
           <Route path="story"                element={<PageWrap><StoryPage /></PageWrap>} />
-          <Route path="contact"              element={<PageWrap><ContactPage /></PageWrap>} />
-          <Route path="volunteer"            element={<PageWrap><VolunteerPage /></PageWrap>} />
+          <Route path="contact"              element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
+          <Route path="volunteer"            element={<PageWrap withFooter={false}><ArchivePage /></PageWrap>} />
           <Route path="blog"                 element={<PageWrap><BlogPage /></PageWrap>} />
           <Route path="blog/:slug"           element={<PageWrap><BlogDetailPage /></PageWrap>} />
           <Route path="admin/login"          element={<PageWrap withFooter={false}><AdminLoginPage /></PageWrap>} />

@@ -1,4 +1,5 @@
 import ThesisBand from './ThesisBand'
+import { useLiveFacts } from '../lib/liveFacts'
 import { useEffect, useRef, useState } from 'react'
 import './AQFooter.css'
 import '../styles/footer.css'
@@ -95,6 +96,7 @@ function liveFigure(n: number | null | undefined, exact = false): string | null 
 }
 
 export default function AQFooter() {
+  const facts = useLiveFacts()
   const { isAuthenticated } = useAuth()
   const { pathname } = useLocation()
   const reducedMotion = usePrefersReducedMotion()
@@ -251,20 +253,20 @@ export default function AQFooter() {
   }, [reducedMotion])
 
   // ── section 2's data ─────────────────────────────────────────────────────
-  const drives = liveFigure(ORG_FACTS.drivesWrittenUp)
-  const members = liveFigure(ORG_FACTS.membersTotal)
+  const drives = liveFigure(facts.drivesWrittenUp)
+  const members = liveFigure(facts.membersTotal)
   const departments = liveFigure(ORG_FACTS.departmentsActive, true)
 
   const FEATURES: Array<{ to: string; fig: string | null; unit: string; note: string; cls: string }> = [
     { to: '/projects', fig: drives, unit: 'drives written up', note: 'projects & what we do', cls: 'aq-bento-a' },
-    { to: '/members', fig: members, unit: `members, ages ${ORG_FACTS.ageRange}`, note: 'members', cls: 'aq-bento-b' },
+    { to: '/members', fig: members, unit: `members, usually ${ORG_FACTS.ageRange}`, note: 'members', cls: 'aq-bento-b' },
     { to: '/teams', fig: departments, unit: 'departments', note: 'teams', cls: 'aq-bento-c' },
   ]
 
   const LISTS: Array<{ h: string; cls: string; links: Array<[string, string]> }> = [
     {
       h: 'read & connect', cls: 'aq-col-d',
-      links: [['blog', '/blog'], ['quick links', '/links'], ['search', '/search'], ['feed', '/'], ['contact', '/contact']],
+      links: [['blog', '/blog'], ['quick links', '/links'], ...(isAuthenticated ? [['search', '/search'] as [string, string]] : []), ['feed', '/'], ['contact', '/contact']],
     },
     {
       h: 'organisation', cls: 'aq-col-e',

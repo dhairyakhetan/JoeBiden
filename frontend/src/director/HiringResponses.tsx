@@ -299,9 +299,9 @@ export default function HiringResponses() {
         // team" while showing one team's applicants is how someone concludes
         // nobody applied. Same correction PostModeration's header already
         // carries for its category scope.
-        subtitle={isScoped
+        subtitle={`${isScoped
           ? 'Applications to your team’s openings. Other teams’ hiring is not yours to see.'
-          : "Every application to every team's job openings, in one place."}
+          : "Every application to every team's job openings, in one place."} ${allApps.filter(a => a.status === 'pending').length} still waiting for a decision (the menu badge counts these).`}
         count={allApps.length}
       />
 

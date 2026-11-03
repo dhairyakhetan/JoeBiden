@@ -480,7 +480,7 @@ const LoginPage = () => {
             <li>
               <span className="lg-step-n" aria-hidden>3</span>
               <span className="lg-step-txt">
-                <span className="lg-step-t">A director approves you</span>
+                <span className="lg-step-t">HR approves you</span>
                 {/* REDESIGN 2026-09: was "teams, drives, points". Section 02
                     freezes this copy, and it is changed here for the same
                     reason the BreakModal string was: the thing it promises no

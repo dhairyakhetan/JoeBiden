@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { EVENT, PARTNERS } from '../config'
+import { EVENT, EVENT_OVER, PARTNERS } from '../config'
 import { Wordmark } from './Wordmark'
 import { sized } from '../../lib/imageUrl'
 
@@ -47,7 +47,7 @@ export function Footer() {
 
           <div className="tt-linklist" style={{ fontSize: 'var(--tt-fs-body)' }}>
             <div className="tt-kicker" style={{ color: 'var(--tt-lemon)', marginBottom: 2 }}>TerraThon</div>
-            <Link to={`${EVENT.base}/register`} style={{ color: 'var(--tt-ink)' }}>Register Now</Link>
+            <Link to={`${EVENT.base}/register`} style={{ color: 'var(--tt-ink)' }}>{EVENT_OVER ? 'Registration closed' : 'Register Now'}</Link>
             <Link to={`${EVENT.base}/schedule`} style={{ color: 'var(--tt-ink)' }}>Schedule</Link>
             <Link to={`${EVENT.base}/contact`} style={{ color: 'var(--tt-ink)' }}>Contact</Link>
           </div>
@@ -87,18 +87,8 @@ export function Footer() {
             © {new Date().getFullYear()} Team AquaTerra. Entry fees are collected by UPI into
             AquaTerra's collection account.
           </span>
-          {/* The way in to the desk.
-              Quiet on purpose, since it is for the four people running the event and
-              not for the person reading the footer, but it is still a real link
-              with a real label and a 44px target, not a secret. Hiding a
-              control from everyone including the people who need it is not
-              security; the database is what refuses a stranger. */}
-          <Link
-            to={`${EVENT.base}/admin`}
-            className="tt-adminlink"
-          >
-            Admin
-          </Link>
+          {/* The staff sign-in is no longer linked from this public page (3 Nov 2026). The route still works and the
+              database is what refuses a stranger; the four people running the event use the address directly. */}
         </div>
       </div>
     </footer>

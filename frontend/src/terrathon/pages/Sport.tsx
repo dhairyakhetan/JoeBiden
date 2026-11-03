@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { EVENT, SPORT_COPY, CONTACTS, ASK_PHONE } from '../config'
+import { EVENT, EVENT_OVER, SPORT_COPY, CONTACTS, ASK_PHONE } from '../config'
 import { SPORT_ORDER, type PublicEvent, type SportSlug } from '../lib/types'
 import { rupees, dayRange, prettyPhone, waNumber, squadLabel } from '../lib/format'
 import { SPORT_PHOTOS } from '../lib/photos'
@@ -496,7 +496,7 @@ export function TerraThonSport({ events, loading, error, reload }: Props) {
               className="tt-btn"
               style={{ fontSize: 20, padding: '0 var(--tt-sp-8)', minHeight: 64, width: '100%', maxWidth: 420 }}
             >
-              Register Now
+              {EVENT_OVER ? 'Registration closed' : 'Register Now'}
             </Link>
           </section>
         )}
