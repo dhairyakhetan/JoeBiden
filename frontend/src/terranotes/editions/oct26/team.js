@@ -36,7 +36,6 @@ export const MEMBERS = [
   { name: 'Priyam Agarwal', role: 'Tech team', team: 'tech', photo: '/team/priyam.webp', flip: '/team/priyam-flip.webp', bio: 'Hey, I’m Priyam! I’m into tech, maths, and quant finance, and I like messing around with new ideas and building random stuff. Mostly just curious and figuring things out as I go :)', instagram: 'priyamagarwal3', badge: { img: '/badges/barca-crest.webp', text: 'born culer' } },
   { name: 'Dhriti Agarwal', role: 'Writing team', team: 'writing', photo: '/team/dhriti.webp', bio: "I'm a student of class 11 flowing through life and accounts!!", instagram: 'wtf__dhriti' },
   { name: 'Divya Rathi', role: 'Design & writing team', team: ['design', 'writing'], photo: '/team/divya.webp', bio: 'probably drinking coffee or already five cups in.', instagram: '' },
-  { name: 'Ashwika Tripathi', role: 'Head of department', team: ['heads', 'writing'], steady: true, photo: '/team/ashwika.webp', bio: 'Just here to make things happen.', instagram: 'theashwika' },
   { name: 'Diti Shah', role: 'Writing team', team: 'writing', photo: '/team/diti.webp', bio: 'Hii…this is Diti Shah', instagram: '_ditishah' },
   { name: 'Ayushi Khemka', role: 'Design team', team: 'design', photo: '/team/ayushi.webp', bio: 'Designing my life one questionable decision at a time.', instagram: '' },
   { name: 'Bhavishya Agarwal', role: 'Tech team', team: 'tech', photo: '/team/bhavishya.webp', bio: 'I like Claude', instagram: 'bhavishya.idk' },
