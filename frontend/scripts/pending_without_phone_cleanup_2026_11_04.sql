@@ -1,0 +1,16 @@
+-- Pending applicants with no phone number removed from the approvals list (owner request, 4 Nov 2026).
+--
+-- STATUS: APPLIED 4 Nov 2026 via the Supabase connector (execute_sql).
+--
+-- Checked: 134 members with status pending_approval. Phone field is members.phone (varchar). 102 had a usable number
+-- (members_phone_key not null), 32 had none (null or blank), 0 had a non-empty but unusable one.
+-- Action: those 32 were set to status 'rejected' with a plain rejection_note; the account row stays, nothing was deleted, and
+-- they see the note on the rejected page with the existing appeal button. Rows with a phone were not touched. Active, rejected,
+-- deleted and every other table were not touched (active stayed 1,424; total rows stayed 1,564; rejected went 4 to 36).
+-- Backup of the 32 rows (ids, previous status, is_active, contacted_at; no personal data): members_pending_nophone_backup_20261104.
+-- Note: 28 of the 32 had never finished the registration form (no name or class), 4 were created in the last 3 days, 5 had a
+-- contacted_at stamp.
+--
+-- Undo: update public.members m set status = 'pending_approval', rejection_note = b.rejection_note
+--         from public.members_pending_nophone_backup_20261104 b where b.member_id = m.member_id and m.status = 'rejected';
+-- No notification was sent to these accounts; they see the reason if they sign in.
