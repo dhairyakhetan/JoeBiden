@@ -14,6 +14,7 @@ import teamService from '../services/teamService'
 import { notificationService } from '../services/notificationService'
 import Sheet from '../components/Sheet'
 import { prefetchDesk, prefetchDesksWhenIdle } from './deskModules'
+import { grievanceService } from '../services/grievanceService'
 import { AdminLayout, AdminSkeleton } from './adminKit'
 import { useMeta } from '../hooks/useMeta'
 
@@ -125,6 +126,8 @@ const DirectorDashboard = () => {
   // NOT leader-wide, so a plain HoD must see no approvals count and no link.
   const canApproveMembers = isSuperAdmin
   const [pendingCertificates, setPendingCertificates] = useState<number | null>(null)
+  // New grievances (HR and Super Admin only; the database returns 0 rows to anyone else, and the query is skipped for them).
+  const [newGrievances, setNewGrievances] = useState<number | null>(null)
   const scopeIdsRef = useRef<number[]>([])
   const [myCategories, setMyCategories] = useState<string[]>([])
   const [myTeamIds, setMyTeamIds] = useState<number[]>([])
@@ -216,7 +219,7 @@ const DirectorDashboard = () => {
     refreshing.current = true
     lastRefresh.current = Date.now()
     try {
-      const [statsResult, scoped, certs] = await Promise.all([
+      const [statsResult, scoped, certs, griev] = await Promise.all([
         directorService.getDashboardStats().catch(() => null),
         !isSuperAdmin && scopeIdsRef.current.length > 0
           ? directorService.getScopedPendingPostsCount(scopeIdsRef.current).catch(() => null)
@@ -225,10 +228,12 @@ const DirectorDashboard = () => {
           ? supabaseCommunity.from('certificate_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending')
               .then(res => (res.error ? null : res.count ?? 0), () => null)
           : Promise.resolve(null),
+        isSuperAdmin ? grievanceService.newCount().catch(() => null) : Promise.resolve(null),
       ])
       if (statsResult?.success) { setStats(statsResult.data); setStatsError(false) }
       if (scoped?.success) setScopedPendingPosts(scoped.data)
       if (certs != null) setPendingCertificates(certs)
+      if (griev != null) setNewGrievances(griev)
       notificationService.getUnreadCount().then(setUnreadCount).catch(() => {})
     } finally {
       refreshing.current = false
@@ -268,6 +273,7 @@ const DirectorDashboard = () => {
     hiring: stats?.pendingApplications || undefined,
     enquiries: stats?.pendingEnquiries || undefined,
     certificates: isSuperAdmin ? pendingCertificates || undefined : undefined,
+    grievances: isSuperAdmin ? newGrievances || undefined : undefined,
   }
   const badgeTitle = (key: NavKey, blurb: string) =>
     key === 'hiring' && counts.hiring && !isSuperAdmin

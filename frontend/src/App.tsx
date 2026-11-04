@@ -335,6 +335,7 @@ const SavedPostsPage         = lazy(() => import('./feed/SavedPostsPage'))
 const MyPostsPage            = lazy(() => import('./feed/MyPostsPage'))
 const BugReportsPage         = lazy(() => import('./bugs/BugReportsPage'))
 const TasksPage              = lazy(() => import('./tasks/TasksPage'))
+const GrievancePage          = lazy(() => import('./grievance/GrievancePage'))
 const ProfilePage            = lazy(() => import('./profile/ProfilePage'))
 const EditProfilePage        = lazy(() => import('./profile/EditProfilePage'))
 const CalendarPage           = lazy(() => import('./calendar/CalendarPage'))
@@ -394,6 +395,7 @@ const DESK_ELEMENTS: Record<NavKey, React.ReactElement> = {
   hiring:           createElement(DESK_LAZY.hiring),
   enquiries:        createElement(DESK_LAZY.enquiries),
   certificates:     createElement(DESK_LAZY.certificates),
+  grievances:       createElement(DESK_LAZY.grievances),
   yearbook:         createElement(DESK_LAZY.yearbook),
   content:          createElement(DESK_LAZY.content),
   projects:         createElement(DESK_LAZY.projects),
@@ -610,6 +612,11 @@ function App() {
                 (scripts/tasks_slice1_2026_10_19.sql); the page only arranges what comes back. */}
             <Route path="/tasks" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<TasksPage />} />
+            </Route>
+
+            {/* A private way to raise a concern with HR (C-32). Signed-in, approved members only; in robots.txt Disallow, not in the sitemap. */}
+            <Route path="/grievance" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<GrievancePage />} />
             </Route>
 
             <Route path="/profile" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>

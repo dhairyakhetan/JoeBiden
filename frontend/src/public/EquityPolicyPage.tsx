@@ -1,5 +1,8 @@
 import './EquityPolicyPage.css'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../auth/AuthContext'
+import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { useMeta } from '../hooks/useMeta'
 import { pageMetadata } from '../lib/metaConfig'
 import { useJsonLd, breadcrumbLd } from '../hooks/useJsonLd'
@@ -37,13 +40,10 @@ const CORE_PRINCIPLES: [string, string][] = [
   ['Privacy', 'Do not share private messages, personal information, or images without consent.'],
 ]
 
-const HR_TEAM: [string, string][] = [
-  ['Naisha Mehta', '7439432821'],
-  ['Janvi Baid', '6291133946'],
-  ['Aarushi Gupta', '9051277776'],
-  ['Diya Poddar', '9674465849'],
-  ['Hrishika Khemka', '9007940202'],
-]
+/** The five HR contacts. NAMES only: their WhatsApp numbers are not in the page, the bundle or the prerendered HTML any more
+ *  (owner, 3 Nov 2026). They live in `hr_contacts`, readable only by a signed-in, approved member, and each name gets a
+ *  "Message on WhatsApp" button for those members. */
+const HR_NAMES = ['Naishha Mehta', 'Janvi Baid', 'Aarushi Gupta', 'Diya Poddar', 'Hrishika Khemka']
 
 /** The document's own sections, in order, for the jump bar. The labels match
     the headings byte for byte so the bar can never name a section the page
@@ -62,6 +62,18 @@ const SECTIONS: [string, string][] = [
 ]
 
 export default function EquityPolicyPage() {
+  const { member } = useAuth()
+  const isActiveMember = member?.status === 'active'
+  const [numbers, setNumbers] = useState<Record<string, string>>({})
+  useEffect(() => {
+    if (!isActiveMember) { setNumbers({}); return }
+    let live = true
+    ;(supabaseCommunity as any).from('hr_contacts').select('name, whatsapp').then(({ data }: { data: { name: string; whatsapp: string }[] | null }) => {
+      if (!live || !data) return
+      setNumbers(Object.fromEntries(data.map(r => [r.name, r.whatsapp])))
+    })
+    return () => { live = false }
+  }, [isActiveMember])
   // noIndex, owner-ruled 2026-09-06. This page names five welfare contacts
   // AND their personal mobile numbers (see CONTACTS below). The members are
   // 14-19, so some are minors, and the harm this actually guards against is
@@ -201,8 +213,8 @@ export default function EquityPolicyPage() {
           <section className="ep-slab" id="appeal" aria-labelledby="ep-h-appeal">
             <h2 className="ep-h" id="ep-h-appeal">Appeal</h2>
             <p className="ep-p">
-              Members may appeal disciplinary action by contacting the Core Committee within 7 days, or filling
-              the provided form within 7 days.
+              Members may appeal disciplinary action by contacting the Core Committee within 7 days, or using the{' '}
+              <Link to="/grievance">grievance form</Link> within 7 days.
             </p>
           </section>
 
@@ -230,16 +242,30 @@ export default function EquityPolicyPage() {
             <h2 className="ep-h" id="ep-h-contact">Contact</h2>
             <p className="ep-p">For questions or concerns, please contact the HR Team</p>
             <ul className="ep-contact">
-              {HR_TEAM.map(([name, phone]) => (
-                <li key={phone}>
+              {HR_NAMES.map(name => (
+                <li key={name}>
                   <span className="ep-contact-name">{name}</span>
-                  <span className="ep-contact-dash"> - </span>
-                  {/* tel: so a member on a phone can act on it in one tap,
-                      rather than copying digits out of running text. */}
-                  <a className="ep-contact-num" href={`tel:+91${phone}`}>{phone}</a>
+                  {numbers[name] && (
+                    <>
+                      <span className="ep-contact-dash"> - </span>
+                      <a className="ep-contact-num" href={`https://wa.me/91${numbers[name]}`} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
+            {!isActiveMember && (
+              <p className="ep-p">
+                <Link to="/login">Sign in to message the HR team.</Link>
+              </p>
+            )}
+            <h3 className="ep-h" style={{ fontSize: '1.05em', marginTop: 20 }}>Grievances</h3>
+            <p className="ep-p">
+              To raise a concern privately, use the <Link to="/grievance">grievance form</Link> (signed-in members). Only the HR team
+              and Super Admins can read it. We usually respond within 7 days. You can also write to{' '}
+              <a href="mailto:ngo.aquaterra@gmail.com">ngo.aquaterra@gmail.com</a>, which works for people who cannot sign in, for
+              example a parent who is not a member.
+            </p>
           </section>
 
           <blockquote className="ep-quote">

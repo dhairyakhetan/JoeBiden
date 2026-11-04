@@ -270,7 +270,7 @@ export default function AQFooter() {
     },
     {
       h: 'organisation', cls: 'aq-col-e',
-      links: [['about', '/about'], ['open books', '/accounts'], ['faq', '/faq'], ['equity policy', '/equity-policy'], ['privacy policy', '/privacy-policy'], ['collaborate', '/collaborations'], ['brand book', '/brand'], ['paradox', '/paradox']],
+      links: [['about', '/about'], ['open books', '/accounts'], ['faq', '/faq'], ['equity policy', '/equity-policy'], ...(isAuthenticated ? [['raise a concern', '/grievance'] as [string, string]] : []), ['privacy policy', '/privacy-policy'], ['collaborate', '/collaborations'], ['brand book', '/brand'], ['paradox', '/paradox']],
     },
     {
       h: 'be a part', cls: 'aq-col-f',

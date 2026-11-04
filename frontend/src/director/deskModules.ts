@@ -57,6 +57,7 @@ export const DESK_LOADERS: Record<NavKey, DeskLoader> = {
   hiring:         () => import('./HiringResponses'),
   enquiries:      () => import('./FormResponses'),
   certificates:   () => import('./CertificateRequests'),
+  grievances:     () => import('./Grievances'),
   yearbook:       () => import('./YearbookManagement'),
   content:        () => import('./ContentManager'),
   projects:       () => import('./ProjectManager'),

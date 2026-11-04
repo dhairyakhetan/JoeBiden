@@ -40,7 +40,7 @@ import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
 export type NavKey =
   | 'blogs' | 'posts' | 'approvals' | 'members' | 'categories'
   | 'teams' | 'hods' | 'content' | 'volunteer_apps' | 'projects'
-  | 'enquiries' | 'hiring' | 'certificates' | 'yearbook'
+  | 'enquiries' | 'hiring' | 'certificates' | 'grievances' | 'yearbook'
   | 'member_of_month' | 'roles' | 'activity_log' | 'guide'
 
 /**
@@ -240,6 +240,11 @@ export const NAV_GROUPS: NavGroup[] = [
       // ['hr', 'super_admin'] - a plain hod/director does not see or reach it.
       { key: 'certificates', label: 'Certificates', icon: '◒', path: 'certificates', privilege: 'super',
         blurb: 'Requests for a certificate, a recommendation letter or proof of volunteering.' },
+      // Grievances (C-33, 3 Nov 2026): HR and Super Admin ONLY. grievances' RLS uses is_super_admin() (role hr or
+      // super_admin) and never is_director(), so a HoD or Director gets zero rows even if they type the URL; the person a
+      // grievance names is excluded too. `super` here resolves through isSuperAdmin(), the same two roles.
+      { key: 'grievances', label: 'Grievances', icon: '◔', path: 'grievances', privilege: 'super',
+        blurb: 'Concerns members have raised privately with HR, with status, notes and who is handling each.' },
       // Any director/HoD can run an invite round; yearbook_entries' own RLS
       // already scopes who can see an unsubmitted entry.
       { key: 'yearbook', label: 'Yearbook', icon: '◓', path: 'yearbook', privilege: 'leader',

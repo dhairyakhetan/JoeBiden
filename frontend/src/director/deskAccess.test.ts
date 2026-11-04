@@ -24,12 +24,12 @@ describe('desk access is declared exactly once', () => {
   // `sops` and `drives` were both deleted (see deskAccess.ts's NavKey). 17
   // from 2026-09-13, when `activity_log` (the community_audit_logs viewer)
   // was added.
-  it('has all 18 desks, with unique keys and unique paths', () => {
-    expect(DESKS).toHaveLength(18)
-    expect(new Set(DESKS.map(d => d.key)).size).toBe(18)
-    expect(new Set(DESKS.map(d => d.path)).size).toBe(18)
-    expect(Object.keys(DESK_BY_KEY)).toHaveLength(18)
-    expect(Object.keys(DESK_BY_PATH)).toHaveLength(18)
+  it('has all 19 desks, with unique keys and unique paths', () => {
+    expect(DESKS).toHaveLength(19)
+    expect(new Set(DESKS.map(d => d.key)).size).toBe(19)
+    expect(new Set(DESKS.map(d => d.path)).size).toBe(19)
+    expect(Object.keys(DESK_BY_KEY)).toHaveLength(19)
+    expect(Object.keys(DESK_BY_PATH)).toHaveLength(19)
   })
 
   it('has no Removed Notes desk', () => {
@@ -43,14 +43,14 @@ describe('desk access is declared exactly once', () => {
   // scoped BY). Six become seven. 2026-09-13: `activity_log` is `super` too
   // (community_audit_logs' own RLS is super_admin-only SELECT) - seven
   // become eight.
-  it('marks exactly the eight super-admin desks as `super`, and no others', () => {
+  it('marks exactly the nine super-admin desks as `super`, and no others', () => {
     const superKeys = DESKS.filter(d => d.privilege === 'super').map(d => d.key).sort()
-    expect(superKeys).toEqual(['activity_log', 'approvals', 'certificates', 'content', 'hods', 'projects', 'roles', 'volunteer_apps'])
+    expect(superKeys).toEqual(['activity_log', 'approvals', 'certificates', 'content', 'grievances', 'hods', 'projects', 'roles', 'volunteer_apps'])
   })
 
-  it('routes those eight at the paths App.tsx guards with requireSuperAdmin', () => {
+  it('routes those nine at the paths App.tsx guards with requireSuperAdmin', () => {
     const superPaths = DESKS.filter(d => d.privilege === 'super').map(d => d.path).sort()
-    expect(superPaths).toEqual(['activity-log', 'approvals', 'certificates', 'content', 'directors', 'projects', 'roles', 'volunteers'])
+    expect(superPaths).toEqual(['activity-log', 'approvals', 'certificates', 'content', 'directors', 'grievances', 'projects', 'roles', 'volunteers'])
   })
 
   it('gives every desk a non-empty label and glyph', () => {
@@ -147,7 +147,8 @@ describe('the effective access set, spelled out', () => {
   // 10 leader + 6 super = 16. Same day, `approvals` moved leader -> super
   // (HR/super_admin-only sign-up approvals): 9 leader + 7 super = 16.
   // 2026-11-02: the Product guide desk (leader) makes it 10 leader + 8 super = 18.
-  it('hod and director each get the 10 leader desks — never the 8 super ones', () => {
+  // 2026-11-03: Grievances (super, HR and Super Admin only) makes it 10 leader + 9 super = 19.
+  it('hod and director each get the 10 leader desks — never the 9 super ones', () => {
     for (const role of ['hod', 'director'] as const) {
       const allowed = DESKS.filter(d => canAccessDesk(d, role))
       expect(allowed).toHaveLength(10)
@@ -157,12 +158,12 @@ describe('the effective access set, spelled out', () => {
     }
   })
 
-  it('hr and super_admin each get all 18', () => {
+  it('hr and super_admin each get all 19', () => {
     for (const role of ['hr', 'super_admin'] as const) {
       expect(isSuperAdmin(role)).toBe(true)
-      expect(DESKS.filter(d => canAccessDesk(d, role))).toHaveLength(18)
+      expect(DESKS.filter(d => canAccessDesk(d, role))).toHaveLength(19)
       const visible = visibleDeskGroups({ role, canApproveMembers: canApprove(role) }).flatMap(g => g.items)
-      expect(visible).toHaveLength(18)
+      expect(visible).toHaveLength(19)
     }
   })
 })

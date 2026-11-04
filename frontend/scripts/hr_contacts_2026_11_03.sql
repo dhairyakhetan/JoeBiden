@@ -1,0 +1,13 @@
+-- ──────────────────────────────────────────────────────────────────────────
+-- The five HR contacts on /equity-policy: numbers only for signed-in members (handoff C-31, owner approved, 3 Nov 2026).
+--
+-- STATUS: APPLIED 3 Nov 2026 (migration hr_contacts_signed_in_only).
+--
+-- public.hr_contacts (name, whatsapp, sort_order): RLS on, no grant to anon, select granted to authenticated and a policy that
+-- requires public.current_member_is_active(). The five rows (names and 10-digit WhatsApp numbers) were inserted directly through
+-- the connector and are deliberately NOT written in this file: the numbers have left the repository's source. The page keeps the
+-- names, and shows each active member a "Message on WhatsApp" button (wa.me link) after reading this table.
+-- Tested: anonymous is refused; an active member reads 5 rows; a pending member reads 0.
+-- To change a contact: update the row (or insert one) in this table and add the name to HR_NAMES in EquityPolicyPage.tsx.
+-- Rollback: drop table public.hr_contacts; restore the numbers from the git history of EquityPolicyPage.tsx.
+-- ──────────────────────────────────────────────────────────────────────────

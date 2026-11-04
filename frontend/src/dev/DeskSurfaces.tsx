@@ -95,6 +95,7 @@ const AccountApprovals = lazy(() => import('../director/AccountApprovals'))
 const PostModeration = lazy(() => import('../director/PostModeration'))
 const VolunteerApplications = lazy(() => import('../director/VolunteerApplications'))
 const CertificateRequests = lazy(() => import('../director/CertificateRequests'))
+const Grievances = lazy(() => import('../director/Grievances'))
 const TeamManagement = lazy(() => import('../director/TeamManagement'))
 const DirectorLanding = lazy(() => import('../director/DirectorLanding'))
 const HiringResponses = import.meta.env.DEV ? lazy(() => import('../director/HiringResponses')) : Placeholder
@@ -117,6 +118,7 @@ const DESKS: { id: string; label: string; note: string; el: ReactNode; shell?: b
   { id: 'posts', label: 'Post Queue', note: 'moderation cards, long bodies, category tags', el: <PostModeration /> },
   { id: 'volunteers', label: 'Vol. Applications', note: 'the other wide table (7 cols)', el: <VolunteerApplications /> },
   { id: 'certificates', label: 'Certificates', note: 'request rows with decisions', el: <CertificateRequests /> },
+  { id: 'grievances', label: 'Grievances', note: 'status stamps, an overdue row, details with notes and history', el: <Grievances /> },
   { id: 'teams', label: 'Teams', note: 'team cards and rosters', el: <TeamManagement /> },
   { id: 'hiring', label: 'Hiring', note: 'applications to openings, accept / reject', el: <HiringResponses /> },
   { id: 'activity', label: 'Activity Log', note: 'audit rows, cron rows hidden by default', el: <ActivityLog /> },

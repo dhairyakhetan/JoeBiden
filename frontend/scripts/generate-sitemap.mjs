@@ -193,7 +193,7 @@ const PARADOX_BLOG_SLUGS_FALLBACK = [
 // verify-sitemap.mjs re-checks the built file against this same list.
 export const EXCLUDED_PREFIXES = [
   '/login', '/_login', '/register', '/auth', '/pending', '/rejected', '/welcome',
-  '/profile', '/notifications', '/saved', '/my-posts', '/bugs', '/tasks', '/settings', '/search',
+  '/profile', '/notifications', '/saved', '/my-posts', '/bugs', '/tasks', '/settings', '/search', '/grievance',
   '/feed', '/director', '/brand', '/dev', '/member/', '/post/',
   '/paradox/admin', '/paradox/scores', '/paradox/updates', '/paradox/register',
   '/paradox/ticket',

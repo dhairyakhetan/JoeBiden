@@ -19,7 +19,7 @@
     { "source": "/labs", "destination": "/terranotes/articles/labs", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(|(?:about|accounts|arcade|auth|blog|brand|bugs|calendar|choose-team|classes|collaborations|contact|crftd|demo|dev|director|directory|drive|equity-policy|everything-we-do|faq|feed|games|honours|invite|join|labs|links|live|login|member|members|my-posts|notifications|opportunities|paradox|pending|post|privacy-policy|profile|projects|recruitment|register|rejected|roots|saved|schools|search|settings|support|tasks|teams|terranotes|terrathon|thank-you|volunteer|volunteer-handbook|yearbook)(?:/.*)?)", "destination": "/" }
+    { "source": "/(|(?:about|accounts|arcade|auth|blog|brand|bugs|calendar|choose-team|classes|collaborations|contact|crftd|demo|dev|director|directory|drive|equity-policy|everything-we-do|faq|feed|games|grievance|honours|invite|join|labs|links|live|login|member|members|my-posts|notifications|opportunities|paradox|pending|post|privacy-policy|profile|projects|recruitment|register|rejected|roots|saved|schools|search|settings|support|tasks|teams|terranotes|terrathon|thank-you|volunteer|volunteer-handbook|yearbook)(?:/.*)?)", "destination": "/" }
   ],
   "headers": [
     {
