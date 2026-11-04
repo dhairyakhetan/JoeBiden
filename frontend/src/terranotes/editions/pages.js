@@ -51,4 +51,11 @@ export const RULED = { sep26: Sep26Rule };
 //     introMast: the intro card leads with "TerraNotes" in big letters, the tagline smaller under it
 //               (shared/HomeIntroCard.jsx)
 export const LAYOUT = { oct26: { wordsRow: true, introMast: true } };
-export const TEAM_FIT = { sep26: Sep26TeamFit };
+// October takes September's compact faces (six a row on web, four then three on phone), not its ruled text
+export const TEAM_FIT = {
+  sep26: Sep26TeamFit,
+  oct26: {
+    web: { faces: Sep26TeamFit.web.faces, face: Sep26TeamFit.web.face },
+    phone: { faces: { ...Sep26TeamFit.phone.faces, top: 580 }, face: Sep26TeamFit.phone.face },
+  },
+};
