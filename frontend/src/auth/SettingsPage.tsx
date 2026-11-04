@@ -20,6 +20,20 @@ export default function SettingsPage() {
   const toast = useToast()
   const confirm = useConfirm()
   const [savingBirthdayPublic, setSavingBirthdayPublic] = useState(false)
+  const [savingPublicProfile, setSavingPublicProfile] = useState(false)
+
+  const handleTogglePublicProfile = async (next: boolean) => {
+    setSavingPublicProfile(true)
+    try {
+      await profileService.setPublicProfile(next)
+      await refreshMember()
+      toast.success(next ? 'your profile is visible to everyone again.' : 'people who aren\'t signed in now see only your name.')
+    } catch (e: any) {
+      toast.error(e?.message || 'couldn\'t change that. try again.')
+    } finally {
+      setSavingPublicProfile(false)
+    }
+  }
 
   const handleToggleBirthdayPublic = async (next: boolean) => {
     setSavingBirthdayPublic(true)
@@ -172,12 +186,20 @@ export default function SettingsPage() {
                 />
               </div>
 
-              {/* Honest coming-soon notice - fake toggles removed */}
-              <div className="card" style={{ padding: 20, background: 'var(--bg-2)', border: 'var(--hair)' }}>
-                <div className="mono xs upper muted">Privacy Controls</div>
-                <p style={{ marginTop: 8, fontSize: 14, color: 'var(--ink-2)' }}>
-                  Profile visibility controls are coming in a future update. Your profile is currently visible to all members.
-                </p>
+              <div className="card" style={{ padding: '16px 18px', background: 'var(--bg-2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--ink)' }}>show my profile to people who aren't signed in</div>
+                  <p style={{ marginTop: 4, fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.5, maxWidth: 52 + 'ch' }}>
+                    on: anyone can see your photo, bio, class and school on your public profile. off: people who aren't signed in see only your name.
+                    signed-in members still see your full profile, and teams and projects still list you by name.
+                  </p>
+                </div>
+                <Toggle
+                  checked={(member as any)?.public_profile !== false}
+                  onChange={handleTogglePublicProfile}
+                  disabled={savingPublicProfile}
+                  ariaLabel="show my profile to people who aren't signed in"
+                />
               </div>
             </div>
           )}

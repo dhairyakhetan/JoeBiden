@@ -810,7 +810,7 @@ export default function PublicProfilePage() {
           {activeTab === 'about' && (
             <div className="card" style={{ padding: 28, maxWidth: 680 }}>
               <div className="serif" style={{ fontSize: 40, lineHeight: 1, marginBottom: 16 }}>about.</div>
-              <p style={{ fontSize: 16, lineHeight: 1.65 }}>{profile.bio || `${profile.fullName} hasn't added a bio yet.`}</p>
+              <p style={{ fontSize: 16, lineHeight: 1.65 }}>{profile.bio || (profile.hidden ? 'this member only shows their name to people who aren\u2019t signed in. sign in to see more.' : `${profile.fullName} hasn't added a bio yet.`)}</p>
               <div style={{ borderTop: 'var(--hair-2)', margin: '20px 0', paddingTop: 16 }}>
                 <div className="row" style={{ gap: 20, flexWrap: 'wrap' }}>
                   {profile.schoolName && <div><span className="mono xs upper muted">school</span><div style={{ fontWeight: 700 }}>{profile.schoolName}</div></div>}

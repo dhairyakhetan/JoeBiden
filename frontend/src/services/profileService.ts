@@ -221,6 +221,21 @@ const profileServiceImpl = {
     return { success: true, message: 'Profile updated successfully', data: { member: profile } }
   },
 
+  /**
+   * The profile visibility switch (handoff C-30). On = anyone can see the photo, bio, class and school on the public profile.
+   * Off = signed-out visitors see the name only; signed-in members, teams and projects are unchanged. The database enforces it
+   * (masked functions plus the anonymous column revoke); this only writes the flag. Owner-only through the update policy.
+   * The column cannot be read directly, so the current value comes from the member row get_own_member() returns.
+   */
+  async setPublicProfile(visible: boolean): Promise<void> {
+    const memberId = await getCachedMemberId()
+    if (!memberId) throw new Error('Please sign in again.')
+    const { data, error } = await (supabaseCommunity as any)
+      .from('members').update({ public_profile: visible }).eq('member_id', memberId).select('member_id')
+    if (error) throw logSupabaseError('profileService.setPublicProfile', error)
+    if (!data || data.length === 0) throw new Error("That didn't save. Please try again.")
+  },
+
   async getPublicProfile(uuid: string) {
     // Public route (/member/:uuid), reachable logged-out. The core read goes through the masked function get_public_member(): for a
     // profile its owner has hidden, a signed-out caller gets the name only (photo, bio, class and school come back empty and

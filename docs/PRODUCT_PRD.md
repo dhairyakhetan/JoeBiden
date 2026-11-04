@@ -230,7 +230,7 @@ party with a 5-second undo.
 
 Settings (`/settings`) covers account info, WhatsApp contact number
 (explicitly offering "own or guardian's" given the teen userbase), a
-birthday-sharing privacy toggle defaulted **off**, and an honestly-labeled
+birthday-sharing privacy toggle defaulted **off**, a profile-visibility toggle defaulted **on** ("show my profile to people who aren't signed in"; off means signed-out visitors see only the name, enforced in the database by masked functions and by the anonymous role having no read on photo, bio, class and school; signed-in members, teams and projects are unchanged), and an honestly-labeled
 "coming soon" state for notification/appearance preferences rather than a
 fake toggle. There is no in-app hard delete — deactivation goes through a
 director request, deletion through an email request.
