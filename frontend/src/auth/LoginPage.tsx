@@ -310,9 +310,14 @@ const LoginPage = () => {
             not stacked above the card: it is scene-setting copy, the card
             below is the action. Untouched logic - AuthHero only gets a new
             skin (AuthHero.css) to sit on paper instead of ink. */}
-        <div className="lg-garden-hero">
-          <AuthHero hero={hero} navKey={`${location.key}:${hero.kind}`} />
-        </div>
+        {/* One headline (C-11, 3 Nov 2026). The garden's hero used to add a SECOND sentence on top of the card's headline, and for the
+            staff variant a different audience entirely. Now it shows only when it explains why someone landed here (a post, a role,
+            a demo, a return trip). The default "numbers" sentence and the staff line no longer compete with the card. */}
+        {hero.kind !== 'default' && hero.kind !== 'admin' && (
+          <div className="lg-garden-hero">
+            <AuthHero hero={hero} navKey={`${location.key}:${hero.kind}`} />
+          </div>
+        )}
       </div>
 
       <div className="lg-card" data-first={String(firstVisit)}>
@@ -435,6 +440,11 @@ const LoginPage = () => {
               "create account" button is already looking. Kept to one line —
               the numbered steps below carry the detail, and saying it twice
               at length just makes both versions easier to skip. */}
+          {hero.kind === 'admin' && (
+            <p className="lg-staff-note mono xs muted" role="note" style={{ margin: '10px 0 0' }}>
+              {hero.sentence} {hero.subline}
+            </p>
+          )}
           <p className="lg-signup-note">
             <strong>This is the sign-up.</strong> No separate form. Your Google
             account is your AquaTerra account.

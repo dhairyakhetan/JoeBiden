@@ -429,7 +429,7 @@ export default function PublicProjectDetailPage() {
         <div className="proj-media-col">
           <div className="proj-viewer" role="group" aria-roledescription="carousel" aria-label={`${project.header} photos`}>
             {/* Slide changes were never announced. */}
-            <span className="sr-only" role="status" aria-live="polite">{`Photo ${activeImg + 1} of ${allImages.length}`}</span>
+            {allImages.length > 0 && <span className="sr-only" role="status" aria-live="polite">{`Photo ${activeImg + 1} of ${allImages.length}`}</span>}
             {allImages.length > 0 ? (
               <Img
                 src={sized(allImages[activeImg].src, 'full')}

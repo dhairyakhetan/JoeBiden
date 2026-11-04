@@ -30,6 +30,8 @@ export interface Department {
   /** Hidden from every public list (the live `teams` row is is_active = false) but kept here so the team picker
       and profile lookups still resolve the name for people who are already on it. */
   hidden?: boolean
+  /** Shown as a card in the department lists, but with no live team behind it: no members, no team page. Counts as a department. */
+  cardOnly?: boolean
   /** Concrete skills a member builds on this team. Optional — filled in per
       team as each team lead supplies their real list (the live `teams` table
       carries the same data in its `skills` column for the team page). */
@@ -44,7 +46,7 @@ export interface Department {
 
 export const DEPARTMENTS: Department[] = [
   {
-    name: 'Events',
+    name: 'Events Team',
     color: 'var(--sky)',
     icon: '🎪',
     desc: 'Paradox, Disco Diwali, Starry Nights, awareness events. AQ-run fundraisers have crossed 6-digit revenue. This team plans and executes every large-scale gathering.',
@@ -62,10 +64,12 @@ export const DEPARTMENTS: Department[] = [
     kind: 'volunteer',
   },
   {
-    name: 'Social Media',
+    // Marketing (owner, 3 Nov 2026): Social Media and Digital Magazine are teams INSIDE Marketing, not departments of their own, so
+    // this card replaces the old "Social Media" one everywhere. Live: teams row 18 with Social Media and Digital Magazine as children.
+    name: 'Marketing',
     color: 'var(--grape)',
-    icon: '📱',
-    desc: 'Instagram (@ngo.aquaterra), LinkedIn, website, reels, carousels, copy. Real brand work by student creators who show up every week.',
+    icon: '📣',
+    desc: 'Instagram (@ngo.aquaterra), LinkedIn, the website, reels, carousels, copy, design and the digital magazine. Real brand work by student creators who show up every week. Social Media and Digital Magazine live here.',
     stat: 'Every AQ post, reel and caption',
     category: 'content',
     kind: 'volunteer',
@@ -78,7 +82,9 @@ export const DEPARTMENTS: Department[] = [
     stat: 'Partnerships across Kolkata',
     category: 'operations',
     kind: 'volunteer',
-    hidden: true,
+    // A card only (owner, 3 Nov 2026): no members are shown for Collabs, and no "being restructured" note. Its live `teams` row stays
+    // inactive, so it has no page and no roster; the department list is what shows it.
+    cardOnly: true,
   },
   {
     name: 'Crftd',

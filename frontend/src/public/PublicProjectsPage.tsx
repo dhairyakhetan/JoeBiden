@@ -292,9 +292,9 @@ function FeaturedBento({ items, total, onViewAll }: { items: PostStreamCardData[
 const deptSlug = (name: string) => name.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '')
 
 const DEPT_LINKS: Record<string, { to: string; label: string }> = {
-  'Events': { to: '/projects?category=events', label: 'see event posts →' },
+  'Events Team': { to: '/projects?category=events', label: 'see event posts →' },
   'Welfare Projects': { to: '/projects?category=welfare', label: 'browse the drives →' },
-  'Social Media': { to: '/projects?category=content', label: 'see what we publish →' },
+  'Marketing': { to: '/projects?category=content', label: 'see what we publish →' },
   'Collabs': { to: '/collaborations', label: 'partner with us →' },
   'Crftd': { to: '/crftd', label: 'see brand work →' },
   'AQ.Ventures': { to: '/opportunities', label: 'open roles →' },

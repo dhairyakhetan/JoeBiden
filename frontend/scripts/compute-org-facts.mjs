@@ -121,6 +121,7 @@ const CONSTANTS = {
   // Trust registration number of TerraRoots (Charity Commissioner, 23 Jul 2025).
   // It was labelled "DARPAN" until 3 Nov 2026; the DARPAN portal ID is a separate
   // number, below. Both from the registration extract the owner supplied.
+  cardOnlyDepartments: 1,
   trustRegNo: 'AAFTT2300ME20251',
   // DARPAN (NITI Aayog) portal ID, active since 31 Jul 2025.
   darpanId: 'WB/2025/0745627',
@@ -814,7 +815,9 @@ async function main() {
       membersTotal: results.membersTotal,
       postsPublished: results.postsPublished,
       teamsActive: results.teamsActive,
-      departmentsActive: results.departmentsActive,
+      // Live top-level teams plus the card-only departments (Collabs has a card but no active live team), so this equals the
+      // number of department cards the site shows (lib/departments.ts, asserted in departments.test.ts).
+      departmentsActive: results.departmentsActive + CONSTANTS.cardOnlyDepartments,
       dogMealsServed: dogMeals,
       schoolsRepresented: null,
     },

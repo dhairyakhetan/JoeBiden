@@ -1,0 +1,17 @@
+-- Profile visibility toggle, steps 1 and 2 of 5 (docs/plans/profile-visibility-toggle.md). Owner chose "stage it", 3 Nov 2026.
+--
+-- STATUS: APPLIED 3 Nov 2026 (migrations members_public_profile_column_20261103, profile_toggle_mask_feed_and_cohorts_20261103).
+--
+-- Step 1: members.public_profile boolean not null default true. Everyone is true, nothing changes. A new column has no privileges,
+--         so anon and authenticated cannot read it directly; the masking views and functions (definer) read it, and a member reads
+--         their own value through get_own_member(). authenticated may UPDATE it (own row, by the existing update policy).
+-- Step 2: post_feed_view now returns author_avatar and tagged members' avatar as NULL for a hidden profile when the caller is
+--         signed out (auth.uid() is null); class_cohort_counts() leaves hidden profiles out for a signed-out caller. Names stay.
+--         member_directory_view needed nothing: it is gated to directors and HR, so anonymous callers never read it.
+-- Tested in a rolled-back block with one profile set hidden: a signed-out caller still sees the member's posts but no avatar (0
+-- avatar rows against 1 before), a signed-in member still sees it (1), cohort counts still return.
+--
+-- NOT DONE (steps 3 to 5), and the toggle is NOT shown to members yet: the embedded reads of members(avatar_url, bio, school_id,
+-- class_grade) in team, comment, roster, project, Member of the Month and search queries, the public profile page, and the /members
+-- and /classes lists still read the base table; then the anonymous column revoke; then the Settings toggle and the policy wording.
+-- Rollback: alter table public.members drop column public_profile; re-create the view and function from their previous definitions.

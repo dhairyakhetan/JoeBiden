@@ -656,17 +656,27 @@ async function main() {
     table: 'welfare_projects',
     // long_writeup joins the select purely for the crawlable body — the meta
     // description still comes from short_summary.
-    columns: 'slug,header,short_summary,long_writeup,main_image,main_image_alt,location',
+    columns: 'slug,header,short_summary,long_writeup,main_image,main_image_alt,location,workshop_date',
     filter: 'is_draft=eq.false',
   })
+  // Unique heads (C-08, 3 Nov 2026). 137 project pages shared a description with another page and 28 shared a title. Only the
+  // record's own text is used: where two pages would collide, the drive's place and month (both on the record) are added, so
+  // nothing is invented. Projects whose own summary is a stub are counted and listed for a person to fill in.
+  const rawDesc = p => metaTrim(p.short_summary || `${p.header} — a student-led AquaTerra welfare drive${p.location ? ` in ${p.location}` : ' in Kolkata'}, run by the members who showed up.`)
+  const monthYear = p => { try { return p.workshop_date ? new Date(p.workshop_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : '' } catch { return '' } }
+  const descCount = new Map(); const titleCount = new Map()
+  for (const p of projectRows) {
+    descCount.set(rawDesc(p), (descCount.get(rawDesc(p)) || 0) + 1)
+    titleCount.set(p.header, (titleCount.get(p.header) || 0) + 1)
+  }
+  const stubSlugs = projectRows.filter(p => p.slug && (p.short_summary || '').trim().length < 40).map(p => p.slug)
   for (const p of projectRows) {
     if (!p.slug) continue
     const path = `/projects/${p.slug}`
+    const where = [p.location, monthYear(p)].filter(Boolean).join(', ')
     const meta = {
-      title: `${p.header} | AquaTerra Welfare Project`,
-      description: metaTrim(
-        p.short_summary || `${p.header} — a student-led AquaTerra welfare drive${p.location ? ` in ${p.location}` : ' in Kolkata'}, run by the members who showed up.`
-      ),
+      title: titleCount.get(p.header) > 1 && where ? `${p.header} (${where}) | AquaTerra Welfare Project` : `${p.header} | AquaTerra Welfare Project`,
+      description: descCount.get(rawDesc(p)) > 1 && where ? metaTrim(`${rawDesc(p)} (${where})`) : rawDesc(p),
     }
     const image = sizedCover(p.main_image)
     // Article, not BlogPosting: a welfare-project write-up is a report of work
@@ -698,6 +708,7 @@ async function main() {
     dynWritten++
   }
   console.log(`   ✓ ${projectRows.length.toString().padStart(4)} welfare project pages`)
+  if (stubSlugs.length) console.log(`   ⚠ ${stubSlugs.length} project pages have a stub or empty summary (under 40 characters): a person needs to write them (list: first 10 ${stubSlugs.slice(0, 10).join(', ')})`)
 
   const teamRows = await select('teams', {
     table: 'teams',
@@ -771,6 +782,76 @@ async function main() {
     subTeamWritten++
   }
   console.log(`   ✓ ${subTeamWritten.toString().padStart(4)} sub-team pages`)
+
+  // ── /opportunities/:id (C-07, 3 Nov 2026) ──────────────────────────────
+  // Open roles are in the sitemap, so each needs its own head. They were left out as "churns fast", but a stale head on a role
+  // that has since closed is harmless (the app takes over and shows the real state) and a head that says "the homepage" is not.
+  const openingRows = await select('job_openings', {
+    table: 'job_openings',
+    columns: 'id,title,description,team_name,status,deleted_at',
+    filter: 'status=eq.open',
+  })
+  let openingWritten = 0
+  for (const op of openingRows) {
+    if (!op.id || !op.title || op.deleted_at) continue
+    const path = `/opportunities/${op.id}`
+    const meta = {
+      title: `${op.title}${op.team_name ? ` · ${op.team_name}` : ''} | Open roles | AquaTerra`,
+      description: metaTrim(op.description || '') || `${op.title}, an open role at AquaTerra in Kolkata.`,
+    }
+    const html = renderRoute(indexHtml, meta, op.title, path, {
+      body: buildBody({
+        heading: op.title,
+        intro: op.team_name ? `An open role in ${op.team_name} at AquaTerra` : 'An open role at AquaTerra',
+        extra: `<article>${toParagraphs(op.description)}</article>`,
+        links: [['/opportunities', 'All open roles'], ...SITE_LINKS],
+      }),
+    })
+    mkdirSync(join(DIST, 'opportunities'), { recursive: true })
+    writeFileSync(join(DIST, 'opportunities', `${op.id}.html`), html, 'utf8')
+    dynWritten++
+    openingWritten++
+  }
+  console.log(`   ✓ ${openingWritten.toString().padStart(4)} open role pages`)
+
+  // ── /paradox/* (C-07) ────────────────────────────────────────────────────
+  // Paradox 2026 is over and its pages now land on an archive page (src/paradox/pages/Archive.tsx). The sitemap still lists its
+  // URLs, so each gets its own honest head instead of inheriting the homepage's. The paths come from the sitemap the build just wrote.
+  let paradoxWritten = 0
+  try {
+    const sm = readFileSync(join(DIST, 'sitemap.xml'), 'utf8')
+    const paths = [...sm.matchAll(/<loc>[^<]*?(\/paradox(?:\/[^<]*)?)<\/loc>/g)].map(m => m[1])
+    const human = slug => slug.replace(/-paradox-2026$/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+    for (const path of paths) {
+      const parts = path.split('/').filter(Boolean) // ['paradox', ...]
+      const slug = parts[parts.length - 1]
+      let title; let description
+      if (parts[1] === 'blog' && parts[2]) {
+        title = `${human(slug)} at Paradox 2026 | AquaTerra`
+        description = `The story of ${human(slug)} at Paradox 2026, AquaTerra's student festival in Kolkata.`
+      } else if (parts[1] === 'blog') {
+        title = 'Paradox 2026 stories | AquaTerra'
+        description = 'Stories from Paradox 2026, AquaTerra\'s student festival in Kolkata.'
+      } else if (parts[1] === 'team') {
+        title = 'The Paradox 2026 team | AquaTerra'
+        description = 'The students who ran Paradox 2026, AquaTerra\'s student festival in Kolkata.'
+      } else {
+        title = 'Paradox 2026: that\'s a wrap | AquaTerra'
+        description = 'Paradox 2026 ran from 1 to 6 June 2026 and has ended. Read the story, meet the team and see the blog.'
+      }
+      const html = renderRoute(indexHtml, { title, description }, title.replace(/ \| AquaTerra$/, ''), path, {
+        body: buildBody({ heading: title.replace(/ \| AquaTerra$/, ''), intro: description, links: [['/paradox/story', 'The Paradox story'], ['/paradox/blog', 'Paradox blog'], ...SITE_LINKS] }),
+      })
+      const file = parts.length === 1 ? join(DIST, 'paradox.html') : join(DIST, ...parts.slice(0, -1), `${slug}.html`)
+      mkdirSync(dirname(file), { recursive: true })
+      writeFileSync(file, html, 'utf8')
+      dynWritten++
+      paradoxWritten++
+    }
+  } catch (e) {
+    console.warn(`   ⚠ paradox pages skipped: ${e?.message || e}`)
+  }
+  console.log(`   ✓ ${paradoxWritten.toString().padStart(4)} paradox pages`)
 
   // ── Terra Notes (/terranotes/*) ───────────────────────────────────────────
   // AQ's monthly digital magazine, and inside it AQ Labs (the old /labs, which now redirects there). Like the Labs

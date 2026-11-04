@@ -157,7 +157,7 @@ export const ORG_FACTS: OrgFacts = {
   membersTotal: 1424,
   postsPublished: 619,
   teamsActive: 9,
-  departmentsActive: 7,
+  departmentsActive: 8,
   dogMealsServed: 3265,
   schoolsRepresented: null,
 
