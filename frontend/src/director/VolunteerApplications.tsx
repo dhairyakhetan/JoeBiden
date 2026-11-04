@@ -115,6 +115,9 @@ export default function VolunteerApplications() {
       let query = supabase
         .from('volunteer_applications')
         .select('*', { count: 'exact' })
+        // The 92 repeat sign-ups from the same email are hidden, not deleted (duplicate_of points at the row kept). The owner's
+        // dedupe (3 Nov 2026) ran as a soft-hide because the delete confirmation could not be approved; the rows stay in the table.
+        .is('duplicate_of' as any, null)
         .order('created_at', { ascending: false })
         .range(start, end)
 

@@ -261,7 +261,7 @@ function useGridEnrichment(enabled: boolean, memberId?: number, role?: string | 
             case 'enquiries':
               return countOf(() => sb().from('collaboration_submissions').select('id', { count: 'exact', head: true }).eq('status', 'new'))
             case 'volunteers':
-              return countOf(() => sb().from('volunteer_applications').select('id', { count: 'exact', head: true }).or('reviewed.is.null,reviewed.eq.false'))
+              return countOf(() => sb().from('volunteer_applications').select('id', { count: 'exact', head: true }).is('duplicate_of', null).or('reviewed.is.null,reviewed.eq.false'))
             case 'certificates':
               return countOf(() => sb().from('certificate_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'))
             default:
