@@ -54,8 +54,18 @@ function isPhoneViewport(): boolean {
   return window.innerWidth <= 640
 }
 
+// Project images mirrored into our own storage (handoff C-09, 4 Nov 2026) live at .../project-images/framer/<sha1>-1600.<ext> with a
+// <sha1>-640.<ext> copy beside it (not for svg or gif). Small slots (avatar, thumb, phone card) take the 640 copy, the rest the 1600.
+const MIRRORED = /^(https?:\/\/[^/?#]+\/storage\/v1\/object\/public\/project-images\/framer\/[0-9a-f]{40})-1600\.(png|jpg|webp|avif)$/
+const MIRRORED_SMALL_MAX = 720
+
 export function sized(url: string | null | undefined, ctx: ImgContext = 'card'): string {
   if (!url || typeof url !== 'string') return url ?? ''
+  const mirrored = MIRRORED.exec(url)
+  if (mirrored) {
+    const want = (isPhoneViewport() && SIZE_PHONE[ctx]) || SIZE[ctx]
+    return want <= MIRRORED_SMALL_MAX ? `${mirrored[1]}-640.${mirrored[2]}` : url
+  }
   // Only Framer's CDN supports the resize param; everything else is left as-is.
   if (!url.includes('framerusercontent.com/images/')) return url
   // Respect a size that's already baked into the URL.

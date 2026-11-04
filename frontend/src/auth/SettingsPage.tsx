@@ -137,7 +137,9 @@ export default function SettingsPage() {
               <p style={{ color: 'var(--ink-2)', fontSize: 14, lineHeight: 1.6, margin: 0 }}>
                 this is how AquaTerra reaches you about drives and events. give your own
                 number or a parent/guardian&rsquo;s — either works, and you can change it
-                whenever you like.
+                whenever you like. it never appears on your profile; only AquaTerra
+                leaders (HR, Super Admin, HoDs and Directors) and the lead of a team
+                you apply to or join can see it.
               </p>
               <ContactNumberFields />
             </div>

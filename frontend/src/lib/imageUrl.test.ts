@@ -46,4 +46,24 @@ describe('sized', () => {
     expect(sized(undefined)).toBe('')
     expect(sized('')).toBe('')
   })
+
+  describe('mirrored project images (C-09)', () => {
+    const key = 'a'.repeat(40)
+    const big = `https://x.supabase.co/storage/v1/object/public/project-images/framer/${key}-1600.jpg`
+    const small = `https://x.supabase.co/storage/v1/object/public/project-images/framer/${key}-640.jpg`
+
+    it('serves the 640 copy to small slots and the 1600 copy to large ones', () => {
+      expect(sized(big, 'avatar')).toBe(small)
+      expect(sized(big, 'thumb')).toBe(small)
+      expect(sized(big, 'card')).toBe(big)
+      expect(sized(big, 'full')).toBe(big)
+    })
+
+    it('leaves svg and gif alone (no 640 copy exists) and other bucket paths alone', () => {
+      const svg = `https://x.supabase.co/storage/v1/object/public/project-images/framer/${key}-1600.svg`
+      expect(sized(svg, 'thumb')).toBe(svg)
+      const other = 'https://x.supabase.co/storage/v1/object/public/avatars/me-1600.jpg'
+      expect(sized(other, 'thumb')).toBe(other)
+    })
+  })
 })

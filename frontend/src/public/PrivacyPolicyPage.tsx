@@ -71,14 +71,14 @@ export default function PrivacyPolicyPage() {
           see it, and how to get rid of it.
         </p>
         {/* Reuses the same real date already stated in the document body (the
-            ep-runhead below and the closing note both say "August 2026"),
+            ep-runhead below and the closing note both say "November 2026"),
             rather than inventing a new one. */}
-        <div className="mono xs upper muted" style={{ marginTop: 10, fontWeight: 700 }}>last updated · august 2026</div>
+        <div className="mono xs upper muted" style={{ marginTop: 10, fontWeight: 700 }}>last updated · november 2026</div>
       </section>
 
       <div className="ep-body">
         <article className="ep-doc">
-          <div className="ep-runhead">AquaTerra · Privacy Policy · August 2026</div>
+          <div className="ep-runhead">AquaTerra · Privacy Policy · November 2026</div>
 
           <section className="ep-section">
             <h2 className="ep-h">What we collect</h2>
@@ -147,10 +147,19 @@ export default function PrivacyPolicyPage() {
           <section className="ep-section">
             <h2 className="ep-h">What other members can see</h2>
             <p className="ep-p">
-              AquaTerra is a community, so some of this is public by design. Your name, photo, class,
-              teams and anything you post are visible to other approved members, and posts an HoD
-              approves can appear on the public site. Your <strong>email address and phone number
-              are never shown to other members</strong>. Only directors handling approvals see them.
+              AquaTerra is a community, so some of this is public by design. Your name, photo, school,
+              role, bio, teams and any posts an HoD approves are visible to anyone, including people
+              who are not signed in, on the members list, your public profile and the class pages. If
+              you would rather not be seen that way, switch your profile to hidden in Settings,
+              Privacy: people who are not signed in then see only your name. Signed-in members, teams
+              and projects are unchanged.
+            </p>
+            <p className="ep-p">
+              Your <strong>email address, phone number, guardian&rsquo;s phone number and Instagram are
+              never shown on your profile</strong> or to other members. AquaTerra leaders (HR, Super
+              Admin, HoDs and Directors) can see your email and phone so they can handle approvals and
+              reach you, and so can the lead of a team you apply to or join. Reveals from the Members
+              desk are logged. LinkedIn, if you add it, is shown to signed-in members only.
             </p>
           </section>
 
@@ -171,15 +180,15 @@ export default function PrivacyPolicyPage() {
               <Link to="/contact">contact form</Link>. Put “privacy” in the subject line so it
               reaches the right person.
             </p>
-            <p className="ep-p pp-flag">
-              <strong>To be filled in by AquaTerra:</strong> a named grievance contact for data
-              questions. India's DPDP Act 2023 expects a specific, reachable person. A made-up
-              name here would be worse than an obvious gap.
+            <p className="ep-p">
+              For any grievance, use the <Link to="/grievance">grievance form</Link> (signed-in members)
+              or contact the HR team listed on the <Link to="/equity-policy">Equity Policy</Link> page.
+              We usually respond within 7 days.
             </p>
           </section>
 
           <div className="ep-runhead" style={{ marginTop: 28 }}>
-            Written to match what the site actually does, as of August 2026.
+            Written to match what the site actually does, as of November 2026.
           </div>
         </article>
 

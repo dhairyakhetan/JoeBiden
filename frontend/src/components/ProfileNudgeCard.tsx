@@ -230,7 +230,7 @@ export default function ProfileNudgeCard({ enabled = true, className, onDismisse
       const p = await refresh()
       toast.success(
         phoneOwner === 'self' ? 'your number is saved.' : "your guardian's number is saved.",
-        'only Directors can see it. it is never shown on your profile.',
+        'only AquaTerra leaders can see it. it is never shown on your profile.',
       )
       await afterEdit(p, memberUuid, ctx)
     } catch (err: unknown) {

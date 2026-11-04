@@ -1,0 +1,20 @@
+-- Project images mirrored out of Framer (handoff C-09; owner approved "mirror and resize", 4 Nov 2026).
+--
+-- STATUS: see the result line at the bottom (filled in when the run finished).
+--
+-- What: welfare_projects image columns (main_image, image_1..4, collab_logo) pointed at framerusercontent.com. A one-off Supabase
+-- edge function (mirror-project-images, replaced by a stub when done) fetched each image from Framer's own resizer at 1600 px and at
+-- 640 px and stored both in the public bucket `project-images` under framer/<sha1 of the original url>-1600.<ext> and -640.<ext>
+-- (svg and gif: one copy). It then set the column to the 1600 copy. Identical Framer URLs share one stored file.
+-- Rollback / audit: every change is a row in public.project_image_url_backup_20261104 (row_id, col, old_url, new_url, status).
+--   To roll one back:  update public.welfare_projects p set <col> = b.old_url from public.project_image_url_backup_20261104 b
+--                      where b.row_id = p.id and b.col = '<col>' and b.status = 'mirrored';
+-- Serving: lib/imageUrl.ts sized() maps the 1600 copy to the 640 copy for avatar, thumb and phone-card slots.
+-- Nothing was changed or cancelled in Framer.
+
+-- RESULT (4 Nov 2026, finished): 963 image references moved (734 distinct files, each in a 1600 px and a 640 px copy; svg and gif single).
+-- Bucket project-images grew from 73 MB total storage to about 325 MB in that bucket. 0 Framer URLs remain in welfare_projects; every
+-- database URL has a backup row; one early upload error (a temporary storage 520) was retried and is marked superseded.
+-- Checked live: /projects, /projects/1, /projects/1010, /projects/1011 and the home page loaded 33 mirrored images, 0 errors, 0 requests
+-- to framerusercontent.com, 0 broken images. The edge function was replaced by a stub that returns 410. Not touched: Framer itself, and
+-- images in posts, blogs or other tables (the audit counted project images only).

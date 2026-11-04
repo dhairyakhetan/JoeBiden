@@ -91,8 +91,8 @@ export function PhoneOwnerForm({
       />
       <p className="pnudge-help" id={helpId}>
         {owner === 'self'
-          ? 'saved as your own number. only Directors can see it, and it never appears on your profile.'
-          : "saved as your guardian's number, kept separate from yours. only Directors can see it, and it never appears on your profile."}
+          ? 'saved as your own number. only AquaTerra leaders can see it, and it never appears on your profile.'
+          : "saved as your guardian's number, kept separate from yours. only AquaTerra leaders can see it, and it never appears on your profile."}
       </p>
       {!guardianAvailable && owner === 'guardian' && (
         <p className="pnudge-err" role="alert">
@@ -163,7 +163,7 @@ export default function ContactNumberFields() {
       await load()
       toast.success(
         owner === 'self' ? 'your number is updated.' : "your guardian's number is saved.",
-        'only Directors can see it. it never appears on your profile.',
+        'only AquaTerra leaders can see it. it never appears on your profile.',
       )
     } catch (err: unknown) {
       const msg = (err as { message?: string })?.message || 'that number did not save.'
