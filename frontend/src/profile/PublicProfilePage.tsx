@@ -1,3 +1,4 @@
+import { fetchMemberCards } from '../lib/publicMembers'
 import Img from '../components/Img'
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useSearchParams, Link } from 'react-router-dom'
@@ -310,7 +311,7 @@ export default function PublicProfilePage() {
         if (!teamIds.length || cancelled) return
         const { data: mateRows } = await supabaseCommunity
           .from('team_members')
-          .select('members(uuid, full_name, avatar_url, role)')
+          .select('members(uuid, full_name, role)')
           .in('team_id', teamIds)
           .neq('member_id', myId)
           // Same soft-remove rule: a removed teammate is not a teammate.
@@ -322,8 +323,10 @@ export default function PublicProfilePage() {
           .filter((p) => p && p.uuid && p.uuid !== uuid)
           .filter((p) => { if (seen.has(p.uuid)) return false; seen.add(p.uuid); return true })
           .slice(0, 8)
-          .map((p) => ({ uuid: p.uuid, fullName: p.full_name, avatarUrl: p.avatar_url ?? undefined, role: p.role }))
-        setAlongside(mates)
+        // Photos come from the masked reader so a hidden teammate shows as a name only to signed-out visitors.
+        const cards = await fetchMemberCards(mates.map((p) => p.uuid))
+        if (cancelled) return
+        setAlongside(mates.map((p) => ({ uuid: p.uuid, fullName: p.full_name, avatarUrl: cards.get(p.uuid)?.avatarUrl, role: p.role })))
       } catch (err) {
         console.warn('[PublicProfilePage] builders-alongside fetch failed', uuid, err)
       } finally {

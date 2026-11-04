@@ -73,46 +73,25 @@ export default function MembersPage() {
     setError(null)
     try {
       const from = (currentPage - 1) * PAGE_SIZE
-      const to = from + PAGE_SIZE - 1
 
-      let query = supabaseCommunity
-        .from('members')
-        .select(
-          // No class_grade. The card renders a name, a school and a role and
-          // nothing else, so selecting it only shipped 1,327 students' class
-          // to every anonymous visitor for a field this page never drew.
-          // It is also what let `class_grade` be revoked from anon entirely.
-          'member_id, uuid, full_name, avatar_url, role, created_at, schools (name)',
-          { count: 'exact' }
-        )
-        .eq('status', 'active')
-        // `member_id` is the tiebreaker, and it is not optional here.
-        // `created_at` is massively non-unique on live data - single timestamps
-        // are shared by 300, 299, 299, 187 and 150 active rows, so most of the
-        // 1,317 members sit inside a handful of ties. With no unique secondary
-        // key Postgres may order a tied block differently on each execution,
-        // and offset paging then repeats some members and silently skips
-        // others across page boundaries. directorService.getMemberDirectory
-        // already documents and fixes exactly this; the public page never got
-        // the same treatment.
-        .order('created_at', { ascending: false })
-        .order('member_id', { ascending: true })
-        .range(from, to)
-
-      const sanitizedQ = sanitizeFilterTerm(currentQ)
-      if (sanitizedQ) query = query.ilike('full_name', `%${sanitizedQ}%`)
-      if (currentRole !== 'all') query = query.eq('role', currentRole)
-
-      const { data, count, error: dbError } = await query
+      // Masked, paged read (database function public_members_page): a hidden profile shows its name only to a signed-out visitor.
+      const { data, error: dbError } = await (supabaseCommunity as any).rpc('public_members_page', {
+        p_q: sanitizeFilterTerm(currentQ) || null,
+        p_role: currentRole,
+        p_limit: PAGE_SIZE,
+        p_offset: from,
+      })
       if (dbError) throw dbError
+      const list = (data as any[]) ?? []
+      const count: number = list.length ? Number(list[0].total) : 0
 
-      const rows: MemberRow[] = (data ?? []).map((m: any) => ({
+      const rows: MemberRow[] = list.map((m: any) => ({
         memberId: m.member_id,
         uuid: m.uuid,
         fullName: m.full_name,
         avatarUrl: m.avatar_url ?? undefined,
         role: m.role ?? 'member',
-        schoolName: m.schools?.name ?? undefined,
+        schoolName: m.school_name ?? undefined,
         createdAt: m.created_at ?? undefined,
       }))
       setMembers(prev => append ? [...prev, ...rows] : rows)

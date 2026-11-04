@@ -1,3 +1,4 @@
+import { fetchMemberCards } from '../lib/publicMembers'
 import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { getCachedMemberId } from '../lib/authCache'
@@ -1021,7 +1022,7 @@ const feedServiceImpl = {
         post_id, uuid, body, category, status, created_at,
         pinned, pinned_title,
         members!posts_author_id_fkey (
-          uuid, full_name, avatar_url
+          uuid, full_name
         )
       `)
       .eq('status', 'published')
@@ -1031,6 +1032,7 @@ const feedServiceImpl = {
       .limit(5)
 
     if (error) throw logSupabaseError('feedService.getPinnedPosts', error)
+    const pinnedCards = await fetchMemberCards((data || []).map((p: any) => p.members?.uuid))
 
     const mapped = (data || []).map((p: any) => ({
       uuid: p.uuid,
@@ -1039,7 +1041,7 @@ const feedServiceImpl = {
       pinnedTitle: p.pinned_title || null,
       authorName: p.members?.full_name || 'AquaTerra',
       authorUuid: p.members?.uuid || '',
-      authorAvatar: p.members?.avatar_url || null,
+      authorAvatar: pinnedCards.get(p.members?.uuid)?.avatarUrl || null,
       createdAt: p.created_at,
     }))
 
@@ -1089,13 +1091,15 @@ const feedServiceImpl = {
       .from('comments')
       .select(`
         comment_id, uuid, body, created_at, parent_comment_id,
-        author:members!author_id(member_id, uuid, full_name, avatar_url, role)
+        author:members!author_id(member_id, uuid, full_name, role)
       `, { count: 'exact' })
       .eq('post_id', postId)
       .order('created_at', { ascending: true })
       .range(offset, offset + limit - 1)
 
     if (error) throw logSupabaseError('feedService.getComments', error)
+    // Comment authors' photos come from the masked reader (a hidden profile shows no photo to a signed-out visitor).
+    const authorCards = await fetchMemberCards((comments || []).map((c: any) => c.author?.uuid))
 
     // parentAuthorName is resolved from THIS page only - a reply to a
     // comment that loaded on an earlier page (before "load more" was
@@ -1115,7 +1119,7 @@ const feedServiceImpl = {
           authorId: c.author?.member_id,
           authorUuid: c.author?.uuid,
           authorName: c.author?.full_name || 'Member',
-          authorAvatar: c.author?.avatar_url || null,
+          authorAvatar: authorCards.get(c.author?.uuid)?.avatarUrl || null,
           authorRole: c.author?.role || 'member',
           parentCommentId: c.parent_comment_id ?? null,
           parentAuthorName: parent?.author?.full_name ?? null,

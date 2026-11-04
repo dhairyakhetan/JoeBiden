@@ -114,17 +114,12 @@ const schoolServiceImpl = {
       }
     }
 
-    const { data, count, error } = await supabaseCommunity
-      .from('members')
-      .select('uuid, full_name, avatar_url, class_grade, role, bio, created_at', { count: 'exact' })
-      .eq('school_id', school.school_id)
-      .eq('status', 'active')
-      // Same non-unique `created_at` as the public members list - narrower ties
-      // here (at most 27 within one school) but the same class of bug, and a
-      // tiebreaker costs nothing.
-      .order('created_at', { ascending: false })
-      .order('member_id', { ascending: true })
-      .range(offset, offset + limit - 1)
+    // Masked reader: a profile its owner has hidden is left out of a school's list for signed-out visitors.
+    const { data: rpcRows, error } = await (supabaseCommunity as any).rpc('public_school_members', {
+      p_school_uuid: uuid, p_limit: limit, p_offset: offset,
+    })
+    const data = (rpcRows as any[]) ?? []
+    const count = data.length ? Number(data[0].total) : 0
 
     if (error) throw logSupabaseError('schoolService.getSchoolMembers', error)
 

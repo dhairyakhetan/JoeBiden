@@ -1,3 +1,4 @@
+import { fetchMemberCards } from '../lib/publicMembers'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { getCachedMemberId } from '../lib/authCache'
 import { hasLeaderAccess } from '../lib/roles'
@@ -90,6 +91,20 @@ export interface PeriodState {
 // teams), so the two `members` embeds MUST name their constraint — PostgREST
 // cannot resolve a bare `members(...)` embed when two FKs point at the same
 // table. `teams` has only one FK from this table, so it embeds unambiguously.
+// The two public lists (getCurrentForAllTeams, list) can be read signed out, so they do not embed the photo; it comes from the
+// masked reader instead (hidden profiles return no photo to a signed-out visitor). Signed-in paths keep PICK_COLS.
+const PICK_COLS_PUBLIC = `
+  id, period, citation, created_at, member_id, picked_by, team_id, photo_url, photo_uploaded_at,
+  member:members!member_of_the_month_member_id_fkey(member_id, uuid, full_name),
+  picker:members!member_of_the_month_picked_by_fkey(member_id, full_name),
+  team:teams(team_id, uuid, name, category)
+`
+
+async function withMemberPhotos(rows: any[]): Promise<any[]> {
+  const cards = await fetchMemberCards(rows.map(r => r.member?.uuid))
+  return rows.map(r => (r.member ? { ...r, member: { ...r.member, avatar_url: cards.get(r.member.uuid)?.avatarUrl ?? null } } : r))
+}
+
 const PICK_COLS = `
   id, period, citation, created_at, member_id, picked_by, team_id, photo_url, photo_uploaded_at,
   member:members!member_of_the_month_member_id_fkey(member_id, uuid, full_name, avatar_url),
@@ -205,11 +220,11 @@ const memberOfMonthServiceImpl = {
   async getCurrentForAllTeams(): Promise<MemberOfMonthPick[]> {
     const { data, error } = await db
       .from('member_of_the_month')
-      .select(PICK_COLS)
+      .select(PICK_COLS_PUBLIC)
       .lte('period', currentPeriod())
       .order('period', { ascending: false })
     if (error) throw logSupabaseError('memberOfMonthService.getCurrentForAllTeams', error)
-    return latestPeriodPerTeam((data || []).map(mapPick))
+    return latestPeriodPerTeam((await withMemberPhotos(data || [])).map(mapPick))
   },
 
   /** Every pick a leader is allowed to see, newest month first (desk's "past
@@ -223,13 +238,13 @@ const memberOfMonthServiceImpl = {
   async list(limit = 96): Promise<MemberOfMonthPick[]> {
     const { data, error } = await db
       .from('member_of_the_month')
-      .select(PICK_COLS)
+      .select(PICK_COLS_PUBLIC)
       .order('period', { ascending: false })
       .order('team_id', { ascending: true })
       .order('created_at', { ascending: true })
       .limit(limit)
     if (error) throw logSupabaseError('memberOfMonthService.list', error)
-    return (data || []).map(mapPick)
+    return (await withMemberPhotos(data || [])).map(mapPick)
   },
 
   /**

@@ -42,6 +42,8 @@ export interface MemberProfile {
   postCount?: number
   taggedCount?: number
   schoolId?: number
+  /** True when the owner has hidden their profile from signed-out visitors and the caller is signed out: only the name is real. */
+  hidden?: boolean
   schoolUuid?: string
   schoolName?: string
   classId?: number
@@ -220,36 +222,21 @@ const profileServiceImpl = {
   },
 
   async getPublicProfile(uuid: string) {
-    // Public route (/member/:uuid) — reachable logged-out. Project only the
-    // non-PII columns this mapper actually reads; never `*` (which pulls
-    // email/phone over the anon key). This keeps the read working after
-    // `REVOKE SELECT (email, phone) ON members FROM anon`.
-    //
-    // `class_grade` is revoked from `anon` as well (2026-09-19), so it may only
-    // be NAMED when there is a session. PostgREST rejects the WHOLE query, not
-    // just the offending column, when the caller cannot read one of them — so
-    // naming it unconditionally would 403 the entire public profile rather than
-    // blanking one field. One call backs two routes: `/profile/:uuid` (signed
-    // in) renders the class line, `/member/:uuid` (public) never did.
-    //
-    // `bio` stays readable by anon deliberately. It is written to be read, it
-    // is profanity-filtered on save, it carries no contact detail, and the
-    // public profile both displays it and builds its meta description from it.
+    // Public route (/member/:uuid), reachable logged-out. The core read goes through the masked function get_public_member(): for a
+    // profile its owner has hidden, a signed-out caller gets the name only (photo, bio, class and school come back empty and
+    // `profile_hidden` is true). Never `select *` from members here: email and phone are closed, and the base-table columns for
+    // photo, bio, class and school are being closed to signed-out callers (docs/plans/profile-visibility-toggle.md, step 4).
+    // `linkedin` is readable by signed-in callers only, so it is a separate read that is skipped when signed out.
     const signedIn = (await getCachedMemberId()) != null
-    const cols =
-      'uuid, full_name, avatar_url, bio, role, status, created_at, school_id'
-      + (signedIn ? ', class_grade, linkedin' : '') // both are revoked from anon: naming them logged-out would 403 the whole read
-      + ', schools (school_id, uuid, name, short_name, logo_url)'
-
-    const { data: member, error } = await supabaseCommunity
-      .from('members')
-      .select(cols)
-      .eq('uuid', uuid)
-      .single()
-
+    const { data: rows, error } = await (supabaseCommunity as any).rpc('get_public_member', { p_uuid: uuid })
     if (error) throw logSupabaseError('profileService.getPublicProfile', error)
-    const m = member as any
-    const school = m.schools as any
+    const m = ((rows as any[]) || [])[0]
+    if (!m) throw logSupabaseError('profileService.getPublicProfile', { message: 'member not found', code: 'PGRST116' } as any)
+    if (signedIn) {
+      const { data: li } = await supabaseCommunity.from('members').select('linkedin').eq('uuid', uuid).maybeSingle()
+      m.linkedin = (li as any)?.linkedin ?? null
+    }
+    const school = m.school_uuid ? { uuid: m.school_uuid, name: m.school_name } : null
 
     const profile: MemberProfile = {
       uuid: m.uuid,
@@ -262,6 +249,7 @@ const profileServiceImpl = {
       status: m.status ?? 'active',
       createdAt: m.created_at ?? undefined,
       schoolId: m.school_id ?? undefined,
+      hidden: !!m.profile_hidden,
       schoolUuid: school?.uuid ?? undefined,
       schoolName: school?.name ?? undefined,
       postCount: 0,

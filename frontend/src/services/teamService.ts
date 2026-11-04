@@ -1,3 +1,4 @@
+import { fetchMemberCards } from '../lib/publicMembers'
 import { isNotApprovedError, NOT_APPROVED_YET_MESSAGE } from '../lib/joinGate'
 import openingInterestService from './openingInterestService'
 import { hasLeaderAccess } from '../lib/roles'
@@ -252,7 +253,7 @@ const teamServiceImpl = {
           sub_team,
           is_active,
           joined_at,
-          members(member_id, uuid, full_name, avatar_url, role)
+          members(member_id, uuid, full_name, role)
         ),
         sub_teams(uuid, slug, name, description, display_order, is_active, team_member_sub_teams(count))
       `)
@@ -286,6 +287,8 @@ const teamServiceImpl = {
         .order('name', { ascending: true }),
     ])
 
+    // Photos are not embedded: signed-out visitors read them through the masked function (hidden profiles come back empty).
+    const photoCards = await fetchMemberCards((d.team_members || []).map((tm: any) => tm.members?.uuid))
     const members: TeamMember[] = (d.team_members || [])
       // Belt and braces: an embedded filter is silently ignored if the
       // relationship name ever changes, and the cost of being wrong here is
@@ -295,7 +298,7 @@ const teamServiceImpl = {
         memberId: tm.members.member_id,
         uuid: tm.members.uuid,
         fullName: tm.members.full_name,
-        avatarUrl: tm.members.avatar_url ?? undefined,
+        avatarUrl: photoCards.get(tm.members.uuid)?.avatarUrl,
         role: tm.role as 'member' | 'lead',
         // The member's org-wide role (member/hod/director/hr/super_admin) —
         // distinct from `role` above, which is team_members.role, forced to
@@ -356,18 +359,19 @@ const teamServiceImpl = {
         role,
         sub_team,
         joined_at,
-        members(member_id, uuid, full_name, avatar_url, role)
+        members(member_id, uuid, full_name, role)
       `)
       .eq('team_id', team.team_id)
       .eq('is_active', true)
 
     if (error) throw logSupabaseError('teamService.getTeamMembers', error)
+    const photoCards = await fetchMemberCards((data || []).map((tm: any) => tm.members?.uuid))
 
     const members: TeamMember[] = (data || []).map((tm: any) => ({
       memberId: (tm.members as any).member_id,
       uuid: (tm.members as any).uuid,
       fullName: (tm.members as any).full_name,
-      avatarUrl: (tm.members as any).avatar_url ?? undefined,
+      avatarUrl: photoCards.get((tm.members as any).uuid)?.avatarUrl,
       role: tm.role as 'member' | 'lead',
       orgRole: (tm.members as any).role ?? undefined,
       // Item 5.6 - one more column on a query that was already running.
@@ -437,13 +441,19 @@ const teamServiceImpl = {
       .select(`
         uuid,
         sub_teams(sub_team_id, uuid, is_active),
-        team_members(is_active, members(uuid, full_name, avatar_url), team_member_sub_teams(sub_team_id))
+        team_members(is_active, members(uuid, full_name), team_member_sub_teams(sub_team_id))
       `)
       .eq('is_active', true)
       .eq('team_members.is_active', true)
 
     if (error) throw logSupabaseError('teamService.getChartRoster', error)
-    return groupChartRoster((data || []) as any[])
+    // Photos from the masked reader (the About page org chart is readable signed out).
+    const rows = (data || []) as any[]
+    const chartCards = await fetchMemberCards(rows.flatMap(t => (t.team_members || []).map((tm: any) => tm.members?.uuid)))
+    for (const t of rows) for (const tm of t.team_members || []) {
+      if (tm.members) tm.members = { ...tm.members, avatar_url: chartCards.get(tm.members.uuid)?.avatarUrl ?? null }
+    }
+    return groupChartRoster(rows)
   },
 
   /** Sub-departments for one team, in display order. */
@@ -502,13 +512,14 @@ const teamServiceImpl = {
         sub_teams!inner(uuid),
         team_members!inner(
           role, sub_team, joined_at, is_active,
-          members(member_id, uuid, full_name, avatar_url, role)
+          members(member_id, uuid, full_name, role)
         )
       `)
       .eq('sub_teams.uuid', subTeamUuid)
       .eq('team_members.is_active', true)
 
     if (error) throw logSupabaseError('teamService.getSubTeamMembers', error)
+    const photoCards = await fetchMemberCards((data || []).map((row: any) => row.team_members?.members?.uuid))
 
     return (data || []).map((row: any) => {
       const tm = row.team_members
@@ -516,7 +527,7 @@ const teamServiceImpl = {
         memberId: tm.members.member_id,
         uuid: tm.members.uuid,
         fullName: tm.members.full_name,
-        avatarUrl: tm.members.avatar_url ?? undefined,
+        avatarUrl: photoCards.get(tm.members.uuid)?.avatarUrl,
         role: tm.role as 'member' | 'lead',
         orgRole: tm.members.role ?? undefined,
         subTeam: tm.sub_team ?? null,
@@ -555,13 +566,14 @@ const teamServiceImpl = {
       .select(`
         role,
         teams!inner(uuid),
-        members!inner(uuid, full_name, avatar_url, status)
+        members!inner(uuid, full_name, status)
       `)
       .in('teams.uuid', teamUuids)
       .eq('is_active', true)
       .eq('members.status', 'active')
 
     if (error) throw logSupabaseError('teamService.getRosterPreviews', error)
+    const photoCards = await fetchMemberCards(((data || []) as any[]).map(r => r.members?.uuid))
 
     for (const row of (data || []) as any[]) {
       const key = row.teams?.uuid
@@ -570,7 +582,7 @@ const teamServiceImpl = {
       ;(out[key] ||= []).push({
         uuid: m.uuid,
         fullName: m.full_name || '',
-        avatarUrl: m.avatar_url ?? undefined,
+        avatarUrl: photoCards.get(m.uuid)?.avatarUrl,
         role: row.role === 'lead' ? 'lead' : 'member',
       })
     }
