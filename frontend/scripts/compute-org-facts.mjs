@@ -230,14 +230,8 @@ const JOBS = [
   // Top-level departments only: a department inside another (Marketing holds Social Media) is not
   // counted again. This is the figure the copy means by "N departments".
   ['departmentsActive', 'teams', q => q.eq('is_active', true).is('parent_team_id', null)],
-  // Diagnostic only — see schoolsRepresented handling in main(). This is NOT
-  // a distinct-schools count (PostgREST's `count=exact` counts rows, not
-  // distinct values, and adding a real distinct aggregate would need a DB
-  // view/RPC, which is a schema change this file is not allowed to make). It
-  // exists only to detect the day someone starts populating school_id, so a
-  // future run of this script has a reason to stop treating the fact as
-  // permanently blocked.
-  ['_membersWithSchool', 'members', q => q.eq('status', 'active').not('school_id', 'is', null)],
+  // (The old `_membersWithSchool` diagnostic was removed 4 Nov 2026: it named members.school_id, which the anonymous role is
+  // losing for the profile visibility toggle, and it only ever logged a warning. schoolsRepresented stays null.)
 ]
 
 /** floor-then-format. THE one rounding rule — every call site imports this
@@ -773,16 +767,6 @@ async function main() {
   if (USING_ANON && ((results.membersTotal ?? 0) < 1000 || (results.drivesWrittenUp ?? 0) < 400)) {
     console.warn(`\n⚠ ORG_FACTS not regenerated: the public key counted ${results.membersTotal} members and ${results.drivesWrittenUp} drives, which looks like an undercount. Keeping the committed files.\n`)
     process.exit(0)
-  }
-
-  // schoolsRepresented stays permanently null until the underlying data
-  // exists (see the long comment in JOBS and in the generated file). The
-  // diagnostic _membersWithSchool count is logged so a future run notices the
-  // day this stops being true, but it is deliberately never shipped as the
-  // fact itself (it's "members with A school on file", not "distinct schools").
-  if (results._membersWithSchool > 0) {
-    console.warn(`   ⚠ ${results._membersWithSchool} member(s) now have school_id set (was 0). ` +
-      `schoolsRepresented can be built for real once there's a distinct-count path — still ships as null this run.`)
   }
 
   // The one derived-by-parsing fact (see computeDogMeals' header). Same
