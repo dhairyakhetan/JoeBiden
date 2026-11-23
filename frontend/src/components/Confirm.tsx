@@ -36,6 +36,8 @@ export interface ConfirmOptions {
   cancelLabel?: string
   /** Renders the confirm button in tomato red instead of mint. */
   danger?: boolean
+  /** For a reversible removal (archive): the confirm button is ink, not mint, so green stays for "go ahead" actions. */
+  neutral?: boolean
   /**
    * Two-step confirm, then hold-to-confirm. Applies to exactly three actions
    * in the app: account deletion, delete-a-team, reject-an-application -
@@ -263,8 +265,8 @@ function ConfirmModal({
                   style={{
                     flex: '1 1 auto', minHeight: 44,
                     padding: '0 18px', borderRadius: 999,
-                    background: shown.danger ? 'var(--danger)' : 'var(--welfare)',
-                    color: shown.danger ? '#fff' : '#0A0A0A',
+                    background: shown.danger ? 'var(--danger)' : shown.neutral ? 'var(--ink)' : 'var(--welfare)',
+                    color: shown.danger || shown.neutral ? '#fff' : '#0A0A0A',
                     border: shown.danger
                       ? '2px solid var(--danger)'
                       : '2px solid var(--ink)',
@@ -401,8 +403,8 @@ export function HoldToConfirmButton({
       style={{
         position: 'relative', overflow: 'hidden',
         flex: '1 1 auto', minHeight: 44, padding: '0 18px', borderRadius: 999,
-        background: 'color-mix(in srgb, ' + fill + ' 35%, var(--card))',
-        color: 'var(--ink)', border,
+        background: 'color-mix(in srgb, ' + fill + ' 12%, var(--card))',
+        color: danger ? 'var(--danger)' : 'var(--ink)', border,
         boxShadow: 'var(--shadow-cta)',
         fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14,
         cursor: 'pointer', userSelect: 'none', WebkitTapHighlightColor: 'transparent',
@@ -419,7 +421,7 @@ export function HoldToConfirmButton({
         }}
       />
       <span style={{ position: 'relative', color: danger && holding ? '#fff' : undefined }}>
-        {holding ? 'keep holding…' : label}
+        {holding ? 'keep holding…' : `hold to ${label.toLowerCase()}`}
       </span>
     </button>
   )

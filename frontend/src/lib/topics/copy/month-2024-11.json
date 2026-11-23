@@ -1,0 +1,75 @@
+{
+  "slug": "month-2024-11",
+  "title": "AquaTerra in November 2024: {count} drives, {placesCount} places",
+  "description": "November 2024 at AquaTerra: {count} drives from dog feeding in Bangur and Salt Lake to science workshops and clothes collections across the city.",
+  "h1Lead": "the month that",
+  "h1Accent": "went everywhere",
+  "lede": "In November 2024 AquaTerra ran {count} drives across {placesCount} places. The month mixed science and finance workshops for children, dog feeding in Bangur and Salt Lake, and clothes collections from Sealdah to Alipore Road, and it took {volunteers} volunteer turnouts to run them all.",
+  "sections": [
+    {
+      "id": "science-month",
+      "heading": "science, games and a little acting",
+      "body": [
+        "Science ran through the month. Science Workshop at Lotus Rescue on 11 November and Brain Lab at Lotus Rescue on 27 November let children explore experiments and fun facts through hands-on work. Science in Action at Amader Pradakhep on 29 November taught the wonders of science to children there too.",
+        "The rest of the month was varied. In Character, an acting workshop at Calcutta Rescue Pathshala on 8 November, taught expression, voice and stage skills. Children's Day games at Amader Pradakhep on 13 November kept the mood light, Open Minds on 15 November at Universal Smile covered mental health and self-care, and Finance for All at Shoishob on 22 November used games to teach money basics."
+      ]
+    },
+    {
+      "id": "dogs-in-november",
+      "heading": "dog feeding in bangur and salt lake",
+      "body": [
+        "[Tails and Treats](/impact/tails-and-treats) ran several feeding drives this month. Drive 19.0 was at Bangur on 1 November and Drive 20.0 at Salt Lake on 2 November, one day apart. Drive 21.0 returned to Bangur on 16 November, and that drive notes 55 dogs fed.",
+        "Going back to the same neighbourhood within a month is how a feeding series builds. In October the team had {count:month-2024-10} drives in total, and dog feeding was not among them, so November is where that work picked up."
+      ]
+    },
+    {
+      "id": "clothes-across-the-city",
+      "heading": "clothes collections across the city",
+      "body": [
+        "[Wear and Share](/impact/wear-and-share) collections ran through November, starting with Clothes Collection Drive 12.0 at Sealdah on 16 November and ending with Drive 15.0 at The Reserve on 30 November. In between, Drive 13.0 at Ballygunge on 23 November came together as a community at Himdari Apartment and noted 7 kgs of clothes collected.",
+        "On the same day, Drive 14.0 at Shubham Apartments on Alipore Road noted 10 kgs. The drive at The Reserve, the last of the month, lists 7 packets of clothes collected."
+      ]
+    },
+    {
+      "id": "joining-in",
+      "heading": "where you could start",
+      "body": [
+        "A month like this runs on short sessions and small teams. Science workshops, a clothes collection and a dog feeding drive can all start with a few friends and a place you already know. [Join AquaTerra](/join) to sign up for the next one, or read [how to run a clothes donation drive](/impact/how-to-run-a-clothes-donation-drive) before you plan your own."
+      ]
+    }
+  ],
+  "learnings": [
+    "A repeatable format, such as the science workshop, can travel to several places in one month without changing much.",
+    "Returning to one neighbourhood twice in a month, as the Bangur dog drives did, is an easy way to keep a series going.",
+    "A clothes collection is quick to start, but the sorting afterwards is part of the same job, so plan for it."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in November 2024?",
+      "a": "AquaTerra ran {count} drives across {placesCount} places in November 2024, with {volunteers} volunteer turnouts. They included science and finance workshops for children, dog feeding drives in Bangur and Salt Lake, and several Wear and Share clothes collections."
+    },
+    {
+      "q": "Where did AquaTerra feed stray dogs in November 2024?",
+      "a": "Tails and Treats fed stray dogs at Bangur on 1 and 16 November 2024 and at Salt Lake on 2 November. The 16 November drive at Bangur notes 55 dogs fed."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. Wear and Share runs clothes collection drives across Kolkata, and in November 2024 they were held at Sealdah, Ballygunge, Alipore Road and The Reserve. Donated clothes are sorted by type and condition before they are given out."
+    },
+    {
+      "q": "What science workshops did AquaTerra run for children in November 2024?",
+      "a": "AquaTerra ran a Science Workshop at Lotus Rescue on 11 November, Brain Lab at Lotus Rescue on 27 November and Science in Action at Amader Pradakhep on 29 November. Students explored experiments through hands-on learning."
+    },
+    {
+      "q": "Can I join an AquaTerra drive in Kolkata?",
+      "a": "Yes, if you are between 14 and 19. Join AquaTerra with Google sign-in, wait for approval, and sign up for a team. Every drive is written up on the site, so you can see what the work involved."
+    }
+  ],
+  "keywords": [
+    "AquaTerra November 2024",
+    "science workshop for children Kolkata",
+    "stray dog feeding Bangur",
+    "clothes collection Kolkata November",
+    "volunteer drives Kolkata 2024"
+  ]
+}

@@ -34,7 +34,7 @@ function FlowRow({ id, name, steps, durationLabel, status, hue }: (typeof FLOW_L
 
 /**
  * The launcher, `/demo` (19.3). An ink card, three flows shown, the rest
- * behind "all 11 walkthroughs" - eleven rows on a phone is a list, three is
+ * behind "all N walkthroughs" - a long list on a phone is a list, three is
  * an invitation. A real logged-in member landing here is let through
  * unchanged (19's own States list) - the flow they pick still runs under a
  * fully shadowed session regardless of who they actually are.
@@ -64,7 +64,7 @@ export default function DemoLauncherPage() {
           {visible.map(f => <FlowRow key={f.id} {...f} />)}
           {!showAll && (
             <button type="button" className="demo-flow-more" onClick={() => setShowAll(true)}>
-              all 11 walkthroughs
+              all {FLOW_LISTINGS.length} walkthroughs
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden="true">
                 <path d="M6 9l6 6 6-6" />
               </svg>

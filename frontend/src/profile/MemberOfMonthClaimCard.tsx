@@ -257,7 +257,11 @@ export default function MemberOfMonthClaimCard({ memberId }: { memberId: number 
                           border: '2px dashed var(--line)', background: 'var(--bg-2)',
                           display: 'grid', placeItems: 'center', overflow: 'hidden', cursor: busy ? 'default' : 'pointer',
                         }}
+                        role="button"
+                        tabIndex={busy ? -1 : 0}
+                        aria-label="Choose a photo"
                         onClick={() => !busy && fileInputRef.current?.click()}
+                        onKeyDown={e => { if (!busy && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); fileInputRef.current?.click() } }}
                       >
                         {previewUrl ? (
                           <Img src={previewUrl} alt="Selected photo preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

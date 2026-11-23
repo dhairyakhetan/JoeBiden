@@ -12,7 +12,7 @@ import teamService, { Team, TeamMember, SubTeam } from '../services/teamService'
 import { useAuth } from '../auth/AuthContext'
 import { useDebounce } from '../hooks/useDebounce'
 import { feedService as feedServiceForSearch } from '../services/feedService'
-import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
+import { hasLeaderAccess } from '../lib/roles'
 import { jobOpenings, CAT_COLORS } from '../lib/jobOpenings'
 import { useToast } from '../components/Toast'
 import { useIsMobile } from '../hooks/useMobile'
@@ -254,7 +254,7 @@ const CreatePostModal = ({ isOpen, onClose, onPostCreated, editPost = null }: Cr
   const isDirector = hasLeaderAccess(member?.role)
   const [shake, setShake] = useState(false)
 
-  // ── Post as the AquaTerra org account (super_admin only) ────────────────
+  // ── Post as the AquaTerra org account (any HoD / director / super_admin / hr) ────────────────
   // A super_admin (or hr — isSuperAdmin() covers both, see lib/roles.ts) can
   // switch the composer's author identity to the canonical AquaTerra org
   // account (members.email = 'official@ngoaquaterra.com') instead of posting
@@ -273,7 +273,7 @@ const CreatePostModal = ({ isOpen, onClose, onPostCreated, editPost = null }: Cr
   // does not touch), and blog/job-opening posts go through their own
   // services too. Widening "post as org" to those would mean auditing each
   // of those paths' own RLS separately — out of scope here.
-  const canPostAsOrg = isSuperAdmin(member?.role) && !isEditing && !selectedTeamUuid && !isJobOpening && !isBlogPost
+  const canPostAsOrg = hasLeaderAccess(member?.role) && !isEditing && !selectedTeamUuid && !isJobOpening && !isBlogPost
   const [postAsOrg, setPostAsOrg] = useState(false)
   // If the composer moves into a mode "post as org" doesn't cover (a team is
   // picked, or the mode switches to blog/opening), silently keeping the

@@ -1,0 +1,86 @@
+{
+  "slug": "sharbat-seva",
+  "title": "Sharbat Seva: summer drinks for Kolkata · AquaTerra",
+  "description": "Sharbat Seva is AquaTerra's summer drive serving chilled sharbat in Kolkata. {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts.",
+  "h1Lead": "cold sharbat for",
+  "h1Accent": "the summer heat",
+  "lede": "Sharbat Seva is AquaTerra's summer drive, in which students serve chilled sharbat to passers by, devotees and locals in Kolkata. Since {firstYear} we have run {count} of these drives, with {volunteers} volunteer turnouts, in two spells: May 2024, and late March to early May 2025.",
+  "sections": [
+    {
+      "id": "what-a-drive-serves",
+      "heading": "what a drive serves",
+      "body": [
+        "A Sharbat Seva drive serves chilled sharbat to whoever is passing. The drinks come in many forms: red and green sharbat, rose and mint, herbal, citrus, fruit-infused and layered. Volunteers serve them at public spots and at temples, and the point is simple: relief from the heat, and a bit of warmth for the people who stop.",
+        "Every drive reports the same amount, 20 litres of Rooh Afza. Because the figure never changes, it reads as the team's stated amount for each drive rather than a measured total. AquaTerra does not add the drives up on this page, so treat each figure as a note on that day."
+      ]
+    },
+    {
+      "id": "the-2024-run",
+      "heading": "the 2024 run",
+      "body": [
+        "The series began on 10 May 2024 outside the Elite Cinema building on Esplanade. Most of the 2024 drives fall on 24 and 26 May. On 24 May 2024 the team served sharbat at a long run of places across Kolkata, including Ballygunge, Hazra, Beniatola, Kankurgachi, Phool Bagan and Bangur, more places than on any other day of the series.",
+        "On 26 May 2024 drives ran at Bidhannagar, Bagmari Market, Ballygunge, JD Birla Institute and the swimming pool area in Salt Lake. That was the end of the 2024 run, and the next sharbat drives came in late March 2025."
+      ]
+    },
+    {
+      "id": "the-2025-run",
+      "heading": "the 2025 run",
+      "body": [
+        "The 2025 run opened on 26 March and closed on 3 May, with most of its drives on 26, 27 and 28 March. On 28 March 2025 the team served at New Alipore, Howrah, Sarat Bose Road, Shiv Temple in Salt Lake and Babylon Lounge. The Howrah drive had the biggest team of the series.",
+        "After 28 March the run slows to smaller days in April and early May. These include apartment complexes such as Pritam Apartment and Balaji Apartment, as well as Dakhinashwar, Kakurgachi and Teghoria. The last drive of the series was at Teghoria on 3 May 2025."
+      ]
+    },
+    {
+      "id": "where-the-drives-were",
+      "heading": "where the drives were",
+      "body": [
+        "Sharbat Seva has taken place at {placesCount} different places, and most of them were visited only once. The series moved from site to site, with few places repeated. The main exception is Sarat Bose Road, which hosted drives on 27 and 28 March 2025 and again in 2024 at Hazra. Shiv Temple in Salt Lake also came back, on 26 and 28 March 2025.",
+        "Temples and public spots recur through the series. Bhootnath Mandir in Beniatola, Bangur Shani-Kali Mandir and the Shiv Temple in Salt Lake are all places where devotees and locals were served, and that is a big part of why the drive feels like a public gift rather than a single event."
+      ]
+    },
+    {
+      "id": "how-to-join",
+      "heading": "how to join",
+      "body": [
+        "Members join Sharbat Seva drives the usual way: sign in with Google, wait for approval, and read the [join page](/join). The same weeks of 2025 also carried [Food for All: food distribution](/impact/food-for-all) drives, which ran at several of the same places, including Sarat Bose Road and Shiv Temple in Salt Lake.",
+        "For the wider seasonal picture, the [seasonal drives](/impact/summer-and-seasonal-drives) page covers the other summer work: children's workshops at Pather Sathi in May 2025, and the 2023 drives, Our Earth at Pather Sathi and the Origami Days summer camp at Gyandeepak. Sharbat Seva is about serving drinks in public, while those are about teaching, so the two are easy to tell apart."
+      ]
+    }
+  ],
+  "learnings": [
+    "Every drive reports the same 20 litres of Rooh Afza, so read it as a stated amount per drive rather than a total.",
+    "Most drives fall on 24 and 26 May 2024, and on a run of days from 26 to 28 March 2025.",
+    "The drives moved around the city, with {placesCount} different places across both spells.",
+    "Temples and public spots feature in both runs, and Sarat Bose Road appears in both."
+  ],
+  "faqs": [
+    {
+      "q": "What is Sharbat Seva?",
+      "a": "Sharbat Seva is AquaTerra's summer drive, in which students serve chilled sharbat to passers by, devotees and locals in Kolkata. AquaTerra has run {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "When did Sharbat Seva run?",
+      "a": "Sharbat Seva ran in two spells. In May 2024 AquaTerra ran {year:2024} drives, most of them on 24 and 26 May. It ran again from 26 March to 3 May 2025, with most of its drives on 26, 27 and 28 March."
+    },
+    {
+      "q": "Where did AquaTerra serve sharbat in Kolkata?",
+      "a": "Sharbat Seva has been served at {placesCount} different places, including Esplanade, Ballygunge, Hazra, Kankurgachi, Salt Lake and Howrah. Sarat Bose Road appears in both the 2024 and 2025 spells."
+    },
+    {
+      "q": "How much sharbat did AquaTerra distribute?",
+      "a": "Each drive reports 20 litres of Rooh Afza distributed. AquaTerra does not give a combined total for the series on this page, so the amounts are not added up here."
+    },
+    {
+      "q": "Can I join a summer sharbat drive?",
+      "a": "Yes, if you are a member aged 14 to 19. Sign in with Google and wait for approval. Each drive is written up on the site, so you can see what it involved before you come along."
+    }
+  ],
+  "keywords": [
+    "Sharbat Seva Kolkata",
+    "summer sharbat distribution Kolkata",
+    "AquaTerra summer drive",
+    "Rooh Afza sharbat Kolkata volunteers",
+    "summer drinks drive Kolkata students",
+    "sharbat drive Salt Lake Kolkata"
+  ]
+}

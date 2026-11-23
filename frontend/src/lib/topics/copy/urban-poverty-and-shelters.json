@@ -1,0 +1,84 @@
+{
+  "slug": "urban-poverty-and-shelters",
+  "title": "Shelters, Ashrams and the Homeless in Kolkata · AquaTerra",
+  "description": "AquaTerra's {count} drives at shelters, ashrams and a footbridge, {firstYear} to {lastYear}: food, sharbat, smile notes, dance, stories, women's sessions and elders' visits.",
+  "h1Lead": "going to the",
+  "h1Accent": "shelters",
+  "lede": "AquaTerra has run {count} drives at shelters, ashrams, a footbridge and an old age home in Kolkata between {firstYear} and {lastYear}. They fall into three kinds: food, drink and sweets handed out at Lake Town Footbridge, workshops and festivals for children and women at the ashrams, and the Respect and Reach visits to elders. Together they drew {volunteers} volunteer turnouts.",
+  "sections": [
+    {
+      "id": "the-footbridge",
+      "heading": "the Lake Town footbridge",
+      "body": [
+        "Lake Town Footbridge hosted five drives. Food For All 9.0 on 29 March 2025 and Food For All 11.0 on 13 April 2025 each recorded 600 bananas donated. Sharbat Seva 19.0 on 27 March 2025 shared 20L of Rooh Afza, with six volunteers on the day.",
+        "Smile Notes, a campaign of affirmation notes handed out with a toffee, came to the footbridge on 10 May and again on 15 May 2026. On 10 May, 100 notes and 100 toffees were given to passers by, with a toffee handed out alongside each note."
+      ]
+    },
+    {
+      "id": "the-ashrams",
+      "heading": "children and women at the ashrams",
+      "body": [
+        "Tetultala Ashram hosted five of these drives, and they include dance, drawing, a women's session and celebrations: Draw Duel, a drawing competition, on 3 May 2024, Secret Cheer on 17 December 2024, where children made wrapping paper for a secret Santa game, Power Within, a women's empowerment workshop on 22 January 2025, Groove Time, a dance workshop on 9 May 2025, and a Children's Day fete on 14 November 2025.",
+        "Two earlier drives were held at other ashrams. Step to Sound, a singing and dancing workshop, came to Telltula Ashram on 8 June 2023, and Move and Groove, a dance workshop on 6 June 2023, was held at the Sree Sree Gauranga Gaudiya Mission Sevashram."
+      ]
+    },
+    {
+      "id": "respect-and-reach",
+      "heading": "respect and reach: visits to elders",
+      "body": [
+        "Respect and Reach visits were held at Urban Shelter for the Homeless, with the aim of an old age home visit. The series starts at drive 1.0 on 28 April 2023 and runs through drive 7.0 on 8 May 2024. Most visits supported about twenty elderly residents, and drive 3.0 on 19 May 2023 looked after thirty elders.",
+        "The series did not stop there. Drive 8.0 on 11 September 2025 was held at All Bengal Women's Union, where the team again supported seniors through small acts of kindness. For the full run, see [Respect and Reach](/impact/respect-and-reach)."
+      ]
+    },
+    {
+      "id": "the-seasonal-rhythm",
+      "heading": "when the drives happened",
+      "body": [
+        "May has more drives than any other month, and most of them are Respect and Reach visits, Smile Notes sessions or ashram workshops. Friday is the most common day of the week, with ten drives. The 2023 Respect and Reach visits ran from late April into early June, so that series covered about five weeks that year."
+      ]
+    },
+    {
+      "id": "volunteers-and-numbers",
+      "heading": "volunteer turnouts",
+      "body": [
+        "The {count} drives recorded {volunteers} volunteer turnouts in total. That total adds up each drive's volunteers, so a student who came to several drives is counted for each one. The largest turnout was nine, at Secret Cheer on 17 December 2024 at Tetultala Ashram, and the smallest were two, at Move and Groove on 6 June 2023 and Power Within on 22 January 2025."
+      ]
+    }
+  ],
+  "learnings": [
+    "Shelter and ashram work here is mostly children's activities and visits to elders, not one-off food handouts.",
+    "Lake Town Footbridge is where food, drink and sweets were handed out, in spring 2025 and again in May 2026.",
+    "Respect and Reach was one of the longest threads, from drive 1.0 in April 2023 to drive 7.0 in May 2024 and on to drive 8.0 in September 2025.",
+    "Drives at the ashrams tend to be workshops for children and women, with celebrations such as the Children's Day fete and Secret Cheer."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra work with homeless people in Kolkata?",
+      "a": "Yes. AquaTerra has run {count} drives at shelters, ashrams and a footbridge in Kolkata since {firstYear}. They include food and drink distributions at Lake Town Footbridge and workshops at Tetultala Ashram."
+    },
+    {
+      "q": "What did AquaTerra do at Lake Town Footbridge?",
+      "a": "AquaTerra held five drives at Lake Town Footbridge. Two Food For All distributions in spring 2025 each recorded 600 bananas donated, a Sharbat Seva drive on 27 March 2025 shared 20L of Rooh Afza, and two Smile Notes sessions in May 2026 handed out notes with affirmations and toffees."
+    },
+    {
+      "q": "What is Respect and Reach?",
+      "a": "Respect and Reach is AquaTerra's series of visits to elders, numbered by drive. The first ran on 28 April 2023, the drives on this page run through drive 7.0 on 8 May 2024, and drive 8.0 followed in September 2025, with support and kind actions for elderly residents."
+    },
+    {
+      "q": "Where can volunteers take part in ashram workshops in Kolkata?",
+      "a": "AquaTerra's recent ashram drives were at Tetultala Ashram, including a dance session, Groove Time, on 9 May 2025, and a Children's Day fete on 14 November 2025. Members join with Google sign-in and an approval, and then take part in drives like these."
+    },
+    {
+      "q": "How many volunteers did AquaTerra send to shelter and ashram drives?",
+      "a": "Across {count} drives at shelters, ashrams and the footbridge, AquaTerra has recorded {volunteers} volunteer turnouts. A volunteer who went to several drives is counted once for each drive."
+    }
+  ],
+  "keywords": [
+    "AquaTerra homeless shelter Kolkata",
+    "ashram visits Kolkata students",
+    "Lake Town footbridge food distribution",
+    "Respect and Reach old age visits Kolkata",
+    "Tetultala Ashram Kolkata",
+    "Smile Notes campaign Kolkata"
+  ]
+}

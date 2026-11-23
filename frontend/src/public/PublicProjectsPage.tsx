@@ -17,6 +17,7 @@ import { useDepartmentCount } from '../hooks/useDepartmentCount'
 import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
 import Skeleton from '../components/Skeleton'
+import WelfareSpotlight from './WelfareSpotlight'
 import { useToast } from '../components/Toast'
 import { isOfficialAccount, VerifiedTick } from '../components/v6Shared'
 import useDebounce from '../hooks/useDebounce'
@@ -73,6 +74,40 @@ const CATEGORIES: { key: Category; label: string }[] = [
   { key: 'operations', label: 'Operations' },
   { key: 'labs', label: 'Labs' },
 ]
+
+type SortKey = 'newest' | 'oldest'
+type KindKey = 'all' | 'drive' | 'story' | 'article'
+type RangeKey = 'all' | '30d' | '90d' | 'since-jul' | 'year' | 'custom'
+const KINDS: { key: KindKey; label: string }[] = [
+  { key: 'all', label: 'all types' },
+  { key: 'drive', label: 'drives & workshops' },
+  { key: 'story', label: 'member stories' },
+  { key: 'article', label: 'articles' },
+]
+const RANGES: { key: RangeKey; label: string }[] = [
+  { key: 'all', label: 'any time' },
+  { key: '30d', label: 'last 30 days' },
+  { key: '90d', label: 'last 3 months' },
+  { key: 'since-jul', label: 'since July' },
+  { key: 'year', label: 'this year' },
+  { key: 'custom', label: 'pick dates' },
+]
+/** ISO bounds for a date preset; `to` is exclusive. Computed once per selection, not per render. */
+function resolveRange(range: RangeKey, customFrom: string, customTo: string): { from?: string; to?: string } {
+  const now = new Date()
+  const daysAgo = (n: number) => new Date(now.getTime() - n * 86400000).toISOString()
+  if (range === '30d') return { from: daysAgo(30) }
+  if (range === '90d') return { from: daysAgo(90) }
+  if (range === 'since-jul') return { from: new Date(Date.UTC(now.getUTCFullYear(), 6, 1)).toISOString() }
+  if (range === 'year') return { from: new Date(Date.UTC(now.getUTCFullYear(), 0, 1)).toISOString() }
+  if (range === 'custom') {
+    const out: { from?: string; to?: string } = {}
+    if (customFrom) out.from = new Date(customFrom + 'T00:00:00').toISOString()
+    if (customTo) out.to = new Date(new Date(customTo + 'T00:00:00').getTime() + 86400000).toISOString()
+    return out
+  }
+  return {}
+}
 
 const PAGE_SIZE = 24
 
@@ -495,6 +530,14 @@ export default function PublicProjectsPage() {
   // numbers" in the sticky rail. `.not('source_stat','is',null)` on the
   // already-selected column above; no new query, no new fetch.
   const [statOnly, setStatOnly] = useState(false)
+  // Refine bar: real sort, post type and date window (replaces the old
+  // decorative "newest" pill). All server-side so pagination stays correct.
+  const [sort, setSort] = useState<SortKey>('newest')
+  const [kind, setKind] = useState<KindKey>('all')
+  const [range, setRange] = useState<RangeKey>('all')
+  const [customFrom, setCustomFrom] = useState('')
+  const [customTo, setCustomTo] = useState('')
+  const dateWindow = useMemo(() => resolveRange(range, customFrom, customTo), [range, customFrom, customTo])
 
   // The featured bento's "see all drives" used to set the category filter
   // and nothing else - the stream it filtered is well off-screen from the
@@ -607,10 +650,15 @@ export default function PublicProjectsPage() {
       // dropped every member-authored post (16 live, 5 of them welfare). The
       // explicit `is.null` arm keeps them; same form as searchService.ts.
       .or('source_type.is.null,source_type.neq.job_opening')
-      .order('created_at', { ascending: false })
-      .order('post_id', { ascending: false })
+      .order('created_at', { ascending: sort === 'oldest' })
+      .order('post_id', { ascending: sort === 'oldest' })
       .range(from, to)
     if (category !== 'all') query = query.eq('category', category)
+    if (kind === 'drive') query = query.eq('source_type' as any, 'welfare_project')
+    else if (kind === 'article') query = query.eq('source_type' as any, 'blog')
+    else if (kind === 'story') query = query.is('source_type' as any, null)
+    if (dateWindow.from) query = query.gte('created_at', dateWindow.from)
+    if (dateWindow.to) query = query.lt('created_at', dateWindow.to)
     // "with a statistic" shortcut (10.1) - ANDs with category, doesn't replace it.
     if (statOnly) query = query.not('source_stat' as any, 'is', null)
 
@@ -622,7 +670,7 @@ export default function PublicProjectsPage() {
     setRows(prev => replace ? newRows : [...prev, ...newRows])
     if (pageIndex === 0 && count != null) setTotalCount(count)
     setHasMore(newRows.length === PAGE_SIZE)
-  }, [category, statOnly])
+  }, [category, statOnly, sort, kind, dateWindow])
 
   // Search mode: delegate to searchService (Phase 11's fixed, deduped posts
   // search) instead of a bespoke ilike query - this is exactly what "search
@@ -710,10 +758,10 @@ export default function PublicProjectsPage() {
     observerInstanceRef.current.observe(node)
   }, [])
 
-  const cards = useMemo(() => rows.map((r, i) => toCard(r, (totalCount || rows.length) - i)), [rows, totalCount])
+  const cards = useMemo(() => rows.map((r, i) => toCard(r, sort === 'oldest' ? i + 1 : (totalCount || rows.length) - i)), [rows, totalCount, sort])
   const featuredCards = useMemo(() => featuredRows.map((r, i) => toCard(r, i)), [featuredRows])
-  const activeFilterCount = (category !== 'all' ? 1 : 0) + (isSearching ? 1 : 0) + (statOnly ? 1 : 0)
-  const clearAllFilters = useCallback(() => { setCategory('all'); setSearch(''); setStatOnly(false) }, [])
+  const activeFilterCount = (category !== 'all' ? 1 : 0) + (isSearching ? 1 : 0) + (statOnly ? 1 : 0) + (kind !== 'all' ? 1 : 0) + (range !== 'all' ? 1 : 0) + (sort !== 'newest' ? 1 : 0)
+  const clearAllFilters = useCallback(() => { setCategory('all'); setSearch(''); setStatOnly(false); setKind('all'); setRange('all'); setCustomFrom(''); setCustomTo(''); setSort('newest') }, [])
 
   // Toolbar's contributor cluster (10.1): real, non-fabricated initials
   // avatars from the distinct authors actually present on the current page
@@ -823,6 +871,14 @@ export default function PublicProjectsPage() {
         />
       )}
 
+      {!isSearching && category === 'all' && (
+        <WelfareSpotlight onSeeAll={() => {
+          setCategory('welfare')
+          const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          requestAnimationFrame(() => { streamRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }) })
+        }} />
+      )}
+
       {/* ── THE ARCHIVE (10-projects.md) ──────────────────────────────── */}
       <section ref={streamRef} className="archive-stick" style={{ padding: 'clamp(28px, 4vw, 44px) 0 clamp(48px, 6vw, 72px)', scrollMarginTop: 'calc(var(--nav-h) + 16px)' }}>
         <div className="container">
@@ -882,10 +938,43 @@ export default function PublicProjectsPage() {
                 </div>
               </div>
 
+              {!isSearching && (
+                <div className="arch-refine" role="group" aria-label="Refine by post type and date">
+                  <div className="arch-refine-row">
+                    <span className="arch-refine-label">type</span>
+                    {KINDS.map(k => (
+                      <button key={k.key} type="button" aria-pressed={kind === k.key}
+                        className={'chip' + (kind === k.key ? ' chip-active' : '')} onClick={() => setKind(k.key)}>
+                        {k.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="arch-refine-row">
+                    <span className="arch-refine-label">when</span>
+                    {RANGES.map(r => (
+                      <button key={r.key} type="button" aria-pressed={range === r.key}
+                        className={'chip' + (range === r.key ? ' chip-active' : '')} onClick={() => setRange(r.key)}>
+                        {r.label}
+                      </button>
+                    ))}
+                    {range === 'custom' && (
+                      <span className="arch-refine-dates">
+                        <input type="date" value={customFrom} max={customTo || undefined} onChange={e => setCustomFrom(e.target.value)} aria-label="From date" />
+                        <span aria-hidden>to</span>
+                        <input type="date" value={customTo} min={customFrom || undefined} onChange={e => setCustomTo(e.target.value)} aria-label="To date" />
+                      </span>
+                    )}
+                    {activeFilterCount > 0 && (
+                      <button type="button" className="arch-refine-clear" onClick={clearAllFilters}>clear all</button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Toolbar: title · count pill · contributor cluster · sort pill */}
               <div className="arch-toolbar">
                 <span className="arch-toolbar-title">
-                  {isSearching ? 'Search results' : statOnly ? 'The ones with numbers' : category === 'all' ? 'Everything, newest first' : `${CATEGORIES.find(c => c.key === category)?.label}, newest first`}
+                  {isSearching ? 'Search results' : statOnly ? 'The ones with numbers' : category === 'all' ? `Everything, ${sort} first` : `${CATEGORIES.find(c => c.key === category)?.label}, ${sort} first`}
                 </span>
                 <span className="arch-count-pill">{loading ? '…' : totalCount.toLocaleString()}</span>
                 <span className="arch-toolbar-spacer" />
@@ -899,10 +988,13 @@ export default function PublicProjectsPage() {
                     )}
                   </div>
                 )}
-                <span className="arch-sort-pill">
-                  newest
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth="3.4" strokeLinecap="round" aria-hidden><path d="M6 9l6 6 6-6" /></svg>
-                </span>
+                <label className="arch-sort-pill arch-sort-pill--select">
+                  <span className="sr-only">Sort order</span>
+                  <select value={sort} onChange={e => setSort(e.target.value as SortKey)} aria-label="Sort order">
+                    <option value="newest">newest first</option>
+                    <option value="oldest">oldest first</option>
+                  </select>
+                </label>
                 <button type="button" className="arch-search-skip" onClick={jumpToSearch} aria-label="Jump to search" title="Jump to search">
                   <MagnifyingGlassIcon width={16} height={16} strokeWidth={2.2} aria-hidden />
                 </button>

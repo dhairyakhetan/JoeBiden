@@ -529,7 +529,7 @@ function NoticeBoardEditModal({ notices, onSave, onClose }: {
                         style={{ ...inputSt, padding: '6px 8px', fontFamily: 'var(--display)', fontWeight: 700, fontSize: 13 }}
                         value={item.title}
                         onChange={e => setDraft(prev => prev.map(n => n.id === item.id ? { ...n, title: e.target.value } : n))}
-                        placeholder="Custom title…"
+                        aria-label="Custom title" placeholder="Custom title…"
                         maxLength={80}
                       />
                       <div style={{ fontFamily: 'var(--eina)', fontSize: 11, color: 'var(--ink-3)', marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -562,7 +562,7 @@ function NoticeBoardEditModal({ notices, onSave, onClose }: {
                   style={inputSt}
                   value={searchQ}
                   onChange={e => handleSearch(e.target.value)}
-                  placeholder="search by keyword or author…"
+                  aria-label="Search by keyword or author" placeholder="search by keyword or author…"
                 />
                 {searching && (
                   <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-3)' }}>…</span>
@@ -616,6 +616,7 @@ function NoticeBoardEditModal({ notices, onSave, onClose }: {
               </div>
               <input
                 style={{ ...inputSt, marginBottom: 10 }}
+                aria-label="Notice title"
                 value={addingTitle.title}
                 onChange={e => setAddingTitle(prev => prev ? { ...prev, title: e.target.value } : null)}
                 placeholder="e.g. Sundarbans relief recap"

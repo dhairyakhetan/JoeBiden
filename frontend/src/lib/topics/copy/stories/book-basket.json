@@ -1,0 +1,18 @@
+{
+  "slug": "book-basket",
+  "title": "Book Basket in Pictures: Collecting Books for Kids in Kolkata · AquaTerra",
+  "description": "Photos from {count} Book Basket drives in Kolkata, where students gather old books from buildings and housing complexes for underprivileged kids.",
+  "h1Lead": "old books,",
+  "h1Accent": "new stories",
+  "lede": "Book Basket is AquaTerra's book collection series. Students gather old books from buildings, housing complexes and neighbourhoods across Kolkata, and set them aside for underprivileged kids. Since {firstYear} we have run {count} drives, with {volunteers} volunteer turnouts, across {placesCount} places.",
+  "chapters": {
+    "2022": { "heading": "where it started", "text": "In 2022 we ran {year:2022} drive, on 20 March, in Kolkata. It is the start of the series, and its caption describes volunteers gathering books to fill shelves and minds with stories. Nothing else is listed until June 2025, so the summer run that follows is where most of the series happened." },
+    "2025": { "heading": "a summer of collections", "text": "In 2025 we ran {year:2025} drives, from 7 June to 8 July. The photos come from places as different as Ashoka Building, Dreamland Housing, South City Residency, Bidhanagar Tank and Beleghata. Most captions say the same thing: books were collected for underprivileged kids with help from dedicated volunteers." }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every drive with its place and details, read [the full story](/impact/book-basket).",
+  "faqs": [
+    { "q": "How can I give old books to AquaTerra's Book Basket?", "a": "Book Basket is a collection series: AquaTerra students gather old books from buildings, housing complexes and neighbourhoods, then pass them on to underprivileged kids. To ask about giving books to a future drive, contact AquaTerra through its contact page." },
+    { "q": "Does AquaTerra collect books in Kolkata?", "a": "Yes. Book Basket has run {count} drives across Kolkata since {firstYear}, with stops at places such as Ashoka Building, Saltlake, Bidhanagar Tank and Beleghata." },
+    { "q": "What did AquaTerra do with the books it collected?", "a": "AquaTerra passed the collected books on to underprivileged kids. The 2025 photo captions describe books gathered for underprivileged kids with help from dedicated volunteers, and the series has run {count} drives in total." }
+  ]
+}

@@ -60,3 +60,28 @@
    viewport there was no keyboard route to the right-hand columns), so they need
    a visible focus indicator of their own. */
 .pp-scroll:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+
+
+/* ── Page layout (restored 5 Nov 2026) ───────────────────────────────────────
+   This page was written against the first version of the shared policy-document stylesheet (EquityPolicyPage.css). That sheet was
+   later rebuilt around new class names (ep-masthead, ep-h1, ep-slab...) and the old layout classes this page still uses (ep-hero,
+   ep-title, ep-body, ep-section, ep-runhead) lost their rules, so the page rendered flush to the left edge with no gutter and the
+   sticker on top of the heading. The page now sits in the same `ep-page` / `container ep-shell` frame as the equity policy, and
+   these rules give its old class names the same look as the new ones. */
+.ep-page .ep-hero {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 4px 2px clamp(10px, 2vw, 18px);
+}
+.ep-page .ep-hero .sticker { align-self: flex-start; }
+.ep-page .ep-title {
+  margin: 0; font-family: var(--eina); font-weight: 800; text-transform: none;
+  font-size: clamp(38px, 9vw, 60px); line-height: 0.94; letter-spacing: -0.04em; color: var(--ink);
+}
+.ep-page .ep-title-serif { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--welfare-ink); }
+.ep-page .ep-body { display: flex; flex-direction: column; gap: 10px; }
+.ep-page .ep-section { margin-top: 26px; }
+.ep-page .ep-section:first-of-type { margin-top: 8px; }
+.ep-page .ep-runhead {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: var(--ls-caps);
+  text-transform: uppercase; color: var(--ink-3);
+}

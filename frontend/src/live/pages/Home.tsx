@@ -13,7 +13,8 @@ import { PhotoArc } from '../components/PhotoArc'
 import { StarField } from '../components/StarField'
 import { EventRow } from '../components/EventRow'
 import { ContactLine, ticketHref } from '../components/ContactLine'
-import { useScrollReveal } from '../lib/hooks'
+import { PastNight } from '../components/PastNight'
+import { useEventPhase, useScrollReveal } from '../lib/hooks'
 import '../disco.css'
 
 export function LiveHome() {
@@ -30,7 +31,9 @@ export function LiveHome() {
     io.observe(el)
     return () => io.disconnect()
   }, [])
-  const cta = ticketHref()
+  const phase = useEventPhase(NEXT_EVENT.date)
+  const isPast = phase === 'past'
+  const cta = isPast ? null : ticketHref()
 
   return (
     <main id="lv-main" ref={rootRef} className="lv-main dd">
@@ -46,7 +49,14 @@ export function LiveHome() {
           ))}
         </h1>
         <p className="dd-hero-lede">Every fundraising night AquaTerra throws, in one place.</p>
-        <p className="dd-hero-when"><span>{NEXT_EVENT.dateShort} · {NEXT_EVENT.venueShort}</span>{DISCO.time && <span className="dd-when-t">{DISCO.time}</span>}</p>
+        {/* once the night is over the hero stops promoting it: the date line goes and the buttons point at the Vault and the list */}
+        {!isPast && <p className="dd-hero-when"><span>{NEXT_EVENT.dateShort} · {NEXT_EVENT.venueShort}</span>{DISCO.time && <span className="dd-when-t">{DISCO.time}</span>}</p>}
+        {isPast ? (
+          <div className="lv-actions dd-hero-actions">
+            <Link className="lv-btn lv-btn-gold lv-btn-lg" to={`${LIVE.base}/vault`}>Open the Vault</Link>
+            <Link className="lv-btn lv-btn-ink lv-btn-lg" to={`${LIVE.base}/events`}>All the nights</Link>
+          </div>
+        ) : (
         <div className="lv-actions dd-hero-actions">
           {cta
             ? <a className="lv-btn lv-btn-gold lv-btn-lg" href={cta} target="_blank" rel="noopener noreferrer">{BOOK_LABEL}</a>
@@ -54,24 +64,29 @@ export function LiveHome() {
           {cta && <Link className="lv-btn lv-btn-ink lv-btn-lg" to={DISCO.base}>See what&apos;s next</Link>}
           <Link className="lv-link" to={`${LIVE.base}/events`}>All the nights</Link>
         </div>
+        )}
         <div className="dd-arc"><PhotoArc /></div>
       </section>
 
       <Marquee ticker items={['TerraThon', 'Starry Night', 'Disco Diwali', 'Paradox', 'Party with a purpose', 'Every night leaves a mark']} />
 
-      {/* the next night, on black with the stars out */}
+      {/* the next night, on black with the stars out; once it is over, the thank-you in its place */}
       <section id="lv-next" className="lv-band lv-tone-night dd-band lv-reveal" aria-labelledby="lv-next-h">
         <StarField lights />
         <div className="lv-section dd-above lv-next-in">
-          <span className="lv-sticker">Upcoming</span>
+          {isPast ? <span className="lv-sticker is-past">Past</span> : <span className="lv-sticker">Upcoming</span>}
           <h2 id="lv-next-h" className="lv-next-h">{NEXT_EVENT.name}<br /><em>{NEXT_EVENT.edition}</em></h2>
           <p className="dd-when">{NEXT_EVENT.dateLabel}{DISCO.time ? ` · ${DISCO.time}` : ''} · {NEXT_EVENT.venue}</p>
-          <Countdown date={NEXT_EVENT.date} />
-          <div className="lv-actions dd-hero-actions">
-            <Link className="lv-btn lv-btn-line lv-btn-lg" to={DISCO.base}>See the night</Link>
-            {cta && <a className="lv-btn lv-btn-gold lv-btn-lg" href={cta} target="_blank" rel="noopener noreferrer">{BOOK_LABEL}</a>}
-          </div>
-          <ContactLine message="Hi, I have a question about Disco Diwali." />
+          {isPast ? <PastNight name={NEXT_EVENT.name} dateLabel={NEXT_EVENT.dateLabel} /> : (
+            <>
+              <Countdown date={NEXT_EVENT.date} />
+              <div className="lv-actions dd-hero-actions">
+                <Link className="lv-btn lv-btn-line lv-btn-lg" to={DISCO.base}>See the night</Link>
+                {cta && <a className="lv-btn lv-btn-gold lv-btn-lg" href={cta} target="_blank" rel="noopener noreferrer">{BOOK_LABEL}</a>}
+              </div>
+              <ContactLine message="Hi, I have a question about Disco Diwali." />
+            </>
+          )}
         </div>
       </section>
 

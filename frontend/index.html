@@ -21,10 +21,11 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://www.ngoaquaterra.com/#org",
       "additionalType": "https://schema.org/NGO",
       "name": "NGO AquaTerra",
       "alternateName": "AquaTerra",
-      "description": "Youth-led, change-driven NGO focused on climate action and community welfare. Student-run organization based in Kolkata creating environmental and social impact with over 1,400 active volunteers.",
+      "description": "Student-run, self-funded NGO in Kolkata, India. Teenagers raise their own money through student events and Crftd, then give it back through welfare and donation drives, free exam papers on ShikshAQ, the Terra Notes magazine, charity sport tournaments and sessions with children, creating environmental and social impact with over 1,400 active volunteers.",
       "url": "https://www.ngoaquaterra.com",
       "logo": "https://www.ngoaquaterra.com/logo.png",
       "foundingDate": "2021",
@@ -65,7 +66,29 @@
       ],
       "knowsAbout": [
         "Environmental Conservation", "Youth Empowerment", "Community Welfare",
-        "Climate Action", "Educational Workshops", "Tree Planting", "Stray Animal Care"
+        "Climate Action", "Educational Workshops", "Tree Planting", "Stray Animal Care",
+        "Donation Drives", "Disaster Relief", "Free Education", "Exam Preparation",
+        "Youth Sport", "Student Journalism", "AI Literacy", "Youth Volunteering"
+      ],
+      "areaServed": [
+        { "@type": "City", "name": "Kolkata" },
+        { "@type": "Place", "name": "Sundarbans, West Bengal" }
+      ],
+      "subOrganization": [
+        {
+          "@type": "Organization", "name": "ShikshAQ", "url": "https://shikshaq.in",
+          "description": "Education platform built by AquaTerra students: free exam papers for any student and a free way to find a teacher.",
+          "sameAs": ["https://instagram.com/shikshaq.in"]
+        },
+        {
+          "@type": "Organization", "name": "Crftd", "url": "https://www.ngoaquaterra.com/crftd",
+          "description": "AquaTerra's student-run streetwear label. Profits fund welfare drives."
+        }
+      ],
+      "subjectOf": [
+        { "@type": "WebPage", "name": "How AquaTerra gives back", "url": "https://www.ngoaquaterra.com/impact" },
+        { "@type": "WebPage", "name": "How AquaTerra trains its teams to use AI", "url": "https://www.ngoaquaterra.com/ai" },
+        { "@type": "Periodical", "name": "Terra Notes", "url": "https://www.ngoaquaterra.com/terranotes", "description": "AquaTerra's monthly digital magazine." }
       ],
       "makesOffer": [
         {
@@ -76,6 +99,16 @@
         {
           "@type": "Offer",
           "itemOffered": { "@type": "Service", "name": "Tree Planting Drives", "description": "Community tree planting initiatives" },
+          "price": "0", "priceCurrency": "INR"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Free exam papers (ShikshAQ)", "description": "Free access to exam papers for any student, on shikshaq.in", "url": "https://www.ngoaquaterra.com/shikshaq" },
+          "price": "0", "priceCurrency": "INR"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "AI sessions for children", "description": "Volunteer-run sessions teaching children what AI is and how to use it safely", "url": "https://www.ngoaquaterra.com/ai" },
           "price": "0", "priceCurrency": "INR"
         },
         {
@@ -93,6 +126,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://www.ngoaquaterra.com/#site",
       "name": "AquaTerra",
       "alternateName": "NGO AquaTerra",
       "url": "https://www.ngoaquaterra.com",
@@ -203,9 +237,9 @@
     <!-- SEO — default (homepage). Per-route titles/descriptions are set at
          runtime by the useMeta hook on each page. Canonical domain is
          ngoaquaterra.com (matches robots.txt, sitemap.xml & structured data). -->
-    <title>AquaTerra | Student-Led Community & NGO in Kolkata</title>
-    <meta name="description" content="AquaTerra: a student-led community and NGO in Kolkata where 1,400+ teenagers take ownership of real welfare, climate & education projects, build leadership skills, and create social impact. Join our ecosystem today." />
-    <meta name="keywords" content="AquaTerra, NGO Kolkata, student NGO, student community Kolkata, ROOTS, ShikshAQ, youth welfare, climate action, tree planting, volunteer Kolkata" />
+    <title>AquaTerra | Student-Run NGO Giving Back in Kolkata</title>
+    <meta name="description" content="AquaTerra: a student-led community and NGO in Kolkata where 1,400+ teenagers fund and run welfare drives, free education, sport and sessions with kids. Self-funded, free to join." />
+    <meta name="keywords" content="AquaTerra, NGO Kolkata, student-run NGO, youth volunteering Kolkata, welfare drives, donation drives, ShikshAQ, free exam papers, Terra Notes, TerraThon, charity sports tournament, AI training for students" />
     <!-- NO DEFAULT CANONICAL, deliberately (audit 2026-09-17).
          There used to be a hardcoded canonical here pointing at the bare origin,
          which existed mainly as a substitution anchor for prerender-meta.mjs. The

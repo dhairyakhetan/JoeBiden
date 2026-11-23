@@ -51,7 +51,7 @@ export interface OrgFacts {
   /** welfare_projects, count(*) where is_draft = false. Public/browsable drives
    *  only — a draft row is not "written up" yet (matches the definition of a
    *  public project scripts/generate-sitemap.mjs already uses for /projects/:slug).
-   *  NOTE this is "written up," not "completed": 548 rows exist and
+   *  NOTE this is "written up," not "completed": 547 rows exist and
    *  are publicly visible; whether every one of them literally happened as
    *  described is a different, unverifiable claim this figure does not make. */
   drivesWrittenUp: number
@@ -86,7 +86,7 @@ export interface OrgFacts {
   dogMealsServed: number
   /** count(distinct school) among active members — BLOCKED, not a query
    *  failure. Checked live 2026-09-05: the `schools` table holds ZERO rows,
-   *  and every one of the 1424 active members has `school_id IS
+   *  and every one of the 1473 active members has `school_id IS
    *  NULL`. The column and the table exist; nothing has ever populated them.
    *  Ships as `null` rather than the honest-but-useless "0 schools
    *  represented" — see WORKFLOW.md's "never a 0, a zero is a claim" rule.
@@ -150,12 +150,12 @@ export interface OrgFacts {
 }
 
 export const ORG_FACTS: OrgFacts = {
-  generatedAt: '2026-11-03T18:18:39.924Z',
+  generatedAt: '2026-11-16T19:23:06.366Z',
 
-  drivesWrittenUp: 548,
+  drivesWrittenUp: 547,
   drivesWithPhoto: 488,
-  membersTotal: 1424,
-  postsPublished: 619,
+  membersTotal: 1473,
+  postsPublished: 627,
   teamsActive: 9,
   departmentsActive: 8,
   dogMealsServed: 3265,

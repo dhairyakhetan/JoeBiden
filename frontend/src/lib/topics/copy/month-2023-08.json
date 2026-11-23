@@ -1,0 +1,74 @@
+{
+  "slug": "month-2023-08",
+  "title": "AquaTerra in August 2023: {count} drives, from bottles to Rakhi",
+  "description": "August 2023 at AquaTerra: {count} drives, computer and terrarium workshops at Pather Sathi, bottle upcycling, a Rakhi workshop and three drives on August 27.",
+  "h1Lead": "bottles, computers and",
+  "h1Accent": "a Rakhi",
+  "lede": "In August 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. The Sunday school at Pather Sathi carried computer and terrarium sessions through the first half of the month. The last day, August 27, had three drives at two schools: a waste workshop, a Rakhi workshop and a planting run.",
+  "sections": [
+    {
+      "id": "sunday-school-computers",
+      "heading": "computers and terrariums at Sunday school",
+      "body": [
+        "Code and Connect on August 4 gave children guided exposure to essential digital tools, and Grow and Glow on August 12 introduced basic digital literacy and computer skills. Both were at Pather Sathi's Sunday school, carrying on the computer thread from July's Tech Time and Ctrl+Create.",
+        "Life in a Bottle on August 8 taught children to make self-sustaining terrariums with care. Activity Hour on August 5 was a session of games, laughter and creative exploration."
+      ]
+    },
+    {
+      "id": "bottles-and-waste",
+      "heading": "bottles, upcycling and waste",
+      "body": [
+        "Bottle To Better, on August 3 at South Calcutta Inner Wheel School, was an upcycling workshop that turned discarded plastic bottles into practical and decorative items. It came in the first days of August, after the July bottle planting at Mother's Nest, so the bottle theme ran across two months.",
+        "Waste Wise, on August 27 at Ashok Hall School, used games, demonstrations and storytelling to build eco-conscious habits among young participants, with five volunteers."
+      ]
+    },
+    {
+      "id": "the-last-day",
+      "heading": "three drives on the last day",
+      "body": [
+        "On August 27 three drives ran at two schools. Waste Wise was at Ashok Hall School, Grow Green 20.0 planted saplings at the same school, and Rakhi Loom was at South Calcutta Inner Wheel School.",
+        "The Rakhi workshop was held in collaboration with Youthwave and South Calcutta Inner Wheel School, and it brought together creativity, culture and community spirit. Grow Green 20.0 was the twentieth drive in the planting run, and nine volunteers planted a mix of saplings."
+      ]
+    },
+    {
+      "id": "how-august-compares",
+      "heading": "how August compares with July and October",
+      "body": [
+        "August had {count} drives, against {count:month-2023-07} in July, when the planting run and the Sunday school were both going at full pace. August turned away from the planting runs and fundraiser nights of July and towards computers, bottles and waste.",
+        "October had {count:month-2023-10} drives, and most were Durga Puja sessions, so the Sunday school's themes changed again, from computers and bottles to festivals."
+      ]
+    }
+  ],
+  "learnings": [
+    "Themes carry over between months: the bottle planting of July and the bottle upcycling and terrariums of August were one thread.",
+    "A school can host several things in one day: Ashok Hall School had a waste workshop and a planting run on August 27.",
+    "Festive workshops, like Rakhi Loom, connect a session to something children already celebrate.",
+    "Computer sessions work best as a repeated thread: Code and Connect and Grow and Glow each took a Sunday school slot in August."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in August 2023?",
+      "a": "In August 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Several were Sunday school workshops at Pather Sathi on computers and terrariums. The month also had a waste management workshop and a Rakhi workshop at schools, and a Grow Green planting run at Ashok Hall School on August 27."
+    },
+    {
+      "q": "Does AquaTerra run a Rakhi workshop?",
+      "a": "Yes. AquaTerra's Rakhi Loom workshop ran on August 27, 2023, at South Calcutta Inner Wheel School in collaboration with Youthwave. It brought together creativity, culture and community spirit for the children who came."
+    },
+    {
+      "q": "Does AquaTerra teach children about waste and recycling?",
+      "a": "Yes. Waste Wise on August 27, 2023, at Ashok Hall School used games, demonstrations and storytelling to teach eco-conscious habits. Bottle To Better on August 3 at South Calcutta Inner Wheel School turned plastic bottles into practical and decorative items."
+    },
+    {
+      "q": "Does AquaTerra run computer workshops at Sunday school?",
+      "a": "Yes. AquaTerra ran computer workshops at Pather Sathi's Sunday school in August 2023, including Code and Connect on August 4 and Grow and Glow on August 12, which introduced digital tools and basic computer literacy to children."
+    }
+  ],
+  "keywords": [
+    "AquaTerra August 2023",
+    "Rakhi workshop Kolkata children",
+    "Pather Sathi Sunday school computer workshop",
+    "waste management workshop for children Kolkata",
+    "Grow Green plantation drive 20.0",
+    "bottle upcycling workshop"
+  ]
+}

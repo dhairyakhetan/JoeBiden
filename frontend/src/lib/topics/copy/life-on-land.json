@@ -1,0 +1,85 @@
+{
+  "slug": "life-on-land",
+  "title": "Life on land: animals and trees in Kolkata · AquaTerra",
+  "description": "Feeding street animals, planting trees and teaching children to care for both. Run by students in Kolkata. {count} drives since {firstYear}.",
+  "h1Lead": "caring for the",
+  "h1Accent": "life on land",
+  "lede": "Life on land, the UN's Goal 15, covers the animals and plants that share our streets and neighbourhoods. AquaTerra's work under it is mostly feeding street animals and planting trees, plus teaching children to care for both. Since {firstYear} we have run {count} drives under this goal, with {volunteers} volunteer turnouts.",
+  "sections": [
+    {
+      "id": "animals-on-the-street",
+      "heading": "the animals on our streets",
+      "body": [
+        "Most drives under this goal are feeding drives. A small team brings biscuits and food to the stray dogs in a neighbourhood, and in 2026 the same drives also fed cows. Volunteers were busiest in 2025, with {year:2025} drives on this page that year.",
+        "The 2026 drives followed the same pattern. Dobson Lane in April and June and Jatindas Park in April fed dogs and cows in short, friendly sessions. The Pawtect animal welfare seminar at MCKV Institute of Technology in July 2025 talked about kindness and protection for animals, and it was held at a college."
+      ]
+    },
+    {
+      "id": "trees-and-the-ground",
+      "heading": "trees and the ground",
+      "body": [
+        "The planting half of life on land is the Grow Green series, which has put saplings into parks, school grounds and housing complexes across the city. The first Grow Green drive was in July 2021 at Ward 58, and the series ran on through to August 2025 at Ashok Hall School.",
+        "The Sundarbans drives add a wildlife angle. The June 2024 Sundarbans Plantation Project put more than fifty saplings in the ground to restore green cover and protect wildlife. The 2021 Sundarbans drive in Ward 142 combined planting with health care in one drive."
+      ]
+    },
+    {
+      "id": "teaching-children-to-care",
+      "heading": "teaching children to care",
+      "body": [
+        "Many workshops on this goal do not involve animals or planting at all. Nature x English sessions at Ek Tara and Pather Sathi in June 2023 used trees and leaves as a classroom, and Nature in Bloom at School on Wheels in March 2023 taught children about the colours of the outdoors.",
+        "Recycled planters are a common thread. Life in a Bottle at Ek Tara in June 2021, Roots and Rise at Jyotirmai in July 2022 and Plant Pact at Mother's Nest in July 2023 all had children planting in bottles."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where it happens",
+      "body": [
+        "Bangur and Salt Lake have the most drives under this goal after Kolkata itself, and the Tails and Treats series has come back to the same stretches of those neighbourhoods again and again. Howrah, Hazra and Laketown have their own runs.",
+        "Across {placesCount} places, the drives have been on streets, in apartment complexes, at schools and in parks. Ashok Hall School and South City International School have both hosted planting drives, and you can see [every school we have worked in](/impact/schools-we-have-visited)."
+      ]
+    },
+    {
+      "id": "how-to-help",
+      "heading": "how to help",
+      "body": [
+        "Start with a feeding or planting drive. Both need only a small team and a few hours. Members join by signing in with Google and waiting for approval, then pick a drive on the projects page. Teachers who want a plant or animal session for their class can see the formats on the [for teachers](/impact/for-teachers) page."
+      ]
+    }
+  ],
+  "learnings": [
+    "Feeding drives are easiest to repeat when they stay close to home, which is why Bangur and Salt Lake keep coming back.",
+    "Feeding and planting both need only a small team, so they suit a school or college group with a few free hours.",
+    "Teaching and doing work best together, as the Pawtect seminar and the Nature in Bloom planting show.",
+    "Recycled planters let children see the same idea twice: waste becomes a pot, and the pot holds a plant."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra do for life on land?",
+      "a": "AquaTerra's work on life on land (UN Goal 15) is feeding stray dogs and other street animals, planting saplings and teaching children to care for both. Since {firstYear} it has run {count} drives under this goal, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "Does AquaTerra feed stray dogs in Kolkata?",
+      "a": "Yes. Tails and Treats drives feed stray dogs in Kolkata neighbourhoods, most often at Bangur and Salt Lake. AquaTerra has run {count:tails-and-treats} of them, and some have also fed cows."
+    },
+    {
+      "q": "Does AquaTerra plant trees in Kolkata?",
+      "a": "Yes. Grow Green has run {count:grow-green} plantation drives since July 2021, planting saplings in parks, school grounds and housing complexes across Kolkata."
+    },
+    {
+      "q": "Can a college group help with animal welfare work in Kolkata?",
+      "a": "Yes. A college seminar was one of the ways AquaTerra worked on animal welfare. The Pawtect seminar, held at MCKV Institute of Technology in July 2025, talked about kindness and protection for animals. To ask about a session for your college, use the contact page."
+    },
+    {
+      "q": "What did AquaTerra do for animals and trees in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} drives under life on land, the most of any year on this page. They included feeding drives in Bangur, Salt Lake and Howrah, Grow Green plantation drives, and the Pawtect seminar in July."
+    }
+  ],
+  "keywords": [
+    "feed stray dogs Kolkata volunteer",
+    "tree plantation drive Kolkata students",
+    "animal welfare seminar Kolkata",
+    "UN Goal 15 life on land Kolkata",
+    "stray animal feeding drive Salt Lake",
+    "sapling planting for students Kolkata"
+  ]
+}

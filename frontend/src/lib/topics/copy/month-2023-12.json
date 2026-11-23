@@ -1,0 +1,74 @@
+{
+  "slug": "month-2023-12",
+  "title": "AquaTerra in December 2023: {count} drives, carols to food packets",
+  "description": "December 2023 at AquaTerra: {count} drives, a Christmas run called Merry Miracles from 15 to 25 December, carol workshops and the first Paradox food day.",
+  "h1Lead": "a december of",
+  "h1Accent": "carols and crafts",
+  "lede": "In December 2023 AquaTerra ran {count} drives across Kolkata, most of them Christmas workshops for children at Pather Sathi. The month's biggest run was Merry Miracles, numbered days from 15 to 25 December, and it closed with Day 1 of a food distribution drive with Paradox.",
+  "sections": [
+    {
+      "id": "merry-miracles-day-by-day",
+      "heading": "merry miracles, day by day",
+      "body": [
+        "Merry Miracles was the biggest series of the month, and each numbered day had its own theme. Day 1 on 15 December at Ek Tara was a session of Christmas crafts, with colour and fun at the centre. Day 2 on 21 December at Gyandeepak offered free dental checkups for kids, promoting hygiene and healthy smiles.",
+        "Day 3 on 22 December at Pather Sathi was a Santa mask making competition, where the children crafted masks that blended creativity with festive excitement. Day 4 on 23 December was a Christmas carnival with games, music and festive cheer, and Day 5 on 25 December took the children on a Christmas movie outing at Shyambazar."
+      ]
+    },
+    {
+      "id": "carols-origami-and-stories",
+      "heading": "carols, origami and story time",
+      "body": [
+        "The rest of the month was steady Sunday School work at Pather Sathi. Young Minds on 2 December used stories, games and learning for curious minds. Christmas Carols 1.0 on 9 December taught children classic tunes, and Christmas Carols 2.0 followed on 16 December, when the children sang together and spread festive joy at Sunday School.",
+        "Fold and Fun, an origami workshop at South Calcutta Inner Wheel School on 12 December, took the month away from Pather Sathi. Participants folded paper into art and learned focus and patience along the way, which is a good example of a craft session that needs little more than paper and a patient team."
+      ]
+    },
+    {
+      "id": "the-first-food-day",
+      "heading": "the first food day",
+      "body": [
+        "The month closed on 29 December with Day 1 of the Food Distribution Drive with Paradox in Kolkata. Its write-up describes nutritious meals distributed to those in need with care and compassion, and food packets handed out by a small team.",
+        "It is the first of the numbered food days. Day 2 followed on 5 April 2024, which the [April 2024 page](/impact/month-2024-04) covers, so a reader can see how the series moved from one month to the next."
+      ]
+    },
+    {
+      "id": "december-beside-november",
+      "heading": "december beside november",
+      "body": [
+        "December had {count} drives, and November had {count:month-2023-11}, so the calendar doubled as the holidays came closer. {topPlace} hosted more than half of December's drives, which made it the steady base for the festive work.",
+        "Across the month {volunteers} volunteer turnouts went into these drives. A volunteer turnout counts every time someone showed up, so a student who came to several drives is counted each time. The other drives ran at Gyandeepak, Ek Tara, a school in South Calcutta and in Kolkata itself."
+      ]
+    }
+  ],
+  "learnings": [
+    "A themed run works when each day has one idea: Merry Miracles gave every day its own craft, check, contest, carnival or outing.",
+    "A place that hosts many sessions becomes a home base, and most of December's festive work ran at Pather Sathi.",
+    "A new kind of drive can start as a numbered day one and grow in later months, as the Paradox food days did from December into April.",
+    "Festive workshops can run in short bursts: the carol sessions, the carnival and the Santa masks all fell inside the last three weeks of December."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in December 2023?",
+      "a": "AquaTerra ran {count} drives in December 2023. Most were Merry Miracles days and Christmas workshops for children at Pather Sathi, along with an origami workshop at South Calcutta Inner Wheel School and Day 1 of a food distribution drive with Paradox on 29 December."
+    },
+    {
+      "q": "What is Merry Miracles?",
+      "a": "Merry Miracles was AquaTerra's Christmas run in December 2023, with numbered days from 15 to 25 December. The days covered Christmas crafts, free dental checkups for kids, a Santa mask making competition, a Christmas carnival and a movie outing at Shyambazar."
+    },
+    {
+      "q": "Did AquaTerra hold a food distribution drive in December 2023?",
+      "a": "Yes. Day 1 of the Food Distribution Drive with Paradox took place in Kolkata on 29 December 2023, with nutritious meals and food packets distributed to people in need. Day 2 followed on 5 April 2024."
+    },
+    {
+      "q": "How many volunteer turnouts did AquaTerra have in December 2023?",
+      "a": "AquaTerra's December 2023 drives had {volunteers} volunteer turnouts in total. A turnout counts each time someone came to a drive, so one student who came to several drives is counted for each one."
+    }
+  ],
+  "keywords": [
+    "AquaTerra December 2023",
+    "Merry Miracles Christmas Kolkata",
+    "Christmas workshops for kids Kolkata 2023",
+    "Pather Sathi Sunday School December",
+    "Paradox food distribution drive Kolkata",
+    "AquaTerra Christmas drives 2023"
+  ]
+}

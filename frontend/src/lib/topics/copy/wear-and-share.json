@@ -1,0 +1,87 @@
+{
+  "slug": "wear-and-share",
+  "title": "Wear and Share: clothes collection drives in Kolkata · AquaTerra",
+  "description": "Wear and Share is AquaTerra's clothes collection series. See where its drives gathered donated clothes in 2024 and 2025, which areas repeat, and how it grew.",
+  "h1Lead": "one garment,",
+  "h1Accent": "one gift",
+  "lede": "Wear and Share is AquaTerra's clothes collection series. It has run {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up) across {placesCount} places. Each drive gathered donated clothes for people in need, and Salt Lake, Ganges Garden Phase 1 and Raghav Residency each hosted more than one.",
+  "sections": [
+    {
+      "id": "the-first-drives",
+      "heading": "the first drives in 2024",
+      "body": [
+        "The first Wear and Share drive was Clothes Collection Drive 1.0 at Ganges Garden Phase 1 on 3 May 2024, and the second ran at the same place the next day. Each gathered a few kilograms of clothes, and the 2.0 write-up calls it a drive that spread comfort and kindness across the community.",
+        "May 2024 was the busiest month of the first year. Drive 4.0 was held at Urbana in Madurdaha on 13 May, 6.0 at Raghav Residency on 16 May, and 7.0 at Rajasthali, Park Circus on 28 May, the last one with notebooks collected alongside the clothes. Every drive in this first run is filed under the same distribution goal that the whole series uses."
+      ]
+    },
+    {
+      "id": "the-autumn-run",
+      "heading": "the autumn and november run",
+      "body": [
+        "Drive 10.0 ran at Ganges Sky on 5 October 2024, and 11.0 at Urbana on 9 October. A run of drives followed in November: 12.0 at Sealdah on 16 November, 13.0 in Ballygunge on 23 November, 14.0 on Alipore Road the same day, and 15.0 at The Reserve on 30 November.",
+        "Many drives were held in residential complexes, such as Raghav Residency, Vistar Apartment in Sealdah and Natural City Laketown. The write-ups for these drives describe a community coming together to donate, so the drives were held where residents live, not in a central drop-off point."
+      ]
+    },
+    {
+      "id": "toy-and-thread-and-2025",
+      "heading": "toy and thread and the 2025 drives",
+      "body": [
+        "In late March 2025 a set of Toy and Thread drives added toys to the clothes collected. Toy and Thread 1.0 was held at Hemchandra Naskar Road on 26 March, and 2.0 at Ballygunge park and 3.0 at New Alipore, both on 28 March. Their write-ups describe toys and clothes for people who needed comfort and relief.",
+        "Wear and Share 16.0 was held at Salt Lake on 17 April 2025, and its write-up says eight bags were collected. July 2025 is the busiest stretch of the series: drives 17.0 to 22.0 ran between 9 and 13 July across Natural City Laketown, Salt Lake, Club Town Greens, Howrah AC, Avani Oxford and Bangur."
+      ]
+    },
+    {
+      "id": "what-gets-counted",
+      "heading": "what the figures measure",
+      "body": [
+        "Most drives report weight in kilograms. A few report bags or packets, and some give a range rather than a single figure, so the weights cannot simply be added up without care. A few write-ups repeat the drive name as their description, which leaves those drives thin.",
+        "AquaTerra's organisation-wide total for clothes distributed is {clothesKg} kg across all of its clothes work. That is a single total, so it cannot be split by series from this page. For what each drive collected, read the drive descriptions above."
+      ]
+    },
+    {
+      "id": "what-the-write-ups-say",
+      "heading": "what the write-ups say",
+      "body": [
+        "The write-ups are short and warm. One says each donated garment is a thread in the fabric of kindness, and another says one garment, one gift, one life changed. They talk about the donation and the warmth it brings, and few of them say who received the clothes.",
+        "The sister series, [Wear and Write: clothes and notebooks](/impact/wear-and-write), ran the same kind of collection with notebooks in 2024 and 2025, and the two are worth reading side by side. Both used Rajasthali, Park Circus as a collection site, so that venue can be compared directly across the two."
+      ]
+    }
+  ],
+  "learnings": [
+    "Wear and Share ran from {firstYear} to {lastYear}, with {year:2024} drives in 2024 and {year:2025} in 2025.",
+    "The busiest stretch of the series is the second week of July 2025, when a burst of drives ran in quick succession.",
+    "Ganges Garden Phase 1, Raghav Residency and Salt Lake each hosted more than one drive.",
+    "Most drives report weight in kilograms, with bags and packets for some, so compare drives with care.",
+    "Some write-ups carry only the drive name as their description, so those drives are harder to judge."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "AquaTerra's Wear and Share drives have collected donated clothes from {firstYear} to {lastYear}, with {count} drives across {placesCount} places in Kolkata and nearby areas such as Howrah. These were collection drives rather than a standing drop-off point, so check with the [contact page](/contact) before you bring anything."
+    },
+    {
+      "q": "Where did AquaTerra collect clothes in 2025?",
+      "a": "Wear and Share ran {year:2025} drives in 2025, including a set of Toy and Thread drives in March. The rest were held at Salt Lake in April, and in July across Salt Lake, Natural City Laketown, Club Town Greens, Howrah AC, Avani Oxford and Bangur."
+    },
+    {
+      "q": "What did AquaTerra collect in 2024?",
+      "a": "In 2024 the Wear and Share series held {year:2024} drives. They started at Ganges Garden Phase 1 on 3 May 2024, ran through Raghav Residency, Urbana and Rajasthali in Park Circus, and continued with a run of drives in November 2024."
+    },
+    {
+      "q": "How can I help with a clothes drive?",
+      "a": "Join AquaTerra as a member aged 14 to 19: sign in with Google, and your account is approved before you take part. Members run the drives, and each drive records its volunteer turnouts. The [join page](/join) explains the steps."
+    },
+    {
+      "q": "How much clothing has AquaTerra distributed?",
+      "a": "AquaTerra's organisation-wide total for clothes distributed is {clothesKg} kg. Wear and Share drives report weight per drive, mostly in kilograms, with some bags and packets, so the series figure is best read from the drive descriptions."
+    }
+  ],
+  "keywords": [
+    "clothes collection drive Kolkata",
+    "donate old clothes Kolkata students",
+    "Wear and Share AquaTerra",
+    "clothes drive apartment Kolkata",
+    "toy and thread drive Kolkata",
+    "AquaTerra clothes distribution"
+  ]
+}

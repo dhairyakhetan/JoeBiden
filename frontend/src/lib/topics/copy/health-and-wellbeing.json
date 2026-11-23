@@ -1,0 +1,87 @@
+{
+  "slug": "health-and-wellbeing",
+  "title": "Health, hygiene and wellbeing workshops · AquaTerra",
+  "description": "Health, hygiene, mental health and dental workshops for children by AquaTerra in Kolkata: {count} drives from {firstYear} to {lastYear}, and what they covered.",
+  "h1Lead": "looking after",
+  "h1Accent": "body and mind",
+  "lede": "AquaTerra has run {count} health, hygiene and wellbeing workshops since {firstYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). They cover menstrual health, good touch and bad touch, adolescence health, mental well-being, dental care and diabetes awareness. Pather Sathi hosts the most of them, and the topic includes a medical camp in the Sundarbans in 2023. This page sets out what the sessions covered, where they ran, and how the topic changed.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a health session covers",
+      "body": [
+        "Most of these are awareness workshops for children. My Body at Calcutta Rescue in June 2025 is a good touch and bad touch workshop where children learn to tell the two apart. World Health Day Workshop at Amader Pradakhep in April 2025 covered wellness, nutrition and hygiene to promote healthier living, and Health Over Sugar at Amader Pradakhep in June 2024 was a diabetes awareness workshop.",
+        "Dental and medical sessions are more practical. Tooth Talk at Ek Tara in June 2023 was a dental camp that offered free checkups and tooth care tips, and Say Cheese at Ek Tara in October 2023 focused on oral hygiene among children. The Medical Camp at the Sundarbans in May 2023 checked vitals and brought healthcare closer to the people who needed it most, and AquaTerra's medical work has counted {checkups} checkups across all its programmes."
+      ]
+    },
+    {
+      "id": "mental-health",
+      "heading": "mental health and self-care",
+      "body": [
+        "Mental health workshops began in July 2023 with Peace Within at Pather Sathi, a Sunday School session on mental wellness. In 2024 the topic grew. Mind Matters at Pather Sathi in August promoted well-being, self-care and emotional awareness, Healing Space at Pather Sathi in September covered emotional well-being and self-care, and Open Minds at Universal Smile in November promoted awareness among students. Pather Sathi hosted two of the three 2024 sessions.",
+        "These are awareness and self-care sessions. The write-ups describe promoting well-being and emotional awareness, not clinical care or counselling, so a child or parent with a health concern should still speak to a doctor or a trusted adult. Peace Within in 2023 was a Sunday School session, and the later sessions were aimed at students."
+      ]
+    },
+    {
+      "id": "menstrual-and-adolescence",
+      "heading": "menstrual and adolescent health",
+      "body": [
+        "Menstrual health comes up in several years. Breaking the Cycle in Kolkata in November 2022 was a menstrual awareness drive that promoted hygiene, health and open conversations. Body Basics at Helping Hands in April 2025 promoted awareness and dignity through education on menstrual health and hygiene, and the Menstrual Awareness Campaign at Pather Sathi in April 2026 is the most recent drive on this page.",
+        "Adolescence health sessions ran with AIM Foundation in May and June 2024. Mind and Body and Teen Talk, both on 29 May 2024, covered hygiene and self-care, and Well Within on 21 June 2024 focused on adolescence health, hygiene and well-being."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when they ran",
+      "body": [
+        "{topPlace} is the most frequent place. It hosted most of the mental health sessions and the 2026 menstrual campaign. AIM Foundation comes next, followed by Amader Pradakhep and Ek Tara. Across {placesCount} places, a few names are written more than one way, so read the count as a close guide rather than an exact one.",
+        "This topic has {year:2022} in 2022, {year:2023} in 2023, {year:2024} in 2024, {year:2025} in 2025 and {year:2026} in 2026. 2024 is the peak year, when adolescence, mental health and diabetes sessions all ran. The first and last years each hold a single drive, so the series is thinnest at its ends."
+      ]
+    },
+    {
+      "id": "what-the-write-ups-say",
+      "heading": "what the write-ups stress",
+      "body": [
+        "The write-ups name the topic of each session. Teen Talk and Mind and Body were adolescence health sessions on hygiene and self-care, and Peace Within was a Sunday School session on mental wellness. The Merry Miracles dental checkup day at Gyan Deepak in December 2023 was day two of that series, with free dental checkups for children.",
+        "Some sessions are about habits as well as facts. Body Basics framed its session around dignity and hygiene, and My Body taught children to tell good touch from bad touch. The write-ups describe these as awareness sessions, not treatment, and Health Over Sugar, the diabetes workshop at Amader Pradakhep in June 2024, is the same kind of awareness work."
+      ]
+    }
+  ],
+  "learnings": [
+    "{topPlace} hosts the largest share of these drives, and it hosted two of the three mental health sessions in 2024.",
+    "Menstrual health comes up across several years, from a drive in Kolkata in November 2022 to a campaign at Pather Sathi in April 2026.",
+    "The 2024 peak mixes mental health, adolescence health and diabetes awareness, across Pather Sathi, AIM Foundation, Universal Smile and Amader Pradakhep.",
+    "Dental and medical camps were a 2023 feature, with the Sundarbans medical camp and dental sessions at Ek Tara and Gyan Deepak."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run health workshops for children in Kolkata?",
+      "a": "Yes. AquaTerra has run {count} health, hygiene and wellbeing workshops since {firstYear}. They include menstrual health sessions, good touch and bad touch awareness, adolescence health, mental well-being, dental care and diabetes awareness. Most ran at places such as Pather Sathi, AIM Foundation and Amader Pradakhep, with Pather Sathi hosting the most."
+    },
+    {
+      "q": "Where can children get a dental checkup through AquaTerra?",
+      "a": "AquaTerra has run dental camps and checkup days. Tooth Talk at Ek Tara in June 2023 offered free checkups and tooth care tips, and a Merry Miracles dental checkup day at Gyan Deepak in December 2023 gave free dental checkups to children. Both took place in 2023, so for any future camp, ask through the [contact page](/contact)."
+    },
+    {
+      "q": "Does AquaTerra run mental health workshops?",
+      "a": "Yes. The first mental health session was Peace Within at Pather Sathi in July 2023. The 2024 run included Mind Matters in August, Healing Space in September and Open Minds at Universal Smile in November. They are awareness and self-care sessions, not clinical care."
+    },
+    {
+      "q": "What did AquaTerra do in health and wellbeing in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} health, hygiene and wellbeing drives, the busiest year on this topic. They included adolescence health sessions with AIM Foundation on 29 May, a diabetes awareness workshop at Amader Pradakhep in June, and several mental health sessions at Pather Sathi and Universal Smile between August and November."
+    },
+    {
+      "q": "How many health workshops has AquaTerra run overall?",
+      "a": "This topic lists {count} health, hygiene and wellbeing drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts. AquaTerra's medical work has counted {checkups} checkups across all its programmes."
+    }
+  ],
+  "keywords": [
+    "health workshop for children Kolkata",
+    "menstrual health workshop Kolkata",
+    "good touch bad touch workshop Kolkata children",
+    "mental health workshop students Kolkata",
+    "dental camp for children Kolkata",
+    "adolescent health workshop Kolkata",
+    "AquaTerra health and hygiene"
+  ]
+}

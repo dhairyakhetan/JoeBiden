@@ -1,0 +1,53 @@
+/* Photo stories (/impact/stories/<slug>). Big cover, a sticky year marker per chapter, photo mosaics. */
+.st-hero { position: relative; min-height: clamp(440px, 72vh, 720px); display: flex; align-items: flex-end; overflow: hidden; background: var(--ink); }
+.st-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: st-zoom 16s ease-out both; }
+.st-hero-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,.88) 0%, rgba(10,10,10,.45) 45%, rgba(10,10,10,.15) 100%); }
+.st-hero-in { position: relative; padding-top: 96px; padding-bottom: clamp(28px, 5vw, 56px); color: #fff; }
+.st-crumb a { color: #fff; }
+.st-h1 { color: #fff; margin: 0; line-height: 0.9; max-width: 16ch; text-shadow: 0 2px 20px rgba(0,0,0,.35); }
+.st-h1 .pl-accent { color: #fff; }
+.st-lede { font-family: var(--eina); font-size: 19px; line-height: 1.55; max-width: 60ch; margin: 18px 0 0; color: rgba(255,255,255,.92); }
+.st-lede .tp-inline { color: #fff; }
+.st-years { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.st-years a { color: var(--ink); background: rgba(255,255,255,.92); border-radius: 999px; padding: 10px 16px; min-height: 44px; display: inline-flex; align-items: center; font-family: var(--code); font-size: 14px; text-decoration: none; transition: transform .2s; }
+.st-years a:hover { transform: translateY(-2px); }
+.st-years a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+@keyframes st-zoom { from { transform: scale(1.12); } to { transform: scale(1); } }
+
+.st-chapters { display: flex; flex-direction: column; gap: clamp(40px, 7vw, 88px); margin-top: 12px; }
+.st-chapter { display: grid; grid-template-columns: 1fr; gap: 12px; scroll-margin-top: 90px; }
+@media (min-width: 980px) { .st-chapter { grid-template-columns: 250px minmax(0, 1fr); gap: 32px; } }
+.st-year {
+  font-family: var(--display); font-weight: 800; font-size: clamp(56px, 6vw, 84px); line-height: .85; color: var(--ink); white-space: nowrap; overflow: hidden;
+  opacity: .12; transition: opacity .6s, transform .6s cubic-bezier(.2,.8,.2,1); transform: translateY(16px);
+}
+@media (min-width: 980px) { .st-year { position: sticky; top: 110px; align-self: start; } }
+.st-chapter.is-in .st-year { opacity: .9; transform: none; }
+.st-kicker { font-weight: 800; color: var(--ink-2); margin: 0 0 6px; }
+.st-h2 { font-size: clamp(26px, 3.4vw, 38px); line-height: 1; margin: 0 0 10px; }
+.st-text { font-size: 17px; }
+.st-closing { padding: clamp(20px, 3vw, 28px); background: var(--bg-2); }
+.st-closing-p { font-size: 18px; }
+.st-more { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .st-more { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.st-more-card { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 16px 18px; min-height: 44px; color: var(--ink); text-decoration: none; font-family: var(--eina); font-size: 16px; }
+.st-more-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .st-hero-img { animation: none; }
+  .st-year { transition: none; transform: none; opacity: .9; }
+  .st-years a { transition: none; }
+}
+
+/* stories gallery (/impact/stories) */
+.st-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .st-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .st-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.st-card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; aspect-ratio: 4 / 3; border-radius: 22px; overflow: hidden; padding: 18px; color: #fff; text-decoration: none; background: var(--ink); }
+.st-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.st-card:hover img, .st-card:focus-visible img { transform: scale(1.07); }
+.st-card:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.st-card-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,.85), rgba(10,10,10,.1) 60%); }
+.st-card-t { position: relative; font-family: var(--eina); font-weight: 700; font-size: 20px; line-height: 1.2; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+.st-card-m { position: relative; font-family: var(--code); font-size: 13px; color: rgba(255,255,255,.88); }
+@media (prefers-reduced-motion: reduce) { .st-card img { transition: none; } }

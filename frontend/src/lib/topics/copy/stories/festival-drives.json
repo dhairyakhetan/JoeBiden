@@ -1,0 +1,45 @@
+{
+  "slug": "festival-drives",
+  "title": "Festival Drives in Pictures: Christmas, Diwali and Holi · AquaTerra",
+  "description": "Photos from {count} festival drives by AquaTerra students since {firstYear}: Christmas, Diwali and Holi workshops and fundraisers across Kolkata.",
+  "h1Lead": "christmas, diwali",
+  "h1Accent": "and holi",
+  "lede": "Festival drives are AquaTerra's workshops and fundraisers for Christmas, Diwali and Holi. Since {firstYear} the series has run {count} drives at {placesCount} places across Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up).",
+  "chapters": {
+    "2021": {
+      "heading": "a green christmas",
+      "text": "In 2021 we ran {year:2021} drive. It was a Green Christmas workshop at Ek Tara in December, where volunteers swapped plastic for plants, crafts and conscious cheer."
+    },
+    "2022": {
+      "heading": "three christmas workshops",
+      "text": "In 2022 we ran {year:2022} drives, all Christmas workshops in December: Season's Magic at Pather Sathi, Jolly Vibes at Ek Tara and Merry Moments at Disha Foundation. The drives were about carols, twinkling lights and giving."
+    },
+    "2023": {
+      "heading": "merry miracles, five days",
+      "text": "In 2023 we ran {year:2023} drives, more than in any other year of the series. Diwali Night in November raised funds through stalls and performances. Then Merry Miracles ran for five days, from 15 to 25 December, with crafts, a dental checkup, a Santa mask competition, a carnival and a movie outing in Shyambazar."
+    },
+    "2024": {
+      "heading": "holi, diwali and a starry night",
+      "text": "In 2024 we ran {year:2024} drives. The photos here start with Holi at Sunday School in March and move to Disco Diwali in New Alipore in October. In December came quizzes, letter writing, a fête at Calcutta Rescue and The Starry Night carnival at Sky Turf, a fundraiser for our welfare work."
+    },
+    "2025": {
+      "heading": "cookies, carols and cards",
+      "text": "In 2025 we ran {year:2025} drives. Disco Diwali 2.0 came first, in October at 60 Chowrangee Banquet, a drive described as AquaTerra's biggest Diwali fundraising success. In December, Merry Miracles returned at Pather Sathi with carols and card making, and the Cookie Pass On Drive went to Silver Spring Apartment, Astitva Apartment and Avani Oxford."
+    }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every festival drive with its date and place, read [the full story](/impact/festival-drives).",
+  "faqs": [
+    {
+      "q": "What festival drives does AquaTerra run?",
+      "a": "AquaTerra runs festival drives for Christmas, Diwali and Holi, mostly as workshops for children and some as fundraisers. Since {firstYear} the series has run {count} drives in Kolkata."
+    },
+    {
+      "q": "Where do AquaTerra's Christmas workshops happen?",
+      "a": "The most frequent place is {topPlace}, where the Merry Miracles days and Christmas carol workshops have run over several years. Other festival drives have been at Ek Tara, Disha Foundation and AIM Foundation."
+    },
+    {
+      "q": "Can I join an AquaTerra festival drive?",
+      "a": "Yes, if you are a member aged 14 to 19. Sign in with Google on the join page and wait for approval. Students run the drives, and the full story lists each one by date and place."
+    }
+  ]
+}

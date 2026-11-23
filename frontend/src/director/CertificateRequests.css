@@ -1,0 +1,29 @@
+/* Certificates desk (/director/certificates). Inherits the desk's rounded-minimal language; tokens only.
+   An accent is a fill with ink text, never text on cream. */
+
+.cdesk-detail { display: flex; flex-direction: column; gap: 14px; }
+.cdesk-doc { border: var(--hair-2); border-radius: var(--r-inner); background: var(--bg-2); padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.cdesk-doc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.cdesk-doc-title { font-family: var(--eina); font-weight: 800; font-size: 15px; color: var(--ink); }
+.cdesk-sub { font-family: var(--eina); font-size: 13px; color: var(--ink-3); }
+.cdesk-label { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px; }
+.cdesk-quote { font-family: var(--eina); font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cdesk-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-family: var(--eina); font-size: 13.5px; color: var(--ink-2); }
+.cdesk-hod { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+.cdesk-text { font-family: var(--eina); font-size: 14px; line-height: 1.6; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--bg); border: var(--hair); border-radius: 14px; padding: 12px 14px; margin: 0; max-height: 360px; overflow-y: auto; }
+.cdesk-text-empty { font-family: var(--eina); font-size: 13.5px; color: var(--ink-3); background: var(--bg); border: var(--hair); border-radius: 14px; padding: 12px 14px; }
+
+.cdesk-field { width: 100%; box-sizing: border-box; padding: 10px 12px; background: var(--bg); border: var(--hair-2); border-radius: 14px; font-family: var(--eina); font-size: 15px; color: var(--ink); }
+.cdesk-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.cdesk-note { font-family: var(--eina); font-size: 13px; color: var(--ink-3); margin: 0; }
+.cdesk-preview { border: var(--hair-2); border-radius: 14px; overflow: hidden; background: var(--bg); }
+.cdesk-preview img { display: block; width: 100%; height: auto; }
+
+.cdesk-resp { display: flex; flex-wrap: wrap; gap: 8px; }
+.cdesk-resp button[aria-pressed="true"] { box-shadow: var(--lift-1); border-color: var(--ink); }
+
+.cdesk-history { display: flex; flex-direction: column; gap: 8px; }
+.cdesk-history-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border: var(--hair); border-radius: 14px; background: var(--bg-2); font-family: var(--eina); font-size: 13.5px; }
+
+.cdesk-cap { font-family: var(--eina); font-size: 13px; color: var(--ink-3); margin: 0 0 12px; }

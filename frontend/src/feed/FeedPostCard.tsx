@@ -848,7 +848,7 @@ function FeedPostCard({ post, seed = 0, allowEager = false, onLikeToggle, savedI
                   value={sheetInput}
                   onChange={e => setSheetInput(e.target.value.slice(0, 500))}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSheetComment() } }}
-                  placeholder="say something..."
+                  aria-label="Write a comment" placeholder="say something..."
                   style={{
                     flex: 1, padding: '9px 14px', background: 'var(--bg)',
                     border: 'var(--hair-3)', borderRadius: 999, color: 'var(--ink)',

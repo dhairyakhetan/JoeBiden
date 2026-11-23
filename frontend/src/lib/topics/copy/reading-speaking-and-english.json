@@ -1,0 +1,87 @@
+{
+  "slug": "reading-speaking-and-english",
+  "title": "Reading, speaking and English workshops · AquaTerra",
+  "description": "Storytelling, public speaking and English workshops for children in Kolkata by AquaTerra: {count} drives since {firstYear}, with places and months.",
+  "h1Lead": "learning to",
+  "h1Accent": "speak up",
+  "lede": "AquaTerra's reading, speaking and English drives help children tell stories, speak up in front of a group and, now and then, work through English grammar. Since {firstYear} we have run {count} of these drives, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). Most are storytelling and public speaking sessions, and the most frequent place is {topPlace}. This page covers what the sessions involved, where they ran, and how the series changed.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a session covers",
+      "body": [
+        "Storytelling is the clearest thread. Fable Factory at Newlight NGO in June 2025 had children explore imagination, voice and narration, Once Upon at Lamp Open Shelter in September 2025 was a storytelling workshop, and Tale Time at School On Wheels Belgachia in March 2025 had children build their own stories from guided prompts. Nature x English ran as a numbered run of outdoor days at Ek Tara and Pather Sathi in June and July 2023, turning poems, leaves and silence into stories.",
+        "Public speaking teaches a related skill. Speech Ready at Ek Tara in May 2025 introduced children to talking in front of an audience, and Speak Skillfully at Disha Foundation in May 2022 helped children speak up, loud and confident. The Speak to Shine sessions at School On Wheels HUHT in May and June 2023 took children from stage fright to a spotlight."
+      ]
+    },
+    {
+      "id": "english-and-money",
+      "heading": "english and money basics",
+      "body": [
+        "The English sessions are fewer. Speak and Spell at Pather Sathi in June 2023 was an English workshop that boosted confidence, creativity and communication. Word Play at Disha Foundation in April 2024 built skills through interactive learning, and the most recent English session is a Teaching English Workshop at Ektara Foundation in April 2026, where children were taught conjunctions and verbs.",
+        "Money came up too. Budget Basics at Pather Sathi in March 2025 introduced basic financial concepts, Money Talks at Tiljala Shed a week later taught saving and budgeting, and Finance for All at Shoishob in November 2024 used games. These are life skills more than reading, so they sit here alongside the English work."
+      ]
+    },
+    {
+      "id": "wear-and-write",
+      "heading": "the wear and write collections",
+      "body": [
+        "Not every drive on this page is a class. Wear & Write is a clothes and notebooks collection campaign with its own numbered run, and most of its drives took place in April and May 2024, at places such as Bangur, Active Acres and Park Circus. Volunteers sorted what came in so that the clothes and notebooks reached the children who needed them most, with the notebooks meant to support learning.",
+        "The series carried on into 2025. Campaign 15.0 at Salarpuria Pearl, Gopalpur, in May 2025 is the most recent, and in March 2025 the Toy and Thread drives collected clothes and toys at New Alipore, Ballygunge Park and Hemchandra Naskar Road. Each write-up gives its own amount gathered on the day, so the totals are best read as collections, not as money."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when they ran",
+      "body": [
+        "The most frequent place is {topPlace}, and Ek Tara and Disha Foundation are close behind. Across {placesCount} places, some write-ups list only Kolkata as the location, and a few names are written more than one way, so read the place count as a close guide rather than an exact one.",
+        "2023 was the first full year of the series, and 2024 was the busiest, with {year:2024} drives. That year had the Wear & Write collections in April and May, a run of public speaking workshops at Disha Foundation in April and May, Voice Power at Ek Tara in May, and storytelling and singing at Alor Disha in December."
+      ]
+    },
+    {
+      "id": "what-the-write-ups-say",
+      "heading": "what the write-ups stress",
+      "body": [
+        "The write-ups stress confidence more than content. Bold Voice at Disha Foundation in May 2024 described children expressing themselves through structured public speaking exercises and games. Clear Talk at Universal Smile in April 2024 covered emotions and confidence, and Speak Out at Disha Foundation that month focused on communication through speaking activities.",
+        "Games and quizzes are a common way in. Speak Smart at Disha Foundation in April 2024 built speaking skills through games, and Brush and Buzz at Pather Sathi in May 2024 mixed drawing with quizzing. Some sessions tied into festivals, such as Spine and Story, a Halloween storytelling workshop at Shoishob in October 2024, and Speak and Sparkle at Pather Sathi in December 2024, which combined a Christmas tree with public speaking prompts."
+      ]
+    }
+  ],
+  "learnings": [
+    "Storytelling and public speaking make up most of the sessions, and some combine them, as Speak and Sparkle at Pather Sathi did in December 2024.",
+    "Games and quizzes made speaking practice feel like play, which is how most of the write-ups describe it.",
+    "The series took off in 2023 and peaked in 2024, when the collections and the speaking workshops ran side by side.",
+    "Short collection drives can run as a series in their own right: the Wear & Write campaigns ran as numbered days across one spring.",
+    "English lessons are the smallest part of this page, and the most recent is a Teaching English Workshop in April 2026."
+  ],
+  "faqs": [
+    {
+      "q": "Where can children join a public speaking workshop with AquaTerra in Kolkata?",
+      "a": "AquaTerra runs public speaking workshops for children in Kolkata, most often at {topPlace}, and also at Ek Tara and Disha Foundation. The impact library lists {count} reading, speaking and English drives since {firstYear}. AquaTerra charges no fees, and the [join page](/join) explains how members take part."
+    },
+    {
+      "q": "Does AquaTerra run English workshops for children?",
+      "a": "Yes, though they are a smaller part of the work. Past sessions include Speak and Spell at Pather Sathi in June 2023, Word Play at Disha Foundation in April 2024, and a Teaching English Workshop at Ektara Foundation in April 2026 on conjunctions and verbs. Storytelling and public speaking make up most of the sessions."
+    },
+    {
+      "q": "What did AquaTerra do in reading and speaking in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} reading, speaking and English drives, the busiest year for this topic. They included public speaking sessions at Disha Foundation in April and May, Voice Power at Ek Tara in May, storytelling and singing at Alor Disha in December, and the Wear & Write clothes and notebooks collections in April and May."
+    },
+    {
+      "q": "Does AquaTerra collect clothes and notebooks?",
+      "a": "AquaTerra has run Wear & Write, a clothes and notebooks collection campaign, in numbered drives from April 2024 to May 2025, at places including Bangur, Park Circus and Gopalpur. Volunteers sorted each collection so the donations reached the children who needed them. AquaTerra takes no monetary donations, so these drives gathered goods, not money."
+    },
+    {
+      "q": "What is Nature x English?",
+      "a": "Nature x English was a numbered run of outdoor English days at Ek Tara and Pather Sathi in June and July 2023. The write-ups describe poems, leaves, trees and silence turned into stories and lessons, and the first day was held at Ek Tara in June 2023."
+    }
+  ],
+  "keywords": [
+    "English workshop for children Kolkata",
+    "public speaking workshop children Kolkata",
+    "storytelling workshop Kolkata NGO",
+    "children speaking skills workshop Kolkata",
+    "clothes and notebooks collection drive Kolkata",
+    "reading workshop for children Kolkata"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "smile-notes",
+  "title": "Smile Notes in Pictures: Notes and Toffees for Passersby · AquaTerra",
+  "description": "Photos from {count} Smile Notes drives in Kolkata in spring 2026, where students handed passersby a note of encouragement and a toffee at {placesCount} places.",
+  "h1Lead": "a note and a toffee,",
+  "h1Accent": "for passersby",
+  "lede": "Smile Notes is AquaTerra's spring 2026 campaign: students hand passersby a note of encouragement and a toffee. It ran as {count} drives at {placesCount} places across Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up).",
+  "chapters": {
+    "2026": {
+      "heading": "a toffee with every note",
+      "text": "In 2026 we ran {year:2026} drives, from 25 March to 15 May. The first, in late March, were at Bhawanipore and at MBA Chaiwala in Lake Town. At Lake Town Footbridge, 100 notes went out with 100 toffees, one toffee for every note."
+    }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. To see each outing with its date and place, read [the full story](/impact/smile-notes).",
+  "faqs": [
+    {
+      "q": "What is the Smile Notes campaign?",
+      "a": "Smile Notes is a spring 2026 campaign by AquaTerra in which students hand passersby a note of encouragement and a toffee. AquaTerra ran {count} Smile Notes drives in Kolkata, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "Where did AquaTerra run Smile Notes?",
+      "a": "Smile Notes drives ran at {placesCount} places in Kolkata, including Bangur, Bhawanipore, Lake Town Footbridge and MBA Chaiwala in Lake Town, between 25 March and 15 May 2026."
+    },
+    {
+      "q": "Can I join a Smile Notes drive?",
+      "a": "Members of AquaTerra aged 14 to 19 can join by signing in with Google on the join page and waiting for approval. Students run the drives themselves."
+    }
+  ]
+}

@@ -44,7 +44,7 @@ export default function MomLemonCard({ mom, linkToProfile = true }: MomLemonCard
       <div className="mom-lemon-photo">
         <div className="avatar mom-lemon-avatar" style={{ background: hashColor(mom.memberName), overflow: 'hidden' }}>
           {mom.memberAvatarUrl
-            ? <Img ctx="avatar" src={mom.memberAvatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
+            ? <Img ctx="card" src={mom.memberAvatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
             : getInitials(mom.memberName)}
         </div>
         <span className="mom-lemon-burst" aria-hidden>MoM</span>

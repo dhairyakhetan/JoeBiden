@@ -1,0 +1,74 @@
+{
+  "slug": "month-2023-10",
+  "title": "AquaTerra in October 2023: {count} drives, many for Durga Puja",
+  "description": "October 2023 at AquaTerra: {count} drives, mostly Durga Puja sessions for children at Pather Sathi and Sujata Child NGO, plus dental and science work at Ek Tara.",
+  "h1Lead": "the month of",
+  "h1Accent": "festive learning",
+  "lede": "In October 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most of the month was Durga Puja sessions for children, at Pather Sathi's Sunday school and at Sujata Child NGO. A dental camp workshop and a STEM workshop ran at Ek Tara, and a Sunday school session on October 28 closed the month.",
+  "sections": [
+    {
+      "id": "durga-puja-at-pather-sathi",
+      "heading": "durga puja at Pather Sathi",
+      "body": [
+        "The numbered Colours Of Durga workshop reached drive 4.0 at Pather Sathi's Sunday school on October 6, and drive 5.0 followed the next day, on October 7. Both were run by three and four volunteers.",
+        "On October 14 the Durga Puja Programme at the Sunday school celebrated tradition, devotion and togetherness, with five volunteers. Pather Sathi hosted more of October's drives than any other place, and most of them carried the festival theme."
+      ]
+    },
+    {
+      "id": "festive-spirit-at-sujata",
+      "heading": "a festive session at Sujata Child NGO",
+      "body": [
+        "Festive Spirit, a Durga Puja workshop at Sujata Child NGO on October 8, brought the festive spirit and a cultural connection to life for the children. Four volunteers ran it.",
+        "It was the only October session at Sujata Child NGO, so the festival reached a second kind of place as well as the Sunday school."
+      ]
+    },
+    {
+      "id": "dental-and-science-at-ek-tara",
+      "heading": "dental care and science at Ek Tara",
+      "body": [
+        "Say Cheese, a dental camp workshop at Ek Tara on October 14, focused on oral hygiene among children. It returned to a health theme that AquaTerra had taken to Ek Tara in June with Tooth Talk, so the same place hosted health sessions twice in one year.",
+        "Brain Builders, a STEM workshop at Ek Tara on October 26, introduced students to science experiments and problem-solving. It had three volunteers."
+      ]
+    },
+    {
+      "id": "how-october-compares",
+      "heading": "how October compares with August and November",
+      "body": [
+        "October had {count} drives, against {count:month-2023-08} in August. August was about computers, bottles and waste, and October was about festivals, dental care and science.",
+        "November had {count:month-2023-11} drives, and it has its own page in this library."
+      ]
+    }
+  ],
+  "learnings": [
+    "A festival can give a whole month one shared thread, but the mix still matters: the dental and science sessions at Ek Tara gave October more than one theme.",
+    "The same place can host different kinds of session: Ek Tara hosted a dental session in June and another in October, plus a science workshop in October.",
+    "A numbered series can run on consecutive days, as Colours Of Durga did from drive 4.0 on October 6 to drive 5.0 on October 7.",
+    "Small teams of two to five were enough for every October session."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in October 2023?",
+      "a": "In October 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most were Durga Puja sessions for children at Pather Sathi's Sunday school and at Sujata Child NGO. The rest were a dental camp workshop and a STEM workshop at Ek Tara, and a Sunday school session that closed the month on October 28."
+    },
+    {
+      "q": "Did AquaTerra run Durga Puja workshops for children in 2023?",
+      "a": "Yes. AquaTerra ran Colours Of Durga 4.0 and 5.0 at Pather Sathi's Sunday school on October 6 and 7, 2023, Festive Spirit at Sujata Child NGO on October 8, and a Durga Puja Programme at the Sunday school on October 14. Each one was for children and run by student volunteers."
+    },
+    {
+      "q": "Does AquaTerra run dental camps for children?",
+      "a": "Yes. Say Cheese, a dental camp workshop at Ek Tara on October 14, 2023, focused on oral hygiene among children. AquaTerra held a dental session at Ek Tara in June 2023 too, called Tooth Talk."
+    },
+    {
+      "q": "Does AquaTerra run science workshops for students?",
+      "a": "Yes. Brain Builders, a STEM workshop at Ek Tara on October 26, 2023, introduced students to science experiments and problem-solving. AquaTerra also ran science sessions in April and May 2023, including Our Earth and Science Sparks."
+    }
+  ],
+  "keywords": [
+    "AquaTerra October 2023",
+    "Durga Puja workshop for children Kolkata",
+    "Sujata Child NGO workshop",
+    "dental camp for children Kolkata",
+    "Ek Tara STEM workshop",
+    "Pather Sathi Sunday school October"
+  ]
+}

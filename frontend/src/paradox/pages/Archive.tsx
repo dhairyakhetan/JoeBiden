@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { stagger, fadeUp, MotionLink } from '../lib/motion'
 import { useMeta } from '../../hooks/useMeta'
+import { pageMetadata } from '../../lib/metaConfig'
 
 /**
  * Paradox 2026 is over (1 to 6 June 2026). Its tickets, scores and registrations lived in a separate database
@@ -10,12 +11,7 @@ import { useMeta } from '../../hooks/useMeta'
  * blog) one tap away.
  */
 export function ArchivePage() {
-  useMeta({
-    title: 'Paradox 2026: that’s a wrap | AquaTerra',
-    description: 'Paradox 2026 ran from 1 to 6 June 2026 and has ended. Read the story, meet the team and see the blog.',
-    image: '',
-    path: '/paradox',
-  })
+  useMeta(pageMetadata.paradoxHome)
   return (
     <div
       className="min-h-[100dvh] bg-bg text-ink flex flex-col items-center justify-center px-5 py-16"

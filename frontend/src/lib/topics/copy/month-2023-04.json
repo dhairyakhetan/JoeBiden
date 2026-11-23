@@ -1,0 +1,74 @@
+{
+  "slug": "month-2023-04",
+  "title": "AquaTerra in April 2023: {count} drives and an elders visit",
+  "description": "April 2023 at AquaTerra: {count} drives, mostly science, earth and first aid sessions at Pather Sathi, and the first Respect and Reach visit to elders.",
+  "h1Lead": "science, first aid and",
+  "h1Accent": "elders",
+  "lede": "In April 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts, where a turnout counts each time someone came along. Most of the month was sessions at Pather Sathi on first aid, the planet, science and grammar. It ended with the first Respect and Reach visit to the Urban Shelter for the Homeless.",
+  "sections": [
+    {
+      "id": "sessions-at-pather-sathi",
+      "heading": "a month of sessions at Pather Sathi",
+      "body": [
+        "Pather Sathi hosted more of April's drives than any other place. The month opened there with Crisis Care, a first aid workshop, on April 1, and closed there with Language Lab, a grammar workshop, on April 29. In between, the Our Earth global warming workshop on April 15 and the ICCV science exhibition on April 22 both ran at Pather Sathi too.",
+        "The sessions were small. Two volunteers ran the first aid and grammar workshops, and four ran the warming and science sessions. Children learned how to handle an urgent situation, the rules and usage of grammar, why temperatures are rising and what can be done about it, and what a science exhibition can spark."
+      ]
+    },
+    {
+      "id": "earth-day",
+      "heading": "earth day at Ek Tara",
+      "body": [
+        "For the Future, the Earth Day workshops, ran at Ek Tara on April 26. Five volunteers taught children about conservation and sustainability. It was the only session of the month at Ek Tara, and its planet theme linked it to the global warming session at Pather Sathi earlier in April.",
+        "By its own stated figure, the Earth Day workshop was the biggest session of the month for children. The planet sessions in April were a short, focused run on one theme."
+      ]
+    },
+    {
+      "id": "first-elders-visit",
+      "heading": "the first visit to elders",
+      "body": [
+        "Respect and Reach drive 1.0 went to the Urban Shelter for the Homeless on April 28. Seven volunteers spent the day with the elders there, the largest team of the month. The visit was about respect and warmth: spending time with the elders and showing them kindness.",
+        "The April visit was the start of the numbered series. Respect and Reach went back to the same shelter in May, with drives 2.0, 3.0 and 4.0 on May 14, 19 and 26, and again in June with drive 5.0. Going back to one shelter is how a single visit became a series."
+      ]
+    },
+    {
+      "id": "how-april-compares",
+      "heading": "how April compares with May",
+      "body": [
+        "April ran {count} drives. May ran {count:month-2023-05}, across more places and with more visits to elders. April's smaller set of sessions was built around one venue, Pather Sathi, and one shelter.",
+        "Read together, the two months show Pather Sathi as the base in both, and Respect and Reach going from one visit in April to three in May. The April sessions are the smaller start, and May is where the same places began to carry a fuller month."
+      ]
+    }
+  ],
+  "learnings": [
+    "One venue can carry a month: Pather Sathi hosted most of April's drives, so a team could cover four topics without finding a new place each time.",
+    "A series starts with one visit: the April elders visit was drive 1.0, and the visits that followed went back to the same shelter.",
+    "A focused session, such as a first aid or grammar workshop, needs only a couple of volunteers, while a planet-themed day can take a team of five.",
+    "A themed day like Earth Day gives a set of workshops a date to point at."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in April 2023?",
+      "a": "In April 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most sessions were at Pather Sathi, covering first aid, global warming, a science exhibition and grammar. Earth Day workshops ran at Ek Tara, and the month ended with the first Respect and Reach visit to the Urban Shelter for the Homeless."
+    },
+    {
+      "q": "When did AquaTerra start visiting elders?",
+      "a": "Respect and Reach, AquaTerra's visits to elders, began with drive 1.0 at the Urban Shelter for the Homeless on April 28, 2023. A team of seven spent the day with the elders, aiming to show them respect and warmth. The series continued with more visits in May and June."
+    },
+    {
+      "q": "Does AquaTerra run first aid workshops for children?",
+      "a": "Yes. Crisis Care, a first aid workshop at Pather Sathi on April 1, 2023, taught children basic first aid for urgent situations. Two volunteers ran it, and AquaTerra ran a first aid workshop in August 2022 too."
+    },
+    {
+      "q": "Did AquaTerra run an Earth Day workshop for children?",
+      "a": "Yes. For the Future, AquaTerra's Earth Day workshops at Ek Tara on April 26, 2023, taught children about conservation and sustainability. Five volunteers ran it, and it was the biggest session of April for children by its own stated figure."
+    }
+  ],
+  "keywords": [
+    "AquaTerra April 2023",
+    "Respect and Reach elders visit Kolkata",
+    "Earth Day workshop for children Kolkata",
+    "first aid workshop for children Kolkata",
+    "Pather Sathi Sunday school Kolkata",
+    "student volunteers Kolkata April 2023"
+  ]
+}

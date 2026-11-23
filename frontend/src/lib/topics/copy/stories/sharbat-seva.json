@@ -1,0 +1,33 @@
+{
+  "slug": "sharbat-seva",
+  "title": "Sharbat Seva in Pictures: Cold Drinks for Kolkata's Summer · AquaTerra",
+  "description": "Photos from {count} Sharbat Seva drives that served chilled sharbat around Kolkata in May 2024 and spring 2025, across {placesCount} places.",
+  "h1Lead": "cold sharbat for",
+  "h1Accent": "the summer heat",
+  "lede": "Sharbat Seva is AquaTerra's summer drive, where students serve chilled sharbat in public places across Kolkata. Since {firstYear}, we have run {count} of these drives, with {volunteers} volunteer turnouts, in two spells: May 2024, and late March to early May 2025.",
+  "chapters": {
+    "2024": {
+      "heading": "a may start",
+      "text": "In 2024 we ran {year:2024} drives, beginning on 10 May outside the Elite Cinema building on Esplanade. Many of the photos are from 24 May, at temples such as Bhootnath Mandir in Beniatola, and at places in Bangur, Phool Bagan, Kankurgachi and Salt Lake. The captions describe fruit, spiced, herbal, floral and citrus sharbat, served icy and cold."
+    },
+    "2025": {
+      "heading": "a spring run in the heat",
+      "text": "In 2025 we ran {year:2025} drives, from late March to 3 May. The photos take us through apartment complexes, Northern Park, and places such as Teghoria and Kakurgachi. Captions say the sharbat cooled hearts, quenched thirst and turned a hot day into a cool celebration."
+    }
+  },
+  "closing": "Members aged 14 to 19 can join by signing in with Google and waiting for approval on the [join page](/join). For the drives in words, with each spell, place and what the team did, read [the full story](/impact/sharbat-seva).",
+  "faqs": [
+    {
+      "q": "What is Sharbat Seva?",
+      "a": "Sharbat Seva is AquaTerra's summer drive, in which students serve chilled sharbat to people in public places across Kolkata. AquaTerra has run {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "When did Sharbat Seva run?",
+      "a": "Sharbat Seva ran in two spells. In May 2024 AquaTerra ran {year:2024} drives, many of them on 24 May. It ran again from late March to 3 May 2025, with {year:2025} drives in that spell."
+    },
+    {
+      "q": "Where did AquaTerra serve sharbat in Kolkata?",
+      "a": "Sharbat Seva has taken place at {placesCount} different places, including Esplanade, Bangur, Salt Lake, Kankurgachi and Teghoria. Temples such as Bhootnath Mandir in Beniatola and the Bangur Shani-Kali Mandir were among the stops in 2024."
+    }
+  ]
+}

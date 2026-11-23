@@ -20,20 +20,20 @@ export interface MetaConfig {
 
 export const pageMetadata: Record<string, MetaConfig> = {
   home: {
-    title: 'AquaTerra | Student-Run NGO & Community in Kolkata',
-    description: `a student-run NGO in Kolkata where ${MEMBERS} teenagers run real welfare, climate and education work. ${DRIVES} drives since 2021. self-funded, free to join.`,
+    title: 'AquaTerra | Student-Run NGO Giving Back in Kolkata',
+    description: `a student-run NGO in Kolkata. ${MEMBERS} teenagers raise their own money and give it back: ${DRIVES} welfare drives, free exam papers, sport and sessions with kids. free to join.`,
     image: '',
     path: '/',
   },
   about: {
-    title: 'About AquaTerra | 16 Students, One Kolkata NGO',
-    description: `how 16 students in Kolkata built a registered, self-funded NGO. now ${MEMBERS} teenagers running real welfare, climate and education work since June 2021.`,
+    title: 'About AquaTerra | Student-Run, Self-Funded NGO in Kolkata',
+    description: `how 16 students in Kolkata built a registered NGO that raises its own money and gives it back. now ${MEMBERS} teenagers and ${DRIVES} welfare drives since June 2021.`,
     image: '',
     path: '/about',
   },
   projects: {
-    title: 'Projects & Drives Since 2021 · AquaTerra Kolkata',
-    description: `${DRIVES} student-run welfare drives, workshops and events, all documented since 2021: ${displayCount(ORG_FACTS.saplingsPlanted)} saplings, ${ORG_FACTS.sundarbansTrips} Sundarbans trips, ${displayCount(ORG_FACTS.bananasDistributed)} bananas. real work, from Kolkata.`,
+    title: 'Every Welfare Drive Since 2021 | AquaTerra Projects, Kolkata',
+    description: `${DRIVES} student-run welfare drives and workshops, each written up with photos: stray dog feeding, food and clothes drives, plantations, Sundarbans relief, kids' sessions.`,
     image: '',
     path: '/projects',
   },
@@ -44,8 +44,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/projects/:slug',
   },
   blog: {
-    title: 'Groundwork Diaries | AquaTerra Student Blog, Kolkata',
-    description: 'student stories from the ground (Sundarbans trips, plantation drives, the late-night event builds) written by the AquaTerra members who were actually there.',
+    title: 'Groundwork Diaries | Stories From AquaTerra Drives, Kolkata',
+    description: 'first-hand stories from AquaTerra drives: Sundarbans relief trips, plantation days, sessions with kids and the late-night event builds that pay for them.',
     image: '',
     path: '/blog',
   },
@@ -57,52 +57,79 @@ export const pageMetadata: Record<string, MetaConfig> = {
     type: 'article',
   },
   schools: {
-    title: 'Schools Network · Kolkata Campuses | AquaTerra',
-    description: 'AquaTerra grows one campus at a time. Students run chapters at their own schools across Kolkata: real drives, real events, real leadership. Bring AQ to yours.',
+    title: 'Start an AquaTerra Chapter at Your School · Kolkata',
+    description: 'students run AquaTerra chapters at their own Kolkata schools: welfare drives, events and real leadership, all free. here is how a campus joins the network.',
     image: '',
     path: '/schools',
   },
   classes: {
-    title: 'Class Cohorts · Students Teaching Students | AquaTerra',
-    description: "Everyone at AquaTerra, grouped by the class they joined with, plus peer tutoring where students teach students. Free always, from Kolkata's student-run NGO.",
+    title: 'Students Teaching Students · Free Peer Classes | AquaTerra',
+    description: "free peer classes where AquaTerra students teach students, plus everyone grouped by the class they joined with. part of how Kolkata's student-run NGO gives back.",
     image: '',
     path: '/classes',
   },
   crftd: {
-    title: 'Crftd | Student-Run Streetwear · AquaTerra',
-    description: "Crftd is AquaTerra's student-run streetwear label: designed, printed and sold by students in Kolkata. Every rupee of profit funds a welfare drive.",
+    title: 'Crftd | Student Streetwear That Funds Welfare · AquaTerra',
+    description: "Crftd is AquaTerra's student-run streetwear label, designed, printed and sold by students in Kolkata. it is one of the two ways the NGO pays for its welfare drives.",
     image: '',
     path: '/crftd',
   },
   collaborations: {
-    title: 'Partnerships & Collaborations · Kolkata | AquaTerra',
-    description: 'Partner with AquaTerra, a student-run NGO in Kolkata: co-host events, sponsor drives, share resources, or run joint welfare work with schools, NGOs and brands.',
+    title: 'Partner With AquaTerra | Schools, NGOs & Brands in Kolkata',
+    description: `run drives with us, host a session for kids, co-host an event or sponsor one. AquaTerra has worked with partner organisations on ${DRIVES} drives since 2021.`,
     image: '',
     path: '/collaborations',
   },
   contact: {
-    title: 'Contact AquaTerra | Partnerships, Collabs & Press',
-    description: 'partnerships, school and NGO collabs, press, or just curious about a student-run NGO in Kolkata, say hi. we read everything and usually reply within a week.',
+    title: 'Contact AquaTerra | Partnerships, Drives, Press · Kolkata',
+    description: 'partner organisations, schools, press, parents or students: write to AquaTerra, the student-run NGO in Kolkata. a student reads every message and replies.',
     image: '',
     path: '/contact',
   },
   faq: {
-    title: 'AquaTerra FAQ | How to Join, Fees & How It Works',
-    description: `answers on joining AquaTerra: who can join (students ${ORG_FACTS.ageRange}), the zero fees, certificates, and how a student-run NGO in Kolkata actually works.`,
+    title: 'AquaTerra FAQ | Joining, Donations, Drives and How It Works',
+    description: `who can join (students ${ORG_FACTS.ageRange}), why there are no fees and no donations, how drives are run and funded, and how Kolkata's student-run NGO works.`,
     image: '',
     path: '/faq',
   },
   opportunities: {
-    title: 'Student Volunteer Opportunities · Kolkata | AquaTerra',
-    description: "Open volunteer roles at AquaTerra, Kolkata's student-run NGO. Real responsibility from day one: pick a team, apply in two minutes. Unpaid, zero fees.",
+    title: 'Volunteer Roles for Students in Kolkata | AquaTerra',
+    description: "open roles across AquaTerra's student-run teams in Kolkata: welfare, events, education, design and more. real responsibility from day one, free, two minutes to apply.",
     image: '',
     path: '/opportunities',
   },
   support: {
-    title: 'Support AquaTerra | No Donations, Real Ways to Help',
-    description: "AquaTerra takes zero donations. it's a self-funded, student-run NGO. support the work instead: buy from Crftd, collaborate, or just spread the word in Kolkata.",
+    title: 'Support AquaTerra | We Take No Donations, Here Is How to Help',
+    description: "AquaTerra is self-funded and takes no donations. help the work instead: join a drive, come to an event, buy from Crftd, partner with us or spread the word in Kolkata.",
     image: '',
     path: '/support',
+  },
+  // The "giving back" pillar pages (owner, 15 Nov 2026). Their body copy lives in
+  // lib/pillarContent.ts; these are only the head tags. Titles front-load the
+  // topic a person would search for, then the brand.
+  impact: {
+    title: 'How AquaTerra Gives Back | Welfare, Donations & Free Education',
+    description: `self-funded, zero donations: ${MEMBERS} Kolkata students earn the money and give it back through ${DRIVES} welfare drives, free exam papers, sport and sessions with kids.`,
+    image: '',
+    path: '/impact',
+  },
+  shikshaq: {
+    title: 'ShikshAQ | Free Exam Papers, Built by Students · AquaTerra',
+    description: 'ShikshAQ is the free education platform built by AquaTerra students in Kolkata: free exam papers for any student, and a free way to find a teacher. no membership needed.',
+    image: '',
+    path: '/shikshaq',
+  },
+  sports: {
+    title: 'Sport at AquaTerra | Charity Tournaments for Kolkata Students',
+    description: 'open cricket, pickleball and FIFA tournaments run by students in Kolkata. TerraThon and Paradox bring school and college teams together, and entry fees fund welfare.',
+    image: '',
+    path: '/sports',
+  },
+  ai: {
+    title: 'How AquaTerra Trains Its Teams to Use AI | Student NGO, Kolkata',
+    description: 'AquaTerra trains student members to use AI well: workshops, AI in the daily running of an NGO, real projects built with it, and sessions teaching kids to use AI safely.',
+    image: '',
+    path: '/ai',
   },
   thankYou: {
     title: 'Thanks, we got your message · AquaTerra',
@@ -111,44 +138,44 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/thank-you',
   },
   privacyPolicy: {
-    title: 'Privacy Policy · AquaTerra Kolkata',
-    description: 'What AquaTerra collects when you join, who else can see it, what we never do with it, and how to have your data deleted. Written for students, in plain language.',
+    title: 'Privacy Policy · AquaTerra',
+    description: 'what AquaTerra collects when you join, who can see it, what we never do with it and how to have it deleted. written for students, in plain language.',
     image: '',
     path: '/privacy-policy',
   },
-  accounts: {
-    title: 'Open Books | Every Rupee In, Every Rupee Out · AquaTerra',
-    description: 'The full FY ledger for AquaTerra, Kolkata: every rupee in and every rupee out, grouped by category and by month, with nothing summarised out of view.',
+  terms: {
+    title: 'Terms of Use · AquaTerra',
+    description: 'the rules for using the AquaTerra site, in plain words: who can join, what you can post, how to get something taken down.',
     image: '',
-    path: '/accounts',
+    path: '/terms',
   },
   directory: {
     // Kept in step with public/DirectoryPage.tsx, which now READS this entry
     // instead of passing useMeta an inline object. Before 2026-09-17 it did
     // both, so the prerendered <title> and the one a JS client saw were
     // different strings on the same URL (audit, SEO P2).
-    title: 'The AQ Map | Everything AquaTerra Does, and Every Way In',
-    description: `every part of AquaTerra on one page: ${departmentsPhrase()} run by students, ${DRIVES} projects, the open roles, and ${yearsPhrase()} of it. pick the way in that suits you.`,
+    title: 'The AQ Map | Everything AquaTerra Does, One Page',
+    description: `every part of AquaTerra on one page: ${departmentsPhrase()} run by students, ${DRIVES} welfare drives, the impact library, open roles and ${yearsPhrase()} of work.`,
     image: '',
     path: '/directory',
   },
   // ── AquaTerra.live (the events hub) ─────────────────────────────────────────
   // Plan: docs/plans/aquaterra-live.md. Descriptions say what the visitor gets and when, never a figure.
   live: {
-    title: 'AquaTerra.live | Party With a Purpose, Kolkata',
-    description: "The home of every fundraising night AquaTerra throws in Kolkata: TerraThon, Starry Night, Disco Diwali and Paradox. Next up: Disco Diwali, The Masquerade Sangeet Edition, 10 November 2026.",
+    title: 'AquaTerra.live | Fundraising Nights That Pay for Welfare, Kolkata',
+    description: "the home of AquaTerra's fundraising nights in Kolkata: Disco Diwali, The Starry Night, TerraThon and Paradox. every ticket pays for the NGO's welfare drives.",
     image: '',
     path: '/live',
   },
   liveDisco: {
     title: 'Disco Diwali 2026 | The Masquerade Sangeet Edition, Kolkata',
-    description: 'A masquerade sangeet night under the Diwali sky, all for charity. 10 November 2026, Kolkata. Count down, get your ticket and bring a mask. By AquaTerra.',
+    description: "AquaTerra's masquerade sangeet night for charity, held 10 November 2026 in Kolkata. student-run, and every ticket funded the NGO's welfare drives.",
     image: '',
     path: '/live/disco-diwali',
   },
   liveEvents: {
-    title: 'The Nights | Every AquaTerra Fundraising Event, Kolkata',
-    description: 'Every fundraising night AquaTerra has thrown in Kolkata, from Disco Diwali to TerraThon, the next one first.',
+    title: 'Every AquaTerra Fundraising Night | Kolkata Events',
+    description: 'every fundraising night AquaTerra has thrown in Kolkata, from Disco Diwali to TerraThon, and what each one paid for.',
     image: '',
     path: '/live/events',
   },
@@ -159,8 +186,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/live/vault',
   },
   liveWhy: {
-    title: 'Why We Host | A Party That Pays | AquaTerra.live',
-    description: 'AquaTerra has no grants and no parent company. The nights are how the programmes get paid for.',
+    title: 'Why AquaTerra Hosts Events | The Nights That Fund the Work',
+    description: 'AquaTerra has no grants, no parent company and takes no donations. its student-run nights are how the welfare drives, ShikshAQ and sessions with kids get paid for.',
     image: '',
     path: '/live/why',
   },
@@ -177,8 +204,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/live/crew',
   },
   liveFaq: {
-    title: 'FAQ | AquaTerra.live Disco Diwali',
-    description: 'How to get a Disco Diwali ticket, when and where it is, what to wear and where the money goes. Short answers from the AquaTerra events team.',
+    title: 'FAQ | AquaTerra.live Fundraising Nights',
+    description: 'When and where Disco Diwali 2026 took place, how the tickets worked, the dress code and where the money from AquaTerra nights goes. Short answers from the events team.',
     image: '',
     path: '/live/faq',
   },
@@ -195,26 +222,26 @@ export const pageMetadata: Record<string, MetaConfig> = {
   // "AquaTerra | Student-Run NGO" instead of the sport someone is being invited
   // to play. Descriptions lead with the concrete ask: fee, format, dates.
   terrathon: {
-    title: 'TerraThon 2026 | Cricket, Pickleball & FIFA in Kolkata',
-    description: "Team AquaTerra's three-sport fundraiser, 2 to 4 October. Cricket, Pickleball and FIFA, open to school and college teams across Kolkata. Entry fees fund our welfare projects.",
+    title: 'TerraThon 2026 | Charity Cricket, Pickleball & FIFA, Kolkata',
+    description: "AquaTerra's three-sport charity tournament, held 2 to 4 October 2026: cricket, pickleball and FIFA for school and college teams. entry fees funded welfare drives.",
     image: '',
     path: '/terrathon',
   },
   terrathonCricket: {
-    title: 'TerraThon Cricket 2026 | Kolkata Student Tournament',
-    description: 'Knockout cricket on turf, 3 and 4 October. Enter a team, play for a prize pool, and fund AquaTerra welfare work in Kolkata. Registration closes the night before.',
+    title: 'TerraThon Cricket 2026 | Charity Tournament, Kolkata',
+    description: 'knockout cricket on turf, 3 and 4 October 2026, for school and college teams in Kolkata. entry fees funded AquaTerra welfare work.',
     image: '',
     path: '/terrathon/cricket',
   },
   terrathonPickleball: {
-    title: 'TerraThon Pickleball 2026 | Doubles, Kolkata',
-    description: 'Doubles pickleball on 2 October, league into knockouts. Grab a partner, take a court, and fund AquaTerra welfare work in Kolkata.',
+    title: 'TerraThon Pickleball 2026 | Charity Doubles, Kolkata',
+    description: 'doubles pickleball on 2 October 2026, league into knockouts, run by AquaTerra students in Kolkata. entry fees funded welfare work.',
     image: '',
     path: '/terrathon/pickleball',
   },
   terrathonFifa: {
-    title: 'TerraThon FIFA 2026 | Solo Esports, Kolkata',
-    description: 'Solo FIFA league on 3 October. One player, one controller, a prize pool, and entry fees that fund AquaTerra welfare work in Kolkata.',
+    title: 'TerraThon FIFA 2026 | Charity Esports League, Kolkata',
+    description: 'a solo FIFA league on 3 October 2026, run by AquaTerra students in Kolkata. one player, one controller, and entry fees that funded welfare work.',
     image: '',
     path: '/terrathon/fifa',
   },
@@ -287,14 +314,14 @@ export const pageMetadata: Record<string, MetaConfig> = {
   },
   join: {
     // Read by public/JoinPromoPage.tsx. See the note on `directory`.
-    title: 'Join AquaTerra · Student-Run NGO in Kolkata',
-    description: `What you get for showing up: logged hours, a certificate on request, ${departmentsPhrase()} and three student-run ventures. Two minutes to apply, no fees, ever.`,
+    title: 'Join AquaTerra | Free Student Volunteering in Kolkata',
+    description: `join ${MEMBERS} students running welfare drives, events and free education in Kolkata: logged hours, a certificate on request, ${departmentsPhrase()}. free, two minutes to apply.`,
     image: '',
     path: '/join',
   },
   games: {
     title: 'Mini Games · AquaTerra',
-    description: 'Short games from the AquaTerra crew: no sign-in, a couple of minutes each.',
+    description: 'short games made by AquaTerra students in Kolkata: no sign-in, a couple of minutes each.',
     image: '',
     path: '/games',
   },
@@ -305,8 +332,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/equity-policy',
   },
   volunteer: {
-    title: 'Volunteer Handbook · Join AquaTerra, Kolkata',
-    description: 'How volunteering at AquaTerra works: show up for a drive, join a team, grow into real responsibility. Student-run in Kolkata, zero fees, no experience needed.',
+    title: 'Volunteer Handbook | How Volunteering at AquaTerra Works',
+    description: 'how volunteering at AquaTerra works: show up for a drive, join a team, grow into real responsibility. student-run in Kolkata, free, no experience needed.',
     image: '',
     path: '/volunteer',
   },
@@ -315,8 +342,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     // AquaTerra (a first-time Google sign-in creates the account), so a title
     // reading "Log In" told search results and shared links the opposite of
     // what the page is for.
-    title: 'Join AquaTerra | Sign Up with Google',
-    description: 'Joining AquaTerra takes one tap: sign in with Google and your account is created. No separate sign-up form, no fees. Student-run NGO in Kolkata.',
+    title: 'Sign In to AquaTerra | Join With Google',
+    description: 'joining AquaTerra takes one tap: sign in with Google and your account is created. free, student-run, Kolkata.',
     image: '',
     path: '/login',
   },
@@ -408,8 +435,8 @@ export const pageMetadata: Record<string, MetaConfig> = {
     type: 'article',
   },
   teams: {
-    title: `${ORG_FACTS.departmentsActive} Student-Led Departments · AquaTerra Kolkata`,
-    description: `${departmentsPhrase()}, all run by students: events, welfare, Crftd, ShikshAQ and more. real ownership from day one. find the lane that fits what you want to build. Kolkata.`,
+    title: `${ORG_FACTS.departmentsActive} Student-Run Teams Behind AquaTerra · Kolkata`,
+    description: `${departmentsPhrase()}, all run by students: welfare, events, Crftd, ShikshAQ, marketing and more. find the team that fits what you want to build, from day one.`,
     image: '',
     path: '/teams',
   },
@@ -420,14 +447,20 @@ export const pageMetadata: Record<string, MetaConfig> = {
     path: '/teams/:uuid',
   },
   members: {
-    title: 'Members & Student Leaders · AquaTerra Kolkata',
-    description: `${MEMBERS} students aged ${ORG_FACTS.ageRange} run AquaTerra: the people behind every drive, event and workshop in Kolkata. meet the members building real things since 2021.`,
+    title: 'The Students Who Run AquaTerra · Kolkata',
+    description: `${MEMBERS} students aged ${ORG_FACTS.ageRange} run AquaTerra: the people behind ${DRIVES} welfare drives, the events that fund them and the free education work.`,
     image: '',
     path: '/members',
   },
+  coreTeam: {
+    title: 'AQ Core | AquaTerra Core Team, Kolkata',
+    description: 'The core members of AquaTerra, the students who carry the work week to week.',
+    image: '',
+    path: '/core-team',
+  },
   quickLinks: {
-    title: 'Quick Links | AquaTerra · Every Page, One Place',
-    description: 'Every AquaTerra link in one place: projects, Crftd, ShikshAQ, teams, the volunteer handbook, plus our Instagram, LinkedIn and WhatsApp. Kolkata student-run NGO.',
+    title: 'Quick Links | Every AquaTerra Page in One Place',
+    description: 'every AquaTerra link in one place: how we give back, projects, ShikshAQ, Crftd, teams, the handbook, plus Instagram, LinkedIn and WhatsApp.',
     image: '',
     path: '/links',
   },
@@ -475,8 +508,9 @@ export const pageMetadata: Record<string, MetaConfig> = {
   },
   // Paradox 2026 Pages
   paradoxHome: {
-    title: 'Paradox 2026 | Student-Led Competitive Fest Kolkata',
-    description: 'Paradox 2026 - AquaTerra\'s student-led competitive fest: sport, business, creative & cultural events across one week in Kolkata. Every rupee funds welfare projects.',
+    // Paradox 2026 has ended; this is the archive page every closed /paradox path lands on (pages/Archive.tsx).
+    title: 'Paradox 2026: That’s a Wrap | AquaTerra Student Fest, Kolkata',
+    description: "Paradox 2026, AquaTerra's student-run fest of sport, business, creative and cultural events, ran 1 to 6 June 2026 in Kolkata. read the story, meet the team, see the blog.",
     image: '',
     path: '/paradox',
   },
@@ -512,9 +546,15 @@ export const pageMetadata: Record<string, MetaConfig> = {
   },
   paradoxTeam: {
     title: 'Team | Meet Paradox 2026 Student Leaders',
-    description: 'Meet the student-led team organising Paradox 2026, AquaTerra\'s competitive fest in Kolkata.',
+    description: 'Meet the student team that organised Paradox 2026, AquaTerra\'s fest of sport, business, creative and cultural events in Kolkata.',
     image: '',
     path: '/paradox/team',
+  },
+  paradoxStory: {
+    title: 'The Story of Paradox 2026 | AquaTerra Student Fest, Kolkata',
+    description: "how a team of AquaTerra students built Paradox 2026, a six-day fest of sport, business, creative and cultural events in Kolkata, 1 to 6 June 2026. proceeds fund welfare.",
+    image: '',
+    path: '/paradox/story',
   },
   paradoxSponsors: {
     title: 'Sponsors | Paradox 2026',

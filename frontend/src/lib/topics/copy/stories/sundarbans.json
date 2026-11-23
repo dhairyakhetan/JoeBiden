@@ -1,0 +1,45 @@
+{
+  "slug": "sundarbans",
+  "title": "Sundarbans in Pictures: Medical Camps, Aid and Planting · AquaTerra",
+  "description": "Photos from {count} Sundarbans drives by AquaTerra students, from July {firstYear} to {lastYear}: aid, medical camps and tree planting in villages.",
+  "h1Lead": "aid, camps and",
+  "h1Accent": "saplings",
+  "lede": "Sundarbans drives bring aid, medical camps and planting to villages across the Sundarbans. The first ran in July 2021, and the series has {count} drives through {lastYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up) across {placesCount} places.",
+  "chapters": {
+    "2021": {
+      "heading": "the first aid drives",
+      "text": "In 2021 we ran {year:2021} drives. Sunderbans 1.0 came in July, when volunteers provided aid to people in the villages. Sunderbans 2.0 followed in Ward 142 later that month, and Genesis Sunderbans 1.0 came in October."
+    },
+    "2022": {
+      "heading": "stories, smiles and care",
+      "text": "In 2022 we ran {year:2022} drives, both in the Sundarbans villages: Sunderbans 3.0 in February and the Mukti Sunderbans Project in March. Both were described as days of stories, smiles and care."
+    },
+    "2023": {
+      "heading": "checkups and planting",
+      "text": "In 2023 we ran {year:2023} drives. In May a Medical Camp checked vitals and brought healthcare closer to people who needed it most. In June, Sunderbans Plantation Project 4.0 was a day of planting, support and sustainability, and in July came the fifth Pather Sathi Sundarbans Project."
+    },
+    "2024": {
+      "heading": "back to planting",
+      "text": "In 2024 we ran {year:2024} drive, Sunderbans Plantation Project 5.0, in June. Saplings were planted to restore green cover and protect wildlife in the Sundarbans."
+    },
+    "2025": {
+      "heading": "health care, again",
+      "text": "In 2025 we ran {year:2025} drive, Sunderbans 8.0, in December, described as impact in action. Its own stated figures include more than a hundred medical checkups, a reminder that the work has mixed health care with aid and planting from the start."
+    }
+  },
+  "closing": "Students aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. Each Sundarbans drive, with its date, place and what the team did, is on [the full story](/impact/sundarbans).",
+  "faqs": [
+    {
+      "q": "What has AquaTerra done in the Sundarbans?",
+      "a": "AquaTerra has run {count} Sundarbans drives since July {firstYear}, in villages across the Sundarbans. The work includes aid drives, medical camps and tree planting, with {volunteers} volunteer turnouts in total."
+    },
+    {
+      "q": "Does AquaTerra run medical camps in the Sundarbans?",
+      "a": "Yes. A Medical Camp in May 2023 checked vitals and brought healthcare closer to people in the Sundarbans. Sunderbans 8.0 in December 2025 reports more than a hundred medical checkups."
+    },
+    {
+      "q": "Can students join a Sundarbans drive?",
+      "a": "Students aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval, and students run the drives themselves. The full story lists each Sundarbans drive by date and place."
+    }
+  ]
+}

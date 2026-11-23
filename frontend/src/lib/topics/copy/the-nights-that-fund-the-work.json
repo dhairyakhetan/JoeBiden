@@ -1,0 +1,86 @@
+{
+  "slug": "the-nights-that-fund-the-work",
+  "title": "Every night that paid for the work · AquaTerra",
+  "description": "Every fest, Diwali party, carnival, tournament and children's fete AquaTerra has run to fund its welfare drives in Kolkata, from {firstYear} to {lastYear}.",
+  "h1Lead": "the nights that",
+  "h1Accent": "paid for it",
+  "lede": "AquaTerra has run {count} nights, fetes and fundraisers from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts across them. Some raised money for the welfare drives, like Paradox, Disco Diwali, The Starry Night and the sports tournaments. Others were children's fetes and anniversary parties. AquaTerra takes no donations, so these nights are one of the ways its welfare work is paid for.",
+  "sections": [
+    {
+      "id": "what-counts-as-a-night",
+      "heading": "what counts as a night",
+      "body": [
+        "This page covers the events AquaTerra's students have run for fundraising and for festive fun, from the first Roots workshop in August 2021 to The Starry Night in December 2025. It includes sports tournaments, fundraising fests, Diwali parties, Christmas carnivals and anniversary parties, along with a few children's fetes.",
+        "Not every night raised money. The children's fetes and workshops sit in the same list because they belong to the same festive calendar, and each night's summary says what it was for."
+      ]
+    },
+    {
+      "id": "from-many-small-nights-to-a-few-series",
+      "heading": "from many small nights to a few series",
+      "body": [
+        "2022 had the most nights, {year:2022} of them: sports tournaments, the first Paradox fest, Trick or Donate at New Alipore, the first anniversary party and the Mini-Fete at Gandhi Vidyalaya. Many of those were one-off events, as the team tried a lot of formats in the first year.",
+        "2023 brought {year:2023} nights, including two FIFA days on Hindustan Road, a football match at VS Arena, Pride Binge and Diwali Night. 2024 had {year:2024}, among them the June Paradox fest, the third anniversary party at Conclave, Play It Forward, Disco Diwali and the Christmas carnival. 2025 had {year:2025}, with Disco Diwali 2.0, Paradox 3.0, the Roots tee days and Starry Night '25."
+      ]
+    },
+    {
+      "id": "the-big-named-nights",
+      "heading": "the big named nights",
+      "body": [
+        "Paradox is the largest youth fest on the list. Its June 2025 edition, Paradox 3.0, ran for five days with twelve events and a Punjabi Night. Disco Diwali has been held in October 2024 and October 2025, and again on 10 November 2026 as a masquerade sangeet night.",
+        "The 2026 listings are the newest of these: Disco Diwali's masquerade sangeet night, TerraThon on 2 to 4 October 2026, Paradox on 1 to 6 June 2026, and the Summer AQ Turns Five, AquaTerra's fifth anniversary party, listed for summer 2026."
+      ]
+    },
+    {
+      "id": "where-these-nights-happen",
+      "heading": "where these nights happen",
+      "body": [
+        "Most of the nights are in Kolkata. Sky Turf hosted three of them: the Turf It Up football fundraiser in December 2022 and The Starry Night fundraisers of December 2024 and December 2025. Ek Tara hosted three as well, the 2021 Roots planting workshop, a mini fete in March 2022 and a mini fete workshop in November 2023.",
+        "Several of the 2025 Roots tee days were at Calcutta Boys School, Calcutta International School and South City International School, all of them school fests."
+      ]
+    },
+    {
+      "id": "where-the-money-goes",
+      "heading": "where the money goes",
+      "body": [
+        "AquaTerra is self-funded and takes no monetary donations. Its welfare drives, the food, saplings, books, clothes and lessons that appear across this library, are paid for in part by these nights, by the sports fundraisers, by Paradox and by Crftd.",
+        "Each night's own funds figure belongs to that night, and this page does not add them up. Read how the whole model works on [how we fund the work](/impact/how-we-fund-the-work)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Not every night raises money: children's fetes and workshops sit beside the fundraisers, so check the summary before assuming.",
+    "The early years tried many formats, and the later years kept a few named series that came back, such as Paradox, Disco Diwali and The Starry Night.",
+    "Paradox has carried its name on nights in every year from 2022 to 2025, which makes it the easiest series to find again.",
+    "Sky Turf is the venue to know for the winter fundraiser, since it hosted The Starry Night in 2024 and 2025."
+  ],
+  "faqs": [
+    {
+      "q": "What nights has AquaTerra held to fund its welfare work?",
+      "a": "AquaTerra has run {count} nights, fetes and fundraisers from {firstYear} to {lastYear}. The best known are Paradox, the student fest, Disco Diwali, The Starry Night Christmas carnival, and the sports tournaments and TerraThon. AquaTerra takes no donations, so these nights help pay for its welfare drives."
+    },
+    {
+      "q": "Does AquaTerra take donations?",
+      "a": "No. AquaTerra takes no monetary donations and is self-funded. Its student-run nights, including Paradox, Disco Diwali and The Starry Night, are one of the ways it pays for the welfare drives it runs."
+    },
+    {
+      "q": "What is the Summer AQ Turns Five?",
+      "a": "It is AquaTerra's fifth anniversary party, with an ocean and mermaid theme, listed for summer 2026. AquaTerra was founded on 11 June 2021, and it has marked earlier anniversaries too, including a first-year party in June 2022."
+    },
+    {
+      "q": "How can a company work with AquaTerra's nights?",
+      "a": "Companies can sponsor or take a stall at a fundraising night, or work with AquaTerra on a drive. Get in touch through the collaborations page. AquaTerra does not ask companies for donations."
+    },
+    {
+      "q": "What nights were listed for 2026?",
+      "a": "The 2026 listings include Paradox from 1 to 6 June, TerraThon from 2 to 4 October and the Summer AQ Turns Five in summer. The Disco Diwali masquerade sangeet night was held on 10 November 2026."
+    }
+  ],
+  "keywords": [
+    "AquaTerra fundraising events Kolkata",
+    "student fundraisers Kolkata",
+    "Paradox Disco Diwali Starry Night",
+    "student-run charity events Kolkata",
+    "youth fest fundraiser Kolkata",
+    "how a student NGO pays for welfare work"
+  ]
+}

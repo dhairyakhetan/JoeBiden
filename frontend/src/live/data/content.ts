@@ -35,15 +35,15 @@ export const EVENTS: LiveEvent[] = [
     slug: 'disco-diwali-2026',
     name: 'Disco Diwali',
     edition: 'The Masquerade Sangeet Edition',
-    status: 'upcoming',
+    // took place on 10 November 2026 (owner, 2026-11-15). The pages would read it as past anyway once the date is gone (lib/eventPhase.ts).
+    status: 'past',
     when: NEXT_EVENT.date,
     dateLabel: NEXT_EVENT.dateLabel,
     venue: DISCO.venueName,
     time: DISCO.time,
-    blurb: 'A masquerade sangeet night under the Diwali sky, with a mirror ball hung over it. Every ticket is for charity.',
+    blurb: 'A masquerade sangeet night under the Diwali sky, with a mirror ball hung over it. Every ticket funded AquaTerra\'s welfare drives.',
     href: DISCO.base,
     photos: ['booth', 'drapes', 'friends', 'greenfloor'],
-    highlights: ['Bring a mask. It is a masquerade.', 'Tickets on WhatsApp, paid by UPI, confirmed with a DD26 booking ID.'],
   },
   {
     slug: 'terrathon-2026',

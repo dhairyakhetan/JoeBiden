@@ -1,0 +1,19 @@
+{
+  "slug": "respect-and-reach",
+  "title": "Respect and Reach in Pictures: Visits with Elders in Kolkata · AquaTerra",
+  "description": "Photos from {count} Respect and Reach visits, where students spend a day with elderly residents, sharing stories, songs and small gifts since {firstYear}.",
+  "h1Lead": "time, stories and",
+  "h1Accent": "respect",
+  "lede": "Respect and Reach is AquaTerra's visit series for elderly residents. Students spend a day with them, listening, singing, telling stories and bringing small gifts. Since {firstYear} we have made {count} visits, with {volunteers} volunteer turnouts, and most of them were at the Urban Shelter for the Homeless.",
+  "chapters": {
+    "2023": { "heading": "stories, songs and gifts", "text": "In 2023 we ran {year:2023} visits, all at the Urban Shelter for the Homeless, between 28 April and 2 June. The captions talk about stories, songs and smiles with the elders we often forget to listen to, and about students bringing joy, gifts and warmth to residents." },
+    "2024": { "heading": "kids and essentials", "text": "In 2024 we ran {year:2024} visits, both at the Urban Shelter for the Homeless, on 3 and 8 May. One held interactive sessions for kids to foster creativity and learning. The other offered support, care and essentials to elderly residents in need." },
+    "2025": { "heading": "a visit beyond the shelter", "text": "In 2025 we ran {year:2025} visit, on 11 September, at All Bengal Women's Union. It is the only visit in this story outside the shelter, and nothing is listed between May 2024 and this day. Its caption says small acts of kindness can have big impacts on seniors." }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every visit with its place and details, read [the full story](/impact/respect-and-reach).",
+  "faqs": [
+    { "q": "Who does AquaTerra visit through Respect and Reach?", "a": "Respect and Reach visits elderly residents. Students spend a day with them, listening, singing, telling stories and bringing gifts and essentials. Most visits were at the Urban Shelter for the Homeless, and one was at All Bengal Women's Union in September 2025." },
+    { "q": "Can students join an AquaTerra Respect and Reach visit?", "a": "Members aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. Each visit is a single day, and each has its own entry on the site." },
+    { "q": "What did AquaTerra do for elders in 2023?", "a": "In 2023 AquaTerra made {year:2023} Respect and Reach visits at the Urban Shelter for the Homeless, between 28 April and 2 June. Students brought stories, songs, gifts and warmth to the residents." }
+  ]
+}

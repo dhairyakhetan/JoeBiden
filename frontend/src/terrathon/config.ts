@@ -40,7 +40,7 @@ export interface Contact {
  * literal: a number changed here used to go stale in two other places.
  */
 export const CONTACTS: Contact[] = [
-  { name: 'Pratyaksh Singhania', phone: '9830554654' },
+  { name: 'Pratyaksh Singhania' },  // number removed 19 Nov 2026 (audit P-30): both events are over, so no personal number is published.
 ]
 
 export const UPI = {
@@ -75,7 +75,7 @@ export const EVENT = {
  * this is index 0; it read index 1 until the second contact was removed on
  * 2026-09-21, which would have thrown at module load.
  */
-export const ASK_PHONE = CONTACTS[0].phone as string
+export const ASK_PHONE = CONTACTS[0].phone ?? ''
 
 /** Per-sport copy. PRD 4.4: the vibe lines ship as written. */
 export const SPORT_COPY: Record<SportSlug, { subtitle: string; vibe: string; fact: string; factLabel: string }> = {
@@ -136,5 +136,5 @@ export const PARTNERS: Partner[] = []
 export const TRACK_RECORD = [
   { value: '2021', label: 'Running since' },
   { value: '3', label: 'Sports this year' },
-  { value: '12A · 80G', label: 'Registered NGO' },
+  { value: 'DARPAN', label: 'Registered charitable trust' },
 ]

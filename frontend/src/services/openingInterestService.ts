@@ -49,8 +49,8 @@ function toInterest(r: any): Interest {
 
 export const openingInterestService = {
   /** Register interest in a role (openingId) or a team (teamUuid). Saving twice is not an error. */
-  async register(memberId: number, target: { openingId: string } | { teamUuid: string }, extra?: { message?: string; customAnswers?: Record<string, unknown> }): Promise<void> {
-    let row: Record<string, unknown> = { member_id: memberId, state: 'waiting', message: extra?.message?.trim() || null, custom_answers: extra?.customAnswers ?? {} }
+  async register(memberId: number, target: { openingId: string } | { teamUuid: string }, extra?: { message?: string; customAnswers?: Record<string, unknown>; fromApplication?: boolean }): Promise<void> {
+    let row: Record<string, unknown> = { member_id: memberId, state: 'waiting', message: extra?.message?.trim() || null, custom_answers: extra?.customAnswers ?? {}, ...(extra?.fromApplication ? { from_application: true } : {}) }
     if ('openingId' in target) {
       row = { ...row, opening_id: target.openingId }
     } else {
@@ -59,7 +59,15 @@ export const openingInterestService = {
       row = { ...row, team_id: team.team_id }
     }
     const { error } = await (supabaseCommunity as any).from('opening_interests').insert(row)
-    // 23505: already registered. That is the state the member wanted, so it is a success.
+    // 23505: already registered. That is the state the member wanted, so it is a success. The one exception: an earlier
+    // plain reminder is upgraded when they now send a real application, so the team sees it (and their answers) while HR decides.
+    if (error && error.code === '23505' && extra?.fromApplication && 'openingId' in target) {
+      const { error: upErr } = await (supabaseCommunity as any).from('opening_interests')
+        .update({ from_application: true, message: extra.message?.trim() || null, custom_answers: extra.customAnswers ?? {}, state: 'waiting' })
+        .eq('member_id', memberId).eq('opening_id', target.openingId).in('state', ['waiting', 'dismissed'])
+      if (upErr) throw logSupabaseError('openingInterestService.register(upgrade)', upErr)
+      return
+    }
     if (error && error.code !== '23505') throw logSupabaseError('openingInterestService.register', error)
   },
 
@@ -69,7 +77,9 @@ export const openingInterestService = {
     if ('openingId' in target) {
       q = q.eq('opening_id', target.openingId)
     } else {
-      const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', target.teamUuid).single()
+      const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', target.teamUuid).single()
+      // A failed lookup is not "no interest": throwing keeps a registered member from being offered the button again.
+      if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('openingInterestService.getMine', teamErr)
       if (!team) return null
       q = q.eq('team_id', team.team_id)
     }

@@ -54,13 +54,6 @@ export function Footer() {
               >
                 @ngo.aquaterra ↗
               </motion.a>
-              <motion.a
-                href="https://wa.me/919748679979" target="_blank" rel="noreferrer"
-                whileTap={{ scale: 0.96 }} transition={SPRING}
-                className="block py-1 hover:text-c2 transition-colors"
-              >
-                WhatsApp ↗
-              </motion.a>
             </motion.div>
 
             <motion.div variants={fadeUp} className="space-y-1">

@@ -1,0 +1,71 @@
+{
+  "slug": "school-on-wheels",
+  "title": "Workshops with School on Wheels in Kolkata · AquaTerra",
+  "description": "Maths, science, speaking, stories and art sessions for children at School on Wheels in Kolkata, run by AquaTerra students. {count} sessions since {firstYear}.",
+  "h1Lead": "workshops with",
+  "h1Accent": "School on Wheels",
+  "lede": "AquaTerra has run {count} workshops with School on Wheels in Kolkata since {firstYear}, with {volunteers} volunteer turnouts across them. The sessions covered school subjects such as maths tables and science, speaking and storytelling, and later art and festival crafts.",
+  "sections": [
+    {
+      "id": "two-seasons",
+      "heading": "two seasons of workshops",
+      "body": [
+        "We first went to School on Wheels in March 2023, when Nature in Bloom celebrated the outdoors with a planting workshop, and the drive notes 80 saplings planted. Between May and July 2023 the visits were classroom sessions: a maths tables workshop, a science basics session, two Speak to Shine days on speaking skills, and a story narration workshop.",
+        "We came back in March 2025 for origami, a story-making workshop and a science session built around experiments. In October 2025 the Art Nook session made Diwali greeting cards, and volunteers told the children Diwali stories while they worked."
+      ]
+    },
+    {
+      "id": "the-places",
+      "heading": "the places we went",
+      "body": [
+        "The sessions were held in several areas: HUHT, Belgachia and Park Circus. Most of the earlier work was at HUHT, and the 2025 sessions were spread across all three.",
+        "Across {count} sessions and {volunteers} volunteer turnouts, the work ranged from school subjects to art and festivals."
+      ]
+    },
+    {
+      "id": "what-children-worked-on",
+      "heading": "what the children worked on",
+      "body": [
+        "The 2023 sessions were built around school subjects, maths and science, and around speaking. Children practised public speaking and story narration, and the Speak to Shine days were the most repeated format at the school. The 2025 sessions turned to art, origami and storytelling, with a focus on making something by hand."
+      ]
+    },
+    {
+      "id": "working-with-schools-like-this",
+      "heading": "working with schools like this",
+      "body": [
+        "For teachers who want a session on maths, science, speaking or art, the [for teachers](/impact/for-teachers) page shows the formats we use, and the [reading, speaking and English workshops](/impact/reading-speaking-and-english) page covers the language sessions. Students who want to run one can join AquaTerra and sign up on the [projects page](/projects)."
+      ]
+    }
+  ],
+  "learnings": [
+    "A session that follows a school subject, like tables or science basics, shows how a workshop can build on what children are already learning.",
+    "A school can be visited in two seasons, as School on Wheels was in 2023 and again in 2025, with different topics each time.",
+    "Speaking and storytelling were the most repeated formats here, with two Speak to Shine days and a story narration workshop in 2023."
+  ],
+  "faqs": [
+    {
+      "q": "Has AquaTerra worked with School on Wheels?",
+      "a": "Yes. AquaTerra has run {count} workshops with School on Wheels between March 2023 and October 2025, with {volunteers} volunteer turnouts across them."
+    },
+    {
+      "q": "What subjects did AquaTerra teach at School on Wheels?",
+      "a": "Maths tables, science basics, speaking skills, story narration and planting in 2023. In 2025 the sessions covered origami, story making, science experiments, and art with Diwali storytelling."
+    },
+    {
+      "q": "Where did the School on Wheels sessions take place?",
+      "a": "In HUHT, Belgachia and Park Circus. Most of the 2023 sessions were at HUHT, and the 2025 sessions were held in all three areas."
+    },
+    {
+      "q": "Can a teacher ask AquaTerra for a workshop?",
+      "a": "Yes. Teachers and educators can see the workshop formats on the for-teachers page and reach AquaTerra through the contact page."
+    }
+  ],
+  "keywords": [
+    "School on Wheels Kolkata workshops",
+    "maths tables workshop for children Kolkata",
+    "speaking skills workshop for kids Kolkata",
+    "origami workshop Park Circus",
+    "School on Wheels HUHT",
+    "AquaTerra school workshops Kolkata"
+  ]
+}

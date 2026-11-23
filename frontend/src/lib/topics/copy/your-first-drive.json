@@ -1,0 +1,86 @@
+{
+  "slug": "your-first-drive",
+  "title": "Your first drive with AquaTerra in Kolkata · AquaTerra",
+  "description": "What a first AquaTerra drive is likely to involve: a dog feeding, a sharbat stall, or a clothes or book collection in Kolkata. {count} drives since {firstYear}.",
+  "h1Lead": "your first",
+  "h1Accent": "drive with us",
+  "lede": "Your first AquaTerra drive is most likely a visit to a Kolkata neighbourhood to feed dogs, hand out food or sharbat, or collect clothes and books. Since {firstYear} we have run {count} drives like these, with {volunteers} volunteer turnouts across them, and Salt Lake, Bangur and Howrah come up most often as the places we go.",
+  "sections": [
+    {
+      "id": "what-a-first-drive-looks-like",
+      "heading": "what a first drive looks like",
+      "body": [
+        "Most first drives are distribution drives. A small team of students goes to a street, a market or a housing complex with a fixed amount of something: biscuits for dogs, food packets, sharbat, clothes or books. Feeding dogs is the other kind of drive you are most likely to meet, and the two together make up most of what we have written up.",
+        "Most drives have a small team, usually between two and eight volunteers. Each drive is written up with what was handed out, where it happened and who went, so you can see the plan before you turn up."
+      ]
+    },
+    {
+      "id": "the-series-you-will-see",
+      "heading": "the series you will see first",
+      "body": [
+        "Tails and Treats is the drive most new members meet first. We have fed stray dogs in Kolkata since {firstYear}, with biscuits, and the series has run {count:tails-and-treats} times. Each drive is a small group handing out biscuits to the dogs on the street they go to, and the same routine repeats from one neighbourhood to the next.",
+        "Sharbat Seva is a summer drive. The sessions run from March to May, and the sharbat drives at Sarat Bose Road and Beleghata each note 20 litres of Rooh Afza. Wear and Share and Book Basket are the collection drives: clothes come in for people who need them, and the books are collected for underprivileged kids. Food For All and Smile Notes make up the rest of the list."
+      ]
+    },
+    {
+      "id": "where-your-first-drive-happens",
+      "heading": "where the drives happen",
+      "body": [
+        "Almost all of them are around Kolkata. Salt Lake, Bangur and Howrah come up most often, followed by Lake Town Footbridge, Sarat Bose Road and Bhawanipore. Across all years we have run drives in {placesCount} places, from temples and malls to apartment complexes and footbridges.",
+        "Each drive is written up with its date and place, so you can see where a drive happened before you decide to join. The places change from series to series: Tails and Treats has moved around the city, while Sharbat Seva has gone to temples, malls and busy spots such as Babylon Lounge."
+      ]
+    },
+    {
+      "id": "what-you-will-do",
+      "heading": "what you will do on the day",
+      "body": [
+        "On a feeding drive the job is to hand out the biscuits and keep the dogs fed. On a sharbat drive you pour and serve the crowd. On a collection drive you take in clothes or books, and the team notes how many kilograms came in.",
+        "The write-ups are warm about these days. A Tails and Treats drive at Dobson Lane in June 2026 says the volunteers fed dogs and cows and had a successful hour. The Smile Notes drive at Lake Town Footbridge in May 2026 handed out 100 affirmation notes, each with a toffee."
+      ]
+    },
+    {
+      "id": "how-to-join-a-drive",
+      "heading": "how to join a drive",
+      "body": [
+        "You join AquaTerra with a Google sign-in, and a member of the team approves your account. AquaTerra is for students aged 14 to 19, and the work is run by students. The projects page lists the drives we have written up, so you can see the kind of work before you sign up.",
+        "If you are not sure which drive suits you, start with a feeding or distribution drive, since those are the most common. Questions can go through the contact page."
+      ]
+    }
+  ],
+  "learnings": [
+    "Start with a feeding or distribution drive. They are the most common kind, and the job on the day is the simplest to learn.",
+    "The same series come back. Tails and Treats has run since {firstYear}, so a first drive can be the start of a routine you keep joining.",
+    "Sharbat drives run in spring and early summer, while the book and clothes drives in the recent run fell in June and July.",
+    "Salt Lake, Bangur and Howrah are where most drives have happened, so those are the neighbourhoods a new member is most likely to see."
+  ],
+  "faqs": [
+    {
+      "q": "Where can I volunteer for a first drive in Kolkata with AquaTerra?",
+      "a": "Most first drives happen in Kolkata neighbourhoods, with Salt Lake, Bangur and Howrah coming up most often. AquaTerra has run {count} drives since {firstYear}, and each drive is written up with its place. Students aged 14 to 19 can join with a Google sign-in and an approval."
+    },
+    {
+      "q": "What is the most likely first drive with AquaTerra?",
+      "a": "A feeding or distribution drive is the most likely. Tails and Treats, which feeds stray dogs in Kolkata with biscuits, is the series that has run most often, with {count:tails-and-treats} drives since {firstYear}."
+    },
+    {
+      "q": "Do I need experience to join an AquaTerra drive?",
+      "a": "The jobs in our write-ups are simple: handing out biscuits or food, serving sharbat, and collecting clothes and books. AquaTerra drives are run by students, and the write-ups do not list any experience needed to take part."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. Wear and Share is AquaTerra's clothes collection drive, and it has run {count:wear-and-share} times. Clothes are gathered for people who need them."
+    },
+    {
+      "q": "How often does AquaTerra run drives?",
+      "a": "AquaTerra has run {count} drives since {firstYear}, with {year:2025} of them in 2025 alone. The series that come back most often are Tails and Treats, Sharbat Seva and Wear and Share."
+    }
+  ],
+  "keywords": [
+    "first volunteer drive Kolkata",
+    "volunteer with AquaTerra",
+    "feeding stray dogs Kolkata volunteer",
+    "student volunteering Kolkata 14 to 19",
+    "AquaTerra drives Salt Lake Bangur",
+    "clothes collection drive Kolkata students"
+  ]
+}

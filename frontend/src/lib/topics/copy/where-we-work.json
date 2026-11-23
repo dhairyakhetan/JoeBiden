@@ -1,0 +1,85 @@
+{
+  "slug": "where-we-work",
+  "title": "Where We Work in Kolkata: Every Place We Have Run · AquaTerra",
+  "description": "Where AquaTerra's {count} drives happened, {firstYear} to {lastYear}: the places we keep going back to, plus schools, shelters, apartment blocks and streets in Kolkata.",
+  "h1Lead": "where we",
+  "h1Accent": "work",
+  "lede": "AquaTerra has run {count} drives across {placesCount} different places between {firstYear} and {lastYear}, with {volunteers} volunteer turnouts. The place we have returned to most is {topPlace}, which has its own page. The rest are spread across other places we keep going back to, schools, shelters, apartment complexes and public spots in Kolkata, with Sundarbans relief trips further afield.",
+  "sections": [
+    {
+      "id": "the-places-we-keep-going-back-to",
+      "heading": "the places we keep going back to",
+      "body": [
+        "A handful of places account for a large share of the drives. Pather Sathi alone has {count:pather-sathi} drives, and the other regular places have their own pages: [With Disha Foundation](/impact/disha-foundation) has {count:disha-foundation}, [With AIM Foundation](/impact/aim-foundation) has {count:aim-foundation}, [With Amader Pradakhep](/impact/amader-pradakhep) has {count:amader-pradakhep}, and [With Ek Tara](/impact/ek-tara) has {count:ek-tara}.",
+        "In the most recent stretch, from July 2025 onward, Pather Sathi appears more often than any other named place, mostly for children's workshops: Digital Safety in May 2026, Menstrual Awareness in April 2026, Valentine's Day cards in February 2026, and the Merry Miracles Christmas days in December 2025."
+      ]
+    },
+    {
+      "id": "schools-and-the-roots-days",
+      "heading": "schools and the Roots tee days",
+      "body": [
+        "In July and August 2025 AquaTerra ran a series of school events where Roots tees were worn: Morpheus Day 2 at South City International School on 4 July, Concord Day 1 and 2 at Calcutta Boys School on 7 and 8 July, Confluence Day 1 and 2 at Calcutta International School on 25 and 26 July, and Novus at The Newtown School on 1 August. Walk-ins ran from 200 at Concord Day 1 to 350 at Morpheus Day 2. Roots is the earlier name of Crftd, AquaTerra's student streetwear label.",
+        "Schools also hosted workshops. Sacred Strings, a rakhi making workshop at BSS school on 4 August 2025, taught two hundred children, and Grow Green at Ashok Hall school planted 100 saplings on 6 August 2025 with eleven volunteer turnouts."
+      ]
+    },
+    {
+      "id": "apartments-and-neighbourhoods",
+      "heading": "apartment complexes and neighbourhoods",
+      "body": [
+        "Cookie Pass On Drive ran in December 2025 at apartment blocks and in Barrackpore: Astitva Apartment and Avani Oxford on 15 December, Silver Spring Apartment on 18 December, and a drive in Barrackpore on 22 December. At each one the volunteers handed at least twenty cookies to residents to pass on, as a small chain of kindness.",
+        "Clothes collections under [Wear and Share](/impact/wear-and-share) ran in neighbourhoods in July 2025: Natural City Laketown on 9 July, Salt Lake and Club Town Greens on 10 July, Howrah AC and Avani Oxford on 12 July, and Bangur on 13 July. Each collection measured the kilograms of clothes gathered."
+      ]
+    },
+    {
+      "id": "streets-and-dogs",
+      "heading": "the streets, and the dogs",
+      "body": [
+        "Feeding dogs is one of the most repeated kinds of drive in the recent work, run under [Tails and Treats](/impact/tails-and-treats). The drives have run at Bangur, Salt Lake, Howrah, Bhowanipur, Vyom, Laketown and Avani Oxford, and in 2026 at Dobson Lane and Jatindas Park. Each drive reports its own number of dogs fed: 45 at Bangur on 23 August 2025, and 90 at Laketown on 5 September 2025.",
+        "Bangur comes up again and again. It appears in dog feeding, Smile Notes and Wear and Share drives. Salt Lake and Avani Oxford host both clothes collections and dog feeding, so the same neighbourhoods see the work more than once."
+      ]
+    },
+    {
+      "id": "beyond-kolkata",
+      "heading": "beyond Kolkata: the Sundarbans",
+      "body": [
+        "Most drives are inside Kolkata and its neighbourhoods. The furthest trips go to the Sundarbans, where the work is relief and plantation. Sunderbans 8.0 on 13 December 2025 had fifteen volunteers, recorded more than a hundred checkups, and brought donated medicines and stationery. For that work, see [Sundarbans relief and plantation](/impact/sundarbans)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most drives are small, with a handful of volunteers each.",
+    "Pather Sathi is where most of our drives have happened, so its own page is the best place to start.",
+    "Feeding dogs, Smile Notes and Wear and Share drives come back to the same spots, such as Bangur and Salt Lake.",
+    "Schools, shelters, apartment complexes and streets all appear in the work, so no single kind of place defines AquaTerra's reach in Kolkata."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run its drives in Kolkata?",
+      "a": "AquaTerra's drives happen across Kolkata: at places it keeps returning to, such as Pather Sathi, Ek Tara, Disha Foundation and AIM Foundation, and at shelters, ashrams, schools, apartment complexes and public spots such as Bangur and Salt Lake. AquaTerra has run {count} drives from {firstYear} to {lastYear}."
+    },
+    {
+      "q": "Which place has AquaTerra worked at most?",
+      "a": "The place with the most drives is {topPlace}, which has its own page with {count:pather-sathi} drives."
+    },
+    {
+      "q": "Does AquaTerra work outside Kolkata?",
+      "a": "Some of its work does. AquaTerra has made Sundarbans relief and plantation trips, such as Sunderbans 8.0 on 13 December 2025, where the team recorded more than a hundred checkups. Most drives are in Kolkata itself."
+    },
+    {
+      "q": "Where did AquaTerra collect clothes?",
+      "a": "Wear and Share clothes collections ran in neighbourhoods such as Natural City Laketown, Salt Lake, Club Town Greens, Avani Oxford, Howrah AC and Bangur in July 2025, with each collection measured in kilograms."
+    },
+    {
+      "q": "How can I find a drive near me?",
+      "a": "Start with the topic pages on this site, such as [Tails and Treats](/impact/tails-and-treats) for dog feeding or [Wear and Share](/impact/wear-and-share) for clothes collections. Members join with Google sign-in and an approval, and then take part in the drives near them."
+    }
+  ],
+  "keywords": [
+    "where AquaTerra works Kolkata",
+    "AquaTerra drive locations",
+    "student volunteer drives Kolkata",
+    "Kolkata schools and shelters volunteering",
+    "Pather Sathi Kolkata",
+    "Sundarbans relief trip students"
+  ]
+}

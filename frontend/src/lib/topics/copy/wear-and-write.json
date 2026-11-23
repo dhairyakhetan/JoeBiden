@@ -1,0 +1,91 @@
+{
+  "slug": "wear-and-write",
+  "title": "Wear and Write: clothes and notebook drives · AquaTerra",
+  "description": "Wear and Write combined clothes and notebook collections in Kolkata. See the 2024 campaign, the sorting work behind it and the places it was held.",
+  "h1Lead": "clothes and notebooks,",
+  "h1Accent": "in one drive",
+  "lede": "Wear and Write ran clothes and notebook collections as one combined campaign, with {count} drives from {firstYear} to {lastYear}. Every 2024 drive fell between 26 April and 24 May, and the campaign drew {volunteers} volunteer turnouts (a turnout counts every time someone showed up) across {placesCount} places.",
+  "sections": [
+    {
+      "id": "the-2024-campaign",
+      "heading": "the 2024 campaign",
+      "body": [
+        "The campaign opened in Kolkata on 26 April 2024 with Campaign 1.0, which collected and distributed clothes and notebooks for children's basic needs and education. It is the only drive measured in packets rather than kilograms, with 40 packets donated.",
+        "The middle of May was the densest stretch. Campaigns 2.0 to 12.0 ran between 6 and 15 May 2024, most of them in and around Bangur and Active Acres, and several ran on 15 May alone, at Active Acres, Rajasthali and Clubtown Greens."
+      ]
+    },
+    {
+      "id": "bangur-and-the-sorting",
+      "heading": "bangur, sorting and the apartment drives",
+      "body": [
+        "Bangur appears in more campaigns than any other area. Anandam Apartment and Sweta Apartment each hosted two campaigns in early May 2024, and Clubtown Greens, Bangur ran one on 14 May. Several of these apartment drives gathered only a few kilograms each.",
+        "Sorting comes up again and again in the write-ups. Campaign 9.0 says organised sorting made donations more impactful, Campaign 11.0 says segregation ensured the clothes and notebooks reached those who needed them most, and Campaign 14.0 describes volunteers sorting for smooth, fair distribution. The write-ups show sorting as a recurring task, but not who received the items."
+      ]
+    },
+    {
+      "id": "the-2025-drive",
+      "heading": "the 2025 drive",
+      "body": [
+        "Only one campaign is dated 2025. Campaign 15.0 was held at Salarpuria Pearl in Gopalpur on 12 May 2025, and its write-up gives 6 kilograms of clothes collected. The campaign numbers carry on from the 2024 run, so it reads as the next campaign rather than a new series.",
+        "This is the last campaign in the series, and nothing in the write-ups after May 2025 mentions a clothes or notebook campaign under this name, so the page does not claim a later one. The Wear and Share series ran through July 2025, so the two should be read side by side for that year."
+      ]
+    },
+    {
+      "id": "what-gets-counted",
+      "heading": "what the figures record",
+      "body": [
+        "Almost every campaign reports weight, not the number of notebooks. Every drive except Campaign 1.0 records clothes in kilograms, so the notebooks named in the write-ups have no matching figure on this site. The heaviest drives recorded are 6 kilograms, at Kolkata in May 2024 and at Salarpuria Pearl in May 2025.",
+        "AquaTerra's organisation-wide total for clothes distributed is {clothesKg} kg across all of its clothes work. That is a single total across series, so use the drive descriptions here for what each campaign collected. Most campaigns give a weight, which is the most direct measure this page can offer."
+      ]
+    },
+    {
+      "id": "where-campaigns-were-held",
+      "heading": "where the campaigns were held",
+      "body": [
+        "The campaigns took place at {placesCount} places. Kolkata and Active Acres each appear in three campaigns, and three campaigns are recorded only by city. Salarpuria Pearl in Gopalpur and Anandam Apartment in Bangur each appear twice. Salarpuria Pearl is the only venue that appears in both 2024 and 2025.",
+        "Rajasthali, Park Circus also hosted a Wear and Share drive in May 2024, about two weeks after its Wear and Write campaign there. For the clothes-only drives, see [Wear and Share: clothes collection](/impact/wear-and-share), and for the book side of the same idea, see [Book Basket: book collection](/impact/book-basket)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Every 2024 Wear and Write campaign took place between 26 April and 24 May.",
+    "Campaign 1.0 is the only drive recorded in packets, while every other campaign is measured in kilograms.",
+    "Bangur appears in more campaigns than any other area, and sorting comes up again and again in the write-ups.",
+    "The only 2025 campaign, 15.0, came in May 2025, a year after the 2024 run began.",
+    "Two campaigns carry the number 9.0, so give the date when you cite one."
+  ],
+  "faqs": [
+    {
+      "q": "What is Wear and Write?",
+      "a": "Wear and Write is AquaTerra's combined clothes and notebook collection campaign. Its {count} drives run from {firstYear} to {lastYear}, and the donations were meant to support children's basic needs and education."
+    },
+    {
+      "q": "Does AquaTerra collect school notebooks?",
+      "a": "Yes. Wear and Write collected notebooks alongside clothes in 2024 and 2025, and the write-ups say they were meant to support children's education. The campaigns record weight rather than notebook counts, so the number of notebooks is not on the site."
+    },
+    {
+      "q": "Where did AquaTerra hold clothes and notebook drives in Kolkata?",
+      "a": "Campaigns were held at Bangur apartments such as Anandam Apartment and Sweta Apartment, at Active Acres, Clubtown Greens, Salarpuria Pearl in Gopalpur and Rajasthali in Park Circus. Three campaigns are recorded only as Kolkata."
+    },
+    {
+      "q": "What did AquaTerra do with Wear and Write donations?",
+      "a": "According to the write-ups, volunteers sorted clothes and notebooks for smooth, fair distribution, so the items could reach the people who needed them most. The write-ups do not name the recipients."
+    },
+    {
+      "q": "How many volunteer turnouts did Wear and Write have?",
+      "a": "Wear and Write recorded {volunteers} volunteer turnouts across {count} campaigns. A turnout counts each volunteer at each drive, so the same person can appear more than once."
+    },
+    {
+      "q": "When did AquaTerra run Wear and Write in 2024?",
+      "a": "In 2024 the campaign ran {year:2024} drives, all between 26 April and 24 May. Campaign 1.0 started in Kolkata on 26 April 2024."
+    }
+  ],
+  "keywords": [
+    "clothes and notebooks drive Kolkata",
+    "notebook donation drive Kolkata students",
+    "Wear and Write AquaTerra",
+    "school supplies drive Kolkata",
+    "Bangur clothes drive",
+    "clothes donation for children Kolkata"
+  ]
+}

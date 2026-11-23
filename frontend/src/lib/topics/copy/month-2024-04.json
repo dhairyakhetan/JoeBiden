@@ -1,0 +1,74 @@
+{
+  "slug": "month-2024-04",
+  "title": "AquaTerra in April 2024: {count} drives, mostly speaking and English",
+  "description": "April 2024 at AquaTerra: {count} drives, mostly speaking and English workshops at Disha Foundation and Sunday School, a clothes campaign and a food day.",
+  "h1Lead": "april was for",
+  "h1Accent": "speaking up",
+  "lede": "In April 2024 AquaTerra ran {count} drives, and most were workshops that helped children speak up and read and write English with more confidence. Disha Foundation hosted the most drives, and the month also began the Wear & Write clothes and notebook campaigns and carried on the food days with Paradox.",
+  "sections": [
+    {
+      "id": "speaking-and-english-at-disha",
+      "heading": "speaking and English at Disha",
+      "body": [
+        "{topPlace} hosted the most drives of the month, and most of its sessions were about speaking or English. Say It and Speak Smart, both on 9 April, used games and speaking exercises to build confidence and clarity. Speak Out on 23 April focused on public speaking, and Word Play on 16 April was an English session built around interactive learning.",
+        "Disha Foundation is one of the places we keep going back to, and April shows how one place can host a whole range of sessions. The only drive there that was not about speaking or English was Craft Studio on 30 April, where children drew, painted and made crafts."
+      ]
+    },
+    {
+      "id": "sunday-school-sentences-and-stories",
+      "heading": "sunday school, sentences and stories",
+      "body": [
+        "Pather Sathi ran the Sunday School workshops of the month. Happy Hour on 6 April, Growth Hour on 12 April and Joyful Hearts on 20 April each taught children through games and fun learning. Growth Hour focused on how to frame correct sentences, which sat close to the speaking work at Disha.",
+        "Green Talk on 26 April was an environmental awareness workshop for children, and the Joyful Hearts session the week before covered sustainability and the environment through activities and discussion. Both used engaging activities that a team could repeat at the same place."
+      ]
+    },
+    {
+      "id": "clothes-notebooks-and-a-food-day",
+      "heading": "clothes, notebooks and a food day",
+      "body": [
+        "Wear & Write Clothes and Notebooks Collection Campaign 1.0 ran in Kolkata on 26 April. It collected and distributed clothes and notebooks to support children's basic needs and their education, and its write-up describes the clothes and notebooks being sorted and passed on. It was the first of the Wear & Write campaigns, and the series ran through May.",
+        "The month also carried on the Food Distribution Drive with Paradox. Day 2 took place in Kolkata on 5 April, with meals offered to people in need and continued volunteer support. Day 1 had been in December, covered on the [December 2023 page](/impact/month-2023-12)."
+      ]
+    },
+    {
+      "id": "april-and-the-month-after",
+      "heading": "april and the month after",
+      "body": [
+        "April had {count} drives, and May had {count:month-2024-05}. The jump comes from May, when the summer Sharbat Seva stalls and the clothes campaigns began to fill the calendar, covered on the [May 2024 page](/impact/month-2024-05).",
+        "Across April {volunteers} volunteer turnouts went into the drives, and a turnout counts every time someone showed up, so the same student can be counted at several drives. April's drives ran at {placesCount} places, led by {topPlace}, with Pather Sathi, Kolkata and Universal Smile the others."
+      ]
+    }
+  ],
+  "learnings": [
+    "A place that hosts many sessions can become a home base: Disha Foundation's speaking and English workshops ran across the month.",
+    "Speaking skills are easy to teach in short sessions, each with one focus such as public speaking, sentences or confidence.",
+    "A clothes campaign can start in one month and run for weeks: the first Wear & Write campaign in April was followed by a long run in May.",
+    "A food day can be picked up again after a gap, as Day 2 in April followed Day 1 in December."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in April 2024?",
+      "a": "AquaTerra ran {count} drives in April 2024. Most were speaking and English workshops for children at Disha Foundation and Sunday School sessions at Pather Sathi, along with a cricket workshop in Kolkata, a clothes and notebook campaign and Day 2 of a food distribution drive with Paradox."
+    },
+    {
+      "q": "Where did AquaTerra hold speaking workshops for children in April 2024?",
+      "a": "Most of the speaking workshops in April 2024 were at Disha Foundation, where Say It, Speak Smart and Speak Out ran alongside Word Play, an English session. AquaTerra also held a public speaking workshop called Clear Talk at Universal Smile on 26 April."
+    },
+    {
+      "q": "Did AquaTerra collect clothes in April 2024?",
+      "a": "Yes. Wear & Write Clothes and Notebooks Collection Campaign 1.0 ran in Kolkata on 26 April 2024, collecting and distributing clothes and notebooks for children's basic needs and education. The campaign series continued through May 2024."
+    },
+    {
+      "q": "How can a student join an AquaTerra workshop?",
+      "a": "Sign in with Google at the [join page](/join) and wait for your membership to be approved. AquaTerra's workshops and drives are run by students, and each one is written up on the site afterwards."
+    }
+  ],
+  "keywords": [
+    "AquaTerra April 2024",
+    "speaking skills workshop Kolkata children",
+    "Disha Foundation Kolkata workshops",
+    "Wear and Write clothes notebooks drive 2024",
+    "English workshop for children Kolkata",
+    "AquaTerra drives April 2024"
+  ]
+}

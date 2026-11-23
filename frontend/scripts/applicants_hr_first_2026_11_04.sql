@@ -1,0 +1,24 @@
+-- Applicants: HR first, then the team (owner request 4 Nov 2026).
+--
+-- STATUS: APPLIED 4 Nov 2026 via the Supabase connector (data steps by execute_sql, policies by migration applicants_hr_first_20261104).
+--
+-- Rule: a team (HoD, Director, team lead) only sees, and only acts on, applications and interests from people HR has approved into
+-- AquaTerra (members.status = 'active'). HR and Super Admin (is_super_admin) see everything; an applicant always sees their own.
+-- Before this, any Director or HoD could read every interest, including the 31 held for people whose sign-up was still waiting for HR.
+--
+-- What the owner chose: handle the 31 waiting applications and the 37 team applications; link and tell the member; HR first, then team.
+-- Findings (counts only): the 37 team applications already point at accounts with the same email (36 approved, 1 since rejected);
+-- 34 had the account's phone, 3 had none; no application matched a different account by phone. Of 102 pending sign-ups, 3 shared a
+-- phone with an approved account, and only 1 of those had a waiting application. Matching was done by phone against approved accounts.
+--
+-- Data changes (backup of every changed row's old values in applicant_cleanup_backup_20261104):
+--   1. One waiting application (pending account 1576) moved to the approved account that owns the same phone (1462), set ready, and
+--      that member got one notification "We linked your earlier application to your account". The pending account itself was not
+--      merged or changed: HR still decides it in the approvals queue.
+--   2. Two team applications with no phone on the form took the number from the applicant's own account. One application still has no
+--      phone because that account has none: HR to chase.
+--   The other 30 waiting applications stay waiting; approving the account flips them to ready (trigger opening_interests_on_member_active)
+--   and only then can the member apply, which is what notifies the team.
+-- Policies changed: job_applications_select, job_applications_update_status, opening_interests_select (see the migration). Tested in a
+-- rolled-back block: an HoD sees 36 of 37 applications and 4 of 35 interests, HR sees all, an applicant sees their own.
+-- Rollback: restore the three policies from their previous definitions (teams read everything via is_director()); data changes from the backup table.

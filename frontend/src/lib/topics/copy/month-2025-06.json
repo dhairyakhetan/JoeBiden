@@ -1,0 +1,82 @@
+{
+  "slug": "month-2025-06",
+  "title": "AquaTerra in June 2025: {count} drives, from books to dog feeding",
+  "description": "June 2025 at AquaTerra: {count} drives, Book Basket collections across Kolkata, dog feeding in Laketown and Salt Lake, a plantation drive and Paradox 3.0.",
+  "h1Lead": "june was",
+  "h1Accent": "books, dogs and Paradox",
+  "lede": "In June 2025 AquaTerra ran {count} drives across Kolkata with {volunteers} volunteer turnouts. The month was built on small Book Basket collections from housing and apartments, a run of stray dog feeding drives on 27 and 28 June, children's workshops at Pather Sathi and AIM Foundation, a plantation at Canal Side Park, and Paradox 3.0, the youth fundraiser that helps pay for the welfare drives.",
+  "sections": [
+    {
+      "id": "a-run-of-book-collections",
+      "heading": "a run of book collections",
+      "body": [
+        "Book Basket is the month's signature. Its collection drives, numbered from 2.0 to 13.0, gathered books for underprivileged children from apartments and housing across the city. The first went out at Ballygunge, Emami City and Ideal Gardens on 2 June, and the last at Kolkata on 21 June, with stops at Dreamland Housing on 14 June and Bidhanagar Tank on 18 June in between.",
+        "Each collection was small. A few kilograms of books at a time, run by a small team. A book segregation drive at Clubtown Greens on 26 June was the other book drive of the month, and together they show how a small team can keep a collection going all month."
+      ]
+    },
+    {
+      "id": "two-days-of-feeding",
+      "heading": "two days of feeding",
+      "body": [
+        "The stray dog feeding drives came in a cluster. On 27 June Tails and Treats 36.0 at MBA Chaiwala in Laketown and 37.0 in Laketown ran on the same day, and the 36.0 write-up says 70 dogs fed with a team of eight, the largest feeding team of the month. On 28 June Tails and Treats 38.0 at Vyom Apartment, 39.0 at Avani Oxford and 40.0 at Salt Lake followed.",
+        "The point of the cluster is that two days can cover several neighbourhoods. The [Tails and Treats](/impact/tails-and-treats) series keeps the same purpose at each stop: food and care for the dogs that live on the street."
+      ]
+    },
+    {
+      "id": "workshops-for-children",
+      "heading": "workshops for children",
+      "body": [
+        "Children's workshops ran through June at Pather Sathi, AIM Foundation and Newlight Ngo. Musical Minds at AIM Foundation opened the month on 2 June, and Storytelling sessions followed at Newlight Ngo on 4 and 5 June with Plot Play and Fable Factory. Innovate, a hands-on STEM workshop, ran at AIM Foundation on 12 June.",
+        "At Pather Sathi the sessions were Chess Moves on 14 June, Happy Hands on 21 June and Laugh and Craft on 28 June. My Body, a good touch and bad touch workshop at Calcutta Rescue on 12 June, taught children to tell the difference between the two. Draw the Day on 9 June was a creative arts workshop in Kolkata."
+      ]
+    },
+    {
+      "id": "a-plantation-and-a-fundraiser",
+      "heading": "a plantation and a fundraiser",
+      "body": [
+        "Grow Green - Plantation Drive 23.0 at Canal Side Park on 14 June had the largest turnout of the month outside Paradox 3.0, and the write-up for that drive says 110 saplings planted. The write-up describes students getting their hands muddy while they planted.",
+        "Paradox 3.0, dated 2 June, is AquaTerra's youth fundraiser. Its edition ran for five days with a full set of events, including a Punjabi Night. The money it raises goes back into the welfare drives, and it sits beside the everyday work rather than replacing it."
+      ]
+    },
+    {
+      "id": "how-june-compares",
+      "heading": "how june compares",
+      "body": [
+        "May ran {count:month-2025-05} drives and July ran {count:month-2025-07}, so June was busier than either neighbouring month. The extra drives were mostly Book Basket collections and feeding stops, which are short and repeatable, sitting alongside one large fundraiser.",
+        "If you want the month before, [May 2025](/impact/month-2025-05) covers the children's workshops at Pather Sathi. [July 2025](/impact/month-2025-07) picks up the Roots tee days and the clothes collections."
+      ]
+    }
+  ],
+  "learnings": [
+    "A collection can be very small and still be worth doing: a few kilograms of books at each stop added up to a month of steady work.",
+    "Feeding drives on consecutive days let one team cover Laketown, Salt Lake and Avani Oxford in two days.",
+    "A plantation drive can draw a bigger team than most collections, as Grow Green at Canal Side Park did in June.",
+    "A fundraiser and a month of everyday drives can run side by side, and the money from the first goes back into the second."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in June 2025?",
+      "a": "In June 2025 AquaTerra ran {count} drives across Kolkata with {volunteers} volunteer turnouts. The month included Book Basket book collections, a run of stray dog feeding drives on 27 and 28 June, children's workshops, a plantation at Canal Side Park and the Paradox 3.0 fundraiser."
+    },
+    {
+      "q": "Where did AquaTerra feed dogs in June 2025?",
+      "a": "Feeding drives in June 2025 ran in Laketown (at MBA Chaiwala and a second stop), at Vyom Apartment, at Avani Oxford and at Salt Lake. Most fell on 27 and 28 June, and the Tails and Treats 36.0 write-up at MBA Chaiwala in Laketown says 70 dogs fed."
+    },
+    {
+      "q": "Did AquaTerra run a book drive in June 2025?",
+      "a": "Yes. Book Basket ran a series of collection drives in June 2025, numbered 2.0 to 13.0, that gathered books for underprivileged children. The stops included Ballygunge, Emami City, Dreamland Housing, Bidhanagar Tank and South City Residency."
+    },
+    {
+      "q": "What was Paradox 3.0?",
+      "a": "Paradox 3.0 is AquaTerra's youth fundraiser. Its June 2025 edition ran for five days with a full set of events, including a Punjabi Night, and the money it raises goes back into AquaTerra's welfare drives."
+    }
+  ],
+  "keywords": [
+    "AquaTerra June 2025",
+    "Book Basket book collection Kolkata 2025",
+    "stray dog feeding Laketown June 2025",
+    "Paradox 3.0 youth fundraiser",
+    "Grow Green plantation Canal Side Park",
+    "AquaTerra drives Kolkata June 2025"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "fundraising",
+  "title": "Our fundraisers and event days · AquaTerra",
+  "description": "{count} fundraisers and event days from {years}: football and basketball tournaments, Paradox, festive carnivals and Roots tee days at school fests.",
+  "h1Lead": "the fundraisers and",
+  "h1Accent": "event days",
+  "lede": "Our fundraisers and event days are the youth events that pay for the welfare work: sports tournaments, the Paradox series, festive carnivals and, in 2025, Roots tee days at school fests. We have run {count} of them from {years}, with {volunteers} volunteer turnouts across them. Every sports tournament we have held falls between 2022 and 2024.",
+  "sections": [
+    {
+      "id": "the-formats",
+      "heading": "the formats",
+      "body": [
+        "The fundraisers come in a few shapes. Sports tournaments use football, FIFA gaming, basketball and turf. Paradox is the big multi-day youth event. Festive carnivals run at Christmas, Diwali and Halloween. Anniversary parties mark AquaTerra's years, and school fests bring Roots tees to the stage.",
+        "Some formats are small. Strategia in April 2022 was a set of timed strategy challenges built around real-world NGO scenarios, and the first anniversary party in June 2022 was a full celebration of AquaTerra's first year. Both are event days rather than tournaments, and both fall in 2022, our busiest year for this kind of event."
+      ]
+    },
+    {
+      "id": "sports-tournaments-2022-to-2024",
+      "heading": "sports tournaments, 2022 to 2024",
+      "body": [
+        "Every football, FIFA, basketball and turf fundraiser falls between 2022 and 2024, and the venues come back again and again. Elgin Turf hosted Turf Wars in March 2022 and TerraThon in July 2022. Sky Turf hosted Turf It Up in December 2022, and VS Arena hosted the Match with a Mission football fundraiser in July 2023 and Play It Forward in May 2024.",
+        "Two FIFA fundraisers ran on consecutive days on Hindustan Road in May 2023. Inception '22 in June 2022 brought several school and college teams together for a basketball tournament. Shoot for the Stars, a basketball fundraiser at Chetla Park Athletic Club in December 2024, is the last sports fundraiser we have held."
+      ]
+    },
+    {
+      "id": "paradox-and-the-food-days",
+      "heading": "paradox and the food days",
+      "body": [
+        "Paradox is the biggest youth event we run. The January 2022 edition ran online as the Dream Team Edition. A June 2024 Paradox event drew a large student team, and Paradox 3.0 in June 2025 ran over several days with a Punjabi Night. Paradox 3.0 has the largest volunteer team of any fundraiser we have held.",
+        "Two food distribution days in Kolkata, in December 2023 and April 2024, carry the Paradox name in their titles. They are meal drives rather than tournaments, which shows that the Paradox name also stood for distribution work, not only for fundraising."
+      ]
+    },
+    {
+      "id": "carnivals-festivals-and-children-days",
+      "heading": "carnivals, festivals and children's days",
+      "body": [
+        "Festive fundraisers follow the calendar. Trick or Donate ran in New Alipore in October 2022, Diwali Night in Kolkata in November 2023, and The Starry Night, a Christmas carnival at Sky Turf in December 2024. The Starry Night had the largest volunteer team among the festive events. Pride Binge, a June 2023 fundraiser in Kolkata, was built around stories and conversation rather than a festival.",
+        "Some fete-style days are children's workshops rather than fundraisers. A Christmas Carnival Workshop at Pather Sathi in December 2024, a Mini Fete at Ek Tara in November 2023 and the Children's Day Fete at Tetultala Ashram in November 2025 belong here because their names carry the fete or carnival tag."
+      ]
+    },
+    {
+      "id": "roots-tees-at-school-fests",
+      "heading": "roots tees at school fests",
+      "body": [
+        "In July and August 2025 our students ran Roots tee days at school fests: Morpheus Day 1 and 2 at South City International School, Concord Day 1 and 2 at Calcutta Boys School, Confluence Day 1 and 2 at Calcutta International School, and Novus at The Newtown School. Each day had its own walk-in count. Roots is the earlier name of Crftd, the student streetwear label."
+      ]
+    },
+    {
+      "id": "reading-the-figures",
+      "heading": "how to read the figures",
+      "body": [
+        "Each fundraiser has a title, a date, a place, a volunteer count, an objective and a short summary, and some carry a funds-raised figure of their own. That figure belongs to the event alone and is not added up here. Some events list no place or no volunteer count, and a few record zero, so the {volunteers} volunteer turnouts across this page are a floor, not an exact total. Turnouts count every time someone showed up."
+      ]
+    }
+  ],
+  "learnings": [
+    "Every football, FIFA, basketball and turf fundraiser we have held falls between 2022 and 2024.",
+    "{year:2022} was our busiest year for fundraisers and event days.",
+    "Paradox 3.0 in June 2025 had the largest volunteer team of any fundraiser.",
+    "The 2025 events were school fest days with Roots tees, a Paradox edition and a Children's Day fete, with no sports tournaments.",
+    "Some events have no volunteer count, so the turnout total is a floor rather than an exact figure."
+  ],
+  "faqs": [
+    {
+      "q": "What fundraisers has AquaTerra held?",
+      "a": "AquaTerra has run {count} fundraisers and event days, dated {years}. They include Paradox, football, FIFA and basketball tournaments, TerraThon, carnivals such as The Starry Night, Diwali Night and Trick or Donate, and Roots tee days at school fests in 2025."
+    },
+    {
+      "q": "Where did AquaTerra hold its sports fundraisers?",
+      "a": "At turfs, arenas and clubs in Kolkata, between 2022 and 2024. Elgin Turf, Sky Turf, VS Arena, Hindustan Road and Chetla Park Athletic Club all hosted sports fundraisers, with the FIFA and football days at VS Arena and Hindustan Road."
+    },
+    {
+      "q": "What is Paradox by AquaTerra?",
+      "a": "Paradox is AquaTerra's youth fundraiser series. It ran as an online edition in January 2022, as an event in June 2024 and in June 2025, when Paradox 3.0 ran over several days with a Punjabi Night. Paradox 3.0 has the largest volunteer team of any fundraiser AquaTerra has run."
+    },
+    {
+      "q": "Did AquaTerra run fundraisers in 2025?",
+      "a": "Yes. The 2025 events include the Roots tee days at school fests at South City International School, Calcutta Boys School, Calcutta International School and The Newtown School, Paradox 3.0 in June, and the Children's Day Fete at Tetultala Ashram in November."
+    },
+    {
+      "q": "Does AquaTerra accept donations at its fundraisers?",
+      "a": "No. AquaTerra does not take monetary donations. Its fundraisers and event days are run by students, and the money they bring in pays for welfare work. This page does not publish revenue, ticket prices or event profit."
+    }
+  ],
+  "keywords": [
+    "AquaTerra fundraisers Kolkata",
+    "student football fundraiser Kolkata",
+    "Paradox youth fundraiser Kolkata",
+    "Christmas carnival fundraiser Kolkata students",
+    "Roots tees school fest Kolkata",
+    "AquaTerra event days"
+  ]
+}

@@ -1,21 +1,23 @@
 import './DirectorDashboard.css'
 import '../styles/routes/director.css'
+import '../styles/components/tactile-desk.css'
 import { useCallback, useEffect, useMemo, useRef, useState, Suspense } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useCapabilities } from '../auth/CapabilityContext'
 import { isSuperAdmin as checkSuperAdmin, getRoleLabel } from '../lib/roles'
-import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { GROUP_HUES, visibleDeskGroups } from './deskAccess'
 import type { NavKey } from './deskAccess'
 import { getInitials } from '../lib/uiHelpers'
 import directorService, { DashboardStats } from '../services/directorService'
+import certificateService from '../services/certificateService'
 import teamService from '../services/teamService'
 import { notificationService } from '../services/notificationService'
 import Sheet from '../components/Sheet'
 import { prefetchDesk, prefetchDesksWhenIdle } from './deskModules'
 import { grievanceService } from '../services/grievanceService'
 import { AdminLayout, AdminSkeleton } from './adminKit'
+import DeskJump from './DeskJump'
 import { useMeta } from '../hooks/useMeta'
 
 // Nav grouping, GROUP_HUES and every desk's required privilege now live in
@@ -67,7 +69,7 @@ export type DirectorContext = {
   myScopeTeamIds: number[]
   /** Pending-post count scoped to `myCategories` (null when unscoped/super admin - fall back to stats.pendingPostReviews). */
   scopedPendingPosts: number | null
-  /** Certificate requests waiting on HR (super admin / HR only; null until counted). The landing counts them like every other queue. */
+  /** The certificate count for THIS viewer (null until counted): for HR, requests waiting on a decision; for any other leader, requests where they were tagged and have not answered. */
   pendingCertificates?: number | null
   /** Re-count the rail badges now (e.g. after approving someone). Optional so fixtures need not supply it. */
   refreshStats?: () => void
@@ -224,10 +226,9 @@ const DirectorDashboard = () => {
         !isSuperAdmin && scopeIdsRef.current.length > 0
           ? directorService.getScopedPendingPostsCount(scopeIdsRef.current).catch(() => null)
           : Promise.resolve(null),
-        isSuperAdmin
-          ? supabaseCommunity.from('certificate_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending')
-              .then(res => (res.error ? null : res.count ?? 0), () => null)
-          : Promise.resolve(null),
+        // One RPC for every leader (20 Nov 2026): HR sees what waits on a decision, a HoD sees what waits on their answer.
+        certificateService.deskCounts()
+          .then(c => (isSuperAdmin ? c.pendingTotal : c.awaitingMyResponse), () => null),
         isSuperAdmin ? grievanceService.newCount().catch(() => null) : Promise.resolve(null),
       ])
       if (statsResult?.success) { setStats(statsResult.data); setStatsError(false) }
@@ -259,8 +260,11 @@ const DirectorDashboard = () => {
     }
   }, [refreshStats])
 
-  // Certificates: first count rides the mount fetch's tail.
-  useEffect(() => { if (isSuperAdmin) void refreshStats(true) }, [isSuperAdmin, refreshStats])
+  // Certificates: first count rides the mount fetch's tail. A HoD's count is just this one number, so it needs no full refresh.
+  useEffect(() => {
+    if (isSuperAdmin) { void refreshStats(true); return }
+    certificateService.deskCounts().then(c => setPendingCertificates(c.awaitingMyResponse)).catch(() => {})
+  }, [isSuperAdmin, refreshStats])
 
   // Approvals badge = EVERYONE waiting (pending_approval), contacted or not.
   // The Approvals desk opens on its "pending" tab, which shows only people not
@@ -272,7 +276,7 @@ const DirectorDashboard = () => {
     posts: (scopedPendingPosts ?? stats?.pendingPostReviews) || undefined,
     hiring: stats?.pendingApplications || undefined,
     enquiries: stats?.pendingEnquiries || undefined,
-    certificates: isSuperAdmin ? pendingCertificates || undefined : undefined,
+    certificates: pendingCertificates || undefined,
     grievances: isSuperAdmin ? newGrievances || undefined : undefined,
   }
   const badgeTitle = (key: NavKey, blurb: string) =>
@@ -478,6 +482,8 @@ const DirectorDashboard = () => {
           <div className="ops-rail2-scope mono">{scopeLabel}</div>
         </div>
 
+        <DeskJump groups={visibleGroups} />
+
         <div className="ops-rail2-nav">
           {visibleGroups.map((g, i) => {
             const isOpen = g.label === activeGroupLabel
@@ -573,6 +579,7 @@ const DirectorDashboard = () => {
           }
         >
           <div className="ops-navsheet-body">
+            <DeskJump groups={visibleGroups} onNavigate={() => setMobileNavOpen(false)} />
             {visibleGroups.map(g => (
               <div key={g.label} className="ops-navsheet-group">
                 <div className="ops-navsheet-grouplabel mono">{g.label}</div>

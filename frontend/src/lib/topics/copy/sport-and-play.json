@@ -1,0 +1,88 @@
+{
+  "slug": "sport-and-play",
+  "title": "Sport and Play with Children in Kolkata · AquaTerra",
+  "description": "Football, cricket and yoga for children, plus fundraising matches and a basketball tournament, run by AquaTerra students in Kolkata. {count} drives since {firstYear}.",
+  "h1Lead": "football, cricket and",
+  "h1Accent": "play",
+  "lede": "AquaTerra's sport and play drives come in two kinds: children's sessions in football, cricket and yoga, and fundraising matches that students organise for a cause. Since {firstYear}, we have run {count} of them across Kolkata, and {topPlace} has hosted the most.",
+  "sections": [
+    {
+      "id": "what-a-sport-drive-looks-like",
+      "heading": "what a sport drive looks like",
+      "body": [
+        "Two kinds of day share this page. The first is a fundraiser: a football tournament at VS Arena, a basketball tournament at Chetla Park Athletic Club, or FIFA gaming days at Hindustan Road. The basketball day had matches, stalls and merchandise, and the football fundraiser at VS Arena was held to support AquaTerra's welfare initiatives.",
+        "The second kind is a children's workshop. Students ran football sessions called Kickoff Time and Goal Bound, cricket sessions called Bat Basics and Bat and Ball, a yoga session at Badami Devi Shishu Kalyan Kendra in Howrah, and a games workshop for Children's Day. The children spent the sessions playing the sports they liked, and the students taught the basics as they went."
+      ]
+    },
+    {
+      "id": "what-the-fundraisers-were-for",
+      "heading": "what the fundraisers were for",
+      "body": [
+        "The fundraisers were played for a cause. The Play It Forward football fundraiser at VS Arena was held to support AquaTerra's welfare initiatives, and the card night at Madhuvan was an evening of cards, fun and charity. This page does not repeat the amounts raised at any event, and it does not estimate what any of them brought in.",
+        "Turnout is uneven. The 2022 Score and Support football fundraiser and the 2024 Play It Forward fundraiser have no volunteer count, so the {volunteers} volunteer turnouts on this page are a floor, not a full tally. Volunteer turnouts count every time someone showed up. The biggest turnout was the Shoot for the Stars basketball tournament at Chetla Park Athletic Club in December 2024."
+      ]
+    },
+    {
+      "id": "where-they-happened",
+      "heading": "where they happened",
+      "body": [
+        "The drives spread across {placesCount} places. {topPlace} hosted the most: the Kickoff Time football session in May 2024, and the Goal Bound football workshop and the Bat and Ball cricket workshop in May 2023. VS Arena and Hindustan Road hosted fundraisers only: Play It Forward and Match with a Mission at VS Arena, and the FIFA days at Hindustan Road.",
+        "Two of these days name only the city, Kolkata, so this page cannot place them more closely. Elgin Turf hosted the 2022 Turf Wars football fundraiser, and Madhuvan hosted the July 2023 Full House card night. If you want to know where each football fundraiser was held, the venues are listed by year in the FAQ below."
+      ]
+    },
+    {
+      "id": "how-the-topic-changed",
+      "heading": "how the topic changed",
+      "body": [
+        "The topic starts in 2022 with two football fundraisers: Turf Wars at Elgin Turf and Score and Support. 2023 was the fullest year, with {year:2023} drives. It mixed fundraisers, such as the FIFA days and the Match with a Mission football match, with workshops such as the Pose and Peace yoga session.",
+        "The balance shifted in 2024. The {year:2024} drives that year included more workshops than fundraisers: a Kickoff Time football session in May, a Children's Day games workshop in November, and the Shoot for the Stars basketball fundraiser in December, the most recent drive on this page."
+      ]
+    },
+    {
+      "id": "what-volunteers-did-and-saw",
+      "heading": "what volunteers did and saw",
+      "body": [
+        "At the Shoot for the Stars tournament, volunteers organised the matches and ran the stalls and merchandise. In the workshops they ran the games and taught the basics of each sport. The Children's Day games workshop at Amader Pradakhep in November 2024 was a fun-filled workshop of exciting activities, laughter and joyful celebration for all the kids.",
+        "The FIFA gaming days and the Madhuvan card night sit on this page because their titles use game words, not because they are physical sport. Readers looking for football, cricket and basketball should look at the children's workshops and the tournaments."
+      ]
+    }
+  ],
+  "learnings": [
+    "More than half of the sport and play drives were fundraisers, not coaching sessions.",
+    "Pather Sathi hosted the most drives in this topic, and its children's sessions included football and cricket.",
+    "The largest volunteer turnout was the Shoot for the Stars basketball tournament at Chetla Park Athletic Club in December 2024.",
+    "Two fundraisers have no volunteer count, so the turnout total for this topic is a floor, not a full tally.",
+    "The FIFA gaming days and a card night are here by title. They are games rather than physical sport."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run football or cricket sessions for children?",
+      "a": "Yes. AquaTerra has run football and cricket workshops for children, as well as basketball and football fundraising tournaments. {count} sport and play drives are on this page, from {firstYear} to {lastYear}, and most of the children's football and cricket sessions were held at Pather Sathi."
+    },
+    {
+      "q": "Where did AquaTerra hold football fundraisers in Kolkata?",
+      "a": "AquaTerra's football fundraisers were held at Elgin Turf in 2022, at VS Arena in 2023 and again in 2024, and at a venue listed only as Kolkata in 2022. The FIFA gaming days were held at Hindustan Road in 2023."
+    },
+    {
+      "q": "Did AquaTerra's sport fundraisers support its welfare work?",
+      "a": "Yes, at least one did. The Play It Forward football fundraiser at VS Arena in May 2024 was held to support AquaTerra's welfare initiatives. This page does not give the amounts raised at any event."
+    },
+    {
+      "q": "What was the most recent sport drive AquaTerra held?",
+      "a": "The most recent drive on this page is the Shoot for the Stars basketball fundraiser at Chetla Park Athletic Club in December 2024. Volunteers organised the matches, stalls and merchandise."
+    },
+    {
+      "q": "Can a teenager join AquaTerra to help run sport drives?",
+      "a": "Yes, if they are aged 14 to 19. Students join AquaTerra through Google sign-in followed by an approval step, and members run the drives, including sport and play sessions."
+    }
+  ],
+  "keywords": [
+    "sport workshops for children Kolkata",
+    "football fundraiser Kolkata students",
+    "cricket workshop for kids Kolkata",
+    "AquaTerra sports fundraiser",
+    "volunteer sports drives for teenagers Kolkata",
+    "basketball fundraiser Kolkata",
+    "children's sports workshop Pather Sathi"
+  ]
+}

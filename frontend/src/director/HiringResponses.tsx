@@ -4,7 +4,8 @@ import { useOutletContext } from 'react-router-dom'
 import type { DirectorContext } from './DirectorDashboard'
 import { scopeToMyTeams } from './deskAccess'
 import { useModalA11y } from '../hooks/useDialog'
-import { jobOpenings, JobOpening, CAT_COLORS as OPENING_CAT_COLORS } from '../lib/jobOpenings'
+import { jobOpenings, JobOpening, CAT_COLORS as OPENING_CAT_COLORS, type WaitingApplicant } from '../lib/jobOpenings'
+import { directorService } from '../services/directorService'
 import { count } from '../lib/uiHelpers'
 import {
   AdminLayout, AdminTabHeader, DataToolbar, FilterPill, EmptyLedger,
@@ -40,6 +41,10 @@ type Application = {
   custom_answers?: Record<string, string>
   /** The applicant's own account, joined by jobOpenings.getApplicationsForOpenings. */
   applicant?: { status?: string | null } | null
+  /** 'phone': a signed-out visitor whose number matched this account. Not proof it was them. */
+  linked_by?: 'account' | 'phone' | null
+  /** What that visitor typed as their name. */
+  typed_name?: string | null
 }
 
 const STATUS_TONE: Record<Application['status'], StampTone> = {
@@ -70,7 +75,8 @@ export default function HiringResponses() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'all' | Application['status']>('all')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'waiting' | Application['status']>('all')
+  const [waiting, setWaiting] = useState<WaitingApplicant[]>([])
   const [openingFilter, setOpeningFilter] = useState<'all' | string>('all')
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   // Per-row busy - a status change on one applicant must never freeze the rest.
@@ -96,6 +102,10 @@ export default function HiringResponses() {
         const byOpening = await jobOpenings.getApplicationsForOpenings(ops.map(o => o.id))
         if (cancelled) return
         setAppsByOpening(byOpening)
+        // People HR has not cleared yet. A failure here must not hide the applications that did load.
+        try { setWaiting(await jobOpenings.getWaitingApplicants()) } catch (e: any) {
+          if (!cancelled) { setWaiting([]); toastError('waiting-for-HR list didn’t load.', e?.message ?? 'try again.') }
+        }
       } catch (e: any) {
         if (cancelled) return
         const msg = e?.message || 'Something went wrong.'
@@ -237,6 +247,42 @@ export default function HiringResponses() {
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
     [allApps, statusFilter, openingFilter, term])
 
+  // Waiting-for-HR applicants for the roles this desk may see, narrowed by the same role filter and search.
+  const waitingShown = useMemo(() => {
+    if (statusFilter !== 'all' && statusFilter !== 'waiting') return []
+    const ids = new Set(scopedOpenings.map(o => o.id))
+    return waiting
+      .filter(w => ids.has(w.openingId))
+      .filter(w => openingFilter === 'all' || w.openingId === openingFilter)
+      .filter(w => !term || w.fullName.toLowerCase().includes(term) || w.openingTitle.toLowerCase().includes(term))
+  }, [waiting, scopedOpenings, statusFilter, openingFilter, term])
+  const waitingTotal = useMemo(() => {
+    const ids = new Set(scopedOpenings.map(o => o.id))
+    return waiting.filter(w => ids.has(w.openingId)).length
+  }, [waiting, scopedOpenings])
+  const [approving, setApproving] = useState<Set<number>>(new Set())
+
+  // HR and super admin can clear the account right here; the application then moves to the team on its own
+  // (database trigger), so the list is simply reloaded.
+  const approveWaiting = async (w: WaitingApplicant) => {
+    const ok = await confirm({
+      title: `Approve ${w.fullName}?`,
+      body: `This makes them an AquaTerra member. Their application for ${w.openingTitle} then goes to the team straight away.`,
+      confirmLabel: 'Approve',
+    })
+    if (!ok) return
+    setApproving(prev => new Set(prev).add(w.memberId))
+    try {
+      await directorService.approveMember(w.memberId)
+      toastSuccess(`${w.fullName} approved`)
+      setReloadKey(k => k + 1)
+    } catch (e: any) {
+      toastError('couldn’t approve.', e?.message ?? 'try again.')
+    } finally {
+      setApproving(prev => { const n = new Set(prev); n.delete(w.memberId); return n })
+    }
+  }
+
   const selection = useRowSelection(filtered)
   const [bulkBusy, setBulkBusy] = useState(false)
 
@@ -287,7 +333,7 @@ export default function HiringResponses() {
   }
 
   // Scoped, so the "which opening" filter cannot offer another team's opening.
-  const openingsWithApps = scopedOpenings.filter(op => (appsByOpening[op.id] || []).length > 0)
+  const openingsWithApps = scopedOpenings.filter(op => (appsByOpening[op.id] || []).length > 0 || waiting.some(w => w.openingId === op.id))
   const isPhone = useIsPhone()
 
   return (
@@ -301,7 +347,7 @@ export default function HiringResponses() {
         // carries for its category scope.
         subtitle={`${isScoped
           ? 'Applications to your team’s openings. Other teams’ hiring is not yours to see.'
-          : "Every application to every team's job openings, in one place."} ${allApps.filter(a => a.status === 'pending').length} still waiting for a decision (the menu badge counts these).`}
+          : "Every application to every team's job openings, in one place."} ${loadError ? '' : `${allApps.filter(a => a.status === 'pending').length} still waiting for a decision (the menu badge counts these).${waitingTotal > 0 ? ` ${waitingTotal} more ${waitingTotal === 1 ? 'person is' : 'people are'} waiting for HR to clear them first.` : ''}`}`.trim()}
         count={allApps.length}
       />
 
@@ -320,6 +366,9 @@ export default function HiringResponses() {
           {(['pending', 'reviewed', 'accepted', 'rejected'] as const).map(s => (
             <FilterPill key={s} active={statusFilter === s} onClick={() => setStatusFilter(s)}>{s}</FilterPill>
           ))}
+          {waitingTotal > 0 && (
+            <FilterPill active={statusFilter === 'waiting'} onClick={() => setStatusFilter('waiting')}>{`waiting for HR (${waitingTotal})`}</FilterPill>
+          )}
         </div>
       </DataToolbar>
 
@@ -369,13 +418,75 @@ export default function HiringResponses() {
           message={`Could not load hiring responses - ${loadError}`}
           onRetry={() => setReloadKey(k => k + 1)}
         />
-      ) : filtered.length === 0 ? (
+      ) : filtered.length === 0 && waitingShown.length === 0 ? (
         <EmptyLedger
           message={allApps.length === 0 ? 'no responses yet' : 'nothing matches'}
           sub={allApps.length === 0 ? "applications to any team's openings will show up here." : 'try a different search or filter.'}
         />
       ) : (
-        filtered.map(app => {
+        <>
+        {waitingShown.length > 0 && (
+          <section aria-label="Waiting for HR" style={{ marginBottom: 20 }}>
+            <div className="mono xs upper" style={{ fontWeight: 800, marginBottom: 4 }}>{`waiting for HR (${waitingShown.length})`}</div>
+            <p className="muted" style={{ fontSize: 13, margin: '0 0 10px', maxWidth: '62ch' }}>
+              These people applied but are not part of AquaTerra yet. You can read what they sent now. You can accept them once HR approves their account, and each application moves into the list below on its own.
+            </p>
+            {waitingShown.map(w => {
+              const hasDetail = !!w.message || Object.keys(w.answers || {}).length > 0
+              const opening = scopedOpenings.find(o => o.id === w.openingId)
+              const isOpen = expanded.has(w.interestId)
+              return (
+                <AdminRow
+                  key={w.interestId}
+                  busy={approving.has(w.memberId)}
+                  stamp={<StatusStamp label="waiting for HR" tone="pending" />}
+                  primary={w.fullName}
+                  secondary={
+                    <>
+                      not part of AquaTerra yet{w.classGrade ? <> · {w.classGrade}</> : null}
+                      <div className="adm-lcard-facts">
+                        <span className="qtag" style={{ ['--cc' as any]: OPENING_CAT_COLORS[opening?.category || ''] || 'var(--welfare)' }}>{w.openingTitle}</span>
+                        {w.teamName && <span className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)' }}>{w.teamName}</span>}
+                      </div>
+                      {hasDetail && (
+                        <button type="button" className="adm-disclose" aria-expanded={isOpen} onClick={e => { e.stopPropagation(); toggleExpand(w.interestId) }}>
+                          {isOpen ? 'hide application' : 'read application'}
+                          {isOpen ? <ChevronUpIcon strokeWidth={2.2} aria-hidden /> : <ChevronDownIcon strokeWidth={2.2} aria-hidden />}
+                        </button>
+                      )}
+                    </>
+                  }
+                  meta={fmtDate(w.appliedAt)}
+                  onToggleExpand={hasDetail ? () => toggleExpand(w.interestId) : undefined}
+                  expanded={hasDetail && isOpen ? (
+                    <>
+                      {w.message && (
+                        <>
+                          <div className="mono xs upper muted" style={{ fontWeight: 700, marginBottom: 6 }}>their message</div>
+                          <p style={{ margin: 0, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{w.message}</p>
+                        </>
+                      )}
+                      <OpeningAnswersDisplay questions={opening?.customQuestions || []} answers={w.answers} />
+                    </>
+                  ) : undefined}
+                  actions={w.canApprove ? (
+                    <button type="button" className="btn btn-sm btn-primary" style={{ minHeight: 44 }} disabled={approving.has(w.memberId)} onClick={() => approveWaiting(w)}>
+                      {approving.has(w.memberId) ? 'Approving…' : 'Approve account'}
+                    </button>
+                  ) : (
+                    <span className="mono" style={{ fontSize: 11, color: 'var(--ink-3)' }} title="HR has to clear this account before the team can accept the application.">
+                      HR has to clear them first
+                    </span>
+                  )}
+                />
+              )
+            })}
+          </section>
+        )}
+        {filtered.length > 0 && waitingShown.length > 0 && (
+          <div className="mono xs upper" style={{ fontWeight: 800, marginBottom: 8 }}>{`cleared applicants (${filtered.length})`}</div>
+        )}
+        {filtered.map(app => {
           const hasDetail = !!app.message || Object.keys(app.custom_answers || {}).length > 0
           const isOpen = expanded.has(app.id)
           return (
@@ -405,6 +516,13 @@ export default function HiringResponses() {
                     {!isApplicantApproved(app) && (
                       <span className="qtag" style={{ ['--cc' as any]: 'var(--sun, var(--ink-3))' }} title={ACCEPT_BLOCKED_MESSAGE}>
                         {AWAITING_APPROVAL_TAG}
+                      </span>
+                    )}
+                    {app.linked_by === 'phone' && (
+                      <span className="qtag" style={{ ['--cc' as any]: 'var(--sun, var(--ink-3))' }}
+                        title="A visitor who was not signed in gave this phone number, and it matched this member. The member has been told. A number is not proof of who applied, so check before you accept.">
+                        linked by phone number
+                        {app.typed_name && app.typed_name.trim().toLowerCase() !== (app.applicant_name || '').trim().toLowerCase() ? <> · typed “{app.typed_name}”</> : null}
                       </span>
                     )}
                   </div>
@@ -470,7 +588,8 @@ export default function HiringResponses() {
               }
             />
           )
-        })
+        })}
+        </>
       )}
 
       <BulkActionBar count={selection.count} onClear={selection.clear} busy={bulkBusy}>

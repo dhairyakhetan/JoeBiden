@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode, useRef } from 'react'
 import { useAuth } from './AuthContext'
 import roleCapabilityMatrixService from '../services/roleCapabilityMatrixService'
 import { effectiveCan, type CapabilityMatrix } from '../lib/capabilities'
@@ -54,7 +54,10 @@ export function CapabilityProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Only the newest refresh may settle state: a slower, older fetch must not mark the matrix ready or overwrite a newer role's answer.
+  const latest = useRef(0)
   const refresh = useCallback(async () => {
+    const mine = ++latest.current
     // A signed-out visitor has no grant on the table and no role to gate, so
     // asking would be a guaranteed 401 on every public page load.
     if (!role) {
@@ -65,14 +68,16 @@ export function CapabilityProvider({ children }: { children: ReactNode }) {
     }
     try {
       const next = await roleCapabilityMatrixService.getMatrix()
+      if (mine !== latest.current) return
       setMatrix(next)
       setError(null)
     } catch (e: any) {
+      if (mine !== latest.current) return
       // Fail open onto the ceilings — see the header.
       setMatrix({})
       setError(e?.message ?? 'Could not load the permission matrix.')
     } finally {
-      setReady(true)
+      if (mine === latest.current) setReady(true)
     }
   }, [role])
 

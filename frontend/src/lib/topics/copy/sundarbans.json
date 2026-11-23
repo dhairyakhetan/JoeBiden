@@ -1,0 +1,87 @@
+{
+  "slug": "sundarbans",
+  "title": "Sundarbans relief: medical camps, aid and planting · AquaTerra",
+  "description": "AquaTerra's Sundarbans drives since 2021 brought food, medical checkups, clothes and planting to villages. See the drives and how the work changed over time.",
+  "h1Lead": "care that reaches",
+  "h1Accent": "the Sundarbans",
+  "lede": "Sundarbans relief is AquaTerra's work in villages across the Sundarbans, bringing food, medical checkups, clothes and planting. The first drive ran in July 2021, and the series has {count} drives through {lastYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up) across {placesCount} places.",
+  "sections": [
+    {
+      "id": "the-early-drives",
+      "heading": "the early drives, 2021 and 2022",
+      "body": [
+        "Sunderbans 1.0 ran on 3 July 2021 in the Sundarbans Villages. Its write-up describes volunteers who connected, explored and gave back, and its own figures are food for 300 people and 200 patients treated. Sunderbans 2.0 followed on 17 July 2021 in Ward 142, where the write-up says 130 saplings were planted and 100 patients were treated.",
+        "The Genesis drive of 9 October 2021 is the one early drive recorded with a named group, Genesis (GECT). Its write-up describes volunteers travelling deep into the Sundarbans to distribute aid and meet local residents. In 2022 the series ran Sunderbans 3.0 in February and the Mukti Sunderbans Project in March, where the write-up says children were given clothes."
+      ]
+    },
+    {
+      "id": "from-food-to-checkups",
+      "heading": "from food to checkups",
+      "body": [
+        "Medical work becomes the main story from 2022 onward. Checkups are the key figure in most drives since then. Sunderbans 3.0 in February 2022 records over 450 checkups, a Medical Camp on 27 May 2023 records over 100, Sunderbans Plantation Project 4.0 in June 2023 records over 200, and the Pather Sathi Sunderbans project in July 2023 records over 250. Each is that drive's own stated figure, not a total.",
+        "Relief took other forms too. The June 2024 planting drive planted over 50 saplings, and the most recent drive, Sunderbans 8.0 on 13 December 2025, was held with Pather Sathi. Its write-up gives over 120 checkups, along with donated medicines and stationery."
+      ]
+    },
+    {
+      "id": "places-and-hosts",
+      "heading": "where the drives happen and who we worked with",
+      "body": [
+        "Named groups are rare in these write-ups. Genesis (GECT) is recorded on the October 2021 drive, and Pather Sathi on Sunderbans 8.0 in December 2025. Pather Sathi also hosted AquaTerra environment workshops, which are covered on the [environment and climate workshops page](/impact/environment-education).",
+        "Most drives are recorded as Sundarbans Villages, or simply as Sundarbans, and {topPlace} is the most frequent entry. Ward 142 is the one ward named. If you are looking for a particular drive, search by its title, because the place names vary from one write-up to the next."
+      ]
+    },
+    {
+      "id": "what-changed",
+      "heading": "what changed over the years",
+      "body": [
+        "The counts are small and uneven: {year:2021} drives in 2021, {year:2022} in 2022, {year:2023} in 2023, {year:2024} in 2024 and {year:2025} in 2025. From 2024 the series settled into about one drive a year, so it is best read as a set of separate drives rather than a steady programme.",
+        "The shape changed as well. Early drives were about food and aid, checkups became the main figure from 2022, and planting appears in 2024. Apart from the 2021 Genesis drive, Sunderbans 8.0 is the only drive with a named group, and it has the largest volunteer turnout on this page."
+      ]
+    },
+    {
+      "id": "what-the-write-ups-say",
+      "heading": "what the write-ups say volunteers did",
+      "body": [
+        "The write-ups describe the work in human terms: stories, smiles and hope. The 2023 Medical Camp write-up says vitals were checked and healthcare was brought closer to people who needed it most. The 2021 drives describe volunteers who explored and gave back, and the June 2024 planting drive stresses green cover and wildlife.",
+        "For organisation-wide totals, see [AquaTerra by the numbers](/impact/by-the-numbers). This series has {volunteers} volunteer turnouts, and across all of AquaTerra's work the organisation has reached {checkups} medical checkups. For the planting side of the Sundarbans work, see [Grow Green: plantation drives](/impact/grow-green)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Sundarbans relief has run from {firstYear} to {lastYear} in {count} drives.",
+    "Medical checkups are the key figure in most drives from 2022 onward.",
+    "The largest volunteer turnout on this page came on Sunderbans 8.0, held on 13 December 2025.",
+    "Pather Sathi is named on the most recent drive, and it also hosted environment workshops.",
+    "Drive titles vary in how they spell the area, so search by title as well as by place."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra do in the Sundarbans?",
+      "a": "AquaTerra runs Sundarbans relief drives in villages, including food distribution, medical checkups, clothes for children and planting. The series has {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "Does AquaTerra run medical camps in the Sundarbans?",
+      "a": "Yes. A Medical Camp on 27 May 2023 is recorded at Sundarbans with over 100 checkups, and Sunderbans 3.0 in February 2022 records over 450 checkups. Checkups are the most common key figure in the series from 2022 onward."
+    },
+    {
+      "q": "Who did AquaTerra work with in the Sundarbans?",
+      "a": "Named groups are rare. The write-ups name Genesis (GECT) on the October 2021 Genesis drive, and Pather Sathi on Sunderbans 8.0 in December 2025. Most other drives do not name a separate group."
+    },
+    {
+      "q": "Where in the Sundarbans did AquaTerra go?",
+      "a": "Most drives are recorded as Sundarbans Villages, with Ward 142 named once. Across the series the drives took place at {placesCount} places, and many are recorded simply as Sundarbans."
+    },
+    {
+      "q": "What did AquaTerra do in the Sundarbans in 2024?",
+      "a": "In 2024 the series held {year:2024} drive: Sunderbans Plantation Project 5.0, held on 22 June 2024, where the write-up says over 50 saplings were planted to restore green cover and protect wildlife."
+    }
+  ],
+  "keywords": [
+    "Sundarbans relief drive Kolkata students",
+    "AquaTerra Sundarbans",
+    "medical camp Sundarbans volunteers",
+    "Pather Sathi Sundarbans",
+    "Sundarbans villages aid students",
+    "Sunderbans plantation project"
+  ]
+}

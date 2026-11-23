@@ -1,0 +1,64 @@
+{
+  "slug": "month-2024-09",
+  "title": "AquaTerra in September 2024: {count} drives, all workshops",
+  "description": "In September 2024 AquaTerra ran {count} children's workshops in art, quizzes, computers and mental health, mostly at Pather Sathi in Kolkata.",
+  "h1Lead": "a month of",
+  "h1Accent": "small workshops",
+  "lede": "In September 2024 AquaTerra ran {count} drives, and every one was a workshop for children. Most were at {topPlace}, with a computer class at Shoishob. The month brought {volunteers} volunteer turnouts and shows what a steady, low-key run of sessions looks like.",
+  "sections": [
+    {
+      "id": "five-sessions",
+      "heading": "five sessions from 7 to 21 September",
+      "body": [
+        "The month opened on 7 September with two sessions that day. Craft a Bag taught children to make eco-friendly paper bags, and Sketch and Solve paired a quiz with art. The same quiz and art format came back on 21 September as Colourful Questions, so the month began and ended with one kind of session.",
+        "Between those dates came Healing Space, a mental health workshop on 14 September about emotional well-being, self-care and awareness, and Keys and Clicks, a computer workshop at Shoishob on 10 September covering basic tech skills, coding and digital creativity."
+      ]
+    },
+    {
+      "id": "pather-sathi",
+      "heading": "a home base at pather sathi",
+      "body": [
+        "Pather Sathi is one of the places we keep going back to, and September shows why. Most of the sessions ran there, which made it the centre of the month. Shoishob hosted the only other session, the computer class, so the whole month stayed within two places.",
+        "A place that already hosts sessions makes the next one easier to plan. If your school, club or neighbourhood has a room you can use, that is the first thing to ask about before you pick a topic. The [Pather Sathi](/impact/pather-sathi) page covers the place across the years."
+      ]
+    },
+    {
+      "id": "joining-in",
+      "heading": "how to help with a session like these",
+      "body": [
+        "Sessions this size run on small teams. If you can run a quiz, lead a drawing session or teach basic computer skills, that is exactly the help these workshops need. Join AquaTerra with Google sign-in, wait for approval, and ask for a team through [volunteer](/volunteer).",
+        "A month with only a handful of drives is a good place to start, because one session shows you the whole process: planning, the day itself and writing it up afterwards."
+      ]
+    }
+  ],
+  "learnings": [
+    "A small team and one regular place can carry a month of sessions.",
+    "A quiz and art format worked at both ends of the month, so a format that works is worth repeating.",
+    "Mixing subjects, from drawing to coding, gives children more than one way into a workshop."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in September 2024?",
+      "a": "AquaTerra ran {count} drives in September 2024, all of them workshops for children. Most were at {topPlace}, with one computer class at Shoishob, and the month had {volunteers} volunteer turnouts in total."
+    },
+    {
+      "q": "Where did AquaTerra run workshops in September 2024?",
+      "a": "Most September 2024 workshops ran at Pather Sathi, which was the most frequent place that month. The other was Shoishob, where the computer workshop Keys and Clicks ran on 10 September."
+    },
+    {
+      "q": "What kind of workshops did AquaTerra hold for children in September 2024?",
+      "a": "They were hands-on sessions: a quiz and art workshop, a mental health workshop, a computer workshop, and eco-friendly paper bag making. AquaTerra's student volunteers ran all of them."
+    },
+    {
+      "q": "Can I volunteer to run an AquaTerra workshop?",
+      "a": "Yes, if you are between 14 and 19. Join AquaTerra with Google sign-in, wait for approval, and sign up for a team. Workshops like the ones in September 2024 are where new volunteers usually start."
+    }
+  ],
+  "keywords": [
+    "AquaTerra September 2024",
+    "children's workshops Kolkata 2024",
+    "Pather Sathi workshops",
+    "student volunteer workshops Kolkata",
+    "mental health workshop for students Kolkata"
+  ]
+}

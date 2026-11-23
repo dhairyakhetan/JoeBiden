@@ -1,0 +1,73 @@
+{
+  "slug": "month-2022-03",
+  "title": "AquaTerra in March 2022: {count} drives, from dogs to saplings",
+  "description": "AquaTerra's March 2022: {count} drives, four stray dog feeding outings, two planting drives, a book collection and a Sundarbans clothes drive.",
+  "h1Lead": "what we did in",
+  "h1Accent": "march 2022",
+  "lede": "In March 2022 AquaTerra ran {count} drives across Kolkata and the Sundarbans. The stray dog feeding outings were the largest group, with planting, a book collection, a football fundraiser and a mini fete making up the rest. Compared with the {count:month-2022-04} drives of April, March was the quieter month.",
+  "sections": [
+    {
+      "id": "stray-dog-outings",
+      "heading": "the stray dog outings",
+      "body": [
+        "Tails and Treats ran four times in March 2022, on 4, 12, 19 and 25 March. Each outing was in Kolkata with four volunteers, and the drives were numbered 3.0 to 6.0 in the series. The dogs fed per drive ranged from thirty-five at the 4.0 outing to seventy at the 3.0 outing.",
+        "The plan stayed simple: a small group of students, food for the dogs and time spent with them. Each outing was its own drive in the series, so the same kind of day repeats across the month."
+      ]
+    },
+    {
+      "id": "planting-books-and-clothes",
+      "heading": "planting, books and clothes",
+      "body": [
+        "Two planting drives sat beside the dog outings. Grow Green 3.0 planted one hundred saplings in Kolkata on 19 March, and Bottled Greens, a plantation workshop at Disha Foundation on 11 March, planted eighty-five.",
+        "Book Basket began on 20 March in Kolkata with about twenty kilograms of books, and its write-up calls it the start of a storybook collection drive. On 12 March the Mukti Sunderbans Project took clothes to villages in the Sundarbans, where one hundred and sixty children got clothes. The [Sundarbans page](/impact/sundarbans) covers those trips."
+      ]
+    },
+    {
+      "id": "a-fundraiser-and-a-fete",
+      "heading": "a fundraiser and a fete",
+      "body": [
+        "Turf Wars, a football fundraiser at Elgin Turf on 18 March, had twenty volunteers, the largest team of the month. Students played for a cause, with goals and good vibes. For how the fundraisers fit into the work, see the [fundraising page](/impact/fundraising).",
+        "Fun Fiesta, a mini fete at Ek Tara on 11 March, had seven volunteers and engaged eighty children with games and snacks. It was run with a helping hand from Universal Ally, and its write-up describes a lively fete with hearts full and hands busy."
+      ]
+    },
+    {
+      "id": "march-beside-april",
+      "heading": "how March sat beside April",
+      "body": [
+        "March had {count} drives and April had {count:month-2022-04}. April brought the Earth Day workshops, which March did not have, but the dog outings carried on into April, so the series is easy to follow from one month to the next.",
+        "{topPlace} hosted the most drives in March, with the Sundarbans villages, Disha Foundation, Ek Tara and Elgin Turf as the other places. In all, March's drives ran at {placesCount} places."
+      ]
+    }
+  ],
+  "learnings": [
+    "A month can have one main series and several smaller drives beside it: March 2022 was mostly dog outings and planting, with a fundraiser and a fete.",
+    "Short, regular outings carry a series: the four stray dog drives ran on 4, 12, 19 and 25 March.",
+    "Planting and clothes drives can share a month with the dog outings, so a team can pick the work that suits it."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in March 2022?",
+      "a": "AquaTerra ran {count} drives in March 2022: four stray dog feeding outings in Kolkata, two planting drives, a book collection, a football fundraiser at Elgin Turf, a mini fete at Ek Tara and a clothes drive in the Sundarbans villages."
+    },
+    {
+      "q": "Where did AquaTerra feed stray dogs in March 2022?",
+      "a": "All four Tails and Treats drives in March 2022 were in Kolkata, on 4, 12, 19 and 25 March, each with four volunteers. The dogs fed per drive ranged from thirty-five to seventy."
+    },
+    {
+      "q": "Did AquaTerra go to the Sundarbans in March 2022?",
+      "a": "Yes. The Mukti Sunderbans Project on 12 March 2022 took clothes to villages in the Sundarbans, where one hundred and sixty children got clothes."
+    },
+    {
+      "q": "What is the Book Basket drive?",
+      "a": "Book Basket is AquaTerra's book collection drive. The first one, on 20 March 2022 in Kolkata, collected about twenty kilograms of books and was the start of a storybook collection."
+    }
+  ],
+  "keywords": [
+    "AquaTerra March 2022",
+    "what AquaTerra did in March 2022",
+    "stray dog feeding Kolkata 2022",
+    "Sundarbans clothes drive 2022",
+    "Book Basket book collection Kolkata",
+    "AquaTerra drives 2022"
+  ]
+}

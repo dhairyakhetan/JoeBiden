@@ -14,6 +14,8 @@ import CvCard from './CvCard'
 import MemberOfMonthClaimCard from './MemberOfMonthClaimCard'
 import MyTasksCard from './MyTasksCard'
 import MemberOfMonthProfileBadge from './MemberOfMonthProfileBadge'
+import CoreBadge from '../components/CoreBadge'
+import { useCoreMembers } from '../lib/coreMembers'
 import FeedPostCard from '../feed/FeedPostCard'
 import PhotoCollection from './PhotoCollection'
 import { feedItemFromPost } from '../feed/feedItemFromPost'
@@ -69,6 +71,7 @@ const ProfilePage = ({ isOwn: isOwnProp = false }: ProfilePageProps) => {
   const { uuid } = useParams<{ uuid: string }>()
   const [searchParams] = useSearchParams()
   const { member: currentMember, refreshMember } = useAuth()
+  const core = useCoreMembers()
   const isMobile = useIsMobile()
   const toast = useToast()
   const confirm = useConfirm()
@@ -479,6 +482,7 @@ const ProfilePage = ({ isOwn: isOwnProp = false }: ProfilePageProps) => {
                   </h1>
                 </div>
                 <div className="pf-chips">
+                  {core.uuids.has((currentMember as any)?.uuid) && <CoreBadge size="md" />}
                   {profile.role !== 'member' && (
                     <span className="pf-chip">{getRoleLabel(profile.role)}</span>
                   )}

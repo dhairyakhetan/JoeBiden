@@ -1,0 +1,80 @@
+{
+  "slug": "month-2025-09",
+  "title": "AquaTerra in September 2025: {count} drives, clothes and art",
+  "description": "AquaTerra's September 2025: {count} drives, dog feeding in Bangur, Howrah and Laketown, a large clothes donation at Goonj, art workshops and an old age home visit.",
+  "h1Lead": "september 2025",
+  "h1Accent": "clothes, art and feeding",
+  "lede": "In September 2025 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. The month opened with a run of dog feeding stops in its first week, moved on to art, acting and storytelling workshops for children, and closed with a feeding stop back in Bangur. A large clothes donation at Goonj in Kolkata and an old age home visit sat in the middle.",
+  "sections": [
+    {
+      "id": "the-first-week-of-feeding",
+      "heading": "the first week of feeding",
+      "body": [
+        "The first week of September was the busiest stretch of the month, and most of the feeding stops came in it. Tails and Treats 50.0 ran at Bangur on 2 September. On 5 September 51.0 ran at Howrah and 52.0 at Laketown on the same day, and the Laketown write-up says 90 dogs fed, the largest figure of the month's feeding drives.",
+        "Tails and Treats 53.0 came back to Bangur on 29 September with a team of four, so Bangur hosted two of the [Tails and Treats](/impact/tails-and-treats) stops in one month. The Howrah stop had the largest feeding team of the month, and the series kept the same purpose at each place: food and care for the street dogs."
+      ]
+    },
+    {
+      "id": "a-clothes-donation-at-goonj",
+      "heading": "a clothes donation at Goonj",
+      "body": [
+        "On 12 September a team of eight ran Clothes Segregation and Donation at Goonj in Kolkata. The name says what the day involved: sorting clothes before they were donated. The write-up says 1000 kgs of clothes donated, the biggest clothes figure of the month.",
+        "For a new member, the day shows how a clothes drive can start with sorting before anything is donated."
+      ]
+    },
+    {
+      "id": "art-acting-and-storytelling",
+      "heading": "art, acting and storytelling",
+      "body": [
+        "Inner Canvas at Pather Sathi on 20 September helped students express themselves through art. Tiny Prints, a fingerpainting workshop at Amader Pradakhep on 6 September, brought colour to life, and Once Upon at Lamp Open Shelter on 5 September was a storytelling session where every story told captured hearts.",
+        "Express More, an acting workshop at Gandhi Peace Foundation on 12 September, explored emotions and stories. Sustainable Creativity at Birla High School on 11 September was the largest team of the month, with students from the fourth and fifth standards making creative pieces around sustainability."
+      ]
+    },
+    {
+      "id": "a-visit-to-older-people",
+      "heading": "a visit to older people",
+      "body": [
+        "Respect and Reach - Old Age Home drive 8.0 was held at All Bengal Women's Union on 11 September. It was built on small acts of kindness for seniors, and the write-up says 20 elderly people were supported through kind actions. The [Respect and Reach](/impact/respect-and-reach) page covers the series and how the visits are run."
+      ]
+    },
+    {
+      "id": "how-september-compares",
+      "heading": "how september compares",
+      "body": [
+        "August ran {count:month-2025-08} drives and October ran {count:month-2025-10}, so September was a busy middle month with a clear split between feeding, clothes and workshops. The [October 2025 page](/impact/month-2025-10) picks up the Diwali sessions that followed."
+      ]
+    }
+  ],
+  "learnings": [
+    "Much of the work can come early in a month: the first week of September carried most of the feeding stops.",
+    "Dog feeding can return to a neighbourhood. Bangur had a feeding drive at both the start and the end of September.",
+    "A clothes day can be large in one go. The Goonj donation was the biggest clothes figure of the month, and a team of eight sorted it.",
+    "Art sessions in September were short and varied, from fingerpainting to acting, so a new member can try more than one craft in a month."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in September 2025?",
+      "a": "In September 2025 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. The month included Tails and Treats feeding stops for stray dogs, a clothes donation at Goonj in Kolkata, art and acting workshops for children, and an old age home visit under the Respect and Reach name."
+    },
+    {
+      "q": "Did AquaTerra donate clothes in September 2025?",
+      "a": "Yes. On 12 September 2025 a team of eight ran Clothes Segregation and Donation at Goonj in Kolkata. The write-up says 1000 kgs of clothes were donated, the largest clothes figure of the month."
+    },
+    {
+      "q": "Where did AquaTerra feed dogs in September 2025?",
+      "a": "Tails and Treats ran feeding stops in September 2025 at Bangur on 2 and 29 September, at Howrah on 5 September and at Laketown on 5 September. The Laketown write-up says 90 dogs fed."
+    },
+    {
+      "q": "Does AquaTerra visit older people?",
+      "a": "Yes. AquaTerra runs old age home visits under the Respect and Reach name. Respect and Reach - Old Age Home drive 8.0 was held at All Bengal Women's Union on 11 September 2025, and its write-up says 20 elderly people were supported through kind actions."
+    }
+  ],
+  "keywords": [
+    "AquaTerra September 2025",
+    "clothes donation Goonj Kolkata 2025",
+    "stray dog feeding Bangur Laketown 2025",
+    "art workshop children Kolkata September 2025",
+    "old age home visit Kolkata",
+    "Respect and Reach AquaTerra"
+  ]
+}

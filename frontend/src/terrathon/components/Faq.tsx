@@ -49,7 +49,7 @@ const FAQ: Array<{ q: string; a: string }> = [
   },
   {
     q: 'Where does the money go?',
-    a: 'Into the welfare projects Team AquaTerra runs through the year. We are a registered NGO, 12A and 80G certified.',
+    a: 'Into the welfare projects Team AquaTerra runs through the year. We are a registered charitable trust, listed on NGO DARPAN.',
   },
 ]
 

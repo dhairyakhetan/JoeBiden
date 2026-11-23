@@ -281,3 +281,29 @@
 @media (prefers-reduced-motion: reduce) {
   .ops-rail2-chevron { transition: none; }
 }
+
+/* ── Jump to a desk (bug tracker e11544ed). Sits on the ink rail and the ink
+   phone sheet, so it uses the rail's on-ink colours. ── */
+.ops-jump { position: relative; flex: none; }
+.ops-jump-input {
+  width: 100%; min-height: 40px; padding: 0 14px;
+  border: var(--hair-inv); border-radius: var(--r-pill);
+  background: rgba(244,239,224,0.07); color: var(--nav-fg-strong);
+  font-family: var(--eina); font-size: 13px;
+}
+.ops-jump-input::placeholder { color: var(--nav-fg-faint); }
+.ops-jump-input:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+.ops-jump-list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20;
+  list-style: none; margin: 0; padding: 6px;
+  background: var(--paper); color: var(--ink);
+  border-radius: var(--r-inner); box-shadow: var(--lift-2);
+}
+.ops-jump-item, .ops-jump-empty {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 40px; padding: 0 10px; border-radius: var(--r-tight);
+  font-family: var(--eina); font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.ops-jump-empty { cursor: default; color: var(--ink-3); font-weight: 500; }
+.ops-jump-item.is-active { background: var(--lemon); }
+.ops-jump-group { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }

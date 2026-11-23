@@ -1,0 +1,91 @@
+{
+  "slug": "places-we-return-to",
+  "title": "Places We Keep Returning To, and the Drives at Each · AquaTerra",
+  "description": "The places AquaTerra keeps going back to in Kolkata, from Pather Sathi and Ek Tara to Disha Foundation and AIM Foundation. {count} drives since {firstYear}.",
+  "h1Lead": "the places we",
+  "h1Accent": "keep returning to",
+  "lede": "Pather Sathi, Ek Tara, Disha Foundation and AIM Foundation are among the places AquaTerra keeps going back to, mostly to run children's sessions. Across {count} of the {drives} drives we have held, from {firstYear} to {lastYear}, these places hosted {volunteers} volunteer turnouts. Pather Sathi has hosted the most, with {count:pather-sathi} drives, followed by Ek Tara with {count:ek-tara}.",
+  "sections": [
+    {
+      "id": "the-main-places",
+      "heading": "the main places",
+      "body": [
+        "Pather Sathi carries about half of the drives at these places. Its drives run from December 2022 onwards, and most are children's workshops in art, public speaking, English, science, quizzes and festive crafts. Because it carries so much of the work, it has a page of its own, and this page treats it as the anchor place.",
+        "Ek Tara is next, with {count:ek-tara} drives from June 2021 onwards. Disha Foundation and AIM Foundation follow. Disha hosted speaking, English and art workshops, and AIM Foundation hosted a run of art workshops in 2024, then music, STEM and storytelling sessions in 2025. Ek Tara has its own page for the detail."
+      ]
+    },
+    {
+      "id": "what-we-do-there",
+      "heading": "what we did at each place",
+      "body": [
+        "Most drives here are workshops for children, each with a named activity. The subjects run from art and craft, public speaking and English to science, STEM, music, financial literacy and festive days for Diwali, Christmas, Holi and Children's Day. Pather Sathi and Ek Tara carry many of these subjects, so the list reflects the places' own mix.",
+        "A few drives were different in kind. At Ektara in October 2025, volunteers helped non-teaching staff with surveys. With AIM Foundation in May 2024, we handed out sanitary napkins, and the Comfort Kits drive notes 100 packets distributed. The Respect and Reach visits to Urban Shelter for the Homeless in May 2024 offered support, care and essentials to elderly residents. These were single drives rather than a series, and they sat alongside the regular workshops at the same places. They were one-off days of help rather than workshops, which is why they stand apart from the subjects above."
+      ]
+    },
+    {
+      "id": "volunteer-turnouts-and-gaps",
+      "heading": "volunteer turnouts, and where the count is thin",
+      "body": [
+        "These places account for {volunteers} volunteer turnouts. A turnout counts every time someone showed up, so a volunteer who came to several drives is counted once for each. The total measures how much help the drives had, not how many different people gave it.",
+        "Some entries are thin. The Learner's Den session at Pather Sathi in June 2026 has no volunteer count and no outcome figure, so it adds to the number of drives but not to the turnouts. This page does not fill that gap with an estimate, so the total stays exactly what the drives reported."
+      ]
+    },
+    {
+      "id": "one-place-many-visits",
+      "heading": "places that go by more than one name",
+      "body": [
+        "Some places go by more than one name. Ek Tara also appears as Ektara, AIM Foundation takes several forms, and Pather Sathi is sometimes written with an extra a. This page counts each place once where the name is clear, so a place's total here is approximate. A reader who sees a different name for the same place should treat it as the same place. Pather Sathi and Ek Tara each have their own page, where their drives are gathered in one place. This matters most for the places with several forms of their name.",
+        "Totals for each place can shift depending on how the names are grouped, and the number of distinct places is probably a little high for the same reason. Readers comparing places across pages should allow for that. Readers comparing place pages should read each total as a close estimate, not an exact figure."
+      ]
+    },
+    {
+      "id": "how-the-drives-changed",
+      "heading": "how the drives changed over time",
+      "body": [
+        "The earliest drive here is Ek Tara's pot painting workshop in June 2021. The most drives came in 2024, with {year:2024}, followed by 2023 with {year:2023}. This topic has {year:2025} drives in 2025 and {year:2026} so far in 2026, with the latest in September.",
+        "The mix shifted within the years. AIM Foundation's biggest year was 2024, mostly art and craft sessions and adolescence health workshops. In 2025 and 2026, the Pather Sathi drives include the Merry Miracles Christmas days and the Children's Day workshop in November 2025."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pather Sathi accounts for about half of the drives at the places we keep going back to.",
+    "Most of these drives are children's workshops in art, speaking, English and festive craft, not one-off service days.",
+    "AIM Foundation's biggest year was 2024, with art workshops and adolescence health sessions.",
+    "Ek Tara has hosted AquaTerra drives since June 2021, the earliest of these places.",
+    "Some places go by more than one name, so totals for each place are approximate."
+  ],
+  "faqs": [
+    {
+      "q": "Which places does AquaTerra run drives at in Kolkata?",
+      "a": "AquaTerra's regular places include Pather Sathi, Ek Tara, Disha Foundation, AIM Foundation, Amader Pradakhep, Tetultala Ashram, Gyandeepak, Shoishob, Universal Smile and Urban Shelter for the Homeless. Across {count} drives at these places, Pather Sathi hosts the most."
+    },
+    {
+      "q": "How many drives has AquaTerra run at these places?",
+      "a": "This page counts {count} drives at these places from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts. That is {count} of the {drives} drives AquaTerra has held in total."
+    },
+    {
+      "q": "Does AquaTerra run drives at Ek Tara?",
+      "a": "Yes. AquaTerra has run {count:ek-tara} drives at Ek Tara since June 2021. They cover art, public speaking, English teaching and Christmas workshops."
+    },
+    {
+      "q": "Which place has AquaTerra's most drives?",
+      "a": "Pather Sathi has the most, with {count:pather-sathi} drives, most of them children's workshops, many held at its Sunday school sessions."
+    },
+    {
+      "q": "Do drives at these places cover health or safety topics?",
+      "a": "Yes. Drives covered menstrual awareness at Pather Sathi in April 2026, a digital safety workshop there in May 2026, good touch and bad touch awareness in 2024, and adolescence health sessions with AIM Foundation in May 2024."
+    },
+    {
+      "q": "Where can I see the drives at a single place?",
+      "a": "Pather Sathi and Ek Tara each have their own impact page on this site. This page covers the places AquaTerra keeps going back to as a whole."
+    }
+  ],
+  "keywords": [
+    "AquaTerra places for children's drives Kolkata",
+    "NGO places for children's workshops Kolkata",
+    "Pather Sathi Kolkata",
+    "Ek Tara Kolkata children",
+    "AIM Foundation Kolkata workshops",
+    "Disha Foundation Kolkata children workshops"
+  ]
+}

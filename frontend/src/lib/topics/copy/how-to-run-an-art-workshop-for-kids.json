@@ -1,0 +1,99 @@
+{
+  "slug": "how-to-run-an-art-workshop-for-kids",
+  "title": "How to run an art workshop for children · AquaTerra",
+  "description": "How AquaTerra runs art workshops for children in Kolkata: one activity, a host place, a small team and a write-up. {count} drives since {firstYear}.",
+  "h1Lead": "running an art",
+  "h1Accent": "workshop for kids",
+  "lede": "An AquaTerra art workshop is one session of painting, drawing, origami or card-making with children, planned and run by a small team of students. We have run {count} of them since {firstYear}, most of them at {topPlace}, with {volunteers} volunteer turnouts across the series. Volunteer turnouts count every time someone showed up, so one student who came back five times counts five times.",
+  "sections": [
+    {
+      "id": "plan-it-around-one-activity",
+      "heading": "plan it around one activity",
+      "body": [
+        "Start with one thing the children will make. The series has run on painting, drawing, pebble painting, fingerpainting, origami, mosaics, pot painting, paper bags, T-shirt painting, greeting cards and diyas. Titles such as Pebble Pop and Origami Time show the idea: one clear activity, named after what the children made. Pick the one that fits the time you have and the materials you can carry.",
+        "Then pick the place and call ahead. The most common place on this page is {topPlace}, where art sessions have run across several years, but we have also worked at AIM Foundation, Ek Tara and Amader Pradakhep. We check with the host a few days before, so we know the room, the tables and roughly how many children to expect."
+      ]
+    },
+    {
+      "id": "gather-what-you-need",
+      "heading": "gather what you need",
+      "body": [
+        "Keep the materials simple, and bring a little more than you think you need. Our sessions have used paper, glue, crayons, paints, pebbles, plain T-shirts, organic colours for a Holi session, and the stationery sets that went to the winners of an art contest at AIM Foundation. Origami needs only paper, and it has run both as a short school session and as a summer camp.",
+        "Plan a second activity for the quiet end. Several drives paired art with a quiz, such as Brush and Buzz and Colour and Cues, so children could paint and then answer questions. We suggest having one short follow-on ready, so that a child who finishes early has something to do while the others catch up."
+      ]
+    },
+    {
+      "id": "on-the-day",
+      "heading": "on the day",
+      "body": [
+        "Start with a short demonstration, then let each child make their own version. A volunteer can show one technique, such as a fold in origami or a dab of paint for fingerprints, and then move between the tables. Keep the helpers spread around the room, so every child has someone close enough to ask.",
+        "Give the session a reason. At Color Club in October 2025, the children made Green Diwali posters after learning why firecrackers harm the environment. At The Art Nook and Mindful Marks the same month, children made Diwali greeting cards, and volunteers told Diwali stories while they worked. A theme gives the making a point.",
+        "Expect a small team and a room of children. Most art drives list between one and six volunteers, and most report between twenty and forty children. The largest was a summer camp at Gyandeepak in June 2023, where twelve volunteers taught origami to a hundred children, so plan for a much bigger team if you want a day like that."
+      ]
+    },
+    {
+      "id": "after-the-drive",
+      "heading": "after the drive",
+      "body": [
+        "Write it up the same week, while the details are clear. A good write-up gives the date, the place, how many helpers came, what the children made and what you would change next time. That note is how the next team learns from the last one, and every drive is public on the site once it is written up.",
+        "Small changes are worth noting: a bigger table, a second helper at the quiet end, or a theme the children enjoyed more than the others. Keep them short. The next team needs the things that worked, not a report on everything."
+      ]
+    },
+    {
+      "id": "how-the-art-drives-grew",
+      "heading": "how the art drives grew",
+      "body": [
+        "The first art session on this page was a pot painting day at Ek Tara in June 2021, where children painted flower pots and then got their hands muddy planting saplings. The series grew quickly after 2022. It had {year:2023} drives in 2023, {year:2024} in 2024 and {year:2025} in 2025, so 2024 had more art drives than any other year.",
+        "Most of the later drives ran at {topPlace}, several of them as Sunday school workshops. The Colours Of Durga run is a good example of a series in one place: five sessions from late September to early October 2023, all at Pather Sathi."
+      ]
+    },
+    {
+      "id": "run-one-with-a-team",
+      "heading": "run one with a team",
+      "body": [
+        "Members of AquaTerra run these sessions, and students aged 14 to 19 can join. Sign in with Google to start, and your membership is approved before you take part in a drive. If you would rather bring a session to your own school, start on the [collaborations page](/collaborations), or [join AquaTerra](/join) to run one with a team."
+      ]
+    }
+  ],
+  "learnings": [
+    "One clear activity per session is easier to teach to a room of children, and the series titles show it: Pebble Pop, Origami Time and Tiny Prints.",
+    "A theme gives the making a reason. The Green Diwali posters and the Diwali greeting cards came from a talk and a story, not from the materials alone.",
+    "Several drives paired art with a quiz, from Brush and Buzz to Colour and Cues, so a quiz can sit beside the painting in the same session.",
+    "Most art drives ran at one place, which kept a series in one room that a team could return to.",
+    "Write each drive up the same week, so the next team can repeat what worked."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run an art workshop for children in Kolkata?",
+      "a": "Plan one activity, such as painting, origami or card-making, and agree the host place a few days ahead. AquaTerra's student teams start with a short demonstration, let each child make their own piece and write the session up afterwards. Since {firstYear}, AquaTerra has run {count} art drives of this kind."
+    },
+    {
+      "q": "Where does AquaTerra run art workshops for children?",
+      "a": "Most of them ran at {topPlace}, with others at AIM Foundation, Ek Tara and Amader Pradakhep, and a few at schools such as School On Wheels. Every drive is written up and public on the site, so you can read the date and place of each one."
+    },
+    {
+      "q": "What do children make in an AquaTerra art workshop?",
+      "a": "It depends on the session. The series includes paintings and drawings, pebble painting, fingerprint art, origami, mosaics, pot painting, paper bags, T-shirt painting, Diwali greeting cards and diyas."
+    },
+    {
+      "q": "How many volunteers does an art workshop need?",
+      "a": "Most art drives had between one and six volunteers. The biggest was a summer camp at Gyandeepak in June 2023, which had twelve volunteers. Across all the art drives, {volunteers} volunteer turnouts count every time someone came, not unique people."
+    },
+    {
+      "q": "Can a school host an AquaTerra art workshop?",
+      "a": "Schools have hosted our drives, including a Diwali greeting card session at School On Wheels in October 2025. To talk about hosting a session, use the collaborations page."
+    },
+    {
+      "q": "How do I join AquaTerra to run a workshop?",
+      "a": "Sign in with Google and wait for your membership to be approved. Members are students aged 14 to 19, and the join page explains the steps."
+    }
+  ],
+  "keywords": [
+    "art workshop for kids Kolkata",
+    "how to run an art workshop for children",
+    "origami workshop for children Kolkata",
+    "painting workshop for kids volunteers",
+    "volunteer to run a kids art session India",
+    "AquaTerra art workshops"
+  ]
+}

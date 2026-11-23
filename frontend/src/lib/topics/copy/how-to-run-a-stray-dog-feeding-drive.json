@@ -1,0 +1,94 @@
+{
+  "slug": "how-to-run-a-stray-dog-feeding-drive",
+  "title": "How to run a stray dog feeding drive · AquaTerra",
+  "description": "How AquaTerra students plan, run and write up a stray dog feeding drive in Kolkata: biscuits, a small team, one neighbourhood you return to, and a short write-up.",
+  "h1Lead": "how to run a",
+  "h1Accent": "stray dog feeding drive",
+  "lede": "A stray dog feeding drive is a small team, a bag of biscuits and an hour on the streets of one neighbourhood. AquaTerra has run {count} of them since {firstYear}, and this is how we set one up, run it on the day and write it up so the next team can repeat it.",
+  "sections": [
+    {
+      "id": "plan-the-drive",
+      "heading": "plan it around one neighbourhood",
+      "body": [
+        "Our feeding drives keep coming back to the same few places. Bangur and Salt Lake come up again and again, with Howrah, Laketown and Avani Oxford close behind. A neighbourhood you return to is easier to plan: you learn where the dogs gather and which lanes are worth the walk.",
+        "Before a drive, the team agrees the place, the date and the biscuits. Our teams suggest checking the area a few days ahead, so nobody arrives to an empty street with a bag of food and no plan for the next stop."
+      ]
+    },
+    {
+      "id": "gather-the-team",
+      "heading": "gather a small team and the food",
+      "body": [
+        "A drive does not need a crowd. Across {count} drives, {volunteers} volunteer turnouts have gone out, which means most outings run with a handful of students. Volunteer turnouts count every time someone showed up, so one student who came to five drives counts five times. The biggest teams have been close to a dozen people.",
+        "The food is biscuits, and the objective is always the same: feeding dogs. Carry the packets in a bag you can open quickly on the street, and bring enough for the whole route rather than a small first batch."
+      ]
+    },
+    {
+      "id": "on-the-day",
+      "heading": "on the day: feed, then take your time",
+      "body": [
+        "On the day, the team walks the route and hands biscuits to the dogs it meets. The write-ups are full of the small things: students cuddled, fed and pampered the dogs they met. The drive at Dobson Lane in April 2026 was described as a successful hour, and it fed cows as well as dogs, so the route can take in other animals on the street.",
+        "Keep the drive short and friendly. The March 2025 drive at Shibpur notes 90 dogs fed in one outing, which shows how far a team can get with a few packets and a steady pace."
+      ]
+    },
+    {
+      "id": "how-the-series-changed",
+      "heading": "how the series changed",
+      "body": [
+        "The early drives from {firstYear} were listed simply as Kolkata. From late 2024 the write-ups start naming the neighbourhood, and in 2025 the series ran in named places across the city, with {year:2025} drives that year at Bangur, Salt Lake, Howrah, Laketown and Avani Oxford.",
+        "In 2026 the series has been smaller, with {year:2026} drives so far, at Dobson Lane and Jatindas Park. The series is up to Feeding Stray Dogs 53.0, and it has touched {placesCount} different places in total, so there is always a new lane to try."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up so the next team can repeat it",
+      "body": [
+        "Every drive goes on the AquaTerra site as a write-up: a title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, usually the number of dogs fed. That is the whole method. A new team reads the last drive at the same place and knows what to buy, where to start and roughly what to expect.",
+        "Write it up soon after the drive, while the place and the count are still clear. A write-up that names the place, the biscuits and the dogs fed is more useful to the next team than a general thank you."
+      ]
+    },
+    {
+      "id": "join-or-run-one",
+      "heading": "join a team, or start your own",
+      "body": [
+        "You do not need experience to take part. AquaTerra is run by students aged 14 to 19, and the feeding drives are run by small teams of them. To join, sign in with Google and wait for approval, then ask the team which drive is next.",
+        "If you want to start a drive in your own area, use the steps above, write it up on the site and bring the people you already know. Our [volunteering page](/volunteer) explains how to get started with a team."
+      ]
+    }
+  ],
+  "learnings": [
+    "Return to the same few neighbourhoods: the series has kept going back to Bangur, Salt Lake and Howrah, and a known route is easier to run than a new one each time.",
+    "A small team is enough. Most drives run with a handful of people and a bag of biscuits.",
+    "Name the place, the food and the count in the write-up, so the next team knows what to expect.",
+    "Keep it short and friendly: one write-up calls a drive a successful hour with biscuits and a few dogs, and a drive that size is one a small team can repeat."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a stray dog feeding drive?",
+      "a": "Choose a neighbourhood you can return to, buy biscuits, go out with a small team, feed the dogs you meet, and write the drive up on the AquaTerra site. AquaTerra has run {count} drives like this since {firstYear}, mostly with a handful of volunteers each."
+    },
+    {
+      "q": "What food do AquaTerra's stray dog drives use?",
+      "a": "The food the write-ups name is biscuits. AquaTerra's feeding drives give biscuits to stray dogs, and the drive at Dobson Lane in April 2026 fed cows as well as dogs."
+    },
+    {
+      "q": "Where does AquaTerra feed stray dogs in Kolkata?",
+      "a": "AquaTerra has run feeding drives across {placesCount} places, with Bangur, Salt Lake, Howrah and Laketown among the most common. Many of the earlier drives are listed simply as Kolkata."
+    },
+    {
+      "q": "Can a student join an AquaTerra feeding drive?",
+      "a": "Yes. AquaTerra is student-run and its members are aged 14 to 19. To join, sign in with Google and wait for approval, then take part in the next drive with a team."
+    },
+    {
+      "q": "Does AquaTerra accept donations for dog feeding?",
+      "a": "AquaTerra takes no monetary donations and is self-funded through its own student-run events. Its welfare work, including the feeding drives, is paid for that way."
+    }
+  ],
+  "keywords": [
+    "stray dog feeding drive",
+    "how to feed stray dogs in Kolkata",
+    "run a dog feeding drive",
+    "feed street dogs as a volunteer in Kolkata",
+    "student dog feeding drive",
+    "Tails and Treats Kolkata"
+  ]
+}

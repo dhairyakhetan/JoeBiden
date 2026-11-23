@@ -1,0 +1,90 @@
+{
+  "slug": "aim-foundation",
+  "title": "With AIM Foundation: Art, Health and STEM Workshops · AquaTerra",
+  "description": "AquaTerra's {count} drives with AIM Foundation, {firstYear} to {lastYear}: a 2024 art run, adolescence health talks, then music, stories, STEM and a competition.",
+  "h1Lead": "from brushes to",
+  "h1Accent": "STEM",
+  "lede": "AquaTerra has run {count} drives with AIM Foundation between {firstYear} and {lastYear}. Most of the 2024 run was art, a burst of workshops between 28 May and 7 June, with adolescence health talks alongside. In 2025 the work moved toward music, storytelling, a STEM session and an art competition, and across the whole period {volunteers} volunteer turnouts have taken part.",
+  "sections": [
+    {
+      "id": "the-2024-art-run",
+      "heading": "the art run of 2024",
+      "body": [
+        "Between 28 May and 7 June 2024, AIM Foundation hosted a run of art workshops for children. Shape and Shade and Art Arcade came on 28 May, Art Hive and Doodle Day on 4 June, Paint A Pot on 5 June, Mini Makers on 6 June and From Lines To Life on 7 June. Each one was about imagination, hands-on making and joyful participation.",
+        "Alongside them were adolescence health sessions: Mind and Body and Teen Talk on 29 May, on hygiene and self-care, and Well Within on 21 June. For the health side of AquaTerra's work across all of its hosts, see [Health, hygiene and wellbeing](/impact/health-and-wellbeing)."
+      ]
+    },
+    {
+      "id": "comfort-kits",
+      "heading": "comfort kits and menstrual hygiene",
+      "body": [
+        "On 30 May 2024 AquaTerra worked with AIM Foundation on Comfort Kits, a sanitary napkin distribution. 100 packets were handed out to support menstrual hygiene and raise awareness among women. It is the only distribution drive at AIM Foundation, and the rest are workshops."
+      ]
+    },
+    {
+      "id": "the-2025-shift",
+      "heading": "2025: competitions, music and STEM",
+      "body": [
+        "The 2025 drives were fewer, {year:2025} in all. Brush Battle on 7 March was an art competition for children, and the top three winners took home stationery sets. Word Weavers on 27 May was a storytelling workshop, Musical Minds on 2 June a music session, and Innovate on 12 June a hands-on STEM workshop that sparked curiosity and critical thinking in young learners.",
+        "The series closed with Santa Mask Making on 17 December 2025, part of the Merry Miracles workshops, where a small group of children made Santa masks with volunteers. It is the last AIM Foundation drive on this page, and like the others it was a workshop rather than a distribution."
+      ]
+    },
+    {
+      "id": "where-and-how",
+      "heading": "where the drives ran",
+      "body": [
+        "Every drive on this page was held at AIM Foundation. Every one fell on a weekday, and Tuesdays were the most common day, with five drives. Most of the drives belong to the 2024 run, and the 2025 sessions were spread out from March to December, so the work was steady rather than seasonal."
+      ]
+    },
+    {
+      "id": "what-the-sessions-were-like",
+      "heading": "what the sessions were like",
+      "body": [
+        "The art sessions of 2024 share the same spirit: imagination, self-expression and joyful participation. The health sessions focus on hygiene, self-care and wellbeing for adolescents. Word Weavers explored imagination and expression through stories, voice and narration, and Innovate used hands-on activities to spark curiosity and critical thinking."
+      ]
+    },
+    {
+      "id": "volunteer-turnouts",
+      "heading": "volunteer turnouts",
+      "body": [
+        "Across {count} drives AquaTerra has recorded {volunteers} volunteer turnouts. Every drive but one had between two and five volunteers. The exception was Festive Fun, a Christmas craft session on 20 December 2024, which had six. A student who went to several drives is counted once for each drive, so the figure counts turnouts, not separate people."
+      ]
+    }
+  ],
+  "learnings": [
+    "AIM Foundation drives were mostly children's art workshops in 2024, with health talks alongside them.",
+    "The 2024 run was packed into the last days of May and the first week of June.",
+    "In 2025 the work moved toward music, storytelling, STEM and a competition.",
+    "Only one of the {count} drives was a distribution: Comfort Kits, the sanitary napkin session."
+  ],
+  "faqs": [
+    {
+      "q": "Has AquaTerra worked with AIM Foundation?",
+      "a": "Yes. AquaTerra has run {count} drives with AIM Foundation between {firstYear} and {lastYear}. Most are children's workshops in art, adolescence health, music, storytelling and STEM."
+    },
+    {
+      "q": "What did AquaTerra do with AIM Foundation in 2024?",
+      "a": "AquaTerra ran {year:2024} drives with AIM Foundation in 2024. Most were art workshops held between 28 May and 7 June, alongside adolescence health talks and one sanitary napkin distribution, Comfort Kits."
+    },
+    {
+      "q": "What STEM workshop did AquaTerra run with AIM Foundation?",
+      "a": "Innovate, a hands-on STEM workshop on 12 June 2025. Its activities sparked curiosity and critical thinking in young learners."
+    },
+    {
+      "q": "Did AIM Foundation drives include a competition?",
+      "a": "Yes. Brush Battle on 7 March 2025 was an art competition for children, and the top three winners received stationery sets as prizes."
+    },
+    {
+      "q": "How many volunteers went to AIM Foundation drives?",
+      "a": "AquaTerra has recorded {volunteers} volunteer turnouts across {count} drives at AIM Foundation. A volunteer who went to several drives is counted once for each drive."
+    }
+  ],
+  "keywords": [
+    "AquaTerra AIM Foundation",
+    "AIM Foundation Kolkata children workshops",
+    "art workshops for kids Kolkata 2024",
+    "adolescence health workshop Kolkata",
+    "STEM workshop Kolkata children",
+    "student volunteers AIM Foundation"
+  ]
+}

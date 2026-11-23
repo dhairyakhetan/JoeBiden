@@ -18,7 +18,7 @@ The next export **replaces `src/terranotes/` and `scripts/terranotes/` whole**, 
   parts live there as `src/TerraNotesRoot.jsx`, `src/styles/document.css` and `embed/aq/` (this README, `prerender.mjs`,
   the fonts). What AQ's own code has to keep doing for it is at the top of `shared/AqNavSlot.jsx`.
 - `public/terranotes/` is only added to by an export, never cleared; the export lists files there it doesn't know.
-- **Packages it needs in `frontend/package.json`:** `react` / `react-dom` 19, `react-router-dom` 7.18+, `@vercel/analytics`
+- **Packages it needs in `frontend/package.json`:** `react` / `react-dom` 19, `react-router-dom` 7.18+
   and `matter-js` (^0.20, loaded only when Buddy's Fling game opens; without it `vite build` can't resolve the import).
   The card covers (`cover-card.webp`) and link previews come from the TerraNotes repo now.
 

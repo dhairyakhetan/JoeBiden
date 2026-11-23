@@ -89,8 +89,55 @@ function onMiss(ctx: HandlerCtx): HandlerResult {
   }
 }
 
+/**
+ * The masked member readers the real site uses for anything a signed-out visitor can see (profile page, rosters, members list,
+ * school lists; see docs/plans/profile-visibility-toggle.md). A demo flow only registers a `members` table handler, so without
+ * these the profile, team and members screens inside a demo failed with "couldn't load this profile". They are answered from the
+ * flow's own `members` handler, so no flow has to know about them. A demo member is never hidden.
+ */
+const MASKED_MEMBER_RPCS = new Set(['rpc:get_public_member', 'rpc:public_member_cards', 'rpc:public_members_page', 'rpc:public_school_members'])
+
+async function membersByUuid(uuid: unknown): Promise<any[]> {
+  const members = handlers.get('members')
+  if (!members || typeof uuid !== 'string') return []
+  const res = await members({ table: 'members', op: 'select', filters: [{ method: 'eq', args: ['uuid', uuid] }], wantsCount: false, single: null })
+  return (res.data as any[]) ?? []
+}
+
+function maskedMemberRpc(name: string): TableHandler {
+  return async (ctx) => {
+    const params = (ctx.payload ?? {}) as Record<string, unknown>
+    if (name === 'rpc:get_public_member') {
+      const [m] = await membersByUuid(params.p_uuid)
+      if (!m) return { data: [], error: null }
+      return {
+        data: [{
+          uuid: m.uuid, full_name: m.full_name, avatar_url: m.avatar_url ?? null, bio: m.bio ?? null, class_grade: m.class_grade ?? null,
+          role: m.role ?? 'member', status: m.status ?? 'active', created_at: m.created_at ?? null, school_id: m.school_id ?? null,
+          school_uuid: null, school_name: null, school_short_name: null, school_logo_url: null, profile_hidden: false,
+        }],
+        error: null,
+      }
+    }
+    if (name === 'rpc:public_member_cards') {
+      const uuids = Array.isArray(params.p_uuids) ? params.p_uuids : []
+      const rows: unknown[] = []
+      for (const u of uuids) {
+        const [m] = await membersByUuid(u)
+        if (m) rows.push({ member_id: m.member_id, uuid: m.uuid, full_name: m.full_name, avatar_url: m.avatar_url ?? null, role: m.role ?? 'member' })
+      }
+      return { data: rows, error: null }
+    }
+    // the directory and school lists: nothing is fixtured for them, so an honest empty list
+    return { data: [], error: null }
+  }
+}
+
 function getHandler(table: string): TableHandler | undefined {
-  return active ? handlers.get(table) : undefined
+  if (!active) return undefined
+  const own = handlers.get(table)
+  if (own) return own
+  return MASKED_MEMBER_RPCS.has(table) ? maskedMemberRpc(table) : undefined
 }
 
 /** A no-op Realtime channel: chainable `.on()`, a `.subscribe()` that never

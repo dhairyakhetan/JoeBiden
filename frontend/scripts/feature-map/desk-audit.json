@@ -1,0 +1,1432 @@
+{
+  "_readme": "Leaders-only layer of the product guide. 'flows' is one map per HoD desk (plus 'shell'): every control, what it does, what it records, who it tells and where the result shows. 'findings' are the flaws found when each desk was checked. state: fixed (say what was done in 'how'), open, flagged (known, not changed) or unverified. Verdicts are derived by hand: flawed = a bug or risk is still not fixed, stale = outdated wording or leftovers remain, healthy = neither. generate.mjs fails if a desk has no flow map or a fixed finding has no 'how'. Update this file whenever a desk's behaviour changes.",
+  "asOf": "2 Nov 2026",
+  "flows": [
+    {
+      "desk": "shell",
+      "name": "The desk itself",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "flawed",
+      "summary": "The landing page, side rail, badges, capability switches and the audit log wiring that every desk shares.",
+      "rows": [
+        {
+          "control": "Landing page and rail",
+          "does": "Lists only the desks the signed in leader may open and counts what is waiting. Counts refresh on every desk change, on window focus and each minute.",
+          "writes": "",
+          "tells": "",
+          "shows": "Badges for Approvals, Post Queue, Hiring, Enquiries and Certificates"
+        },
+        {
+          "control": "Jump to a desk",
+          "does": "A search box at the top of the rail (and of the phone desk menu). Type part of a desk's name, or a word people use for it such as collab or applicants, then pick it or press Enter to open that desk. It only offers desks you can already open.",
+          "writes": "",
+          "tells": "",
+          "shows": "The chosen desk"
+        },
+        {
+          "control": "Capability switches",
+          "does": "HR can untick an action for a role. This only hides it in the app; the database still decides.",
+          "writes": "The capability table",
+          "tells": "",
+          "shows": "Hidden buttons"
+        },
+        {
+          "control": "Audit log",
+          "does": "Desks record actions through one database function. It now needs an active member and a lowercase action name.",
+          "writes": "The audit log",
+          "tells": "",
+          "shows": "The Activity Log desk"
+        }
+      ]
+    },
+    {
+      "desk": "approvals",
+      "name": "Approvals",
+      "who": "HR or super admin",
+      "verdict": "healthy",
+      "summary": "New people trying to get in. Everyone who signs in with Google for the first time lands here as pending. Five tabs: pending, contacted, all, rejected and shared phones. A header button opens applications by day.",
+      "rows": [
+        {
+          "control": "Mark contacted, undo contacted",
+          "does": "Records that someone reached out to the applicant. The row moves from pending to contacted. Undo contacted clears it if it was a mis-click, and the row goes back to pending.",
+          "writes": "The member row (contacted time) and the audit log",
+          "tells": "",
+          "shows": "The pending and contacted tabs"
+        },
+        {
+          "control": "Approve (one or many)",
+          "does": "Removes the row at once, gives a 5 second undo, then makes the person an active member. Refuses a row someone else already decided.",
+          "writes": "The member row (active, approved by, approved at) and the audit log",
+          "tells": "The member gets a welcome notice",
+          "shows": "They land in the feed. The Members desk lists them."
+        },
+        {
+          "control": "Reject (one or many)",
+          "does": "Asks for a reason (behaviour or not suitable, contact missing or unreachable, age criteria, or other with a description), shows the exact words the applicant will read, then marks the account rejected. Extra words can be added to any reason. Refuses a row someone else already decided.",
+          "writes": "The member row (rejected, note) and the audit log",
+          "tells": "The member gets the note as a notice",
+          "shows": "Their rejected page. The rejected tab here refreshes the next time you open it."
+        },
+        {
+          "control": "Load more",
+          "does": "Fetches the next 20 people after the last one you can see, so decided rows can no longer cause anyone to be skipped.",
+          "writes": "",
+          "tells": "",
+          "shows": "The list"
+        },
+        {
+          "control": "Shared phones tab",
+          "does": "Lists live accounts that share a phone number, with full names, emails and numbers.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "The list, grouped by number"
+        },
+        {
+          "control": "Applications by day",
+          "does": "Opens a window counting everyone who signed up to join on each day (Kolkata time) over the last 7, 14, 30 or 90 days, split into still waiting, approved and rejected or removed, with the total, the daily average and the busiest day. Read only.",
+          "writes": "",
+          "tells": "",
+          "shows": "The window itself"
+        }
+      ]
+    },
+    {
+      "desk": "posts",
+      "name": "Post Queue",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Posts members wrote that wait for a leader. A scoped HoD sees posts tagged to their teams, the teams inside them, and posts nobody tagged. The database now enforces the same rule.",
+      "rows": [
+        {
+          "control": "Approve (one or many)",
+          "does": "Publishes the post after a 5 second undo. Refuses a post someone else already decided.",
+          "writes": "The post (published, reviewed by) and the audit log",
+          "tells": "The author gets a notice. Tagged members are told only now.",
+          "shows": "The home feed and the author's My posts"
+        },
+        {
+          "control": "Reject (one or many)",
+          "does": "Asks for a reason, then sends the post back.",
+          "writes": "The post (rejected, note) and the audit log",
+          "tells": "The author gets the reason",
+          "shows": "The author's My posts, where it can be edited and resubmitted"
+        },
+        {
+          "control": "Ask for detail",
+          "does": "Sends the author a question and leaves the post in the queue. Now reports a real failure instead of always saying sent.",
+          "writes": "The audit log",
+          "tells": "The author",
+          "shows": "The author's notifications"
+        },
+        {
+          "control": "Load more",
+          "does": "Pages after the last post you can see, so decisions no longer cause skipped posts.",
+          "writes": "",
+          "tells": "",
+          "shows": "The queue"
+        }
+      ]
+    },
+    {
+      "desk": "blogs",
+      "name": "Blog Drafts",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Long essays submitted from the composer, waiting to publish or schedule.",
+      "rows": [
+        {
+          "control": "Save cover",
+          "does": "Adds the new cover first, then removes the old one, so a failed save keeps the old cover.",
+          "writes": "The essay's image row and the audit log",
+          "tells": "",
+          "shows": "The essay preview"
+        },
+        {
+          "control": "Publish or schedule",
+          "does": "Asks to confirm, then publishes or schedules. A cover you typed but did not save is now kept. Needs the approve-posts capability.",
+          "writes": "The post (status, dates) and the audit log",
+          "tells": "The author",
+          "shows": "The Blog page. A scheduled essay goes live by itself at its time."
+        },
+        {
+          "control": "Delete",
+          "does": "Asks to confirm, then hides the draft. Needs the delete-posts capability.",
+          "writes": "The post (deleted time) and the audit log",
+          "tells": "The author",
+          "shows": "Nowhere. It leaves the queue."
+        },
+        {
+          "control": "Live and scheduled tab, unpublish",
+          "does": "Lists live and scheduled essays. Unpublish confirms, needs the approve-posts capability, refuses an essay someone else already changed and keeps the cover and text.",
+          "writes": "The post (back to draft) and the audit log",
+          "tells": "The author",
+          "shows": "The essay leaves the public Blog page; an already-built static page clears at the next deploy"
+        }
+      ]
+    },
+    {
+      "desk": "members",
+      "name": "Members",
+      "who": "Any HoD or director, HR and super admin (some controls HR and super admin only)",
+      "verdict": "healthy",
+      "summary": "Every account with role, status, teams and contact details. The desktop table now has the same actions as the phone cards.",
+      "rows": [
+        {
+          "control": "Copy email, phone or Instagram",
+          "does": "Logs who looked, then copies it. Needs the reveal-contact capability.",
+          "writes": "The contact access log",
+          "tells": "",
+          "shows": "Your clipboard"
+        },
+        {
+          "control": "Role dropdown",
+          "does": "Checks the capability first, asks to confirm, then changes the role. HR and super admin only.",
+          "writes": "The member row and the audit log",
+          "tells": "The member",
+          "shows": "Their access changes at once"
+        },
+        {
+          "control": "Teams",
+          "does": "Ticks a person in or out of teams, one checkbox at a time.",
+          "writes": "The roster (the database records it)",
+          "tells": "The member",
+          "shows": "The team page"
+        },
+        {
+          "control": "Break",
+          "does": "Sets a break for the member. The notice now says a leader set it.",
+          "writes": "The break history",
+          "tells": "The member",
+          "shows": "The calendar and the on-break pill"
+        },
+        {
+          "control": "Archive or restore",
+          "does": "Moves an account out of or back into the active list. A plain HoD can no longer archive an HR or super admin account.",
+          "writes": "The member row and the audit log",
+          "tells": "The member",
+          "shows": "The Archived filter"
+        },
+        {
+          "control": "Delete, restore, restart as applicant",
+          "does": "Soft deletes, brings back, or sends someone back through approval. Delete is HR and super admin only and never shows on rows already deleted.",
+          "writes": "The member row and the audit log",
+          "tells": "",
+          "shows": "The Deleted filter"
+        },
+        {
+          "control": "Pending and Suspended views",
+          "does": "Read-only lists. HR and super admin get a link to Approvals on pending rows.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "The list"
+        },
+        {
+          "control": "Make core, remove core, import AQ Core list",
+          "does": "HR and super admin only. Make core gives a member the AQ Core badge; remove core takes it away after a confirm. Import AQ Core list takes pasted emails from the core members sheet, adds each one that matches an active member, skips anyone already core and lists the emails it could not match.",
+          "writes": "The core members list and the audit log",
+          "tells": "Nobody",
+          "shows": "The AQ Core badge on profiles, the member list and this desk, and the Core Team page"
+        }
+      ]
+    },
+    {
+      "desk": "member_of_month",
+      "name": "Member of the Month",
+      "who": "Any HoD or director, HR and super admin, for any team",
+      "verdict": "healthy",
+      "summary": "Pick one or more standouts per team and write the note that goes with it. Picks for a future month are announced automatically when the month begins.",
+      "rows": [
+        {
+          "control": "Set the pick",
+          "does": "Saves the pick. If the month has started, the member is told and a feed post is made.",
+          "writes": "The pick and the audit log",
+          "tells": "The member, at once if the month has started, otherwise by the daily job when it begins",
+          "shows": "The feed post under the AquaTerra account and the shareable poster"
+        },
+        {
+          "control": "Clear the pick",
+          "does": "Asks to confirm, then removes it.",
+          "writes": "The pick and the audit log",
+          "tells": "",
+          "shows": "Nowhere"
+        },
+        {
+          "control": "Open or close a period",
+          "does": "Controls which month is open for picks. HR and super admin only.",
+          "writes": "The period and the audit log",
+          "tells": "",
+          "shows": "The desk"
+        }
+      ]
+    },
+    {
+      "desk": "teams",
+      "name": "Teams",
+      "who": "Any HoD or director, HR and super admin (delete is HR and super admin only)",
+      "verdict": "stale",
+      "summary": "Create and edit departments and teams: name, description, logo and banner.",
+      "rows": [
+        {
+          "control": "Create",
+          "does": "Makes the team, then adds you to it. The form no longer asks for a category; new teams quietly get welfare because the database requires one. If adding you fails it says the team exists.",
+          "writes": "The team, the roster and the audit log",
+          "tells": "",
+          "shows": "The Teams page"
+        },
+        {
+          "control": "Edit",
+          "does": "Changes name, description, category or banner.",
+          "writes": "The team and the audit log",
+          "tells": "",
+          "shows": "The Teams page"
+        },
+        {
+          "control": "Delete",
+          "does": "Hold to confirm. Clears the roster and removes any HoD scope pointing at the team. Cannot be undone. HR and super admin only.",
+          "writes": "The audit log",
+          "tells": "",
+          "shows": "Gone from every page"
+        }
+      ]
+    },
+    {
+      "desk": "categories",
+      "name": "Moderation",
+      "who": "Any HoD or director can read it; only HR and super admin can change it",
+      "verdict": "stale",
+      "summary": "Chooses which teams each HoD or director moderates posts for. The nav label used to say Categories.",
+      "rows": [
+        {
+          "control": "Assign a team",
+          "does": "Adds a team to a HoD's scope. Their queue and the database rule both narrow to those teams plus untagged posts.",
+          "writes": "The scope and the audit log",
+          "tells": "The HoD",
+          "shows": "Their Post Queue"
+        },
+        {
+          "control": "Remove a team",
+          "does": "Asks to confirm, then removes it. A HoD with no scopes sees the whole queue.",
+          "writes": "The scope and the audit log",
+          "tells": "The HoD",
+          "shows": "Their Post Queue"
+        }
+      ]
+    },
+    {
+      "desk": "hiring",
+      "name": "Hiring",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Open roles and everyone who applied. A scoped HoD sees their teams' openings plus openings with no team.",
+      "rows": [
+        {
+          "control": "Status dropdown",
+          "does": "Moves an application between new, reviewed, accepted and rejected.",
+          "writes": "The application and the audit log (keyed to the application itself)",
+          "tells": "The applicant",
+          "shows": "Their notifications"
+        },
+        {
+          "control": "Accept (one or many)",
+          "does": "Now asks to confirm. Checks the applicant's own account is active, adds them to the team, and notifies them.",
+          "writes": "The application, the team roster and the audit log",
+          "tells": "The applicant",
+          "shows": "The team page"
+        },
+        {
+          "control": "Reject",
+          "does": "Asks for a reason first. If the save fails the box stays open with your text.",
+          "writes": "The application and the audit log",
+          "tells": "The applicant gets the reason",
+          "shows": "Their notifications"
+        },
+        {
+          "control": "Waiting for HR (group and filter)",
+          "does": "Lists people who applied but whom HR has not cleared yet, apart from the cleared applicants. You can read their message and answers, never a phone or email, and you cannot accept them.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "This desk and the team's Responses tab"
+        },
+        {
+          "control": "Approve account (HR and super admin only)",
+          "does": "Asks to confirm, then approves the person as a member. A database trigger turns their waiting applications into real ones.",
+          "writes": "The member, the new applications and the audit log",
+          "tells": "The applicant and the team's leaders",
+          "shows": "The main applicant list"
+        },
+        {
+          "control": "Linked by phone number mark",
+          "does": "Marks an application a signed-out visitor sent by giving a number that matched this member, with the name they typed if it differs.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "This desk and the team's Responses tab"
+        },
+        {
+          "control": "WhatsApp templates",
+          "does": "Copies a ready message with the name filled in. Edit and delete are audited.",
+          "writes": "The template and the audit log",
+          "tells": "",
+          "shows": "Your clipboard"
+        }
+      ]
+    },
+    {
+      "desk": "enquiries",
+      "name": "Enquiries",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Messages from the contact and collaboration forms, moved through a status pipeline.",
+      "rows": [
+        {
+          "control": "Status dropdown or bulk bar",
+          "does": "Moves enquiries between new, in progress, contacted and closed. A partly saved bulk change now reports which rows did not save and reverts only those.",
+          "writes": "The enquiry and the audit log",
+          "tells": "Nobody. The sender is not told.",
+          "shows": "This desk and the landing page count"
+        },
+        {
+          "control": "Our notes",
+          "does": "One notes box per request, inside the opened row, kept whatever the status. For why it was closed, what was agreed or who is following up. Search also finds words in the notes.",
+          "writes": "The enquiry (notes) and the audit log",
+          "tells": "Nobody. The sender never sees it.",
+          "shows": "This desk only"
+        },
+        {
+          "control": "Load older",
+          "does": "The desk shows the newest 200 of each form with the true total, and loads older ones on request.",
+          "writes": "",
+          "tells": "",
+          "shows": "The list"
+        }
+      ]
+    },
+    {
+      "desk": "certificates",
+      "name": "Certificates",
+      "who": "Any HoD or director, HR and super admin (HR decides)",
+      "verdict": "healthy",
+      "summary": "Requests for a certificate or letter, one row per member. Every leader can read; tagged HoDs answer; HR decides.",
+      "rows": [
+        {
+          "control": "Open a member",
+          "does": "Shows every document that member has open together (what they claim, the months they say they were with AQ, the teams they tagged, what they asked to be mentioned, which HoDs answered and how, leaders' notes, the text) and their earlier decisions below.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "This desk"
+        },
+        {
+          "control": "I can vouch / I cannot vouch / not sure",
+          "does": "Only for a HoD the member tagged. Records their answer and an optional note; can be changed while the request is open. Refused for anyone not tagged, in the database.",
+          "writes": "The HoD's answer and, if written, a note",
+          "tells": "Nobody. The member never sees it",
+          "shows": "HR and every leader on this desk"
+        },
+        {
+          "control": "Add a note",
+          "does": "Any leader, tagged or not, adds a note HR can read. Open requests only. Not available on your own request.",
+          "writes": "The note",
+          "tells": "Nobody",
+          "shows": "Leaders on this desk"
+        },
+        {
+          "control": "Write or edit the text / use the standard wording",
+          "does": "HR or a tagged HoD pastes or edits the text, replacing any draft. This is the route when someone needs a letter before the next draft run. Certificates are already drafted with fixed wording when filed; 'restore the standard wording' puts it back after an edit.",
+          "writes": "The text, marked as written by a person or standard",
+          "tells": "Nobody",
+          "shows": "This desk"
+        },
+        {
+          "control": "Preview the document",
+          "does": "Draws the document from the saved text in your browser, so HR sees what the member will get. Says so if the text is too long for the page.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "This desk"
+        },
+        {
+          "control": "Issue",
+          "does": "HR only. Needs text to exist and asks to confirm. The database records who decided and when (it ignores what the browser sends), gives the document a verification code, and refuses a decision on your own request or an already-decided one.",
+          "writes": "The request and the audit log",
+          "tells": "The member is notified with a link to open it",
+          "shows": "The member's Certificates page, and the Cleared tab here"
+        },
+        {
+          "control": "Decline",
+          "does": "HR only. Needs a reason. Same protections as Issue.",
+          "writes": "The request and the audit log",
+          "tells": "The member gets the reason",
+          "shows": "Their notifications"
+        },
+        {
+          "control": "Download PDF / Copy link",
+          "does": "For an issued document, any leader can download an A4 PDF drawn on the real template with both founders' signatures, or copy the link to hand to the member. Only the member it belongs to, HR and HoDs can open the link.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "Your downloads"
+        }
+      ]
+    },
+    {
+      "desk": "yearbook",
+      "name": "Yearbook",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Invite members to write their yearbook entry and read what comes back.",
+      "rows": [
+        {
+          "control": "Invite members",
+          "does": "Searches members and creates an invited entry for each.",
+          "writes": "The entries and the audit log",
+          "tells": "Each invitee",
+          "shows": "The member's Yearbook page"
+        },
+        {
+          "control": "Remind or remove an invite",
+          "does": "New. Each asks to confirm and works only while the entry is still invited.",
+          "writes": "The entry and the audit log",
+          "tells": "Remind notifies the member",
+          "shows": "This desk"
+        },
+        {
+          "control": "Export",
+          "does": "Opens the poster studio for submitted entries.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "The poster studio"
+        }
+      ]
+    },
+    {
+      "desk": "content",
+      "name": "All posts",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "Every post on the feed, for leaders to review and tidy. It was labelled as the editor for public page copy, which it never was; it now says what it is.",
+      "rows": [
+        {
+          "control": "Approve or reject (button or A and R keys)",
+          "does": "Goes through the same path as the Post Queue. Reject asks for a reason first.",
+          "writes": "The post and the audit log",
+          "tells": "The author",
+          "shows": "The feed and My posts"
+        },
+        {
+          "control": "Other status moves, edit, pin, feature",
+          "does": "Need the approve-posts capability and are hidden without it. Each writes an audit row; editing someone else's words is marked as a staff edit.",
+          "writes": "The post and the audit log",
+          "tells": "",
+          "shows": "The feed"
+        },
+        {
+          "control": "Delete",
+          "does": "Asks to confirm. Hidden without the delete capability.",
+          "writes": "The post and the audit log",
+          "tells": "",
+          "shows": "Nowhere"
+        }
+      ]
+    },
+    {
+      "desk": "projects",
+      "name": "Drive Write-ups",
+      "who": "HR or super admin",
+      "verdict": "flawed",
+      "summary": "Publish the public story of a finished drive: photos, numbers and narrative.",
+      "rows": [
+        {
+          "control": "Save",
+          "does": "Creates or edits the write-up.",
+          "writes": "The project and the audit log",
+          "tells": "",
+          "shows": "The Projects page"
+        },
+        {
+          "control": "Publish or unpublish toggle",
+          "does": "Now applies the same hero image rule as the editor and asks to confirm, so a blank card cannot go public.",
+          "writes": "The project and the audit log",
+          "tells": "",
+          "shows": "The Projects page and the feed"
+        },
+        {
+          "control": "Feature or delete",
+          "does": "Delete counts attendance first and confirms.",
+          "writes": "The project and the audit log",
+          "tells": "",
+          "shows": "The Projects page"
+        }
+      ]
+    },
+    {
+      "desk": "hods",
+      "name": "Manage HoDs",
+      "who": "HR or super admin",
+      "verdict": "healthy",
+      "summary": "Promote a member to HoD or director, or step one back down.",
+      "rows": [
+        {
+          "control": "Promote",
+          "does": "Asks to confirm, makes the person a HoD, and records one audit row. Buttons are disabled while it runs.",
+          "writes": "The member row and the audit log",
+          "tells": "The person",
+          "shows": "Their desk access"
+        },
+        {
+          "control": "Remove or change role",
+          "does": "Updates the role first and clears their team scopes only after it works. You cannot demote yourself or the top tier here.",
+          "writes": "The member row and the audit log",
+          "tells": "The person",
+          "shows": "Their desk access"
+        },
+        {
+          "control": "Eligible list",
+          "does": "Searches members and now has Load more instead of stopping at 50.",
+          "writes": "",
+          "tells": "",
+          "shows": "The list"
+        }
+      ]
+    },
+    {
+      "desk": "volunteer_apps",
+      "name": "Vol. Applications",
+      "who": "HR or super admin",
+      "verdict": "healthy",
+      "summary": "The volunteer outreach list. The owner chose to keep it a live working tool, so its description now says so.",
+      "rows": [
+        {
+          "control": "Reviewed toggle and labels",
+          "does": "Saves the change and rolls back only the rows that failed. A failed batch no longer replaces the list with one page.",
+          "writes": "The application",
+          "tells": "",
+          "shows": "The list"
+        },
+        {
+          "control": "Export to a spreadsheet",
+          "does": "Contains emails and phone numbers. Now asks to confirm and records who exported.",
+          "writes": "The audit log",
+          "tells": "",
+          "shows": "Your downloads"
+        }
+      ]
+    },
+    {
+      "desk": "roles",
+      "name": "Roles & Permissions",
+      "who": "HR or super admin",
+      "verdict": "healthy",
+      "summary": "A table of what each role can reach. Unticking takes access away; nothing can add it.",
+      "rows": [
+        {
+          "control": "Tick or untick a cell",
+          "does": "Saves one cell. Several quick clicks now keep their own pending state. Two database rules stop HR and super admin being locked out.",
+          "writes": "The capability table and the audit log",
+          "tells": "",
+          "shows": "Buttons hidden or shown for that role"
+        },
+        {
+          "control": "Reset all",
+          "does": "Asks to confirm, then restores the defaults.",
+          "writes": "The capability table and the audit log",
+          "tells": "",
+          "shows": "Every role"
+        }
+      ]
+    },
+    {
+      "desk": "activity_log",
+      "name": "Activity Log",
+      "who": "HR or super admin",
+      "verdict": "healthy",
+      "summary": "Who approved, rejected or changed what, and when. Read only.",
+      "rows": [
+        {
+          "control": "Search, action filter, date range",
+          "does": "Now filtered by the database, not just the rows on screen. The filter treats TEAM_MEMBER_ADDED and team_member_added as one action.",
+          "writes": "",
+          "tells": "",
+          "shows": "The list, 50 at a time"
+        },
+        {
+          "control": "Include scheduled-post rows",
+          "does": "Off by default. About 90,000 rows are the automatic post publisher and used to bury everything else.",
+          "writes": "",
+          "tells": "",
+          "shows": "The list"
+        }
+      ]
+    },
+    {
+      "desk": "guide",
+      "name": "Product guide",
+      "who": "Any HoD or director, HR and super admin",
+      "verdict": "healthy",
+      "summary": "This page. Read only, shown in a sandboxed frame.",
+      "rows": [
+        {
+          "control": "Guide, Map and Desk flows views",
+          "does": "Filters by role, searches, and follows what connects to what.",
+          "writes": "Nothing",
+          "tells": "",
+          "shows": "This page"
+        }
+      ]
+    },
+    {
+      "desk": "grievances",
+      "name": "Grievances",
+      "who": "HR and super admin only",
+      "verdict": "healthy",
+      "summary": "Where HR reads and works the concerns members raise privately on the grievance form. The database, not the screen, decides who sees what: a HoD or Director gets nothing, and the person a grievance names is hidden from it.",
+      "rows": [
+        {
+          "control": "The list and its filters",
+          "does": "Newest first, with a status stamp and category. Filters by status (open, new, in review, resolved, closed) and by category. A row is marked overdue once it has been new or in review for seven days.",
+          "writes": "",
+          "tells": "",
+          "shows": "A count of new grievances on the side rail, for HR and super admin only"
+        },
+        {
+          "control": "Open the details",
+          "does": "Shows the full text, who sent it, who it is about, the dates, the notes and the history of changes.",
+          "writes": "",
+          "tells": "",
+          "shows": "Plain text only"
+        },
+        {
+          "control": "Status",
+          "does": "Moves a grievance between new, in review, resolved and closed. Resolved and closed stamp the date. There is no delete.",
+          "writes": "The grievance and its history",
+          "tells": "",
+          "shows": "The member sees the new status on the grievance form page"
+        },
+        {
+          "control": "Assigned to",
+          "does": "Gives a grievance to an HR or super admin member.",
+          "writes": "The grievance and its history",
+          "tells": "",
+          "shows": "The assigned name on the row"
+        },
+        {
+          "control": "Resolution note",
+          "does": "What was decided or done.",
+          "writes": "The grievance and its history",
+          "tells": "",
+          "shows": "HR only"
+        },
+        {
+          "control": "Add an internal note",
+          "does": "A note only HR and super admin can read.",
+          "writes": "The notes",
+          "tells": "",
+          "shows": "The notes list"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "shell-landing-approvals",
+      "desk": "shell",
+      "sev": "bug",
+      "stale": true,
+      "state": "fixed",
+      "title": "A plain HoD saw an Approvals count they could not open",
+      "plain": "The landing page told every leader how many sign-ups were waiting, but Approvals became HR and super admin only in September. A HoD clicked the count and hit a permission wall.",
+      "how": "The count, the jigsaw block and the desk chip now show only to HR and super admin. Wording now speaks of teams, not categories. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "DirectorLanding.tsx, DirectorDashboard.tsx"
+    },
+    {
+      "id": "shell-log-action",
+      "desk": "shell",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Any signed-in account could write into the audit log",
+      "plain": "The function that records audit rows had no role check, so a throwaway account could fill the Activity Log with fake entries.",
+      "how": "Changed live on 2 Nov 2026: the caller must be an active member, the action must be lowercase snake_case, details are capped, and anonymous callers are blocked. Verified.",
+      "where": "log_action() in the database"
+    },
+    {
+      "id": "shell-post-scope",
+      "desk": "posts",
+      "sev": "bug",
+      "stale": true,
+      "state": "fixed",
+      "title": "The queue a HoD saw and the posts the database let them act on disagreed",
+      "plain": "The screen scoped by team. The database scoped by the retired categories. A HoD with a leftover category could see a post and fail to approve it, and a team-scoped HoD could act on anything through the API.",
+      "how": "Changed live on 2 Nov 2026: the database now follows the same team rule as the queue. Verified with five sample users. 10 of 30 leaders are now limited to their teams' posts and untagged ones.",
+      "where": "can_moderate_post() and the posts update policy"
+    },
+    {
+      "id": "shell-badges",
+      "desk": "shell",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Sidebar counts went stale until a reload",
+      "plain": "After clearing the queue the badge stayed on the old number. Hiring, Enquiries and Certificates had no badge in the rail at all.",
+      "how": "Counts refresh on navigation, window focus and every minute. Hiring, Enquiries and Certificates now have badges. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "DirectorDashboard.tsx"
+    },
+    {
+      "id": "shell-undo",
+      "desk": "shell",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Undo could restore a row after the approval had already gone through",
+      "plain": "If you tapped Undo just after the 5 seconds ended, the row came back on screen although the approval may have saved.",
+      "how": "A late Undo now does nothing and says it is too late. Two actions on one row no longer leave a stray timer. Selection survives Load more.",
+      "where": "adminKit.tsx"
+    },
+    {
+      "id": "shell-capflash",
+      "desk": "shell",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "A desk switched off for a role could flash open while the role loaded",
+      "plain": "Until the member record arrived, the switches read as all on.",
+      "how": "Capability answers now wait for the real role. The database still decided throughout.",
+      "where": "CapabilityContext.tsx"
+    },
+    {
+      "id": "shell-capcomments",
+      "desk": "shell",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "Comments and hints described a lead role and a migration that no longer match",
+      "plain": "Notes said team lead access could never apply and that a migration was not applied. Both were wrong against the live database.",
+      "how": "Corrected after checking the live constraint and function.",
+      "where": "capabilities.ts"
+    },
+    {
+      "id": "shell-blurbs",
+      "desk": "shell",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "Desk labels and blurbs were out of date",
+      "plain": "Categories is really Moderation, Content is really a list of all posts, Teams claimed a count that was wrong, Drive Write-ups pointed at a Drives desk deleted in September, and Vol. Applications was called a read-only archive although it is a working tool.",
+      "how": "Labels and blurbs corrected. Paths and access did not change.",
+      "where": "deskAccess.ts"
+    },
+    {
+      "id": "shell-unlogged",
+      "desk": "shell",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "Several actions still leave no audit trail",
+      "plain": "See the individual desks for what was added. The Activity Log only shows what has been wired up, and older rows use two different spellings.",
+      "where": "lib/auditLog.ts"
+    },
+    {
+      "id": "approvals-skip",
+      "desk": "approvals",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "Load more silently skipped people after a decision",
+      "plain": "Approve five people on page one, press Load more, and five people on page two were never shown until a refresh.",
+      "how": "Paging now continues after the last person you can see, and the total refreshes after each decision. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "AccountApprovals.tsx, directorService.ts"
+    },
+    {
+      "id": "approvals-rejected",
+      "desk": "approvals",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "The rejected tab stayed stale for the whole session",
+      "plain": "Someone you rejected today did not appear in the rejected tab until you reloaded, and the list had no fixed order.",
+      "how": "The tab refreshes after a reject and sorts newest first.",
+      "where": "AccountApprovals.tsx"
+    },
+    {
+      "id": "approvals-copy",
+      "desk": "approvals",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "The no-access message named the wrong roles",
+      "plain": "It said HoDs and directors could review applications. Only HR and super admin can.",
+      "how": "Message corrected and dead text removed.",
+      "where": "AccountApprovals.tsx"
+    },
+    {
+      "id": "approvals-double-decide",
+      "desk": "approvals",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Two leaders could decide the same person and send contradictory notices",
+      "plain": "Approve and reject updated by id alone, so a stale tab could reject someone already approved.",
+      "how": "Each decision now requires the row to still be pending and tells you if someone else got there first. This covers posts, drafts and archive too. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "directorService.ts"
+    },
+    {
+      "id": "approvals-filter",
+      "desk": "approvals",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Search and the class filter only looked at rows already loaded",
+      "plain": "With more than 20 pending, a person on page two could not be found by name until you pressed Load more, and the class pills only listed grades already seen.",
+      "where": "AccountApprovals.tsx",
+      "how": "Search, the class pills and the contacted split now run in the database. Typing is debounced, stale replies are dropped, the pills list every grade in the queue and the header count follows the filter. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390. With 25 pending fixtures, searching found the page-two person."
+    },
+    {
+      "id": "posts-ask",
+      "desk": "posts",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "Ask for detail always said sent, even when it failed",
+      "plain": "The notice function never reports errors, so the failure message could never appear.",
+      "how": "A new version reports real failures, and the ask is now in the audit log.",
+      "where": "PostModeration.tsx, notificationService.ts"
+    },
+    {
+      "id": "blogs-cover",
+      "desk": "blogs",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "A cover you typed but had not saved was dropped on publish",
+      "plain": "Publishing ignored the cover box unless you had pressed Save cover first.",
+      "how": "Publish now passes the typed cover. Changing a cover keeps the old one if the new save fails.",
+      "where": "BlogDrafts.tsx, blogService.ts"
+    },
+    {
+      "id": "blogs-capability",
+      "desk": "blogs",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Blog actions ignored the capability switches, left no audit row and told no one",
+      "plain": "Publish, schedule and delete worked even with the capability switched off, and the author never learned their essay went live or was deleted.",
+      "how": "Capability checks, audit rows and author notices added.",
+      "where": "BlogDrafts.tsx, blogService.ts"
+    },
+    {
+      "id": "blogs-unpublish",
+      "desk": "blogs",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "There was no way to unpublish an essay from this desk",
+      "plain": "Once an essay was live, the only options were to leave it or delete it.",
+      "where": "BlogDrafts.tsx",
+      "how": "A live and scheduled tab with an unpublish button: it confirms, needs the approve-posts capability, refuses an essay someone else already changed, keeps the cover and text, tells the author and writes an audit row. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390."
+    },
+    {
+      "id": "members-desktop",
+      "desk": "members",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "On a laptop the Members desk had no Teams, Archive or Restore controls",
+      "plain": "They existed only in the phone card layout, which is hidden on wide screens. HR could open the Archived filter and not restore anyone.",
+      "how": "The desktop table now has the same actions with the same confirms. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "MemberDirectory.tsx"
+    },
+    {
+      "id": "members-rolecap",
+      "desk": "members",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "A role change could be confirmed and then silently do nothing",
+      "plain": "The capability was checked after the confirm dialog, so with it switched off you confirmed and nothing happened.",
+      "how": "Checked before the dialog, and the dropdown is disabled with a reason. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "MemberDirectory.tsx"
+    },
+    {
+      "id": "members-archive-admin",
+      "desk": "members",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Any leader could archive an HR or super admin account",
+      "plain": "Archiving removes the powers of an admin, so a plain HoD could lock one out.",
+      "how": "Only a super admin can archive HR or super admin accounts. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "memberDirectoryRules.ts"
+    },
+    {
+      "id": "members-race",
+      "desk": "members",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Fast typing in search could show an older result",
+      "plain": "A slow earlier search could land after a newer one and overwrite it.",
+      "how": "Old responses are now ignored.",
+      "where": "MemberDirectory.tsx"
+    },
+    {
+      "id": "members-order",
+      "desk": "members",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Demoting a HoD removed their scopes before checking the demotion worked",
+      "plain": "If the role change was refused, the person kept their role but lost the teams that limited them, so they then saw the whole queue.",
+      "how": "The role changes first, and scopes are cleared only after it succeeds.",
+      "where": "directorService.ts"
+    },
+    {
+      "id": "members-notify",
+      "desk": "members",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Members were not told about role changes, archiving or team changes",
+      "plain": "These actions changed a person's access without a word to them.",
+      "how": "Role change, archive, restore and team add or remove now notify the member.",
+      "where": "directorService.ts, MemberTeamsDialog.tsx"
+    },
+    {
+      "id": "members-pills",
+      "desk": "members",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "No filter for HR accounts, and old comments",
+      "plain": "HR people showed only under Everyone.",
+      "how": "An HR filter was added and the stale comments corrected.",
+      "where": "MemberDirectory.tsx"
+    },
+    {
+      "id": "members-status-filter",
+      "desk": "members",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "No pending or suspended view",
+      "plain": "The service could list them but the desk offered no filter.",
+      "where": "MemberDirectory.tsx",
+      "how": "Pending and Suspended pills were added. Rows there are read only; HR and super admin get a link to Approvals. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390."
+    },
+    {
+      "id": "mom-audit",
+      "desk": "member_of_month",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Picks and periods left no audit trail",
+      "plain": "Nothing recorded who picked whom or who opened a month.",
+      "how": "Pick, clear, open and close are now logged.",
+      "where": "memberOfMonthService.ts"
+    },
+    {
+      "id": "mom-queued",
+      "desk": "member_of_month",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "A pick queued for a future month was never announced",
+      "plain": "The member notice and feed post are sent only when you save a pick for a month that has already started. Nothing sends them when a queued month begins. There is no scheduled job for it.",
+      "where": "MemberOfMonth.tsx",
+      "how": "A daily database job (00:10 IST) now sends the member notice and the feed post once the month begins, and the desk says so. Earlier picks were marked announced, so nothing old is re-announced. Verified live with a rolled-back test."
+    },
+    {
+      "id": "mom-nonteam",
+      "desk": "member_of_month",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "A HoD on no team could open this desk but every pick was refused",
+      "plain": "The database let a HoD pick only for teams they were an active member of, while the desk was open to every leader.",
+      "where": "deskAccess.ts, can_pick_mom_for_team()",
+      "how": "Owner decision: any active HoD or director may pick for any team. The desk now lists every team and the database rule matches. The nominee must still be an active member of that team. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390."
+    },
+    {
+      "id": "teams-half",
+      "desk": "teams",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Creating a team could half fail and invite a duplicate",
+      "plain": "The team was made, then you were added in a second step. If that failed the message said the team could not be created, so a retry made a second one.",
+      "how": "The message now says the team exists and why you were not added.",
+      "where": "TeamManagement.tsx"
+    },
+    {
+      "id": "teams-delete",
+      "desk": "teams",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Any leader could hard delete any team",
+      "plain": "Delete removed the team and its roster with a single hold, and the warning did not mention HoD scopes.",
+      "how": "The button is HR and super admin only and the confirm lists what it clears. The database policy still lets any leader delete through the API. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "TeamManagement.tsx"
+    },
+    {
+      "id": "teams-dup-log",
+      "desk": "teams",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Team roster changes were logged twice with different spellings",
+      "plain": "The database and the app each wrote a row, so the Activity Log showed twin entries.",
+      "how": "The app-side duplicates were removed.",
+      "where": "teamService.ts"
+    },
+    {
+      "id": "teams-cats",
+      "desk": "teams",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "The team form hid the retired categories, but the database still needed one",
+      "plain": "The form no longer asks. The database used to require one of the five old values, so new teams quietly got welfare.",
+      "how": "A team can now be saved with no category (applied 2 Nov 2026). Existing teams keep theirs, and posts and roles from a team with none are filed as welfare.",
+      "where": "lib/categories.ts"
+    },
+    {
+      "id": "hire-badge",
+      "desk": "hiring",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "The Hiring number counted every team, but a scoped HoD only sees their own",
+      "plain": "A HoD limited to their teams saw a bigger number on the Hiring badge and the landing than they found when they opened the desk.",
+      "how": "Decided 2 Nov 2026: the number stays organisation-wide and now says so (badge hover, landing line and landing block read 'across all teams'). HR and super admin see no change.",
+      "where": "DirectorLanding.tsx"
+    },
+    {
+      "id": "mod-copy",
+      "desk": "categories",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "Wording and the list on this desk were misleading",
+      "plain": "Messages still said categories, and a plain HoD saw every other HoD described as having no teams, which was false for them.",
+      "how": "Wording updated, the whole-queue line is shown only to HR and super admin or on your own row, and the HoD is told when a team is assigned or removed.",
+      "where": "CategoryManagement.tsx"
+    },
+    {
+      "id": "mod-legacy",
+      "desk": "categories",
+      "sev": "gap",
+      "stale": true,
+      "state": "flagged",
+      "title": "The old category join is still loaded",
+      "plain": "The director list still reads the retired categories and one screen displays them.",
+      "where": "directorService.ts, DirectorManagement.tsx"
+    },
+    {
+      "id": "hiring-reject",
+      "desk": "hiring",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "A failed reject threw away the reason you typed",
+      "plain": "The reject window closed even when the save failed, so the written reason was lost.",
+      "how": "The window stays open with your text when the save fails. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "HiringResponses.tsx"
+    },
+    {
+      "id": "hiring-confirm",
+      "desk": "hiring",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Accepting someone had no confirm",
+      "plain": "Accept, and bulk accept, put people on a team and notify them with one click.",
+      "how": "Both now ask to confirm. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "HiringResponses.tsx"
+    },
+    {
+      "id": "hiring-audit-id",
+      "desk": "hiring",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "The audit row for an application pointed at the applicant, not the application",
+      "plain": "The log id column is a number and applications use long codes.",
+      "where": "jobOpenings.ts, community_audit_logs",
+      "how": "A new column holds the application id and the audit row now points at the application itself."
+    },
+    {
+      "id": "hiring-teamless",
+      "desk": "hiring",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "A scoped HoD can accept applicants for openings that belong to no team",
+      "plain": "By owner decision on 2 Nov 2026 any leader may accept for these. Recorded here so it reads as intended, not as an oversight.",
+      "where": "deskAccess.ts, job_applications policy"
+    },
+    {
+      "id": "enq-cap",
+      "desk": "enquiries",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "Older enquiries could not be reached",
+      "plain": "Only the newest 200 of each form ever loaded and the counts stopped at 200.",
+      "how": "True totals are shown with a Load older button.",
+      "where": "FormResponses.tsx"
+    },
+    {
+      "id": "enq-bulk",
+      "desk": "enquiries",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "A partly saved bulk change looked like a full success",
+      "plain": "If only some rows saved, the rest stayed visibly changed. A failure could also overwrite someone else's change.",
+      "how": "Failed rows are reported and reverted alone, and every change is audited.",
+      "where": "FormResponses.tsx, formResponsesLogic.ts"
+    },
+    {
+      "id": "cert-overwrite",
+      "desk": "certificates",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "An issued certificate could be flipped to declined",
+      "plain": "Two HR users, or a stale tab, could overwrite a decision, and nothing recorded it.",
+      "how": "The app now requires the request to be pending, and the database refuses to reopen a decided request (live 2 Nov 2026). Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "certificateService.ts, certificate_requests trigger"
+    },
+    {
+      "id": "cert-silent",
+      "desk": "certificates",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "Members were never told, and there was no audit row or badge",
+      "plain": "A decision was silent, left no trail, and the desk had no count anywhere in the rail.",
+      "how": "The requester is notified, a row is audited, and the rail shows a pending count. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "certificateService.ts, DirectorDashboard.tsx"
+    },
+    {
+      "id": "cert-delivery",
+      "desk": "certificates",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "The issued document exists only in the browser of whoever pressed Download",
+      "plain": "Nothing is stored or sent to the member.",
+      "where": "CertificateRequests.tsx",
+      "how": "Owner decision: HR sends it by hand. The member notice now says HR will send the document directly, and every issued row shows a send-by-hand reminder with the member name. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390."
+    },
+    {
+      "id": "year-way-out",
+      "desk": "yearbook",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "An invite that is never answered had no way out",
+      "plain": "There was no reminder and no way to remove an invite, and the subtitle counted skipped entries as invited.",
+      "how": "Remind and remove were added with confirms, plus audit rows and a split count.",
+      "where": "YearbookManagement.tsx, yearbookService.ts"
+    },
+    {
+      "id": "year-skipped",
+      "desk": "yearbook",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "The skipped filter works only if the member screen marks skips",
+      "plain": "The desk can show skipped entries, but whether the member side ever sets that state was not checked.",
+      "where": "YearbookManagement.tsx"
+    },
+    {
+      "id": "year-edition",
+      "desk": "yearbook",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "The edition is the calendar year with no way to switch",
+      "plain": "It is fixed when the page loads.",
+      "where": "yearbookService.ts"
+    },
+    {
+      "id": "content-label",
+      "desk": "content",
+      "sev": "bug",
+      "stale": true,
+      "state": "fixed",
+      "title": "The desk was labelled as the editor of public page copy",
+      "plain": "It is a list of feed posts. No table for page copy exists.",
+      "how": "Relabelled All posts everywhere, including the PRD. Nothing was built.",
+      "where": "ContentManager.tsx, deskAccess.ts"
+    },
+    {
+      "id": "content-bypass",
+      "desk": "content",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "Verdicts here skipped the capability switch, the audit log and the author notice",
+      "plain": "Pressing R rejected a post with no reason, no confirm and no word to the author, even with moderation switched off for your role.",
+      "how": "Verdicts use the Post Queue path, reject asks for a reason, and edit, pin, feature and delete check the capability and write audit rows. A blocked delete is now hidden, not silent.",
+      "where": "ContentManager.tsx"
+    },
+    {
+      "id": "proj-publish",
+      "desk": "projects",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "The publish toggle could put a card with no image on the public feed",
+      "plain": "The editor refused to go live without a hero image, but the toggle in the list did not.",
+      "how": "The toggle applies the same rule and confirms. Create, edit, publish, delete and feature are now audited.",
+      "where": "ProjectManager.tsx, ProjectManagerShared.tsx"
+    },
+    {
+      "id": "proj-cache",
+      "desk": "projects",
+      "sev": "risk",
+      "stale": false,
+      "state": "flagged",
+      "title": "The project list is cached in memory",
+      "plain": "A second HoD's changes show only after Refresh. Overlapping loads can no longer overwrite each other.",
+      "where": "ProjectManager.tsx"
+    },
+    {
+      "id": "hods-notify",
+      "desk": "hods",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Promotion wrote up to three audit rows and told nobody",
+      "plain": "The component, the service and the database each logged it, and the person heard nothing.",
+      "how": "One row is written and the person is notified. Buttons are disabled while a change runs, and the eligible list can load more.",
+      "where": "DirectorManagement.tsx"
+    },
+    {
+      "id": "vol-batch",
+      "desk": "volunteer_apps",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "A failed batch label replaced the whole list with one page",
+      "plain": "A blocked write also counted as saved, and a filter change during loading could append the wrong rows.",
+      "how": "Failures are detected, rolled back row by row and reloaded from the start.",
+      "where": "VolunteerApplications.tsx"
+    },
+    {
+      "id": "vol-export",
+      "desk": "volunteer_apps",
+      "sev": "risk",
+      "stale": false,
+      "state": "fixed",
+      "title": "The spreadsheet export of emails and phones left no trace",
+      "plain": "Anyone with access could export every applicant and nothing recorded it.",
+      "how": "Export now asks to confirm and writes an audit row.",
+      "where": "VolunteerApplications.tsx"
+    },
+    {
+      "id": "vol-stale",
+      "desk": "volunteer_apps",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "Described as a read only archive though it is a live tool",
+      "plain": "The desk has a live counter, labels and an export.",
+      "how": "You chose to keep it live, so the blurb, subtitle and product document now say so.",
+      "where": "deskAccess.ts, PRODUCT_PRD.md"
+    },
+    {
+      "id": "roles-audit",
+      "desk": "roles",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "Changing who can do what left no trail",
+      "plain": "The page that changes access never wrote to the Activity Log, and two quick clicks could lose their busy state.",
+      "how": "Every tick, untick and reset is audited and each cell tracks its own pending state.",
+      "where": "RolesPage.tsx, roleCapabilityMatrixService.ts"
+    },
+    {
+      "id": "log-noise",
+      "desk": "activity_log",
+      "sev": "bug",
+      "stale": true,
+      "state": "fixed",
+      "title": "Real events were buried under about 90,000 automatic rows",
+      "plain": "The newest 200 rows spanned three hours, search and filters only looked at what was loaded, and one action appeared under two spellings.",
+      "how": "Scheduled-post rows are hidden by default and search, action and date filters run in the database. Both spellings are treated as one action. Checked in the offline desk harness (real services over an in-memory fake, not live data) at 1440 and 390.",
+      "where": "ActivityLog.tsx, activityLogQuery.ts"
+    },
+    {
+      "id": "log-pills",
+      "desk": "activity_log",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "The action filter lists known actions plus those seen so far",
+      "plain": "There is no database query for every distinct action, so a rare action appears only after it has been loaded. Old rows keep their old spelling.",
+      "where": "activityLogQuery.ts"
+    },
+    {
+      "id": "shell-db-wider",
+      "desk": "shell",
+      "sev": "risk",
+      "stale": false,
+      "state": "flagged",
+      "title": "The database lets any HoD write where the screens say HR only",
+      "plain": "A plain HoD cannot open Drive Write-ups or Vol. Applications or delete a team in the app, but the database still lets any HoD change those tables through the API. The owner chose to leave this on 2 Nov 2026.",
+      "where": "welfare_projects, volunteer_applications and teams policies"
+    },
+    {
+      "id": "roles-app-only",
+      "desk": "roles",
+      "sev": "gap",
+      "stale": false,
+      "state": "flagged",
+      "title": "The capability switches only hide buttons; the database ignores them",
+      "plain": "Unticking approve posts for HoDs stops the button and the handler in the app, not a call made straight to the database. The hints still say RLS ceiling. The owner chose to leave the wording on 2 Nov 2026.",
+      "where": "CapabilityContext.tsx, RolesPage.tsx"
+    },
+    {
+      "id": "log-overflow",
+      "desk": "activity_log",
+      "sev": "bug",
+      "stale": false,
+      "state": "fixed",
+      "title": "The action filter row pushed the Activity Log wider than the screen",
+      "plain": "At laptop width the row of action filters was about 2000 pixels wide and made the whole page scroll sideways. Found by the browser check.",
+      "how": "The filter row now stays inside its frame and scrolls within it. Rechecked at 1440 and 390, inside and outside the real desk shell: no sideways page scroll.",
+      "where": "styles/routes/director.css"
+    },
+    {
+      "id": "mom-hint",
+      "desk": "member_of_month",
+      "sev": "gap",
+      "stale": true,
+      "state": "fixed",
+      "title": "The team picker said Teams you belong to while listing every team",
+      "plain": "Stale copy after the any-team decision. Found by the browser check.",
+      "how": "The hint now reads Any active team for everyone.",
+      "where": "MemberOfMonth.tsx"
+    },
+    {
+      "id": "members-table-width",
+      "desk": "members",
+      "sev": "gap",
+      "stale": false,
+      "state": "fixed",
+      "title": "On a laptop the Members table is wider than its frame for HR",
+      "plain": "HR sees a table about 1600 pixels wide inside a frame about 900 to 1100 pixels wide, so reaching the Actions column means scrolling the table sideways. It scrolled, but nothing said so and the name scrolled away with everything else.",
+      "how": "Changed 3 Nov 2026: a shadow appears on whichever edge has more to scroll to, the name column stays pinned while you scroll, and the long free-text columns have a minimum width so a school name no longer wraps to eight lines. The table is still wider than the frame; it is now clearly scrollable. Same cue on the Drives and Volunteers tables.",
+      "where": "MemberDirectory.tsx, director-people.css, director.css"
+    },
+    {
+      "id": "grievances-access",
+      "desk": "grievances",
+      "sev": "gap",
+      "state": "open",
+      "title": "Not yet exercised through the screen with real accounts",
+      "plain": "A member can send a grievance and see only its status. Only HR and super admin can read, assign and note it; HoDs and Directors get no rows, and anyone a grievance names is shut out of it, including HR.",
+      "how": "Access rules checked in a rolled-back database test (member, HoD, Director, the named HR member, another HR member: 0, 0, 0, 0, 1 rows; a forged submitter refused). The form and the desk were built and type-checked but not clicked through with real accounts.",
+      "where": "scripts/grievances_2026_11_03.sql, Grievances.tsx"
+    }
+  ]
+}

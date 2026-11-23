@@ -1,0 +1,77 @@
+{
+  "slug": "for-schools",
+  "title": "Schools: workshops and drives we run in Kolkata · AquaTerra",
+  "description": "Schools that have hosted AquaTerra's student volunteers: {count} drives, workshops and plantation days since {firstYear}, and how a school can host one.",
+  "h1Lead": "schools that host",
+  "h1Accent": "our drives",
+  "lede": "AquaTerra is a student-run charity in Kolkata, and schools are one of the places where our volunteers run workshops, plantation days and fests. Since {firstYear} we have run {count} drives at schools, with {volunteers} volunteer turnouts across them, and a school can host a session with us. Most school sessions are single-topic workshops that a teacher can look over before booking one.",
+  "sections": [
+    {
+      "id": "what-we-have-done",
+      "heading": "what we have done at schools",
+      "body": [
+        "Most school drives are workshops. Volunteers have taught origami at South Calcutta Inner Wheel School and School On Wheels Park Circus, story making at School On Wheels Belgachia, maths tables and science at School On Wheels HUHT, and first aid at Shanti Rani primary school. Some schools hosted an art competition, such as National Hindi High School in June 2023, and others an Earth Day session at South City International School in April 2025.",
+        "Plantation days have come back to the same schools. Grow Green visited Ashok Hall School in August 2023 and again in August 2025, and it ran at South City International School in April 2025 as well. The July 2025 Roots days ran over two days each at South City International School, Calcutta International School and Calcutta Boys School, where students wore Roots tees, the streetwear line that is now [Crftd](/crftd)."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when these drives happen",
+      "body": [
+        "Our school work has reached {placesCount} places, and a few schools come back again and again. {topPlace} has hosted the most drives, followed by Ashok Hall School, South Calcutta Inner Wheel School and School On Wheels, which has hosted sessions in Belgachia, Park Circus and HUHT. The school work has moved up and down. There were {year:2022} drives at schools in 2022, {year:2023} in 2023, {year:2024} in 2024 and {year:2025} in 2025, so 2025 had the most and 2024 the fewest."
+      ]
+    },
+    {
+      "id": "what-a-school-gets",
+      "heading": "what a school gets from a drive",
+      "body": [
+        "A school gets a team of students who plan the session, bring what it needs and run it with the children. Every drive on this site lists its date, place, objective and volunteer turnout, so a school can see what it would be hosting before it says yes.",
+        "Schools have hosted a range of sessions. In October 2024 Inner Wheel School held Painted Flames, a diya decorating session for Diwali. In July 2024 the same school hosted Safe and Strong, an awareness session on good touch and bad touch. In August 2025 BSS school hosted Sacred Strings, a Rakhi making workshop."
+      ]
+    },
+    {
+      "id": "how-a-school-can-host",
+      "heading": "how a school can host a session",
+      "body": [
+        "Start with a teacher or a principal who wants a session for their children. Write through the [contact page](/contact) with the kind of session you have in mind, whether a workshop, a plantation day, a clothes collection or a fest, and the dates you can offer. Our volunteers are members aged fourteen to nineteen, and the sessions are planned and led by students.",
+        "A teacher can read the formats first. The guides on [how to start a drive at your school](/impact/how-to-start-a-drive-at-your-school), [how to run an art workshop for kids](/impact/how-to-run-an-art-workshop-for-kids) and [how to run a clothes donation drive](/impact/how-to-run-a-clothes-donation-drive) are written from what our teams actually ran."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most school sessions are single-topic workshops, from origami to maths tables, so a teacher can pick one subject and build the session around it.",
+    "Plantation days come back to the same schools: Grow Green visited Ashok Hall School in 2023 and again in 2025.",
+    "Several school days ran over two days, such as the Roots days at Calcutta International School in July 2025.",
+    "Every school session is written up on this site, so a school can check what a session covered before it hosts one."
+  ],
+  "faqs": [
+    {
+      "q": "Can a school host an AquaTerra workshop?",
+      "a": "Yes. Schools have hosted AquaTerra workshops, plantation days and clothes drives, and AquaTerra has run {count} drives at schools since {firstYear}. The sessions are planned and led by student volunteers, and a school can ask for one through the [contact page](/contact)."
+    },
+    {
+      "q": "Which schools has AquaTerra run drives at?",
+      "a": "AquaTerra has run drives at South City International School, School On Wheels, Ashok Hall School, South Calcutta Inner Wheel School, Calcutta International School and Calcutta Boys School, among others. The full list is on [every school we have worked in](/impact/schools-we-have-visited)."
+    },
+    {
+      "q": "Does AquaTerra run plantation drives at schools?",
+      "a": "Yes. Grow Green plantation drives have been held at Ashok Hall School in August 2023 and August 2025, at South City International School in April 2025, and at Calcutta Girls High School in July 2023."
+    },
+    {
+      "q": "What workshops can a school book from AquaTerra?",
+      "a": "Schools have hosted art and craft workshops, origami, storytelling, public speaking, science, maths tables, first aid and awareness sessions. Each is run by student volunteers and written up on this site."
+    },
+    {
+      "q": "How does a school start a drive with AquaTerra?",
+      "a": "Contact AquaTerra through the contact page with the kind of session you want and the dates. The [how to start a drive at your school](/impact/how-to-start-a-drive-at-your-school) guide sets out the steps our teams used."
+    }
+  ],
+  "keywords": [
+    "schools in Kolkata with AquaTerra",
+    "workshops for school children in Kolkata",
+    "plantation drive at a school in Kolkata",
+    "student volunteers for schools in Kolkata",
+    "host a workshop at a school in Kolkata",
+    "AquaTerra school drives"
+  ]
+}

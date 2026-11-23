@@ -43,14 +43,16 @@ describe('desk access is declared exactly once', () => {
   // scoped BY). Six become seven. 2026-09-13: `activity_log` is `super` too
   // (community_audit_logs' own RLS is super_admin-only SELECT) - seven
   // become eight.
-  it('marks exactly the nine super-admin desks as `super`, and no others', () => {
+  it('marks exactly the eight super-admin desks as `super`, and no others', () => {
     const superKeys = DESKS.filter(d => d.privilege === 'super').map(d => d.key).sort()
-    expect(superKeys).toEqual(['activity_log', 'approvals', 'certificates', 'content', 'grievances', 'hods', 'projects', 'roles', 'volunteer_apps'])
+    expect(superKeys).toEqual(['activity_log', 'approvals', 'content', 'grievances', 'hods', 'projects', 'roles', 'volunteer_apps'])
   })
 
-  it('routes those nine at the paths App.tsx guards with requireSuperAdmin', () => {
+  it('routes those eight at the paths App.tsx guards with requireSuperAdmin', () => {
     const superPaths = DESKS.filter(d => d.privilege === 'super').map(d => d.path).sort()
-    expect(superPaths).toEqual(['activity-log', 'approvals', 'certificates', 'content', 'directors', 'grievances', 'projects', 'roles', 'volunteers'])
+    expect(superPaths).toEqual(['activity-log', 'approvals', 'content', 'directors', 'grievances', 'projects', 'roles', 'volunteers'])
+    // 2026-11-20: `certificates` moved from `super` to `leader` on purpose. Every HoD can read the pipeline and a tagged one can
+    // answer; only issuing and declining stay HR-only, enforced in the desk and by the database, not by this gate.
   })
 
   it('gives every desk a non-empty label and glyph', () => {
@@ -148,11 +150,13 @@ describe('the effective access set, spelled out', () => {
   // (HR/super_admin-only sign-up approvals): 9 leader + 7 super = 16.
   // 2026-11-02: the Product guide desk (leader) makes it 10 leader + 8 super = 18.
   // 2026-11-03: Grievances (super, HR and Super Admin only) makes it 10 leader + 9 super = 19.
-  it('hod and director each get the 10 leader desks — never the 9 super ones', () => {
+  // 2026-11-20: Certificates opened to every leader (read the queue, tagged HoDs answer): 11 leader + 8 super = 19.
+  it('hod and director each get the 11 leader desks — never the 8 super ones', () => {
     for (const role of ['hod', 'director'] as const) {
       const allowed = DESKS.filter(d => canAccessDesk(d, role))
-      expect(allowed).toHaveLength(10)
+      expect(allowed).toHaveLength(11)
       expect(allowed.every(d => d.privilege === 'leader')).toBe(true)
+      expect(allowed.some(d => d.key === 'certificates')).toBe(true)
       const visible = visibleDeskGroups({ role, canApproveMembers: canApprove(role) }).flatMap(g => g.items)
       expect(visible.map(d => d.key).sort()).toEqual(allowed.map(d => d.key).sort())
     }

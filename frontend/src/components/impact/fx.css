@@ -1,0 +1,71 @@
+/* Interaction kit for the giving-back pages. Rounded-minimal: hairlines, 32/22/14 radii, soft lifts, hues as fills only.
+   Every animation below has a reduced-motion override at the end of this file. */
+
+/* tilt */
+.fx-tilt { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.18s var(--ease-out, ease-out), box-shadow 0.18s; will-change: transform; }
+.fx-tilt:hover { box-shadow: var(--lift-2, 0 10px 30px rgba(10,10,10,.12)); }
+
+/* bars */
+.fx-bar { display: block; height: 10px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.fx-bar-fill { display: block; height: 100%; width: var(--w); border-radius: 999px; transform-origin: left center; }
+.fx-bar-fill:not(.is-in) { transform: scaleX(0.04); }
+.fx-bar-fill.is-in { transform: scaleX(1); transition: transform 0.9s cubic-bezier(.2,.8,.2,1); }
+
+/* mosaic */
+.fx-mosaic-wrap { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.fx-mosaic { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 140px; grid-auto-flow: dense; }
+@media (min-width: 760px) { .fx-mosaic { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 170px; } }
+@media (min-width: 1180px) { .fx-mosaic { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 160px; } }
+.fx-tile-1 { grid-column: span 2; grid-row: span 2; }
+@media (min-width: 760px) { .fx-tile-4 { grid-row: span 2; } .fx-tile-6 { grid-column: span 2; } }
+.fx-tile { border-radius: 14px; overflow: hidden; background: var(--bg-2); }
+.fx-tile-btn { all: unset; box-sizing: border-box; position: relative; display: block; width: 100%; height: 100%; cursor: zoom-in; }
+.fx-tile-btn img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(.2,.8,.2,1), filter 0.3s; }
+.fx-tile-btn:hover img, .fx-tile-btn:focus-visible img { transform: scale(1.06); }
+.fx-tile-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+.fx-tile-cap {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 10px 8px; color: #fff; font-family: var(--eina); font-size: 13px; line-height: 1.3;
+  background: linear-gradient(to top, rgba(10,10,10,.82), rgba(10,10,10,0)); text-shadow: 0 1px 6px rgba(0,0,0,.5);
+  opacity: 0; transform: translateY(6px); transition: opacity 0.25s, transform 0.25s;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.fx-tile-btn:hover .fx-tile-cap, .fx-tile-btn:focus-visible .fx-tile-cap { opacity: 1; transform: none; }
+@media (hover: none) { .fx-tile-cap { opacity: 1; transform: none; } }
+.fx-more { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* lightbox */
+.fx-lb-back { position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,10,.86); display: grid; place-items: center; padding: 16px; }
+.fx-lb { position: relative; width: min(1100px, 100%); max-height: calc(100dvh - 32px); outline: none; }
+.fx-lb-fig { margin: 0; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.fx-lb-fig img { max-width: 100%; max-height: calc(100dvh - 210px); object-fit: contain; border-radius: 14px; background: #111; }
+.fx-lb-cap { color: #fff; font-family: var(--eina); display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; max-width: 70ch; }
+.fx-lb-cap strong { font-size: 17px; }
+.fx-lb-cap span { font-size: 14px; color: rgba(255,255,255,.82); }
+.fx-lb-sum { font-size: 14px; line-height: 1.5; }
+.fx-lb-link { color: #fff; text-decoration: underline; text-underline-offset: 3px; padding: 10px 6px; min-height: 44px; display: inline-flex; align-items: center; }
+.fx-lb-x { position: absolute; top: -6px; right: -6px; background: var(--card); z-index: 2; }
+.fx-lb-nav { position: absolute; top: 40%; background: var(--card); }
+.fx-lb-prev { left: 4px; }
+.fx-lb-next { right: 4px; }
+.fx-lb-count { position: absolute; top: 4px; left: 8px; color: rgba(255,255,255,.85); font-family: var(--code); font-size: 13px; }
+
+/* drift strip */
+.fx-drift { overflow: hidden; mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); padding: 4px 0; }
+.fx-drift-track { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px; width: max-content; animation: fx-drift 60s linear infinite; }
+.fx-drift:hover .fx-drift-track, .fx-drift:focus-within .fx-drift-track { animation-play-state: paused; }
+.fx-drift-a { display: block; width: 150px; height: 104px; border-radius: 14px; overflow: hidden; background: var(--bg-2); }
+.fx-drift-a img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.fx-drift-a:hover img { transform: scale(1.08); }
+.fx-drift-a:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+@keyframes fx-drift { to { transform: translateX(-50%); } }
+
+/* gentle float for decorative stickers */
+.fx-float { animation: fx-float 5s ease-in-out infinite; }
+@keyframes fx-float { 50% { transform: translateY(-6px) rotate(-2deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-tilt, .fx-tile-btn img, .fx-tile-cap, .fx-drift-a img { transition: none !important; transform: none !important; }
+  .fx-bar-fill, .fx-bar-fill:not(.is-in) { transform: none !important; transition: none !important; }
+  .fx-drift-track, .fx-float { animation: none !important; }
+  .fx-drift { overflow-x: auto; }
+}

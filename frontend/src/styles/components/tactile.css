@@ -1,0 +1,66 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Tactile layer: buttons, cards, tables, charts, dropdowns, sheets.
+
+   Adapted from the kosta4a/tactile-design skill, but fitted to THIS project's
+   rounded-minimalism language. What is deliberately NOT taken from the skill:
+   its 6/8px radii and 0.5px hairlines (the owner's 32/22/14 radii and 1px
+   hairlines stay), black primary (the green .btn-primary and its hard offset
+   shadow stay: they are one of the two sanctioned offset objects), and any
+   edit to tokens.css. The press scale stays 0.96 on buttons (lib/motion tapScale);
+   cards keep the base stylesheet's hover and press (a smaller card press was tried and cut to stay inside the eager CSS budget).
+
+   What this file adds is only depth cues:
+     - a crisp 1px drop under every raised control (no big soft blur),
+     - a pressed-in inner shade while a control is held,
+     - menus and sheets that carry a ring + one short drop instead of lift-4,
+     - tables and bars that read as one raised object with a hairline frame.
+   Hover styles are fine-pointer only. Reduced motion is covered by the
+   app-wide catch-all in v6.css (durations collapse to ~0).
+
+   Loaded LAST in main.tsx so it wins ties. No tracked accent-lint violations
+   live here: every colour is a token or an ink alpha.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --tx-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --tx-ink: 10, 10, 10;
+  --tx-drop: 0 1px 2px 0 rgba(var(--tx-ink), 0.12);
+  --tx-card: 0 1px 2px 0 rgba(var(--tx-ink), 0.1), 0 3px 4px -2px rgba(var(--tx-ink), 0.1);
+  --tx-menu: 0 1px 2px 0 rgba(var(--tx-ink), 0.12), 0 4px 8px -4px rgba(var(--tx-ink), 0.16);
+  --tx-modal: 0 1px 2px 0 rgba(var(--tx-ink), 0.12), 0 6px 8px -4px rgba(var(--tx-ink), 0.16);
+  --tx-pressed: inset 0 1px 3px 0 rgba(var(--tx-ink), 0.18);
+  --tx-edge: rgba(var(--tx-ink), 0.14);
+}
+
+/* Buttons: secondary and coloured .btn are raised by a crisp drop and sunk while held. The base .btn rule already
+   transitions box-shadow over 0.15s; this only sets the curve. */
+html .btn:not(.btn-primary):not(.btn-ghost) {
+  border-color: var(--tx-edge);
+  box-shadow: var(--tx-drop);
+  transition-timing-function: var(--tx-ease);
+}
+html .btn:not(.btn-primary):not(.btn-ghost):active:not(:disabled) {
+  box-shadow: var(--tx-pressed);
+  background: var(--bg-2);
+}
+/* The primary keeps its hard offset (owner-sanctioned); pressed, it collapses into the surface like a key bottoming out. */
+html .btn-primary:active:not(:disabled) {
+  box-shadow: 0 0 0 0 var(--ink), inset 0 2px 4px 0 rgba(var(--tx-ink), 0.28);
+}
+
+/* Cards: a ring-and-drop lift instead of a soft blur. The desk's .admin cards live in tactile-desk.css. */
+html .card,
+html .card:hover,
+html .rail-card {
+  box-shadow: var(--tx-card);
+}
+
+/* Overlays: ring-and-short-drop. The neutral hover replaces the loud green fill on menu rows. */
+html .modal { box-shadow: var(--tx-modal); }
+html .menu { box-shadow: var(--tx-menu); }
+html .menu-item:hover,
+html .menu-item:focus-visible {
+  background: var(--bg-2);
+  color: var(--ink);
+}
+html .menu-item:active { background: color-mix(in srgb, var(--bg-2) 80%, var(--ink) 8%); }

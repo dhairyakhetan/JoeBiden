@@ -62,17 +62,25 @@ const LINK_GROUPS: LinkGroup[] = [
       { label: 'Members',          sub: 'The people behind the work',   href: '/members',        color: '#FFE94A', icon: '👥' },
       // audit-ok: Pop Orange as a card fill (--dc), the sticker palette.
       { label: 'Blog',             sub: 'Stories from the community',   href: '/blog',           color: '#FF7A1A', icon: '✍' },
-      { label: 'Open Books',       sub: 'Every rupee in, every rupee out', href: '/accounts',    color: 'var(--welfare)', icon: '📒' },
       { label: 'Terra Notes',      sub: 'The monthly digital magazine',  href: '/terranotes',     color: 'var(--grape)', icon: '📖' },
       { label: 'AQ Labs',          sub: '8 student-built projects',     href: '/terranotes/articles/labs', color: 'var(--lemon)', icon: '🧪' },
       { label: 'The AQ Map',       sub: 'Everything we do, one map',    href: '/directory',      color: 'var(--sky)', icon: '🗺' },
     ],
   },
   {
+    heading: 'How we give back', hue: 'var(--welfare)',
+    links: [
+      { label: 'How We Give Back', sub: 'Self-funded welfare, education and sport', href: '/impact', color: 'var(--welfare)', icon: '🌱' },
+      { label: 'ShikshAQ',         sub: 'Free exam papers, built by students', href: '/shikshaq', color: 'var(--sky)', icon: '📚' },
+      { label: 'Sport',            sub: 'Open tournaments that fund welfare', href: '/sports', color: 'var(--tomato)', icon: '🏏' },
+      { label: 'AI at AquaTerra',  sub: 'How we train our teams to use AI', href: '/ai', color: 'var(--lemon)', icon: '✨' },
+    ],
+  },
+  {
     heading: 'Get involved', hue: 'var(--sky)',
     links: [
       { label: 'Open Roles',       sub: 'Openings across departments',  href: '/opportunities',  color: 'var(--sky)', icon: '🎯' },
-      { label: 'TerraThon',        sub: 'Cricket, pickleball & FIFA · 2-4 Oct', href: '/terrathon', color: 'var(--sky)', icon: '🏆' },
+      { label: 'TerraThon',        sub: 'Cricket, pickleball & FIFA · ran 2-4 Oct', href: '/terrathon', color: 'var(--sky)', icon: '🏆' },
       { label: 'Volunteer Handbook', sub: 'Everything about volunteering', href: '/volunteer',   color: 'var(--lemon)', icon: '📖' },
       { label: 'Collaborate',      sub: 'Events, sponsorships, schools', href: '/collaborations', color: 'var(--sky)', icon: '🤝' },
       { label: 'Support Us',       sub: 'No donations - real ways to help', href: '/support',    color: 'var(--welfare)', icon: '🌱' },
@@ -90,7 +98,7 @@ const LINK_GROUPS: LinkGroup[] = [
   {
     heading: 'Connect with us', hue: 'var(--tomato)',
     links: [
-      { label: 'WhatsApp Community', sub: 'Join the group to hear first', href: WHATSAPP, external: true, color: '#25D366', icon: '💬' },
+      { label: 'WhatsApp',         sub: 'Message the team directly', href: WHATSAPP, external: true, color: '#25D366', icon: '💬' },
       { label: 'Instagram',        sub: '@ngo.aquaterra',               href: INSTAGRAM, external: true, color: '#FF6BD6', icon: '📸' },
       { label: 'LinkedIn',         sub: 'Follow our work',              href: LINKEDIN,  external: true, color: '#0A66C2', icon: '💼' },
       { label: 'Contact Us',       sub: 'Get in touch directly',        href: '/contact',        color: '#FF6BD6', icon: '✉' },

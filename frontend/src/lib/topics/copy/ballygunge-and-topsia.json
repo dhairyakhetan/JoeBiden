@@ -1,0 +1,83 @@
+{
+  "slug": "ballygunge-and-topsia",
+  "title": "Ballygunge and Topsia drives: sharbat and books · AquaTerra",
+  "description": "AquaTerra's drives around Ballygunge, Topsia and Park Circus since {firstYear}: {count} drives of sharbat, clothes, books and toys, plus two workshops.",
+  "h1Lead": "sharbat and books across",
+  "h1Accent": "Ballygunge and Topsia",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drives around Ballygunge, Topsia and Park Circus, with {volunteers} volunteer turnouts. Most came in 2024 and 2025, and they are sharbat drives and clothes, book and toy collections, with two workshops for children along the way.",
+  "sections": [
+    {
+      "id": "the-first-drive",
+      "heading": "the first drive, in 2022",
+      "body": [
+        "The first AquaTerra drive in this area was an Earth Day workshop at Don Bosco School in Park Circus on 21 April 2022. Volunteers led hands-on sessions on sustainability, waste and action, and the session ended with trees planted in bottles.",
+        "No drive in this area is written up for 2023. The series came back in May 2024, and that is where most of its drives are."
+      ]
+    },
+    {
+      "id": "2024-sharbat-and-clothes",
+      "heading": "2024: sharbat and clothes in May",
+      "body": [
+        "May 2024 was the busiest month of the series here. Sharbat Seva ran on 24 May at Ballygunge Circular Road and on 26 May at Mayfair Road in Ballygunge, and each gives twenty litres of Rooh Afza as its figure. A Wear and Write clothes and notebook drive ran at Rajasthali in Park Circus on 15 May.",
+        "Rajasthali hosted a Wear and Share drive on 28 May, which gathered three kilograms of clothes. The clothes collections continued in November 2024, when a Wear and Share drive at Himdari Apartment in Ballygunge gathered seven kilograms."
+      ]
+    },
+    {
+      "id": "2025-books-toys-and-origami",
+      "heading": "2025: books, toys and an origami workshop",
+      "body": [
+        "In 2025 the drives were a sharbat drive at Topsia on 26 March, an origami workshop at School On Wheels in Park Circus on 3 March, a clothes and toys collection at Ballygunge Park on 28 March, and a book collection at Ballygunge on 2 June. The origami session taught children to fold paper into birds, boats and more.",
+        "There are two workshops in the whole area: the 2022 Earth Day session and the 2025 origami session. Both took place in Park Circus."
+      ]
+    },
+    {
+      "id": "where-and-who",
+      "heading": "where the drives happen, and who goes",
+      "body": [
+        "Across the area the drives have been held in {placesCount} places, from Ballygunge and Ballygunge Park to Topsia, Park Circus, Mayfair Road and Ballygunge Circular Road. Ballygunge and Rajasthali are the two names that come up most often, and Rajasthali hosted two of the 2024 drives.",
+        "The largest team came out for the clothes and toys collection at Ballygunge Park on 28 March 2025. Turnouts here are small. {volunteers} volunteer turnouts across {count} drives counts every visit, so a student who came to several drives is counted for each one."
+      ]
+    },
+    {
+      "id": "how-to-get-involved",
+      "heading": "how to join or help",
+      "body": [
+        "Members aged 14 to 19 join through the [join page](/join): sign in with Google, then wait for approval. Each drive here is written up on the site with its place, its date and what the team did, so you can see the kind of outing before you come along.",
+        "If the sharbat drives draw you in, [Sharbat Seva](/impact/sharbat-seva) covers the summer drinks across the city. The related neighbourhood pages are [Sarat Bose Road](/impact/sarat-bose-road) and [Bhawanipore](/impact/bhawanipore), and the book collections are in [Book Basket](/impact/book-basket)."
+      ]
+    }
+  ],
+  "learnings": [
+    "The area's drives came in bursts, most of them in May 2024 and then in early 2025.",
+    "Sharbat drives ran at more than one spot in late May 2024, on different days.",
+    "The only workshops here are the 2022 Earth Day session and the 2025 origami session, both for children in Park Circus.",
+    "Rajasthali in Park Circus hosted two clothes and notebook drives in May 2024, so one place can carry a whole collection drive.",
+    "Dog feeding is not part of the drives in this area, which are sharbat, clothes, books, toys and workshops."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run drives in Ballygunge and Topsia?",
+      "a": "AquaTerra has run drives at Ballygunge and Ballygunge Park, on Ballygunge Circular Road and Mayfair Road, at Rajasthali in Park Circus, at Don Bosco School and School On Wheels in Park Circus, and at Topsia. Since {firstYear} the drives have been held in {placesCount} places."
+    },
+    {
+      "q": "What did AquaTerra do in Ballygunge and Topsia in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} drives in this area. In May, students served sharbat on Ballygunge Circular Road and on Mayfair Road, and ran clothes and notebook collections at Rajasthali in Park Circus. In November, a clothes drive at Himdari Apartment in Ballygunge followed."
+    },
+    {
+      "q": "Did AquaTerra run a workshop in Park Circus?",
+      "a": "Yes, twice. AquaTerra ran an Earth Day workshop at Don Bosco School in Park Circus on 21 April 2022, and an origami workshop at School On Wheels in Park Circus on 3 March 2025. Children took part in both sessions."
+    },
+    {
+      "q": "How many volunteer turnouts has this area had?",
+      "a": "AquaTerra has had {volunteers} volunteer turnouts across {count} drives around Ballygunge, Topsia and Park Circus since {firstYear}. A turnout counts each time someone showed up, so a student who went to several drives is counted once for each."
+    }
+  ],
+  "keywords": [
+    "drives in Ballygunge Kolkata",
+    "Topsia volunteering Kolkata",
+    "Park Circus volunteering Kolkata",
+    "sharbat distribution Ballygunge",
+    "origami workshop Park Circus",
+    "AquaTerra Ballygunge"
+  ]
+}

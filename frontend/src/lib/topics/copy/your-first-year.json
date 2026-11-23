@@ -1,0 +1,94 @@
+{
+  "slug": "your-first-year",
+  "title": "Your first year as an AquaTerra member · AquaTerra",
+  "description": "What a first year with AquaTerra is likely to involve: drives, children's workshops and festive sessions across Kolkata. {count} drives and sessions since {firstYear}.",
+  "h1Lead": "your first",
+  "h1Accent": "year with us",
+  "lede": "A first year with AquaTerra is a mix of everything we run: dog feedings, sharbat and food drives, clothes and book collections, children's workshops and festive sessions, mostly in Kolkata. Since {firstYear} we have run {count} drives and sessions, with {volunteers} volunteer turnouts, and the run has grown each year through 2025.",
+  "sections": [
+    {
+      "id": "what-a-first-year-covers",
+      "heading": "what a first year covers",
+      "body": [
+        "Across {years} we have run {count} drives and sessions, and most of the work is across Kolkata. A first year is likely to take you through several kinds of work: a feeding or distribution drive, a collection drive for clothes or books, a workshop for children, and a festive session. Some of the sessions are one-off, and some come back year after year.",
+        "Volunteer turnouts count every time someone showed up. So one member who came to five drives counts five times, and the {volunteers} turnouts are a measure of how much the work took, not of how many people did it."
+      ]
+    },
+    {
+      "id": "the-series-you-will-meet",
+      "heading": "the series you will meet",
+      "body": [
+        "Tails and Treats is one of the oldest series, starting in January 2022, and it has run {count:tails-and-treats} times, feeding stray dogs with biscuits. Sharbat Seva is the summer series, handing out chilled sharbat in March to May, and it has run {count:sharbat-seva} times.",
+        "Wear and Share ({count:wear-and-share}) gathers clothes for people who need them, and Book Basket ({count:book-basket}) collects books for underprivileged kids. Food For All ({count:food-for-all}) served meals and food packets, and Smile Notes ({count:smile-notes}) handed out affirmation notes, each with a toffee."
+      ]
+    },
+    {
+      "id": "how-the-year-grew",
+      "heading": "how the run grew",
+      "body": [
+        "The run grew every year through 2025. We ran {year:2021} drives in 2021, when the first ones began in June, {year:2022} in 2022, {year:2023} in 2023, {year:2024} in 2024 and {year:2025} in 2025, the largest year so far. {year:2026} drives have been written up in 2026 so far.",
+        "That growth is what makes a first year feel busy now. There is more to join than there was when the first drives started in 2021."
+      ]
+    },
+    {
+      "id": "where-your-year-happens",
+      "heading": "where your year happens",
+      "body": [
+        "Pather Sathi is the place we return to most, with more sessions than any other place. Kolkata as a general location, which many drives list, comes next, then Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep.",
+        "Across all years we have run drives and sessions in {placesCount} places, from Salt Lake and Bangur to Howrah and Lake Town Footbridge. Each drive is written up with its date and place."
+      ]
+    },
+    {
+      "id": "what-a-member-does",
+      "heading": "what a member does across a year",
+      "body": [
+        "Across a year the work tends to fall into a mix: a feeding or distribution drive, a sharbat stall when the summer heat arrives, a children's workshop, and a festive session in December. Our flagship winter fundraiser, Starry Night, sits at the end of the year.",
+        "The write-ups are the best way to see what your year could hold, since each drive and session is written up with its date, place and what was done."
+      ]
+    },
+    {
+      "id": "how-to-start-your-year",
+      "heading": "how to start your year",
+      "body": [
+        "You join AquaTerra with a Google sign-in, and a member of the team approves your account. AquaTerra is for students aged 14 to 19, and the work is run by students. The projects page lists the drives and sessions we have written up, so you can see what a year looks like before you join.",
+        "AquaTerra is self-funded and takes no donations. It pays for its welfare work through its own student-run events and through Crftd, the student streetwear label."
+      ]
+    }
+  ],
+  "learnings": [
+    "Repeat drives build the year. Series like Tails and Treats come back, which gives a new member a routine to step into.",
+    "The run grew each year through 2025, so there is more to join now than there was in 2022.",
+    "The year has a shape: sharbat and collection drives in the warmer months, children's workshops through the year, and festive sessions in December.",
+    "Places repeat. Pather Sathi hosts more sessions than any other place, so a first year builds familiarity with a few regular places."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} drives and sessions. They included Tails and Treats dog feedings, Sharbat Seva summer drives, Wear and Share clothes collections and workshops for children at Pather Sathi and other places."
+    },
+    {
+      "q": "What did AquaTerra do in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} drives and sessions, the largest year so far. The year included Tails and Treats, Sharbat Seva, Food For All, Book Basket, children's workshops and the Starry Night winter fundraiser."
+    },
+    {
+      "q": "How long has AquaTerra been running?",
+      "a": "AquaTerra was founded in June 2021, and its first drive was that same month. It has run {count} drives and sessions since {firstYear}, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "Is AquaTerra a charity?",
+      "a": "AquaTerra is a student-run registered charitable trust. It takes no monetary donations and charges no fees, and it pays for its welfare work through its own student-run events and through Crftd, its streetwear label."
+    },
+    {
+      "q": "How many drives has AquaTerra run?",
+      "a": "AquaTerra has run {count} drives and sessions since {firstYear}, across {placesCount} places. Tails and Treats, Sharbat Seva and Wear and Share are the series that have come back most often."
+    }
+  ],
+  "keywords": [
+    "AquaTerra history Kolkata",
+    "what did AquaTerra do",
+    "student charity Kolkata annual work",
+    "AquaTerra 2025 drives",
+    "youth volunteering Kolkata yearly",
+    "AquaTerra impact by year"
+  ]
+}

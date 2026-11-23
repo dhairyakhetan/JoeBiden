@@ -192,7 +192,7 @@ export function TerraThonContact() {
       </div>
 
       <p style={{ marginTop: 'var(--tt-block)', fontSize: 'var(--tt-fs-meta)', color: 'var(--tt-muted)' }}>
-        Team AquaTerra is a registered NGO, 12A and 80G certified.
+        Team AquaTerra is a registered charitable trust, listed on NGO DARPAN.
       </p>
 
       {/* FAQ, "before you ask" split: a short green poster heading on the

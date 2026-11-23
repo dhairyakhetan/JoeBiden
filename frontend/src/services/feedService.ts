@@ -1,5 +1,5 @@
 import { fetchMemberCards } from '../lib/publicMembers'
-import { hasLeaderAccess, isSuperAdmin } from '../lib/roles'
+import { hasLeaderAccess } from '../lib/roles'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { getCachedMemberId } from '../lib/authCache'
 import { attachDocuments, fetchDocumentRows, attachDocumentRows } from '../lib/postDocuments'
@@ -43,7 +43,7 @@ export interface CreatePostData {
   /**
    * Publish this post as the canonical AquaTerra org account
    * (members.email = 'official@ngoaquaterra.com') instead of the signed-in
-   * member. super_admin/hr only — see CreatePostModal.tsx's canPostAsOrg and
+   * member. HoD/director/super_admin/hr — see CreatePostModal.tsx's canPostAsOrg and
    * scripts/post_as_org_account_2026_09.sql's create_post_as_org() RPC.
    * This flag being true is NOT itself the authorization: it only changes
    * WHICH write path createPost() takes (the RPC vs. the plain insert). The
@@ -582,15 +582,15 @@ const feedServiceImpl = {
     // does the whole insert (post + images + documents + tags + category)
     // as a SECURITY DEFINER function instead.
     //
-    // The isSuperAdmin() check here is defense-in-depth, not the real
+    // The hasLeaderAccess() check here is defense-in-depth, not the real
     // boundary - the RPC re-checks is_super_admin() itself and resolves the
     // org account's member_id server-side from a fixed, hardcoded email
     // (never from a client-supplied id), so a forged flag from a
     // non-super-admin session throws inside the RPC rather than writing
     // anything under a spoofed author.
     if (data.postAsOrgAccount) {
-      if (!isSuperAdmin(memberRow.role)) {
-        throw new Error('Only a super admin can post as the AquaTerra org account')
+      if (!hasLeaderAccess(memberRow.role)) {
+        throw new Error('Only a HoD, director or super admin can post as the AquaTerra org account')
       }
 
       const documentUrlsJson = (data.documentUrls ?? []).map(d => ({
@@ -791,18 +791,21 @@ const feedServiceImpl = {
     if (knownPostId) {
       postId = knownPostId
     } else {
-      const { data: post } = await supabaseCommunity.from('posts').select('post_id').eq('uuid', uuid).single()
+      const { data: post, error: postErr } = await supabaseCommunity.from('posts').select('post_id').eq('uuid', uuid).single()
+      if (postErr && postErr.code !== 'PGRST116') throw logSupabaseError('feedService.lookup', postErr)
       if (!post) throw new Error('Post not found')
       postId = (post as any).post_id as number
     }
 
     // Check existing like and toggle in parallel-friendly sequence
-    const { data: existingLike } = await supabaseCommunity
+    const { data: existingLike, error: likeReadErr } = await supabaseCommunity
       .from('likes')
       .select('like_id')
       .eq('post_id', postId)
       .eq('member_id', memberId)
       .maybeSingle()
+    // A failed read must not look like "no like yet": the unlike tap would fall into the insert and hit the unique constraint.
+    if (likeReadErr) throw logSupabaseError('feedService.toggleLike', likeReadErr)
 
     // Every caller already renders a like count for this post before the user
     // clicks - use it instead of an extra exact-count round trip. Only fall
@@ -1095,6 +1098,7 @@ const feedServiceImpl = {
       `, { count: 'exact' })
       .eq('post_id', postId)
       .order('created_at', { ascending: true })
+      .order('comment_id', { ascending: true })
       .range(offset, offset + limit - 1)
 
     if (error) throw logSupabaseError('feedService.getComments', error)
@@ -1141,7 +1145,8 @@ const feedServiceImpl = {
     if (knownPostId) {
       postId = knownPostId
     } else {
-      const { data: postRow } = await supabaseCommunity.from('posts').select('post_id').eq('uuid', postUuid).single()
+      const { data: postRow, error: postRowErr } = await supabaseCommunity.from('posts').select('post_id').eq('uuid', postUuid).single()
+      if (postRowErr && postRowErr.code !== 'PGRST116') throw logSupabaseError('feedService.lookup', postRowErr)
       if (!postRow) throw new Error('Post not found')
       postId = (postRow as any).post_id as number
     }

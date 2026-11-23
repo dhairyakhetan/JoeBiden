@@ -11,6 +11,7 @@ import breakService from '../services/breakService'
 import { todayISO } from '../lib/breakWindows'
 import { installVerifyStubs, viewerMember, type Scenario } from './deskVerifyKit'
 import '../styles/routes/director.css'
+import '../styles/components/tactile-desk.css'
 
 /**
  * /dev/desk — the HoD desk preview harness.
@@ -95,6 +96,7 @@ const AccountApprovals = lazy(() => import('../director/AccountApprovals'))
 const PostModeration = lazy(() => import('../director/PostModeration'))
 const VolunteerApplications = lazy(() => import('../director/VolunteerApplications'))
 const CertificateRequests = lazy(() => import('../director/CertificateRequests'))
+const MemberCertificates = lazy(() => import('../certificates/CertificatesPage'))
 const Grievances = lazy(() => import('../director/Grievances'))
 const TeamManagement = lazy(() => import('../director/TeamManagement'))
 const DirectorLanding = lazy(() => import('../director/DirectorLanding'))
@@ -106,6 +108,7 @@ const ProjectManager = import.meta.env.DEV ? lazy(() => import('../director/Proj
 const DirectorManagement = import.meta.env.DEV ? lazy(() => import('../director/DirectorManagement')) : Placeholder
 const ContentManager = import.meta.env.DEV ? lazy(() => import('../director/ContentManager')) : Placeholder
 const YearbookManagement = import.meta.env.DEV ? lazy(() => import('../director/YearbookManagement')) : Placeholder
+const FormResponses = import.meta.env.DEV ? lazy(() => import('../director/FormResponses')) : Placeholder
 const CategoryManagement = import.meta.env.DEV ? lazy(() => import('../director/CategoryManagement')) : Placeholder
 const DirectorDashboard = import.meta.env.DEV ? lazy(() => import('../director/DirectorDashboard')) : Placeholder
 
@@ -118,6 +121,7 @@ const DESKS: { id: string; label: string; note: string; el: ReactNode; shell?: b
   { id: 'posts', label: 'Post Queue', note: 'moderation cards, long bodies, category tags', el: <PostModeration /> },
   { id: 'volunteers', label: 'Vol. Applications', note: 'the other wide table (7 cols)', el: <VolunteerApplications /> },
   { id: 'certificates', label: 'Certificates', note: 'request rows with decisions', el: <CertificateRequests /> },
+  { id: 'certmember', label: 'Member: certificates', note: 'the member-facing application form (not a desk), against the same in-memory data', el: <MemberCertificates /> },
   { id: 'grievances', label: 'Grievances', note: 'status stamps, an overdue row, details with notes and history', el: <Grievances /> },
   { id: 'teams', label: 'Teams', note: 'team cards and rosters', el: <TeamManagement /> },
   { id: 'hiring', label: 'Hiring', note: 'applications to openings, accept / reject', el: <HiringResponses /> },
@@ -128,6 +132,7 @@ const DESKS: { id: string; label: string; note: string; el: ReactNode; shell?: b
   { id: 'hods', label: 'Manage HoDs', note: 'directors, their scopes and role changes', el: <DirectorManagement /> },
   { id: 'content', label: 'All posts', note: 'every post, with filters and actions', el: <ContentManager /> },
   { id: 'yearbook', label: 'Yearbook', note: 'invitations and the year list', el: <YearbookManagement /> },
+  { id: 'enquiries', label: 'Enquiries', note: 'collab and contact forms, status pipeline, the team notes box', el: <FormResponses /> },
   { id: 'categories', label: 'Moderation', note: 'who moderates which teams', el: <CategoryManagement /> },
 ]
 

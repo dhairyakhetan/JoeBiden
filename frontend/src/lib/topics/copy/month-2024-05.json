@@ -1,0 +1,82 @@
+{
+  "slug": "month-2024-05",
+  "title": "AquaTerra in May 2024: {count} drives, sharbat, clothes and shelters",
+  "description": "May 2024 at AquaTerra: {count} drives and {volunteers} volunteer turnouts, sharbat stalls, clothes campaigns, AIM Foundation sessions and visits.",
+  "h1Lead": "may was a",
+  "h1Accent": "full summer",
+  "lede": "In May 2024 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most were summer sharbat stalls and clothes and notebook collections, with art, speaking and health workshops for children in between, and it is the month the Sharbat Seva and Wear and Share series began to run in earnest.",
+  "sections": [
+    {
+      "id": "sharbat-in-the-heat",
+      "heading": "sharbat in the heat",
+      "body": [
+        "Sharbat Seva was the summer's backbone. Its first drive was on 10 May at the old Elite Cinema building on Esplanade, and the series went on to stalls in Kankurgachi, Ballygunge, Bangur, Hazra, Beniatola, Salt Lake and Phool Bagan. Rooh Afza was the base at every stall, and the flavours varied from one to the next: rose and mint on Sarat Bose Road, red and green in Kankurgachi, and citrus, fruit and herbal sharbat elsewhere.",
+        "Most of the stalls went out on 24 May, with a further run on 26 May at the Salt Lake pool, JD Birla Institute, Karunamoyee Bidhannagar, Bagmari Market and Mayfair Road. Each write-up describes cold sharbat that refreshed crowds on a hot day, and the series is covered in full on the [Sharbat Seva page](/impact/sharbat-seva)."
+      ]
+    },
+    {
+      "id": "clothes-and-notebooks-campaign-by-campaign",
+      "heading": "clothes and notebooks, campaign by campaign",
+      "body": [
+        "Wear & Write ran as a numbered series of collection campaigns, with clothes and notebooks gathered and then sorted so they could be shared fairly. Early in the month the campaigns went to apartment complexes in Bangur, at Anandam Apartment and Sweta Apartment, and the series moved on to Active Acres, Clubtown Greens and Kolkata by the middle of the month.",
+        "Wear and Share ran its own collections alongside, at Ganges Garden Phase 1 at the start of May, at Urbana in Madurdaha, at Raghav Residency and at Rajasthali, Park Circus in the last week. Its write-ups describe clothes shared with those in need, with a few kilograms collected per drive. The series is on the [Wear and Write](/impact/wear-and-write) and [Wear and Share](/impact/wear-and-share) pages."
+      ]
+    },
+    {
+      "id": "art-speaking-and-health",
+      "heading": "art, speaking and health",
+      "body": [
+        "Children's workshops ran alongside the campaigns. Pather Sathi hosted the most drives, with Brush and Buzz on 3 May mixing drawing and quizzing, Art Meets Quiz on 11 May, Doodle and Draw on 17 May and Colour Crew on 26 May. Voice Power at Ek Tara on 10 May and Bold Voice at Disha Foundation on 7 May built public speaking skills.",
+        "The last week of May belonged to [AIM Foundation](/impact/aim-foundation). Shape and Shade and Art Arcade on 28 May were art workshops, Mind and Body and Teen Talk on 29 May covered adolescence health, hygiene and self-care, and Comfort Kits on 30 May distributed sanitary napkins with AIM to support menstrual hygiene and raise awareness among women."
+      ]
+    },
+    {
+      "id": "visits-and-a-football-night",
+      "heading": "visits and a football night",
+      "body": [
+        "Respect and Reach visited the Urban Shelter for the Homeless on 3 May and again on 8 May, offering support, care and essentials to elderly residents, with interactive sessions for children on the first visit. The series has its own [Respect and Reach page](/impact/respect-and-reach).",
+        "On 18 May Play It Forward, a football fundraiser at VS Arena, brought the community together to support AquaTerra's welfare initiatives."
+      ]
+    },
+    {
+      "id": "may-beside-june",
+      "heading": "how may sat beside june",
+      "body": [
+        "May had {count} drives, and June had {count:month-2024-06}. June was more about art and quizzes at AIM Foundation and Pather Sathi, and Paradox 1.0 on 7 June, so the calendar moved from stalls and collections towards workshops.",
+        "{volunteers} volunteer turnouts went into May's drives. A volunteer turnout counts every time someone showed up, so one person who came to several drives is counted each time. {topPlace} hosted the most drives this month, and the drives ran at {placesCount} places in all."
+      ]
+    }
+  ],
+  "learnings": [
+    "A summer theme can carry many drives at once: Sharbat Seva put stalls across many neighbourhoods in the middle of May.",
+    "A numbered campaign can run for weeks: the Wear & Write series reached campaign 14.0 by 24 May.",
+    "One place can host several kinds of learning, as AIM Foundation did in the last week of May with art, health and hygiene sessions.",
+    "Clothes campaigns work best when donations are sorted before they go out, which the write-ups describe as the step that makes distribution fair."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in May 2024?",
+      "a": "AquaTerra ran {count} drives in May 2024 with {volunteers} volunteer turnouts. The month was mostly Sharbat Seva summer stalls across Kolkata and Wear & Write clothes and notebook campaigns, with art, speaking and health workshops for children and visits to the Urban Shelter for the Homeless."
+    },
+    {
+      "q": "What is Sharbat Seva?",
+      "a": "Sharbat Seva is AquaTerra's summer sharbat distribution drive. In May 2024 its stalls went out across Kolkata, including Esplanade, Kankurgachi, Ballygunge, Bangur, Hazra and Salt Lake, serving cold sharbat to crowds on hot days."
+    },
+    {
+      "q": "Did AquaTerra collect clothes in May 2024?",
+      "a": "Yes. Wear & Write and Wear and Share ran many clothes and notebook collections in May 2024, at apartments in Bangur, at Active Acres, at Clubtown Greens and at Rajasthali, Park Circus. Volunteers sorted the donations so they could be distributed fairly."
+    },
+    {
+      "q": "What did AquaTerra do at AIM Foundation in May 2024?",
+      "a": "AIM Foundation hosted several drives in the last week of May 2024. They were art workshops on 28 May, adolescence health workshops on 29 May, and Comfort Kits, a sanitary napkin distribution with AIM, on 30 May."
+    }
+  ],
+  "keywords": [
+    "AquaTerra May 2024",
+    "Sharbat Seva Kolkata summer drive",
+    "clothes and notebooks collection Kolkata 2024",
+    "Wear and Write campaign Kolkata",
+    "AIM Foundation adolescence health workshop",
+    "summer drives Kolkata 2024"
+  ]
+}

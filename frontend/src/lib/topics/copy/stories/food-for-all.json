@@ -1,0 +1,21 @@
+{
+  "slug": "food-for-all",
+  "title": "Food for All in Pictures: Meals and Food Drives in Kolkata · AquaTerra",
+  "description": "Photos from {count} Food for All drives in Kolkata, where students served meals, bananas and food packets to people in need from {firstYear} to {lastYear}.",
+  "h1Lead": "food, handed out,",
+  "h1Accent": "in pictures",
+  "lede": "Food for All is AquaTerra's food distribution work: meals, bananas and food packets handed out in Kolkata. From {firstYear} to {lastYear} we ran {count} food drives, with {volunteers} volunteer turnouts, and most of them came in one stretch of spring 2025.",
+  "chapters": {
+    "2022": { "heading": "the first food drive", "text": "In 2022 we ran {year:2022} drive, on 13 November, at the Lighthouse for the blind. Its caption says food that fills stomachs and love that touches hearts. It is the first food drive in this series, and it stands on its own until the 2023 drives." },
+    "2023": { "heading": "a Rath Yatra and a Paradox day", "text": "In 2023 we ran {year:2023} drives in Kolkata, one in June and one in December. The June photo is from Rath Yatra, and its caption says meals were served with dignity, kindness and compassion. The December photo is Day 1 of the Paradox food distribution, with nutritious meals for people in need." },
+    "2024": { "heading": "day two", "text": "In 2024 we ran {year:2024} drive, Day 2 of the Paradox food distribution, in Kolkata on 5 April. Its caption describes meals offered to the needy with continued volunteer support. It is the only food drive in this series dated 2024." },
+    "2025": { "heading": "the spring run", "text": "In 2025 we ran {year:2025} drives, the biggest year in the series. The photos run from 30 March to 17 April, from Hazra and Lake Town Footbridge to Gariahat, Salt Lake, Dakhineshwar and Balaji Apartment. One caption says bananas were shared with love at Hazra, and another says nutritious food was served to ensure no one slept hungry." },
+    "2026": { "heading": "one drive so far", "text": "In 2026 we ran {year:2026} drive, on 7 March. Its photo is not on this page yet, so this chapter is shorter than the others." }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every food drive with its place and details, read [the full story](/impact/food-for-all).",
+  "faqs": [
+    { "q": "Where did AquaTerra run food distribution drives?", "a": "Food for All drives have been held in Kolkata at places including the Lighthouse for the blind, Lake Town Footbridge, Gariahat, Salt Lake and Hazra. Since {firstYear} the series has reached {placesCount} places." },
+    { "q": "What food did AquaTerra hand out?", "a": "The photo captions describe nutritious meals, fresh and healthy food, and food packets. At Hazra in March 2025, the drive handed out bananas." },
+    { "q": "Can I take part in a food drive with AquaTerra?", "a": "Members aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. Each food drive has its own entry on the site, with its place and what the team did." }
+  ]
+}

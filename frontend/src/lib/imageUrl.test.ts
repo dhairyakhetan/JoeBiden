@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { sized } from './imageUrl'
+import { sized, googlePhotoAt } from './imageUrl'
 
 const FRAMER = 'https://framerusercontent.com/images/abc123.jpg'
 
@@ -65,5 +65,23 @@ describe('sized', () => {
       const other = 'https://x.supabase.co/storage/v1/object/public/avatars/me-1600.jpg'
       expect(sized(other, 'thumb')).toBe(other)
     })
+  })
+})
+
+describe('googlePhotoAt', () => {
+  const G = 'https://lh3.googleusercontent.com/a/ACg8ocAbC=s96-c'
+  it('raises the size and keeps the crop flag', () => {
+    expect(googlePhotoAt(G, 1024)).toBe('https://lh3.googleusercontent.com/a/ACg8ocAbC=s1024-c')
+  })
+  it('caps at 1024 and floors at 32', () => {
+    expect(googlePhotoAt(G, 4000)).toContain('=s1024-c')
+    expect(googlePhotoAt(G, 4)).toContain('=s32-c')
+  })
+  it('leaves any other URL alone', () => {
+    expect(googlePhotoAt('https://example.com/a.jpg', 512)).toBe('https://example.com/a.jpg')
+  })
+  it('sized() uses it per context', () => {
+    expect(sized(G, 'avatar')).toBe('https://lh3.googleusercontent.com/a/ACg8ocAbC=s192-c')
+    expect(sized(G, 'card')).toBe('https://lh3.googleusercontent.com/a/ACg8ocAbC=s640-c')
   })
 })

@@ -48,9 +48,8 @@ const DirectorLanding = () => {
   const pendingPosts = (scopedPendingPosts ?? stats?.pendingPostReviews) || 0
   const pendingEnquiries = stats?.pendingEnquiries || 0
   const pendingApplications = stats?.pendingApplications || 0
-  // Certificate requests are an HR queue the rail already counted but the landing ignored, so an HR person opening
-  // the desk read "nothing waiting" with a certificate waiting.
-  const certsWaiting = isSuperAdmin ? pendingCertificates || 0 : 0
+  // For HR: requests waiting on a decision. For any other leader: requests that tag them and wait on their answer.
+  const certsWaiting = pendingCertificates || 0
   // Restated here (the layout chrome shows it too) because the landing is
   // where a director orients - "which desk am I reading?" should not require
   // looking back up at the nav.
@@ -81,7 +80,7 @@ const DirectorLanding = () => {
     { show: isSuperAdmin && pendingApprovals > 0, count: pendingApprovals, noun: pendingApprovals === 1 ? 'member sign-up' : 'member sign-ups', verb: 'waiting on approval', to: '/director/approvals' },
     { show: pendingPosts > 0, count: pendingPosts, noun: pendingPosts === 1 ? 'post' : 'posts', verb: 'waiting in the review queue', to: '/director/posts' },
     { show: pendingEnquiries > 0, count: pendingEnquiries, noun: pendingEnquiries === 1 ? 'enquiry' : 'enquiries', verb: 'nobody has replied to yet', to: '/director/enquiries' },
-    { show: certsWaiting > 0, count: certsWaiting, noun: certsWaiting === 1 ? 'certificate request' : 'certificate requests', verb: 'waiting for you to decide', to: '/director/certificates' },
+    { show: certsWaiting > 0, count: certsWaiting, noun: certsWaiting === 1 ? 'certificate request' : 'certificate requests', verb: isSuperAdmin ? 'waiting for you to decide' : 'waiting for your answer', to: '/director/certificates' },
     { show: pendingApplications > 0, count: pendingApplications, noun: pendingApplications === 1 ? 'application' : 'applications', verb: isSuperAdmin ? 'waiting on a decision' : 'across all teams waiting on a decision', to: '/director/hiring' },
   ] as const).filter(t => t.show)
 

@@ -1,0 +1,74 @@
+{
+  "slug": "how-to-donate-old-clothes-in-kolkata",
+  "title": "How to donate old clothes in Kolkata · AquaTerra",
+  "description": "How to donate old clothes in Kolkata: hand them to AquaTerra's Wear and Share collections, {count} clothes drives since {firstYear} across the city.",
+  "h1Lead": "old clothes",
+  "h1Accent": "to a drive",
+  "lede": "You can donate old clothes in Kolkata by handing them to one of AquaTerra's Wear and Share collection drives, which are held at apartment complexes and neighbourhoods across the city. Since {firstYear}, student volunteers have run {count} clothes drives, and they sort what is collected before it goes to people who need it.",
+  "sections": [
+    {
+      "id": "how-a-collection-works",
+      "heading": "how a collection drive works",
+      "body": [
+        "A collection drive is held at one place, and student volunteers collect the clothes that residents bring. Drives have been held in complexes such as Active Acres, Raghav Residency, Club Town Greens, Ganges Sky and Avani Oxford, and in neighbourhoods such as Salt Lake and Ballygunge. Once the clothes are in, the team sorts them. The Urbana drive in October 2024 was a segregation drive, sorting donated items by type and condition for distribution."
+      ]
+    },
+    {
+      "id": "where-the-drives-have-been",
+      "heading": "where the drives have been",
+      "body": [
+        "Most collections have been held at apartment complexes and housing estates. Active Acres, Salarpuria Pearl in Gopalpur, Anandam Apartment and Sweta Apartment in Bangur, and Rajasthali in Park Circus each hosted drives more than once. The drives have run across {placesCount} places, from Salt Lake and Sealdah to Howrah AC and Park Circus. Most of them were in 2024, when {year:2024} drives ran, against {year:2025} in 2025."
+      ]
+    },
+    {
+      "id": "the-clothes-series",
+      "heading": "the Wear and Share and Wear and Write series",
+      "body": [
+        "Wear and Share is the main clothes series. It ran from Wear and Share 1.0 in May 2024 to Wear and Share 22.0 in July 2025, with a numbered drive for each round. Wear and Write adds notebooks to the clothes. Its campaigns ran from April 2024 to May 2025, and Toy and Thread added toys in March 2025 at New Alipore, Ballygunge Park and Hemchandra Naskar Road."
+      ]
+    },
+    {
+      "id": "how-to-hand-clothes-in",
+      "heading": "how to hand clothes in",
+      "body": [
+        "Every drive is written up on the [projects page](/projects) with its date, place and objective, so you can check a drive before you bring anything. For a collection near you, write through the [contact page](/contact). Bring clothes you no longer wear. AquaTerra charges no fees, and the clothes handed in are sorted by student volunteers. The [responsible consumption](/impact/responsible-consumption) page sets out how reuse fits the wider work."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most collections have been held inside apartment complexes and housing estates, where residents bring their clothes to one point.",
+    "Wear and Share runs as numbered rounds, so a single collection is one step in a longer run, as Wear and Share 22.0 was in July 2025.",
+    "Clothes and notebooks went together in Wear and Write, which ran in 2024 and 2025.",
+    "The team sorts what it collects by type and condition before the clothes are given out."
+  ],
+  "faqs": [
+    {
+      "q": "How can I donate old clothes in Kolkata?",
+      "a": "Hand them to an AquaTerra Wear and Share collection drive. Drives run at apartment complexes and neighbourhoods across Kolkata, and student volunteers sort what they collect. AquaTerra has run {count} clothes drives since {firstYear}."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. AquaTerra's Wear and Share drives collect old clothes, and the Wear and Write campaigns collect clothes and notebooks together. Across its drives AquaTerra has distributed {clothesKg} kg of clothes."
+    },
+    {
+      "q": "Can I donate old clothes and books together?",
+      "a": "Yes, on some drives. Wear and Write campaigns collected clothes and notebooks together in 2024 and 2025, and Toy and Thread collected clothes and toys in March 2025."
+    },
+    {
+      "q": "Where are the clothes drives in Kolkata?",
+      "a": "Clothes drives have run across {placesCount} places, mostly apartment complexes and housing estates, including Active Acres, Raghav Residency, Salt Lake, Sealdah and Bangur."
+    },
+    {
+      "q": "Can I donate money to AquaTerra instead?",
+      "a": "AquaTerra takes no monetary donations and charges no fees. Its welfare work is paid for through its own student-run events and through Crftd, its student streetwear label."
+    }
+  ],
+  "keywords": [
+    "donate old clothes Kolkata",
+    "clothes donation drive Kolkata",
+    "where to donate clothes in Kolkata",
+    "Wear and Share Kolkata",
+    "give old clothes to students in Kolkata",
+    "clothes collection apartments Kolkata"
+  ]
+}

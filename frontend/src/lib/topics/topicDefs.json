@@ -1,0 +1,1993 @@
+{
+ "_readme": "The impact library: every /impact/<slug> page. One entry per page. `match` decides which welfare_projects rows (is_draft=false) belong to the page: header/location/text are case-insensitive JS regexes (text = header + short_summary + objective); year matches workshop_date's year; all = every drive. Read by scripts/compute-topic-facts.mjs (counts and drive lists), the app (lib/topics/topicKit.ts), prerender-meta.mjs and generate-sitemap.mjs. The words for each page live in copy/<slug>.json. Add a page: add an entry here and a copy file, then run the build. Neighbourhoods and journey pages are ordinary topics. `stories` are photo essays at /impact/stories/<slug>, built from the named topic's drives (chapters by year); their words are copy/stories/<slug>.json.",
+ "groups": [
+  {
+   "id": "series",
+   "name": "Drives we run again and again"
+  },
+  {
+   "id": "workshops",
+   "name": "Sessions with children"
+  },
+  {
+   "id": "places",
+   "name": "Places we keep going back to"
+  },
+  {
+   "id": "neighbourhoods",
+   "name": "Neighbourhoods"
+  },
+  {
+   "id": "years",
+   "name": "Year by year"
+  },
+  {
+   "id": "guides",
+   "name": "How it all works"
+  },
+  {
+   "id": "journey",
+   "name": "Your first year with us"
+  },
+  {
+   "id": "howto",
+   "name": "How to run one yourself"
+  },
+  {
+   "id": "months",
+   "name": "Month by month"
+  },
+  {
+   "id": "causes",
+   "name": "The global goals we work on"
+  },
+  {
+   "id": "schools",
+   "name": "Schools we have worked in"
+  },
+  {
+   "id": "fundraisers",
+   "name": "The nights that paid for it"
+  },
+  {
+   "id": "audiences",
+   "name": "Working with us"
+  },
+  {
+   "id": "questions",
+   "name": "Questions people ask"
+  },
+  {
+   "id": "reading",
+   "name": "Reading from our members"
+  }
+ ],
+ "topics": [
+  {
+   "slug": "tails-and-treats",
+   "group": "series",
+   "label": "Tails and Treats: feeding stray dogs",
+   "match": {
+    "header": "tails"
+   },
+   "related": [
+    "animal-welfare",
+    "food-for-all",
+    "volunteering-for-teens-in-kolkata"
+   ]
+  },
+  {
+   "slug": "sharbat-seva",
+   "group": "series",
+   "label": "Sharbat Seva: summer drinks for the city",
+   "match": {
+    "header": "sharbat"
+   },
+   "related": [
+    "food-for-all",
+    "summer-and-seasonal-drives",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "grow-green",
+   "group": "series",
+   "label": "Grow Green: plantation drives",
+   "match": {
+    "header": "plantation|grow green|sapling|tree plant"
+   },
+   "related": [
+    "environment-education",
+    "sundarbans",
+    "by-the-numbers"
+   ]
+  },
+  {
+   "slug": "wear-and-share",
+   "group": "series",
+   "label": "Wear and Share: clothes collection",
+   "match": {
+    "header": "wear (and|&) share|clothes collection|toy and thread|clothes and toys"
+   },
+   "related": [
+    "wear-and-write",
+    "food-for-all",
+    "how-a-drive-works"
+   ]
+  },
+  {
+   "slug": "wear-and-write",
+   "group": "series",
+   "label": "Wear and Write: clothes and notebooks",
+   "match": {
+    "header": "wear (and|&) write|notebook"
+   },
+   "related": [
+    "book-basket",
+    "wear-and-share",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "book-basket",
+   "group": "series",
+   "label": "Book Basket: book collection",
+   "match": {
+    "header": "book basket|book collection|book donation"
+   },
+   "related": [
+    "wear-and-write",
+    "reading-speaking-and-english",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "food-for-all",
+   "group": "series",
+   "label": "Food for All: food distribution",
+   "match": {
+    "header": "food"
+   },
+   "related": [
+    "sharbat-seva",
+    "tails-and-treats",
+    "urban-poverty-and-shelters"
+   ]
+  },
+  {
+   "slug": "respect-and-reach",
+   "group": "series",
+   "label": "Respect and Reach: old age homes",
+   "match": {
+    "header": "respect|old age"
+   },
+   "related": [
+    "festival-drives",
+    "how-a-drive-works",
+    "volunteering-for-teens-in-kolkata"
+   ]
+  },
+  {
+   "slug": "smile-notes",
+   "group": "series",
+   "label": "Smile Notes campaign",
+   "match": {
+    "header": "smile notes"
+   },
+   "related": [
+    "year-2026",
+    "arts-and-crafts",
+    "festival-drives"
+   ]
+  },
+  {
+   "slug": "sundarbans",
+   "group": "series",
+   "label": "Sundarbans relief and plantation",
+   "match": {
+    "text": "sund[ae]rban"
+   },
+   "related": [
+    "grow-green",
+    "health-and-wellbeing",
+    "by-the-numbers"
+   ]
+  },
+  {
+   "slug": "festival-drives",
+   "group": "series",
+   "label": "Festival drives: Durga Puja, Diwali, Christmas",
+   "match": {
+    "header": "durga|puja|diwali|christmas|merry|santa|rakhi|cookie|holi|eid"
+   },
+   "related": [
+    "arts-and-crafts",
+    "respect-and-reach",
+    "smile-notes"
+   ]
+  },
+  {
+   "slug": "summer-and-seasonal-drives",
+   "group": "series",
+   "label": "Seasonal drives: summer heat and winter cold",
+   "match": {
+    "header": "sharbat|summer|heat|winter|blanket|warm"
+   },
+   "related": [
+    "sharbat-seva",
+    "festival-drives",
+    "food-for-all"
+   ]
+  },
+  {
+   "slug": "animal-welfare",
+   "group": "series",
+   "label": "Animal welfare",
+   "match": {
+    "text": "stray|dog|animal|cat|tails"
+   },
+   "related": [
+    "tails-and-treats",
+    "food-for-all",
+    "environment-education"
+   ]
+  },
+  {
+   "slug": "arts-and-crafts",
+   "group": "workshops",
+   "label": "Art and craft workshops",
+   "match": {
+    "header": "art|draw|paint|craft|origami|brush|colour|color|sketch|mask|card making|decoration"
+   },
+   "related": [
+    "drama-music-and-dance",
+    "festival-drives",
+    "lessons-from-our-drives"
+   ]
+  },
+  {
+   "slug": "reading-speaking-and-english",
+   "group": "workshops",
+   "label": "Reading, speaking and English workshops",
+   "match": {
+    "header": "speak|english|story|narrat|literacy|read|write|voice|talk"
+   },
+   "related": [
+    "book-basket",
+    "free-resources-for-students",
+    "science-and-stem"
+   ]
+  },
+  {
+   "slug": "science-and-stem",
+   "group": "workshops",
+   "label": "Science, maths and computer workshops",
+   "match": {
+    "header": "science|stem|computer|space|math|quiz|coding|robot"
+   },
+   "related": [
+    "reading-speaking-and-english",
+    "ai-and-digital-skills",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "drama-music-and-dance",
+   "group": "workshops",
+   "label": "Drama, music and dance workshops",
+   "match": {
+    "header": "drama|act|music|dance|sing|theatre|theater"
+   },
+   "related": [
+    "arts-and-crafts",
+    "sport-and-play",
+    "lessons-from-our-drives"
+   ]
+  },
+  {
+   "slug": "health-and-wellbeing",
+   "group": "workshops",
+   "label": "Health, hygiene and wellbeing",
+   "match": {
+    "header": "health|mental|dental|hygiene|adolescen|body|medical|wellbeing|well-being|menstrua"
+   },
+   "related": [
+    "sundarbans",
+    "for-parents",
+    "reading-speaking-and-english"
+   ]
+  },
+  {
+   "slug": "environment-education",
+   "group": "workshops",
+   "label": "Environment and climate education",
+   "match": {
+    "header": "earth|nature|waste|bottle|recycl|climate|environment|plastic|green"
+   },
+   "related": [
+    "grow-green",
+    "animal-welfare",
+    "science-and-stem"
+   ]
+  },
+  {
+   "slug": "sport-and-play",
+   "group": "workshops",
+   "label": "Sport and play with children",
+   "match": {
+    "header": "football|sport|cricket|yoga|fitness|basketball|game|kickoff|goal|fifa"
+   },
+   "related": [
+    "drama-music-and-dance",
+    "fundraising",
+    "volunteering-for-teens-in-kolkata"
+   ]
+  },
+  {
+   "slug": "ai-and-digital-skills",
+   "group": "workshops",
+   "label": "Computer and digital skills for kids",
+   "match": {
+    "header": "computer|digital|\\bai\\b|internet|coding|tech"
+   },
+   "related": [
+    "science-and-stem",
+    "free-resources-for-students",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "places-we-return-to",
+   "group": "places",
+   "label": "The places we keep going back to",
+   "match": {
+    "location": "pather sa+thi|ek ?tara|disha|amader|aim|gyandeepak|tetultala|urban shelter|shoishob|universal smile|hope foundation|a little contribution"
+   },
+   "related": [
+    "pather-sathi",
+    "ek-tara",
+    "aim-foundation"
+   ]
+  },
+  {
+   "slug": "pather-sathi",
+   "group": "places",
+   "label": "Drives at Pather Sathi",
+   "match": {
+    "location": "pather sa+thi"
+   },
+   "related": [
+    "places-we-return-to",
+    "tails-and-treats",
+    "arts-and-crafts"
+   ]
+  },
+  {
+   "slug": "ek-tara",
+   "group": "places",
+   "label": "Drives at Ek Tara",
+   "match": {
+    "location": "ek ?tara"
+   },
+   "related": [
+    "places-we-return-to",
+    "arts-and-crafts",
+    "reading-speaking-and-english"
+   ]
+  },
+  {
+   "slug": "disha-foundation",
+   "group": "places",
+   "label": "Drives at Disha Foundation",
+   "match": {
+    "location": "disha"
+   },
+   "related": [
+    "places-we-return-to",
+    "pather-sathi",
+    "health-and-wellbeing"
+   ]
+  },
+  {
+   "slug": "amader-pradakhep",
+   "group": "places",
+   "label": "Drives at Amader Pradakhep",
+   "match": {
+    "location": "amader"
+   },
+   "related": [
+    "places-we-return-to",
+    "ek-tara",
+    "arts-and-crafts"
+   ]
+  },
+  {
+   "slug": "aim-foundation",
+   "group": "places",
+   "label": "Drives at AIM Foundation",
+   "match": {
+    "location": "aim"
+   },
+   "related": [
+    "places-we-return-to",
+    "disha-foundation",
+    "science-and-stem"
+   ]
+  },
+  {
+   "slug": "urban-poverty-and-shelters",
+   "group": "places",
+   "label": "Shelters, ashrams and the homeless",
+   "match": {
+    "location": "shelter|ashram|homeless|footbridge"
+   },
+   "related": [
+    "food-for-all",
+    "wear-and-share",
+    "places-we-return-to"
+   ]
+  },
+  {
+   "slug": "where-we-work",
+   "group": "places",
+   "label": "Where we work in Kolkata",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "places-we-return-to",
+    "sundarbans",
+    "volunteering-for-teens-in-kolkata"
+   ]
+  },
+  {
+   "slug": "year-2021",
+   "group": "years",
+   "label": "2021: the first drives",
+   "match": {
+    "year": 2021
+   },
+   "related": [
+    "year-2022",
+    "grow-green",
+    "lessons-from-our-drives"
+   ]
+  },
+  {
+   "slug": "year-2022",
+   "group": "years",
+   "label": "2022: finding a rhythm",
+   "match": {
+    "year": 2022
+   },
+   "related": [
+    "year-2021",
+    "year-2023",
+    "tails-and-treats"
+   ]
+  },
+  {
+   "slug": "year-2023",
+   "group": "years",
+   "label": "2023: workshops take off",
+   "match": {
+    "year": 2023
+   },
+   "related": [
+    "year-2022",
+    "year-2024",
+    "arts-and-crafts"
+   ]
+  },
+  {
+   "slug": "year-2024",
+   "group": "years",
+   "label": "2024: Sharbat Seva and Wear and Share begin",
+   "match": {
+    "year": 2024
+   },
+   "related": [
+    "year-2023",
+    "year-2025",
+    "sharbat-seva"
+   ]
+  },
+  {
+   "slug": "year-2025",
+   "group": "years",
+   "label": "2025: series that keep running",
+   "match": {
+    "year": 2025
+   },
+   "related": [
+    "year-2024",
+    "year-2026",
+    "food-for-all"
+   ]
+  },
+  {
+   "slug": "year-2026",
+   "group": "years",
+   "label": "2026 so far",
+   "match": {
+    "year": 2026
+   },
+   "related": [
+    "year-2025",
+    "smile-notes",
+    "by-the-numbers"
+   ]
+  },
+  {
+   "slug": "how-we-fund-the-work",
+   "group": "guides",
+   "label": "How we fund the work",
+   "match": {
+    "header": "fundrais|paradox|roots|fete|fifa"
+   },
+   "related": [
+    "fundraising",
+    "by-the-numbers",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "fundraising",
+   "group": "guides",
+   "label": "Fundraisers and event days",
+   "match": {
+    "header": "fundrais|roots|fete|paradox|carnival|anniversary"
+   },
+   "related": [
+    "how-we-fund-the-work",
+    "sport-and-play",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "how-a-drive-works",
+   "group": "guides",
+   "label": "How a drive works, start to finish",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "volunteering-for-teens-in-kolkata",
+    "student-leadership",
+    "lessons-from-our-drives"
+   ]
+  },
+  {
+   "slug": "volunteering-for-teens-in-kolkata",
+   "group": "guides",
+   "label": "Volunteering for teenagers in Kolkata",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "how-a-drive-works",
+    "for-parents",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "student-leadership",
+   "group": "guides",
+   "label": "How students run AquaTerra",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "how-a-drive-works",
+    "how-we-fund-the-work",
+    "ai-and-digital-skills"
+   ]
+  },
+  {
+   "slug": "for-parents",
+   "group": "guides",
+   "label": "For parents",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "volunteering-for-teens-in-kolkata",
+    "health-and-wellbeing",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "free-resources-for-students",
+   "group": "guides",
+   "label": "Free resources for students",
+   "match": {
+    "header": "book|notebook|study|exam|learner|tuition|class"
+   },
+   "related": [
+    "book-basket",
+    "reading-speaking-and-english",
+    "ai-and-digital-skills"
+   ]
+  },
+  {
+   "slug": "by-the-numbers",
+   "group": "guides",
+   "label": "AquaTerra by the numbers",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "lessons-from-our-drives",
+    "where-we-work",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "lessons-from-our-drives",
+   "group": "guides",
+   "label": "What our drives have taught us",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "by-the-numbers",
+    "how-a-drive-works",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "salt-lake",
+   "group": "neighbourhoods",
+   "label": "Drives in Salt Lake",
+   "match": {
+    "location": "salt ?lake|bidhannagar|sector v"
+   },
+   "related": [
+    "bangur",
+    "lake-town",
+    "tails-and-treats"
+   ]
+  },
+  {
+   "slug": "bangur",
+   "group": "neighbourhoods",
+   "label": "Drives in Bangur",
+   "match": {
+    "location": "bangur"
+   },
+   "related": [
+    "salt-lake",
+    "lake-town",
+    "wear-and-share"
+   ]
+  },
+  {
+   "slug": "lake-town",
+   "group": "neighbourhoods",
+   "label": "Drives in Lake Town",
+   "match": {
+    "location": "lake ?town"
+   },
+   "related": [
+    "bangur",
+    "salt-lake",
+    "smile-notes"
+   ]
+  },
+  {
+   "slug": "ballygunge-and-topsia",
+   "group": "neighbourhoods",
+   "label": "Drives in Ballygunge and Topsia",
+   "match": {
+    "location": "topsia|park circus|ballygunge"
+   },
+   "related": [
+    "sarat-bose-road",
+    "bhawanipore",
+    "sharbat-seva"
+   ]
+  },
+  {
+   "slug": "howrah",
+   "group": "neighbourhoods",
+   "label": "Drives in Howrah",
+   "match": {
+    "location": "howrah|shibpur"
+   },
+   "related": [
+    "salt-lake",
+    "food-for-all",
+    "tails-and-treats"
+   ]
+  },
+  {
+   "slug": "alipore",
+   "group": "neighbourhoods",
+   "label": "Drives in Alipore",
+   "match": {
+    "location": "alipore"
+   },
+   "related": [
+    "bhawanipore",
+    "sarat-bose-road",
+    "food-for-all"
+   ]
+  },
+  {
+   "slug": "sarat-bose-road",
+   "group": "neighbourhoods",
+   "label": "Drives in Sarat Bose Road",
+   "match": {
+    "location": "sarat bose"
+   },
+   "related": [
+    "ballygunge-and-topsia",
+    "bhawanipore",
+    "sharbat-seva"
+   ]
+  },
+  {
+   "slug": "bhawanipore",
+   "group": "neighbourhoods",
+   "label": "Drives in Bhawanipore",
+   "match": {
+    "location": "bhowanipur|bhawanipore|bhawanipur|bhowanipore"
+   },
+   "related": [
+    "alipore",
+    "sarat-bose-road",
+    "smile-notes"
+   ]
+  },
+  {
+   "slug": "your-first-drive",
+   "group": "journey",
+   "label": "Your first drive",
+   "match": {
+    "header": "tails|sharbat|wear (and|&) share|food|book basket|smile notes"
+   },
+   "related": [
+    "your-first-month",
+    "how-a-drive-works",
+    "tails-and-treats"
+   ]
+  },
+  {
+   "slug": "your-first-month",
+   "group": "journey",
+   "label": "Your first month",
+   "match": {
+    "location": "pather sa+thi|ek ?tara|disha|amader|aim"
+   },
+   "related": [
+    "your-first-drive",
+    "your-first-year",
+    "arts-and-crafts"
+   ]
+  },
+  {
+   "slug": "your-first-year",
+   "group": "journey",
+   "label": "Your first year",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "your-first-month",
+    "student-leadership",
+    "fundraising"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-stray-dog-feeding-drive",
+   "group": "howto",
+   "label": "How to run a stray dog feeding drive",
+   "match": {
+    "header": "tails"
+   },
+   "related": [
+    "tails-and-treats",
+    "animal-welfare",
+    "your-first-drive"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-sharbat-stall",
+   "group": "howto",
+   "label": "How to run a summer sharbat stall",
+   "match": {
+    "header": "sharbat"
+   },
+   "related": [
+    "sharbat-seva",
+    "summer-and-seasonal-drives",
+    "food-for-all"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-plantation-drive",
+   "group": "howto",
+   "label": "How to run a tree plantation drive",
+   "match": {
+    "header": "plantation|grow green|sapling|tree plant"
+   },
+   "related": [
+    "grow-green",
+    "environment-education",
+    "sundarbans"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-clothes-donation-drive",
+   "group": "howto",
+   "label": "How to run a clothes donation drive",
+   "match": {
+    "header": "wear (and|&) share|clothes collection|toy and thread|clothes and toys"
+   },
+   "related": [
+    "wear-and-share",
+    "wear-and-write",
+    "for-schools"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-book-donation-drive",
+   "group": "howto",
+   "label": "How to run a book donation drive",
+   "match": {
+    "header": "book basket|book collection|book donation|notebook"
+   },
+   "related": [
+    "book-basket",
+    "wear-and-write",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-food-distribution-drive",
+   "group": "howto",
+   "label": "How to run a food distribution drive",
+   "match": {
+    "header": "food"
+   },
+   "related": [
+    "food-for-all",
+    "sharbat-seva",
+    "urban-poverty-and-shelters"
+   ]
+  },
+  {
+   "slug": "how-to-visit-an-old-age-home",
+   "group": "howto",
+   "label": "How to plan a visit to an old age home",
+   "match": {
+    "header": "respect|old age"
+   },
+   "related": [
+    "respect-and-reach",
+    "festival-drives",
+    "your-first-month"
+   ]
+  },
+  {
+   "slug": "how-to-run-an-art-workshop-for-kids",
+   "group": "howto",
+   "label": "How to run an art workshop for children",
+   "match": {
+    "header": "art|draw|paint|craft|origami|brush|colour|color|sketch"
+   },
+   "related": [
+    "arts-and-crafts",
+    "pather-sathi",
+    "for-teachers"
+   ]
+  },
+  {
+   "slug": "how-to-run-a-reading-session-for-kids",
+   "group": "howto",
+   "label": "How to run a reading and English session for children",
+   "match": {
+    "header": "speak|english|story|narrat|literacy|read|write"
+   },
+   "related": [
+    "reading-speaking-and-english",
+    "book-basket",
+    "for-teachers"
+   ]
+  },
+  {
+   "slug": "how-to-celebrate-a-festival-with-kids",
+   "group": "howto",
+   "label": "How to celebrate a festival with children",
+   "match": {
+    "header": "durga|puja|diwali|christmas|merry|santa|rakhi|holi"
+   },
+   "related": [
+    "festival-drives",
+    "arts-and-crafts",
+    "smile-notes"
+   ]
+  },
+  {
+   "slug": "month-2022-03",
+   "group": "months",
+   "label": "March 2022",
+   "match": {
+    "month": "2022-03"
+   },
+   "related": [
+    "month-2022-04",
+    "year-2022"
+   ]
+  },
+  {
+   "slug": "month-2022-04",
+   "group": "months",
+   "label": "April 2022",
+   "match": {
+    "month": "2022-04"
+   },
+   "related": [
+    "month-2022-03",
+    "month-2022-06",
+    "year-2022"
+   ]
+  },
+  {
+   "slug": "month-2022-06",
+   "group": "months",
+   "label": "June 2022",
+   "match": {
+    "month": "2022-06"
+   },
+   "related": [
+    "month-2022-04",
+    "month-2022-07",
+    "year-2022"
+   ]
+  },
+  {
+   "slug": "month-2022-07",
+   "group": "months",
+   "label": "July 2022",
+   "match": {
+    "month": "2022-07"
+   },
+   "related": [
+    "month-2022-06",
+    "month-2022-08",
+    "year-2022"
+   ]
+  },
+  {
+   "slug": "month-2022-08",
+   "group": "months",
+   "label": "August 2022",
+   "match": {
+    "month": "2022-08"
+   },
+   "related": [
+    "month-2022-07",
+    "month-2023-04",
+    "year-2022"
+   ]
+  },
+  {
+   "slug": "month-2023-04",
+   "group": "months",
+   "label": "April 2023",
+   "match": {
+    "month": "2023-04"
+   },
+   "related": [
+    "month-2022-08",
+    "month-2023-05",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-05",
+   "group": "months",
+   "label": "May 2023",
+   "match": {
+    "month": "2023-05"
+   },
+   "related": [
+    "month-2023-04",
+    "month-2023-06",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-06",
+   "group": "months",
+   "label": "June 2023",
+   "match": {
+    "month": "2023-06"
+   },
+   "related": [
+    "month-2023-05",
+    "month-2023-07",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-07",
+   "group": "months",
+   "label": "July 2023",
+   "match": {
+    "month": "2023-07"
+   },
+   "related": [
+    "month-2023-06",
+    "month-2023-08",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-08",
+   "group": "months",
+   "label": "August 2023",
+   "match": {
+    "month": "2023-08"
+   },
+   "related": [
+    "month-2023-07",
+    "month-2023-10",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-10",
+   "group": "months",
+   "label": "October 2023",
+   "match": {
+    "month": "2023-10"
+   },
+   "related": [
+    "month-2023-08",
+    "month-2023-11",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-11",
+   "group": "months",
+   "label": "November 2023",
+   "match": {
+    "month": "2023-11"
+   },
+   "related": [
+    "month-2023-10",
+    "month-2023-12",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2023-12",
+   "group": "months",
+   "label": "December 2023",
+   "match": {
+    "month": "2023-12"
+   },
+   "related": [
+    "month-2023-11",
+    "month-2024-04",
+    "year-2023"
+   ]
+  },
+  {
+   "slug": "month-2024-04",
+   "group": "months",
+   "label": "April 2024",
+   "match": {
+    "month": "2024-04"
+   },
+   "related": [
+    "month-2023-12",
+    "month-2024-05",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-05",
+   "group": "months",
+   "label": "May 2024",
+   "match": {
+    "month": "2024-05"
+   },
+   "related": [
+    "month-2024-04",
+    "month-2024-06",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-06",
+   "group": "months",
+   "label": "June 2024",
+   "match": {
+    "month": "2024-06"
+   },
+   "related": [
+    "month-2024-05",
+    "month-2024-07",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-07",
+   "group": "months",
+   "label": "July 2024",
+   "match": {
+    "month": "2024-07"
+   },
+   "related": [
+    "month-2024-06",
+    "month-2024-08",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-08",
+   "group": "months",
+   "label": "August 2024",
+   "match": {
+    "month": "2024-08"
+   },
+   "related": [
+    "month-2024-07",
+    "month-2024-09",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-09",
+   "group": "months",
+   "label": "September 2024",
+   "match": {
+    "month": "2024-09"
+   },
+   "related": [
+    "month-2024-08",
+    "month-2024-10",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-10",
+   "group": "months",
+   "label": "October 2024",
+   "match": {
+    "month": "2024-10"
+   },
+   "related": [
+    "month-2024-09",
+    "month-2024-11",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-11",
+   "group": "months",
+   "label": "November 2024",
+   "match": {
+    "month": "2024-11"
+   },
+   "related": [
+    "month-2024-10",
+    "month-2024-12",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2024-12",
+   "group": "months",
+   "label": "December 2024",
+   "match": {
+    "month": "2024-12"
+   },
+   "related": [
+    "month-2024-11",
+    "month-2025-01",
+    "year-2024"
+   ]
+  },
+  {
+   "slug": "month-2025-01",
+   "group": "months",
+   "label": "January 2025",
+   "match": {
+    "month": "2025-01"
+   },
+   "related": [
+    "month-2024-12",
+    "month-2025-03",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-03",
+   "group": "months",
+   "label": "March 2025",
+   "match": {
+    "month": "2025-03"
+   },
+   "related": [
+    "month-2025-01",
+    "month-2025-04",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-04",
+   "group": "months",
+   "label": "April 2025",
+   "match": {
+    "month": "2025-04"
+   },
+   "related": [
+    "month-2025-03",
+    "month-2025-05",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-05",
+   "group": "months",
+   "label": "May 2025",
+   "match": {
+    "month": "2025-05"
+   },
+   "related": [
+    "month-2025-04",
+    "month-2025-06",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-06",
+   "group": "months",
+   "label": "June 2025",
+   "match": {
+    "month": "2025-06"
+   },
+   "related": [
+    "month-2025-05",
+    "month-2025-07",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-07",
+   "group": "months",
+   "label": "July 2025",
+   "match": {
+    "month": "2025-07"
+   },
+   "related": [
+    "month-2025-06",
+    "month-2025-08",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-08",
+   "group": "months",
+   "label": "August 2025",
+   "match": {
+    "month": "2025-08"
+   },
+   "related": [
+    "month-2025-07",
+    "month-2025-09",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-09",
+   "group": "months",
+   "label": "September 2025",
+   "match": {
+    "month": "2025-09"
+   },
+   "related": [
+    "month-2025-08",
+    "month-2025-10",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-10",
+   "group": "months",
+   "label": "October 2025",
+   "match": {
+    "month": "2025-10"
+   },
+   "related": [
+    "month-2025-09",
+    "month-2025-12",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2025-12",
+   "group": "months",
+   "label": "December 2025",
+   "match": {
+    "month": "2025-12"
+   },
+   "related": [
+    "month-2025-10",
+    "month-2026-03",
+    "year-2025"
+   ]
+  },
+  {
+   "slug": "month-2026-03",
+   "group": "months",
+   "label": "March 2026",
+   "match": {
+    "month": "2026-03"
+   },
+   "related": [
+    "month-2025-12",
+    "month-2026-04",
+    "year-2026"
+   ]
+  },
+  {
+   "slug": "month-2026-04",
+   "group": "months",
+   "label": "April 2026",
+   "match": {
+    "month": "2026-04"
+   },
+   "related": [
+    "month-2026-03",
+    "month-2026-05",
+    "year-2026"
+   ]
+  },
+  {
+   "slug": "month-2026-05",
+   "group": "months",
+   "label": "May 2026",
+   "match": {
+    "month": "2026-05"
+   },
+   "related": [
+    "month-2026-04",
+    "year-2026"
+   ]
+  },
+  {
+   "slug": "zero-hunger",
+   "group": "causes",
+   "label": "Zero hunger (UN Goal 2)",
+   "match": {
+    "text": "food|banana|meal|sharbat|ration|biscuit|cookie|bread"
+   },
+   "related": [
+    "food-for-all",
+    "sharbat-seva",
+    "how-to-run-a-food-distribution-drive"
+   ]
+  },
+  {
+   "slug": "good-health-and-wellbeing",
+   "group": "causes",
+   "label": "Good health and well-being (UN Goal 3)",
+   "match": {
+    "text": "health|medical|dental|hygiene|mental|menstru|checkup|yoga"
+   },
+   "related": [
+    "health-and-wellbeing",
+    "sundarbans",
+    "for-parents"
+   ]
+  },
+  {
+   "slug": "quality-education",
+   "group": "causes",
+   "label": "Quality education (UN Goal 4)",
+   "match": {
+    "text": "workshop|book|notebook|session|english|science|computer|learner|class"
+   },
+   "related": [
+    "reading-speaking-and-english",
+    "science-and-stem",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "reduced-inequalities",
+   "group": "causes",
+   "label": "Reduced inequalities (UN Goal 10)",
+   "match": {
+    "text": "shelter|homeless|slum|underprivileged|old age|elderly|ashram|orphan|footbridge"
+   },
+   "related": [
+    "urban-poverty-and-shelters",
+    "respect-and-reach",
+    "wear-and-share"
+   ]
+  },
+  {
+   "slug": "responsible-consumption",
+   "group": "causes",
+   "label": "Responsible consumption: reuse and recycling (UN Goal 12)",
+   "match": {
+    "text": "cloth|wear|blanket|toy|book|notebook|recycl|waste|bottle|plastic"
+   },
+   "related": [
+    "wear-and-share",
+    "book-basket",
+    "environment-education"
+   ]
+  },
+  {
+   "slug": "climate-action",
+   "group": "causes",
+   "label": "Climate action (UN Goal 13)",
+   "match": {
+    "text": "plant|sapling|tree|green|climate|environment|waste|recycl|plastic|earth|nature"
+   },
+   "related": [
+    "grow-green",
+    "environment-education",
+    "sundarbans"
+   ]
+  },
+  {
+   "slug": "life-on-land",
+   "group": "causes",
+   "label": "Life on land (UN Goal 15)",
+   "match": {
+    "text": "stray|dog|animal|tree|sapling|plantation"
+   },
+   "related": [
+    "tails-and-treats",
+    "grow-green",
+    "animal-welfare"
+   ]
+  },
+  {
+   "slug": "school-on-wheels",
+   "group": "schools",
+   "label": "Drives with School on Wheels",
+   "match": {
+    "location": "school on wheels"
+   },
+   "related": [
+    "schools-we-have-visited",
+    "reading-speaking-and-english",
+    "for-teachers"
+   ]
+  },
+  {
+   "slug": "south-city-international-school",
+   "group": "schools",
+   "label": "Drives at South City International School",
+   "match": {
+    "location": "south city international"
+   },
+   "related": [
+    "schools-we-have-visited",
+    "grow-green",
+    "for-schools"
+   ]
+  },
+  {
+   "slug": "inner-wheel-school",
+   "group": "schools",
+   "label": "Drives at the Inner Wheel School",
+   "match": {
+    "location": "inner wheel"
+   },
+   "related": [
+    "schools-we-have-visited",
+    "arts-and-crafts",
+    "for-schools"
+   ]
+  },
+  {
+   "slug": "ashok-hall-school",
+   "group": "schools",
+   "label": "Drives at Ashok Hall School",
+   "match": {
+    "location": "ashok hall"
+   },
+   "related": [
+    "schools-we-have-visited",
+    "environment-education",
+    "for-schools"
+   ]
+  },
+  {
+   "slug": "schools-we-have-visited",
+   "group": "schools",
+   "label": "Every school we have worked in",
+   "match": {
+    "location": "school|vidyalaya|academy"
+   },
+   "related": [
+    "for-schools",
+    "school-on-wheels",
+    "quality-education"
+   ]
+  },
+  {
+   "slug": "disco-diwali",
+   "group": "fundraisers",
+   "label": "Disco Diwali",
+   "match": {
+    "header": "disco"
+   },
+   "related": [
+    "the-nights-that-fund-the-work",
+    "how-we-fund-the-work",
+    "festival-drives"
+   ]
+  },
+  {
+   "slug": "paradox-fest",
+   "group": "fundraisers",
+   "label": "Paradox, the student fest",
+   "match": {
+    "header": "paradox"
+   },
+   "related": [
+    "the-nights-that-fund-the-work",
+    "how-we-fund-the-work",
+    "sport-fundraisers"
+   ]
+  },
+  {
+   "slug": "the-starry-night",
+   "group": "fundraisers",
+   "label": "The Starry Night Christmas carnival",
+   "match": {
+    "header": "starry|christmas carnival"
+   },
+   "related": [
+    "the-nights-that-fund-the-work",
+    "festival-drives",
+    "disco-diwali"
+   ]
+  },
+  {
+   "slug": "sport-fundraisers",
+   "group": "fundraisers",
+   "label": "Charity matches and TerraThon",
+   "match": {
+    "header": "fifa|football fund|basketball|shoot for the stars|match with a mission|play it forward|terrathon"
+   },
+   "related": [
+    "sport-and-play",
+    "paradox-fest",
+    "the-nights-that-fund-the-work"
+   ]
+  },
+  {
+   "slug": "crftd-and-roots-days",
+   "group": "fundraisers",
+   "label": "Crftd (ROOTS) pop-up days",
+   "match": {
+    "header": "roots|crftd"
+   },
+   "related": [
+    "how-we-fund-the-work",
+    "the-nights-that-fund-the-work",
+    "fundraising"
+   ]
+  },
+  {
+   "slug": "the-nights-that-fund-the-work",
+   "group": "fundraisers",
+   "label": "Every night that paid for the work",
+   "match": {
+    "header": "fundrais|paradox|roots|fete|carnival|anniversary|disco|starry|terrathon|fifa"
+   },
+   "related": [
+    "how-we-fund-the-work",
+    "disco-diwali",
+    "paradox-fest"
+   ]
+  },
+  {
+   "slug": "for-schools",
+   "group": "audiences",
+   "label": "For schools",
+   "match": {
+    "location": "school|vidyalaya|academy"
+   },
+   "related": [
+    "schools-we-have-visited",
+    "how-to-run-a-clothes-donation-drive",
+    "quality-education"
+   ]
+  },
+  {
+   "slug": "for-companies",
+   "group": "audiences",
+   "label": "For companies and CSR teams",
+   "match": {
+    "header": "fundrais|paradox|disco|starry|carnival|terrathon|collab"
+   },
+   "related": [
+    "the-nights-that-fund-the-work",
+    "zero-hunger",
+    "climate-action"
+   ]
+  },
+  {
+   "slug": "for-colleges",
+   "group": "audiences",
+   "label": "For college students and societies",
+   "match": {
+    "location": "college|university|institute"
+   },
+   "related": [
+    "for-schools",
+    "volunteering-for-teens-in-kolkata",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "for-teachers",
+   "group": "audiences",
+   "label": "For teachers and educators",
+   "match": {
+    "header": "workshop"
+   },
+   "related": [
+    "quality-education",
+    "how-to-run-an-art-workshop-for-kids",
+    "how-to-run-a-reading-session-for-kids"
+   ]
+  },
+  {
+   "slug": "where-can-teenagers-volunteer-in-kolkata",
+   "group": "questions",
+   "label": "Where can teenagers volunteer in Kolkata?",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "volunteering-for-teens-in-kolkata",
+    "your-first-drive",
+    "where-we-work"
+   ]
+  },
+  {
+   "slug": "how-to-donate-old-clothes-in-kolkata",
+   "group": "questions",
+   "label": "How can I donate old clothes in Kolkata?",
+   "match": {
+    "header": "wear (and|&) share|clothes collection|toy and thread|clothes and toys|wear (and|&) write"
+   },
+   "related": [
+    "wear-and-share",
+    "how-to-run-a-clothes-donation-drive",
+    "responsible-consumption"
+   ]
+  },
+  {
+   "slug": "how-to-donate-books-in-kolkata",
+   "group": "questions",
+   "label": "How can I donate books in Kolkata?",
+   "match": {
+    "header": "book basket|book collection|book donation|notebook"
+   },
+   "related": [
+    "book-basket",
+    "how-to-run-a-book-donation-drive",
+    "free-resources-for-students"
+   ]
+  },
+  {
+   "slug": "how-to-help-stray-dogs-in-kolkata",
+   "group": "questions",
+   "label": "How can I help stray dogs in Kolkata?",
+   "match": {
+    "header": "tails"
+   },
+   "related": [
+    "tails-and-treats",
+    "how-to-run-a-stray-dog-feeding-drive",
+    "life-on-land"
+   ]
+  },
+  {
+   "slug": "where-to-plant-trees-in-kolkata",
+   "group": "questions",
+   "label": "Where can I plant trees in Kolkata?",
+   "match": {
+    "header": "plantation|grow green|sapling|tree plant"
+   },
+   "related": [
+    "grow-green",
+    "how-to-run-a-plantation-drive",
+    "climate-action"
+   ]
+  },
+  {
+   "slug": "how-can-students-help-the-sundarbans",
+   "group": "questions",
+   "label": "How can students help the Sundarbans?",
+   "match": {
+    "text": "sund[ae]rban"
+   },
+   "related": [
+    "sundarbans",
+    "good-health-and-wellbeing",
+    "climate-action"
+   ]
+  },
+  {
+   "slug": "how-to-feed-the-homeless-in-kolkata",
+   "group": "questions",
+   "label": "How can I help feed people in need in Kolkata?",
+   "match": {
+    "header": "food|sharbat"
+   },
+   "related": [
+    "food-for-all",
+    "zero-hunger",
+    "how-to-run-a-food-distribution-drive"
+   ]
+  },
+  {
+   "slug": "how-to-teach-underprivileged-children-in-kolkata",
+   "group": "questions",
+   "label": "How can I teach children who need it in Kolkata?",
+   "match": {
+    "header": "workshop"
+   },
+   "related": [
+    "reading-speaking-and-english",
+    "for-teachers",
+    "quality-education"
+   ]
+  },
+  {
+   "slug": "is-aquaterra-a-real-ngo",
+   "group": "questions",
+   "label": "Is AquaTerra a real, registered NGO?",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "for-parents",
+    "by-the-numbers",
+    "student-leadership"
+   ]
+  },
+  {
+   "slug": "does-volunteering-help-college-applications",
+   "group": "questions",
+   "label": "Does volunteering help with college applications?",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "volunteering-for-teens-in-kolkata",
+    "student-leadership",
+    "your-first-year"
+   ]
+  },
+  {
+   "slug": "what-is-a-student-run-ngo",
+   "group": "questions",
+   "label": "What is a student-run NGO?",
+   "match": {
+    "all": true
+   },
+   "related": [
+    "student-leadership",
+    "how-a-drive-works",
+    "is-aquaterra-a-real-ngo"
+   ]
+  },
+  {
+   "slug": "how-are-student-ngos-funded",
+   "group": "questions",
+   "label": "How do student NGOs pay for their work without donations?",
+   "match": {
+    "header": "fundrais|paradox|roots|fete|carnival|anniversary|disco|starry"
+   },
+   "related": [
+    "how-we-fund-the-work",
+    "the-nights-that-fund-the-work",
+    "for-companies"
+   ]
+  },
+  {
+   "slug": "what-to-bring-to-your-first-drive",
+   "group": "questions",
+   "label": "What should I expect at my first volunteering drive?",
+   "match": {
+    "header": "tails|sharbat|wear (and|&) share|food|book basket|smile notes"
+   },
+   "related": [
+    "your-first-drive",
+    "how-a-drive-works",
+    "volunteering-for-teens-in-kolkata"
+   ]
+  },
+  {
+   "slug": "how-to-celebrate-festivals-with-underprivileged-kids",
+   "group": "questions",
+   "label": "How can I celebrate festivals with children who need it?",
+   "match": {
+    "header": "durga|puja|diwali|christmas|merry|santa|rakhi|holi"
+   },
+   "related": [
+    "festival-drives",
+    "how-to-celebrate-a-festival-with-kids",
+    "smile-notes"
+   ]
+  },
+  {
+   "slug": "how-to-start-a-drive-at-your-school",
+   "group": "questions",
+   "label": "How do I start a drive at my school?",
+   "match": {
+    "location": "school|vidyalaya|academy"
+   },
+   "related": [
+    "for-schools",
+    "schools-we-have-visited",
+    "how-to-run-a-clothes-donation-drive"
+   ]
+  },
+  {
+   "slug": "reading-growing-up",
+   "group": "reading",
+   "label": "Growing up, in our own words",
+   "match": {
+    "blog": "growing up|childhood|mirror|last walk|school|group photo|nostalgia|teen"
+   },
+   "related": [
+    "student-leadership",
+    "volunteering-for-teens-in-kolkata",
+    "what-is-a-student-run-ngo"
+   ]
+  },
+  {
+   "slug": "reading-kindness-and-empathy",
+   "group": "reading",
+   "label": "On kindness and empathy",
+   "match": {
+    "blog": "empathy|kind|help|judge|grateful|ungrateful|voic|saying no|joke"
+   },
+   "related": [
+    "student-leadership",
+    "volunteering-for-teens-in-kolkata",
+    "what-is-a-student-run-ngo"
+   ]
+  },
+  {
+   "slug": "reading-kolkata-and-cities",
+   "group": "reading",
+   "label": "On Kolkata and other cities",
+   "match": {
+    "blog": "kolkata|city|cities|patna|labyrinth"
+   },
+   "related": [
+    "student-leadership",
+    "volunteering-for-teens-in-kolkata",
+    "what-is-a-student-run-ngo"
+   ]
+  },
+  {
+   "slug": "reading-books-and-stories",
+   "group": "reading",
+   "label": "Books, reviews and short stories",
+   "match": {
+    "blog": "book|review|tbr|story|novel|vibe"
+   },
+   "related": [
+    "student-leadership",
+    "volunteering-for-teens-in-kolkata",
+    "what-is-a-student-run-ngo"
+   ]
+  },
+  {
+   "slug": "reading-society-and-change",
+   "group": "reading",
+   "label": "On society and change",
+   "match": {
+    "blog": "society|child labour|war|teen-led|ngo|social impact|displacement"
+   },
+   "related": [
+    "student-leadership",
+    "volunteering-for-teens-in-kolkata",
+    "what-is-a-student-run-ngo"
+   ]
+  }
+ ],
+ "stories": [
+  {
+   "slug": "tails-and-treats",
+   "topic": "tails-and-treats",
+   "label": "Tails and Treats, in pictures"
+  },
+  {
+   "slug": "sharbat-seva",
+   "topic": "sharbat-seva",
+   "label": "Sharbat Seva, in pictures"
+  },
+  {
+   "slug": "grow-green",
+   "topic": "grow-green",
+   "label": "Grow Green, in pictures"
+  },
+  {
+   "slug": "wear-and-share",
+   "topic": "wear-and-share",
+   "label": "Wear and Share, in pictures"
+  },
+  {
+   "slug": "wear-and-write",
+   "topic": "wear-and-write",
+   "label": "Wear and Write, in pictures"
+  },
+  {
+   "slug": "book-basket",
+   "topic": "book-basket",
+   "label": "Book Basket, in pictures"
+  },
+  {
+   "slug": "food-for-all",
+   "topic": "food-for-all",
+   "label": "Food for All, in pictures"
+  },
+  {
+   "slug": "respect-and-reach",
+   "topic": "respect-and-reach",
+   "label": "Respect and Reach, in pictures"
+  },
+  {
+   "slug": "smile-notes",
+   "topic": "smile-notes",
+   "label": "Smile Notes, in pictures"
+  },
+  {
+   "slug": "sundarbans",
+   "topic": "sundarbans",
+   "label": "The Sundarbans, in pictures"
+  },
+  {
+   "slug": "festival-drives",
+   "topic": "festival-drives",
+   "label": "Festival drives, in pictures"
+  },
+  {
+   "slug": "arts-and-crafts",
+   "topic": "arts-and-crafts",
+   "label": "Art and craft sessions, in pictures"
+  },
+  {
+   "slug": "drama-music-and-dance",
+   "topic": "drama-music-and-dance",
+   "label": "Drama, music and dance, in pictures"
+  },
+  {
+   "slug": "science-and-stem",
+   "topic": "science-and-stem",
+   "label": "Science sessions, in pictures"
+  },
+  {
+   "slug": "health-and-wellbeing",
+   "topic": "health-and-wellbeing",
+   "label": "Health sessions, in pictures"
+  },
+  {
+   "slug": "sport-and-play",
+   "topic": "sport-and-play",
+   "label": "Sport and play, in pictures"
+  }
+ ]
+}

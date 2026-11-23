@@ -1,0 +1,72 @@
+{
+  "slug": "month-2024-10",
+  "title": "AquaTerra in October 2024: {count} drives and Disco Diwali",
+  "description": "October 2024 at AquaTerra: {count} drives, from diya painting and clothes collections to Disco Diwali, the festive night that funds our welfare work.",
+  "h1Lead": "october's",
+  "h1Accent": "disco and diyas",
+  "lede": "In October 2024 AquaTerra ran {count} drives, and most of the month's {volunteers} volunteer turnouts came from one night: Disco Diwali, our festive fundraiser at New Alipore on 26 October. The rest of the month was smaller work, from diya painting and a Halloween storytelling workshop to two clothes collections.",
+  "sections": [
+    {
+      "id": "disco-diwali",
+      "heading": "one night that carried the month",
+      "body": [
+        "Disco Diwali was the big event of the month. Held at New Alipore, Kolkata, on 26 October, it blended dance, décor and community giving, and it is one of the nights that pays for the welfare drives AquaTerra runs across the city. The [Disco Diwali](/impact/disco-diwali) page covers the night itself.",
+        "The same day, Spine and Story ran at Shoishob, a Halloween storytelling workshop where children created and shared their own stories. Two very different kinds of work happened on the same day."
+      ]
+    },
+    {
+      "id": "festival-sessions",
+      "heading": "diyas, music and stories before the festival",
+      "body": [
+        "Before Diwali, Painted Flames at Inner Wheel School on 27 October had children paint and design their own diyas to celebrate the festival. It was a hands-on session in colour, and the diyas were the children's own work.",
+        "On 28 October, Musical Minds at Amader Pradakhep took children through rhythm, melody and songs with instruments. By comparison, the {count:month-2024-09} drives in September were all workshops, with no festival sessions."
+      ]
+    },
+    {
+      "id": "clothes-in-october",
+      "heading": "two clothes collections, early in the month",
+      "body": [
+        "Wear and Share collections ran at the start of October. The drive at Ganges Sky on 5 October encouraged donations and noted 7 kgs of clothes collected. On 9 October the drive at Urbana sorted donated items by type and condition so they could be given out, and noted 10 kgs.",
+        "Collecting is only half of a clothes drive. The sorting step after it decides how well the clothes reach the people who need them, and it is worth planning a day for it. The [Wear and Share](/impact/wear-and-share) page follows the series through the year."
+      ]
+    },
+    {
+      "id": "joining-in",
+      "heading": "how to help in a busy month",
+      "body": [
+        "A festive month needs a lot of hands at once, and the mix is the point. A fundraiser night, a clothes sort and a storytelling session all ran in the same few weeks with the same student team. If you want to help, join AquaTerra and pick the kind of work you are good at, from a stall on the night to a sorting table.",
+        "New volunteers can start with a single workshop. [Join AquaTerra](/join) to sign up, or ask about a team through [volunteer](/volunteer)."
+      ]
+    }
+  ],
+  "learnings": [
+    "One big night can carry a month of smaller sessions, while the team keeps the small ones running the same week.",
+    "A clothes collection needs a sorting step afterwards, so plan the day after as well as the day of the drive.",
+    "Festival sessions work best when children make something themselves, as with the diya painting and the storytelling."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in October 2024?",
+      "a": "AquaTerra ran {count} drives in October 2024, with {volunteers} volunteer turnouts across the month. The biggest was Disco Diwali, our festive fundraiser at New Alipore on 26 October, with the rest across workshops and clothes collections."
+    },
+    {
+      "q": "What was Disco Diwali?",
+      "a": "Disco Diwali is AquaTerra's festive fundraiser. It was held at New Alipore, Kolkata, on 26 October 2024 and blended dance, décor and community giving. What it raises goes to the welfare drives AquaTerra runs across the city."
+    },
+    {
+      "q": "Where did AquaTerra hold clothes collections in October 2024?",
+      "a": "Wear and Share held collections at Ganges Sky on 5 October and at Urbana on 9 October 2024. The Ganges Sky drive noted 7 kgs of clothes collected, and the Urbana drive noted 10 kgs."
+    },
+    {
+      "q": "Does AquaTerra run festival workshops for children?",
+      "a": "Yes. In October 2024 children made diyas at Inner Wheel School, made Halloween stories at Shoishob and took part in a music workshop at Amader Pradakhep. AquaTerra's student volunteers run these sessions, and you can join to help run the next one."
+    }
+  ],
+  "keywords": [
+    "AquaTerra October 2024",
+    "Disco Diwali Kolkata",
+    "Diwali workshop for children Kolkata",
+    "clothes collection drive Kolkata October",
+    "student volunteers Kolkata festival"
+  ]
+}

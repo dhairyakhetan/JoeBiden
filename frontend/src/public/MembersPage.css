@@ -248,3 +248,11 @@
   .mem-card, .mem-exit { transition: none; }
   .mem-card:hover, .mem-exit:hover { transform: none; }
 }
+
+/* AQ Core badge sits on the role's line, so a core card is no taller than any other (the skeleton height holds). */
+.mem-card .mem-core { margin: 8px 0 0 6px; vertical-align: top; }
+.mem-core-link {
+  display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px;
+  font-family: var(--eina); font-weight: 700; font-size: 14px;
+  color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
+}

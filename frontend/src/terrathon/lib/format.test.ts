@@ -121,9 +121,9 @@ describe('tidyPhone', () => {
   // The field sits beside a +91 chip, so the numbers people paste carry one.
   // Every one of these is the same ten digits wearing different clothes.
   it('takes the shapes people actually paste', () => {
-    for (const raw of ['+91 98305 54654', '+919830554654', '91 98305 54654',
-                       '098305 54654', '098305-54654', '98305 54654', '9830554654']) {
-      expect(tidyPhone(raw)).toBe('9830554654')
+    for (const raw of ['+91 90000 00001', '+919000000001', '91 90000 00001',
+                       '090000 00001', '090000-00001', '90000 00001', '9000000001']) {
+      expect(tidyPhone(raw)).toBe('9000000001')
     }
   })
 
@@ -134,7 +134,7 @@ describe('tidyPhone', () => {
   })
 
   it('caps at ten digits rather than letting a long paste through', () => {
-    expect(tidyPhone('9830554654999')).toHaveLength(10)
+    expect(tidyPhone('9000000001999')).toHaveLength(10)
   })
 
   it('leaves a leading zero alone while it could still be the number itself', () => {

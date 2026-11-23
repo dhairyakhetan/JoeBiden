@@ -1,0 +1,74 @@
+{
+  "slug": "month-2024-08",
+  "title": "AquaTerra in August 2024: {count} drives, planting, art and rakhis",
+  "description": "August 2024 at AquaTerra: {count} drives, Grow Green planting in Kolkata, Raksha Bandhan rakhis, art and a mental health workshop at Pather Sathi.",
+  "h1Lead": "august, with",
+  "h1Accent": "saplings and rakhis",
+  "lede": "In August 2024 AquaTerra ran {count} drives, and {topPlace} hosted most of them. The Grow Green plantation drives put saplings into the ground, a Raksha Bandhan session at Ek Tara had children making rakhis, and the rest was art and mental health sessions, with a good touch, bad touch workshop closing the month.",
+  "sections": [
+    {
+      "id": "a-month-at-pather-sathi",
+      "heading": "a month at Pather Sathi",
+      "body": [
+        "{topPlace} hosted the most drives in August, and its sessions ran through the whole month. Mind Matters on 9 August covered mental well-being, self-care and emotional awareness among students, and the [health and wellbeing page](/impact/health-and-wellbeing) has the wider picture of that work.",
+        "Art Flow on 10 August, The Art Room on 17 August and Stroke by Stroke on 24 August were art workshops where students painted, drew and made crafts. Smart With Safety on 31 August closed the month there with a workshop on good touch, bad touch and personal safety, the same subject covered in July at Inner Wheel School and Gyandeepak, on the [July 2024 page](/impact/month-2024-07)."
+      ]
+    },
+    {
+      "id": "planting-in-august",
+      "heading": "planting in august",
+      "body": [
+        "Grow Green ran twice in August, as drives 21.0 and 22.0. Grow Green 21.0 was on 2 August at Santosh Mitra Square, and 22.0 was on 10 August at Tollygunge. Both were plantation drives where students planted saplings to promote environmental awareness and sustainability.",
+        "The same idea repeats at a new place each time: a patch of ground, a group of students and a set of saplings. The [Grow Green page](/impact/grow-green) covers the series, and the [plantation drive guide](/impact/how-to-run-a-plantation-drive) sets out how one is run."
+      ]
+    },
+    {
+      "id": "rakhis-and-craft",
+      "heading": "rakhis and craft at Ek Tara and Gyandeepak",
+      "body": [
+        "Rakhi Moments on 16 August at Ek Tara was a Raksha Bandhan activity where students made rakhis and celebrated the bond of love and protection. Its write-up describes a joyful session with children at the centre, and it sat beside the regular art sessions of the month.",
+        "Craft and Colour on 8 August at Gyandeepak had students creating artistic items from paper, glue and a lot of creativity. Both were festive sessions, and the [festival drives page](/impact/festival-drives) covers the other celebrations AquaTerra has run through the year."
+      ]
+    },
+    {
+      "id": "august-beside-july",
+      "heading": "august beside july and september",
+      "body": [
+        "August had {count} drives, July had {count:month-2024-07} and September had {count:month-2024-09}. The month was lighter on clothes than July, when Wear and Share ran twice, and it had planting drives that July did not have.",
+        "{volunteers} volunteer turnouts went into August's drives. A volunteer turnout counts every time someone showed up, so one student who came to several drives is counted for each one. August's drives ran at {placesCount} places in all."
+      ]
+    }
+  ],
+  "learnings": [
+    "A plantation series can repeat in new places: Grow Green's 21.0 and 22.0 went to two different neighbourhoods in the same month.",
+    "Festival sessions are small and easy to add to a month: Raksha Bandhan at Ek Tara sat beside the regular art sessions.",
+    "Health and safety topics can sit in the same place as the art sessions, as Mind Matters and Smart With Safety did at Pather Sathi.",
+    "A planting drive can be numbered and repeated, as Grow Green's 21.0 and 22.0 show, so each drive in the series has its own place and date."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in August 2024?",
+      "a": "AquaTerra ran {count} drives in August 2024. Pather Sathi hosted most of them, with art workshops, a mental health workshop and a good touch, bad touch session, plus Grow Green planting drives at Santosh Mitra Square and Tollygunge and a Raksha Bandhan rakhi session at Ek Tara."
+    },
+    {
+      "q": "Where did AquaTerra plant saplings in August 2024?",
+      "a": "The Grow Green plantation drives in August 2024 were at Santosh Mitra Square on 2 August, numbered 21.0, and at Tollygunge on 10 August, numbered 22.0. Both were run to promote environmental awareness and sustainability."
+    },
+    {
+      "q": "What is Grow Green?",
+      "a": "Grow Green is AquaTerra's plantation drive series, where students plant saplings to promote environmental awareness and sustainability. In August 2024 the series reached drives 21.0 and 22.0, at Santosh Mitra Square and Tollygunge in Kolkata."
+    },
+    {
+      "q": "Does AquaTerra run a mental health workshop for students?",
+      "a": "Yes. Mind Matters, a mental health workshop at Pather Sathi on 9 August 2024, promoted mental well-being, self-care and emotional awareness among students. The [health and wellbeing page](/impact/health-and-wellbeing) covers the wider topic."
+    }
+  ],
+  "keywords": [
+    "AquaTerra August 2024",
+    "Grow Green plantation Kolkata",
+    "Raksha Bandhan rakhi workshop Kolkata children",
+    "mental health workshop students Kolkata",
+    "Pather Sathi art workshop Kolkata",
+    "AquaTerra drives August 2024"
+  ]
+}

@@ -1,0 +1,27 @@
+-- ──────────────────────────────────────────────────────────────────────────
+-- Signed-out visitors can no longer map who follows or likes whom, or read reviewer notes (handoff C-14, 3 Nov 2026).
+--
+-- STATUS: BOTH PARTS APPLIED 3 Nov 2026 (follow_counts_rpc_20261103, social_graph_lockdown_20261103; part 2 ran after the front end that uses
+-- follow_counts() and named achievement columns is deployed (a cached older page doing the old reads would otherwise fail).
+--
+-- Read-only findings first (anonymous role, tested with set local role anon):
+--   readable rows: likes 23, follows 7, comments 2, team_members 195, external_achievements 3 (approved only)
+--   locked (0 rows although data exists): contact_submissions, collaboration_submissions, job_applications (36),
+--     volunteer_applications (495), team_join_requests, certificate_requests, referrals, notifications,
+--     community_audit_logs, contact_access_log, client_error_logs
+--   team_members has no reviewer columns (the audit saw them on external_achievements only)
+-- Kept public on purpose: team_members (rosters are public pages), comments on published posts, approved achievements.
+--
+-- PART 1 (applied): public.follow_counts(uuid) returns follower and following NUMBERS only, for anon and authenticated.
+--
+-- PART 2 (run after deploy):
+--   alter policy follows_public_read on public.follows to authenticated;     -- anon can no longer read who follows whom
+--   alter policy likes_select on public.likes to authenticated;              -- anon can no longer read who liked what
+--   begin;
+--     revoke select on public.external_achievements from anon;
+--     grant select (achievement_id, member_id, title, description, achievement_date, created_at, updated_at, uuid,
+--                   achievement_type, achievement_end_date, proof_url, status) on public.external_achievements to anon;
+--   commit;                                                                   -- reviewer columns closed to anon
+-- Rollback: alter policy ... to public; grant select on public.external_achievements to anon;
+-- Verify:  set local role anon; select count(*) from follows; -- 0; select reviewed_by from external_achievements; -- denied
+-- ──────────────────────────────────────────────────────────────────────────

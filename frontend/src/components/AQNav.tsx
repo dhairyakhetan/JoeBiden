@@ -269,6 +269,7 @@ export default function AQNav(_props: AQNavProps) {
   // Links entirely, leaving them unreachable on mobile outside the footer).
   const mobileSheetLinks = [
     { href: '/projects',        label: 'Projects',       icon: <BoltSVG /> },
+    { href: '/impact',          label: 'Giving back',    icon: <WaveSVG /> },
     { href: '/teams',           label: 'Teams',          icon: <FlagSVG /> },
     { href: '/members',         label: 'Members',        icon: <GlobeSVG /> },
     { href: '/blog',            label: 'Blog',           icon: <PenSVG /> },
@@ -285,7 +286,6 @@ export default function AQNav(_props: AQNavProps) {
     { href: '/support',         label: 'Support',        icon: <WaveSVG /> },
     { href: '/contact',         label: 'Contact',        icon: <GlobeSVG /> },
     { href: '/links',           label: 'Quick Links',    icon: <SparklesSVG /> },
-    { href: '/accounts',        label: 'Open Books',     icon: <GlobeSVG /> },
     { href: '/equity-policy',   label: 'Equity Policy',  icon: <GlobeSVG /> },
   ]
 
@@ -834,6 +834,7 @@ export default function AQNav(_props: AQNavProps) {
           ['01', 'Home', '/'], ['02', 'Projects', '/projects'], ['03', 'Teams', '/teams'],
           ['04', 'Blog', '/blog'], ['05', 'Members', '/members'], ['06', 'About', '/about'],
           ['TN', 'Terra Notes', '/terranotes'], ['LV', 'Live - Events and more', '/live'],
+          ['GB', 'Giving back', '/impact'],
         ]
         const exploreHc = ['var(--pink)', 'var(--lemon)', 'var(--sky)', 'var(--grape)', 'var(--tomato)', 'var(--welfare)', 'var(--lemon)', 'var(--tomato)']
         const involved: [string, string, string, string][] = [
@@ -842,7 +843,7 @@ export default function AQNav(_props: AQNavProps) {
             : ['07', 'Apply', '/login', 'var(--pink)'] as [string, string, string, string]),
           ['08', 'Openings', '/opportunities', 'var(--lemon)'],
           ['09', 'Brand book', '/brand', 'var(--pink)'], ['10', 'Crftd', '/crftd', 'var(--grape)'],
-          ['11', 'ShikshAQ', 'https://shikshaq.in', 'var(--sky)'], ['12', 'Collab', '/collaborations', 'var(--welfare)'],
+          ['11', 'ShikshAQ', '/shikshaq', 'var(--sky)'], ['12', 'Collab', '/collaborations', 'var(--welfare)'],
           // Section 33: AQ Labs lands in the get-involved column, NOT in
           // navLinks. That is a recorded user decision: navLinks is three items
           // by design, and a top-level slot would weight a seven-project cohort
@@ -882,7 +883,7 @@ export default function AQNav(_props: AQNavProps) {
                         onClick={() => go(href)}
                         onMouseEnter={() => prefetchRouteByPath(href)}
                         onFocus={() => prefetchRouteByPath(href)}
-                        style={{ ['--hc' as any]: exploreHc[i] }}>
+                        style={{ ['--hc' as any]: exploreHc[i % exploreHc.length] }}>
                         <span className="num">{num}</span>{label}<span className="ar">→</span>
                       </a>
                     ))}
@@ -941,7 +942,7 @@ export default function AQNav(_props: AQNavProps) {
                   <div className="aq-mega-socs">
                     <a className="aq-mega-soc" href="/faq" onClick={e => { e.preventDefault(); go('/faq') }} onMouseEnter={() => prefetchRouteByPath('/faq')} onFocus={() => prefetchRouteByPath('/faq')}><b>FAQ</b><span>questions</span></a>
                     <a className="aq-mega-soc" href="/support" onClick={e => { e.preventDefault(); go('/support') }} onMouseEnter={() => prefetchRouteByPath('/support')} onFocus={() => prefetchRouteByPath('/support')}><b>Support</b><span>help centre</span></a>
-                    <a className="aq-mega-soc" href="/accounts" onClick={e => { e.preventDefault(); go('/accounts') }} onMouseEnter={() => prefetchRouteByPath('/accounts')} onFocus={() => prefetchRouteByPath('/accounts')}><b>Open Books</b><span>every rupee</span></a>
+                    <a className="aq-mega-soc" href="/impact" onClick={e => { e.preventDefault(); go('/impact') }} onMouseEnter={() => prefetchRouteByPath('/impact')} onFocus={() => prefetchRouteByPath('/impact')}><b>Giving back</b><span>impact library</span></a>
                     <a className="aq-mega-soc" href="/links" onClick={e => { e.preventDefault(); go('/links') }} onMouseEnter={() => prefetchRouteByPath('/links')} onFocus={() => prefetchRouteByPath('/links')}><b>All links</b><span>sitemap</span></a>
                   </div>
                 </div>
@@ -1007,8 +1008,8 @@ export default function AQNav(_props: AQNavProps) {
         }
         const sheet = (hrefs: string[]) => hrefs.map(h => mobileSheetLinks.find(l => l.href === h)!).map(l => ({ href: l.href, label: l.label }))
         groups.push({ title: 'explore', rows: [...sheet(['/projects', '/teams', '/members', '/blog', '/terranotes', '/games', '/opportunities']), { href: '/live', label: 'AquaTerra Live', ink: true }, { href: LABS_HREF, label: 'AQ Labs ’26', ink: true }] })
-        groups.push({ title: 'about aquaterra', rows: sheet(['/about', '/volunteer', '/crftd', '/collaborations', '/schools', '/classes', '/faq', '/support', '/contact']) })
-        groups.push({ title: 'open books', rows: sheet(['/links', '/accounts', '/equity-policy']) })
+        groups.push({ title: 'about aquaterra', rows: sheet(['/about', '/impact', '/volunteer', '/crftd', '/collaborations', '/schools', '/classes', '/faq', '/support', '/contact']) })
+        groups.push({ title: 'more', rows: sheet(['/links', '/equity-policy']) })
         return (
           <div ref={drawerRef} tabIndex={-1} style={{ outline: 'none' }} className="aq-drawer" role="dialog" aria-modal="true" aria-label="Menu">
             <div className="aq-draw-hd">

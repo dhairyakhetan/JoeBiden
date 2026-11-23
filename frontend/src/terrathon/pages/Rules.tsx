@@ -255,7 +255,7 @@ export function TerraThonRules({ events, loading, error, reload }: Props) {
       )}
 
       {/* ── One way to ask ─────────────────────────────────────────────────── */}
-      {ask && (
+      {ASK_PHONE && ask && (
         <section style={{ marginTop: 'var(--tt-block)', display: 'grid', gap: 12, justifyItems: 'start' }}>
           <h2 style={{ fontSize: 24, textTransform: 'uppercase' }}>Something not covered here?</h2>
           <a

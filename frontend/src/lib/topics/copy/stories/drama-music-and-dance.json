@@ -1,0 +1,20 @@
+{
+  "slug": "drama-music-and-dance",
+  "title": "Drama, Music and Dance in Pictures: Kids' Stage Workshops · AquaTerra",
+  "description": "Photos from {count} drama, music and dance drives for children in Kolkata since {firstYear}: acting, storytelling, singing and dance, year by year.",
+  "h1Lead": "lines, beats and",
+  "h1Accent": "big moves",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drama, music and dance drives for children in Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). The pictures follow the stage from a skit at Loretto Day School to a theatre workshop at Pather Sathi.",
+  "chapters": {
+    "2022": { "heading": "scripts and skits", "text": "It began with a skit. Act It Out at Loretto Day School in April 2022 had volunteers acting and laughing with the children. In the summer the drama series moved to Disha Foundation, with sessions named 1.0 to 5.0 between late July and late August, all about acting, voice and movement." },
+    "2023": { "heading": "dance, rhythm and song", "text": "Dance took over in 2023. Move and Groove at Sree Sree Gauranga Gaudiya Mission Sevashram in June and Step to Sound, a singing and dancing workshop, got children moving and singing. In November, Break and Dance at Pather Sathi's Sunday School and Step Up kept the rhythm going, while the Diwali night in Kolkata raised funds through stalls and performances." },
+    "2024": { "heading": "stories and songs", "text": "With {year:2024} drives, 2024 was the largest year so far. Tune In at Universal Smile in July explored rhythm and melody, and Tales and Tunes at Alor Disha in December used stories and songs to spark joy and self-expression. The Science in Action workshop at Amader Pradakhep in November is also filed under this series." },
+    "2025": { "heading": "theatre and musical minds", "text": "2025 brought theatre. Curtain Call at Pather Sathi in May was a workshop where volunteers got goofy with the kids, acting and laughing together. Groove Time at Tetultala Ashram in May and Musical Minds at AIM Foundation in June kept the music and dance going, and Fable Factory at Newlight Ngo used storytelling, voice and fun narration." }
+  },
+  "closing": "Want to see where the stage takes you next? Read [the full story](/impact/drama-music-and-dance) for the whole series, then [join AquaTerra](/join) to help run the next workshop.",
+  "faqs": [
+    { "q": "Does AquaTerra run drama and dance workshops for children in Kolkata?", "a": "Yes. AquaTerra has run {count} drama, music and dance drives since {firstYear}, mostly acting, storytelling, music and dance sessions for children at places such as Disha Foundation and Pather Sathi." },
+    { "q": "What happens at an AquaTerra drama or dance workshop?", "a": "Students lead sessions built on play, such as a skit, a dance routine, a song or a story. Children try acting, voice, rhythm and movement, with students leading each session." },
+    { "q": "Can a student join AquaTerra to help with music and drama workshops?", "a": "Yes, if you are between 14 and 19. AquaTerra is a student-run volunteer group and you join with Google sign-in and an approval, then help with the next drive." }
+  ]
+}

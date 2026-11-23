@@ -577,6 +577,7 @@ export type Database = {
           contact_name: string
           created_at: string | null
           email: string
+          notes: string | null
           id: number
           message: string
           org_name: string
@@ -588,6 +589,7 @@ export type Database = {
           contact_name: string
           created_at?: string | null
           email: string
+          notes?: string | null
           id?: number
           message: string
           org_name: string
@@ -599,6 +601,7 @@ export type Database = {
           contact_name?: string
           created_at?: string | null
           email?: string
+          notes?: string | null
           id?: number
           message?: string
           org_name?: string
@@ -878,6 +881,7 @@ export type Database = {
         Row: {
           created_at: string | null
           email: string
+          notes: string | null
           id: number
           message: string | null
           name: string
@@ -888,6 +892,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           email: string
+          notes?: string | null
           id?: number
           message?: string | null
           name: string
@@ -898,6 +903,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           email?: string
+          notes?: string | null
           id?: number
           message?: string | null
           name?: string

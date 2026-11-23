@@ -1,0 +1,92 @@
+{
+  "slug": "how-a-drive-works",
+  "title": "How an AquaTerra drive works, start to finish · AquaTerra",
+  "description": "{drives} drives since {firstYear}. How an AquaTerra drive runs, how numbered series work, the places we keep going back to and who runs each drive.",
+  "h1Lead": "how a drive",
+  "h1Accent": "works, start to finish",
+  "lede": "An AquaTerra drive is an outing or event with a place, a purpose and a team of students. Each one gets a title, a date, a place, a volunteer count, an objective, a short summary and one key figure. The {drives} drives we have run since {firstYear} show how that works in practice, from a single workshop at a school to a numbered feeding run.",
+  "sections": [
+    {
+      "id": "what-counts-as-a-drive",
+      "heading": "what counts as a drive",
+      "body": [
+        "Anything we run as a planned outing or event is a drive, whatever its form. The most recent drives, from early July 2025 onward, are mostly workshops, followed by distribution drives and dog feeding. Others include stalls, a fundraising event, a Sundarbans relief trip, a plantation drive, a Children's Day fete and an old age home visit.",
+        "The mix changes with the season. Late 2025 was heavy on art workshops in October and on festive workshops and Cookie Pass On drives in December, while summer 2025 was heavy on dog feeding and clothes collection. Looking across the year shows when each kind of drive happened."
+      ]
+    },
+    {
+      "id": "the-parts-of-a-write-up",
+      "heading": "what each drive records",
+      "body": [
+        "Every drive is recorded with a title, a date, a place, a volunteer count, an objective, a short summary and a key line. The key line is the drive's own statement, such as the number of children taught or dogs fed, so read it as that drive's figure rather than a total. Some drives also name a collaborator. The Sundarbans 8.0 trip in December 2025 was run together with Pather Sathi."
+      ]
+    },
+    {
+      "id": "series-and-their-numbers",
+      "heading": "numbered series",
+      "body": [
+        "Many drives belong to a numbered series. Tails and Treats outings carry numbers, from 41.0 in July 2025 to 53.0 at the end of September 2025. Four of them, 42.0 to 45.0, took place on 9 August 2025 at different places, so one series can run several outings on a single day. Wear and Share follows the same pattern, with 17.0 to 22.0 held between 9 and 13 July 2025.",
+        "The numbers show a series' pace. Across all years the Tails and Treats series has {count:tails-and-treats} drives, which makes it one of the largest series we run. Read in order, the 2025 numbers show how quickly the dog feeding outings followed one another over the summer and early autumn."
+      ]
+    },
+    {
+      "id": "when-one-drive-appears-twice",
+      "heading": "when one outing is counted twice",
+      "body": [
+        "Some outings are described two ways, once as a workshop and once as a distribution drive. The Smile Notes outings on 25 and 26 March 2026 are examples, so a drive count can run above the number of outings.",
+        "Volunteer counts are sometimes blank or zero. The turnout total is therefore a floor, and the most reliable figures are the ones a drive gives in its own key line. A drive with a blank count is still a real drive and is included in the total of drives, even though it adds nothing to the turnouts."
+      ]
+    },
+    {
+      "id": "where-drives-happen",
+      "heading": "where drives happen",
+      "body": [
+        "Drives happen in {placesCount} places, and the most frequent is {topPlace}, with {count:pather-sathi} drives across all years. Disha Foundation, Ek Tara, AIM Foundation and Amader Pradakhep host repeat series that we keep going back to. Public places such as Bangur, Salt Lake and Bhawanipore host dog feeding and outreach drives."
+      ]
+    },
+    {
+      "id": "who-runs-a-drive",
+      "heading": "who runs a drive",
+      "body": [
+        "Students run AquaTerra's drives. Our members are teenagers, and each drive is described publicly on the site, so anyone can see what it involved. Volunteers join by signing in with Google and then waiting for an approval."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most of the latest drives are workshops, with distribution drives and dog feeding next.",
+    "Series are numbered, and a numbered series can run several outings on a single day.",
+    "Some outings are described twice, so drive counts can run above the number of outings.",
+    "Pather Sathi is the most frequent place we have run drives, and a few venues host repeat series.",
+    "Volunteer counts range from one person to the large fundraiser teams, so the turnout total is a floor."
+  ],
+  "faqs": [
+    {
+      "q": "How does an AquaTerra drive work?",
+      "a": "A drive is an outing or event with a place, an objective and a team of students. Each one is recorded with its title, date, place, volunteer count, objective, a short summary and a key figure. Series such as Tails and Treats are numbered, so one outing can be traced to the next."
+    },
+    {
+      "q": "Who runs AquaTerra drives?",
+      "a": "Students do. AquaTerra is a student-run organisation, and its members are teenagers who run the drives themselves. Members join by signing in with Google and then waiting for an approval."
+    },
+    {
+      "q": "How do I join an AquaTerra drive?",
+      "a": "Sign in with Google to start joining, then wait for an approval before taking part. AquaTerra charges no fees to members, and past drives are public on the site so you can see the kind of work before you join."
+    },
+    {
+      "q": "Where do AquaTerra drives take place?",
+      "a": "Across {placesCount} places, most often at {topPlace}. Other regular places include Disha Foundation, Ek Tara and Bangur, and drives also run in public places such as Salt Lake."
+    },
+    {
+      "q": "Are AquaTerra drives public?",
+      "a": "Yes. Each drive is listed on the AquaTerra site with its title, date, place, volunteer count, objective and key figure, so anyone can check what a drive involved."
+    }
+  ],
+  "keywords": [
+    "how an NGO volunteer drive works Kolkata",
+    "AquaTerra drive write-ups",
+    "student volunteer drives Kolkata",
+    "how to join AquaTerra volunteer drives",
+    "AquaTerra Tails and Treats",
+    "AquaTerra Smile Notes outreach"
+  ]
+}

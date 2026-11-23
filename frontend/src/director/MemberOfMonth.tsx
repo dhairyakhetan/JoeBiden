@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties } from 'react'
+import { googlePhotoAt } from '../lib/imageUrl'
 import { Link } from 'react-router-dom'
 import Img from '../components/Img'
 import Field from '../components/Field'
@@ -298,7 +299,7 @@ const MemberOfMonth = () => {
     teamCategory: p.teamCategory,
     period: formatPeriod(p.period),
     citation: p.citation || undefined,
-    imageUrl: p.photoUrl || p.memberAvatarUrl || undefined,
+    imageUrl: (p.photoUrl ? p.photoUrl : p.memberAvatarUrl ? googlePhotoAt(p.memberAvatarUrl, 1024) : undefined),
   })
   const storyFilenameForPick = (p: MemberOfMonthPick) =>
     `aq-mom-${p.teamName.toLowerCase().replace(/\s+/g, '-')}-${p.period}.png`

@@ -145,7 +145,8 @@ const followServiceImpl = {
       .range(offset, offset + limit - 1)
 
     if (error) throw logSupabaseError('followService.getFollowers', error)
-    return (data ?? []).map((row: any) => ({
+    // A follow whose member row is gone or hidden by RLS embeds `members: null`; skip it instead of failing the whole list.
+    return (data ?? []).filter((row: any) => row.members).map((row: any) => ({
       memberId: row.members.member_id,
       uuid: row.members.uuid,
       fullName: row.members.full_name,
@@ -171,7 +172,8 @@ const followServiceImpl = {
       .range(offset, offset + limit - 1)
 
     if (error) throw logSupabaseError('followService.getFollowing', error)
-    return (data ?? []).map((row: any) => ({
+    // A follow whose member row is gone or hidden by RLS embeds `members: null`; skip it instead of failing the whole list.
+    return (data ?? []).filter((row: any) => row.members).map((row: any) => ({
       memberId: row.members.member_id,
       uuid: row.members.uuid,
       fullName: row.members.full_name,

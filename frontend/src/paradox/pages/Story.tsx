@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { useState, useEffect, useRef } from 'react'
+import { useMeta } from '../../hooks/useMeta'
+import { pageMetadata } from '../../lib/metaConfig'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import type { Event } from '../lib/types'
@@ -22,6 +24,7 @@ const TAGLINES: Record<string, string> = {
 const PAL = ['#FF4338', '#FFD23F', '#B79CED', '#B79CED'] as const
 
 export function StoryPage() {
+  useMeta(pageMetadata.paradoxStory)
   const [events, setEvents] = useState<Event[]>([])
   const [eventSlug, setEventSlug] = useState('cricket')
   const [name, setName] = useState('')

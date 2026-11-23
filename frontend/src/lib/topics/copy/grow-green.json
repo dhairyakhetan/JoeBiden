@@ -1,0 +1,87 @@
+{
+  "slug": "grow-green",
+  "title": "Grow Green: tree planting drives since 2021 · AquaTerra",
+  "description": "Grow Green is AquaTerra's tree planting series, running since July 2021. See where drives were held, which schools and parks hosted them, and how it grew.",
+  "h1Lead": "one sapling",
+  "h1Accent": "at a time",
+  "lede": "Grow Green is AquaTerra's tree planting series, and students run every drive. Since July {firstYear}, we have held {count} planting drives in Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up) at {placesCount} places, from parks and schools to residential streets.",
+  "sections": [
+    {
+      "id": "how-it-started",
+      "heading": "how the series started",
+      "body": [
+        "Grow Green began on 16 July 2021 with Plantation Drive 1.0 at Ward 58. The first write-up says students got their hands muddy planting saplings, a line that comes back again and again across the series. By 6 August 2025 the drives had reached Plantation Drive 26.0, held at Ashok Hall School.",
+        "Planting also ran through workshops. Bottled Greens at Disha Foundation in March 2022 and Roots Rise, a saplings painting drive at Mallickpur in April 2022, are counted on this page because their titles are about plantation and saplings. Both are filed under the same planting theme as the rest of the series."
+      ]
+    },
+    {
+      "id": "the-2023-run",
+      "heading": "the 2023 run",
+      "body": [
+        "Most of the 2023 drives came in June and early July. Plantation Drives 6.0 to 12.0 were all held in Kolkata between 2 June and 1 July 2023. From 8.0 onward the write-ups name Each One Plant One as the group we worked with, the same group that appears on several 2022 drives.",
+        "From 5 July to 27 August 2023 the drives moved into named parks and schools: Calcutta Girls High School, Goltalab, Gachtala, Gitanjali Park and Vivekananda Park, Shubo Malik Square, CB Block Park and Ashok Hall School. Two drives were held at Gachtala on 14 July 2023 alone."
+      ]
+    },
+    {
+      "id": "where-drives-happen",
+      "heading": "where the drives happen",
+      "body": [
+        "Many drives are recorded only as {topPlace}, which names a city rather than a site. Named schools come back again and again: Ashok Hall School hosted drives in August 2023 and August 2025, and South City International School hosted drives on 21 and 22 April 2025.",
+        "Parks come up too: Canal Side Park in June 2025, Tollygunge and Santosh Mitra Square in August 2024, and Shubo Malik Square in July 2023. The Sundarbans plantation projects are part of this series as well, and [Sundarbans relief and plantation](/impact/sundarbans) covers that work in full."
+      ]
+    },
+    {
+      "id": "sundarbans-overlap",
+      "heading": "the sundarbans drives in this series",
+      "body": [
+        "Two Sundarbans entries carry plantation titles, so they count here. Sunderbans Plantation Project 4.0 was held at Sundarbans Villages on 10 June 2023, and its write-up describes a day of sowing smiles, support and sustainability. Its own stated figure is over 200 checkups rather than saplings.",
+        "Sunderbans Plantation Project 5.0 followed on 22 June 2024, with over 50 saplings planted to restore green cover and protect wildlife. In 2024 the series held {year:2024} drives in all: that Sundarbans project in June, and the August drives at Santosh Mitra Square and Tollygunge, both in Kolkata."
+      ]
+    },
+    {
+      "id": "what-volunteers-did",
+      "heading": "what volunteers did on the day",
+      "body": [
+        "The write-ups describe the same core task again and again: planting saplings, with the aim of promoting environmental awareness and sustainability. One 2023 write-up says volunteers planted a variety of saplings in public spaces and community areas, reinforcing how much green cover matters in a busy city.",
+        "Most write-ups give a saplings figure for their own drive, so the saplings count is the number to look at first. Across the whole organisation AquaTerra has planted {saplings} saplings, and this series is the main place to see how that total was built."
+      ]
+    }
+  ],
+  "learnings": [
+    "Grow Green has run since 16 July 2021 and reached Plantation Drive 26.0 by 6 August 2025.",
+    "2023 was the busiest year in the series, with {year:2023} drives, most of them in June and July, in quick succession.",
+    "Ashok Hall School and South City International School each hosted more than one drive, so a school can become a regular planting place.",
+    "Each One Plant One worked with the team on a run of drives in 2022 and 2023.",
+    "The Sundarbans plantation drives belong to this series too, so read this page and the Sundarbans page together."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra hold tree planting drives in Kolkata?",
+      "a": "AquaTerra's Grow Green drives have been held at parks and schools across Kolkata, including Canal Side Park, Gachtala, Tollygunge, Santosh Mitra Square and Ashok Hall School. Across the series the drives took place at {placesCount} places, and many are recorded only as {topPlace}."
+    },
+    {
+      "q": "How many saplings has AquaTerra planted?",
+      "a": "Most AquaTerra planting write-ups give a saplings figure for their own drive, and across the whole organisation AquaTerra counts {saplings} saplings. Grow Green is the main planting series, with {count} drives from {firstYear} to {lastYear}."
+    },
+    {
+      "q": "Can a student take part in a tree planting drive with AquaTerra?",
+      "a": "Yes, if you are a member aged 14 to 19. Grow Green drives are run by AquaTerra's student members. To take part, join AquaTerra by signing in with Google, and your account is approved before you go out on a drive. Across the series, {volunteers} volunteer turnouts have been recorded."
+    },
+    {
+      "q": "What did AquaTerra plant in 2024?",
+      "a": "In 2024 the Grow Green series held {year:2024} drives. Plantation Drive 21.0 was at Santosh Mitra Square and Plantation Drive 22.0 at Tollygunge, both in August 2024, and Sunderbans Plantation Project 5.0 took place in the Sundarbans in June 2024, with over 50 saplings planted."
+    },
+    {
+      "q": "Is Grow Green the same as the Sundarbans work?",
+      "a": "They overlap but are not the same. Grow Green is the plantation series, and Sunderbans Plantation Project 4.0 and 5.0 sit inside it. The wider Sundarbans relief work, including medical camps, is covered on AquaTerra's Sundarbans relief and plantation page."
+    }
+  ],
+  "keywords": [
+    "tree planting drives Kolkata",
+    "student plantation drive Kolkata",
+    "AquaTerra Grow Green",
+    "sapling planting Kolkata schools",
+    "Each One Plant One Kolkata",
+    "Sundarbans plantation drive"
+  ]
+}

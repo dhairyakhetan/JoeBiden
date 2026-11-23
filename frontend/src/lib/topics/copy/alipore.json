@@ -1,0 +1,78 @@
+{
+  "slug": "alipore",
+  "title": "Drives in Alipore: fundraisers, clothes and food · AquaTerra",
+  "description": "AquaTerra's drives in Alipore, from a 2022 Halloween fundraiser to a 2025 food and toy day, mostly at New Alipore. {count} drives, {years}.",
+  "h1Lead": "our drives in",
+  "h1Accent": "Alipore",
+  "lede": "AquaTerra has run {count} drives in Alipore since {firstYear}, from a Halloween fundraiser in 2022 to food, sharbat and toy drives in March 2025. Most of them were at New Alipore, and our two fundraisers, Trick or Donate and Disco Diwali, account for most of the {volunteers} volunteer turnouts on this page.",
+  "sections": [
+    {
+      "id": "the-fundraisers",
+      "heading": "the fundraisers",
+      "body": [
+        "Alipore's first drive was Trick or Donate, a Halloween fundraiser at New Alipore on 28 October 2022. It was an evening of spooky fun for a cause, and it is the only Halloween event on this page.",
+        "Disco Diwali came back in October 2024. On 26 October at New Alipore it blended dance, decor and community giving, and it had more volunteer turnouts than every other drive on this page put together. Fundraisers like these are part of how the welfare work is paid for."
+      ]
+    },
+    {
+      "id": "clothes-food-and-toys",
+      "heading": "the clothes, food and toy drives",
+      "body": [
+        "In November 2024 a clothes collection was held at Shubham Apartments on Alipore Road. It was led by one student, and it gathered 10 kg of clothes from a small team. It is the only clothes collection in Alipore on this page.",
+        "On 28 March 2025 three drives ran at New Alipore on the same day. Sharbat Seva handed out 20 litres of Rooh Afza, Food for All gave out packed meals, and Toy and Thread gathered toys and clothes for people who need comfort. Together they are the most concentrated day of handouts in Alipore."
+      ]
+    },
+    {
+      "id": "where-in-alipore",
+      "heading": "where in alipore",
+      "body": [
+        "New Alipore is the place named most often here, {topPlace}, and it hosted both fundraisers as well as most of the 2025 handouts. The only other location is Shubham Apartments on Alipore Road, where the clothes collection was held.",
+        "The March 2025 food and sharbat drives also ran at [Sarat Bose Road](/impact/sarat-bose-road), so the same kind of handout reached more than one neighbourhood that week. For the work in Bhawanipore, see [Drives in Bhawanipore](/impact/bhawanipore)."
+      ]
+    },
+    {
+      "id": "how-alipore-changed",
+      "heading": "how the work in alipore changed",
+      "body": [
+        "Alipore began with fundraisers in 2022, moved to clothes and sharbat in late 2024, and in March 2025 became a day of handouts: food, sharbat and toys at New Alipore. No drive in Alipore falls in 2023, so the work has come in stretches rather than as a steady run.",
+        "The most recent drive on this page is from 28 March 2025. Anyone wanting to know what comes next in Alipore can ask through the [contact page](/contact)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Alipore's biggest turnouts came from fundraisers, not from handouts.",
+    "New Alipore hosted most of Alipore's drives, so it is the starting point for anyone looking for the work here.",
+    "The March 2025 food, sharbat and toy drives all ran at New Alipore on one day.",
+    "The one clothes collection in Alipore gathered 10 kg from a single location."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run drives in Alipore?",
+      "a": "Yes. AquaTerra has run {count} drives in Alipore since {firstYear}, mostly at New Alipore. They include a Halloween fundraiser, a Diwali fundraiser, a clothes collection, and a set of food, sharbat and toy drives in March 2025."
+    },
+    {
+      "q": "What was Trick or Donate?",
+      "a": "Trick or Donate was AquaTerra's Halloween fundraiser at New Alipore on 28 October 2022. It was the first drive in Alipore on this page, and it was held as an evening of spooky fun for a cause."
+    },
+    {
+      "q": "What was Disco Diwali?",
+      "a": "Disco Diwali is AquaTerra's festive fundraiser, which blends dance, decor and community giving. The 2024 edition was held at New Alipore on 26 October 2024, and it had the largest turnout of any drive in Alipore on this page."
+    },
+    {
+      "q": "Where in Alipore did AquaTerra hold drives in 2025?",
+      "a": "On 28 March 2025 AquaTerra held food, sharbat and toy drives at New Alipore. The toy drive, Toy and Thread, gathered toys and clothes for people in need."
+    },
+    {
+      "q": "Can a student join AquaTerra to help with drives in Alipore?",
+      "a": "Yes, if you are a student aged 14 to 19. Join by signing in with Google and waiting for an approval step. Members run the drives, so joining is the way in."
+    }
+  ],
+  "keywords": [
+    "drives in Alipore Kolkata",
+    "Diwali fundraiser Alipore",
+    "Halloween fundraiser Kolkata students",
+    "clothes collection Alipore Kolkata",
+    "food distribution New Alipore",
+    "AquaTerra Alipore"
+  ]
+}

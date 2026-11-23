@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/lint-accent-tokens.mjs && node scripts/verify-routing.mjs && node scripts/compute-org-facts.mjs && node scripts/generate-sitemap.mjs && tsc -b && vite build && node scripts/verify-sitemap.mjs && node scripts/check-bundle-budget.mjs && node scripts/prerender-meta.mjs",
+    "build": "node scripts/lint-accent-tokens.mjs && node scripts/verify-routing.mjs && node scripts/compute-org-facts.mjs && node scripts/compute-topic-facts.mjs && node scripts/generate-sitemap.mjs && tsc -b && vite build && node scripts/verify-sitemap.mjs && node scripts/check-bundle-budget.mjs && node scripts/prerender-meta.mjs",
     "build:full": "npm run build",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "org-facts": "node scripts/compute-org-facts.mjs",
@@ -24,11 +24,11 @@
     "guide:check": "node scripts/feature-map/generate.mjs --check"
   },
   "dependencies": {
+    "@fontsource/montserrat": "^5.3.0",
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.105.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
-    "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "@zxing/library": "^0.23.0",
     "clsx": "^2.1.1",

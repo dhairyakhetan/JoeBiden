@@ -1,0 +1,94 @@
+{
+  "slug": "respect-and-reach",
+  "title": "Respect and Reach: Visiting Elderly Residents · AquaTerra",
+  "description": "Respect and Reach is AquaTerra's visit series for elderly residents: {count} visits since {firstYear}, with stories, songs, gifts and care.",
+  "h1Lead": "time, stories and",
+  "h1Accent": "respect for elders",
+  "lede": "Respect and Reach is AquaTerra's visit series for elderly residents. Students spend a day with them, listening, singing, telling stories and bringing small gifts. Since {firstYear}, the series has made {count} visits with {volunteers} volunteer turnouts, and seven of those visits were at the Urban Shelter for the Homeless.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a visit looks like",
+      "body": [
+        "A Respect and Reach visit is a day spent with elderly residents. The summaries describe stories, songs and smiles, gifts and warmth, and care and essentials. One of them calls the day a time with the elders people often forget to listen to. The aim is company as much as anything else, and the summaries lean on respect and joy rather than on figures.",
+        "Not every visit was for elders alone. The May 2024 visit at the Urban Shelter for the Homeless, titled Old Age Home drive 6.0, describes interactive sessions for kids that foster creativity and learning. Its summary does not say how the elders and the children shared the day, so it is not clear who the visit was for."
+      ]
+    },
+    {
+      "id": "when-it-ran",
+      "heading": "a spring run, then a long gap",
+      "body": [
+        "The series began on 28 April 2023 and ran through the spring. Five visits took place between 28 April and 2 June 2023, and the first of them had the largest crew in the series. Two more followed on 3 and 8 May 2024, both at the shelter.",
+        "The next visit is on 11 September 2025, at All Bengal Women's Union, the only visit outside the shelter. Nothing is listed between May 2024 and that September, so a yearly trend would mislead. Each visit is a single day of its own rather than part of a steady programme."
+      ]
+    },
+    {
+      "id": "where-it-happened",
+      "heading": "one shelter and one women's union",
+      "body": [
+        "Seven of the eight visits took place at the Urban Shelter for the Homeless. The venue name is spelled two ways across the visits, so a search on one form may miss some of them. This page uses the longer form, which most of the visits use.",
+        "All Bengal Women's Union hosted the September 2025 visit, the only one at that venue. If you are comparing settings, that change of venue is the one to check."
+      ]
+    },
+    {
+      "id": "who-took-part",
+      "heading": "who took part",
+      "body": [
+        "Volunteer turnouts on these visits add up to {volunteers}. A turnout counts every time someone showed up, so a student who came to several visits is counted each time. The first visit had seven volunteers, the largest crew in the series. Students aged fourteen to nineteen run the visits, and this page does not name any volunteer or resident."
+      ]
+    },
+    {
+      "id": "reading-the-record",
+      "heading": "what the figures can and cannot show",
+      "body": [
+        "Many visits carry the same line about kind actions supporting elderly people, with a count of elders supported. That line repeats from visit to visit, so it is not a count of the people each visit reached, and it should not be added up. The May 2023 visit, Old Age Home drive 3.0, gives its own figure of 30 elders looked after, which applies to that visit alone.",
+        "The visits do not say what the essentials were or how many residents received them. Treat the series as a picture of company and care, not a count of people served. Anyone who wants a figure for residents should ask AquaTerra through the contact page."
+      ]
+    },
+    {
+      "id": "how-it-connects",
+      "heading": "how the series connects to the rest of the site",
+      "body": [
+        "Respect and Reach sits alongside festival drives, the page on how a drive works from start to finish, and the page on volunteering for teenagers in Kolkata. Those pages cover other work, so read them for the wider picture.",
+        "Every visit has its own public entry on this site, so the series can be checked one visit at a time, and this page says plainly where the figures cannot be trusted."
+      ]
+    }
+  ],
+  "learnings": [
+    "The series has {count} visits, and {year:2023} of them came in one spring run from late April to early June 2023.",
+    "The first visit had seven volunteers, the largest crew in the series, and no later visit had more than six.",
+    "Most visits were at the Urban Shelter for the Homeless, and the September 2025 visit moved to All Bengal Women's Union.",
+    "Nothing is listed from May 2024 to September 2025, so read the series as a set of spring visits rather than a steady programme.",
+    "The visits are about company, stories and essentials, not medical care, and this page does not claim more than that."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra visit elderly residents?",
+      "a": "Yes. Its Respect and Reach series has made {count} visits since {firstYear}, mostly at the Urban Shelter for the Homeless, with one visit in September 2025 at All Bengal Women's Union."
+    },
+    {
+      "q": "What do student volunteers do on a visit to elderly residents?",
+      "a": "Students spend time with residents, tell stories, sing songs, bring gifts and offer care and essentials. One visit's summary calls the day a time with elders people often forget to listen to. The visits do not describe medical care, so AquaTerra does not claim any on them."
+    },
+    {
+      "q": "Where did AquaTerra's elderly care visits take place?",
+      "a": "Seven of the eight visits took place at the Urban Shelter for the Homeless, between April 2023 and May 2024. The September 2025 visit took place at All Bengal Women's Union. No other venues are listed."
+    },
+    {
+      "q": "How many volunteers took part in Respect and Reach?",
+      "a": "The visits have had {volunteers} volunteer turnouts across {count} visits. A turnout counts each person each time they came, so one person who came to several visits is counted once for each one."
+    },
+    {
+      "q": "Can a teenager join a visit like this?",
+      "a": "Teenagers aged fourteen to nineteen can join AquaTerra by signing in with Google and getting approved on the join page. Students run the visits themselves once they are members."
+    }
+  ],
+  "keywords": [
+    "elderly care visits Kolkata",
+    "old age home visits Kolkata volunteers",
+    "Respect and Reach AquaTerra",
+    "volunteer visits to elderly people Kolkata",
+    "Urban Shelter for the Homeless volunteers",
+    "AquaTerra elderly care"
+  ]
+}

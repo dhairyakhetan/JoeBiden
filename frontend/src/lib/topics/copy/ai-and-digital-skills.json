@@ -1,0 +1,87 @@
+{
+  "slug": "ai-and-digital-skills",
+  "title": "Digital Skills Workshops for Kids in Kolkata · AquaTerra",
+  "description": "Computer literacy, coding and digital safety workshops AquaTerra students ran for children at Pather Sathi and Shoishob in Kolkata. {count} drives, {years}.",
+  "h1Lead": "digital skills for",
+  "h1Accent": "young learners",
+  "lede": "AquaTerra's digital skills drives are computer workshops for children, most of them at Pather Sathi. The newest is a digital safety session there in May 2026, and the other is a computer workshop at Shoishob in September 2024. This page covers {count} drives across {years}, and it does not include AquaTerra's wider AI training.",
+  "sections": [
+    {
+      "id": "what-a-computer-workshop-covered",
+      "heading": "what a computer workshop covered",
+      "body": [
+        "In July and August 2023, a run of Sunday school workshops at Pather Sathi introduced children to the basics. Tech Time taught the basics of digital literacy, Ctrl+Create brought in foundational computer skills in a friendly setting, and Code and Connect gave students guided exposure to essential digital tools. All three ran between late July and early August 2023, as part of the Sunday school at Pather Sathi, where most of this topic's sessions took place. The 2023 run was the first computer teaching in this topic, and it was the only computer teaching that year.",
+        "In September 2024 the Keys and Clicks computer workshop at Shoishob covered basic tech skills, coding and digital creativity, and was described as engaging. This page names no particular software, because the sessions were not described that way. The Keys and Clicks session was the only computer workshop in this topic that year, and it came after a long gap."
+      ]
+    },
+    {
+      "id": "digital-safety",
+      "heading": "digital safety",
+      "body": [
+        "The newest drive on this page is the Digital Safety Workshop at Pather Sathi in May 2026. It gave children essential digital safety knowledge through an interactive session, with volunteers teaching them about digital safety. It is the most recent entry on this page, and it was held at the same place as the 2023 computer workshops.",
+        "This is the only session on the page about staying safe rather than about making or using software. With one drive it is too early to say whether it will become a regular strand, so this page describes it as it happened."
+      ]
+    },
+    {
+      "id": "where-the-sessions-ran",
+      "heading": "where the sessions ran",
+      "body": [
+        "Most of the sessions were at Pather Sathi, one of the places we keep going back to. The 2023 computer workshops there ran as Sunday school sessions, and the digital safety workshop in May 2026 was held there too. Pather Sathi appears in every drive on this page except the Keys and Clicks workshop at Shoishob.",
+        "Shoishob hosted the only session outside Pather Sathi, the Keys and Clicks computer workshop in September 2024. That came more than a year after the Pather Sathi computer run, so the two are not one series. It is also the only one of this page's drives held at Shoishob. Shoishob is also one of [the places we return to](/impact/places-we-return-to), with drives of its own. This page treats Pather Sathi as one place."
+      ]
+    },
+    {
+      "id": "how-the-series-moved",
+      "heading": "how the series has moved",
+      "body": [
+        "The computer workshops came in a burst. They ran in late July and early August 2023, and the next computer workshop was not until September 2024. No session in this topic falls in 2025, so the gap between September 2024 and May 2026 is a real one. This topic has {year:2023} drives in 2023, {year:2024} in 2024 and {year:2026} in 2026. Read these counts as a handful of sessions each, not as a trend. The digital safety drive came more than a year and a half after the last computer session, so it reads as a new strand rather than a continuation.",
+        "The newest session is a different kind: digital safety rather than computer skills. With only {count} drives, the topic is too small to show a trend, so this page describes each session as it happened. Read the newest session as a single workshop, set against the computer sessions that came before it."
+      ]
+    },
+    {
+      "id": "where-ai-fits",
+      "heading": "where AI fits",
+      "body": [
+        "AquaTerra also trains its members to use AI, in workshops, in daily work and in projects they build with it. It also runs sessions that teach children about AI. Those sessions are not part of the drives counted on this page, so the {count} figure covers computer and digital safety sessions only.",
+        "If you are looking for AI training, the [AI page](/ai) describes that side of the work. This page is the place for the computer and digital safety sessions that children attended in Kolkata. The AI side of the work is part of how members learn and teach, and it has its own page, so readers can find it without searching this one."
+      ]
+    }
+  ],
+  "learnings": [
+    "Every session on this page is for children, and each one is a computer, digital literacy or digital safety session.",
+    "Pather Sathi hosted most of the sessions, including the digital safety workshop in May 2026.",
+    "The computer workshops ran in one burst in mid-2023, and the next computer session came in September 2024.",
+    "Digital safety is the newest strand, from May 2026.",
+    "AI training for members is part of AquaTerra's work, and it is not counted in the drives on this page."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra teach AI to its members and to children?",
+      "a": "Yes. AquaTerra trains its members to use AI, in workshops, in daily work and in projects they build with it, and it runs sessions that teach children about AI. The {count} computer and digital safety drives on this page do not include those AI sessions."
+    },
+    {
+      "q": "What computer skills did AquaTerra teach children in Kolkata?",
+      "a": "The 2023 Sunday school computer workshops at Pather Sathi taught basic computer literacy, foundational computer skills and digital literacy. The Keys and Clicks workshop at Shoishob in September 2024 covered basic tech skills, coding and digital creativity."
+    },
+    {
+      "q": "Where did AquaTerra hold its digital safety workshop?",
+      "a": "AquaTerra held its Digital Safety Workshop at Pather Sathi in May 2026. It gave children essential digital safety knowledge through an interactive session, with volunteers teaching them."
+    },
+    {
+      "q": "Is AquaTerra's digital skills work free for children?",
+      "a": "AquaTerra is a registered charitable trust and charges no fees for its drives. Its digital skills drives are run by its student members, and this page does not go beyond the details of each drive."
+    },
+    {
+      "q": "How can a student get involved in digital skills work with AquaTerra?",
+      "a": "Students aged 14 to 19 join AquaTerra through Google sign-in followed by an approval step. Members run the workshops, so digital skills work is carried out by students who have joined."
+    }
+  ],
+  "keywords": [
+    "computer workshop for kids Kolkata",
+    "digital safety workshop for children Kolkata",
+    "digital literacy Sunday school Kolkata",
+    "coding basics for kids Kolkata",
+    "AI training for students Kolkata",
+    "AquaTerra digital skills workshops"
+  ]
+}

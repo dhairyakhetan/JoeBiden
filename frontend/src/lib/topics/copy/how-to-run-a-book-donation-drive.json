@@ -1,0 +1,98 @@
+{
+  "slug": "how-to-run-a-book-donation-drive",
+  "title": "How to run a book donation drive · AquaTerra",
+  "description": "How AquaTerra students run a book collection drive in Kolkata: one building, a small team, sorting books and notebooks, and a write-up with the weight in kilos.",
+  "h1Lead": "how to run a",
+  "h1Accent": "book donation drive",
+  "lede": "A book donation drive is a request to a building, a box for storybooks and notebooks, and a small team that sorts what comes in. AquaTerra has run {count} drives that collect books or notebooks since {firstYear}, and many of them were run by one or two people from a single building.",
+  "sections": [
+    {
+      "id": "start-small",
+      "heading": "start small, from one building",
+      "body": [
+        "The Book Basket drives of June and July 2025 are the clearest example. Many were held at a single housing complex or neighbourhood: Dreamland Housing, South City Residency, Paymanti Housing, Emami City, Ideal Gardens, Santosh Apartments and Natural City in Laketown. Many of them were run by one person, and the largest team in that run had four.",
+        "A small drive is still a real drive. Our teams suggest asking the building a few days ahead, agreeing where the box sits, and picking a time when residents are likely to be around. One person with a box and a clear message can do the whole thing."
+      ]
+    },
+    {
+      "id": "the-message",
+      "heading": "give the drive a message people remember",
+      "body": [
+        "The Book Basket series has used short lines to explain why books matter: the drive in June 2025 at Ballygunge was described as book collection drives where volunteers gathered books to fill shelves and minds with stories, and another said your old books can write someone else's new story.",
+        "Keep the ask simple: storybooks and school books, a box at the gate, and a line that says who the books are for. The write-ups say the books go to underprivileged kids, so say that on the sign too."
+      ]
+    },
+    {
+      "id": "sort-as-you-go",
+      "heading": "sort as you go, and pair books with notebooks",
+      "body": [
+        "Sorting keeps the drive useful. The Wear and Write campaigns of 2024 sorted clothes and notebooks so that they could be handed on fairly, and one write-up says the sorting made the donations more useful. Separate storybooks from school books, and set aside anything damaged so the box stays easy to carry.",
+        "Notebooks are a natural pair for books. Between late April and late May 2024, the Wear and Write campaigns collected clothes and notebooks together at places including Active Acres, Clubtown Greens and Salarpuria Pearl in Gopalpur, and the 2025 Wear and Write drive at Salarpuria Pearl did the same."
+      ]
+    },
+    {
+      "id": "weigh-and-count",
+      "heading": "weigh the books and write the amount down",
+      "body": [
+        "Book drives are measured in kilos. The write-ups give small amounts, a few kilos at a time: the July 2025 drive at Ashoka Building notes 3 kgs of books, and the drive at Bidhanagar Tank in June 2025 notes 5 kgs. Those are honest figures for a drive run by a small team, and they are what the next team should expect.",
+        "Across {count} drives, {volunteers} volunteer turnouts have worked the collections. Volunteer turnouts count every time someone showed up, so a student who ran several drives in one month counts each time."
+      ]
+    },
+    {
+      "id": "the-series",
+      "heading": "how the series grew",
+      "body": [
+        "The series began with a storybook drive in Kolkata in March 2022, which is the only drive from that year on this page. The next drives came in 2024, when the notebook campaigns ran through April and May. In 2024 the Wear and Write campaigns held {year:2024} drives, and in 2025 the Book Basket drives and the Wear and Write campaigns together ran {year:2025} drives.",
+        "Active Acres hosted three of the 2024 drives between 14 and 15 May, which shows how a building can become a regular stop. The series is up to Book Basket Book Collection Drive 16.0, the latest drive in the set."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up with the kilos and the building",
+      "body": [
+        "Each drive goes on the AquaTerra site as a write-up: the title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, which for a book drive is the weight of books collected.",
+        "Name the building in the summary. A line that says Book Basket at Santosh Apartments, with the weight and the team size, tells the next team what to do and where to ask."
+      ]
+    }
+  ],
+  "learnings": [
+    "One person and one building is a complete drive: most 2025 Book Basket drives were run that way.",
+    "Give the ask a single clear message, and say who the books are for.",
+    "Pair books with notebooks when a clothes drive is already on: the 2024 campaigns collected them together.",
+    "Write the weight in kilos every time, so the next drive can be planned against a real figure."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a book donation drive?",
+      "a": "Ask a building or housing complex to host a box, say which books you want, sort them as they come in, weigh them and write the drive up on the AquaTerra site. AquaTerra's Book Basket series has run {count:book-basket} drives, and many were run by one or two people."
+    },
+    {
+      "q": "Does AquaTerra collect old books?",
+      "a": "Yes. The Book Basket drives collect books for underprivileged kids, and the write-ups describe books gathered to fill shelves and minds with stories."
+    },
+    {
+      "q": "Does AquaTerra collect notebooks as well?",
+      "a": "Yes. The Wear and Write campaigns of 2024 and 2025 collected clothes and notebooks together, and the write-ups say they were gathered to support children's learning."
+    },
+    {
+      "q": "Where has AquaTerra held book drives?",
+      "a": "AquaTerra's book and notebook drives have been held at {placesCount} places, mostly housing complexes and neighbourhoods in Kolkata, including Dreamland Housing, South City Residency, Active Acres and Ballygunge."
+    },
+    {
+      "q": "Does AquaTerra accept money for book drives?",
+      "a": "No. AquaTerra takes no monetary donations and is self-funded through its own student-run events. Its book drives collect books and notebooks, not cash."
+    },
+    {
+      "q": "Are AquaTerra's book drives run by students?",
+      "a": "Yes. Students run the drives, and a single drive can be led by one person or a small team of up to four. Each drive is written up on the AquaTerra site."
+    }
+  ],
+  "keywords": [
+    "book donation drive Kolkata",
+    "how to run a book collection drive",
+    "old books donation Kolkata children",
+    "Book Basket AquaTerra",
+    "notebook collection drive for students Kolkata",
+    "book drive for underprivileged kids Kolkata"
+  ]
+}

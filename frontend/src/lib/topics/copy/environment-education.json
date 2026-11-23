@@ -1,0 +1,87 @@
+{
+  "slug": "environment-education",
+  "title": "Environment and climate workshops for children · AquaTerra",
+  "description": "AquaTerra's environment workshops teach children about waste, climate and nature through Earth Day, bottle projects and nature days. See where they were held.",
+  "h1Lead": "teaching children to",
+  "h1Accent": "look after the planet",
+  "lede": "AquaTerra's environment and climate education is a workshop series for children, covering waste, climate, nature and bottle upcycling. It has {count} entries from {firstYear} to {lastYear} and {volunteers} volunteer turnouts (a turnout counts every time someone showed up). Some entries are planting drives, so the Grow Green series is part of this page too.",
+  "sections": [
+    {
+      "id": "earth-day-sessions",
+      "heading": "earth day in april",
+      "body": [
+        "Earth Day sessions ran in April 2022, 2023 and 2025. Planet First was held at Ek Tara on 22 April 2022, Heal the Earth at Don Bosco School, Park Circus on 21 April 2022, and Green Hour at Pariwar Milan on 29 April 2022. In 2023 For the Future ran at Ek Tara on 26 April, and in 2025 Smiles Shared ran at South City International School on 21 April.",
+        "The sessions were hands-on and covered sustainability, waste and action. Planet First, Heal the Earth and Smiles Shared share almost the same description, so the title and date are the best way to tell them apart. Heal the Earth went further, with volunteers planting trees in bottles, which links it to the bottle projects below."
+      ]
+    },
+    {
+      "id": "bottles-and-upcycling",
+      "heading": "bottles, pots and upcycling",
+      "body": [
+        "A run of bottle workshops took place from 2021 to 2023. Life in a Bottle painted flower pots at Ek Tara in June 2021, Waste to Wealth turned scrap into products at Loretto Rainbow home park street in August 2022, and Roots and Rise had volunteers planting trees in bottles at Jyotirmai in July 2022. In 2023, Bottle To Better upcycled plastic bottles at South Calcutta Inner Wheel School, Life in a Bottle built terrariums at Pather Sathi, and Plant Pact made terrariums at Mother's Nest.",
+        "The bottle sessions were busiest in 2023, the same year the series was busiest overall. Plant Pact at Mother's Nest in July 2023 and Life in a Bottle at Pather Sathi in August 2023 are the terrarium sessions, and their write-ups describe children learning how self-sustaining ecosystems work."
+      ]
+    },
+    {
+      "id": "nature-and-english",
+      "heading": "nature and english days",
+      "body": [
+        "The Nature x English days of 2023 are the clearest set of repeat sessions. Day 1 ran at Ek Tara on 16 June, Day 2 at Ek Tara on 23 June, and Day 3 at Pather Sathi on 30 June, with Day 4 at Ek Tara on 7 July. Each day used stories, leaves, poems and outdoor themes, and each recorded a similar figure for children taught.",
+        "Ek Tara hosted most of these days. It was also the venue for the Life in a Bottle pot painting session in June 2021, and for a Green Christmas workshop in December 2021, where volunteers swapped plastic for plants, crafts and conscious cheer."
+      ]
+    },
+    {
+      "id": "climate-and-planting",
+      "heading": "climate talks and the planting drives",
+      "body": [
+        "Climate sessions are fewer. Let's Talk Climate ran at Ek Tara on 31 August 2021, and Our Earth, a session on global warming, ran at Pather Sathi on 15 April 2023. The rest of the topic is mostly planting. Every Kolkata entry here is a Grow Green planting drive, and the planting series on its own has {count:grow-green} drives.",
+        "The planting drives account for the most volunteer turnouts on this page, and they make up the largest share of its entries. For the planting side, see [Grow Green: plantation drives](/impact/grow-green). For organisation-wide totals across every topic, see [AquaTerra by the numbers](/impact/by-the-numbers)."
+      ]
+    },
+    {
+      "id": "where-sessions-are-held",
+      "heading": "where the sessions are held",
+      "body": [
+        "Across the topic, the workshops have taken place at {placesCount} places. Ek Tara and Pather Sathi host most of the workshop series. Ashok Hall School and South City International School host school sessions, and Gachtala appears in the planting drives. Pather Sathi also appears on the Sundarbans page, where it is the named group on the most recent drive.",
+        "{topPlace} is the most frequent entry, because several planting drives are recorded only by city. Those Kolkata entries are all planting drives, so the workshop side of this page is smaller than the total suggests. The school sessions are each recorded against their own school name, so they are easy to find."
+      ]
+    }
+  ],
+  "learnings": [
+    "Earth Day sessions ran in April 2022, 2023 and 2025, at venues across Kolkata.",
+    "The bottle workshops cluster in 2022 and 2023, when bottle projects became a recurring theme.",
+    "The Nature x English days of June and July 2023 were a repeat series at Ek Tara and Pather Sathi.",
+    "Every Kolkata entry on this page is a planting drive, so the workshop entries are fewer than the total suggests.",
+    "Read this topic alongside Grow Green, since the two share many entries."
+  ],
+  "faqs": [
+    {
+      "q": "What environment workshops does AquaTerra run for children?",
+      "a": "AquaTerra runs environment and climate workshops for children, including Earth Day sessions, bottle upcycling and terrarium workshops, nature-based English days and climate talks. The series has {count} entries from {firstYear} to {lastYear}, and some of those entries are planting drives."
+    },
+    {
+      "q": "Does AquaTerra run Earth Day workshops?",
+      "a": "Yes. AquaTerra held Earth Day workshops in April 2022, April 2023 and April 2025, at venues including Ek Tara, Don Bosco School in Park Circus and South City International School."
+    },
+    {
+      "q": "Does AquaTerra teach children about waste and recycling?",
+      "a": "Yes. Waste Wise, held at Ashok Hall School on 27 August 2023, taught eco-conscious habits through games, demonstrations and storytelling. Bottle To Better showed children how to upcycle plastic bottles at South Calcutta Inner Wheel School on 3 August 2023."
+    },
+    {
+      "q": "Where are AquaTerra's environment workshops held?",
+      "a": "Sessions have been held at venues including Ek Tara, Pather Sathi, Ashok Hall School, South City International School and Don Bosco School in Park Circus. Across the topic, the sessions and drives have taken place at {placesCount} places."
+    },
+    {
+      "q": "How many children has AquaTerra taught about the environment?",
+      "a": "Many workshops give a figure for children taught in their own write-up, and this page does not add those figures into one total. Across all of AquaTerra's work, {children} children have been reached."
+    }
+  ],
+  "keywords": [
+    "environment workshops for children Kolkata",
+    "Earth Day workshop Kolkata students",
+    "climate education Kolkata children",
+    "bottle upcycling workshop Kolkata",
+    "terrarium workshop children Kolkata",
+    "AquaTerra environment education"
+  ]
+}

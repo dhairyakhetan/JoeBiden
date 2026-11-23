@@ -1,0 +1,111 @@
+/* Tactile layer, HoD desk part. Loaded with its route so the eager CSS budget stays put; see styles/components/tactile.css for the rules this follows. */
+
+/* Desk icon buttons and action pills share the same raise and press. */
+html .admin .iconbtn,
+html .admin .adm-actpill {
+  background-color: var(--card);
+  border-color: var(--tx-edge);
+  box-shadow: var(--tx-drop);
+  transition: background-color 0.15s var(--tx-ease), color 0.15s var(--tx-ease), border-color 0.15s var(--tx-ease), box-shadow 0.15s var(--tx-ease), transform 0.15s var(--tx-ease);
+}
+
+html .admin .iconbtn:active,
+html .admin .adm-actpill:active {
+  box-shadow: var(--tx-pressed);
+  transform: scale(0.96);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html .admin .iconbtn:hover:not(.ok):not(.no),
+  html .admin .adm-actpill:hover {
+    background-color: var(--bg-2);
+  }
+}
+
+/* ━━━ 2. CARDS (desk-scoped; the global .card rules live in tactile.css) ━━━ */
+
+html .admin .card,
+html .admin .hod-card {
+  box-shadow: var(--tx-card);
+}
+
+html .admin .card:hover {
+  box-shadow: var(--tx-card);
+}
+
+/* ━━━ 3. TABLES ━━━ */
+
+/* The frame is one raised object: card fill, hairline, crisp drop. */
+html .admin .mdir-table-wrap,
+html .admin .pm-tablewrap,
+html .admin .vol-tablewrap {
+  box-shadow: var(--tx-card);
+}
+
+html .admin .mdir-table thead th {
+  box-shadow: 0 1px 0 0 rgba(var(--tx-ink), 0.06);
+}
+
+/* Each row fades its own fill in place, and sinks a shade while pressed. */
+html .admin .mdir-table tbody tr,
+html .admin .pm-table tbody tr,
+html .admin .vol-table tbody tr {
+  transition: background-color 0.15s var(--tx-ease);
+}
+
+html .admin .mdir-table tbody tr:active,
+html .admin .pm-table tbody tr:active,
+html .admin .vol-table tbody tr:active {
+  background: color-mix(in srgb, var(--bg-2) 70%, var(--ink) 4%);
+}
+
+/* ━━━ 5. DROPDOWNS ━━━ */
+
+/* The select pill becomes a raised white control (it was a hollow outline). */
+html .admin .adm-selectpill > select {
+  background-color: var(--card);
+  border: 1px solid var(--tx-edge);
+  box-shadow: var(--tx-drop);
+  transition: background-color 0.15s var(--tx-ease), border-color 0.15s var(--tx-ease), box-shadow 0.15s var(--tx-ease);
+}
+
+html .admin .adm-selectpill > select:active {
+  box-shadow: var(--tx-pressed);
+  background-color: var(--bg-2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html .admin .adm-selectpill > select:hover {
+    background-color: var(--bg-2);
+  }
+}
+
+/* ━━━ 6. SHEETS AND DIALOGS ━━━ */
+
+html .adm-sheet {
+  box-shadow: var(--tx-modal);
+}
+
+html .adm-sheet-close {
+  transition: background-color 0.15s var(--tx-ease), transform 0.15s var(--tx-ease), box-shadow 0.15s var(--tx-ease);
+}
+
+html .adm-sheet-close:active {
+  background: var(--bg-2);
+  box-shadow: var(--tx-pressed);
+  transform: scale(0.94);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html .adm-sheet-close:hover {
+    background: var(--bg-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .admin .iconbtn:active,
+  html .admin .adm-actpill:active,
+  html .adm-sheet-close:active {
+    transform: none;
+  }
+}

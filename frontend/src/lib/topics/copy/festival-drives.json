@@ -1,0 +1,94 @@
+{
+  "slug": "festival-drives",
+  "title": "Festival Drives: Durga Puja, Diwali and Christmas · AquaTerra",
+  "description": "AquaTerra's festival drives bring Durga Puja, Diwali, Rakhi, Holi and Christmas workshops to kids across Kolkata: {count} drives since {firstYear}.",
+  "h1Lead": "a year of",
+  "h1Accent": "festivals for kids",
+  "lede": "AquaTerra's festival drives are workshops and fundraisers built around Durga Puja, Diwali, Rakhi, Holi and Christmas. Since {firstYear}, the series has run {count} drives with {volunteers} volunteer turnouts, where a turnout counts every time someone showed up. More than half of the drives fall in December.",
+  "sections": [
+    {
+      "id": "when-they-run",
+      "heading": "when the festival drives run",
+      "body": [
+        "The festival drives follow the calendar, and Christmas is the busiest season. More than half of all the drives fall in December, and there has been a Christmas drive in every year from {firstYear} to {lastYear}. The rest of the year is a handful of drives at a time, each tied to one festival.",
+        "Durga Puja and Diwali cluster in autumn, Rakhi falls in August and Holi in March. The Colours of Durga workshops ran through September and October 2023. Diwali events were held on 3 November 2023, 26 October 2024 and 21 October 2025, and Rakhi workshops ran each August from 2023 to 2025."
+      ]
+    },
+    {
+      "id": "merry-miracles",
+      "heading": "merry miracles and the christmas run",
+      "body": [
+        "Merry Miracles is the name AquaTerra uses for its multi-day Christmas drive. In December 2023 it ran as numbered days at Ek Tara, Pather Sathi and Gyan Deepak. Day 1 was Christmas crafts, Day 2 free dental checkups for kids, Day 3 Santa mask making, Day 4 a carnival of games and music, and Day 5 a movie outing at Shyambazar.",
+        "The later Christmas drives kept the same mix of crafts, carols and stories. In December 2025 kids made Christmas cards at Pather Sathi on 13 December, then sang carols and ate cake there the next day. Cookie Pass On drives ran from 15 to 22 December, asking residents to pass cookies to someone less fortunate, at places including Barrackpore and Avani Oxford."
+      ]
+    },
+    {
+      "id": "diwali-and-fundraisers",
+      "heading": "diwali, carnivals and fundraisers",
+      "body": [
+        "Not every festival drive is a workshop. Diwali Night on 3 November 2023 in Kolkata raised funds through stalls and performances. Disco Diwali was held on 26 October 2024 at New Alipore, and Disco Diwali 2.0 on 21 October 2025 at 60 Chowrangee Banquet. Both mix dance, lights and decor with giving back to the community. The 2024 Disco Diwali drew the largest volunteer turnout in the series, and the 2025 summary calls its sequel AquaTerra's biggest Diwali fundraising success.",
+        "The Starry Night, a Christmas carnival on 22 December 2024 at Sky Turf, is also a fundraiser. Its summary describes an evening of music, food and cheer that raised funds and awareness for AquaTerra's ongoing welfare work, and fifty volunteers ran it."
+      ]
+    },
+    {
+      "id": "where-they-happen",
+      "heading": "pather sathi and the sunday school",
+      "body": [
+        "Pather Sathi is the most frequent place by a wide margin. Nearly half of the festival drives were held there, through the Durga Puja, Christmas and Holi series and the Sunday school sessions for kids. Outside Pather Sathi, festival drives ran at Ek Tara, AIM Foundation, Disha Foundation, Calcutta Rescue and Sujata Child NGO, along with several apartment complexes and a few one-off venues.",
+        "The drives have been held at {placesCount} places in total. The festival calendar is a set of repeat visits to one main venue, plus a long tail of single stops. Pather Sathi's drives run from December 2022 to December 2025 and cover several of the festival seasons, so it is the best place to start on the kids' side."
+      ]
+    },
+    {
+      "id": "what-kids-did",
+      "heading": "crafts, carols, colours and cake",
+      "body": [
+        "The activities repeat across the years. Kids made Christmas cards, Santa masks, wrapping paper and rakhis, sang carols, practised public speaking and decorated a Christmas tree, and played with organic colours at a Holi party. In the Secret Cheer workshop of December 2024 at Tetultala Ashram, kids made wrapping paper, and volunteers then used it to wrap gifts for a secret Santa game with the kids."
+      ]
+    },
+    {
+      "id": "reading-the-record",
+      "heading": "what the figures do and do not show",
+      "body": [
+        "Many workshops share the same line about children taught, and the Cookie Pass On drives share the same line about twenty cookies. Read those as shared wording rather than separate counts for each drive, since one repeated figure says little about the drive it sits on.",
+        "The Diwali Night of November 2023 has no volunteer turnout, so that event adds nothing to the {volunteers} total, and nothing on this site explains the zero. Read the total as the sum of the drives that report a turnout, not as a full picture of everyone who came."
+      ]
+    }
+  ],
+  "learnings": [
+    "More than half of the {count} festival drives fall in December, so Christmas is the season the series is built around.",
+    "Merry Miracles was a numbered run of days in December 2023, and the later Christmas drives kept the same mix of crafts, carols and stories.",
+    "Durga Puja, Diwali, Rakhi and Holi each have their own series, held in autumn, August and March.",
+    "Fundraisers such as Disco Diwali and The Starry Night sit in the same calendar as the workshops.",
+    "Pather Sathi hosted nearly half of the festival drives, so a reader interested in the kids' side should start there."
+  ],
+  "faqs": [
+    {
+      "q": "What festival drives does AquaTerra run for kids in Kolkata?",
+      "a": "AquaTerra runs festival drives for kids around Durga Puja, Diwali, Rakhi, Holi and Christmas. Since {firstYear} it has run {count} drives, mostly workshops at Pather Sathi and other Sunday school and community spaces, plus fundraising events for Diwali and Christmas."
+    },
+    {
+      "q": "What did AquaTerra do for Christmas in 2025?",
+      "a": "In December 2025 AquaTerra ran Merry Miracles Day 1, a card-making workshop at Pather Sathi on 13 December, and a carol and cake session there on 14 December. Cookie Pass On drives ran between 15 and 22 December at places including Avani Oxford and Barrackpore, asking residents to pass cookies to someone less fortunate."
+    },
+    {
+      "q": "Did AquaTerra run Durga Puja workshops?",
+      "a": "Yes. The Colours of Durga series ran as Durga Puja workshops at Pather Sathi in September and October 2023, and its fifth session, on 7 October 2023, closed the series. Other Durga Puja sessions include a programme at the Sunday school in October 2023 and a workshop with Sujata Child NGO on 8 October 2023."
+    },
+    {
+      "q": "Is Disco Diwali a fundraiser?",
+      "a": "Yes. Disco Diwali is a fundraising event. It was held on 26 October 2024 at New Alipore, Kolkata, and again on 21 October 2025 at 60 Chowrangee Banquet, with dance, lights and decor alongside giving back to the community. Volunteers ran both."
+    },
+    {
+      "q": "How many festival drives has AquaTerra run?",
+      "a": "AquaTerra has run {count} festival drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts in total. A turnout counts every time someone showed up, so a volunteer who came to several drives is counted once for each one."
+    }
+  ],
+  "keywords": [
+    "Durga Puja workshops Kolkata kids",
+    "Diwali fundraiser Kolkata students",
+    "Christmas workshop for kids Kolkata",
+    "Merry Miracles AquaTerra",
+    "Rakhi workshop Kolkata children",
+    "Holi workshop Kolkata kids"
+  ]
+}

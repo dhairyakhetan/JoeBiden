@@ -74,3 +74,30 @@ export function countForView(view: ApprovalsView, counts: ContactedCounts | null
 export function headerCount(view: ApprovalsView, counts: ContactedCounts | null, loadedRows: number): number {
   return countForView(view, counts) ?? loadedRows
 }
+
+/**
+ * Reasons HR picks from when rejecting an applicant (bug tracker 46398e8d).
+ * `label` is what HR sees on the chip; `note` is what the applicant is told.
+ * "Other" has no fixed text: HR's own words are the whole note.
+ */
+export const REJECTION_REASONS = [
+  { id: 'not_suitable', label: 'behavioural reasons / not suitable', note: 'Not suitable for AquaTerra at this time.' },
+  { id: 'contact', label: 'contact missing / incorrect / unreachable', note: 'We could not reach you on the contact details you gave.' },
+  { id: 'age', label: 'age criteria does not match', note: 'You do not meet our age criteria.' },
+  { id: 'other', label: 'other', note: '' },
+] as const
+
+export type RejectionReasonId = typeof REJECTION_REASONS[number]['id']
+
+/**
+ * The note saved on the member and sent to the applicant. A fixed reason plus
+ * optional extra words; "other" needs the extra words. Returns '' when the
+ * combination is not yet complete, which keeps the confirm button disabled.
+ */
+export function composeRejectionNote(reason: RejectionReasonId | null, extra: string): string {
+  const more = extra.trim()
+  if (!reason) return ''
+  if (reason === 'other') return more
+  const base = REJECTION_REASONS.find(r => r.id === reason)!.note
+  return more ? `${base} ${more}` : base
+}

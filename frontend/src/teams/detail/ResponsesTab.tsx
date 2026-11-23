@@ -6,13 +6,14 @@ import { useRef, useState } from 'react'
 import { isApplicantApproved, AWAITING_APPROVAL_TAG, ACCEPT_BLOCKED_MESSAGE } from '../../lib/applicantGate'
 import { useModalA11y } from '../../hooks/useDialog'
 import { useToast } from '../../components/Toast'
-import { jobOpenings } from '../../lib/jobOpenings'
+import { jobOpenings, type WaitingApplicant } from '../../lib/jobOpenings'
+import WaitingApplicants from '../../components/WaitingApplicants'
 import { OpeningAnswersDisplay } from '../../components/OpeningQuestionBuilder'
 import { TeamOpening } from './shared'
 
 export default function ResponsesTab({
   openings, openingResponses, setOpeningResponses, responsesLoading, responsesError,
-  onRetryResponses, totalResponses, isMobile,
+  onRetryResponses, totalResponses, waiting = [], onWaitingChanged, isMobile,
 }: {
   openings: TeamOpening[]
   openingResponses: Record<string, any[]>
@@ -22,6 +23,9 @@ export default function ResponsesTab({
   responsesError: boolean
   onRetryResponses: () => void
   totalResponses: number
+  /** People HR has not cleared yet: seen here, not acceptable until their account is approved. */
+  waiting?: WaitingApplicant[]
+  onWaitingChanged?: () => void
   isMobile: boolean
 }) {
   const { success: toastSuccess, error: toastError } = useToast()
@@ -102,7 +106,12 @@ export default function ResponsesTab({
     )
   }
 
-  if (totalResponses === 0) {
+  const questionsByOpening = Object.fromEntries(openings.map(o => [o.id, o.customQuestions || []]))
+  const waitingBlock = waiting.length > 0
+    ? <WaitingApplicants items={waiting} questionsByOpening={questionsByOpening} onChanged={() => onWaitingChanged?.()} />
+    : null
+
+  if (totalResponses === 0 && waiting.length === 0) {
     return (
       <div className="card" style={{ padding: 60, textAlign: 'center' }}>
         <div className="h-display" style={{ fontSize: 28 }}>no responses yet.</div>
@@ -113,6 +122,8 @@ export default function ResponsesTab({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+      {waitingBlock}
+      {waitingBlock && totalResponses > 0 && <div className="mono xs upper" style={{ fontWeight: 800, marginBottom: -12 }}>{`cleared applicants (${totalResponses})`}</div>}
       {openings.filter(op => (openingResponses[op.id] || []).length > 0).map(op => (
         <div key={op.id}>
           <div className="mono xs upper muted" style={{ fontWeight: 700, marginBottom: 10 }}>
@@ -124,6 +135,7 @@ export default function ResponsesTab({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ fontWeight: 700, fontSize: 14 }}>{app.applicant_name || 'Anonymous'}</div>
                     {!isApplicantApproved(app) && <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 2 }} title={ACCEPT_BLOCKED_MESSAGE}>{AWAITING_APPROVAL_TAG}</div>}
+                    {app.linked_by === 'phone' && <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 2 }} title="A visitor who was not signed in gave this phone number, and it matched this member. The member has been told. A number is not proof of who applied, so check before you accept.">linked by phone number{app.typed_name && app.typed_name.trim().toLowerCase() !== (app.applicant_name || '').trim().toLowerCase() ? ` · typed “${app.typed_name}”` : ''}</div>}
                   {/* Was an unlabelled ~86x21 select at 10px: under the 44px
                       floor, and 10px triggers iOS Safari's focus zoom. */}
                   <select

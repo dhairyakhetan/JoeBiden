@@ -1,9 +1,11 @@
 import { unstable_HistoryRouter as HistoryRouter, Routes, Route, Navigate, useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom'
-import { useEffect, useState, Suspense, createElement } from 'react'
+import { useEffect, useRef, useState, Suspense, createElement } from 'react'
 import { createAnimatedHistory } from './terranotes/lib/animatedHistory'
 import { isTnPath } from './terranotes/lib/base'
+import { clarityTag } from './lib/clarity'
 import { lazyWithRetry as lazy } from './lib/lazyWithRetry'
 import { AuthProvider, useAuth } from './auth/AuthContext'
+import { registrationGateTarget } from './lib/registrationGate'
 import { CapabilityProvider } from './auth/CapabilityContext'
 import DeskCapabilityGate from './director/DeskCapabilityGate'
 import ToastProvider from './components/Toast'
@@ -22,6 +24,17 @@ const scrollByKey = new Map<string, number>()
 function AmbientPause() {
   useEffect(() => startAmbientPause(), [])
   return null
+}
+
+/**
+ * Sends a signed-in member who has not given a contact number (or class) to /register, wherever they are. The rule and the
+ * exemptions live in lib/registrationGate.ts so they can be tested without a router.
+ */
+function RegistrationGate() {
+  const { member, isLoading } = useAuth()
+  const location = useLocation()
+  const target = registrationGateTarget({ pathname: location.pathname, member: member as any, isLoading })
+  return target ? <Navigate to={target} replace /> : null
 }
 
 function ScrollToTop() {
@@ -146,6 +159,13 @@ function AppRouter({ children }: { children: React.ReactNode }) {
   const [history] = useState(() => createAnimatedHistory())
   const [inTn, setInTn] = useState(() => isTnPath(window.location.pathname))
   useEffect(() => history.onShown((p: string) => setInTn(isTnPath(p))), [history])
+  // Clarity: mark the session once per page load as having seen Terra Notes, so its recordings can be filtered by
+  // area = terranotes. Clarity follows SPA page changes by itself; no page-view events here. (lib/clarity.ts: a no-op
+  // when the tag is not on the page, i.e. for signed-in visitors.)
+  const taggedTn = useRef(false)
+  useEffect(() => {
+    if (inTn && !taggedTn.current) { taggedTn.current = true; clarityTag('area', 'terranotes') }
+  }, [inTn])
   return <HistoryRouter history={history} useTransitions={inTn ? false : undefined}>{children}</HistoryRouter>
 }
 
@@ -237,6 +257,7 @@ const PublicProjectDetailPage = lazy(() => import('./public/PublicProjectDetailP
 const BlogListPage           = lazy(ROUTE_LOADERS.blog)
 const BlogPostPage           = lazy(() => import('./public/BlogPostPage'))
 const SupportPage            = lazy(ROUTE_LOADERS.support)
+const PillarPage             = lazy(ROUTE_LOADERS.pillar)
 // Terra Notes (the monthly digital magazine) and, inside it, AQ Labs. /labs redirects into it.
 // (Previously: AQ Labs, the '26 cohort, redesign section 33; one component served the
 // index and the seven project pages; the cohort is a checked-in constant, not
@@ -249,9 +270,6 @@ const GamePage               = lazy(() => import('./games/GamePage'))
 // a wayfinding surface people reach deliberately, not part of the first load.
 const DirectoryPage          = lazy(ROUTE_LOADERS.directory)
 const PrivacyPolicyPage      = lazy(ROUTE_LOADERS.privacyPolicy)
-// Open Books — the public FY ledger at /accounts. Deliberately public, no
-// ProtectedRoute: see AccountsPage.tsx / the PRD for why.
-const AccountsPage           = lazy(ROUTE_LOADERS.accounts)
 const ThankYouPage           = lazy(() => import('./public/ThankYouPage'))
 const VolunteerHandbookPage  = lazy(ROUTE_LOADERS.volunteer)
 const QuickLinksPage         = lazy(ROUTE_LOADERS.links)
@@ -336,6 +354,9 @@ const MyPostsPage            = lazy(() => import('./feed/MyPostsPage'))
 const BugReportsPage         = lazy(() => import('./bugs/BugReportsPage'))
 const TasksPage              = lazy(() => import('./tasks/TasksPage'))
 const GrievancePage          = lazy(() => import('./grievance/GrievancePage'))
+const CertificatesPage       = lazy(() => import('./certificates/CertificatesPage'))
+const CertificateViewPage    = lazy(() => import('./certificates/CertificateViewPage'))
+const VerifyCertificatePage  = lazy(() => import('./certificates/VerifyCertificatePage'))
 const ProfilePage            = lazy(() => import('./profile/ProfilePage'))
 const EditProfilePage        = lazy(() => import('./profile/EditProfilePage'))
 const CalendarPage           = lazy(() => import('./calendar/CalendarPage'))
@@ -461,6 +482,7 @@ function App() {
         <CapabilityProvider>
         <AppRouter>
         <ScrollToTop />
+        <RegistrationGate />
         <AmbientPause />
         <GlobalShortcuts />
         <CelebrationHost />
@@ -481,6 +503,12 @@ function App() {
               <Route path="/blog" element={<BlogListPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/support" element={<SupportPage />} />
+              {/* The "giving back" pillar pages, one renderer (lib/pillarContent.ts holds the words). */}
+              {/* all of /impact: the hub, the library (/impact/<slug>), photo stories and explorers; PillarPage dispatches */}
+              <Route path="/impact/*" element={<PillarPage pillarKey="impact" />} />
+              <Route path="/shikshaq" element={<PillarPage pillarKey="shikshaq" />} />
+              <Route path="/sports" element={<PillarPage pillarKey="sports" />} />
+              <Route path="/ai" element={<PillarPage pillarKey="ai" />} />
               <Route path="/labs" element={<LabsRedirect />} />
               <Route path="/labs/:slug" element={<LabsRedirect />} />
               {/* TerraNotes, AQ's monthly digital magazine (and, inside it, AQ Labs). It owns everything under /terranotes;
@@ -500,8 +528,13 @@ function App() {
                   real per-route <head> content at build time, not just the
                   runtime `useMeta` swap this page also sets for visitors. */}
               <Route path="/directory" element={<DirectoryPage />} />
+              {/* Anyone checks the code printed on a certificate or letter (20 Nov 2026). noindex; in robots.txt Disallow. */}
+              <Route path="/verify" element={<VerifyCertificatePage />} />
+              <Route path="/verify/:code" element={<VerifyCertificatePage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-              <Route path="/accounts" element={<AccountsPage />} />
+              <Route path="/terms" element={<PrivacyPolicyPage />} />
+              {/* Open Books was retired 15 Nov 2026 (the CA declined it). Old links land on How we give back; vercel.json redirects too. */}
+              <Route path="/accounts" element={<Navigate to="/impact" replace />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/volunteer" element={<VolunteerHandbookPage />} />
               <Route path="/volunteer-handbook" element={<Navigate to="/volunteer" replace />} />
@@ -535,6 +568,8 @@ function App() {
                   existing links, shared posts and indexed URLs don't 404. */}
               <Route path="/roots" element={<Navigate to="/crftd" replace />} />
               <Route path="/members" element={<MembersPage />} />
+              {/* Same chunk as /members (MembersPage dispatches on the path): the eager bundle is at its budget. */}
+              <Route path="/core-team" element={<MembersPage />} />
               <Route path="/member/:uuid" element={<PublicProfilePage />} />
               <Route path="/post/:uuid" element={<PostPage />} />
               <Route path="/teams" element={<TeamsPage />} />
@@ -617,6 +652,14 @@ function App() {
             {/* A private way to raise a concern with HR (C-32). Signed-in, approved members only; in robots.txt Disallow, not in the sitemap. */}
             <Route path="/grievance" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<GrievancePage />} />
+            </Route>
+
+            {/* Ask for a certificate or letter, and open an issued one (20 Nov 2026). Active members only; in robots.txt Disallow, not in the sitemap. */}
+            <Route path="/certificates" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<CertificatesPage />} />
+            </Route>
+            <Route path="/certificates/:id" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<CertificateViewPage />} />
             </Route>
 
             <Route path="/profile" element={<ProtectedRoute requireActive><DashboardLayout /></ProtectedRoute>}>

@@ -108,7 +108,7 @@ if (catchAll) {
   if (unreachable.length) {
     problems.push(`App.tsx routes the SPA rewrite does not reach (they would hard-404): ${unreachable.map(x => '/' + x).join(', ')}.\n      Run: node frontend/scripts/sync-vercel-rewrites.mjs`)
   }
-  for (const unknown of ['/terms', '/favicon.ico', '/og-image.png', '/manifest.json', '/api/health', '/wp-admin']) {
+  for (const unknown of ['/tos', '/favicon.ico', '/og-image.png', '/manifest.json', '/api/health', '/wp-admin']) {
     if (re.test(unknown)) problems.push(`The SPA rewrite still matches ${unknown}, which is not a route: it would return 200 with the home page (soft 404).`)
   }
 }

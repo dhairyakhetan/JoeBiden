@@ -1,0 +1,86 @@
+{
+  "slug": "how-to-help-stray-dogs-in-kolkata",
+  "title": "How can I help stray dogs in Kolkata? · AquaTerra",
+  "description": "Join a small student team that feeds stray dogs in Kolkata with biscuits on a route you can repeat. How AquaTerra's Tails and Treats drives run and how to join.",
+  "h1Lead": "how can I help",
+  "h1Accent": "stray dogs in Kolkata?",
+  "lede": "You help stray dogs in Kolkata by joining a small team that walks a neighbourhood route with biscuits and feeds the dogs it meets. AquaTerra has run {count} of these Tails and Treats drives since {firstYear}, and the students who run them join by signing in with Google and waiting for approval.",
+  "sections": [
+    {
+      "id": "what-a-drive-looks-like",
+      "heading": "what a drive looks like",
+      "body": [
+        "A drive is a walk with a bag of biscuits. The team picks a neighbourhood, goes out, and feeds the dogs it meets along the way. The write-ups are full of small moments: at the Bangur drive that became Feeding Stray Dogs 53.0 in September 2025, students cuddled, fed and pampered the dogs they met, and that drive notes 55 dogs fed.",
+        "Keep it friendly and unhurried. The Shibpur drive in March 2025 notes 90 dogs fed, and the Dobson Lane drive in April 2026 says volunteers fed dogs and cows and had a successful hour. The point is not a big number. It is a route another team can repeat next week."
+      ]
+    },
+    {
+      "id": "where-the-dogs-are",
+      "heading": "where the dogs are",
+      "body": [
+        "Across {placesCount} places, Bangur and Salt Lake have come up more often than any other named place, and Howrah, Laketown and Avani Oxford follow. The drives keep returning to the same few neighbourhoods, which makes each one easier to plan.",
+        "The earliest drives, from {firstYear}, went out simply as Kolkata, with no neighbourhood named. From late 2024 the write-ups start naming the place, and in 2026 the series ran at Dobson Lane and Jatindas Park."
+      ]
+    },
+    {
+      "id": "how-the-series-grew",
+      "heading": "how the series grew",
+      "body": [
+        "The series was busiest in {year:2025}, when drives went out in most months of the year, and several of them on the same day. The August and September drives came thick and fast, with several neighbourhoods fed on the same day.",
+        "Across {firstYear} to {lastYear} the series has run {count} drives in total. Each one is written up on the AquaTerra site with its place, its date and how many dogs were fed, so the next team can see what the last one did."
+      ]
+    },
+    {
+      "id": "what-a-team-brings",
+      "heading": "what a team brings",
+      "body": [
+        "Biscuits are the food the drives name, every time. Bring enough for the whole route rather than a small first batch, and carry them in a bag you can open quickly on the street. Teams are small: most outings run with a handful of students, and the biggest teams have been close to a dozen.",
+        "Our teams suggest checking the area a few days ahead, so nobody arrives at an empty street with no plan for the next stop. Afterwards, write the drive up on the site with the place, the date, the number of people and the dogs fed."
+      ]
+    },
+    {
+      "id": "how-you-can-help",
+      "heading": "how you can help",
+      "body": [
+        "You can help by joining a team on a drive, or by starting one in your own area with people you already know. Members are students aged 14 to 19. Sign in with Google, wait for approval, and then ask the team which drive is next.",
+        "AquaTerra takes no monetary donations and charges no fees. The feeding work is paid for by its own student-run nights, such as Paradox and Disco Diwali, whose proceeds fund the welfare drives. To get started, see the [volunteering page](/volunteer) or the [guide to running a feeding drive](/impact/how-to-run-a-stray-dog-feeding-drive)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Return to the same few neighbourhoods. Bangur and Salt Lake have carried more drives than any other named place, and a known route is easier to plan than a new one each time.",
+    "A small team is enough. Most outings run with a handful of people and a bag of biscuits.",
+    "Write the place, the food and the count into the write-up, so the next team knows what to expect.",
+    "Feed the other animals on the route too. The April 2026 drive at Dobson Lane fed cows as well as dogs."
+  ],
+  "faqs": [
+    {
+      "q": "How can I help stray dogs in Kolkata?",
+      "a": "Join an AquaTerra feeding team, or start a small one in your neighbourhood with biscuits, a few people and a route you can repeat. AquaTerra has run {count} Tails and Treats drives since {firstYear}, and each one is written up on its site."
+    },
+    {
+      "q": "Where does AquaTerra feed stray dogs in Kolkata?",
+      "a": "AquaTerra has fed dogs across {placesCount} places in Kolkata. Bangur and Salt Lake have come up more often than any other named place, with Howrah, Laketown and Avani Oxford after them. In 2026 the drives were at Dobson Lane and Jatindas Park."
+    },
+    {
+      "q": "What food do AquaTerra's stray dog drives use?",
+      "a": "The food the drives name is biscuits. The April 2026 drive at Dobson Lane fed cows as well as dogs, so a route can include other animals on the street."
+    },
+    {
+      "q": "Does AquaTerra take donations for feeding stray dogs?",
+      "a": "No. AquaTerra takes no monetary donations and charges no fees. Its welfare work, including the dog feeding drives, is paid for by its own student-run events such as Paradox and Disco Diwali."
+    },
+    {
+      "q": "Can a student join an AquaTerra dog feeding drive?",
+      "a": "Yes, if you are aged 14 to 19. Sign in with Google, wait for approval, then ask the team which drive is next. The drives are run by students, and the team welcomes new people who want to help."
+    }
+  ],
+  "keywords": [
+    "how to help stray dogs in Kolkata",
+    "feed stray dogs in Kolkata",
+    "volunteer to feed street dogs Kolkata",
+    "stray dog feeding drive Kolkata students",
+    "Tails and Treats AquaTerra",
+    "animal welfare volunteering Kolkata"
+  ]
+}

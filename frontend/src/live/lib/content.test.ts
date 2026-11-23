@@ -102,7 +102,8 @@ describe('the built-in fallback the site shows before, or without, the database'
     for (const pr of PROGRAMMES) expect(validateProgrammeForm({ ...emptyProgrammeForm(), name: pr.name, line: pr.line, photo: pr.photo ?? '', photoAlt: pr.photoAlt ?? '' }).ok, pr.name).toBe(true)
   })
   it('splits into upcoming and past, past newest first', () => {
-    expect(upcomingOf(EVENTS)).toHaveLength(1)
+    expect(upcomingOf(EVENTS)).toHaveLength(0)
+    expect(upcomingOf(EVENTS).length + pastOf(EVENTS).length).toBe(EVENTS.length)
     const w = pastOf(EVENTS).map(e => e.when)
     expect([...w].sort().reverse()).toEqual(w)
   })

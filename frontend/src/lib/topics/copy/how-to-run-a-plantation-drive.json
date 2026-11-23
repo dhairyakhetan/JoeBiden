@@ -1,0 +1,90 @@
+{
+  "slug": "how-to-run-a-plantation-drive",
+  "title": "How to run a tree plantation drive · AquaTerra",
+  "description": "How AquaTerra students plan and run a tree plantation drive in Kolkata: choosing the ground, sizing the team, planting on the day and writing up the saplings.",
+  "h1Lead": "how to run a tree",
+  "h1Accent": "plantation drive",
+  "lede": "A plantation drive is a day of planting saplings in a school, park or open square, with a small team and a clear count of what went in the ground. AquaTerra has run {count} plantation drives since {firstYear}, and this is how a team chooses the ground, plans the day and writes it up.",
+  "sections": [
+    {
+      "id": "choose-the-ground",
+      "heading": "choose the ground before the day",
+      "body": [
+        "Our plantation drives happen where there is ground to plant: a school compound, a park, a square or a patch of open land. The places that come up most are Ashok Hall School, South City International School, Canal Side Park, Gachtala and Santosh Mitra Square. Many drives are listed simply as Kolkata, and the first one, in July 2021, was at Ward 58.",
+        "Settle the ground a few days ahead. Our teams suggest walking the site first, asking the school or park which areas are open for planting, and deciding where the saplings go before anyone arrives with a spade. A place that has hosted a drive before is easier to plan again."
+      ]
+    },
+    {
+      "id": "size-the-team",
+      "heading": "size the team to the saplings",
+      "body": [
+        "The saplings are the main thing to plan for, because the write-ups lead with them. The drive at South City International School in April 2025 notes 70 saplings planted, and the drive at Canal Side Park in June 2025 notes 110. Work out how many saplings you have, then how many people you need to get them in the ground in a morning.",
+        "Across {count} drives, {volunteers} volunteer turnouts have planted. Most teams have been between eight and twelve people, which was enough for a school compound or a park. Volunteer turnouts count every time someone showed up, so one student who planted at several drives counts each time."
+      ]
+    },
+    {
+      "id": "planting-day",
+      "heading": "on the planting day",
+      "body": [
+        "Planting is hands-on work, and the write-ups say so: students got their hands muddy, planted saplings and enjoyed the day outdoors. Teams work in small groups along the ground you have agreed, so each sapling has its own space and nobody waits for a spade.",
+        "The series has also taken other forms. A saplings painting drive at Mallickpur in April 2022 gave children a chance to paint saplings, and a plantation workshop at Disha Foundation followed a similar idea. In June and early July 2023, a run of drives in Kolkata was done with Each One Plant One, so a team can also plant as part of a wider campaign."
+      ]
+    },
+    {
+      "id": "how-the-series-grew",
+      "heading": "how the series grew",
+      "body": [
+        "The Grow Green series started in July 2021 and grew in steps. It had {year:2022} drives in 2022 and then, in 2023, the series grew to {year:2023} drives, including a cluster in July 2023 at Gachtala, Gitanjali Park and Vivekananda Park, Shubo Malik Square and CB Block Park.",
+        "Since then the drives have been fewer, with {year:2024} in 2024 and {year:2025} in 2025, and several of the 2025 drives were at schools. The Sundarbans plantation project runs on its own track, and you can read about it on the [Sundarbans page](/impact/sundarbans)."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up with the saplings and the place",
+      "body": [
+        "Each drive goes on the AquaTerra site as a write-up: the title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, which for a plantation is the number of saplings planted. The latest drive in the series is Grow Green Plantation Drive 26.0.",
+        "Write the place and the planting into the summary. A line that says the drive was at Ashok Hall School, with saplings planted by a team of nine, is useful to the next team; a line that only says the drive was green is not."
+      ]
+    }
+  ],
+  "learnings": [
+    "Plant where you can return: Gachtala hosted two drives on the same day in July 2023, and South City International School hosted drives on two days in a row in April 2025.",
+    "Settle the ground before the day, so the team spends its time planting rather than deciding where to plant.",
+    "Lead the write-up with the saplings and the place: those two lines are what the next team needs most.",
+    "Think about who the day is for: the 2022 painting session at Mallickpur showed a way to bring children in alongside the saplings."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a tree plantation drive?",
+      "a": "Choose ground where planting is allowed, agree where the saplings go, bring a team of around eight to twelve people, plant on the day and write the drive up on the AquaTerra site. AquaTerra has run {count} plantation drives since {firstYear}."
+    },
+    {
+      "q": "How many saplings does AquaTerra plant in one drive?",
+      "a": "It varies by drive. The write-ups give figures from around fifty to more than a hundred saplings, for example the June 2025 drive at Canal Side Park notes 110 saplings planted."
+    },
+    {
+      "q": "Where has AquaTerra run plantation drives?",
+      "a": "AquaTerra has run plantation drives at {placesCount} places, mostly across Kolkata, including Ashok Hall School, South City International School, Canal Side Park and Gachtala, and once in the Sundarbans."
+    },
+    {
+      "q": "Does AquaTerra run tree planting at schools?",
+      "a": "Yes. Several plantation drives were held at schools, including Ashok Hall School in August 2023 and August 2025, and South City International School in April 2025."
+    },
+    {
+      "q": "When did AquaTerra's plantation drives start?",
+      "a": "The first Grow Green plantation drive was in July 2021 at Ward 58. The series has run {count} drives since then, and {year:2023} of them fell in 2023 alone."
+    },
+    {
+      "q": "Can students in Kolkata join an AquaTerra plantation drive?",
+      "a": "AquaTerra is run by students aged 14 to 19. To join, sign in with Google and wait for approval, then take part in the next drive with a team."
+    }
+  ],
+  "keywords": [
+    "tree plantation drive Kolkata",
+    "how to run a plantation drive",
+    "sapling planting drive for students Kolkata",
+    "Grow Green AquaTerra",
+    "school tree plantation Kolkata",
+    "volunteer tree planting Kolkata"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "slug": "animal-welfare",
+  "title": "Animal welfare in Kolkata: stray dogs and more · AquaTerra",
+  "description": "AquaTerra's animal welfare work in Kolkata is mostly the Tails and Treats dog feeding series, plus a seminar and all-animal feeding drives.",
+  "h1Lead": "caring for the city's",
+  "h1Accent": "animals",
+  "lede": "AquaTerra's animal welfare work is mostly the stray dog feeding series Tails and Treats, which has run {count:tails-and-treats} drives from {firstYear} to {lastYear}, with {volunteers:tails-and-treats} volunteer turnouts. This page covers the dog work and the few other drives that speak directly to animals.",
+  "sections": [
+    {
+      "id": "what-the-work-covers",
+      "heading": "what the work covers",
+      "body": [
+        "Most of AquaTerra's animal welfare work is stray dog feeding. Every dog drive has the same aim, feeding dogs, and most of them name biscuits as the food. The full picture of that series, including its places and how it changed, is on the [Tails and Treats: feeding stray dogs](/impact/tails-and-treats) page.",
+        "Other animal work is much smaller. There is one animal welfare seminar, Pawtect, held in 2025, one all-animal feeding drive from 2022, and an all-animal wording that a few later dog drives also use. The 2026 drives at Dobson Lane feed cows as well. If you are looking for animal work, expect the dog series to be the main thread."
+      ]
+    },
+    {
+      "id": "the-dog-series",
+      "heading": "the dog series",
+      "body": [
+        "Dog feeding runs through the city and its neighbourhoods. The 2022 and 2023 drives name only Kolkata. From November 2024 the drives name places such as Bangur, Salt Lake, Howrah and Dobson Lane, and 2025 was the year with the most drives.",
+        "Each drive gives its own dogs-fed figure. Those figures change from one drive to the next, and AquaTerra does not add them into one total. Read them as the team's own note on the day, not as a checked count. A high figure does not mark a newer or bigger drive, since the biggest figures appear in both 2022 and 2025."
+      ]
+    },
+    {
+      "id": "the-seminar",
+      "heading": "the animal welfare seminar",
+      "body": [
+        "On 17 July 2025 AquaTerra ran an animal welfare seminar called Pawtect at MCKV Institute of Technology, a college. The seminar describes its aim as advocating kindness and protection for our furry friends. Most of this work is feeding, so the seminar stands out as the one drive here that teaches about animals as a subject rather than feeding them."
+      ]
+    },
+    {
+      "id": "the-all-animal-drive",
+      "heading": "the all-animal feeding drive",
+      "body": [
+        "The For Every Paw drive on 17 May 2022 was an all-animal feeding drive in Kolkata. Students gave food and love to every furry friend they met. It is the earliest drive in AquaTerra's animal work that goes beyond dogs, and it came a few months after the dog series began.",
+        "The same all-animal wording appears on the 9 August 2025 drive at Bangur, which belongs to the dog series, and on the 5 September 2025 drive at Howrah, whose figure is for dogs. Apart from those, the only drives that name an animal other than dogs are the cows fed at Dobson Lane in 2026."
+      ]
+    },
+    {
+      "id": "how-to-get-involved",
+      "heading": "how to get involved",
+      "body": [
+        "Members can take part in the dog drives and other animal work the usual way. Sign in with Google, wait for approval, and read the [join page](/join) for the details. Animal drives are run by students, and each one is written up on the site, so you can see what a drive involved before you sign up.",
+        "Animal welfare sits beside [Food for All: food distribution](/impact/food-for-all), which covers the food drives AquaTerra runs for people, and the [Environment and climate education](/impact/environment-education) page, which covers the teaching on sustainability. A reader who wants the full range of the work can start at the [impact library](/impact)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Dog feeding is the main animal welfare work, and its stated aim is feeding dogs.",
+    "The dog series had more drives in 2025 than in any other year, spread across named neighbourhoods.",
+    "Beyond the dogs, the animal work is one seminar, one all-animal feeding drive from 2022, and the cows fed in 2026.",
+    "Each dogs-fed figure is the team's own note on its drive, so compare drives by place and turnout."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra do for animal welfare in Kolkata?",
+      "a": "AquaTerra's main animal welfare work is feeding stray dogs through the Tails and Treats series, which has run {count:tails-and-treats} drives from {firstYear} to {lastYear}. It has also held an animal welfare seminar and all-animal feeding drives, and each is written up on the site."
+    },
+    {
+      "q": "Can teenagers join AquaTerra's animal welfare drives?",
+      "a": "Yes, if you are a member aged 14 to 19. AquaTerra is a student-run organisation in Kolkata, and its dog feeding drives are run by students. To join, sign in with Google and wait for approval."
+    },
+    {
+      "q": "Did AquaTerra hold an animal welfare seminar?",
+      "a": "Yes. On 17 July 2025 AquaTerra held an animal welfare seminar called Pawtect at MCKV Institute of Technology. The seminar described its aim as advocating kindness and protection for animals."
+    },
+    {
+      "q": "What was the For Every Paw drive?",
+      "a": "For Every Paw was an all-animal feeding drive in Kolkata on 17 May 2022. Students gave food and love to every animal they met. It is the earliest drive in AquaTerra's animal work that feeds more than dogs."
+    },
+    {
+      "q": "Does AquaTerra take donations for animal welfare?",
+      "a": "No. AquaTerra takes no monetary donations. Its animal welfare work is paid for by its own student-run events."
+    }
+  ],
+  "keywords": [
+    "animal welfare Kolkata students",
+    "stray dog feeding Kolkata NGO",
+    "animal welfare volunteering Kolkata teens",
+    "AquaTerra animal welfare",
+    "all animal feeding drive Kolkata",
+    "animal welfare seminar Kolkata"
+  ]
+}

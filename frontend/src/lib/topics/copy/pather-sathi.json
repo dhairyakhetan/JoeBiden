@@ -1,0 +1,88 @@
+{
+  "slug": "pather-sathi",
+  "title": "Pather Sathi: Sunday School Workshops in Kolkata · AquaTerra",
+  "description": "Sunday school workshops AquaTerra has run at Pather Sathi in Kolkata: art, public speaking, festive series and digital literacy. {count} drives, {years}.",
+  "h1Lead": "the most drives at",
+  "h1Accent": "Pather Sathi",
+  "lede": "Pather Sathi is the place where AquaTerra has run the most drives: {count} from {years}, with {volunteers} volunteer turnouts. Most are children's workshops, many held at Sunday school, in art, public speaking, English, science and festive crafts. Some series return, such as Merry Miracles at Christmas and Holi in March.",
+  "sections": [
+    {
+      "id": "what-a-session-looked-like",
+      "heading": "what a Pather Sathi session looked like",
+      "body": [
+        "A typical session is a single workshop run by a small team of volunteers for a group of children. Teams are small, usually a handful of volunteers, and most sessions centre on one activity. Because the format repeats, a new volunteer can see what a session looks like from the first one they join.",
+        "The subjects are wide: painting and drawing, quizzes, storytelling and poetry, chess, mental health talks, financial literacy, multiplication and fractions, first aid, space education and computer skills. The format stays much the same from one session to the next: one group of children and one activity."
+      ]
+    },
+    {
+      "id": "the-festival-series",
+      "heading": "the festival series",
+      "body": [
+        "The Colours Of Durga workshops ran as numbered sessions from 1.0 to 5.0 in late September and early October 2023, and a Durga Puja programme at Sunday school followed in October. The Merry Miracles Christmas drives ran at Pather Sathi in December 2023 as a run of Christmas days, including Days 4 and 5, and came back in December 2024 and December 2025.",
+        "Holi came back in March 2024 with a Holi workshop at Sunday school, and again in March 2025 as Holi Hues. Republic Day in February 2024 was marked with Tricolour Time, a flag making workshop, and Children's Day in November 2025 with games, chips and drinks."
+      ]
+    },
+    {
+      "id": "the-skills-series",
+      "heading": "the skills series",
+      "body": [
+        "Some series build one skill across several drives. Public speaking appears as Speak and Sparkle in December 2024, Speak Skillfully in March 2025 and PowerSpeak in November 2025. Computer work ran as Ctrl+Create, Tech Time and Code and Connect in July and August 2023, and a digital safety workshop followed in May 2026.",
+        "The science and maths side includes the ICCV science exhibition in April 2023, Science Sparks in May 2023, Wonder Lab in July 2023, Beyond the Stars space education in December 2024, Math Minds fractions in March 2025 and Fun Factors multiplication in August 2025."
+      ]
+    },
+    {
+      "id": "volunteer-turnouts-over-time",
+      "heading": "volunteer turnouts over time",
+      "body": [
+        "Across {count} drives, Pather Sathi has {volunteers} volunteer turnouts. A turnout counts every time someone showed up, so a volunteer who came to several sessions is counted once for each. It is a sum over every drive, not a count of unique people.",
+        "The drives move by year: {year:2023} in 2023, the fullest year, then {year:2024} in 2024, {year:2025} in 2025 and {year:2026} in 2026 up to June. The first drive, a Season's Magic Christmas workshop in December 2022, is where this page starts. Read the number of drives and the turnouts together, since a busy year is not always the year with the most help."
+      ]
+    },
+    {
+      "id": "what-the-children-made-and-learned",
+      "heading": "what the children made and learned",
+      "body": [
+        "The sessions mostly describe what the children did: they drew and painted, sang carols, made cards, masks and paper bags, decorated trees and wrote letters. Arts sessions include Pebble Pop pebble painting in March 2025, T-shirt painting in June 2023 and origami in May 2023.",
+        "Some sessions focused on wellbeing and safety. Smart With Safety in August 2024 covered good touch, bad touch and personal safety, and Mind Matters and Healing Space covered mental wellbeing in August and September 2024. Menstrual awareness ran in April 2026, and a digital safety workshop followed in May 2026."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pather Sathi has hosted more than half of the drives at the places we keep going back to.",
+    "Merry Miracles Christmas drives recur in December in 2023, 2024 and 2025.",
+    "The Durga Puja series ran as numbered sessions from 1.0 to 5.0 in September and October 2023.",
+    "Public speaking recurs at Pather Sathi in 2024 and 2025, with Speak and Sparkle, Speak Skillfully and PowerSpeak.",
+    "Turnout figures are per drive, so they measure help given rather than the number of different people."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra do at Pather Sathi?",
+      "a": "AquaTerra runs children's workshops at Pather Sathi, many of them at its Sunday school sessions, in art, public speaking, English, science, digital literacy and festive crafts. This page counts {count} drives there, from December 2022 to June 2026."
+    },
+    {
+      "q": "How many drives has AquaTerra held at Pather Sathi?",
+      "a": "This page counts {count} drives at Pather Sathi, with {volunteers} volunteer turnouts. That is more than half of the {count:places-we-return-to} drives at the places AquaTerra keeps going back to."
+    },
+    {
+      "q": "When did AquaTerra start working with Pather Sathi?",
+      "a": "The first Pather Sathi drive is the Season's Magic Christmas workshop on December 17, 2022. Drives have continued through {lastYear}."
+    },
+    {
+      "q": "Does AquaTerra hold festival workshops at Pather Sathi?",
+      "a": "Yes. Pather Sathi hosted the Colours Of Durga series in September and October 2023, Merry Miracles Christmas drives in December 2023, 2024 and 2025, and Holi workshops in March 2024 and March 2025."
+    },
+    {
+      "q": "Can I see Pather Sathi drives year by year?",
+      "a": "This page breaks them down: {year:2022} in 2022, {year:2023} in 2023, {year:2024} in 2024, {year:2025} in 2025 and {year:2026} in 2026 so far. The sections above name the activities in each year."
+    }
+  ],
+  "keywords": [
+    "Pather Sathi Kolkata",
+    "Sunday school workshops Kolkata children",
+    "Sunday school volunteering Kolkata",
+    "Merry Miracles Christmas workshop Kolkata",
+    "Durga Puja workshop for children Kolkata",
+    "AquaTerra Pather Sathi drives",
+    "digital literacy workshop Sunday school Kolkata"
+  ]
+}

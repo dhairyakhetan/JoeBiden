@@ -33,6 +33,7 @@ const schoolServiceImpl = {
       .from('schools')
       .select('school_id, uuid, name, short_name, logo_url, location, website, created_at', { count: 'exact' })
       .order('name', { ascending: true })
+      .order('school_id', { ascending: true })
       .range(offset, offset + limit - 1)
 
     if (search) {

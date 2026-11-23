@@ -1,0 +1,95 @@
+{
+  "slug": "year-2026",
+  "title": "What AquaTerra did in 2026, drive by drive · AquaTerra",
+  "description": "{count} AquaTerra drives so far in {years}, from a February card workshop to Smile Notes outreach, stray dog feeding and English sessions for children.",
+  "h1Lead": "what we did in",
+  "h1Accent": "2026, drive by drive",
+  "lede": "So far in {years} we have run {count} drives in Kolkata, most of them workshops for children. The year opened with a Valentine's Day card workshop at Pather Sathi in February and the latest drive so far is a Mother's Day card session at Disha Foundation in September. The rest of the year was stray dog feeding, Smile Notes outreach, a food distribution, a campus stall and a stationery kit drive with Vishwajagriti and Emami.",
+  "sections": [
+    {
+      "id": "the-shape-of-the-year",
+      "heading": "the shape of the year",
+      "body": [
+        "The first drive of the year was a Valentine's Day card workshop at Pather Sathi on 8 February, where children designed greeting cards alongside volunteers. The latest so far is a Mother's Day card session at Disha Foundation on 5 September. Nothing from later in the year has been added yet, so this page is the year as it stands, not a finished account. For comparison, we ran {count:year-2025} drives in 2025.",
+        "The work came in bursts rather than a steady line. Smile Notes went out in March and again in May, Tails and Treats fed dogs in April and June, and the teaching sessions clustered in April. Most weeks had no drive at all."
+      ]
+    },
+    {
+      "id": "smile-notes-outreach",
+      "heading": "smile notes outreach",
+      "body": [
+        "Smile Notes was the most repeated series of the year. In March we handed out notes at Bhawanipore on 25 March and at MBA Chaiwala in Lake Town on 26 March. In May we went back to Lake Town Footbridge on 10 and 15 May and to Bangur on 15 May. Each outing gave passers-by 100 notes with an affirmation, and each note came with a toffee.",
+        "Earlier that month we also handed out food near a slum area in Bhawanipore, two boxes of twenty packs of croissants on 7 March. A single outing sometimes shows up under two descriptions, once as a workshop and once as a distribution drive, so the drive count runs a little above the number of outings."
+      ]
+    },
+    {
+      "id": "feeding-stray-dogs",
+      "heading": "feeding stray dogs",
+      "body": [
+        "Tails and Treats ran three times in 2026: at Jatindas Park on 19 April, and at Dobson Lane on 25 April and again on 29 June. At each stop volunteers fed biscuits to more than ten dogs, and on the April Dobson Lane drive they fed cows too. Across all years since 2022 the series has {count:tails-and-treats} drives.",
+        "The feeding crews are small, usually three or four volunteers. The two Dobson Lane drives, in April and June, were the same place visited twice this year, so the street became a regular stop on the route."
+      ]
+    },
+    {
+      "id": "teaching-and-learning-sessions",
+      "heading": "teaching and learning sessions",
+      "body": [
+        "Grammar and English came up more than any other subject in the 2026 teaching sessions. On 4 April two sessions on subjects and predicates ran with worksheets, one at Disha Foundation and one at Ek Tara. Teaching sessions at Ek Tara that month covered nouns, pronouns, verbs and conjunctions, with fifteen children in each.",
+        "Learner's Den at Pather Sathi covered days, weeks and months, with maths, general knowledge and art, on 6 April. It came back on 4 June to spread information to children. The Digital Safety Workshop at Pather Sathi on 16 May taught children about digital safety, and the Menstrual Awareness Campaign there on 6 April covered menstrual health and hygiene."
+      ]
+    },
+    {
+      "id": "cards-and-crafts",
+      "heading": "cards and crafts",
+      "body": [
+        "Card making bookends the year. Children made Valentine's Day cards at Pather Sathi on 8 February, students made Mother's Day cards at Disha Foundation on 9 May, and a second Mother's Day card session ran at Disha Foundation on 5 September. The May session made around sixteen cards and the September one around fifteen.",
+        "The two Mother's Day sessions show the same workshop running twice at one place in a single year, which is the simplest way a drive becomes a habit."
+      ]
+    },
+    {
+      "id": "the-biggest-day",
+      "heading": "the biggest day and the places we return to",
+      "body": [
+        "The largest team of the year went to the Aq x Vishwajagriti and Emami collaboration at Science City on 27 March. A team of thirteen handed out 300 stationery kits and hosted thirty children for the day. A custom T-shirt stall at Xaviers University in Newtown ran for three days from 5 March, sold 100 T-shirts and reached more than 400 students.",
+        "Across {placesCount} places, {topPlace} hosted the most drives this year. Disha Foundation, Ek Tara, Bhawanipore, Dobson Lane and Lake Town come up often too. Pather Sathi and Disha Foundation each hosted several drives, and the card making and teaching sessions kept going back to them."
+      ]
+    }
+  ],
+  "learnings": [
+    "Repeat visits build familiarity: Pather Sathi and Disha Foundation each hosted several drives, and the card and teaching sessions kept returning to them.",
+    "Grammar and English was the most common subject of the year's teaching sessions.",
+    "Smile Notes is simple to repeat: each outing hands out 100 notes with a toffee attached, and the same format ran from Bhawanipore to Lake Town.",
+    "Mother's Day card making ran twice at Disha Foundation, in May and in September, so a workshop can come back in the same year.",
+    "The year's volunteer turnouts total {volunteers}. That counts every time someone showed up, so one person who joined several drives is counted once for each."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in 2026?",
+      "a": "In 2026 AquaTerra has run {count} drives so far, dated February to September. They include Valentine's Day and Mother's Day card workshops, Smile Notes outreach in March and May, stray dog feeding, English and grammar sessions for children and a stationery kit drive at Science City with Vishwajagriti and Emami. Together they count {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "Did AquaTerra feed stray dogs in 2026?",
+      "a": "Yes. Tails and Treats fed stray dogs at Jatindas Park on 19 April and at Dobson Lane on 25 April and 29 June, using biscuits. Across all years since 2022 the Tails and Treats series has {count:tails-and-treats} drives."
+    },
+    {
+      "q": "Where did AquaTerra run drives in 2026?",
+      "a": "Across {placesCount} places in 2026, most often at {topPlace}. Other places include Disha Foundation, Ek Tara, Bhawanipore, Dobson Lane and Lake Town, along with a campus stall at Xaviers University in Newtown."
+    },
+    {
+      "q": "What was AquaTerra's latest drive in 2026?",
+      "a": "The latest drive so far is a Mother's Day card making session at Disha Foundation on 5 September 2026. Drives from later in the year have not been added yet, so this page shows the year as it stands."
+    },
+    {
+      "q": "How does 2026 compare with 2025 at AquaTerra?",
+      "a": "AquaTerra has run {count:year-2026} drives in 2026 so far and {count:year-2025} in 2025. The 2026 count stops in September, so it is not a full-year comparison."
+    }
+  ],
+  "keywords": [
+    "what AquaTerra did in 2026",
+    "AquaTerra drives 2026 Kolkata",
+    "AquaTerra Smile Notes outreach",
+    "stray dog feeding Kolkata students 2026",
+    "AquaTerra teaching sessions for children",
+    "AquaTerra Mother's Day card making"
+  ]
+}

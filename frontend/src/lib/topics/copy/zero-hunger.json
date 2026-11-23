@@ -1,0 +1,94 @@
+{
+  "slug": "zero-hunger",
+  "title": "Zero Hunger: food and sharbat drives in Kolkata · AquaTerra",
+  "description": "Since {firstYear}, AquaTerra has run {count} drives that hand out food, sharbat and biscuits in Kolkata. This is our work on UN Goal 2, Zero Hunger.",
+  "h1Lead": "food on the streets,",
+  "h1Accent": "one stop at a time",
+  "lede": "Zero Hunger is UN Sustainable Development Goal 2: end hunger, make sure everyone has enough to eat, and improve nutrition. Since {firstYear} AquaTerra has run {count} drives with food or drinks in them, from banana and packed-meal distributions to summer sharbat stalls, and most of them are a small student team on a street, at a temple or outside an apartment block.",
+  "sections": [
+    {
+      "id": "what-goal-2-asks",
+      "heading": "what goal two asks for",
+      "body": [
+        "Goal 2 of the UN Sustainable Development Goals is Zero Hunger. It aims to end hunger, achieve food security, improve nutrition and promote sustainable farming. We are a student group, so the farming side is not ours. The goal still shapes what we do: getting food and drinks into the hands of people who need them today.",
+        "Most of our food work is one morning or one evening, a stock of food or drinks, and a few volunteers. Our dog feeding drives also sit under this topic because they hand out biscuits, but the goal is about people, so the animal work has its own series, [Tails and Treats](/impact/tails-and-treats)."
+      ]
+    },
+    {
+      "id": "bananas-and-packed-meals",
+      "heading": "bananas, packed meals and cookies",
+      "body": [
+        "Our first food distribution in this topic was at Lighthouse for the blind in November 2022. In June 2023 a Rath Yatra food donation drive served meals in Kolkata, and in December 2023 and April 2024 two food distribution days ran at Paradox, our annual event, handing out packed food to people in need.",
+        "The banana runs found their rhythm in March and April 2025. Bananas went out at Hazra, Sarat Bose Road, Howrah, New Alipore and Shiv Temple in Salt Lake at the end of March, then at Gariahat, Dakhineshwar, Northern Park, Salt Lake and Lake Town Footbridge in mid April. Most banana drives gave out 600 bananas each, and the team at Howrah packed meals to hand out on the spot.",
+        "In December 2025 the Cookie Pass On drives asked each resident to pass a cookie on to someone who needs it. They ran at Barrackpore, Avani Oxford, Silver Spring Apartment and Astitva Apartment, and the kindness was meant to travel further than the stop itself."
+      ]
+    },
+    {
+      "id": "sharbat-in-the-heat",
+      "heading": "sharbat in the heat",
+      "body": [
+        "Sharbat drives cluster in the hot months. On 24 and 26 May 2024 a run of sharbat stalls went out across the city on the same days, from Kankurgachi and Ballygunge to Hazra, Bangur and Phool Bagan. In late March and April 2025 the stalls came back to Topsia, Beleghata, Howrah, Teghoria and Kakurgachi.",
+        "Most sharbat stalls were stocked with 20 litres of Rooh Afza, served cold, and many were set up beside temples, such as the Shiv Temple in Salt Lake and the Bhootnath Mandir in Beniatola. The full series is on its own page, [Sharbat Seva](/impact/sharbat-seva)."
+      ]
+    },
+    {
+      "id": "dogs-and-biscuits",
+      "heading": "dogs, and the biscuits in our bags",
+      "body": [
+        "Biscuits run through the [Tails and Treats](/impact/tails-and-treats) series. Its drives have fed stray dogs in Kolkata, Salt Lake, Bangur, Howrah and Laketown, and across all of them the total is {dogMeals} meals for stray dogs."
+      ]
+    },
+    {
+      "id": "what-a-food-drive-looks-like",
+      "heading": "what a food drive looks like on the day",
+      "body": [
+        "A stop starts with the food or drinks already packed, a team of volunteers, and a place where people are already waiting or walking past. Most food stops were run by a team of three to six volunteers. The team hands things out, shares a few words, and makes sure the last person in line gets the same as the first.",
+        "The steps are set out in [How to run a food distribution drive](/impact/how-to-run-a-food-distribution-drive). Food sits next to [Food for All](/impact/food-for-all), which is the banana and meal series, so a new member can read the steps and then see them in a real stop."
+      ]
+    },
+    {
+      "id": "how-to-help",
+      "heading": "how to help",
+      "body": [
+        "Members join AquaTerra by signing in with Google and waiting for approval. Once you are in, the food and sharbat drives across the city are run by student teams, so the way to start is to [join AquaTerra](/join) and take part in the next stop."
+      ]
+    }
+  ],
+  "learnings": [
+    "A banana, a packet of biscuits or a glass of sharbat needs little setup, so a team of three to six can run a whole stop.",
+    "The sharbat runs cluster between March and May, and the banana runs were packed into March and April 2025, so the season decides the calendar.",
+    "The same places come back. Pather Sathi, Bangur and Salt Lake appear more than once, so a new member can learn one place well.",
+    "A food drive can carry a second idea: the Cookie Pass On drives asked each resident to pass the cookie on, so the kindness went further than the stop.",
+    "Feeding animals and feeding people are different work. Keeping them in separate series makes it clear who each drive is for."
+  ],
+  "faqs": [
+    {
+      "q": "What is UN Goal 2, Zero Hunger?",
+      "a": "Zero Hunger is UN Sustainable Development Goal 2. It aims to end hunger, achieve food security, improve nutrition and promote sustainable farming. AquaTerra's food drives, including banana distributions, packed meals and sharbat stalls, are how the student group works on this goal in Kolkata, with {count} drives since {firstYear}."
+    },
+    {
+      "q": "Does AquaTerra run food distribution drives in Kolkata?",
+      "a": "Yes. AquaTerra's student volunteers run food distribution drives across Kolkata, handing out bananas, packed meals and sharbat at places such as Bhawanipore, Sarat Bose Road, Howrah and Salt Lake. The food drives have run from {firstYear} to {lastYear}."
+    },
+    {
+      "q": "How many bananas has AquaTerra handed out?",
+      "a": "AquaTerra has distributed {bananas} bananas across its food drives. Most of the banana distributions in 2025 gave out 600 bananas per drive, at places including Gariahat, Lake Town Footbridge and Salt Lake."
+    },
+    {
+      "q": "Does AquaTerra feed stray dogs?",
+      "a": "Yes. The Tails and Treats drives feed stray dogs with biscuits in Kolkata and nearby areas, and across all of them AquaTerra has served {dogMeals} meals for stray dogs."
+    },
+    {
+      "q": "How can I volunteer for a food drive with AquaTerra?",
+      "a": "Sign in to AquaTerra with Google and wait for an approval. Once you are a member you can take part in food and sharbat drives run by student teams, and the steps for running one yourself are on the site."
+    }
+  ],
+  "keywords": [
+    "food distribution drive Kolkata volunteer",
+    "sharbat distribution drive Kolkata summer",
+    "banana distribution drive Kolkata students",
+    "UN Sustainable Development Goal 2 Zero Hunger Kolkata",
+    "feeding stray dogs Kolkata volunteer",
+    "student NGO food drive Kolkata"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "slug": "drama-music-and-dance",
+  "title": "Drama, music and dance workshops · AquaTerra",
+  "description": "Acting, music, dance and singing workshops for children by AquaTerra in Kolkata: {count} drives from {firstYear} to {lastYear}, plus the Paradox fundraiser.",
+  "h1Lead": "from script to",
+  "h1Accent": "stage and song",
+  "lede": "AquaTerra has run {count} drama, music and dance drives between {firstYear} and {lastYear}. Most are acting, storytelling, music and dance sessions for children, at places such as Disha Foundation, which hosted a numbered drama series in 2022. The topic also includes a few fundraising events. Paradox 1.0 alone accounts for most of the {volunteers} volunteer turnouts (a turnout counts every time someone showed up), so the classes are a smaller group than the total suggests.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what the sessions look like",
+      "body": [
+        "Drama sessions are built on play. Act It Out at Loretto Day School in April 2022, the earliest drive on this page, was a skit workshop where volunteers acted and laughed with the children. The Drama Workshop series at Disha Foundation ran as numbered sessions from 1.0 to 5.0, from late July to late August 2022, and the write-ups describe acting, voice and movement, improvisation, and turning a script into a stage performance.",
+        "Music and dance are about rhythm and movement. Musical Minds ran at Amader Pradakhep in October 2024 and at AIM Foundation in June 2025, with beats, melodies, songs and instruments. Move and Groove at Sree Sree Gauranga Gaudiya Mission Sevashram in June 2023 and Groove Time at Tetultala Ashram in May 2025 were dance workshops where children danced and expressed themselves freely."
+      ]
+    },
+    {
+      "id": "fundraisers-and-paradox",
+      "heading": "the fundraisers and paradox",
+      "body": [
+        "Paradox is the largest drive on this page by volunteer turnouts. It is AquaTerra's flagship fundraising series, and the first edition, Paradox 1.0, was held in Kolkata in June 2024 with the help of a large group of student volunteers. AquaTerra pays for its welfare work through its own student-run events, and Paradox is one of them. It is an event rather than a class, so it is listed here alongside the other fundraisers.",
+        "The other fundraisers are Play It Forward, a football fundraiser at VS Arena in May 2024 that supported welfare initiatives, and Diwali Night in Kolkata in November 2023, which combined stalls, performances and community participation. Neither has volunteer turnouts counted on this page, so they add drives without adding to the turnout total."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when they ran",
+      "body": [
+        "{topPlace} is the most frequent place, and Disha Foundation is close behind. Disha hosted the 2022 drama series, and Pather Sathi hosted several of the Sunday School dance and activity sessions in 2023. Kolkata is the location for Paradox and Diwali Night. Across {placesCount} places, a few names are written more than one way, so treat the count as a close guide.",
+        "This topic has {year:2022} drives in 2022, {year:2023} in 2023, {year:2024} in 2024 and {year:2025} in 2025, so the series did not grow in a straight line. The busiest year was 2024, with Paradox 1.0 in June, Tune In at Universal Smile in July, Rakhi Moments at Ek Tara in August, and Musical Minds at Amader Pradakhep in October."
+      ]
+    },
+    {
+      "id": "what-the-children-did",
+      "heading": "what the children did",
+      "body": [
+        "Across these drives, children tell stories, sing carols, make masks and rakhis, and act out scenes. Tales and Tunes at Alor Disha in December 2024 engaged children in stories and songs. Merry Masks at Amader Pradakhep in December 2024 had children make paper masks and sing carols, and Rakhi Moments at Ek Tara in August 2024 had students make rakhis to celebrate Raksha Bandhan.",
+        "Some sessions mix disciplines. Rhythm and Strokes at Pather Sathi in May 2023 combined art and dance, and Step to Sound at Telltula Ashram in June 2023 combined singing and dancing. Plant Pact at Mother's Nest in July 2023 was a terrarium workshop on self-sustaining ecosystems, which sits closer to nature than to performance."
+      ]
+    },
+    {
+      "id": "what-volunteers-did",
+      "heading": "what volunteers did",
+      "body": [
+        "The write-ups describe volunteers joining in. Curtain Call at Pather Sathi in May 2025 was a theatre workshop where volunteers got goofy with the children, acting, laughing and learning together. Express More at Gandhi Peace Foundation in September 2025 explored emotions and stories, and In Character at Calcutta Rescue Pathshala in November 2024 worked on expression, voice and stage skills.",
+        "The largest volunteer teams among the classes were the Drama Workshop sessions at Disha Foundation in 2022 and Step Up at A Little Contribution in November 2023. Many classes have only a few volunteers, so the total reads best with the fundraisers set aside."
+      ]
+    }
+  ],
+  "learnings": [
+    "Paradox 1.0 accounts for most of the {volunteers} volunteer turnouts, so the total should be read as mostly one fundraiser.",
+    "Acting came first: the Drama Workshop series at Disha Foundation in 2022 is the most concentrated run on this page, five numbered sessions in about a month.",
+    "Acting came in 2022, dance in 2023 and music from 2024, so the topic grew one discipline at a time.",
+    "Some of the {count} drives are fundraisers rather than classes, so the class count is smaller than the total."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run drama or acting workshops for children in Kolkata?",
+      "a": "Yes. AquaTerra has run acting and drama workshops since {firstYear}, including Act It Out at Loretto Day School in April 2022 and a numbered Drama Workshop series at Disha Foundation from late July to late August 2022. Later acting sessions include In Character at Calcutta Rescue Pathshala in November 2024 and Express More at Gandhi Peace Foundation in September 2025."
+    },
+    {
+      "q": "Where did AquaTerra hold music and dance workshops?",
+      "a": "Music and dance sessions ran at Pather Sathi, AIM Foundation, Amader Pradakhep, Universal Smile and Tetultala Ashram, among other places. Examples include Move and Groove in June 2023, Musical Minds at AIM Foundation in June 2025 and Tune In at Universal Smile in July 2024. AquaTerra has run {count} drama, music and dance drives in total, including fundraisers."
+    },
+    {
+      "q": "What was Paradox?",
+      "a": "Paradox is AquaTerra's flagship fundraising series. The first edition, Paradox 1.0, was held in Kolkata in June 2024 with the help of a large group of student volunteers. It is one of the student-run events AquaTerra uses to pay for its welfare work, and it is an event rather than a drama or dance class."
+    },
+    {
+      "q": "How many volunteer turnouts has AquaTerra had for drama, music and dance drives?",
+      "a": "AquaTerra has counted {volunteers} volunteer turnouts across the {count} drama, music and dance drives on this topic. A turnout counts every time someone showed up, so one person who came to several drives is counted several times. Most of that total comes from Paradox 1.0, so the figure for classes alone is much lower."
+    },
+    {
+      "q": "What did AquaTerra do in drama, music and dance in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} drama, music and dance drives, its busiest year on this topic. They included Paradox 1.0 in June, Tune In music at Universal Smile in July, Rakhi Moments at Ek Tara in August, and Musical Minds at Amader Pradakhep in October, plus Tales and Tunes at Alor Disha and Merry Masks at Amader Pradakhep in December."
+    }
+  ],
+  "keywords": [
+    "drama workshop for kids Kolkata",
+    "music workshop for children Kolkata",
+    "dance workshop for children Kolkata",
+    "acting workshop Kolkata NGO",
+    "storytelling and singing workshop Kolkata",
+    "AquaTerra Paradox fundraiser",
+    "theatre workshop students Kolkata"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "slug": "student-leadership",
+  "title": "How students run the drives · AquaTerra",
+  "description": "How AquaTerra's student members plan, run and write up drives in Kolkata, from numbered feeding series to school events and joint kit distributions.",
+  "h1Lead": "the students who",
+  "h1Accent": "run the work",
+  "lede": "AquaTerra is run by its student members. A small crew plans a drive, runs it and writes it up with a date, a place and a turnout. Since {firstYear} there have been {count} drives and {volunteers} volunteer turnouts, counting every time someone showed up, and some formats keep coming back, run by different crews in different places.",
+  "sections": [
+    {
+      "id": "numbered-series",
+      "heading": "numbered series that repeat",
+      "body": [
+        "The clearest sign of a repeatable format is the numbered series. Tails and Treats runs as a numbered run of feeding drives, from Feeding Stray Dogs 41.0 to 53.0, all between July and September 2025. On 9 August 2025 alone, parallel drives ran at Vyom, Bangur, Bhowanipur and Salt Lake, so more than one crew was out on the same day.",
+        "Wear and Share works the same way. Clothes Collection Drives 17.0 to 22.0 fall within one week, from 9 to 13 July 2025, at places including Natural City Laketown, Club Town Greens, Salt Lake, Avani Oxford, Howrah AC and Bangur. Each drive has its own turnout, so the series feels like a routine rather than a one-off."
+      ]
+    },
+    {
+      "id": "school-events",
+      "heading": "school events and the Roots label",
+      "body": [
+        "In July and early August 2025, student volunteers ran Roots tee events on school days: Morpheus Day 2 at South City International School, Concord Day 1 and 2 at Calcutta Boys School, Confluence Day 1 and 2 at Calcutta International School, and Novus at The Newtown School. Roots is the earlier name of [Crftd](/crftd), the student streetwear label. Each event counted its walk-ins, and the crews on those days were a handful of people each."
+      ]
+    },
+    {
+      "id": "places-and-hosts",
+      "heading": "joint drives with other groups",
+      "body": [
+        "Some drives are joint efforts. The Vishwajagriti and Emami joint drive ran twice, in December 2025 and March 2026, both at Science City. The March 2026 drive handed out stationery kits and hosted children. Both Science City drives were distribution drives, so this kind of joint work is a format that can repeat.",
+        "The Sundarbans 8.0 relief trip in December 2025 was run with Pather Sathi. Its write-up mentions a checkup count and a donation of medicines and stationery. It is one of the few drives outside Kolkata, which is why it stands apart from the everyday series."
+      ]
+    },
+    {
+      "id": "keeping-the-record",
+      "heading": "checking before quoting a total",
+      "body": [
+        "A student team that writes up its own drives also checks them. Two Smile Notes drives are each entered twice, at Bhawanipore on 25 March 2026 and at MBA Chaiwala Lake Town on 26 March 2026. One Learner's Den session has no turnout and no key figure. Spotting these is part of the job, and the [lessons page](/impact/lessons-from-our-drives) goes into the detail."
+      ]
+    }
+  ],
+  "learnings": [
+    "Formats repeat across crews: the Tails and Treats series and the Wear and Share series both run as numbered drives.",
+    "Parallel drives on the same day, such as the feeding drives on 9 August 2025, show that more than one crew can run at once.",
+    "School events such as the Roots days counted walk-ins at each event, which gives a simple measure of reach.",
+    "Joint drives such as the Science City kit distribution come back to the same venue months apart.",
+    "A student team owns its own drive pages, so duplicates and blank fields should be checked before any total is quoted."
+  ],
+  "faqs": [
+    {
+      "q": "Who runs AquaTerra's drives?",
+      "a": "Students do. AquaTerra is a student-run volunteer organisation in Kolkata, and its drives are planned, run and written up by members aged fourteen to nineteen. AquaTerra has run {count} drives from {years}."
+    },
+    {
+      "q": "How are AquaTerra's drives organised?",
+      "a": "Members run drives as small crews and write each one up with a date, a place, an objective, a volunteer turnout and usually a key figure. Some drives are numbered series that repeat the same format across different places."
+    },
+    {
+      "q": "What did AquaTerra's students do in 2025?",
+      "a": "Students ran {year:2025} drives in 2025. They included the Tails and Treats feeding run from July to September, Wear and Share clothes collections in July, Roots tee events on school days, and the Sundarbans 8.0 relief trip in December."
+    },
+    {
+      "q": "Does AquaTerra take donations or charge fees?",
+      "a": "No. AquaTerra takes no monetary donations and charges no fees. Its welfare work is paid for through its own student-run events, such as Paradox, Disco Diwali and The Starry Night."
+    }
+  ],
+  "keywords": [
+    "how students run an NGO in Kolkata",
+    "student led charity Kolkata",
+    "student volunteer organisation Kolkata leadership",
+    "youth led NGO Kolkata",
+    "AquaTerra student team",
+    "student run social organisation Kolkata"
+  ]
+}

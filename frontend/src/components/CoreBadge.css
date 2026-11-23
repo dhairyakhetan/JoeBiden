@@ -1,0 +1,11 @@
+/* AQ Core badge. Lemon fill, ink text: readable on cream, on white cards and on the ink profile slab. */
+.aq-core-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--lemon); color: var(--ink);
+  border-radius: var(--r-pill);
+  font-family: var(--mono); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  white-space: nowrap; flex-shrink: 0; line-height: 1;
+}
+.aq-core-badge::before { content: '★'; font-size: 0.9em; }
+.aq-core-badge--sm { font-size: 9.5px; padding: 4px 8px; }
+.aq-core-badge--md { font-size: 11px; padding: 7px 12px; }

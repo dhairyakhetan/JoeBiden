@@ -191,7 +191,7 @@ export function ImageUploadZone({
 
       {onAltChange && (
         <div className="pm-field" style={{ gap: 4 }}>
-          <input className="input pm-input" placeholder="Describe the photo (for screen readers)" value={alt ?? ''}
+          <input className="input pm-input" aria-label="Photo description" placeholder="Describe the photo (for screen readers)" value={alt ?? ''}
             onChange={e => onAltChange(e.target.value || null)} style={{ fontSize: 12 }} />
           <span className="pm-hint">Alt text - a short description for visually-impaired visitors & SEO.</span>
         </div>
@@ -580,7 +580,7 @@ export function ImagesTab({ form, set, adv, toggleAdv, bumpUploading }: TabProps
                   onAltChange={alt => set(`image_${n}_alt` as any, alt)}
                   onUploadingChange={bumpUploading}
                   label={`Photo ${n}`} compact />
-                <input className="input pm-input" placeholder="Caption (optional)"
+                <input className="input pm-input" aria-label="Caption" placeholder="Caption (optional)"
                   value={(form as any)[`label_${n}`] ?? ''}
                   onChange={e => set(`label_${n}` as any, e.target.value || null)}
                   style={{ fontSize: 12 }} />

@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useMeta } from '../../hooks/useMeta'
+import { pageMetadata } from '../../lib/metaConfig'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import type { BlogPost } from '../lib/types'
@@ -32,6 +34,7 @@ const CARD_TEXT = ['var(--ink)', 'var(--ink)', '#fff']
 const CARD_ROTATE = ['-0.5deg', '0.5deg', '-0.5deg']
 
 export function BlogPage() {
+  useMeta(pageMetadata.paradoxBlog)
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(false)

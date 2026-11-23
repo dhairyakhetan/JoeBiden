@@ -233,3 +233,14 @@ const DARK_FILLS = new Set(['var(--ink)', 'var(--ink-2)'])
 export function isDarkDepartmentFill(color: string | undefined | null): boolean {
   return !!color && DARK_FILLS.has(color.trim())
 }
+
+/**
+ * The department count from the live team tree: every active top-level team plus the card-only
+ * departments (Collabs), which have a card but no live team. The same number the build writes to
+ * ORG_FACTS.departmentsActive, so copy rendered from the live read and from the build agree
+ * (audit 19 Nov 2026: /about and /teams said "seven" while the cards and /links said eight).
+ */
+export function departmentCountFromTree(tree: { parentUuid?: string }[]): number {
+  const live = tree.filter(t => !t.parentUuid).length
+  return live === 0 ? 0 : live + PUBLIC_DEPARTMENTS.filter(d => d.cardOnly).length
+}

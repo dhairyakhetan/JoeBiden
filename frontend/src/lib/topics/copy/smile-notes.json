@@ -1,0 +1,85 @@
+{
+  "slug": "smile-notes",
+  "title": "Smile Notes: Affirmations and Toffees for Passersby · AquaTerra",
+  "description": "Smile Notes is AquaTerra's spring 2026 street campaign, where students hand passersby encouraging notes with a toffee for each one, across Kolkata.",
+  "h1Lead": "a note and a toffee for",
+  "h1Accent": "passersby",
+  "lede": "Smile Notes is AquaTerra's spring 2026 campaign, in which students hand passersby a note of affirmation and a toffee. It ran at {placesCount} places across Kolkata, with {count} outings and {volunteers} volunteer turnouts, where a turnout counts every time someone showed up.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a smile notes drive looks like",
+      "body": [
+        "Volunteers stand at a spot on the street and hand passersby a note of affirmation, with a toffee for each note. The moment is small: a few kind words and a sweet, and a brighter day for someone who did not expect it. The campaign is built around that short exchange, so the note and the toffee are what a passerby takes away.",
+        "The summaries describe the same kind of day at every spot: spreading kindness, sharing uplifting affirmations and creating joyful moments in the community. At Bangur on 15 May, the notes went to passersby, which is the clearest picture of who received them."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when it ran",
+      "body": [
+        "The campaign opened on 25 March 2026 at Bhawanipore and moved to MBA Chaiwala Lake Town the next day, 26 March. It went on to Lake Town Footbridge on 10 and 15 May and to Bangur on 15 May. So it ran from late March to mid May 2026, across {placesCount} places.",
+        "Lake Town has the most outings: four of the seven, at MBA Chaiwala Lake Town and Lake Town Footbridge. Bhawanipore and Bangur each have a single day, so they read as one-off stops rather than regular spots."
+      ]
+    },
+    {
+      "id": "how-it-moved",
+      "heading": "from late March to mid May",
+      "body": [
+        "Smile Notes began at Bhawanipore and then settled into Lake Town for most of the season. The campaign used the same plan throughout, a few volunteers and a set of notes with a toffee for each one. Some of the summaries call the same kind of day a workshop and others a distribution drive, so those two words do not reliably say what kind of day it was."
+      ]
+    },
+    {
+      "id": "who-took-part",
+      "heading": "who took part",
+      "body": [
+        "Volunteer turnouts across the campaign add up to {volunteers}. A turnout counts every time someone showed up, so a volunteer who came out on more than one day is counted each time. Two days in March are listed twice, so that total is an upper bound on the number of people who came out. Students aged fourteen to nineteen run these campaigns, and this page does not name anyone."
+      ]
+    },
+    {
+      "id": "first-season",
+      "heading": "a campaign with one season so far",
+      "body": [
+        "Every day of Smile Notes so far falls in spring 2026, so there are no earlier seasons to compare. Nothing on this site says whether the campaign will return, so treat this page as a picture of one season rather than a settled programme.",
+        "The campaign sits beside the art and craft workshops and the festival drives, which work with children rather than passersby. Read those pages for the workshops; this one is about the street, where the notes were handed out."
+      ]
+    }
+  ],
+  "learnings": [
+    "Smile Notes ran from late March to mid May 2026, across {placesCount} places in Kolkata.",
+    "Each note came with a toffee, so every handout paired a message of encouragement with a small treat.",
+    "Most of the campaign was on Lake Town streets, with one-off stops at Bhawanipore and Bangur.",
+    "Two days in March are listed twice, so the turnout figure is an upper bound rather than an exact count.",
+    "The campaign has one season so far, so there is no year-on-year trend to read yet."
+  ],
+  "faqs": [
+    {
+      "q": "What is the Smile Notes campaign?",
+      "a": "Smile Notes is an AquaTerra campaign in which student volunteers hand passersby a note of affirmation, with a toffee for each note. It ran in spring 2026 across Kolkata, with {count} outings at places including Bhawanipore, MBA Chaiwala Lake Town, Lake Town Footbridge and Bangur."
+    },
+    {
+      "q": "Where did AquaTerra hand out Smile Notes?",
+      "a": "Smile Notes went to Bhawanipore on 25 March 2026, MBA Chaiwala Lake Town on 26 March, Lake Town Footbridge on 10 and 15 May, and Bangur on 15 May 2026. Most of the outings were on Lake Town streets."
+    },
+    {
+      "q": "What did passersby get from Smile Notes?",
+      "a": "They got a note of affirmation and a toffee. The summaries describe the notes as encouraging and positive, and the aim as spreading kindness and encouragement in the community."
+    },
+    {
+      "q": "How many volunteers took part in Smile Notes?",
+      "a": "Smile Notes has had {volunteers} volunteer turnouts across {count} outings. A turnout counts every time someone showed up, so a volunteer who came out on several days is counted once for each day. Two March days are listed twice, so the figure is an upper bound."
+    },
+    {
+      "q": "Can I join a campaign like Smile Notes?",
+      "a": "Yes, if you are a teenager aged fourteen to nineteen. Join by signing in with Google and getting approved on the join page, after which students run campaigns like Smile Notes."
+    }
+  ],
+  "keywords": [
+    "smile notes campaign Kolkata",
+    "affirmation notes and toffees Kolkata",
+    "AquaTerra Smile Notes",
+    "kindness campaign Kolkata students",
+    "Lake Town Kolkata volunteers",
+    "street kindness campaign Kolkata"
+  ]
+}

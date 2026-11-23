@@ -1,0 +1,86 @@
+{
+  "slug": "climate-action",
+  "title": "Planting and climate drives in Kolkata · AquaTerra",
+  "description": "Tree planting, Earth Day workshops and Sundarbans trips. AquaTerra's climate work in Kolkata, run by students aged 14 to 19. {count} drives since {firstYear}.",
+  "h1Lead": "planting and",
+  "h1Accent": "teaching climate",
+  "lede": "AquaTerra works on climate action mostly by planting trees and teaching children why it matters. Since {firstYear} we have run {count} climate and environment drives across Kolkata and the Sundarbans, with {volunteers} volunteer turnouts.",
+  "sections": [
+    {
+      "id": "planting-in-the-city",
+      "heading": "planting in the city",
+      "body": [
+        "Most climate drives are planting drives. Grow Green began in July 2021 at Ward 58 and has run through parks, school grounds and housing complexes since. The spots include Gachtala, Goltalab, Shubo Malik Square, Santosh Mitra Square, Canal Side Park and the grounds of Ashok Hall School.",
+        "A planting drive is a small team and a morning. Volunteers prepare the ground and plant the saplings. Students at Ek Tara took part in some of the earliest planting sessions too."
+      ]
+    },
+    {
+      "id": "teaching-the-climate",
+      "heading": "teaching the climate, not just planting",
+      "body": [
+        "Plenty of climate work happens indoors with children. Earth Day workshops ran in April 2022, April 2023 and April 2025, and Let's Talk Climate at Ek Tara in August 2021 unpacked climate change, green habits and everyday action. Our Earth, held at Pather Sathi in April 2023, looked at rising temperatures and melting ice, and taught children what they can do about it.",
+        "The Nature x English days in June 2023 used stories, leaves and poems to teach English outdoors, at Ek Tara and at Pather Sathi. In October 2025 the Color Club session at Ektara had children make Green Diwali posters, and they talked about how firecrackers harm the environment."
+      ]
+    },
+    {
+      "id": "the-sundarbans",
+      "heading": "the Sundarbans",
+      "body": [
+        "The Sundarbans drives combine planting with health and relief. The first one, in Ward 142 in July 2021, notes 130 saplings planted and 100 patients treated. In June 2023 the fourth Sundarbans Plantation Project spent a day sowing smiles, support and sustainability in the villages, and its own figure is checkups.",
+        "The June 2024 Sundarbans Plantation Project put more than fifty saplings in the ground to restore green cover and protect wildlife. For the trips in more detail, see [Sundarbans relief and plantation](/impact/sundarbans)."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where it happens and who runs it",
+      "body": [
+        "Across {placesCount} places, from parks to school grounds to a village in the Sundarbans, climate drives have kept a clear pattern: Kolkata is the main ground, and Ek Tara and Pather Sathi are the places we keep going back to for workshops. Bangur and Salt Lake appear more than once across the series.",
+        "Every drive is planned and led by students aged 14 to 19. Ashok Hall School and South City International School both hosted planting and Earth Day sessions, and the [schools we have worked in](/impact/schools-we-have-visited) page lists the rest."
+      ]
+    },
+    {
+      "id": "how-to-join",
+      "heading": "how to join the climate work",
+      "body": [
+        "Start with a planting drive, because it is the simplest way to see the work. Members join by signing in with Google and waiting for approval, then pick a drive on the projects page. Schools that want a workshop on climate or the environment can get in touch through the contact page."
+      ]
+    }
+  ],
+  "learnings": [
+    "A repeating planting series is easier to plan than one-off events, which is why Grow Green has kept going for years.",
+    "Earth Day workshops and planting drives ran in the same weeks, so one plan could cover the classroom and the ground.",
+    "Most climate drives ran with a handful of volunteers, so a small team is enough to start.",
+    "Outdoor learning works in English too: the Nature x English days showed that the outdoors can be a classroom."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra do for climate action?",
+      "a": "AquaTerra's climate work is mostly planting and environmental teaching. Since {firstYear} it has run {count} drives under UN Goal 13 across Kolkata and the Sundarbans, including Grow Green plantation drives, Earth Day workshops and Sundarbans trips."
+    },
+    {
+      "q": "Does AquaTerra plant trees in Kolkata?",
+      "a": "Yes. The Grow Green series has planted saplings in parks, housing complexes and school grounds since July 2021, and it is the main planting series on this page, with {count:grow-green} drives."
+    },
+    {
+      "q": "Where does AquaTerra run Sundarbans plantation trips?",
+      "a": "AquaTerra's Sundarbans Plantation Project has run in villages in the Sundarbans, planting saplings and offering checkups. The June 2024 project put more than fifty saplings in the ground to restore green cover and protect wildlife."
+    },
+    {
+      "q": "Does AquaTerra run environment workshops for schools?",
+      "a": "Yes. AquaTerra has taught children about climate and sustainability at schools and at places such as Ek Tara and Pather Sathi. The Earth Day sessions and the waste management workshop at Ashok Hall School are two examples."
+    },
+    {
+      "q": "How can a student volunteer for a climate drive in Kolkata?",
+      "a": "Students aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. After that, pick a planting or workshop drive on the projects page and sign up with a team."
+    }
+  ],
+  "keywords": [
+    "tree plantation drive Kolkata students",
+    "climate action for kids Kolkata",
+    "Earth Day workshop Kolkata",
+    "Sundarbans plantation project",
+    "UN Goal 13 climate action Kolkata",
+    "environment education workshop for children Kolkata",
+    "Grow Green plantation AquaTerra"
+  ]
+}

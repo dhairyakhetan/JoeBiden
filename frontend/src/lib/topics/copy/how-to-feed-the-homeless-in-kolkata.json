@@ -1,0 +1,86 @@
+{
+  "slug": "how-to-feed-the-homeless-in-kolkata",
+  "title": "How can I feed the homeless in Kolkata? · AquaTerra",
+  "description": "How AquaTerra's food and sharbat drives reached people in need across Kolkata: bananas, packed meals and chilled sharbat, where they went and how to join.",
+  "h1Lead": "how can I feed",
+  "h1Accent": "people in need",
+  "lede": "You feed people in need in Kolkata by joining a small team that hands out food on a street, at a temple or by a footbridge, with bananas, packed meals or chilled sharbat. AquaTerra has run {count} food and sharbat drives since {firstYear}, mostly with a handful of volunteers each, and the busiest stretch was March and April 2025.",
+  "sections": [
+    {
+      "id": "what-a-food-drive-is",
+      "heading": "what a food drive is",
+      "body": [
+        "A food drive is one stop and a few volunteers. The Food For All drives of spring 2025 handed out bananas at a set amount for each stop, at places such as Sarat Bose Road, Hazra and Lake Town Footbridge. The team arrives, hands the food out, shares a few smiles and moves on.",
+        "Packed meals and food packets came from the larger outings. The Food Distribution Drive days at Paradox, in December 2023 and April 2024, gave out packets, and the Rath Yatra food donation drive in June 2023 served meals on the streets of Kolkata with, in its own words, dignity and compassion on every plate."
+      ]
+    },
+    {
+      "id": "sharbat-in-the-heat",
+      "heading": "sharbat in the heat",
+      "body": [
+        "The Sharbat Seva drives are a series of their own, with a standard twenty litres of Rooh Afza per stop. The first run was in May 2024, when chilled sharbat was served at a string of places from Esplanade to Kankurgachi. A second run, from late March to early May 2025, went to temples, markets and passers-by.",
+        "Sharbat is the one drive type that has a page of its own. Read the [Sharbat Seva page](/impact/sharbat-seva) for the full series, and the [guide to running a sharbat stall](/impact/how-to-run-a-sharbat-stall) for setting one up."
+      ]
+    },
+    {
+      "id": "where-we-stop",
+      "heading": "where we stop",
+      "body": [
+        "The food and sharbat drives have gone to {placesCount} places, from footbridges and temples to a market and apartment blocks. Sarat Bose Road came up four times and Lake Town Footbridge three times, while Parnashree and Salt Lake each came up twice.",
+        "The sharbat series went to crowded places on hot days: a cinema in Esplanade, a mall in Kankurgachi, and a temple at Bangur. Each write-up names the spot, so the next team can go back to it."
+      ]
+    },
+    {
+      "id": "how-the-drives-changed",
+      "heading": "how the drives changed",
+      "body": [
+        "The food drives started small, with a few in 2022 and 2023, including the Paradox food distribution days and the Rath Yatra donation drive. From 2024 the series grew, with {year:2024} drives that year, most of them the May sharbat run.",
+        "{year:2025} was the busiest year, and most of its drives fell in March and April. The most recent stop, in March 2026, handed out croissants at Bhawanipore, near a slum area."
+      ]
+    },
+    {
+      "id": "how-to-join-or-start-one",
+      "heading": "how to join or start one",
+      "body": [
+        "Join a food team by signing in with Google and waiting for approval. Members are students aged 14 to 19. Ask the team which drive is next and what it needs: bananas, packed meals or the sharbat ingredients.",
+        "To start one yourself, the [guide to running a food distribution drive](/impact/how-to-run-a-food-distribution-drive) sets out the steps. Our teams suggest checking the place a few days ahead, and writing the drive up afterwards with the place, the date, the team and the food given out."
+      ]
+    }
+  ],
+  "learnings": [
+    "Keep the first drive small. Bananas or a few packed meals with a team of three to five covered most of the spring 2025 stops.",
+    "Let the season pick the food. Sharbat ran in May 2024 and again through spring 2025, when the weather was hot.",
+    "Go back to the same few places. Sarat Bose Road and Lake Town Footbridge came up more than once, and a known stop is easier to plan.",
+    "Name the place and the amount in the write-up, so the next team can plan the same stop with the right amount of food."
+  ],
+  "faqs": [
+    {
+      "q": "How can I feed people in need in Kolkata?",
+      "a": "Join an AquaTerra food or sharbat team, or start a small one with bananas, packed meals or chilled sharbat. AquaTerra has run {count} food and sharbat drives since {firstYear}, and each one is written up on its site with the place and date."
+    },
+    {
+      "q": "What food does AquaTerra hand out in Kolkata?",
+      "a": "The drives have handed out bananas, packed meals and food packets, and chilled sharbat. The standard sharbat stop uses twenty litres of Rooh Afza, and the food drives have covered {placesCount} places in total."
+    },
+    {
+      "q": "Are AquaTerra's food drives only for homeless people?",
+      "a": "No. The write-ups describe the people fed as those in need, passers-by and devotees, rather than a single group. A drive feeds whoever at the stop needs food."
+    },
+    {
+      "q": "Does AquaTerra take donations for food drives?",
+      "a": "No. AquaTerra takes no monetary donations and charges no fees. Its welfare work, including food drives, is paid for by its own student-run events, such as Paradox and Disco Diwali."
+    },
+    {
+      "q": "Can a student volunteer for an AquaTerra food drive?",
+      "a": "Yes, if you are aged 14 to 19. Sign in with Google, wait for approval, and ask the team which drive is next."
+    }
+  ],
+  "keywords": [
+    "feed homeless people in Kolkata",
+    "food distribution drive Kolkata volunteers",
+    "sharbat distribution Kolkata summer",
+    "give food to people in need Kolkata students",
+    "banana distribution Kolkata",
+    "AquaTerra food drive"
+  ]
+}

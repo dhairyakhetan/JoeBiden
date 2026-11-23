@@ -1,0 +1,86 @@
+{
+  "slug": "free-resources-for-students",
+  "title": "Free Resources for Students in Kolkata · AquaTerra",
+  "description": "What AquaTerra gives students for free: book and notebook drives and study sessions at Pather Sathi, with {count} drives from {firstYear} to {lastYear}.",
+  "h1Lead": "books, notebooks and",
+  "h1Accent": "study help",
+  "lede": "AquaTerra's free resources for students are mostly books, notebooks and clothes, collected and handed on in drives, plus a few study sessions for kids. Since {firstYear}, these drives number {count}, with {volunteers} volunteer turnouts, where a turnout counts every time someone showed up.",
+  "sections": [
+    {
+      "id": "what-students-get",
+      "heading": "what students can get here",
+      "body": [
+        "Most of what this page covers is paper and cloth. Book Basket collects books for underprivileged kids, and Wear and Write collects clothes and notebooks. Together they make up most of the {count} drives, so the free resource here is mostly books, notebooks and clothes rather than lessons.",
+        "A smaller set of drives are study sessions: Little Learners at Sunday school in March 2024, Math Minds on fractions in March 2025, and Learner's Den on days, weeks and months in April 2026. AquaTerra charges no fees for its work, and no fee is listed for any of these sessions."
+      ]
+    },
+    {
+      "id": "books-and-notebooks",
+      "heading": "book basket and wear and write",
+      "body": [
+        "Book Basket drives gathered books for underprivileged kids. The first was on 20 March 2022, and most of the rest fall in June and early July 2025. Wear and Write ran in a tight cluster from 26 April to 24 May 2024, with one more campaign on 12 May 2025. Its drives sorted clothes and notebooks, and one summary says the sorting was meant to make sure they reached those who needed them most.",
+        "Many drives report the weight they collected, in kilograms, and some report packets instead. Each drive's figure belongs to that drive alone, so add them up with care. This page does not add them together."
+      ]
+    },
+    {
+      "id": "study-sessions",
+      "heading": "study sessions for kids",
+      "body": [
+        "Pather Sathi is where the study sessions happen. Little Learners on 16 March 2024 was an interactive Sunday school workshop built around learning, values and fun activities, with four volunteers. Math Minds on 8 March 2025 taught kids fractions in a one-on-one session, led by one volunteer.",
+        "Learner's Den on 6 April 2026 covered days, weeks and months through maths, general knowledge and art, with four volunteers. A June 2026 Learner's Den session is also listed, with a short summary about spreading information to children, but no volunteer count yet."
+      ]
+    },
+    {
+      "id": "shikshaq",
+      "heading": "where to go online for exam papers",
+      "body": [
+        "For exam practice online, [ShikshAQ](/shikshaq) is AquaTerra's own resource. Students built it, it offers free exam papers and a free way to be connected with a teacher, and it is open to people who are not members. The [AI and digital skills](/impact/ai-and-digital-skills) work covers the workshops that teach members and kids to use technology."
+      ]
+    },
+    {
+      "id": "reading-the-record",
+      "heading": "what this list leaves out",
+      "body": [
+        "This page brings drives together by theme, so it overlaps with the Book Basket and Wear and Write pages, which have their own totals. Read those pages for their own figures. Some place names are written in more than one way, so a search on one form may miss a few drives.",
+        "Each drive is a single day, and the numbers attached to it, whether kilograms, packets or children taught, belong to that day alone."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most of the {count} drives are book, notebook or clothing drives rather than lessons.",
+    "Wear and Write ran in a tight cluster in spring 2024, from late April to late May.",
+    "Study help is small: a handful of sessions at Pather Sathi, from 2024 to 2026.",
+    "For exam papers, the best route is ShikshAQ, which is AquaTerra's own free resource and is open to non-members.",
+    "Book Basket and Wear and Write have their own pages, and their figures are not added together here."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra give books to underprivileged kids?",
+      "a": "Yes. The Book Basket series collects books for underprivileged kids. It has run {count:book-basket} drives, the first in March 2022 and most of the rest in June and early July 2025. This site does not name the schools or homes that receive the books."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes and notebooks?",
+      "a": "Yes. The Wear and Write campaigns have collected clothes and notebooks, and each drive gives its weight in kilograms. The 2024 campaigns clustered between late April and late May, and another ran on 12 May 2025."
+    },
+    {
+      "q": "Where can students find free exam papers in Kolkata?",
+      "a": "ShikshAQ, built by students at shikshaq.in, offers free exam papers and a free way to be connected with a teacher. It is open to people who are not AquaTerra members."
+    },
+    {
+      "q": "Are the study sessions for kids free?",
+      "a": "No fee is listed for the study sessions, and AquaTerra charges no fees for its work. The sessions ran at Pather Sathi, with volunteers doing the teaching."
+    },
+    {
+      "q": "How can I donate books or notebooks to AquaTerra?",
+      "a": "Contact AquaTerra through the contact page before you bring anything, because this site does not give a standing drop-off address. AquaTerra takes no monetary donations, but it does collect books, notebooks and clothes during its drives. The join page explains how to become a member."
+    }
+  ],
+  "keywords": [
+    "free books for students Kolkata",
+    "free exam papers Kolkata students",
+    "notebooks and clothes drive Kolkata",
+    "free study help for kids Kolkata",
+    "ShikshAQ free exam papers",
+    "AquaTerra book collection Kolkata"
+  ]
+}

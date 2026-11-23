@@ -49,7 +49,7 @@ const DashboardLayout = () => {
           (~84px tall on mobile) so the final row of content + footer don't
           hide behind it. Bar is only rendered <640px so the spacer is
           conditional via CSS media query in v6.css (.aq-bottom-bar-spacer). */}
-      <main id="main-content" tabIndex={-1} style={{ outline: 'none', paddingTop: isDirectorRoute ? 0 : 'var(--nav-h, 70px)' }}>
+      <main id="main-content" tabIndex={-1} style={{ outline: 'none', minHeight: isDirectorRoute ? undefined : '100vh', paddingTop: isDirectorRoute ? 0 : 'var(--nav-h, 70px)' }}>
         <Outlet />
       </main>
 

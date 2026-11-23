@@ -1,0 +1,86 @@
+{
+  "slug": "food-for-all",
+  "title": "Food for All: food distribution in Kolkata · AquaTerra",
+  "description": "AquaTerra's Food for All drives hand out meals, bananas and food packets in Kolkata. {count} food drives from {firstYear} to {lastYear}, mostly in spring 2025.",
+  "h1Lead": "making sure no one",
+  "h1Accent": "goes hungry",
+  "lede": "Food for All is AquaTerra's food distribution work: packed meals, bananas and packets of food handed out in and around Kolkata. Since {firstYear} we have run {count} food drives, with {volunteers} volunteer turnouts, and most of them fall in one stretch of spring 2025.",
+  "sections": [
+    {
+      "id": "what-a-food-drive-is",
+      "heading": "what a food drive is",
+      "body": [
+        "A Food for All drive is a distribution. Volunteers take food to a set place and hand it out to the people there. The food named across the series is bananas, packed meals and packets of food. Most of the 2025 drives gave out bananas, and the drives from 2022 to 2024 gave out food packets.",
+        "The stated purpose is short and plain. The 15 April 2025 drive at Balaji Apartment says nutritious food was served to make sure no one slept hungry. At Howrah and New Alipore on 28 March 2025, the team set out with packed meals and handed them out in person."
+      ]
+    },
+    {
+      "id": "the-spring-2025-run",
+      "heading": "the spring 2025 run",
+      "body": [
+        "{year:2025} drives fall in 2025, and all of them come in one stretch, from 26 March to 17 April. Most of them report the same figure, 600 bananas, so that number is the amount each drive states rather than a total for the run.",
+        "The 28 March 2025 drives at Howrah and New Alipore handed out packed meals in person, even though their stated figure is also in bananas. One drive, in Kolkata on 17 April 2025, reports a much larger banana figure than the rest, and AquaTerra does not add the figures together on this page."
+      ]
+    },
+    {
+      "id": "the-paradox-drives",
+      "heading": "the Paradox food drives",
+      "body": [
+        "Some food drives ran under the Paradox name. Food Distribution Drive Day 1 was in Kolkata on 29 December 2023, and its own report gives 60 food packets donated. Day 2 followed in Kolkata on 5 April 2024, with a report giving 80 food packets donated.",
+        "Both were run as distribution days, with meals handed out to people in need. The Rath Yatra food donation drive of 24 June 2023 is the only other food drive in the series named after an occasion."
+      ]
+    },
+    {
+      "id": "the-early-drives",
+      "heading": "the early drives",
+      "body": [
+        "The first food drive was on 13 November 2022 at the Lighthouse for the blind. It was a small drive with a single volunteer, and its own report gives 30 food packets donated. On 24 June 2023, during Rath Yatra, AquaTerra ran a food donation drive in Kolkata. Its report gives 100 food packets donated, and it says the team served dignity and compassion along with the meals."
+      ]
+    },
+    {
+      "id": "where-food-went",
+      "heading": "where the food went",
+      "body": [
+        "The food went to {placesCount} places. Several drives name only the city of Kolkata, so the named spots tell more. Salt Lake, Lake Town Footbridge and Sarat Bose Road come up again and again in the spring 2025 drives, with Howrah and New Alipore on the packed-meal day and Hazra on 30 March.",
+        "Some places are shared with [Sharbat Seva](/impact/sharbat-seva), which ran in the same weeks. Sarat Bose Road, Lake Town Footbridge and Shiv Temple in Salt Lake all appear in both series, so the two worked the same places in the same weeks. The newest drive, at Bhawanipore on 7 March 2026, handed out boxes of croissants near a slum area."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most food drives took place in one stretch of spring 2025, from late March to mid April.",
+    "Bananas are the food named most often in the 2025 drives, and most of them state the same figure.",
+    "Packed meals were handed out in person on 28 March 2025 at Howrah and New Alipore.",
+    "Two food drives in December 2023 and April 2024 were held under the Paradox name.",
+    "Food for All and Sharbat Seva shared several places in the same weeks of 2025."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run food distribution drives in Kolkata?",
+      "a": "Yes. Food for All is AquaTerra's food distribution work. AquaTerra has run {count} drives from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts, mostly in and around Kolkata, including Salt Lake, Howrah and Hazra."
+    },
+    {
+      "q": "What did AquaTerra do in 2025 for people who are hungry?",
+      "a": "In 2025 AquaTerra ran {year:2025} food distribution drives, all between 26 March and 17 April. Most gave out bananas, and the 28 March 2025 drives at Howrah and New Alipore handed out packed meals."
+    },
+    {
+      "q": "Does AquaTerra accept money donations for food?",
+      "a": "No. AquaTerra takes no monetary donations. Its welfare work, food drives included, is paid for by its own student-run events."
+    },
+    {
+      "q": "What was the Paradox food distribution drive Day 2?",
+      "a": "Day 2 was a food distribution drive in Kolkata on 5 April 2024, held under the Paradox name. Its own report gives 80 food packets donated. Day 1 was in Kolkata on 29 December 2023."
+    },
+    {
+      "q": "Can I volunteer for food drives as a teenager?",
+      "a": "Yes, if you are a member aged 14 to 19. To join, sign in with Google and wait for approval, and the [join page](/join) explains the steps."
+    }
+  ],
+  "keywords": [
+    "food distribution drive Kolkata",
+    "food drive Kolkata students",
+    "banana distribution Kolkata NGO",
+    "AquaTerra Food for All",
+    "meal distribution Kolkata volunteers",
+    "Paradox food drive Kolkata"
+  ]
+}

@@ -6,9 +6,10 @@ import { sized } from '../../lib/imageUrl'
 /**
  * An ink slab to close the page, so the site ends on the same note it opened.
  *
- * The credentials line is plain text, not a badge image: a parent checking
- * whether this is a real organisation scans for "12A" and "80G", and a graphic
- * of a certificate is both heavier and less searchable than the words.
+ * The credentials line is plain text, not a badge image: a graphic of a
+ * certificate is both heavier and less searchable than the words. It states
+ * only what AQ holds a document for (the DARPAN registration). The 12A and 80G
+ * claims were removed on 19 Nov 2026: no 12A or 80G document was supplied.
  *
  * No percentage claim anywhere. AQ's own review flagged a 100%-to-charity style
  * statement as unsupportable, so the copy says what the money funds without
@@ -41,7 +42,7 @@ export function Footer() {
               organisation in Kolkata.
             </p>
             <p style={{ margin: '14px 0 0', fontFamily: 'var(--tt-code)', fontSize: 'var(--tt-fs-meta)', color: 'var(--tt-lemon)' }}>
-              Registered NGO · 12A and 80G certified
+              Registered charitable trust · listed on NGO DARPAN
             </p>
           </div>
 

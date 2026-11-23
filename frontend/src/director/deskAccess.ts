@@ -234,12 +234,13 @@ export const NAV_GROUPS: NavGroup[] = [
         blurb: 'Open roles, and the people who have applied to them.' },
       { key: 'enquiries', label: 'Enquiries', icon: '◑', path: 'enquiries', privilege: 'leader',
         blurb: 'Messages sent in through the contact and collaboration forms.' },
-      // The HR desk. FR10 (user, 2026-09-05): "certificate only for HR" -
-      // issuing a certificate / LoR / LoV is an HR act, not general HoD work.
-      // 'super' resolves through isSuperAdmin(), whose ADMIN_ROLES are exactly
-      // ['hr', 'super_admin'] - a plain hod/director does not see or reach it.
-      { key: 'certificates', label: 'Certificates', icon: '◒', path: 'certificates', privilege: 'super',
-        blurb: 'Requests for a certificate, a recommendation letter or proof of volunteering.' },
+      // The certificate pipeline desk. FR10 (user, 2026-09-05) made it HR-only. On 2026-11-20 the owner opened it to every HoD
+      // on purpose: any leader can READ the queue, a HoD a member tagged can answer (vouch / cannot / not sure), any leader can
+      // add a note, and a tagged HoD or HR can write the text. ISSUING and DECLINING stay HR / super admin only. That split is
+      // inside the desk and in the database (certificate_requests_update_hr, the certificate_* functions), not in this gate,
+      // so 'leader' here only means "may open the desk". `is_director()` on the read policies matches it.
+      { key: 'certificates', label: 'Certificates', icon: '◒', path: 'certificates', privilege: 'leader',
+        blurb: 'Members asking for a certificate or a letter. Say whether you can vouch for them; HR decides.' },
       // Grievances (C-33, 3 Nov 2026): HR and Super Admin ONLY. grievances' RLS uses is_super_admin() (role hr or
       // super_admin) and never is_director(), so a HoD or Director gets zero rows even if they type the URL; the person a
       // grievance names is excluded too. `super` here resolves through isSuperAdmin(), the same two roles.

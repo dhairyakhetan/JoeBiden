@@ -1,0 +1,45 @@
+{
+  "slug": "tails-and-treats",
+  "title": "Tails and Treats in Pictures: Feeding Kolkata's Strays · AquaTerra",
+  "description": "Photos from {count} Tails and Treats drives feeding stray dogs in Kolkata since {firstYear}. Students, biscuits, and the neighbourhoods the drives moved into.",
+  "h1Lead": "tails and treats,",
+  "h1Accent": "in pictures",
+  "lede": "Tails and Treats is where AquaTerra students feed stray dogs in Kolkata, mostly with biscuits. Since {firstYear} we have run {count} of these drives, with {volunteers} volunteer turnouts, and the photos below follow the series from one city-wide effort into named neighbourhoods.",
+  "chapters": {
+    "2022": {
+      "heading": "the city-wide start",
+      "text": "In 2022 we ran {year:2022} drives. The photos run from April to September, all of them in Kolkata. The captions talk about students cuddling, feeding and pampering the dogs, and about pups and their people having a good day together."
+    },
+    "2023": {
+      "heading": "a summer of small outings",
+      "text": "In 2023 we ran {year:2023} drives, and the photos are from May to July. One caption says every dog deserves a full belly and a happy day. Another describes a biscuit in hand and a wagging tail in sight, and a third says the drives brought food, shelter and care to strays in need."
+    },
+    "2024": {
+      "heading": "into the neighbourhoods",
+      "text": "From November 2024 the drives moved into neighbourhoods. The photos name Bangur, Salt Lake and Hazra, and the last of them is from 14 December. In 2024 we ran {year:2024} drives, and the captions describe volunteers feeding and comforting dogs, spreading love and warmth."
+    },
+    "2025": {
+      "heading": "the busiest year",
+      "text": "In 2025 we ran {year:2025} drives, more than in any other year of the series. The photos here are from late August and September, at Bangur, Salt Lake, Howrah and Laketown. One September drive was an all-animal feeding drive, where students shared love and food with every furry friend they met."
+    },
+    "2026": {
+      "heading": "dogs and cows, too",
+      "text": "In 2026 we ran {year:2026} drives, at Dobson Lane and Jatindas Park, and the latest photos are from late June. One April caption says volunteers fed dogs and cows during the drive. A June caption describes a small animal welfare initiative caring for stray dogs."
+    }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every drive in words, with its place and what the team did, read [the full story](/impact/tails-and-treats).",
+  "faqs": [
+    {
+      "q": "Where can I feed stray dogs in Kolkata as a volunteer?",
+      "a": "AquaTerra's Tails and Treats drives have run across Kolkata, in places such as Bangur, Salt Lake, Howrah and Laketown. Members aged 14 to 19 can join by signing in with Google and waiting for approval, and each drive has its own page on the site."
+    },
+    {
+      "q": "What did AquaTerra do for stray dogs in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} Tails and Treats drives, more than in any other year of the series. The photos from that year are from late August and September, at Bangur, Salt Lake, Howrah and Laketown."
+    },
+    {
+      "q": "Does AquaTerra feed cows as well as dogs?",
+      "a": "Mostly not. Most captions in the series talk only about dogs. One April 2026 drive at Dobson Lane fed dogs and cows, and a September 2025 drive at Howrah was described as an all-animal feeding drive."
+    }
+  ]
+}

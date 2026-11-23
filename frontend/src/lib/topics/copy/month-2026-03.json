@@ -1,0 +1,64 @@
+{
+  "slug": "month-2026-03",
+  "title": "AquaTerra in March 2026: {count} drives across Kolkata",
+  "description": "March 2026 at AquaTerra: {count} drives across Kolkata, from Smile Notes stops on the street to a kit day at Science City and a T-shirt stall.",
+  "h1Lead": "march was about",
+  "h1Accent": "small kindnesses",
+  "lede": "In March 2026 AquaTerra ran {count} drives with {volunteers} volunteer turnouts across {placesCount} places (volunteer turnouts count every time someone showed up). The month was built around Smile Notes, a stationery kit day at Science City and a food stop near a slum area in Bhawanipore, with a T-shirt stall at Xaviers University in the first week.",
+  "sections": [
+    {
+      "id": "smile-notes-on-the-street",
+      "heading": "smile notes on the street",
+      "body": [
+        "Smile Notes was the month's main series. On 25 March the team handed out affirmation notes at Bhawanipore, and on 26 March at MBA Chaiwala Lake Town. Each note came with a toffee: 100 notes and 100 toffees per stop, given to people walking past.",
+        "Both stops were short street distributions run by teams of three to eight, so a new member can see exactly what a Smile Notes stop asks for. The full series is on [Smile Notes](/impact/smile-notes)."
+      ]
+    },
+    {
+      "id": "a-kit-day-and-a-stall",
+      "heading": "a kit day and a stall",
+      "body": [
+        "The biggest team of the month went to the Aq x Vishwajagriti and Emami collab at Science City on 27 March, where 300 stationery kits were distributed and children were hosted for the day. The drive was a different shape from [Smile Notes](/impact/smile-notes), which ran on the street, because this one was a kit distribution and a day of hosting.",
+        "In the first week of March a custom T-shirt stall ran for three days at Xaviers University, Kolkata, and was visited by students all through the three days. Food came on 7 March, when a team handed out croissant packs near a slum area in Bhawanipore."
+      ]
+    },
+    {
+      "id": "how-march-sat-in-the-year",
+      "heading": "how march sat in the year",
+      "body": [
+        "March was the month of the street, with Smile Notes and a stall. April was the month of the classroom, with {count:month-2026-04} drives and more teaching at Ek Tara and Disha Foundation. See [April 2026](/impact/month-2026-04) for the other half of the spring. Before this, [December 2025](/impact/month-2025-12) had {count:month-2025-12} drives."
+      ]
+    }
+  ],
+  "learnings": [
+    "A street stop needs only a few things to start: a box of notes or toffees, a small team, and a spot where people walk past.",
+    "Running the same format twice in a week, as Smile Notes did at Bhawanipore and at MBA Chaiwala Lake Town, lets a team find its rhythm.",
+    "A stall reaches far more people than its team. The T-shirt stall at Xaviers University drew footfall in the hundreds across three days."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in March 2026?",
+      "a": "In March 2026 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. The month centred on Smile Notes stops at Bhawanipore and MBA Chaiwala Lake Town, a stationery kit day at Science City, a food stop near a slum area in Bhawanipore and a custom T-shirt stall at Xaviers University."
+    },
+    {
+      "q": "Where did AquaTerra run drives in March 2026?",
+      "a": "AquaTerra's March 2026 drives were in {placesCount} places across Kolkata, including Bhawanipore, MBA Chaiwala Lake Town, Science City and Xaviers University. Bhawanipore hosted the most stops, with the Smile Notes distribution and a food stop."
+    },
+    {
+      "q": "What is Smile Notes?",
+      "a": "Smile Notes is an AquaTerra campaign that hands affirmation notes to passersby, with a toffee given with each note. In March 2026 it ran at Bhawanipore on 25 March and at MBA Chaiwala Lake Town on 26 March."
+    },
+    {
+      "q": "How can I take part in an AquaTerra drive?",
+      "a": "Sign in to AquaTerra with Google and wait for approval. Drives like the March 2026 stops are run by student teams, and members can take part once they are approved."
+    }
+  ],
+  "keywords": [
+    "AquaTerra March 2026",
+    "Smile Notes campaign Kolkata",
+    "stationery kits distribution Science City",
+    "student drives Kolkata March 2026",
+    "Bhawanipore drive Kolkata students",
+    "student volunteer drives Kolkata"
+  ]
+}

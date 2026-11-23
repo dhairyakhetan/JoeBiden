@@ -34,12 +34,8 @@ const PHONE_RE = /^\+?[\d\s-]{7,}$/
 // the user's browser is. Anyone landing on /paradox/register after this
 // instant gets the "closed" panel below instead of the form.
 const REGISTRATION_CUTOFF = new Date('2026-05-30T21:00:00+05:30')
-const POC_NAME = 'Aastha Saluja'
-// Country code prepended for the wa.me URL — Aastha's number lives in
-// Team.tsx (TEAM_CONTACTS) as 8910353970; this constant + the link
-// builder below stay deliberately co-located so the cutoff message
-// doesn't drift if the contact list moves.
-const POC_WA_NUMBER = '918910353970'
+// Registration help goes through the AquaTerra Instagram inbox; no personal numbers are published.
+const IG_URL = 'https://instagram.com/ngo.aquaterra'
 
 function validate(form: Form, isDuo: boolean, partnerRequired: boolean): Errors {
   const e: Errors = {}
@@ -531,7 +527,7 @@ export function RegisterPage() {
               whileTap={{ scale: 0.96 }}
               transition={SPRING}
               className="mt-5 rounded-2xl border-[1.5px] border-ink p-4 flex items-center justify-between gap-3"
-              style={{ background: '#25D366', color: '#0A0A0A', textDecoration: 'none', boxShadow: '3px 3px 0 var(--ink)', transitionProperty: 'transform, box-shadow' }}
+              style={{ background: 'var(--bg)', color: '#0A0A0A', textDecoration: 'none', boxShadow: '3px 3px 0 var(--ink)', transitionProperty: 'transform, box-shadow' }}
             >
               <div>
                 <div className="font-mono text-[10px] tracking-[0.14em] uppercase" style={{ opacity: 0.65 }}>★ official group</div>
@@ -625,16 +621,8 @@ export function RegisterPage() {
   // above and returns first.
   const manualFlow = Date.now() > REGISTRATION_CUTOFF.getTime()
   if (manualFlow) {
-    const buildWaHref = (eventName: string) => {
-      const msg = encodeURIComponent(
-        `Hi ${POC_NAME.split(' ')[0]}, I'd like to register for ${eventName} at Paradox 2026.`
-      )
-      return `https://wa.me/${POC_WA_NUMBER}?text=${msg}`
-    }
-    const generalMsg = encodeURIComponent(
-      `Hi ${POC_NAME.split(' ')[0]}, I'd like to register for Paradox 2026. Which events still have spots?`
-    )
-    const generalWaHref = `https://wa.me/${POC_WA_NUMBER}?text=${generalMsg}`
+    const buildWaHref = (_eventName: string) => IG_URL
+    const generalWaHref = IG_URL
 
     return (
       <div className="min-h-[100dvh] bg-bg text-ink" style={{ position: 'relative', zIndex: 1 }}>
@@ -662,8 +650,8 @@ export function RegisterPage() {
               few spots remain.
             </h1>
             <p className="font-body mt-4 text-[15px] leading-relaxed" style={{ textWrap: 'pretty' } as React.CSSProperties}>
-              The auto-registration form is closed. <strong>DM {POC_NAME}</strong> on
-              WhatsApp and she'll confirm whether the event you want still has
+              The auto-registration form is closed. <strong>Message @ngo.aquaterra</strong> on
+              Instagram and the organisers will confirm whether the event you want still has
               room.
             </p>
             <a
@@ -672,7 +660,7 @@ export function RegisterPage() {
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full border-[1.5px] border-ink px-5 py-3 min-h-[48px] font-body font-semibold active:scale-[0.96]"
               style={{
-                background: '#25D366',
+                background: 'var(--bg)',
                 color: 'var(--ink)',
                 boxShadow: '4px 4px 0 var(--ink)',
                 transitionProperty: 'transform, box-shadow',
@@ -682,11 +670,8 @@ export function RegisterPage() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                 <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.88 11.9L4 20l4.22-1.1a7.94 7.94 0 0 0 3.83.97h.01A7.94 7.94 0 0 0 20 11.94a7.85 7.85 0 0 0-2.4-5.62Zm-5.55 12.21h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.43-.16-.25a6.6 6.6 0 0 1 5.6-10.1 6.55 6.55 0 0 1 4.66 1.94 6.55 6.55 0 0 1 1.93 4.66 6.6 6.6 0 0 1-6.59 6.59Zm3.62-4.94c-.2-.1-1.17-.58-1.35-.65-.18-.07-.31-.1-.45.1-.13.2-.51.65-.63.78-.12.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99a6 6 0 0 1-1.11-1.38c-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.34l-.38-.01a.74.74 0 0 0-.54.25c-.18.2-.71.7-.71 1.7s.73 1.97.83 2.1c.1.13 1.44 2.2 3.49 3.08.48.21.86.34 1.16.43.49.16.94.13 1.29.08.39-.06 1.2-.49 1.37-.97.17-.48.17-.88.12-.97-.05-.09-.18-.14-.38-.24Z"/>
               </svg>
-              Message {POC_NAME.split(' ')[0]} — general
+              Message us on Instagram
             </a>
-            <div className="font-mono text-[11px] mt-3 opacity-60 tabular-nums">
-              +91 89103 53970
-            </div>
           </motion.div>
 
           {/* Per-event WA buttons. Each one prefills "Hi Aastha, I'd
@@ -705,7 +690,7 @@ export function RegisterPage() {
               </div>
             ) : events.length === 0 ? (
               <div className="font-body text-[14px] opacity-60">
-                No events loaded — message {POC_NAME.split(' ')[0]} directly.
+                No events loaded — message us on Instagram.
               </div>
             ) : (
               <motion.div
@@ -767,7 +752,7 @@ export function RegisterPage() {
                       transition={SPRING}
                       className="rounded-2xl border-[1.5px] border-ink bg-bg px-4 py-3 min-h-[64px] flex items-center gap-3 no-underline text-ink"
                       style={{ boxShadow: '3px 3px 0 var(--ink)' }}
-                      aria-label={`Message ${POC_NAME} on WhatsApp about ${e.name}`}
+                      aria-label={`Message AquaTerra on Instagram about ${e.name}`}
                     >
                       {inner}
                     </motion.a>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEPARTMENTS, PUBLIC_DEPARTMENTS } from './departments'
+import { DEPARTMENTS, PUBLIC_DEPARTMENTS, departmentCountFromTree } from './departments'
 import { ORG_FACTS } from './orgFacts'
 
 describe('public department list', () => {
@@ -26,5 +26,15 @@ describe('public department list', () => {
 
   it('still lets hidden departments stay out of public lists', () => {
     expect(PUBLIC_DEPARTMENTS.every(d => !d.hidden)).toBe(true)
+  })
+})
+
+describe('departmentCountFromTree', () => {
+  it('adds the card-only departments to the live top-level teams, matching the card list', () => {
+    const tree = Array.from({ length: PUBLIC_DEPARTMENTS.length - 1 }, () => ({})).concat([{ parentUuid: 'x' }])
+    expect(departmentCountFromTree(tree)).toBe(PUBLIC_DEPARTMENTS.length)
+  })
+  it('an empty tree is a failed read, not zero departments plus Collabs', () => {
+    expect(departmentCountFromTree([])).toBe(0)
   })
 })

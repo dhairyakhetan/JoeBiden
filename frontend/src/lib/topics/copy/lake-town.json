@@ -1,0 +1,90 @@
+{
+  "slug": "lake-town",
+  "title": "Lake Town drives: sharbat, bananas and smile notes · AquaTerra",
+  "description": "AquaTerra's drives in Lake Town since {firstYear}: {count} drives at {placesCount} places, from food and sharbat at the footbridge to Smile Notes in 2026.",
+  "h1Lead": "sharbat, bananas and",
+  "h1Accent": "smile notes",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drives in Lake Town, with {volunteers} volunteer turnouts. They began in spring 2025 with sharbat and bananas at the Lake Town Footbridge, moved into dog feeding and collections that summer, and in 2026 became the home of the Smile Notes campaign.",
+  "sections": [
+    {
+      "id": "how-it-began",
+      "heading": "how it began at the footbridge",
+      "body": [
+        "The first Lake Town drive was a sharbat drive at the Lake Town Footbridge on 27 March 2025, and the drive's own figure is twenty litres of Rooh Afza. Two food drives followed at the same footbridge, on 29 March and 13 April 2025, and each gives 600 bananas donated as its figure.",
+        "The footbridge is the most common spot in Lake Town. The spring 2025 food and sharbat drives ran there, and so did two of the Smile Notes drives in May 2026."
+      ]
+    },
+    {
+      "id": "the-summer-of-dogs-and-collections",
+      "heading": "the summer of dogs and collections",
+      "body": [
+        "Dog feeding came to Lake Town in June 2025. Students fed street dogs at MBA Chaiwala in Laketown on 27 June, and at Laketown the same day. The drives' own figures are 70 dogs fed at MBA Chaiwala and 65 at Laketown. Another Tails and Treats drive at Laketown followed on 5 September 2025, noting 90 dogs fed.",
+        "Collections ran that summer too. Natural City in Laketown hosted a book collection on 6 June 2025 and a clothes collection on 9 July 2025, when the team gathered between ten and fifteen kilograms of clothes."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where the drives happen",
+      "body": [
+        "Across Lake Town the drives have been held in {placesCount} places: the Lake Town Footbridge, MBA Chaiwala in Laketown, Natural City in Laketown, and a few more. Two spots, MBA Chaiwala and Natural City, have hosted more than one drive, and the footbridge has hosted the most."
+      ]
+    },
+    {
+      "id": "what-changed-in-2026",
+      "heading": "2026 and the smile notes",
+      "body": [
+        "All of the 2026 drives in Lake Town were Smile Notes. On 26 March the notes went out at MBA Chaiwala, twice on the same day, once as a distribution drive and once as a workshop. On 10 and 15 May they went out at the Lake Town Footbridge.",
+        "Each Smile Notes outing gives 100 affirmation notes and 100 toffees as its figure, one toffee for each note, handed to people passing by. The same campaign ran at Bangur on 15 May 2026, and the [Smile Notes](/impact/smile-notes) page covers the whole series."
+      ]
+    },
+    {
+      "id": "who-takes-part",
+      "heading": "who takes part",
+      "body": [
+        "Students hand out the food, sharbat and notes in person, and on dog drives they feed the dogs biscuits. The biggest teams in Lake Town came to MBA Chaiwala, for the dog feeding drive in June 2025 and for the March 2026 Smile Notes drives.",
+        "{volunteers} volunteer turnouts across {count} drives counts every visit. A student who came to more than one drive is counted for each, so the number measures places filled, not separate people."
+      ]
+    },
+    {
+      "id": "how-to-get-involved",
+      "heading": "how to join or help",
+      "body": [
+        "Members aged 14 to 19 join through the [join page](/join), by signing in with Google and waiting for approval. Every Lake Town drive is written up on the site, with its place, its date and what the team did.",
+        "In other neighbourhoods the same kinds of drive have their own pages: [Bangur](/impact/bangur) and [Salt Lake](/impact/salt-lake) for dogs and collections, [Food For All](/impact/food-for-all) for the banana and food drives across the city, and [Sharbat Seva](/impact/sharbat-seva) for the summer drinks."
+      ]
+    }
+  ],
+  "learnings": [
+    "Lake Town's first drives all ran in spring 2025, at the same footbridge.",
+    "The Smile Notes format, an affirmation note with a toffee for each note, ran in Lake Town and at Bangur in 2026.",
+    "Dog feeding and collections ran in the same summer, June and July 2025, so one neighbourhood can host more than one kind of drive.",
+    "Two drives on the same day can have different aims, as the two Smile Notes outings at MBA Chaiwala on 26 March 2026 show.",
+    "Dogs fed is each drive's own figure, so compare dog drives with dog drives."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run drives in Lake Town?",
+      "a": "Most AquaTerra drives in Lake Town have been at the Lake Town Footbridge. Others have been at MBA Chaiwala in Laketown and at Natural City in Laketown. Since {firstYear} the drives have been held in {placesCount} places across the neighbourhood."
+    },
+    {
+      "q": "What did AquaTerra do in Lake Town in 2026?",
+      "a": "In 2026 AquaTerra ran {year:2026} Lake Town drives, all of them Smile Notes outings. Students gave out affirmation notes, with a toffee for each note, at MBA Chaiwala on 26 March and at the Lake Town Footbridge on 10 and 15 May."
+    },
+    {
+      "q": "Did AquaTerra run food drives in Lake Town?",
+      "a": "Yes. The food drives at the Lake Town Footbridge on 29 March and 13 April 2025 were banana distributions, each giving 600 bananas donated as its figure. A sharbat drive at the same footbridge came on 27 March 2025."
+    },
+    {
+      "q": "How many volunteer turnouts has AquaTerra had in Lake Town?",
+      "a": "AquaTerra has had {volunteers} volunteer turnouts across {count} drives in Lake Town since {firstYear}. A turnout counts each time someone showed up at a drive, so the total measures places filled, not separate people."
+    }
+  ],
+  "keywords": [
+    "drives in Lake Town Kolkata",
+    "Laketown Kolkata volunteering",
+    "Lake Town Footbridge food drive",
+    "smile notes Kolkata",
+    "sharbat distribution Lake Town",
+    "student volunteers Laketown Kolkata"
+  ]
+}

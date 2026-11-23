@@ -1,0 +1,96 @@
+{
+  "slug": "by-the-numbers",
+  "title": "AquaTerra by the numbers: drives and turnouts · AquaTerra",
+  "description": "{drives} drives since {firstYear}, {volunteers} volunteer turnouts and {members} active members. The figures move as new drives are added.",
+  "h1Lead": "AquaTerra,",
+  "h1Accent": "by the numbers",
+  "lede": "AquaTerra has run {drives} drives since {firstYear}, with {volunteers} volunteer turnouts, {children} children reached and {members} active members today. Most figures here are counted from our drives, so they move as new drives are added.",
+  "sections": [
+    {
+      "id": "headline-figures",
+      "heading": "the headline figures",
+      "body": [
+        "Our drives run from {firstYear} to {lastYear} across {placesCount} places. The most frequent named place is {topPlace}. Volunteer turnouts add up to {volunteers}. Each turnout is one person joining one drive, so someone who came to many drives adds to the total each time.",
+        "Two of these figures count people, and they behave differently. Active members is the number of people in the organisation today, so it changes as membership changes. The turnout total adds up every visit, so someone who joined one drive and someone who joined many are both counted, once for each drive."
+      ]
+    },
+    {
+      "id": "what-the-drives-gave",
+      "heading": "what the drives gave",
+      "body": [
+        "Some outputs are counted as numbers in their own right. We have planted {saplings} saplings, distributed {bananas} bananas, done {checkups} medical checkups, served {dogMeals} meals to stray dogs, distributed {clothesKg} kg of clothes and made {sundarbansTrips} trips to the Sundarbans. Each figure comes from the drives that record it, so a missing figure on one drive does not mean the work did not happen.",
+        "Each output traces back to the drives behind it. The {count:grow-green} Grow Green drives are where the planting happens, the {count:tails-and-treats} Tails and Treats drives are the dog feeding outings, and the {count:wear-and-share} Wear and Share drives are the clothes collections. Visit those pages to see what a drive involved."
+      ]
+    },
+    {
+      "id": "how-the-record-grew",
+      "heading": "how the work grew by year",
+      "body": [
+        "The yearly count of drives rises from {count:year-2021} in 2021 to {count:year-2025} in 2025. Our 2022 drives number {count:year-2022}, 2023 has {count:year-2023} and 2024 has {count:year-2024}. 2026 is only partly in, with {count:year-2026} drives so far and the latest dated September 2026.",
+        "Each year has its own shape. 2023 includes the FIFA and football fundraisers, and 2025 includes the Roots tee days at school fests and Paradox 3.0. Reading the year pages side by side shows how the mix changed from one year to the next."
+      ]
+    },
+    {
+      "id": "themes-behind-the-counts",
+      "heading": "the themes behind the counts",
+      "body": [
+        "The largest theme groups are arts and crafts, with {count:arts-and-crafts} drives, and animal welfare, with {count:animal-welfare}. Reading, speaking and English has {count:reading-speaking-and-english}, environment education has {count:environment-education}, and drama, music and dance has {count:drama-music-and-dance}. Science and STEM has {count:science-and-stem}, and sport and play has {count:sport-and-play}.",
+        "Food, health and shelter work has its own pages too. Food for All has {count:food-for-all} drives, health and wellbeing has {count:health-and-wellbeing}, and urban poverty and shelter visits have {count:urban-poverty-and-shelters}. Each is a theme in its own right, and a drive can be read through the theme page that fits it."
+      ]
+    },
+    {
+      "id": "places-we-return-to",
+      "heading": "the places we keep going back to",
+      "body": [
+        "Pather Sathi has {count:pather-sathi} drives across all years, Disha Foundation has {count:disha-foundation}, Ek Tara has {count:ek-tara}, and AIM Foundation has {count:aim-foundation}. Our page on those places holds {count:places-we-return-to} drives in total. These are among the most frequent named places, so they run through many years of our work.",
+        "A place count is a different view from a theme count. It shows where the work happens, not what the work was. A venue such as {topPlace} shows how often the same host opened its doors across the years, which a theme count cannot show."
+      ]
+    },
+    {
+      "id": "reading-the-figures",
+      "heading": "how to read these figures",
+      "body": [
+        "A single drive's key line belongs to that drive alone. Totals across all our drives are only as complete as the drives that record each figure. Read the totals as a floor for what we have recorded, not as an audited count of everything AquaTerra has done.",
+        "The most recent figures are the least settled. A drive can be added after it happens, so the 2026 figures and the latest months of 2025 may still grow. The year pages show how each year stands today, and the topic pages show the same figures in context.",
+        "For the stories behind the numbers, read [how a drive works](/impact/how-a-drive-works) and [what our drives have taught us](/impact/lessons-from-our-drives). Those pages explain what a drive involves and what the team learned from running them, and they are the best next step for anyone checking how these totals were built."
+      ]
+    }
+  ],
+  "learnings": [
+    "A volunteer turnout counts a person once for each drive they joined, so one person can add to the total many times.",
+    "The yearly count of drives rose each year up to 2025, the latest full year.",
+    "Arts and crafts and animal welfare are the two largest theme groups.",
+    "Pather Sathi is the most frequent named place by a clear margin.",
+    "Totals are only as complete as the drives that record each figure."
+  ],
+  "faqs": [
+    {
+      "q": "How many drives has AquaTerra done?",
+      "a": "AquaTerra has run {drives} drives from {firstYear} to {lastYear}. The count comes from the drives we have recorded and updates as new ones are added."
+    },
+    {
+      "q": "How many volunteer turnouts has AquaTerra recorded?",
+      "a": "AquaTerra has {members} active members. Across all our drives we have recorded {volunteers} volunteer turnouts, which counts a person once for each drive they joined, so one person can appear more than once."
+    },
+    {
+      "q": "How many children has AquaTerra reached?",
+      "a": "Across AquaTerra's drives, {children} children have been reached. The figure is a total of what each drive records, so treat it as a floor, not an audited count."
+    },
+    {
+      "q": "How many saplings has AquaTerra planted?",
+      "a": "We have planted {saplings} saplings and distributed {bananas} bananas across the drives that record them. Each figure comes from the drives that state it."
+    },
+    {
+      "q": "Where does AquaTerra work most often?",
+      "a": "In Kolkata, most often at {topPlace}, which is the most frequent named place across our drives with {count:pather-sathi} drives in all years. Other repeat places include Disha Foundation and Ek Tara."
+    }
+  ],
+  "keywords": [
+    "AquaTerra impact numbers",
+    "how many drives AquaTerra has done",
+    "AquaTerra volunteer turnouts",
+    "student NGO Kolkata impact figures",
+    "AquaTerra children reached",
+    "AquaTerra saplings planted"
+  ]
+}

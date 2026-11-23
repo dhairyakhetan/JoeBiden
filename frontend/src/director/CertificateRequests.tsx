@@ -1,242 +1,172 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
-import certificateService, { AlreadyDecidedError, CertificateRequest, DocType, RequestStatus } from '../services/certificateService'
-import { generateCertificate, downloadCertificate } from '../components/certificateGenerator'
-import { useToast } from '../components/Toast'
-import { useConfirm } from '../components/Confirm'
-import { I } from '../components/v6Shared'
-import { ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { isSuperAdmin } from '../lib/roles'
+import certificateService from '../services/certificateService'
 import {
-  AdminLayout, AdminTabHeader, DataToolbar, FilterPill, EmptyLedger,
-  AdminSkeleton, AdminErrorState, AdminRow, AdminRowActions, StatusStamp, type StampTone,
+  clearedCases, groupIntoCases, pendingCases, summariseHods,
+  type CertCase, type CertTypeInfo, type DeskDoc, type OrgSubTeam, type OrgTeam,
+} from '../certificates/certificateLogic'
+import {
+  AdminLayout, AdminTabHeader, DataToolbar, FilterPill, EmptyLedger, AdminSkeleton, AdminErrorState, AdminRow, StatusStamp,
 } from './adminKit'
+import CertificateDocBlock, { caseChips, claimedChip, fmtDate, type DeskCtx } from './CertificateCaseDetail'
+import './CertificateRequests.css'
 
 /**
- * `/director/certificates` - the HR desk's certificate/LoR/LoV queue
- * (handoff/16-welfare-record.md §4/§5): every request shows the hours,
- * drive count, and date range as derived from the real roster at the
- * moment the member asked, and a director issues or declines with a note -
- * "exactly like every other desk in handoff/07." There is no automatic LoR
- * - every decision here is a person's, never a threshold check.
+ * `/director/certificates`: the certificate pipeline, as seen by every leader.
+ *
+ * A member asks on /certificates and tags the HoDs who have seen their work. Every HoD can READ the queue. Only a tagged HoD can
+ * answer (vouch, cannot vouch, not sure); any leader can add a note; HR and tagged HoDs can write the text themselves (the route
+ * for an informal "I need it now"); only HR can issue or decline. Cleared requests keep who decided and when.
+ *
+ * One row per MEMBER, not per document: everything a person has open is clubbed into one case, however many rounds it was asked
+ * for in, with their earlier decisions shown as history. What each person may do is `powersFor` in certificates/certificateLogic.ts,
+ * and the database enforces the same rules again (scripts/certificate_pipeline_2026_11_20.sql).
  */
 
-const DOC_LABEL: Record<DocType, string> = { certificate: 'Certificate', lor: 'Letter of Recommendation', lov: 'Letter of Volunteering' }
+type Tab = 'pending' | 'cleared'
+type PendingFilter = 'all' | 'mine' | 'notext'
 
-// handoff/20-admin-desks.md §20.4: "Columns: member · document type · note ·
-// requested · status." The row's top-right `stamp` slot is this desk-family's
-// shared status vocabulary (see FormResponses/HiringResponses' own
-// STATUS_TONE maps) - document type moves to a `qtag` chip in `secondary` so
-// both the type AND the actual pending/issued/declined status are visible at
-// once, instead of the type silently standing in for status.
-const STATUS_TONE: Record<RequestStatus, StampTone> = { pending: 'pending', issued: 'approved', declined: 'rejected' }
-
-function fmtDate(iso: string | null): string {
-  if (!iso) return ''
-  try { return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) }
-  catch { return '' }
-}
-
-function DecideRow({ request, onDecided, onStale }: { request: CertificateRequest; onDecided: (r: CertificateRequest) => void; onStale: () => void }) {
-  const { member } = useAuth()
-  const toast = useToast()
-  const confirm = useConfirm()
-  // One `open` toggle drives both directions: on a pending request it reveals
-  // the decline-note field; on an already-decided one it reveals who decided
-  // and why. (AdminRow only renders `expanded` when `onToggleExpand` is also
-  // set, so every row - not just pending ones - needs a live toggle or the
-  // decided-info panel below would never be reachable.)
+function CaseRow({ c, tab, ctx }: { c: CertCase; tab: Tab; ctx: DeskCtx }) {
   const [open, setOpen] = useState(false)
-  const [note, setNote] = useState('')
-  const [busy, setBusy] = useState(false)
-  const [generating, setGenerating] = useState(false)
-  const isPending = request.status === 'pending'
-
-  // Owner: "generate certificate option with all formalities." Issuing used
-  // to only flip `status`, with no actual document behind it - this draws
-  // one on the spot from the request's own DB-derived hours/drive-count/date
-  // snapshot (certificateGenerator.ts), so HR has something to hand the
-  // member rather than just a changed status label.
-  const handleDownload = async () => {
-    setGenerating(true)
-    try {
-      const dataUrl = await generateCertificate(request)
-      downloadCertificate(dataUrl, `aq-${request.docType}-${(request.memberName || 'member').toLowerCase().replace(/\s+/g, '-')}.png`)
-    } catch (e: any) {
-      toast.error('couldn’t generate that document.', e?.message || 'try again.')
-    } finally {
-      setGenerating(false)
-    }
-  }
-
-  const decide = async (status: 'issued' | 'declined') => {
-    if (status === 'declined' && !note.trim()) { setOpen(true); return }
-    if (status === 'issued') {
-      const ok = await confirm({
-        title: `issue this ${DOC_LABEL[request.docType].toLowerCase()}?`,
-        body: `${request.memberName || 'this member'} will be told it is approved. you send the document to them by hand.`,
-        confirmLabel: 'issue it',
-      })
-      if (!ok) return
-    }
-    setBusy(true)
-    try {
-      const result = await certificateService.decide(request.id, status, note, member?.member_id)
-      onDecided(result.data)
-      toast.success(status === 'issued' ? 'issued' : 'declined', status === 'issued' ? `now send it to ${request.memberName || 'the member'} by hand.` : undefined)
-      setOpen(false)
-    } catch (e: any) {
-      if (e instanceof AlreadyDecidedError) {
-        toast.info('already decided.', 'someone else got to this one first. showing the latest.')
-        onStale()
-        return
-      }
-      toast.error('couldn’t save that decision.', e?.message || 'try again.')
-    } finally {
-      setBusy(false)
-    }
-  }
+  const docs = tab === 'pending' ? c.open : c.closed
+  const others = tab === 'pending' ? c.closed : c.open
+  const needsMyAnswer = tab === 'pending' && docs.some(d => d.hods.some(h => h.memberId === ctx.viewer.memberId && h.response == null))
+  const noText = tab === 'pending' && docs.some(d => !d.draft)
+  const claimed = docs.map(claimedChip).find(Boolean)
 
   return (
     <AdminRow
-      busy={busy}
-      stamp={<StatusStamp label={request.status} tone={STATUS_TONE[request.status]} />}
-      primary={request.memberName || 'unknown member'}
+      stamp={tab === 'pending'
+        ? <StatusStamp label={`${docs.length} waiting`} tone="pending" />
+        : <StatusStamp label={docs.every(d => d.status === 'issued') ? 'issued' : docs.every(d => d.status === 'declined') ? 'declined' : 'decided'} tone={docs.every(d => d.status === 'issued') ? 'approved' : 'rejected'} />}
+      primary={c.memberName}
       secondary={
         <>
           <div className="adm-lcard-facts">
-            <span className="qtag" style={{ ['--cc' as any]: 'var(--sky)' }}>{DOC_LABEL[request.docType]}</span>
+            <span className="qtag" style={{ ['--cc' as any]: 'var(--sky)' }}>{caseChips(docs)}</span>
+            {needsMyAnswer && <span className="qtag" style={{ ['--cc' as any]: 'var(--lemon)' }}>needs your answer</span>}
+            {noText && <span className="qtag" style={{ ['--cc' as any]: 'var(--bg)' }}>no text yet</span>}
+            {others.length > 0 && <span className="qtag" style={{ ['--cc' as any]: 'var(--bg)' }}>{tab === 'pending' ? `${others.length} earlier decided` : `${others.length} still open`}</span>}
           </div>
-          {request.hoursAtRequest ?? '?'}h &middot; {request.driveCountAtRequest ?? '?'} drives
-          {request.dateRangeStart && <> &middot; {fmtDate(request.dateRangeStart)} &ndash; {fmtDate(request.dateRangeEnd)}</>}
-          {request.status === 'issued' && (
-            <div className="qrow" role="note" style={{ marginTop: 8 }}>
-              <span className="qtag" style={{ ['--cc' as any]: 'var(--sky)' }}>send by hand</span>
-              <span className="adm-note">
-                the app does not deliver this. send the document to {request.memberName || 'the member'} yourself.
-              </span>
-            </div>
-          )}
-          {request.memberNote && (
-            <div className="adm-lcard-facts">
-              <span className="adm-note">"{request.memberNote}"</span>
-            </div>
-          )}
-          <button
-            type="button"
-            className="adm-disclose"
-            aria-expanded={open}
-            onClick={e => { e.stopPropagation(); setOpen(v => !v) }}
-          >
-            {open
-              ? (isPending ? 'hide the decision' : 'hide who decided')
-              : (isPending ? 'decide with a note' : 'who decided, and why')}
-            {open
-              ? <ChevronUpIcon strokeWidth={2.2} aria-hidden />
-              : <ChevronDownIcon strokeWidth={2.2} aria-hidden />}
-          </button>
+          {claimed && <span>{claimed}</span>}
+          {tab === 'pending' && docs.length > 0 && (() => {
+            const s = summariseHods(docs.flatMap(d => d.hods))
+            return s.total > 0 ? <span> &middot; {s.approve} approve, {s.disapprove} do not, {s.clueless} not sure, {s.waiting} waiting</span> : null
+          })()}
         </>
       }
-      meta={fmtDate(request.requestedAt)}
+      meta={tab === 'pending' ? `since ${fmtDate(c.oldestOpenAt)}` : fmtDate(c.latestDecidedAt)}
       onToggleExpand={() => setOpen(v => !v)}
-      expanded={!open ? undefined : !isPending ? (
-        <p className="mono xs muted" style={{ margin: 0 }}>
-          {request.status === 'issued' ? 'issued' : 'declined'} by a director
-          {request.decisionNote && <> &middot; "{request.decisionNote}"</>}
-        </p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }} onClick={e => e.stopPropagation()}>
-          <input
-            className="input"
-            style={{ width: '100%' }}
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            placeholder="reason (required to decline, optional to issue)"
-            autoFocus
-          />
-          <p className="adm-note">decline stays disabled until this has text. issue does not need one.</p>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-sm adm-approve" disabled={busy} onClick={() => decide('issued')}><I.check /> issue</button>
-            <button className="btn btn-sm adm-reject" disabled={busy || !note.trim()} onClick={() => decide('declined')}><XMarkIcon width={14} height={14} strokeWidth={2.4} aria-hidden /> decline</button>
-          </div>
+      expanded={open ? (
+        <div className="cdesk-detail" onClick={e => e.stopPropagation()}>
+          {docs.map(d => <CertificateDocBlock key={d.id} doc={d} ctx={ctx} />)}
+          {others.length > 0 && (
+            <div>
+              <p className="cdesk-label">{tab === 'pending' ? 'earlier certificates for this member' : 'still open for this member'}</p>
+              <div className="cdesk-history">
+                {others.map(d => (
+                  <div key={d.id} className="cdesk-history-row">
+                    <span>
+                      <strong>{d.typeLabel}</strong> &middot; {d.status === 'pending' ? `asked ${fmtDate(d.requestedAt)}` : `${d.status} ${fmtDate(d.decidedAt)}${d.decidedByName ? ` by ${d.decidedByName}` : ''}`}
+                    </span>
+                    {d.status !== 'pending' && <span className="cdesk-sub">{d.claimedMinHours != null ? `${d.claimedMinHours} h claimed` : ''}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      actions={
-        isPending ? (
-          <AdminRowActions sheetTitle={`${DOC_LABEL[request.docType]} for ${request.memberName}`}>
-            <button className="btn btn-sm adm-approve" disabled={busy} onClick={() => decide('issued')}><I.check /> issue</button>
-            <button className="btn btn-sm adm-reject" disabled={busy} onClick={() => setOpen(true)}><XMarkIcon width={14} height={14} strokeWidth={2.4} aria-hidden /> decline</button>
-          </AdminRowActions>
-        ) : request.status === 'issued' ? (
-          <button className="btn btn-sm" disabled={generating} onClick={handleDownload}>
-            {generating ? 'generating…' : 'download'}
-          </button>
-        ) : undefined
-      }
+      ) : undefined}
     />
   )
 }
 
 export default function CertificateRequests() {
-  const [requests, setRequests] = useState<CertificateRequest[]>([])
+  const { member } = useAuth()
+  const viewer = useMemo(() => ({ memberId: (member as any)?.member_id as number | undefined, role: (member as any)?.role as string | undefined }), [member])
+  const hr = isSuperAdmin(viewer.role)
+
+  const [docs, setDocs] = useState<DeskDoc[]>([])
+  const [capped, setCapped] = useState(false)
+  const [types, setTypes] = useState<CertTypeInfo[]>([])
+  const [org, setOrg] = useState<{ teams: OrgTeam[]; subTeams: OrgSubTeam[] }>({ teams: [], subTeams: [] })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'issued' | 'declined'>('pending')
+  const [tab, setTab] = useState<Tab>('pending')
+  const [filter, setFilter] = useState<PendingFilter>('all')
   const [search, setSearch] = useState('')
 
-  const fetchRequests = async () => {
-    setLoading(true); setError(null)
+  const load = useCallback(async (quiet = false) => {
+    if (!quiet) setLoading(true)
+    setError(null)
     try {
-      const result = await certificateService.listAll()
-      setRequests(result.data)
+      const [desk, t, o] = await Promise.all([certificateService.listDesk(), certificateService.listTypes(), certificateService.listOrg()])
+      setDocs(desk.docs); setCapped(desk.capped); setTypes(t); setOrg(o)
     } catch (e: any) {
       setError(e?.message || 'Failed to load requests')
     } finally {
       setLoading(false)
     }
-  }
-  useEffect(() => { fetchRequests() }, [])
+  }, [])
+  useEffect(() => { void load() }, [load])
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    return requests
-      .filter(r => statusFilter === 'all' || r.status === statusFilter)
-      .filter(r => !term || (r.memberName || '').toLowerCase().includes(term))
-  }, [requests, statusFilter, search])
+  const ctx: DeskCtx = useMemo(() => ({ viewer, types, teams: org.teams, subTeams: org.subTeams, refresh: () => load(true) }), [viewer, types, org, load])
 
-  const pendingCount = requests.filter(r => r.status === 'pending').length
+  const cases = useMemo(() => groupIntoCases(docs), [docs])
+  const term = search.trim().toLowerCase()
+
+  const pending = useMemo(() => pendingCases(cases).filter(c => {
+    if (term && !c.memberName.toLowerCase().includes(term)) return false
+    if (filter === 'mine') return c.open.some(d => d.hods.some(h => h.memberId === viewer.memberId && h.response == null))
+    if (filter === 'notext') return c.open.some(d => !d.draft)
+    return true
+  }), [cases, term, filter, viewer.memberId])
+  const cleared = useMemo(() => clearedCases(cases).filter(c => !term || c.memberName.toLowerCase().includes(term)), [cases, term])
+
+  const shown = tab === 'pending' ? pending : cleared
+  const waitingOnMe = cases.filter(c => c.open.some(d => d.hods.some(h => h.memberId === viewer.memberId && h.response == null))).length
+  const openCount = cases.filter(c => c.open.length > 0).length
 
   return (
     <AdminLayout>
       <div style={{ paddingBottom: 80 }}>
         <AdminTabHeader
           label="Certificates"
-          title="Certificates, LoRs & LoVs"
-          count={filtered.length}
-          subtitle="A member asks, HR decides - hours and drive count come from the real roster, not a typed guess."
+          title="Certificates and letters"
+          count={shown.length}
+          subtitle={hr
+            ? 'A member asks, the HoDs they tag vouch, and HR decides. The hours a member types are a claim, shown beside what attendance records.'
+            : 'You can read every request. If a member tagged you, say whether you can vouch for them. Any HoD can add a note. HR decides.'}
         />
 
         <DataToolbar search={search} onSearch={setSearch} searchPlaceholder="Search by name...">
           <div className="adm-hscroll">
-          <FilterPill active={statusFilter === 'pending'} onClick={() => setStatusFilter('pending')}>pending{pendingCount > 0 && ` (${pendingCount})`}</FilterPill>
-          <FilterPill active={statusFilter === 'issued'} onClick={() => setStatusFilter('issued')}>issued</FilterPill>
-          <FilterPill active={statusFilter === 'declined'} onClick={() => setStatusFilter('declined')}>declined</FilterPill>
-          <FilterPill active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>all</FilterPill>
+            <FilterPill active={tab === 'pending'} onClick={() => setTab('pending')}>pending{openCount > 0 && ` (${openCount})`}</FilterPill>
+            <FilterPill active={tab === 'cleared'} onClick={() => setTab('cleared')}>cleared</FilterPill>
+            {tab === 'pending' && (
+              <>
+                <FilterPill active={filter === 'all'} onClick={() => setFilter('all')}>everyone</FilterPill>
+                <FilterPill active={filter === 'mine'} onClick={() => setFilter('mine')}>needs my answer{waitingOnMe > 0 && ` (${waitingOnMe})`}</FilterPill>
+                <FilterPill active={filter === 'notext'} onClick={() => setFilter('notext')}>no text yet</FilterPill>
+              </>
+            )}
           </div>
         </DataToolbar>
+
+        {capped && <p className="cdesk-cap">Showing the newest 600 documents. Older ones are still in the database.</p>}
 
         {loading ? (
           <AdminSkeleton rows={4} />
         ) : error ? (
-          <AdminErrorState message={error} onRetry={fetchRequests} />
-        ) : filtered.length === 0 ? (
+          <AdminErrorState message={error} onRetry={() => load()} />
+        ) : shown.length === 0 ? (
           <EmptyLedger
-            message={statusFilter === 'pending' ? 'nothing pending' : 'no matches'}
-            sub={statusFilter === 'pending' ? 'requests will show up here the moment a member asks.' : 'try a different filter or search.'}
+            message={tab === 'pending' ? (filter === 'all' && !term ? 'nothing pending' : 'no matches') : (term ? 'no matches' : 'nothing cleared yet')}
+            sub={tab === 'pending' ? 'requests show up here the moment a member asks.' : 'issued and declined requests are kept here, with who decided.'}
           />
         ) : (
-          filtered.map(r => (
-            <DecideRow key={r.id} request={r} onStale={fetchRequests} onDecided={updated => setRequests(prev => prev.map(x => (x.id === updated.id ? updated : x)))} />
-          ))
+          shown.map(c => <CaseRow key={`${tab}-${c.memberId}`} c={c} tab={tab} ctx={ctx} />)
         )}
       </div>
     </AdminLayout>

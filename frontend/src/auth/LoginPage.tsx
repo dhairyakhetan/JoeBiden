@@ -149,6 +149,7 @@ const LoginPage = () => {
       applyFromViewportPoint(px, py)
     }
 
+    let disposed = false
     const DOE = (window as any).DeviceOrientationEvent
     if (DOE && typeof DOE.requestPermission === 'function') {
       // iOS 13+: only a real tap may call this - browsers reject a bare call
@@ -157,7 +158,7 @@ const LoginPage = () => {
       requestGyroRef.current = () => {
         DOE.requestPermission()
           .then((state: string) => {
-            if (state === 'granted') window.addEventListener('deviceorientation', onOrientation)
+            if (state === 'granted' && !disposed) window.addEventListener('deviceorientation', onOrientation)
           })
           .catch(() => { /* denied, or the call itself failed - stay static */ })
         setNeedsGyroTap(false)
@@ -169,6 +170,7 @@ const LoginPage = () => {
     }
 
     return () => {
+      disposed = true
       window.removeEventListener('deviceorientation', onOrientation)
       requestGyroRef.current = null
     }

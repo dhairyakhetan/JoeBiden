@@ -1,0 +1,98 @@
+{
+  "slug": "how-to-run-a-food-distribution-drive",
+  "title": "How to run a food distribution drive · AquaTerra",
+  "description": "How AquaTerra students plan a food distribution drive in Kolkata: one food, a short route of stops, a team that can split up, and a write-up of the amount.",
+  "h1Lead": "how to run a",
+  "h1Accent": "food distribution drive",
+  "lede": "A food distribution drive is a route of short stops where a small team hands out one kind of food, such as bananas or packed meals, to people who need it. AquaTerra has run {count} food distribution drives since {firstYear}, and this is how a team chooses the food, plans the route and writes up the day.",
+  "sections": [
+    {
+      "id": "choose-the-food",
+      "heading": "choose one food you can hand out quickly",
+      "body": [
+        "The food changes with the season and the series. The Food For All drives of March and April 2025 handed out bananas at stop after stop, and most write-ups name the same amount. The December 2023 Paradox food drive at Kolkata notes 60 food packets donated, and the Rath Yatra drive in June 2023 notes 100 food packets. The 2026 drive at Bhawanipore handed out croissant packs near a slum area.",
+        "Pick one food and stick to it for the day. A single food is quick to pack, quick to hand over and easy to count at the end, and it means the team does not have to stop and decide what to give at every stop."
+      ]
+    },
+    {
+      "id": "plan-the-route",
+      "heading": "plan a route of short stops",
+      "body": [
+        "The 2025 run moved from temple to footbridge to park to market over about three weeks, between 26 March and 17 April. The stops included Shiv Temple in Salt Lake, Sarat Bose Road, Lake Town Footbridge, Northern Park, Balaji Apartment, Gariahat and Howrah. Lake Town Footbridge and Sarat Bose Road each came up twice in that run.",
+        "Plan the order so the stops are close together, and leave a spare stop in case a place is busier than expected. Our teams suggest checking each place a few days ahead, so the team knows where to stand and where people will queue."
+      ]
+    },
+    {
+      "id": "gather-the-team",
+      "heading": "gather a team that can split up",
+      "body": [
+        "Food drives are run by small teams. Across {count} drives, {volunteers} volunteer turnouts have handed food out, and the team sizes in the write-ups range from one volunteer to eight. Volunteer turnouts count every time someone showed up, so a student who did several stops counts for each one.",
+        "Split the jobs before you leave: one person hands out food, one keeps a count of what has gone out, and one leads the route. The Howrah and New Alipore drives on 28 March 2025 were both headed out with packed meals in hand, which is the kind of plan that works when the team knows who does what."
+      ]
+    },
+    {
+      "id": "on-the-day",
+      "heading": "on the day: hand it over with care",
+      "body": [
+        "On the day, hand the food over directly and let people take what they need. The Rath Yatra drive in 2023 was described as serving meals with dignity, kindness and compassion on every plate, and the write-ups from the stops say the same thing in their own words: a few smiles, a plate, and nobody sent away hungry.",
+        "Keep the stop short. The team leaves when the food is gone, writes the count down, and moves on to the next place on the route."
+      ]
+    },
+    {
+      "id": "how-the-series-changed",
+      "heading": "how the series changed",
+      "body": [
+        "The first food drive was in November 2022 at the Lighthouse for the blind, handing out food packets. In 2023 the drives were at Rath Yatra and in Kolkata with food packets, and in 2024 a Paradox food drive ran on 5 April. The series grew in 2025, when {year:2025} drives ran in one spring. The one drive so far in 2026, at Bhawanipore, handed out croissant packs.",
+        "Across {placesCount} places, the series has mostly been one stop at a time, although the 2025 run came back to a few places, including Lake Town Footbridge and Sarat Bose Road, on more than one day."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up with the food, the place and the count",
+      "body": [
+        "Each drive goes on the AquaTerra site as a write-up: the title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, which for a food drive is the amount handed out. Use one unit for the whole drive, whether that is packets, bananas or boxes.",
+        "Name the place and the food in the summary. A line that says the drive at Lake Town Footbridge gave out bananas with four volunteers is more useful to the next team than a general line about hunger."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pick one food for the whole drive, so the team hands it out quickly and counts it cleanly.",
+    "Keep the route short and close together: the 2025 run covered many stops in about three weeks.",
+    "Split the jobs before you leave, with one person on the count from the start.",
+    "Name the food and the amount in the write-up, so the next team knows what to pack."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a food distribution drive?",
+      "a": "Choose one food, such as bananas, packed meals or food packets, plan a short route of stops, go out with a small team and hand the food over directly. AquaTerra has run {count} food distribution drives since {firstYear}, and each one is written up on the site."
+    },
+    {
+      "q": "What food does AquaTerra hand out?",
+      "a": "The food has changed over time. The 2025 Food For All drives handed out bananas, earlier drives handed out food packets and packed meals, and the 2026 drive at Bhawanipore handed out croissant packs."
+    },
+    {
+      "q": "Where does AquaTerra run food distribution drives?",
+      "a": "AquaTerra has run food distribution drives at {placesCount} places, including Sarat Bose Road, Lake Town Footbridge, Salt Lake, Howrah and Gariahat, and at the Lighthouse for the blind in 2022."
+    },
+    {
+      "q": "How many food drives did AquaTerra run in 2025?",
+      "a": "AquaTerra ran {year:2025} food distribution drives in 2025, mostly between 26 March and 17 April as part of the Food For All series, handing out bananas at stops across Kolkata."
+    },
+    {
+      "q": "Are AquaTerra's food drives run by students?",
+      "a": "Yes. Students run the food drives, usually in small teams from one volunteer to eight, and each drive is written up on the AquaTerra site."
+    },
+    {
+      "q": "Does AquaTerra accept money for food distribution?",
+      "a": "No. AquaTerra takes no monetary donations and is self-funded through its own student-run events. Its food drives are paid for that way."
+    }
+  ],
+  "keywords": [
+    "food distribution drive Kolkata",
+    "how to run a food distribution drive",
+    "student food drive Kolkata",
+    "banana distribution drive Kolkata",
+    "packed meals distribution Kolkata volunteers",
+    "Food For All AquaTerra"
+  ]
+}

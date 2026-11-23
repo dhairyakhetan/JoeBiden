@@ -858,3 +858,68 @@
    them, so the rules were deleted rather than left dead (00.13/README rule
    9's "delete dead CSS" spirit) - see PostStreamCard.tsx.
    ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Refine bar: post type + date window + real sort (Nov 2026) ─────────── */
+.arch-refine {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px; padding: 12px 14px;
+  background: var(--card); border: var(--hair-2); border-radius: var(--r-inner);
+  box-shadow: var(--lift-1);
+}
+.arch-refine-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.arch-refine-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink); opacity: 0.6; min-width: 38px;
+}
+.arch-refine-dates { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
+.arch-refine-dates input {
+  min-height: 40px; padding: 0 10px; border: var(--hair-2); border-radius: var(--r-pill);
+  background: var(--paper); color: var(--ink); font-family: var(--code); font-size: 12px;
+}
+.arch-refine-clear {
+  margin-left: auto; min-height: 40px; padding: 0 12px; background: none; border: 0;
+  font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink); text-decoration: underline; cursor: pointer;
+}
+.arch-sort-pill--select { position: relative; padding: 0; }
+.arch-sort-pill--select select {
+  appearance: none; -webkit-appearance: none; min-height: 40px; padding: 0 30px 0 14px;
+  background: transparent; border: 0; border-radius: var(--r-pill); color: var(--ink);
+  font: inherit; font-weight: 700; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%230A0A0A' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.arch-sort-pill--select select:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 600px) {
+  .arch-refine-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .arch-refine-row .chip { flex-shrink: 0; }
+  .arch-refine-clear { margin-left: 0; flex-shrink: 0; }
+}
+
+/* ── Welfare spotlight band (Nov 2026) ───────────────────────────────────── */
+.wspot { padding: clamp(24px, 4vw, 44px) 0 0; }
+.wspot-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.wspot-kick { font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); opacity: 0.65; }
+.wspot-h { font-family: var(--display); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; font-size: clamp(24px, 4vw, 40px); line-height: 1.02; margin: 6px 0 0; max-width: 16ch; }
+.wspot-serif { font-family: var(--serif); font-style: italic; font-weight: 400; text-transform: none; }
+.wspot-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.wspot-rail {
+  list-style: none; margin: 0; padding: 4px 0 10px; display: grid; grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 300px); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin;
+}
+.wspot-card { scroll-snap-align: start; }
+.wspot-link {
+  position: relative; display: block; aspect-ratio: 4 / 5; border-radius: var(--r-outer); overflow: hidden;
+  border: var(--hair-2); box-shadow: var(--lift-1); background: var(--card); color: #fff;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.wspot-link:hover { transform: translateY(-3px); box-shadow: var(--lift-2); }
+.wspot-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.wspot-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.wspot-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,10,0) 38%, rgba(10,10,10,0.82) 100%); }
+.wspot-body { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px; display: flex; flex-direction: column; gap: 5px; }
+.wspot-meta { font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.82); }
+.wspot-title { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 18px; line-height: 1.05; letter-spacing: -0.01em; }
+.wspot-place { font-family: var(--eina); font-size: 12.5px; color: rgba(255,255,255,0.85); }
+@media (min-width: 900px) { .wspot-rail { grid-auto-columns: 280px; } }
+@media (prefers-reduced-motion: reduce) { .wspot-link { transition: none; } .wspot-link:hover { transform: none; } }

@@ -68,7 +68,7 @@ const AuthCallbackPage = () => {
       if (guest && member.status === 'pending_approval') {
         // The draft stays until /pending has shown its confirmation: /register starts from the name and number in it.
         openingInterestService
-          .register(member.member_id, { openingId: guest.openingId }, { message: guest.message, customAnswers: guest.answers })
+          .register(member.member_id, { openingId: guest.openingId }, { message: guest.message, customAnswers: guest.answers, fromApplication: true })
           .then(() => { markGuestApplied(guest.title); clearWish() })
           .catch(() => { /* the waiting page still offers "remind me" for the same role */ })
           .finally(routeNow)

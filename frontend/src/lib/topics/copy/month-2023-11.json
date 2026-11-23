@@ -1,0 +1,74 @@
+{
+  "slug": "month-2023-11",
+  "title": "AquaTerra in November 2023: {count} drives across Kolkata",
+  "description": "In November 2023 AquaTerra ran {count} drives: a Diwali Night fundraiser, Sunday School skills workshops, a fete at Ek Tara and two dance workshops to finish.",
+  "h1Lead": "what we did in",
+  "h1Accent": "november 2023",
+  "lede": "In November 2023 AquaTerra ran {count} drives in Kolkata, most of them workshops for children, and one Diwali Night that raised money for our welfare work. It is a useful picture of a small team's calendar in a quiet month: a few Sunday School sessions, a fete and two dance workshops at the end.",
+  "sections": [
+    {
+      "id": "a-diwali-night-to-start",
+      "heading": "a diwali night to start the month",
+      "body": [
+        "The month opened on 3 November with Diwali Night, a fundraising event in Kolkata with stalls, performances and community members taking part. It was the only drive of the month that was not a workshop, and it lists no volunteer turnouts of its own.",
+        "The money raised goes to AquaTerra's welfare drives. That is why the night sits on this page beside the children's workshops: it is how the rest of the work gets paid for. The [fundraising page](/impact/fundraising) explains how the nights fit together across the year."
+      ]
+    },
+    {
+      "id": "sunday-school-and-skills",
+      "heading": "sunday school and skills",
+      "body": [
+        "Pather Sathi hosted the most drives in November, and most of them were Sunday School workshops. Skill Space on 4 November blended fun, values and interactive learning, and Break and Dance on 25 November let children explore rhythm, creativity and self-expression through movement.",
+        "Each of these was a small team of students running one workshop for a room full of children. The Sunday School sessions are the steady base of the calendar, and the same kind of session can be repeated from one month to the next, which is what makes them easy to join as a first drive."
+      ]
+    },
+    {
+      "id": "a-fete-and-two-dance-workshops",
+      "heading": "a fete, then two dance workshops",
+      "body": [
+        "The Mini Fete Workshop at Ek Tara on 13 November was the most playful drive of the month, with games, crafts and interactive stalls to engage and teach the children who came. A little over a week later, on 24 November, Step Up brought an energetic dance workshop to A Little Contribution, and the next day Break and Dance ran at Pather Sathi.",
+        "Two dance workshops on consecutive days show a team reusing what works. Step Up had the largest team of the month's workshops, and its write-up describes rhythm, movement and joyful expression for everyone taking part. A dance workshop is a good example of a format a new group can try, since it needs a space and a small team."
+      ]
+    },
+    {
+      "id": "november-beside-december",
+      "heading": "how november sat beside december",
+      "body": [
+        "November had {count} drives and December had {count:month-2023-12}, so the calendar roughly doubled in a month. December was mostly the Merry Miracles Christmas run and carol workshops at Pather Sathi, covered on the [December page](/impact/month-2023-12).",
+        "Across the month {volunteers} volunteer turnouts went into these drives. A volunteer turnout counts every time someone showed up, so one student who came to several drives is counted for each one. In all, November's drives ran at {placesCount} places, with {topPlace} the most frequent."
+      ]
+    }
+  ],
+  "learnings": [
+    "One large community night can sit beside small weekly workshops: the Diwali Night fundraiser and the Sunday School sessions shared the same month.",
+    "A dance or art workshop needs a space and a small team, which makes it a good first drive for a new group of students.",
+    "Running the same kind of workshop on two consecutive days lets a team reuse what worked on the first day.",
+    "A quiet month still has a shape: November closed with a run of workshops at the end rather than one big day."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in November 2023?",
+      "a": "AquaTerra ran {count} drives in November 2023. They were a Diwali Night fundraiser in Kolkata on 3 November, Sunday School and skills workshops at Pather Sathi, a mini fete at Ek Tara on 13 November, and two dance workshops in the final week of the month."
+    },
+    {
+      "q": "Where did AquaTerra run drives in November 2023?",
+      "a": "Most November 2023 drives were at {topPlace}, with the rest at Ek Tara, A Little Contribution and Kolkata for the Diwali Night. AquaTerra ran the month's drives in {placesCount} places."
+    },
+    {
+      "q": "Did AquaTerra hold a fundraiser in November 2023?",
+      "a": "Yes. AquaTerra's Diwali Night on 3 November 2023 in Kolkata had stalls, performances and community members taking part in fundraising. The money raised goes to AquaTerra's welfare drives, and AquaTerra takes no monetary donations."
+    },
+    {
+      "q": "How can a student join an AquaTerra drive?",
+      "a": "Sign in with Google at the [join page](/join) and wait for your membership to be approved. AquaTerra's drives are run by students, and every drive is written up on the site once it is done."
+    }
+  ],
+  "keywords": [
+    "AquaTerra November 2023",
+    "what AquaTerra did in November 2023",
+    "Diwali night fundraiser Kolkata 2023",
+    "Sunday School dance workshop Kolkata",
+    "AquaTerra drives Pather Sathi 2023",
+    "student volunteer drives Kolkata November"
+  ]
+}

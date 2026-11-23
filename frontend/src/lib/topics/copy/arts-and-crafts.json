@@ -1,0 +1,87 @@
+{
+  "slug": "arts-and-crafts",
+  "title": "Art and craft workshops in Kolkata · AquaTerra",
+  "description": "Art and craft drives for children in Kolkata, run by AquaTerra student volunteers since {firstYear}: cards, origami, pot painting, mosaics and festival crafts.",
+  "h1Lead": "what children make",
+  "h1Accent": "with their hands",
+  "lede": "Since {firstYear}, AquaTerra has run {count} art and craft drives for children across Kolkata, and {volunteers} volunteer turnouts have come along (a turnout counts every time someone showed up). Most of the drives happen at {topPlace}, where the sessions range from pot painting and origami to Diwali diyas and Christmas stockings, and this page covers what a drive looks like, where and when they happen, how the series changed, and what volunteers did and saw.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a drive looks like",
+      "body": [
+        "Most drives are a single session with a group of children and a small team of student volunteers. Each one has a title that names the craft and the theme. Pebble Pop, a pebble painting session at Pather Sathi in March 2025, and Tiny Prints, a fingerpainting workshop at Amader Pradakhep in September 2025, are two good examples of how the drives are named and what they cover.",
+        "What children make includes cards, masks, stockings, origami, painted pots and pebbles, paper bags and posters. At Amader Pradakhep in December 2025 the Stocking Decoration session ended with cake, and volunteers filled the stockings with chocolates for the children. Origami Time at School On Wheels Park Circus in March 2025 taught the children to fold paper into birds and boats."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where they happen and when",
+      "body": [
+        "The most frequent place is {topPlace}, which hosts more of these drives than any other place. AIM Foundation, Amader Pradakhep and Ek Tara come next. Across {placesCount} places in all, the series has moved between schools, foundations and an ashram. A few names are written more than one way, so treat the place count as close rather than exact.",
+        "The calendar follows the festivals. Christmas crafts cluster in the second half of December, Diwali art sits in October, and Earth Day art appears in April. 2024 was the busiest year, with {year:2024} drives, including a run of AIM Foundation art sessions from late May into early June, among them Paint A Pot on 5 June and Art Hive on 4 June."
+      ]
+    },
+    {
+      "id": "how-it-changed",
+      "heading": "how the series changed",
+      "body": [
+        "The first art and craft drive was Life in a Bottle, a pot painting session at Ek Tara in June 2021, where students painted flower pots and then planted saplings. 2022 was a smaller year, mostly Earth Day and Independence Day sessions, including Heal The Earth at Don Bosco School, Park Circus, where the children painted and then planted trees in bottles.",
+        "2023 was the first big year, with {year:2023} drives. The Colours Of Durga series ran at Pather Sathi from late September into early October, and the Merry Miracles run in December 2023 had Christmas craft and Santa mask days at Pather Sathi and Ek Tara. From 2024 the work spread to more hosts, including Hope Foundation, Disha Foundation and AIM Foundation, and that year was the peak. In 2025 the sessions leaned toward festivals and seasons, with Green Diwali posters at Ektara and Santa masks at AIM Foundation."
+      ]
+    },
+    {
+      "id": "what-volunteers-did",
+      "heading": "what volunteers did and saw",
+      "body": [
+        "The write-ups describe volunteers making the piece alongside the children. Canvas & Conversations at Pather Sathi in October 2025 explored colour, texture and hands on art making. At School On Wheels in October 2025, the Art Nook session paired Diwali greeting cards with volunteers reciting Diwali stories, and the Art and Craft session at Pather Sathi in December 2025 taught public speaking through storytelling and art.",
+        "Some drives carried a message as well as a craft. Color Club at Ektara in October 2025 had children make Green Diwali posters after learning how firecrackers harm the environment. The Earth Day session at South City International School covered sustainability, waste and action, and Brush Battle at AIM Foundation in March 2025 was an art contest where the top three winners took home stationery sets."
+      ]
+    },
+    {
+      "id": "joining-a-drive",
+      "heading": "if you want to help run one",
+      "body": [
+        "Each drive has a theme, a craft and a place, and the write-ups describe volunteers joining that plan. Pot painting, origami, drawing, mask making and card making come up again and again, and several drives paired the art with a quiz or a story. If you are new to running a session, pick a craft you already know well and build a short story around it, the way many of these drives did.",
+        "AquaTerra membership is for students aged fourteen to nineteen. You join with Google sign-in and an approval step, and the [join page](/join) sets out the details. These drives were run by student members, so that is who the write-ups describe. If you run a school or a centre and would like to host a session, you can reach us through the [contact page](/contact)."
+      ]
+    }
+  ],
+  "learnings": [
+    "{topPlace} hosts more of these drives than any other place, with AIM Foundation, Amader Pradakhep and Ek Tara next in line.",
+    "The calendar follows the festivals: Christmas crafts in late December, Diwali art in October and Earth Day art in April.",
+    "A steady run of short sessions beat one big event. 2024 was the busiest year because the drives came round again and again, from May to December.",
+    "Pairing a craft with a quiz, a story or a message about the environment gave children more to take home than the craft alone.",
+    "The most recent drive is a Mother's Day card session at Disha Foundation in September 2026."
+  ],
+  "faqs": [
+    {
+      "q": "Where can I volunteer at an art and craft workshop in Kolkata?",
+      "a": "AquaTerra runs art and craft drives across Kolkata, most often at {topPlace}, and also at AIM Foundation, Amader Pradakhep and Ek Tara. The impact library lists {count} of these drives since {firstYear}, each with its place and date. To take part, start on the [join page](/join), where membership is open to students aged fourteen to nineteen."
+    },
+    {
+      "q": "What did AquaTerra do in art and craft in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} art and craft drives, the busiest year for this topic. They included a run of AIM Foundation art sessions from late May into early June, Tricolour Time flag making at Pather Sathi for Republic Day in February, Painted Flames diya decoration at Inner Wheel School in October, and Merry Masks, a mask making and carol singing workshop at Amader Pradakhep in December."
+    },
+    {
+      "q": "Does AquaTerra charge for art and craft workshops?",
+      "a": "No. AquaTerra charges no fees and takes no monetary donations. Its art and craft drives are run by student volunteers, and each one is listed with its place and date."
+    },
+    {
+      "q": "What crafts do children make at AquaTerra workshops?",
+      "a": "Children have made greeting cards for Mother's Day, Valentine's Day, Father's Day and Diwali, paper masks, Christmas stockings and ornaments, origami birds and boats, paper bags, painted pots and pebbles, mosaics, and Indian flags for Republic Day. Many sessions also mix in storytelling or a quiz."
+    },
+    {
+      "q": "Where did AquaTerra's first art workshop take place?",
+      "a": "The first art and craft drive was Life in a Bottle, a pot painting session at Ek Tara in June 2021. Students painted flower pots and then planted saplings. It is the earliest art and craft drive AquaTerra has written up."
+    }
+  ],
+  "keywords": [
+    "art and craft workshops Kolkata",
+    "art workshop for children Kolkata",
+    "origami workshop Kolkata students",
+    "Christmas craft workshop Kolkata children",
+    "Diwali art workshop Kolkata",
+    "AquaTerra art and craft drives"
+  ]
+}

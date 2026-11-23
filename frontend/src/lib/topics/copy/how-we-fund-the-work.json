@@ -1,0 +1,86 @@
+{
+  "slug": "how-we-fund-the-work",
+  "title": "How AquaTerra pays for its welfare work · AquaTerra",
+  "description": "AquaTerra is self-funded: no monetary donations and no fees. Its welfare work is paid for through student-run events such as Paradox, plus Crftd, its streetwear label.",
+  "h1Lead": "how the welfare work is",
+  "h1Accent": "paid for",
+  "lede": "AquaTerra is self-funded. It takes no monetary donations and charges no fees, so its welfare work is paid for by its own student-run events, including Paradox, Disco Diwali, TerraThon, The Starry Night carnival and fundraiser matches, and by Crftd, its student streetwear label, which was called ROOTS at first. The fundraisers and event days below ran between {years}, and they are the events that keep the work going.",
+  "sections": [
+    {
+      "id": "what-does-not-pay-for-the-work",
+      "heading": "what we do not take",
+      "body": [
+        "AquaTerra does not take monetary donations, and it charges no fees. Our work is paid for by what our students raise through events and by Crftd. This page does not give a revenue split, ticket prices, sponsor money or the profit from any event, so anyone looking for those figures will not find them here.",
+        "Some things come in as items rather than money. The clothes and books collected through Wear and Share and Book Basket are items, not cash. We have run {count:wear-and-share} Wear and Share drives and {count:book-basket} Book Basket drives so far, and across all of AquaTerra's work, {clothesKg} kg of clothes have been distributed."
+      ]
+    },
+    {
+      "id": "the-events-that-carry-the-work",
+      "heading": "the events that carry the work",
+      "body": [
+        "Paradox is the flagship. It is our youth fundraiser, and it ran as an online event in January 2022, as an event in Kolkata in June 2024, and in June 2025 as Paradox 3.0, a multi-day run that included a Punjabi Night. Paradox 3.0 had the largest volunteer team of any fundraiser we have run.",
+        "Sports fundraisers filled the calendar from 2022 to 2024. Football, FIFA and basketball fundraisers ran at turfs, arenas and clubs in Kolkata, including VS Arena, Sky Turf, Hindustan Road and Chetla Park Athletic Club. TerraThon, the Terrathon 1.0 fundraiser at Elgin Turf in July 2022, was built around taking part in many sports.",
+        "The festive events follow the calendar. Trick or Donate ran in New Alipore in October 2022, Diwali Night in Kolkata in November 2023, and The Starry Night, a Christmas carnival at Sky Turf in December 2024. The Starry Night had the largest volunteer team of the festive events."
+      ]
+    },
+    {
+      "id": "roots-tees-at-school-fests",
+      "heading": "roots tees at school fests",
+      "body": [
+        "In July and August 2025 our students ran Roots tee days at school fests: Morpheus Day 1 and 2 at South City International School, Concord Day 1 and 2 at Calcutta Boys School, Confluence Day 1 and 2 at Calcutta International School, and Novus at The Newtown School. Roots is the earlier name of Crftd, the student streetwear label, so these days show the label's part in paying for the welfare work."
+      ]
+    },
+    {
+      "id": "what-the-figures-do-and-do-not-show",
+      "heading": "what the figures do and do not show",
+      "body": [
+        "Each fundraiser has a title, a date, a place, a volunteer count, an objective and a short summary, and some carry a funds-raised figure of their own. We do not add those figures together or treat them as income, because each one is that event's own statement.",
+        "Volunteer counts are uneven. Some fundraisers have no count or a zero, so the {volunteers:how-we-fund-the-work} volunteer turnouts here are a floor, not an exact total. Turnouts count every time someone showed up, so the same person can appear at several events."
+      ]
+    },
+    {
+      "id": "where-the-work-goes",
+      "heading": "where the work goes",
+      "body": [
+        "The events pay for welfare work that has its own pages. Stray dog feeding has {count:tails-and-treats} drives across all years, food distribution has {count:food-for-all}, and Sundarbans trips have {count:sundarbans}. Reading those pages next to this one shows what a fundraiser is ultimately for, even though no single event is tied to a specific cost here."
+      ]
+    }
+  ],
+  "learnings": [
+    "AquaTerra takes no monetary donations and charges no fees, so its welfare work is paid for by its own events and by Crftd.",
+    "Every sports fundraiser we have held falls between 2022 and 2024.",
+    "{year:2022} was our busiest year for fundraisers and event days.",
+    "Paradox 3.0 in June 2025 had the largest volunteer team of any fundraiser.",
+    "The 2025 events were school fest days with Roots tees, a Paradox edition and a Children's Day fete, with no sports tournaments."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra accept donations?",
+      "a": "No. AquaTerra does not take monetary donations. It is self-funded and pays for its welfare work through student-run events, including Paradox and fundraiser matches, and through Crftd, its student streetwear label. Clothes and books collected in drives are items, not money."
+    },
+    {
+      "q": "How does AquaTerra pay for its welfare work?",
+      "a": "Through its own student-run events and through Crftd. The events include Paradox, Disco Diwali, TerraThon, The Starry Night carnival and fundraiser matches. AquaTerra charges no fees, and this page does not publish a revenue split, ticket prices or event profit."
+    },
+    {
+      "q": "What is Crftd and how does it connect to AquaTerra?",
+      "a": "Crftd is AquaTerra's student streetwear label. It was called ROOTS at first, and Roots tee days ran at school fests in July and August 2025. Crftd is one of the ways AquaTerra pays for its welfare work."
+    },
+    {
+      "q": "What is Paradox?",
+      "a": "Paradox is AquaTerra's youth fundraiser. It ran online in January 2022, as an event in Kolkata in June 2024, and in June 2025 as Paradox 3.0, a multi-day run that included a Punjabi Night. Some days that carry the Paradox name were food distribution drives in Kolkata."
+    },
+    {
+      "q": "Does AquaTerra publish how much its events raise?",
+      "a": "No. This page does not publish revenue, sponsor money, ticket prices or event profit. A few fundraiser days carry a funds-raised figure of their own, which is that event's statement and is not added up here."
+    }
+  ],
+  "keywords": [
+    "how does AquaTerra fund its work",
+    "does AquaTerra accept donations",
+    "AquaTerra Paradox youth fundraiser",
+    "Crftd student streetwear Kolkata",
+    "student run NGO Kolkata funding",
+    "AquaTerra fundraiser matches Kolkata"
+  ]
+}

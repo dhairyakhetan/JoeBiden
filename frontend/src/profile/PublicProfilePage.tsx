@@ -33,6 +33,8 @@ import { pageMetadata } from '../lib/metaConfig'
 import { getInitials, hashColor } from '../lib/uiHelpers'
 import { ORG_FACTS, displayCount } from '../lib/orgFacts'
 import '../styles/routes/profile.css'
+import CoreBadge from '../components/CoreBadge'
+import { useCoreMembers } from '../lib/coreMembers'
 
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return ''
@@ -52,6 +54,7 @@ export default function PublicProfilePage() {
   const { uuid } = useParams<{ uuid: string }>()
   const [searchParams] = useSearchParams()
   const { member: currentMember, isLoading: authLoading } = useAuth()
+  const core = useCoreMembers()
   const isMobile = useIsMobile()
   const toast = useToast()
   const [profile, setProfile] = useState<MemberProfile | null>(null)
@@ -487,6 +490,7 @@ export default function PublicProfilePage() {
                       you’re both on {memberTeams.filter(t => myTeamUuids.has(t.uuid)).map(t => t.name).join(', ')}
                     </span>
                   )}
+                  {uuid && core.uuids.has(uuid) && <Link to="/core-team" aria-label="AQ Core, see the core team"><CoreBadge size="md" /></Link>}
                   {memberTeams.map(t => (
                     <Link key={t.uuid} to={`/teams/${t.uuid}`} className="pf-chip">
                       <span className="pf-chip-dot" style={{ background: deptColorForTeamName(t.name) || 'var(--ink-3)' }} aria-hidden="true" />

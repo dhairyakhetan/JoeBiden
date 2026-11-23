@@ -1,0 +1,21 @@
+{
+  "slug": "health-and-wellbeing",
+  "title": "Health Sessions in Pictures: Body, Mind and Smiles · AquaTerra",
+  "description": "Photos from {count} health, hygiene and wellbeing drives for children in Kolkata since {firstYear}: dental checkups, mental health and more.",
+  "h1Lead": "looking after",
+  "h1Accent": "bodies and minds",
+  "lede": "AquaTerra has run {count} health, hygiene and wellbeing workshops since {firstYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). They cover menstrual health, dental care, mental wellbeing, good touch and bad touch, and diabetes awareness, and {topPlace} hosts the most of them.",
+  "chapters": {
+    "2022": { "heading": "breaking the cycle", "text": "The first drive in this series came in November 2022. Breaking the Cycle was a menstrual awareness drive in Kolkata that promoted hygiene, health and open conversations, and it set the topic off on the subjects that still run through it." },
+    "2023": { "heading": "smiles, checkups and minds", "text": "2023 brought the dental season. Tooth Talk at Ek Tara in June offered free checkups and tooth care tips, and Say Cheese at Ek Tara in October focused on oral hygiene among children. Merry Miracles had a second day of free dental checkups for kids in December, and the year also brought a mental health workshop at Pather Sathi and a medical camp in the Sundarbans." },
+    "2024": { "heading": "minds, sugar and growing up", "text": "With {year:2024} drives, 2024 was the largest year so far. Three of the pictures below are mental health workshops: Mind Matters and Healing Space at Pather Sathi, and Open Minds at Universal Smile. Health Over Sugar at Amader Pradakhep raised awareness on diabetes, and Well Within at AIM Foundation covered adolescence health." },
+    "2025": { "heading": "body basics", "text": "In 2025 the workshops covered the body. My Body at Calcutta Rescue in June taught children to tell good touches from bad. Body Basics at Helping Hands in April promoted awareness and dignity through education on menstrual health and hygiene, and World Health Day at Amader Pradakhep covered wellness, nutrition and hygiene." },
+    "2026": { "heading": "the newest chapter", "text": "The newest chapter is 2026, and it is still small, with no pictures yet. Until then, the earlier years show what the topic covers, from menstrual health and hygiene to dental checkups and mental wellbeing." }
+  },
+  "closing": "Want to help with the next health session? Read [the full story](/impact/health-and-wellbeing) for the whole series, then [join AquaTerra](/join) to get involved.",
+  "faqs": [
+    { "q": "Does AquaTerra run health and hygiene workshops for children in Kolkata?", "a": "Yes. AquaTerra has run {count} health, hygiene and wellbeing workshops since {firstYear}. They cover dental care, mental wellbeing, menstrual health, good touch and bad touch, and diabetes awareness." },
+    { "q": "Does AquaTerra offer free dental checkups?", "a": "Some of its health drives did. Tooth Talk at Ek Tara in June 2023 offered free checkups and tooth care tips, and Merry Miracles had a second day of free dental checkups for kids in December 2023." },
+    { "q": "How can a student join AquaTerra to help with health workshops?", "a": "AquaTerra is a student-run volunteer group for members aged 14 to 19. You join with Google sign-in and an approval, and students run the drives, including the health workshops." }
+  ]
+}

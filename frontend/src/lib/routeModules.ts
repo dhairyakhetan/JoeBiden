@@ -56,7 +56,8 @@ export type RouteKey =
   | 'home' | 'projects' | 'teams' | 'members' | 'blog' | 'opportunities'
   | 'about' | 'faq' | 'contact' | 'support' | 'collaborations' | 'crftd'
   | 'volunteer' | 'equityPolicy' | 'links' | 'schools' | 'classes'
-  | 'directory' | 'terranotes' | 'login' | 'join' | 'brand' | 'privacyPolicy' | 'accounts'
+  | 'directory' | 'terranotes' | 'login' | 'join' | 'brand' | 'privacyPolicy'
+  | 'pillar'
 
 /**
  * RouteKey -> the module that renders it. The specifiers must stay STRING
@@ -88,7 +89,8 @@ export const ROUTE_LOADERS: Record<RouteKey, RouteLoader> = {
   join:           () => import('../public/JoinPromoPage'),
   brand:          () => import('../public/BrandPage'),
   privacyPolicy:  () => import('../public/PrivacyPolicyPage'),
-  accounts:       () => import('../public/AccountsPage'),
+  // /impact, /shikshaq, /sports and /ai share one renderer, so one chunk.
+  pillar:         () => import('../public/PillarPage'),
 }
 
 /**
@@ -186,7 +188,7 @@ const PATH_TO_ROUTE_KEY: Record<string, RouteKey> = {
   'join': 'join',
   'brand': 'brand',
   'privacy-policy': 'privacyPolicy',
-  'accounts': 'accounts',
+  'impact': 'pillar',
 }
 
 /** `href` -> RouteKey, or null if `href` isn't a static public content route. */

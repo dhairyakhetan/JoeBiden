@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>AquaTerra Product Guide</title>
+<meta name="description" content="Everything the AquaTerra website can do, who it is for, and what connects to what. Generated from the code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a sticky control bar over two views of one registry. "Guide" is cards grouped by area, "Map" is the same
+   features as columns joined by curves. Rounded concentric radii (32/22/14) and hairlines follow the site's own system. */
+:root {
+  --paper: #F4EFE0;
+  --card: #FFFDF6;
+  --ink: #12110E;
+  --ink-2: #4A4740;
+  --ink-3: #78746A;
+  --hair: rgba(18,17,14,0.12);
+  --hair-2: rgba(18,17,14,0.22);
+  --a-front: #1B8A5A;
+  --a-join: #D9A21B;
+  --a-comm: #6C4DE0;
+  --a-teams: #D8532B;
+  --a-lead: #12110E;
+  --a-event: #D6407F;
+  --focus: #6C4DE0;
+  --lift: 0 1px 2px rgba(18,17,14,0.06), 0 8px 24px -12px rgba(18,17,14,0.18);
+  --display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
+  --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  --code: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r-outer: 32px;
+  --r-inner: 22px;
+  --r-tight: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14130F;
+    --card: #1D1B16;
+    --ink: #F3EEDF;
+    --ink-2: #C4BEAE;
+    --ink-3: #928C7C;
+    --hair: rgba(243,238,223,0.14);
+    --hair-2: rgba(243,238,223,0.26);
+    --a-front: #3FBF86;
+    --a-join: #EDB93A;
+    --a-comm: #9C86FF;
+    --a-teams: #F2784F;
+    --a-lead: #F3EEDF;
+    --a-event: #F06AA0;
+    --focus: #9C86FF;
+    --lift: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14130F;
+  --card: #1D1B16;
+  --ink: #F3EEDF;
+  --ink-2: #C4BEAE;
+  --ink-3: #928C7C;
+  --hair: rgba(243,238,223,0.14);
+  --hair-2: rgba(243,238,223,0.26);
+  --a-front: #3FBF86;
+  --a-join: #EDB93A;
+  --a-comm: #9C86FF;
+  --a-teams: #F2784F;
+  --a-lead: #F3EEDF;
+  --a-event: #F06AA0;
+  --focus: #9C86FF;
+  --lift: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 132px; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 16px/1.55 var(--body); -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 72px;
+}
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 1180px; margin: 0 auto; }
+.mono { font-family: var(--code); }
+
+/* Inside the HoD desk the desk already prints the title, so the hero collapses to the counts. */
+.embedded .top .eyebrow, .embedded .top h1, .embedded .top .lede { display: none; }
+.embedded .top { padding-top: 20px; }
+.embedded .bar { margin-top: 12px; }
+
+/* top: title + counts */
+.top { padding-top: 40px; padding-bottom: 8px; display: grid; gap: 14px; }
+.eyebrow { font: 500 12px/1 var(--code); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+h1 { margin: 0; font: 800 clamp(34px, 6vw, 64px)/0.98 var(--display); letter-spacing: -0.03em; text-wrap: balance; max-width: 18ch; }
+h1 em { font: italic 400 1.04em/1 var(--serif); letter-spacing: -0.01em; color: var(--a-front); }
+.lede { margin: 0; max-width: 62ch; color: var(--ink-2); font-size: 17px; text-wrap: pretty; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 4px; }
+.counts span { font: 500 13px/1 var(--code); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.counts b { font: 800 22px/1 var(--display); color: var(--ink); margin-right: 6px; letter-spacing: -0.02em; }
+
+/* control bar */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin: 22px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
+  background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hair);
+}
+.bar-in { max-width: 1180px; margin: 0 auto; display: grid; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.seg { display: inline-flex; padding: 4px; gap: 2px; border: 1px solid var(--hair-2); border-radius: 999px; background: var(--card); }
+.seg button { font: 700 13px/1 var(--body); padding: 10px 18px; border-radius: 999px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; min-height: 40px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.search { flex: 1 1 220px; min-width: 0; display: flex; }
+.search input {
+  width: 100%; min-height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--hair-2);
+  background: var(--card); color: var(--ink); font: 500 15px var(--body);
+}
+.search input::placeholder { color: var(--ink-3); }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.chip {
+  flex: none; font: 600 13px/1 var(--body); padding: 0 14px; min-height: 40px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--hair-2); background: var(--card); color: var(--ink-2);
+}
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.chips-label { font: 500 12px/1 var(--code); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin-right: 4px; flex: none; }
+.roles-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.note { font-size: 13px; color: var(--ink-3); margin: 0; min-height: 1.2em; }
+
+/* guide view */
+.view { padding-top: 28px; }
+.area { margin-bottom: 56px; }
+.area-head { display: grid; gap: 4px; margin-bottom: 18px; padding-left: 18px; border-left: 6px solid var(--ac); border-radius: 3px; }
+.area-head h2 { margin: 0; font: 800 clamp(24px, 3.4vw, 34px)/1.05 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.area-head p { margin: 0; color: var(--ink-2); max-width: 64ch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.card {
+  position: relative; background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-inner); padding: 22px 22px 20px;
+  box-shadow: var(--lift); display: grid; gap: 12px; align-content: start; min-width: 0;
+  scroll-margin-top: 140px;
+}
+.card.flash { outline: 3px solid var(--ac); outline-offset: 3px; }
+.card h3 { margin: 0; font: 800 21px/1.12 var(--display); letter-spacing: -0.015em; text-wrap: balance; }
+.card p { margin: 0; text-wrap: pretty; }
+.sum { color: var(--ink); }
+.use { color: var(--ink-2); font-size: 15px; }
+.use b { color: var(--ink); font-weight: 700; }
+.reach { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1.3 var(--body); color: var(--ink); }
+.reach i { width: 8px; height: 8px; border-radius: 50%; background: var(--ac); flex: none; }
+.who { display: flex; flex-wrap: wrap; gap: 6px; }
+.who span { font: 600 12px/1 var(--body); padding: 7px 10px; border-radius: 999px; border: 1px solid var(--hair-2); color: var(--ink-2); }
+.who span.on { background: color-mix(in srgb, var(--ac) 16%, transparent); border-color: color-mix(in srgb, var(--ac) 55%, transparent); color: var(--ink); }
+.paths { display: flex; flex-wrap: wrap; gap: 6px; }
+.paths code { font: 500 12px/1 var(--code); padding: 6px 8px; border-radius: 8px; background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink-2); overflow-wrap: anywhere; }
+.links { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--hair); }
+.links h4 { margin: 0; font: 500 11px/1 var(--code); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.links ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.links li { font-size: 14px; color: var(--ink-2); display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.links button { font: 700 14px/1.3 var(--body); color: var(--ink); background: none; border: 0; padding: 4px 0; text-decoration: underline; text-decoration-color: var(--hair-2); text-underline-offset: 3px; cursor: pointer; text-align: left; min-height: 32px; }
+.links button:hover { text-decoration-color: var(--ink); }
+.dim { opacity: 0.28; }
+.empty { padding: 60px 0; text-align: center; color: var(--ink-2); }
+.empty b { display: block; font: 800 24px var(--display); color: var(--ink); margin-bottom: 6px; }
+
+/* map view */
+.map-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.map-scroll { overflow: auto; border: 1px solid var(--hair); border-radius: var(--r-outer); background: var(--card); box-shadow: var(--lift); max-height: 78vh; }
+.map { position: relative; margin: 22px; }
+.map svg { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.col-title { position: absolute; top: 0; font: 500 11px/1.2 var(--code); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ac); display: flex; align-items: center; gap: 8px; }
+.col-title::before { content: ""; width: 20px; height: 4px; border-radius: 3px; background: var(--ac); }
+.node {
+  position: absolute; display: block; text-align: left; padding: 9px 12px; border-radius: var(--r-tight); cursor: pointer;
+  background: var(--paper); color: var(--ink); border: 1.5px solid var(--hair-2); font: 700 13px/1.2 var(--body); min-height: 44px;
+  transition: opacity .15s, border-color .15s, background .15s;
+}
+.node::before { content: ""; position: absolute; left: -1.5px; top: 10px; bottom: 10px; width: 4px; border-radius: 3px; background: var(--ac); }
+.node:hover { border-color: var(--ac); }
+.node[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.node.n-dim { opacity: 0.22; }
+.node.n-off { opacity: 0.12; }
+.edge { fill: none; stroke: var(--ink-3); stroke-width: 1.2; opacity: 0.16; transition: opacity .15s, stroke .15s; }
+.edge.e-on { opacity: 0.95; stroke-width: 2.2; }
+.edge.e-out { stroke: var(--a-front); }
+.edge.e-in { stroke: var(--a-comm); }
+.edge.e-off { opacity: 0.04; }
+.panel { position: sticky; top: 138px; background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-outer); padding: 24px; box-shadow: var(--lift); display: grid; gap: 14px; min-width: 0; }
+.panel h3 { margin: 0; font: 800 24px/1.1 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.panel p { margin: 0; color: var(--ink-2); text-wrap: pretty; }
+.panel .hint { color: var(--ink-3); font-size: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 22px; height: 3px; border-radius: 3px; }
+.cl { display: grid; gap: 10px; }
+.cl h4 { margin: 0 0 4px; font: 500 11px/1 var(--code); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.cl ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cl li { font-size: 14px; color: var(--ink-2); }
+.cl li button { display: block; font: 700 14px/1.3 var(--body); color: var(--ink); background: none; border: 0; padding: 2px 0; text-decoration: underline; text-decoration-color: var(--hair-2); text-underline-offset: 3px; cursor: pointer; text-align: left; }
+.open-card { justify-self: start; font: 700 13px/1 var(--body); padding: 0 16px; min-height: 40px; border-radius: 999px; border: 1px solid var(--hair-2); background: transparent; color: var(--ink); cursor: pointer; }
+.foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--hair); color: var(--ink-3); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; }
+.foot code { font: 500 12px var(--code); }
+@media (max-width: 900px) {
+  .map-wrap { grid-template-columns: minmax(0, 1fr); }
+  .panel { position: static; }
+  .map-scroll { max-height: 64vh; }
+}
+@media (max-width: 700px) {
+  .bar { position: static; backdrop-filter: none; }
+  html { scroll-padding-top: 16px; }
+  .card { scroll-margin-top: 16px; }
+  .panel { top: auto; }
+}
+@media (max-width: 560px) {
+  .top { padding-top: 28px; }
+  .card { padding: 18px 18px 16px; }
+  .seg button { padding: 10px 14px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+/* Leaders-only layer: status badges, the desk flow maps and the audit findings. None of this is in the shareable guide:
+   generate.mjs only puts the data in the leaders build, and every rule below is inert without it. */
+.lnote{margin:10px 0 0;max-width:72ch;font-size:13px;line-height:1.5;color:var(--ink-3)}
+.stat{display:inline-flex;align-items:center;gap:6px;font:700 11px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1px solid var(--hair-2);color:var(--ink-2);background:transparent;margin:0 0 10px}
+.stat i{width:8px;height:8px;border-radius:50%;background:var(--ink-3)}
+.stat.working{color:var(--a-front);border-color:var(--a-front)}.stat.working i{background:var(--a-front)}
+.stat.partial{color:var(--a-join);border-color:var(--a-join)}.stat.partial i{background:var(--a-join)}
+.stat.retired i{background:var(--ink-3)}
+.stat.unverified{border-style:dashed}
+.stat-note{margin:-2px 0 12px;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.node .dot{position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--ink-3)}
+.node .dot.working{background:var(--a-front)}.node .dot.partial{background:var(--a-join)}
+.dsum{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 18px}
+.dsum span{background:var(--card);border:1px solid var(--hair);border-radius:var(--r-tight);padding:10px 14px;font-size:13px;color:var(--ink-2)}
+.dsum b{display:block;font:800 22px/1.1 var(--display);color:var(--ink)}
+.dfilter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.desk{background:var(--card);border:1px solid var(--hair);border-radius:var(--r-inner);padding:20px;margin:0 0 18px;box-shadow:var(--lift)}
+.desk-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 14px;margin:0 0 4px}
+.desk-h h3{font:800 22px/1.15 var(--display);margin:0}
+.desk-who{font-size:13px;color:var(--ink-3)}
+.verdict{font:700 11px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1px solid var(--hair-2)}
+.verdict.healthy{color:var(--a-front);border-color:var(--a-front)}.verdict.flawed{color:var(--a-teams);border-color:var(--a-teams)}.verdict.stale{color:var(--a-join);border-color:var(--a-join)}
+.desk-sum{margin:6px 0 14px;color:var(--ink-2);font-size:14px;line-height:1.55}
+.fl{border:1px solid var(--hair);border-radius:var(--r-tight);overflow:hidden;margin:0 0 16px}
+.fl-row{display:grid;grid-template-columns:1.1fr 1.6fr 1.1fr 1.1fr 1.1fr;gap:0}
+.fl-row>div{padding:10px 12px;font-size:13px;line-height:1.5;border-top:1px solid var(--hair)}
+.fl-row:first-child>div{border-top:0}
+.fl-head>div{font:700 11px/1.3 var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);background:var(--paper)}
+.fl-row>div:first-child{font-weight:700}
+.fl-row .none{color:var(--ink-3)}
+@media (max-width:860px){.fl-head{display:none}.fl-row{grid-template-columns:1fr}.fl-row>div[data-l]::before{content:attr(data-l) ": ";font-weight:700;color:var(--ink-3)}.fl-row+.fl-row{border-top:6px solid var(--paper)}}
+.finds h4{font:700 12px/1 var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+.find{border:1px solid var(--hair);border-left-width:4px;border-radius:var(--r-tight);padding:12px 14px;margin:0 0 10px;background:var(--paper)}
+.find.bug{border-left-color:var(--a-teams)}.find.risk{border-left-color:var(--a-join)}.find.gap{border-left-color:var(--a-comm)}
+.find.fixed{opacity:.8}
+.find-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 6px}
+.find-top b{font-size:14px}
+.tag{font:700 10px/1 var(--body);letter-spacing:.05em;text-transform:uppercase;padding:4px 7px;border-radius:999px;border:1px solid var(--hair-2);color:var(--ink-2)}
+.tag.fixed{color:var(--a-front);border-color:var(--a-front)}.tag.open{color:var(--a-teams);border-color:var(--a-teams)}.tag.flagged{color:var(--ink-3)}
+.find p{margin:0 0 4px;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.find code{font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">AquaTerra, Kolkata</span>
+    <h1>What the site can do, and <em>what connects to what</em></h1>
+    <p class="lede">Every page and every leadership desk on the AquaTerra website, in plain language. Pick who you are to see only what is yours, or switch to the map to follow how one feature leads to the next.</p>
+    <div class="counts" id="counts" aria-label="Totals"></div>
+    <p class="lnote" id="lead-note" hidden></p>
+  </header>
+</div>
+<div class="bar">
+  <div class="bar-in">
+    <div class="row">
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" id="b-guide" aria-pressed="true">Guide</button>
+        <button type="button" id="b-map" aria-pressed="false">Map</button>
+        <button type="button" id="b-desks" aria-pressed="false" hidden>Desk flows</button>
+      </div>
+      <label class="search" for="q"><input id="q" type="search" placeholder="Search a feature, a page or a word" autocomplete="off"></label>
+    </div>
+    <div class="roles-row">
+      <span class="chips-label">I am a</span>
+      <div class="chips" id="roles" role="group" aria-label="Show features for"></div>
+    </div>
+    <p class="note" id="note" aria-live="polite"></p>
+  </div>
+</div>
+<main class="wrap view" id="view"></main>
+<div class="wrap">
+  <div class="foot">
+    <span>Generated from the code, so it moves when the site does. Plain-language text lives in <code>frontend/scripts/feature-map/features.json</code>.</span>
+    <span>Rules and business logic: <code>docs/PRODUCT_PRD.md</code></span>
+  </div>
+</div>
+<script>
+const G = {"areas":[{"id":"front-door","name":"The public front door","blurb":"Everything anyone can read without signing in."},{"id":"joining","name":"Joining AquaTerra","blurb":"From a first Google sign-in to an approved member."},{"id":"community","name":"The member community","blurb":"What an approved member uses every day."},{"id":"teams-work","name":"Teams, drives and hiring","blurb":"How the work gets organised and who does it."},{"id":"leadership","name":"The HoD desk","blurb":"The leadership screens at /director. Each one is only shown to the roles that may use it."},{"id":"events","name":"Events, magazine and play","blurb":"The fest, the tournament, the live hub, the monthly magazine, games and the product tour."}],"roles":[{"id":"visitor","label":"Visitor","note":"Not signed in"},{"id":"applicant","label":"Applicant","note":"Signed in, not yet approved"},{"id":"member","label":"Member","note":"Approved volunteer"},{"id":"lead","label":"Team lead","note":"A member who leads one team"},{"id":"hod","label":"HoD or director","note":"Leadership"},{"id":"hr","label":"HR or super admin","note":"The top tier"}],"features":[{"id":"quick-links","area":"front-door","name":"Quick links","summary":"One page with every link AquaTerra uses.","use":"Open it to find any official channel.","reach":"Menu, Quick links","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/links"],"desks":[],"gate":"anyone"},{"id":"public-pages","area":"front-door","name":"About and the organisation chart","summary":"The story of AquaTerra, what it believes, and the whole organisation drawn as one picture: departments, who is in them, and how they nest.","use":"Open About, tap a department to see what is inside it and who works there, then follow the link to that team's own page.","reach":"Top menu, About","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/directory","/about"],"desks":[],"gate":"anyone"},{"id":"projects","area":"front-door","name":"Projects","summary":"The archive of welfare drives and campaigns, each with photos, numbers and the story of what happened.","use":"Browse the list, open a project to read it. A photo strip of the latest welfare drives sits near the top with a button to join the next one. Narrow the list by post type (drives and workshops, member stories, articles), by date (last 30 days, 3 months, since July, this year or your own dates) and by newest or oldest first. The call to action at the bottom takes a visitor to sign in and join.","reach":"Top menu, Projects","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/projects","/projects/:slug"],"desks":[],"gate":"anyone"},{"id":"blog","area":"front-door","name":"Blog","summary":"Long essays by members, called Groundwork Diaries.","use":"Read any essay. Members write one through the composer on the home page; it goes live after a leader publishes it.","reach":"Top menu, Blog","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/blog","/blog/:slug"],"desks":[],"gate":"anyone"},{"id":"openings","area":"front-door","name":"Open roles","summary":"Volunteer roles that are open now, plus a band of roles that are always open. Each role has its own page with what it needs and a way to apply. If your sign-up is still waiting for approval you can't apply yet: you get a pop-up and can ask to be reminded once you're in.","use":"Pick a role and read it. Press Apply. If you are signed in, one tap sends it. If not, give your name and phone number, no email. If your number belongs to an AquaTerra member, your application goes straight to the team and you are done. If not, you are told you are not part of AquaTerra yet and sign in with Google to sign up: your application is saved, HR confirms you first, and it then goes to the team on its own. A waiting member who presses Apply can send the application too, and it waits with HR.","reach":"Top menu, Openings","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/opportunities","/opportunities/:id"],"desks":[],"gate":"anyone"},{"id":"members-public","area":"front-door","name":"Member directory","summary":"The list of active members and a public profile for each, showing name, photo, class, teams and what they have done with AquaTerra.","use":"Browse or search the list and open a profile. Phone numbers and emails are never shown here.","reach":"Top menu, Members","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/members","/member/:uuid"],"desks":[],"gate":"anyone"},{"id":"core-team","area":"front-door","name":"AQ Core and the Core Team page","summary":"Core members carry an AQ Core badge on their profile, on the member list and on the HoD desk. The Core Team page lists everyone with the badge.","use":"Open the Core Team page from the member list, or tap the badge on a profile. HR and super admin add or remove people from the Members desk, one at a time or by pasting the emails from the core members sheet.","reach":"Members page, meet the core team","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/core-team"],"desks":[],"gate":"anyone"},{"id":"schools-classes","area":"front-door","name":"Schools and classes","summary":"The campus network page, which explains how student chapters work and invites a school to start one, and the student-taught classes, built from real member data so the numbers are never invented. There is no public list of chapter schools yet.","use":"Read what runs in schools and which classes exist.","reach":"About menu, Schools and Classes","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/schools","/classes"],"desks":[],"gate":"anyone"},{"id":"crftd","area":"front-door","name":"CRFTD","summary":"The clothing label that raises money for the work.","use":"Read about the label and follow the links to buy.","reach":"About menu, CRFTD","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/crftd"],"desks":[],"gate":"anyone"},{"id":"help-pages","area":"front-door","name":"Handbook, FAQ and support","summary":"The volunteer handbook, answers to common questions, and ways to support the work.","use":"Read the handbook before joining, or check the FAQ if something is unclear.","reach":"About menu, Handbook, FAQ and Support","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/support","/volunteer","/faq"],"desks":[],"gate":"anyone"},{"id":"giving-back","area":"front-door","name":"How we give back, and the impact library","summary":"A hub on how AquaTerra pays for its work (its own events and Crftd, never donations) and where the money goes, a page each for ShikshAQ, sport and AI training, and the impact library: over 140 pages built from the drive records, covering every drive series and workshop type, neighbourhoods, schools, places, each month and year, the UN goals the work serves, how-to guides for running a drive yourself, the fundraising nights that pay for it, pages for schools, companies, colleges and teachers, answers to the questions people search for, and reading lists of members' blog posts. Each lists the drives it covers with their photos. Photo stories tell each series year by year, and eight explorers let you play with the data: a timeline, a calculator, a quiz, a places map, a Kolkata map, a two-year comparison, a random drive and a photo memory game.","use":"Read how a series works or what happened in a year or a neighbourhood, open any photo big and jump to that drive's write-up, scrub through every month since 2021, add up any series yourself, or answer four questions to find the drive that suits you.","reach":"Main menu and footer, How we give back; the library is at the end of the hub and of the About page; every project write-up ends with the library pages that drive belongs to.","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/impact/*","/shikshaq","/sports","/ai"],"desks":[],"gate":"anyone"},{"id":"contact-collab","area":"front-door","name":"Contact and collaboration forms","summary":"Two forms: one to ask AquaTerra something, one to propose working together. Both end on a thank-you page.","use":"Fill in the form and send it. Nobody needs an account.","reach":"About menu, Contact and Collaborations","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/thank-you","/collaborations","/contact"],"desks":[],"gate":"anyone"},{"id":"policies","area":"front-door","name":"Policies","summary":"The equity policy, the privacy policy and the terms of use, in plain words.","use":"Read them. The equity policy explains why a phone number is never passed on. The terms of use say who can join, what you can post and how to get something taken down.","reach":"Footer and the menu, More","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/equity-policy","/privacy-policy","/terms"],"desks":[],"gate":"anyone"},{"id":"join-promo","area":"front-door","name":"Join page","summary":"A short pitch for people who are not yet sure they want to apply.","use":"Read it, then tap through to sign in.","reach":"Shared links and ads","who":["visitor"],"paths":["/join"],"desks":[],"gate":"anyone"},{"id":"brand","area":"front-door","name":"Brand sheet","summary":"The live specimen of AquaTerra's fonts, colours and shapes. Not linked from the menu.","use":"Open it to see how the brand looks when it is used correctly.","reach":"Direct link only","who":["visitor","member","lead","hod","hr"],"paths":["/brand"],"desks":[],"gate":"anyone"},{"id":"login","area":"joining","name":"Sign in with Google","summary":"The only way in. A first-time sign-in is the application: there is no separate sign-up form.","use":"Tap the Google button. New people are taken to finish their profile; returning members land on the feed.","reach":"Apply or Log in buttons everywhere","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/login","/auth/callback"],"desks":[],"gate":"anyone"},{"id":"register","area":"joining","name":"Finish your profile","summary":"Three questions, one at a time: name, class, and a phone number. One phone number belongs to one account; if the number is already registered, the screen shows the masked email to log in with and how to reach HR.","use":"Answer the three questions and submit. The application is not complete until a class and a real phone number are on file.","reach":"Automatic after the first sign-in","who":["applicant"],"paths":["/register"],"desks":[],"gate":"anyone"},{"id":"pending","area":"joining","name":"Waiting for approval","summary":"Where an applicant waits. It checks for approval on its own, shows a sample feed, and lets them browse roles and teams. They can't apply until approved, but can ask to be reminded. A removed or suspended account can appeal from the rejected page; a rejected applicant waits 30 days to reapply. While you wait you can still browse roles and teams and ask to be reminded about the ones you want. If you were heading for a role or team when you signed in, it shows here with a button to remind you once you're approved.","use":"Wait here. The page moves on by itself when HR approves the account. If you applied for a role first, it says your application is saved and what happens next.","reach":"Automatic after the profile is finished","who":["applicant"],"paths":["/pending","/rejected","/choose-team"],"desks":[],"gate":"anyone"},{"id":"home-feed","area":"community","name":"Home feed and posts","summary":"One scroll of everything happening: updates, drive recaps, blog posts and open roles. Members write posts with photos, documents, tags and stat blocks. A member's post waits for a leader; a leader's own post goes live at once. Right after you're approved, a card at the top asks if you still want the role or team you were interested in.","use":"Read, like, comment, save and share from any post. Tap the composer to write one, choose a category and attach photos.","reach":"Home","who":["visitor","member","lead","hod","hr"],"paths":["/","/post/:uuid"],"desks":[],"gate":"anyone"},{"id":"my-posts","area":"community","name":"My posts","summary":"Every post you wrote and where it stands: waiting, live, or sent back. A sent-back post can be edited and resubmitted without making a duplicate.","use":"Open it from your avatar menu and edit anything that was sent back.","reach":"Avatar menu, My posts","who":["member","lead","hod","hr"],"paths":["/my-posts"],"desks":[],"gate":"active member"},{"id":"profile","area":"community","name":"Profile","summary":"Your own record: posts, achievements, real volunteering hours, a CV built only from real records, an optional wall for notes, tasks, and a way to take a break. A phone number can only belong to one account. You can add your LinkedIn (shown to other members) and Instagram (only you see it, and it fills your CV).","use":"Edit your details, add outside achievements, see your certificate requests, generate a CV, or set a break with a start and end date.","reach":"Avatar menu, Profile","who":["member","lead","hod","hr"],"paths":["/profile/me","/profile/edit","/profile/:uuid"],"desks":[],"gate":"active member"},{"id":"settings","area":"community","name":"Settings","summary":"Account details, a contact number (your own or a guardian's), a birthday privacy switch that starts off, and a switch for whether people who are not signed in can see your photo, bio, class and school (on by default).","use":"Change your number, choose whether your birthday is shared, or hide your profile from people who are not signed in so they see only your name.","reach":"Avatar menu, Settings","who":["member","lead","hod","hr"],"paths":["/settings"],"desks":[],"gate":"active member"},{"id":"search","area":"community","name":"Search","summary":"One search box across drives, posts, members, teams, openings, schools and classes, with time filters and trending posts.","use":"Press Ctrl or Cmd and K from anywhere, or open the search icon.","reach":"Search icon, or Ctrl/Cmd+K","who":["member","lead","hod","hr"],"paths":["/search"],"desks":[],"gate":"active member"},{"id":"calendar","area":"community","name":"Calendar","summary":"A read-only month and agenda view of drives, your breaks, hiring and task deadlines, and birthdays people chose to share. Tasks you're on show on the day they're due, and link to your task list.","use":"Switch between month and agenda and tap an item to open it.","reach":"Avatar menu, Calendar","who":["member","lead","hod","hr"],"paths":["/calendar"],"desks":[],"gate":"active member"},{"id":"notifications","area":"community","name":"Notifications","summary":"Everything addressed to you: likes, comments, tags, approvals, team requests and system notices. Repeats on one post roll into a single line. In-app only for now. Work now reaches you here too: a task you're added to, a drive you're asked to run, your hours once a drive is completed, and the answer to a bug or feature report you filed. Filters for Teams and Work, and a Load older button.","use":"Open the bell. Tap a line to jump to what it is about.","reach":"Bell icon","who":["member","lead","hod","hr"],"paths":["/notifications"],"desks":[],"gate":"active member"},{"id":"saved","area":"community","name":"Saved","summary":"Bookmarks for posts, drives and openings, filtered by kind. Cleared when you sign out, by design.","use":"Tap the bookmark on anything, then come back here to find it.","reach":"Avatar menu, Saved","who":["member","lead","hod","hr"],"paths":["/saved"],"desks":[],"gate":"active member"},{"id":"yearbook","area":"community","name":"Yearbook","summary":"A member who has been invited writes a short quote and adds a photo for this year's edition, or skips the year. Anyone not invited sees a clear message instead of a broken form.","use":"If you were invited, add your quote and photo before the edition closes.","reach":"Full menu, Yearbook, or the invite notification","who":["member","lead","hod","hr"],"paths":["/yearbook"],"desks":[],"gate":"active member"},{"id":"invite","area":"community","name":"Invite a friend","summary":"A personal invite link and a record of what happened to each invite. A referral only counts once a director confirms the person is an active member.","use":"Copy your link and share it. The invited person never sees who sent it.","reach":"Full menu, Invite a friend, or the Profile page","who":["member","lead","hod","hr"],"paths":["/invite"],"desks":[],"gate":"active member"},{"id":"tasks","area":"community","name":"Tasks","summary":"A task tracker. Each task is a team task or a private general task, with performers, supervisors and spectators, a due date that remembers its first value, and a done circle you can tap without opening the task.","use":"Create a task, add people and a role for each, then tick it off. Add a whole team at once as spectators.","reach":"Avatar menu, Tasks","who":["member","lead","hod","hr"],"paths":["/tasks"],"desks":[],"gate":"active member"},{"id":"bugs","area":"community","name":"Bugs and requests","summary":"Report a bug or ask for a feature, see every other report and its plain status, and add a me too instead of filing a duplicate. A daily routine works the queue; a leader checks each fix on the live site.","use":"Press Alt+Shift+B (or hold two fingers on a phone) on any page to report, or open the page to follow a report. Say whether a fix worked.","reach":"Avatar menu, Bugs and requests","who":["member","lead","hod","hr"],"paths":["/bugs"],"desks":[],"gate":"active member"},{"id":"teams","area":"teams-work","name":"Teams","summary":"The departments and the teams inside them, each with a page showing its description, sub-departments, members, open roles and every post tagged to it. A member can follow a team or ask to join; a lead approves. Asking to join a team is for approved members; if you're still waiting for approval you can ask to be reminded.","use":"Open a team, read about it, and press ask to join. A request never adds you by itself. On the team map, a team with its own smaller teams (Social Media inside Marketing) shows them as branches underneath, and a yellow dot means a team has open roles.","reach":"Top menu, Teams","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/teams","/teams/:uuid","/teams/:uuid/sub/:slug"],"desks":[],"gate":"anyone"},{"id":"drives","area":"teams-work","name":"Drive check-in and wrap-up","summary":"The field tools for a welfare drive. Check-in works without internet and syncs when it returns. Wrap-up turns real attendance into hours and suggests the headline numbers for the drive's post.","use":"On the day, a drive lead checks people in. Afterwards they open wrap-up and confirm the numbers.","reach":"From a drive's page, for its leads","who":["lead","hod","hr"],"paths":["/drive/:id/check-in","/drive/:id/wrap"],"desks":[],"gate":"active member"},{"id":"desk-home","area":"leadership","name":"Desk home","summary":"The landing page of the leadership desk. It lists only the desks the signed-in leader may open, grouped as queue, people, intake and admin.","use":"Pick a desk, or type part of its name in the jump box at the top of the side menu and press Enter. A leader never sees a desk their role cannot use.","reach":"Avatar menu, HoD desk","who":["hod","hr"],"paths":["/director"],"desks":[],"gate":"HoD or director"},{"id":"desk-approvals","area":"leadership","name":"Approvals","summary":"New people trying to get in. Approving one makes them a member; rejecting one can carry a note the applicant sees. A fifth tab, shared phones, lists live accounts that use the same phone number, with full names, emails and numbers, so HR can contact the people involved.","use":"Read the application, contact them if needed, then approve or reject. Marked someone contacted by mistake? Undo contacted puts them back in pending. Rejecting asks you to pick a reason and shows the words the applicant will read. Open the shared phones tab to see accounts that share a number.","reach":"Desk, queue group","who":["hr"],"paths":["/director/approvals"],"desks":["Approvals"],"gate":"HR or super admin"},{"id":"desk-queue","area":"leadership","name":"Post Queue and Blog Drafts","summary":"Everything members wrote that is waiting to go live. A HoD sees posts tagged to their own teams plus untagged ones; approving or rejecting can be done one at a time or in bulk. Long pieces wait in Blog Drafts to publish or schedule. Live essays can be taken back to drafts.","use":"Open the queue, read, approve or reject with a reason.","reach":"Desk, queue group","who":["hod","hr"],"paths":["/director/posts","/director/blogs"],"desks":["Post Queue","Blog Drafts"],"gate":"HoD or director"},{"id":"desk-members","area":"leadership","name":"Members","summary":"Every account with role, teams and contact details. Leaders can put someone on a break, filter to who is on a break now or has one booked, and see each person's dates. Revealing a phone number or email is recorded against the leader's name. Pending and suspended accounts have their own read-only views.","use":"Search a member, open their row for actions, or press On a break to see who is away and when they return. HR and super admin can make someone core or remove them, or import the core members sheet by pasting its emails.","reach":"Desk, people group","who":["hod","hr"],"paths":["/director/members"],"desks":["Members"],"gate":"HoD or director"},{"id":"desk-recognition","area":"leadership","name":"Member of the Month","summary":"Pick one or more standouts for each team and write the note that goes with it. A shareable poster is made automatically, and a pick saved for a future month is announced on the first of that month.","use":"Choose the honoree, write the citation, publish.","reach":"Desk, people group","who":["hod","hr"],"paths":["/director/member-of-month"],"desks":["Member of the Month"],"gate":"HoD or director"},{"id":"desk-teams","area":"leadership","name":"Teams desk","summary":"Create and edit departments: name, description, logo and the picture shown on the Teams page.","use":"Edit a team and save. The public pages update.","reach":"Desk, people group","who":["hod","hr"],"paths":["/director/teams"],"desks":["Teams"],"gate":"HoD or director"},{"id":"desk-moderation","area":"leadership","name":"Moderation scope","summary":"Choose which teams a HoD or director moderates posts for. With none assigned they see the whole queue. A plain HoD sees only their own assignments, and the HoD is told when one changes.","use":"Assign or remove a team for a leader.","reach":"Desk, people group","who":["hod","hr"],"paths":["/director/categories"],"desks":["Moderation"],"gate":"HoD or director"},{"id":"desk-hiring","area":"leadership","name":"Hiring","summary":"Open roles and everyone who applied to them, across all teams, with message templates for reaching out. People HR has not cleared yet are listed apart under \"waiting for HR\": you can read what they sent but not accept them, and HR gets an Approve button. Once HR approves, the application moves into the main list on its own. An application linked by phone number (the visitor was not signed in) carries a mark, because a number is not proof of who applied. Rejecting needs a reason.","use":"Open a role, read applications, shortlist or reject.","reach":"Desk, intake group","who":["hod","hr"],"paths":["/director/hiring"],"desks":["Hiring"],"gate":"HoD or director"},{"id":"desk-enquiries","area":"leadership","name":"Enquiries","summary":"Messages from the contact and collaboration forms, moved through a status pipeline so none gets lost.","use":"Open one, reply outside the site, then update its status. Each one has a notes box for your team, for why it was closed or what was agreed. The sender never sees it.","reach":"Desk, intake group","who":["hod","hr"],"paths":["/director/enquiries"],"desks":["Enquiries"],"gate":"HoD or director"},{"id":"certificates","area":"community","name":"Certificates","summary":"Ask for a certificate or a letter in one place. You pick the documents you want, with a sample of each, the teams and sub-teams you were part of, the HoDs who have seen your work, the least number of hours you worked, and the months you were with us. For letters you can add a few rough notes about what to mention. The HoDs you tag say whether they can vouch for you and the HR team decides. Once it is issued you open it here and download the PDF, signed and carrying a code anyone can check. You only ever see your own.","use":"Open Certificates, pick what you need, tag your teams and HoDs, enter your minimum hours and the months you were with us, and send. You get a notification when it is ready.","reach":"Profile, certificates card","who":["member","lead","hod","hr"],"paths":["/certificates","/certificates/:id"],"desks":[],"gate":"active member"},{"id":"verify-certificate","area":"front-door","name":"Verify a document","summary":"Anyone can check the code printed on an AquaTerra certificate or letter. It says whether the code is real and shows only who it was issued to, which document it is and the date, so a school or employer can compare it with the paper in their hand.","use":"Type the code that starts with AQ, or follow the link on the document.","reach":"The address on the document, ngoaquaterra.com/verify","who":["visitor","member","lead","hod","hr"],"paths":["/verify","/verify/:code"],"desks":[],"gate":"anyone"},{"id":"desk-certificates","area":"leadership","name":"Certificates","summary":"Every request for a certificate or letter, one row per member with everything they have open together and their earlier ones beneath. HoDs can read all of it. A HoD a member tagged says whether they can vouch, any HoD can add a note, and HR or a tagged HoD can write a letter's text themselves when someone needs it quickly. Certificates have fixed wording and are ready for HR at once. Only HR issues or declines, and an issued document is given a code anyone can check. Cleared requests keep who decided.","use":"HoDs: answer the ones that tag you and add notes on the rest. HR: read what the HoDs said, check the text and the preview, then issue or decline.","reach":"Desk, intake group","who":["hod","hr"],"paths":["/director/certificates"],"desks":["Certificates"],"gate":"HoD or director"},{"id":"desk-yearbook","area":"leadership","name":"Yearbook desk","summary":"Invite members into this year's edition and read their submissions.","use":"Search members, invite them, then review what comes back.","reach":"Desk, intake group","who":["hod","hr"],"paths":["/director/yearbook"],"desks":["Yearbook"],"gate":"HoD or director"},{"id":"desk-content","area":"leadership","name":"All posts","summary":"Every post on the feed, for leaders to review and tidy: approve or reject, edit, pin, feature or delete. It is not an editor for the words on the public pages.","use":"Open it to find any post. Approving, rejecting and editing need the approve-posts switch to be on for your role.","reach":"Desk, admin group","who":["hr"],"paths":["/director/content"],"desks":["All posts"],"gate":"HR or super admin"},{"id":"desk-projects","area":"leadership","name":"Drive Write-ups","summary":"Publish the public story of a finished drive: photos, numbers and narrative. Running the drive is a separate job.","use":"Pick a finished drive, add the story and photos, publish.","reach":"Desk, admin group","who":["hr"],"paths":["/director/projects"],"desks":["Drive Write-ups"],"gate":"HR or super admin"},{"id":"desk-hods","area":"leadership","name":"Manage HoDs","summary":"Promote a member to HoD or director, or step one back down. It stops anyone locking themselves out.","use":"Pick a member and change their role.","reach":"Desk, admin group","who":["hr"],"paths":["/director/directors"],"desks":["Manage HoDs"],"gate":"HR or super admin"},{"id":"desk-volunteers","area":"leadership","name":"Volunteer applications archive","summary":"The volunteer outreach list: applications with labels, a reviewed mark, a live counter and a spreadsheet export that asks first and is recorded. People now sign up through Google at the sign-in page.","use":"Look things up. Nothing new arrives here.","reach":"Desk, admin group","who":["hr"],"paths":["/director/volunteers"],"desks":["Vol. Applications"],"gate":"HR or super admin"},{"id":"desk-access","area":"leadership","name":"Roles, permissions and activity log","summary":"A table of what each role can reach, where unticking takes access away and nothing can add any. Beside it, a log of who approved, rejected or changed what, and when.","use":"Untick a box to take a role's access away, or read the log to see what happened.","reach":"Desk, admin group","who":["hr"],"paths":["/director/roles","/director/activity-log"],"desks":["Roles & Permissions","Activity Log"],"gate":"HR or super admin"},{"id":"paradox","area":"events","name":"Paradox","summary":"The annual cultural and fundraising fest, with its own registration, payments and event-day tools. Attendees never need an AquaTerra account.","use":"Paradox 2026 (1 to 6 June) is over. The pages now say so and point to the story, the team and the blog. Organisers still have their control screens.","reach":"Top menu, or a direct link","who":["visitor","member","lead","hod","hr"],"paths":["/paradox/*"],"desks":[],"gate":"anyone"},{"id":"terrathon","area":"events","name":"TerraThon","summary":"The inter-school sports tournament: team registration, fixtures and gate check-in that works offline.","use":"TerraThon 2026 (2 to 4 October) is over. Registration is closed on the pages and in the database; the pages stay up as an archive. Staff check-in screens remain.","reach":"A direct link","who":["visitor","member","lead","hod","hr"],"paths":["/terrathon/*"],"desks":[],"gate":"anyone"},{"id":"live","area":"events","name":"AquaTerra Live","summary":"The hub for AquaTerra events. Right now it promotes Disco Diwali on 10 November 2026 at 60 Chowringhee, with booking over WhatsApp, and it has a small admin area for the team. Once a night's date has passed, the pages switch to past tense by themselves: the countdown and ticket buttons give way to a thank-you and links to the photo vault and the list of nights.","use":"Open it from the menu while an event is on.","reach":"Menu, AquaTerra Live","who":["visitor","member","lead","hod","hr"],"paths":["/live/*"],"desks":[],"gate":"anyone"},{"id":"terranotes","area":"events","name":"Terra Notes","summary":"The monthly digital magazine, with past editions, articles, games inside it, and AQ Labs.","use":"Read the current edition or pick an older one. The old Labs addresses forward here.","reach":"Top menu, Terra Notes","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/terranotes/*"],"desks":[],"gate":"anyone"},{"id":"games","area":"events","name":"Mini games","summary":"A small hub of mini games, one page each: Drive Sorter (sort twelve things into dry, wet and e-waste), Streak Tap (a reaction test) and Sticker Match (find eight pairs).","use":"Pick a game and play.","reach":"Menu, Mini games","who":["visitor","applicant","member","lead","hod","hr"],"paths":["/games","/games/:slug"],"desks":[],"gate":"anyone"},{"id":"demo","area":"events","name":"Product tour","summary":"A guided walkthrough for someone considering joining. It needs no account and writes nothing to the real database.","use":"Click through the tour to see what members do.","reach":"A direct link","who":["visitor"],"paths":["/demo/*"],"desks":[],"gate":"anyone"},{"id":"desk-guide","area":"leadership","name":"Product guide","summary":"This guide, inside the desk. Every page and desk on the site in plain language, filtered by who you are, with a map of what connects to what. It rebuilds from the code, so it stays current. Only HoDs, directors and HR can open it.","use":"Pick who you are to see only what is yours, search for a feature, or switch to the map and tap a box to follow where it leads.","reach":"Desk, reference group","who":["hod","hr"],"paths":["/director/guide"],"desks":["Product guide"],"gate":"HoD or director"},{"id":"honours","area":"community","name":"Honours","summary":"Every Member of the Month, month by month. Each card links to the person, to their team and to their wall, so you can say congratulations.","use":"Scroll back through the months. Tap a name to see their profile, a team to see what it does, or \"say congratulations\" to leave a note on their wall.","reach":"\"all honours\" link under the Member of the Month card on a team page or on the winner's profile","who":["member","lead","hod","hr"],"paths":["/honours"],"desks":[],"gate":"active member"},{"id":"grievance","area":"community","name":"Raise a concern","summary":"A private form for signed-in members to raise a concern with the HR team: harassment, discrimination, safety, misconduct by a member or by a HoD or HR, or something else. Only HR and super admins can read it, and the sender sees the status of what they sent.","use":"Open it from the equity policy page or the footer, pick what it is about, write what happened, and send it. We usually respond within seven days.","reach":"Equity policy page, footer, privacy policy","who":["member"],"paths":["/grievance"],"desks":[],"gate":"active member"},{"id":"desk-grievances","area":"leadership","name":"Grievances","summary":"Where HR reads and works the concerns members raise: status, who is handling it, internal notes, and a marker once one has waited seven days. Directors and HoDs cannot see it.","use":"Open a grievance, read it, assign it, add notes, and move it to resolved or closed.","reach":"Desk, intake group","who":["hr"],"paths":["/director/grievances"],"desks":["Grievances"],"gate":"HR or super admin"}],"edges":[{"from":"public-pages","to":"teams","why":"every department on the chart links to its team page","kind":"described"},{"from":"public-pages","to":"openings","why":"the about page points people to open roles","kind":"described"},{"from":"projects","to":"login","why":"the call to action on a project sends visitors to sign in","kind":"described"},{"from":"projects","to":"desk-projects","why":"write-ups are published from the Drive Write-ups desk","kind":"described"},{"from":"projects","to":"drives","why":"a project is the public story of a drive that was run in the field","kind":"described"},{"from":"blog","to":"desk-queue","why":"drafts wait in the Blog Drafts desk before they publish","kind":"described"},{"from":"blog","to":"home-feed","why":"a blog post is the same thing as a feed post with a headline and cover","kind":"described"},{"from":"openings","to":"desk-hiring","why":"every application lands in the Hiring desk","kind":"described"},{"from":"openings","to":"teams","why":"each role belongs to one team and shows on that team's page","kind":"described"},{"from":"openings","to":"login","why":"applying needs a sign-in","kind":"described"},{"from":"openings","to":"home-feed","why":"once you're approved, a card at the top of your feed asks if you still want the role you were interested in","kind":"described"},{"from":"members-public","to":"profile","why":"a signed-in member sees the fuller profile screen","kind":"described"},{"from":"members-public","to":"teams","why":"a profile lists the teams a person is on","kind":"described"},{"from":"members-public","to":"core-team","why":"the list links to the core team, and a core member's profile shows the badge","kind":"described"},{"from":"core-team","to":"members-public","why":"the Core Team page links back to every member, and the member list links to it","kind":"described"},{"from":"schools-classes","to":"contact-collab","why":"schools get in touch through the collaboration form","kind":"described"},{"from":"help-pages","to":"contact-collab","why":"the FAQ ends with a way to ask a question","kind":"described"},{"from":"giving-back","to":"projects","why":"the hub sends people to every drive's write-up as proof of the numbers","kind":"described"},{"from":"giving-back","to":"crftd","why":"Crftd is one of the two ways the work is paid for","kind":"described"},{"from":"giving-back","to":"join-promo","why":"every page ends with a way to join","kind":"described"},{"from":"giving-back","to":"public-pages","why":"the About page ends with the library's directory","kind":"described"},{"from":"contact-collab","to":"desk-enquiries","why":"every submission appears in the Enquiries desk","kind":"described"},{"from":"policies","to":"desk-members","why":"the Members desk records every time a leader reveals a phone number, which is the promise the equity policy makes","kind":"described"},{"from":"join-promo","to":"login","why":"the pitch ends at sign in","kind":"described"},{"from":"login","to":"register","why":"a brand new account goes straight to the three profile questions","kind":"described"},{"from":"login","to":"home-feed","why":"an approved member goes to the feed","kind":"described"},{"from":"login","to":"pending","why":"a finished but unapproved account goes to the waiting page","kind":"described"},{"from":"register","to":"pending","why":"submitting puts the account in the approval queue","kind":"described"},{"from":"register","to":"login","why":"a taken phone number tells the person which email to log in with instead","kind":"described"},{"from":"pending","to":"desk-approvals","why":"HR approves or rejects from the Approvals desk","kind":"described"},{"from":"pending","to":"openings","why":"an applicant can apply for roles while they wait","kind":"described"},{"from":"pending","to":"teams","why":"after approval an optional screen suggests teams to browse","kind":"described"},{"from":"home-feed","to":"desk-queue","why":"a member's post is held in the Post Queue until a leader approves it","kind":"described"},{"from":"home-feed","to":"notifications","why":"likes, comments and tags notify the author","kind":"described"},{"from":"home-feed","to":"saved","why":"saving a post puts it in the saved list","kind":"described"},{"from":"home-feed","to":"my-posts","why":"an author follows a post's status in My posts","kind":"described"},{"from":"home-feed","to":"teams","why":"a post can be tagged to teams and then also shows on each team page","kind":"described"},{"from":"my-posts","to":"desk-queue","why":"the status comes from the Post Queue decision","kind":"described"},{"from":"profile","to":"certificates","why":"the certificates card shows your requests and links to the page where you ask","kind":"described"},{"from":"profile","to":"desk-members","why":"leaders see a member's break and details in the Members desk","kind":"described"},{"from":"profile","to":"tasks","why":"a profile has a tasks tab","kind":"described"},{"from":"profile","to":"calendar","why":"your own breaks show on your calendar","kind":"described"},{"from":"profile","to":"honours","why":"a Member of the Month winner's profile links to all honours","kind":"described"},{"from":"settings","to":"calendar","why":"sharing your birthday puts it on the calendar","kind":"described"},{"from":"search","to":"teams","why":"results include teams","kind":"described"},{"from":"search","to":"profile","why":"results include members","kind":"described"},{"from":"calendar","to":"drives","why":"drive dates come from the drives","kind":"described"},{"from":"calendar","to":"tasks","why":"a task's due date shows on the calendar and opens your task list","kind":"described"},{"from":"notifications","to":"home-feed","why":"most notifications point back to a post","kind":"described"},{"from":"saved","to":"home-feed","why":"saved posts open on the post page","kind":"described"},{"from":"yearbook","to":"desk-yearbook","why":"leaders pick who is invited and read what comes back","kind":"described"},{"from":"invite","to":"login","why":"an invite link leads the new person to sign in","kind":"described"},{"from":"tasks","to":"teams","why":"a team page has a tasks tab","kind":"described"},{"from":"tasks","to":"profile","why":"a profile lists what a person performs or supervises","kind":"described"},{"from":"teams","to":"openings","why":"a team page lists its open roles","kind":"described"},{"from":"teams","to":"desk-teams","why":"HoDs edit the team name, picture and description in the Teams desk","kind":"described"},{"from":"teams","to":"tasks","why":"members and leaders see the team's tasks","kind":"described"},{"from":"teams","to":"desk-hiring","why":"a lead reviews applicants for their team's roles","kind":"described"},{"from":"teams","to":"honours","why":"a team page's Member of the Month card links to all honours","kind":"described"},{"from":"drives","to":"profile","why":"attendance becomes the verified hours on each member's profile","kind":"described"},{"from":"drives","to":"projects","why":"a finished drive is later written up as a public project","kind":"described"},{"from":"drives","to":"home-feed","why":"wrap-up pushes stat blocks to the drive's post","kind":"described"},{"from":"desk-approvals","to":"pending","why":"the decision moves the applicant off the waiting page","kind":"described"},{"from":"desk-approvals","to":"register","why":"applications arrive from the profile questions","kind":"described"},{"from":"desk-queue","to":"home-feed","why":"approving puts the post on the feed","kind":"described"},{"from":"desk-queue","to":"blog","why":"publishing a draft puts it on the blog","kind":"described"},{"from":"desk-queue","to":"my-posts","why":"the author sees the decision there","kind":"described"},{"from":"desk-members","to":"core-team","why":"making someone core puts them on the Core Team page","kind":"described"},{"from":"desk-members","to":"profile","why":"a member sets their own break on their profile","kind":"described"},{"from":"desk-members","to":"teams","why":"team membership is managed from a member's row","kind":"described"},{"from":"desk-members","to":"policies","why":"the contact audit note points at the equity policy","kind":"described"},{"from":"desk-recognition","to":"profile","why":"the honoree gets a claim flow on their profile","kind":"described"},{"from":"desk-recognition","to":"home-feed","why":"the poster is posted to the feed","kind":"described"},{"from":"desk-teams","to":"teams","why":"edits show on the public team pages","kind":"described"},{"from":"desk-moderation","to":"desk-queue","why":"the assignment decides which posts a HoD sees","kind":"described"},{"from":"desk-hiring","to":"openings","why":"roles created here appear on the public openings page","kind":"described"},{"from":"desk-hiring","to":"teams","why":"each role belongs to a team","kind":"described"},{"from":"desk-enquiries","to":"contact-collab","why":"the forms feed this list","kind":"described"},{"from":"certificates","to":"desk-certificates","why":"what you send lands on the Certificates desk for the HoDs you tagged and for HR","kind":"described"},{"from":"certificates","to":"profile","why":"your profile shows your latest requests and links back here","kind":"described"},{"from":"certificates","to":"verify-certificate","why":"every issued document carries a code that anyone can check","kind":"described"},{"from":"verify-certificate","to":"certificates","why":"the code is printed on documents issued from the certificates page","kind":"described"},{"from":"desk-certificates","to":"certificates","why":"requests arrive from the certificates page, and issued ones are downloaded from it","kind":"described"},{"from":"desk-yearbook","to":"yearbook","why":"invited members fill in their entry there","kind":"described"},{"from":"desk-content","to":"public-pages","why":"edits appear on the public pages","kind":"described"},{"from":"desk-projects","to":"projects","why":"published write-ups appear on the Projects page","kind":"described"},{"from":"desk-projects","to":"drives","why":"a write-up follows a drive that was run and wrapped up","kind":"described"},{"from":"desk-hods","to":"desk-access","why":"a role's reach is set in Roles and Permissions","kind":"described"},{"from":"desk-volunteers","to":"login","why":"this process was replaced by signing in","kind":"described"},{"from":"desk-access","to":"desk-home","why":"the matrix decides which desks each leader sees","kind":"described"},{"from":"desk-access","to":"desk-approvals","why":"approvals and rejections are written to the log","kind":"described"},{"from":"demo","to":"login","why":"the tour ends at sign in","kind":"described"},{"from":"desk-guide","to":"desk-home","why":"it lists every desk, including the ones each leader can open","kind":"described"},{"from":"honours","to":"profile","why":"each honoured person links to their profile and wall","kind":"described"},{"from":"honours","to":"teams","why":"each pick names the team it was for, which opens that team","kind":"described"},{"from":"grievance","to":"desk-grievances","why":"what a member sends lands on the HR grievances desk","kind":"described"},{"from":"desk-grievances","to":"grievance","why":"members send concerns from the grievance form","kind":"described"},{"from":"quick-links","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"quick-links","to":"paradox","why":"the page links to /paradox","kind":"in code"},{"from":"quick-links","to":"crftd","why":"the page links to /crftd","kind":"in code"},{"from":"quick-links","to":"public-pages","why":"the page links to /about","kind":"in code"},{"from":"quick-links","to":"teams","why":"the page links to /teams","kind":"in code"},{"from":"quick-links","to":"members-public","why":"the page links to /members","kind":"in code"},{"from":"quick-links","to":"blog","why":"the page links to /blog","kind":"in code"},{"from":"quick-links","to":"terranotes","why":"the page links to /terranotes","kind":"in code"},{"from":"quick-links","to":"giving-back","why":"the page links to /impact","kind":"in code"},{"from":"quick-links","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"quick-links","to":"terrathon","why":"the page links to /terrathon","kind":"in code"},{"from":"quick-links","to":"help-pages","why":"the page links to /volunteer","kind":"in code"},{"from":"quick-links","to":"contact-collab","why":"the page links to /collaborations","kind":"in code"},{"from":"quick-links","to":"search","why":"the page links to /search","kind":"in code"},{"from":"quick-links","to":"schools-classes","why":"the page links to /schools","kind":"in code"},{"from":"quick-links","to":"login","why":"the page links to /login","kind":"in code"},{"from":"public-pages","to":"login","why":"the page links to /login","kind":"in code"},{"from":"public-pages","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"public-pages","to":"blog","why":"the page links to /blog","kind":"in code"},{"from":"public-pages","to":"help-pages","why":"the page links to /support","kind":"in code"},{"from":"public-pages","to":"members-public","why":"the page links to /members","kind":"in code"},{"from":"public-pages","to":"terranotes","why":"the page links to /terranotes/articles/labs","kind":"in code"},{"from":"projects","to":"contact-collab","why":"the page links to /collaborations","kind":"in code"},{"from":"projects","to":"crftd","why":"the page links to /crftd","kind":"in code"},{"from":"projects","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"projects","to":"teams","why":"the page links to /teams","kind":"in code"},{"from":"projects","to":"members-public","why":"the page links to /members","kind":"in code"},{"from":"projects","to":"help-pages","why":"the page links to /volunteer","kind":"in code"},{"from":"blog","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"openings","to":"help-pages","why":"the page links to /volunteer","kind":"in code"},{"from":"members-public","to":"login","why":"the page links to /login","kind":"in code"},{"from":"members-public","to":"public-pages","why":"the page links to /directory","kind":"in code"},{"from":"members-public","to":"schools-classes","why":"the page links to /schools","kind":"in code"},{"from":"members-public","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"members-public","to":"honours","why":"the page links to /honours","kind":"in code"},{"from":"core-team","to":"login","why":"the page links to /login","kind":"in code"},{"from":"core-team","to":"public-pages","why":"the page links to /directory","kind":"in code"},{"from":"schools-classes","to":"public-pages","why":"the page links to /directory","kind":"in code"},{"from":"schools-classes","to":"login","why":"the page links to /login","kind":"in code"},{"from":"crftd","to":"contact-collab","why":"the page links to /collaborations","kind":"in code"},{"from":"help-pages","to":"login","why":"the page links to /login","kind":"in code"},{"from":"help-pages","to":"crftd","why":"the page links to /crftd","kind":"in code"},{"from":"help-pages","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"help-pages","to":"members-public","why":"the page links to /members","kind":"in code"},{"from":"contact-collab","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"contact-collab","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"policies","to":"grievance","why":"the page links to /grievance","kind":"in code"},{"from":"policies","to":"login","why":"the page links to /login","kind":"in code"},{"from":"policies","to":"help-pages","why":"the page links to /volunteer","kind":"in code"},{"from":"policies","to":"contact-collab","why":"the page links to /contact","kind":"in code"},{"from":"pending","to":"login","why":"the page links to /login","kind":"in code"},{"from":"pending","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"home-feed","to":"contact-collab","why":"the page links to /collaborations","kind":"in code"},{"from":"home-feed","to":"crftd","why":"the page links to /crftd","kind":"in code"},{"from":"home-feed","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"home-feed","to":"login","why":"the page links to /login","kind":"in code"},{"from":"home-feed","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"profile","to":"invite","why":"the page links to /invite","kind":"in code"},{"from":"profile","to":"settings","why":"the page links to /settings","kind":"in code"},{"from":"settings","to":"login","why":"the page links to /login","kind":"in code"},{"from":"settings","to":"profile","why":"the page links to /profile/edit","kind":"in code"},{"from":"calendar","to":"projects","why":"the page links to /projects","kind":"in code"},{"from":"saved","to":"login","why":"the page links to /login","kind":"in code"},{"from":"saved","to":"openings","why":"the page links to /opportunities","kind":"in code"},{"from":"teams","to":"login","why":"the page links to /login","kind":"in code"},{"from":"teams","to":"public-pages","why":"the page links to /about","kind":"in code"},{"from":"desk-home","to":"desk-approvals","why":"the page links to /director/approvals","kind":"in code"},{"from":"desk-home","to":"desk-queue","why":"the page links to /director/posts","kind":"in code"},{"from":"desk-home","to":"desk-enquiries","why":"the page links to /director/enquiries","kind":"in code"},{"from":"desk-home","to":"desk-certificates","why":"the page links to /director/certificates","kind":"in code"},{"from":"desk-home","to":"desk-hiring","why":"the page links to /director/hiring","kind":"in code"},{"from":"desk-home","to":"desk-members","why":"the page links to /director/members","kind":"in code"},{"from":"desk-home","to":"search","why":"the page links to /search","kind":"in code"},{"from":"desk-home","to":"notifications","why":"the page links to /notifications","kind":"in code"},{"from":"desk-home","to":"profile","why":"the page links to /profile/me","kind":"in code"},{"from":"desk-approvals","to":"desk-home","why":"the page links to /director","kind":"in code"},{"from":"desk-queue","to":"desk-home","why":"the page links to /director","kind":"in code"},{"from":"desk-queue","to":"search","why":"the page links to /search","kind":"in code"},{"from":"desk-queue","to":"notifications","why":"the page links to /notifications","kind":"in code"},{"from":"desk-queue","to":"profile","why":"the page links to /profile/me","kind":"in code"},{"from":"desk-members","to":"desk-approvals","why":"the page links to /director/approvals","kind":"in code"},{"from":"desk-recognition","to":"desk-members","why":"the page links to /director/members","kind":"in code"},{"from":"desk-hiring","to":"desk-home","why":"the page links to /director","kind":"in code"},{"from":"desk-hiring","to":"search","why":"the page links to /search","kind":"in code"},{"from":"desk-hiring","to":"notifications","why":"the page links to /notifications","kind":"in code"},{"from":"desk-hiring","to":"profile","why":"the page links to /profile/me","kind":"in code"},{"from":"desk-hods","to":"desk-home","why":"the page links to /director","kind":"in code"},{"from":"live","to":"policies","why":"the page links to /privacy-policy","kind":"in code"},{"from":"games","to":"terranotes","why":"the page links to /terranotes","kind":"in code"},{"from":"grievance","to":"policies","why":"the page links to /equity-policy","kind":"in code"}]};
+(function () {
+  try { if (location.href === 'about:srcdoc') document.documentElement.classList.add('embedded'); } catch (e) {}
+  var areaVar = { 'front-door': '--a-front', 'joining': '--a-join', 'community': '--a-comm', 'teams-work': '--a-teams', 'leadership': '--a-lead', 'events': '--a-event' };
+  var byId = {}; G.features.forEach(function (f) { byId[f.id] = f; });
+  var state = { view: 'guide', role: 'all', q: '', sel: null };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var color = function (a) { return 'var(' + (areaVar[a] || '--ink') + ')'; };
+  var roleLabel = {}; G.roles.forEach(function (r) { roleLabel[r.id] = r.label; });
+
+  // counts
+  var pages = new Set(); G.features.forEach(function (f) { f.paths.forEach(function (p) { pages.add(p); }); });
+  $('counts').innerHTML =
+    '<span><b>' + G.features.length + '</b>features</span>' +
+    '<span><b>' + pages.size + '</b>pages and desks</span>' +
+    '<span><b>' + G.edges.length + '</b>connections</span>';
+
+  if (G.leaders) {
+    $('lead-note').hidden = false;
+    $('lead-note').textContent = 'Status is as of ' + G.asOf + '. It comes from reading the code, the live database and the desk checks under "Desk flows". The desks fixed on 2 Nov 2026 were also clicked through at laptop and phone width in an offline test harness, which uses fixture data and not the live site. A feature marked working is built, reachable and backed by live data with no known fault; "partly working" names the fault.';
+  }
+
+  // role chips
+  var chips = [{ id: 'all', label: 'Everyone' }].concat(G.roles);
+  $('roles').innerHTML = chips.map(function (c) { return '<button type="button" class="chip" data-role="' + c.id + '" aria-pressed="' + (c.id === 'all') + '">' + esc(c.label) + '</button>'; }).join('');
+  $('roles').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    state.role = b.dataset.role;
+    [].forEach.call($('roles').children, function (x) { x.setAttribute('aria-pressed', x === b); });
+    render();
+  });
+
+  function visible(f) {
+    if (state.role !== 'all' && f.who.indexOf(state.role) < 0) return false;
+    if (state.q) {
+      var hay = (f.name + ' ' + f.summary + ' ' + f.use + ' ' + f.reach + ' ' + f.paths.join(' ') + ' ' + f.desks.join(' ')).toLowerCase();
+      var words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+      for (var i = 0; i < words.length; i++) if (hay.indexOf(words[i]) < 0) return false;
+    }
+    return true;
+  }
+  function outs(id) { return G.edges.filter(function (e) { return e.from === id; }); }
+  function ins(id) { return G.edges.filter(function (e) { return e.to === id; }); }
+
+  function whoHtml(f) {
+    if (f.who.length === G.roles.length) return '<div class="who" aria-label="Who can use it"><span class="on">Everyone</span></div>';
+    return '<div class="who" aria-label="Who can use it">' + G.roles.filter(function (r) { return f.who.indexOf(r.id) >= 0; }).map(function (r) {
+      return '<span class="on">' + esc(r.label) + '</span>';
+    }).join('') + '</div>';
+  }
+
+  function statusHtml(f) {
+    if (!G.leaders || !f.status) return '';
+    return '<span class="stat ' + f.status.state + '"><i></i>' + esc(G.statusLabels[f.status.state]) + '</span>' +
+      (f.status.note ? '<p class="stat-note">' + esc(f.status.note) + '</p>' : '');
+  }
+
+  function cardHtml(f) {
+    var o = outs(f.id).filter(function (e) { return e.kind === 'described'; });
+    var links = o.length ? '<div class="links"><h4>Leads to</h4><ul>' + o.map(function (e) {
+      return '<li><button type="button" data-go="' + e.to + '">' + esc(byId[e.to].name) + '</button><span>' + esc(e.why) + '</span></li>';
+    }).join('') + '</ul></div>' : '';
+    var paths = f.paths.length ? '<div class="paths">' + f.paths.slice(0, 6).map(function (p) { return '<code>' + esc(p) + '</code>'; }).join('') + '</div>' : '';
+    return '<article class="card" id="f-' + f.id + '" style="--ac:' + color(f.area) + '">' +
+      '<h3>' + esc(f.name) + '</h3>' + statusHtml(f) +
+      '<p class="sum">' + esc(f.summary) + '</p>' +
+      '<p class="use"><b>How: </b>' + esc(f.use) + '</p>' +
+      '<span class="reach"><i></i>' + esc(f.reach) + '</span>' +
+      whoHtml(f) + paths + links + '</article>';
+  }
+
+  function renderGuide() {
+    var any = false, html = '';
+    G.areas.forEach(function (a) {
+      var list = G.features.filter(function (f) { return f.area === a.id && visible(f); });
+      if (!list.length) return; any = true;
+      html += '<section class="area" style="--ac:' + color(a.id) + '" aria-labelledby="a-' + a.id + '"><div class="area-head"><h2 id="a-' + a.id + '">' + esc(a.name) + '</h2><p>' + esc(a.blurb) + '</p></div><div class="grid">' + list.map(cardHtml).join('') + '</div></section>';
+    });
+    $('view').innerHTML = any ? html : '<div class="empty"><b>Nothing matches.</b>Clear the search or pick a different role.</div>';
+  }
+
+
+  // desk flows and findings (leaders build only)
+  var fstate = 'all';
+  var SEV = { bug: 'Wrong now', risk: 'Could go wrong', gap: 'Missing step' };
+  var FST = { fixed: 'Fixed', open: 'Open', flagged: 'Known, not changed', unverified: 'Not verified' };
+  function findHtml(x) {
+    return '<div class="find ' + x.sev + (x.state === 'fixed' ? ' fixed' : '') + '"><div class="find-top"><b>' + esc(x.title) + '</b>' +
+      '<span class="tag ' + x.state + '">' + esc(FST[x.state] || x.state) + '</span><span class="tag">' + esc(SEV[x.sev] || x.sev) + '</span>' +
+      (x.stale ? '<span class="tag">Stale</span>' : '') + '</div><p>' + esc(x.plain) + '</p>' +
+      (x.how ? '<p><b>What was done: </b>' + esc(x.how) + '</p>' : '') +
+      (x.where ? '<p><code>' + esc(x.where) + '</code></p>' : '') + '</div>';
+  }
+  function rowHtml(r) {
+    var cell = function (l, v) { return '<div data-l="' + l + '">' + (v ? esc(v) : '<span class="none">Nothing</span>') + '</div>'; };
+    return '<div class="fl-row"><div data-l="Control">' + esc(r.control) + '</div>' + cell('What happens', r.does) + cell('Recorded in', r.writes) + cell('Who is told', r.tells) + cell('Where it shows', r.shows) + '</div>';
+  }
+  function renderDesks() {
+    var q = state.q.toLowerCase();
+    var all = G.findings;
+    var cnt = function (st) { return all.filter(function (x) { return x.state === st; }).length; };
+    var vcount = function (v) { return G.flows.filter(function (d) { return d.verdict === v; }).length; };
+    var html = '<section class="area" style="--ac:var(--a-lead)"><div class="area-head"><h2>How the desk works, and what is wrong with it</h2><p>Every control on every leadership desk: what it does, what it records, who it tells and where the result shows up. Below each desk, the flaws found when it was checked on ' + esc(G.asOf) + ', and what happened to each. Healthy means nothing wrong is still open. Flawed means a real fault is still open. Stale means out of date wording or leftovers remain.</p></div>' +
+      '<div class="dsum"><span><b>' + G.flows.length + '</b>desks and areas checked</span><span><b>' + vcount('healthy') + '</b>healthy</span><span><b>' + vcount('flawed') + '</b>flawed</span><span><b>' + vcount('stale') + '</b>stale</span>' +
+      '<span><b>' + cnt('fixed') + '</b>fixed</span><span><b>' + cnt('open') + '</b>open</span><span><b>' + cnt('flagged') + '</b>known, not changed</span></div>' +
+      '<div class="dfilter" role="group" aria-label="Show findings">' + ['all', 'open', 'fixed', 'flagged'].map(function (k) {
+        return '<button type="button" class="chip" data-fs="' + k + '" aria-pressed="' + (fstate === k) + '">' + (k === 'all' ? 'All findings' : k === 'flagged' ? 'Known, not changed' : k.charAt(0).toUpperCase() + k.slice(1)) + '</button>';
+      }).join('') + '</div>';
+    var any = false;
+    G.flows.forEach(function (d) {
+      var fs = all.filter(function (x) { return x.desk === d.desk && (fstate === 'all' || x.state === fstate); });
+      var hay = (d.name + ' ' + d.summary + ' ' + d.rows.map(function (r) { return [r.control, r.does, r.writes, r.tells, r.shows].join(' '); }).join(' ') + ' ' + fs.map(function (x) { return x.title + ' ' + x.plain; }).join(' ')).toLowerCase();
+      if (q && hay.indexOf(q) < 0) return;
+      if (fstate !== 'all' && !fs.length) return;
+      any = true;
+      html += '<article class="desk" id="d-' + d.desk + '"><div class="desk-h"><h3>' + esc(d.name) + '</h3><span class="verdict ' + d.verdict + '">' + esc(d.verdict) + '</span><span class="desk-who">' + esc(d.who) + '</span></div>' +
+        '<p class="desk-sum">' + esc(d.summary) + '</p>' +
+        '<div class="fl"><div class="fl-row fl-head"><div>Control</div><div>What happens</div><div>Recorded in</div><div>Who is told</div><div>Where it shows</div></div>' + d.rows.map(rowHtml).join('') + '</div>' +
+        (fs.length ? '<div class="finds"><h4>Findings (' + fs.length + ')</h4>' + fs.map(findHtml).join('') + '</div>' : '<div class="finds"><h4>Findings</h4><p class="hint">None recorded.</p></div>') + '</article>';
+    });
+    if (!any) html += '<div class="empty"><b>Nothing matches.</b>Clear the search or the filter.</div>';
+    $('view').innerHTML = html + '</section>';
+  }
+
+  // map
+  var COLW = 232, GAPX = 56, ROWH = 62, TOP = 34, NODEW = 208;
+  function renderMap() {
+    var cols = G.areas.map(function (a) { return { a: a, items: G.features.filter(function (f) { return f.area === a.id; }) }; });
+    var maxRows = Math.max.apply(null, cols.map(function (c) { return c.items.length; }));
+    var W = cols.length * COLW + (cols.length - 1) * GAPX - (COLW - NODEW);
+    var H = TOP + maxRows * ROWH;
+    var pos = {};
+    var html = '<div class="map-scroll"><div class="map" id="map" style="width:' + W + 'px;height:' + H + 'px"><svg id="edges" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true"></svg>';
+    cols.forEach(function (c, ci) {
+      var x = ci * (COLW + GAPX);
+      html += '<div class="col-title" style="left:' + x + 'px;width:' + NODEW + 'px;--ac:' + color(c.a.id) + '">' + esc(c.a.name) + '</div>';
+      c.items.forEach(function (f, ri) {
+        var y = TOP + ri * ROWH; pos[f.id] = { x: x, y: y };
+        html += '<button type="button" class="node" data-id="' + f.id + '" aria-pressed="false" style="left:' + x + 'px;top:' + y + 'px;width:' + NODEW + 'px;--ac:' + color(f.area) + '">' + esc(f.name) + (G.leaders && f.status ? '<span class="dot ' + f.status.state + '" title="' + esc(G.statusLabels[f.status.state]) + '"></span>' : '') + '</button>';
+      });
+    });
+    html += '</div></div>';
+    html += '<aside class="panel" id="panel" aria-live="polite"></aside>';
+    $('view').innerHTML = '<div class="map-wrap">' + html + '</div>';
+    var svg = $('edges'), ns = 'http://www.w3.org/2000/svg';
+    G.edges.forEach(function (e, i) {
+      var a = pos[e.from], b = pos[e.to]; if (!a || !b) return;
+      var p = document.createElementNS(ns, 'path');
+      var ay = a.y + 22, by = b.y + 22, d;
+      if (a.x === b.x) {
+        var bulge = 70 + (Math.abs(a.y - b.y) / ROWH) * 3;
+        d = 'M' + (a.x + NODEW) + ',' + ay + ' C' + (a.x + NODEW + bulge) + ',' + ay + ' ' + (b.x + NODEW + bulge) + ',' + by + ' ' + (b.x + NODEW) + ',' + by;
+      } else if (a.x < b.x) {
+        var ax = a.x + NODEW, bx = b.x, m = (bx - ax) / 2;
+        d = 'M' + ax + ',' + ay + ' C' + (ax + m) + ',' + ay + ' ' + (bx - m) + ',' + by + ' ' + bx + ',' + by;
+      } else {
+        var ax2 = a.x, bx2 = b.x + NODEW, m2 = (ax2 - bx2) / 2;
+        d = 'M' + ax2 + ',' + ay + ' C' + (ax2 - m2) + ',' + ay + ' ' + (bx2 + m2) + ',' + by + ' ' + bx2 + ',' + by;
+      }
+      p.setAttribute('d', d); p.setAttribute('class', 'edge'); p.dataset.i = i; svg.appendChild(p);
+    });
+    paintMap();
+  }
+
+  function paintMap() {
+    var sel = state.sel;
+    var nbr = {};
+    if (sel) { nbr[sel] = 1; G.edges.forEach(function (e) { if (e.from === sel) nbr[e.to] = 1; if (e.to === sel) nbr[e.from] = 1; }); }
+    [].forEach.call(document.querySelectorAll('.node'), function (n) {
+      var f = byId[n.dataset.id], off = !visible(f);
+      n.setAttribute('aria-pressed', n.dataset.id === sel);
+      n.classList.toggle('n-off', off);
+      n.classList.toggle('n-dim', !off && !!sel && !nbr[n.dataset.id]);
+    });
+    [].forEach.call(document.querySelectorAll('.edge'), function (p) {
+      var e = G.edges[+p.dataset.i];
+      var on = sel && (e.from === sel || e.to === sel);
+      var off = !visible(byId[e.from]) || !visible(byId[e.to]);
+      p.setAttribute('class', 'edge' + (on ? ' e-on ' + (e.from === sel ? 'e-out' : 'e-in') : '') + (off || (sel && !on) ? ' e-off' : ''));
+    });
+    var panel = $('panel'); if (!panel) return;
+    if (!sel) {
+      panel.innerHTML = '<h3>Follow a feature</h3><p class="hint">Tap any box. Lines show where it leads to and what leads to it. Green goes out, purple comes in.</p>' +
+        '<div class="legend"><span><i style="background:var(--a-front)"></i>leads to</span><span><i style="background:var(--a-comm)"></i>reached from</span></div>';
+      return;
+    }
+    var f = byId[sel], o = outs(sel), i = ins(sel);
+    var li = function (list, key) { return list.length ? '<ul>' + list.map(function (e) { return '<li><button type="button" data-pick="' + e[key] + '">' + esc(byId[e[key]].name) + '</button>' + esc(e.why) + '</li>'; }).join('') + '</ul>' : '<p class="hint">Nothing yet.</p>'; };
+    panel.innerHTML = '<h3>' + esc(f.name) + '</h3>' + statusHtml(f) + '<p>' + esc(f.summary) + '</p>' + whoHtml(f).replace('class="who"', 'class="who" style="--ac:' + color(f.area) + '"') +
+      '<div class="cl"><div><h4>Leads to</h4>' + li(o, 'to') + '</div><div><h4>Reached from</h4>' + li(i, 'from') + '</div></div>' +
+      '<button type="button" class="open-card" data-open="' + f.id + '">Read the full entry</button>';
+  }
+
+  function render() {
+    var shown = G.features.filter(visible).length;
+    $('note').textContent = (state.role === 'all' && !state.q) ? '' : shown + ' of ' + G.features.length + ' features' + (state.role !== 'all' ? ' for a ' + roleLabel[state.role].toLowerCase() : '') + (state.q ? ' matching "' + state.q + '"' : '');
+    $('b-guide').setAttribute('aria-pressed', state.view === 'guide');
+    $('b-map').setAttribute('aria-pressed', state.view === 'map');
+    $('b-desks').setAttribute('aria-pressed', state.view === 'desks');
+    $('roles').parentNode.style.display = state.view === 'desks' ? 'none' : '';
+    if (state.view === 'guide') renderGuide(); else if (state.view === 'desks') renderDesks(); else renderMap();
+    try { history.replaceState(null, '', '#' + state.view); } catch (e) {}
+  }
+
+  function openCard(id) {
+    state.view = 'guide'; state.q = ''; $('q').value = '';
+    if (state.role !== 'all' && byId[id].who.indexOf(state.role) < 0) { state.role = 'all'; [].forEach.call($('roles').children, function (x) { x.setAttribute('aria-pressed', x.dataset.role === 'all'); }); }
+    render();
+    var el = $('f-' + id); if (!el) return;
+    el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1600);
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-go],[data-pick],[data-open],.node'); if (!t) return;
+    if (t.dataset.go) return openCard(t.dataset.go);
+    if (t.dataset.open) return openCard(t.dataset.open);
+    var id = t.dataset.pick || t.dataset.id;
+    state.sel = state.sel === id && !t.dataset.pick ? null : id; paintMap();
+  });
+  $('b-guide').addEventListener('click', function () { state.view = 'guide'; render(); });
+  $('b-map').addEventListener('click', function () { state.view = 'map'; render(); });
+  if (G.leaders) {
+    $('b-desks').hidden = false;
+    $('b-desks').addEventListener('click', function () { state.view = 'desks'; render(); });
+    document.addEventListener('click', function (e) { var b = e.target.closest('[data-fs]'); if (b) { fstate = b.dataset.fs; render(); } });
+  }
+  $('q').addEventListener('input', function (e) { state.q = e.target.value.trim(); render(); });
+  if (location.hash === '#map') state.view = 'map';
+  if (G.leaders && location.hash === '#desks') state.view = 'desks';
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "slug": "salt-lake",
+  "title": "Drives in Salt Lake: dog feeding, sharbat and clothes · AquaTerra",
+  "description": "AquaTerra's drives in Salt Lake since {firstYear}: {count} drives at {placesCount} places, about half of them dog feeding, the rest sharbat, bananas and clothes.",
+  "h1Lead": "every drive in",
+  "h1Accent": "Salt Lake",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drives in Salt Lake, with {volunteers} volunteer turnouts. About half are Tails and Treats dog feeding outings, with biscuits for the dogs on the street, and the rest are sharbat, banana, clothes and book drives, plus one sanitary napkin drive in March 2025.",
+  "sections": [
+    {
+      "id": "what-a-drive-looks-like",
+      "heading": "what a drive looks like here",
+      "body": [
+        "About half the Salt Lake drives are Tails and Treats dog feeding outings. A small group of students takes a few packets of biscuits to the streets where the dogs gather, feeds them, cuddles them and heads home. The drive's own write-up for 9 August 2025 says it was all tails, treats and love, and that is how most of these outings read.",
+        "The rest are distribution drives. Students served sharbat at Shiv Temple in Salt Lake, handed out bananas, collected old clothes and books, and in March 2025 gave sanitary napkins to women near a slum area beside Salt Lake Haveli. Each drive gives its own figure for what it handed out, so read each one as that team's note on the day."
+      ]
+    },
+    {
+      "id": "how-it-started",
+      "heading": "how the drives started in 2024",
+      "body": [
+        "The first Salt Lake drives came in May 2024, when students served sharbat at Karunamoyee in Bidhannagar and at the swimming pool area in Salt Lake. Both drives give twenty litres of Rooh Afza as their own figure, and both were on 26 May 2024.",
+        "Dog feeding started that autumn. The first dog drive here was on 2 November 2024, followed by drives on 7 and 14 December and on 4 January 2025. Those early outings were small, and the series picked up steadily through 2025."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where the drives happen",
+      "body": [
+        "Most drives here simply name Salt Lake, but some have more precise spots too: Shiv Temple in Salt Lake, Salt Lake Haveli, Karunamoyee in Bidhannagar and the swimming pool area. Across the neighbourhood the drives have been in {placesCount} places in all.",
+        "Late March 2025 was a busy week at Shiv Temple. On 26 March the team handed out bananas and served sharbat there, and on 28 March it served sharbat there again. The bananas and the sharbat came in the same few days."
+      ]
+    },
+    {
+      "id": "what-changed",
+      "heading": "how it changed, 2024 to 2025",
+      "body": [
+        "In 2024 there were {year:2024} drives here: sharbat in May, then dog feeding from November. In 2025 there were {year:2025}, and the work spread out, with bananas and clothes in spring, sanitary napkins in March, a book and clothes collection in July, and dog feeding through August.",
+        "The most recent Salt Lake drive on the site is a dog feeding outing from 29 August 2025. Nothing here is written up after that, so if you want to see what the team is doing now, the newer neighbourhood pages are a better guide, such as [Bangur](/impact/bangur) and [Lake Town](/impact/lake-town)."
+      ]
+    },
+    {
+      "id": "who-takes-part",
+      "heading": "who takes part",
+      "body": [
+        "Students do all of the work: carrying biscuits and bananas, serving sharbat to devotees and passers-by, sorting clothes and books, and feeding the dogs. Several of the biggest teams came out for dog drives, including Salt Lake Haveli on 21 March 2025 and Salt Lake itself on 7 December 2024.",
+        "A note on the figures: volunteer turnouts count every time someone showed up. A student who came to five drives is counted five times, so {volunteers} is a count of places filled across {count} drives, not a count of separate people."
+      ]
+    },
+    {
+      "id": "how-to-get-involved",
+      "heading": "how to join or help",
+      "body": [
+        "Members aged 14 to 19 join through the usual route: sign in with Google, then wait for approval, as explained on the [join page](/join). Every drive is written up on the site, so you can see where it happened and what the team handed out before you decide to come along.",
+        "If the dog feeding drives appeal to you, the [Tails and Treats](/impact/tails-and-treats) page explains the whole series. If you prefer collections, [Wear and Share](/impact/wear-and-share) covers the clothes drives, including the ones that ran here in 2025."
+      ]
+    }
+  ],
+  "learnings": [
+    "Dog feeding is about half of the Salt Lake drives and the most common kind here, with biscuits as the food.",
+    "Sharbat and bananas clustered at Shiv Temple in late March 2025, which made that week a busy one here.",
+    "Each drive gives its own figure for what it handed out, so compare drives of the same kind rather than across the whole neighbourhood.",
+    "Volunteer turnouts measure places filled, not separate people, so a student who came often is counted often."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run drives in Salt Lake?",
+      "a": "AquaTerra has run drives across Salt Lake itself, and at specific spots such as Shiv Temple in Salt Lake, Salt Lake Haveli, Karunamoyee in Bidhannagar and the swimming pool area. Since {firstYear} the drives have been held in {placesCount} places."
+    },
+    {
+      "q": "What did AquaTerra do in Salt Lake in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} drives in Salt Lake. Students fed street dogs with biscuits through the summer, served sharbat and bananas at Shiv Temple in late March, gave sanitary napkins to women near a slum area in March, and ran clothes and book collections in July."
+    },
+    {
+      "q": "Can I join a dog feeding drive in Salt Lake?",
+      "a": "Members aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. The Salt Lake dog feeding drives ran from November 2024 to August 2025, and the most recent was on 29 August 2025."
+    },
+    {
+      "q": "How many volunteer turnouts has AquaTerra had in Salt Lake?",
+      "a": "AquaTerra has had {volunteers} volunteer turnouts across {count} drives in Salt Lake since {firstYear}. A turnout counts each time someone showed up at a drive, so one student who went to several drives is counted once for each."
+    }
+  ],
+  "keywords": [
+    "drives in Salt Lake Kolkata",
+    "stray dog feeding Salt Lake",
+    "volunteering in Salt Lake Kolkata",
+    "sharbat distribution Salt Lake",
+    "AquaTerra Salt Lake",
+    "student volunteers Salt Lake Kolkata"
+  ]
+}

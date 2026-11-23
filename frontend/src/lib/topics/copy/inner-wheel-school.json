@@ -1,0 +1,63 @@
+{
+  "slug": "inner-wheel-school",
+  "title": "Workshops at the Inner Wheel School · AquaTerra",
+  "description": "Bottle upcycling, origami, Rakhi crafts, a personal safety session and Diwali diyas at the Inner Wheel School in South Calcutta, run by AquaTerra students.",
+  "h1Lead": "crafts and care at the",
+  "h1Accent": "Inner Wheel School",
+  "lede": "AquaTerra ran {count} workshops at the Inner Wheel School in South Calcutta between August 2023 and October 2024, with {volunteers} volunteer turnouts. The sessions mixed crafts such as origami and diya painting with a personal safety awareness session.",
+  "sections": [
+    {
+      "id": "what-the-workshops-were",
+      "heading": "what the workshops were",
+      "body": [
+        "All of the work at the Inner Wheel School was workshops, not collections, and it ran from August 2023 to October 2024. The first was Bottle To Better in August 2023, a hands-on session on turning discarded plastic bottles into practical and decorative items. Later that month the Rakhi Workshop brought creativity and culture to the children, held together with Youthwave.",
+        "The later sessions moved from making to feeling. Fold and Fun in December 2023 taught origami, with a focus on patience. Safe and Strong in July 2024 was an awareness workshop on good touch and bad touch, delivered with care, and Painted Flames in October 2024 had children paint and design diyas for Diwali."
+      ]
+    },
+    {
+      "id": "crafts-and-awareness",
+      "heading": "from crafts to personal safety",
+      "body": [
+        "The mix is the point. Origami and diya painting sit beside a session on personal safety, so the school's visits gave children both a making activity and a topic to talk about."
+      ]
+    },
+    {
+      "id": "how-the-visits-worked",
+      "heading": "how the visits worked",
+      "body": [
+        "Each visit was a single workshop run by a small team of volunteers. Across {count} sessions and {volunteers} volunteer turnouts, the school was visited in both {year:2023} and {year:2024}, so the work came back to the same place."
+      ]
+    }
+  ],
+  "learnings": [
+    "One clear activity per session, like folding origami or painting a diya, gives a short workshop its shape.",
+    "Festival sessions suit the calendar: the Diwali diya workshop came in October, the season it was made for.",
+    "Creative sessions and awareness topics can share a team, as they did here across two years."
+  ],
+  "faqs": [
+    {
+      "q": "Has AquaTerra run workshops at the Inner Wheel School?",
+      "a": "Yes. AquaTerra has run {count} workshops at the Inner Wheel School in South Calcutta between August 2023 and October 2024, with {volunteers} volunteer turnouts."
+    },
+    {
+      "q": "What workshops did AquaTerra teach at the Inner Wheel School?",
+      "a": "Plastic bottle upcycling, the Rakhi Workshop, origami, a good touch and bad touch awareness session, and diya decoration for Diwali."
+    },
+    {
+      "q": "Is the Inner Wheel School a place AquaTerra has visited more than once?",
+      "a": "Yes. AquaTerra went to the school in both 2023 and 2024, with {year:2023} sessions in 2023 and {year:2024} in 2024."
+    },
+    {
+      "q": "How can a school in Kolkata host an AquaTerra workshop?",
+      "a": "Schools can see the formats on the for-schools page or contact AquaTerra through the contact page. The sessions are run by AquaTerra students, who join through Google sign-in and approval."
+    }
+  ],
+  "keywords": [
+    "Inner Wheel School Kolkata workshops",
+    "origami workshop for children Kolkata",
+    "upcycling plastic bottle workshop school",
+    "Diwali diya workshop for kids Kolkata",
+    "good touch bad touch workshop school Kolkata",
+    "AquaTerra school workshops South Calcutta"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "slug": "sport-fundraisers",
+  "title": "Sports fundraisers and TerraThon in Kolkata · AquaTerra",
+  "description": "Football, FIFA and basketball fundraisers in Kolkata from {firstYear} to {lastYear}, with TerraThon, AquaTerra's student sports festival, and the welfare work they support.",
+  "h1Lead": "matches and tournaments",
+  "h1Accent": "for a cause",
+  "lede": "AquaTerra has held {count} sports fundraisers from {firstYear} to {lastYear}: football matches, FIFA gaming nights, a multi-sport TerraThon and a basketball tournament. Each was a sporting event with a stated cause, and the event summaries say the proceeds go to charity or to AquaTerra's welfare work. TerraThon is listed again for 2 to 4 October 2026.",
+  "sections": [
+    {
+      "id": "football-and-the-first-turf-days",
+      "heading": "football and the first turf days",
+      "body": [
+        "The series opened in July 2022 with Score and Support, a football fundraiser in Kolkata about passion, play and purpose. Three weeks later, on 22 July 2022, TerraThon 1.0 took over Elgin Turf at Choudhary House and Stumps, a fundraiser where you play several sports and the proceedings go to charity.",
+        "TerraThon 1.0 was the largest team on this page, and it set the pattern for a sports day that is more than one game."
+      ]
+    },
+    {
+      "id": "fifa-nights-on-hindustan-road",
+      "heading": "fifa nights on hindustan road",
+      "body": [
+        "Two FIFA fundraisers ran on consecutive days, 25 and 26 May 2023, on Hindustan Road in Kolkata. Both were titled Kick for a Cause, with FIFA 23 on a PS5, battles and prizes. Each day's summary describes gaming for a greater good, which is a sport that needs a screen rather than a pitch."
+      ]
+    },
+    {
+      "id": "football-matches-at-vs-arena",
+      "heading": "football matches at vs arena",
+      "body": [
+        "VS Arena hosted the Match with a Mission football fundraiser on 1 July 2023 and Play It Forward on 18 May 2024. The first turned kicks into kindness, and the second brought the community together through participation in support of AquaTerra's welfare initiatives.",
+        "The two matches were less than a year apart, which shows that a venue can come back when a fundraiser works."
+      ]
+    },
+    {
+      "id": "basketball-at-chetla-park",
+      "heading": "basketball at chetla park",
+      "body": [
+        "Shoot for the Stars, a basketball fundraiser at Chetla Park Athletic Club on 14 December 2024, is the most recent sports fundraiser on this page. It ran a tournament with matches, stalls and merchandise, and its summary calls it a tournament showing true sportsmanship.",
+        "It had a bigger team than any of the football matches or FIFA nights on this page, because a tournament has more to run than a single match."
+      ]
+    },
+    {
+      "id": "terrathon-then-and-next",
+      "heading": "terrathon, then and next",
+      "body": [
+        "TerraThon is AquaTerra's student sports festival in Kolkata. The 2022 fundraiser was its first edition, TerraThon 1.0. The 2026 festival is listed for 2 to 4 October 2026 with cricket, pickleball and a solo FIFA league, so a sport-led week is on the calendar again.",
+        "To play, watch or help, students can [join AquaTerra](/join), and the sport side of the work sits on the [sports page](/sports). For the wider list of nights, see [every night that paid for the work](/impact/the-nights-that-fund-the-work)."
+      ]
+    }
+  ],
+  "learnings": [
+    "A sports night does not need a pitch to raise money: FIFA gaming on a PS5 ran as a fundraiser in May 2023.",
+    "Venues come back: VS Arena hosted two football fundraisers less than a year apart.",
+    "A tournament needs more hands than a match: Shoot for the Stars had a bigger team than any football or FIFA event on this page.",
+    "Name the cause in the summary, as Play It Forward did when it said it supported AquaTerra's welfare initiatives."
+  ],
+  "faqs": [
+    {
+      "q": "What sports fundraisers has AquaTerra held?",
+      "a": "AquaTerra has held {count} sports fundraisers from {firstYear} to {lastYear}, including football fundraisers at VS Arena, FIFA gaming nights on Hindustan Road, the multi-sport TerraThon 1.0 at Elgin Turf and a basketball tournament at Chetla Park Athletic Club."
+    },
+    {
+      "q": "What is TerraThon?",
+      "a": "TerraThon is AquaTerra's student sports festival in Kolkata, with cricket, pickleball and a solo FIFA league. The first, TerraThon 1.0, was a fundraiser in July 2022 at Elgin Turf, and TerraThon 2026 is listed for 2 to 4 October 2026."
+    },
+    {
+      "q": "Does sports fundraising pay for AquaTerra's welfare work?",
+      "a": "Yes. AquaTerra is self-funded and takes no monetary donations. Its sports fundraisers were held to support welfare, as the event summaries say, and TerraThon's proceedings go to charity."
+    },
+    {
+      "q": "Where are AquaTerra's sports fundraisers held?",
+      "a": "They have been held at VS Arena for football, on Hindustan Road in Kolkata for FIFA gaming, at Chetla Park Athletic Club for basketball, and at Elgin Turf for TerraThon 1.0."
+    },
+    {
+      "q": "How can I help run a sports fundraiser?",
+      "a": "Join AquaTerra and volunteer on the next event team. The December 2024 basketball tournament ran matches, stalls and merchandise, so there is plenty to do on the day."
+    }
+  ],
+  "keywords": [
+    "sports fundraiser Kolkata students",
+    "TerraThon Kolkata",
+    "AquaTerra football fundraiser",
+    "FIFA fundraiser Kolkata",
+    "basketball tournament fundraiser Kolkata",
+    "charity sports tournament Kolkata"
+  ]
+}

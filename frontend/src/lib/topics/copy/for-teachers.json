@@ -1,0 +1,85 @@
+{
+  "slug": "for-teachers",
+  "title": "For teachers: workshop formats we run with children · AquaTerra",
+  "description": "For teachers and educators: the {count} workshops AquaTerra's student volunteers have run with children since {firstYear}, in art, English, maths and science.",
+  "h1Lead": "the formats",
+  "h1Accent": "you can borrow",
+  "lede": "AquaTerra's student volunteers have run {count} workshops for children since {firstYear}, and {topPlace} has hosted more of them than any other place. Art, storytelling, English grammar, maths, science and health awareness make up most of the list, and a teacher can see each format on this site before trying one in a class.",
+  "sections": [
+    {
+      "id": "what-a-workshop-looks-like",
+      "heading": "what a workshop looks like",
+      "body": [
+        "A workshop is one topic for one group of children, planned by a few students and run on the day. Some run as a short series: the Merry Miracles sessions at Pather Sathi in December 2025 covered Christmas cards on one day and carols and stories on the next.",
+        "Some workshops mix a lesson with a game. Fun Factors turned multiplication into an exciting adventure at Pather Sathi in August 2025, and Chess Moves in June 2025 used chess to build strategy and focus. Fable Factory at Newlight NGO in June 2025 explored imagination through voice and narration."
+      ]
+    },
+    {
+      "id": "the-formats",
+      "heading": "the formats you will recognise",
+      "body": [
+        "Art and craft is the largest family. Workshops have covered painting, pebble painting, mosaic, origami, fingerpainting and Diwali greeting cards, and ReTee at Mahadevi Birla Sishu Vihar in April 2025 turned old T-shirts into something new. Language and reading come next. Teaching English sessions at Ektara Foundation in April 2026 covered conjunctions, verbs, nouns and pronouns, and Sentence Secrets at Ek Tara took children through subjects and predicates with worksheets. Speech Ready at Ek Tara in May 2025 introduced children to talking in front of an audience.",
+        "Science, maths and money come next. Think and Tinker at School On Wheels HUHT in March 2025, Force and Fun at Shoishob in February 2025, and Keys and Clicks at Shoishob in September 2024, which covered basic tech skills and coding. Money Talks at Tiljala Shed in March 2025 taught saving and budgeting."
+      ]
+    },
+    {
+      "id": "health-and-safety-sessions",
+      "heading": "health and safety awareness sessions",
+      "body": [
+        "Some sessions are awareness work. The Digital Safety Workshop at Pather Sathi in May 2026 taught children about digital safety. My Body, a good touch and bad touch session at Calcutta Rescue in June 2025, helped children tell the difference between good and bad touches. Body Basics at Helping Hands in April 2025 covered menstrual health and hygiene.",
+        "Mental health and adolescent health sessions have run at Pather Sathi, Universal Smile and AIM Foundation, including Healing Space at Pather Sathi in September 2024 and Well Within at AIM Foundation in June 2024. The site describes what each session covered, so a teacher can check the topic before asking for one."
+      ]
+    },
+    {
+      "id": "festival-and-seasonal-sessions",
+      "heading": "festival and seasonal sessions",
+      "body": [
+        "Christmas and Children's Day sessions have come back each year, and Diwali sessions ran in October 2025. In October 2025 children made Diwali greeting cards at Amader Pradakhep and at School On Wheels, and made Green Diwali posters at Ektara after learning how firecrackers harm the environment. In December 2024 and December 2025 the Christmas sessions covered cards, carols, paper masks and secret Santa crafts.",
+        "Children's Day games have run at Amader Pradakhep in November 2024 and at Pather Sathi in November 2025. Valentine's Day card making at Pather Sathi in February 2026 and Mother's Day card making at Disha Foundation in May 2026 follow the same pattern: a craft made by the children with the volunteers."
+      ]
+    },
+    {
+      "id": "using-these-in-a-class",
+      "heading": "using these formats in a class",
+      "body": [
+        "Each of these formats is a starting point, not a script. The guides [how to run an art workshop for kids](/impact/how-to-run-an-art-workshop-for-kids) and [how to run a reading session for kids](/impact/how-to-run-a-reading-session-for-kids) are written from how AquaTerra's teams ran them, with the places, timing and materials they used. A teacher who wants a session at a school or a centre can write through the [contact page](/contact). Our volunteers are members aged fourteen to nineteen, and the team plans and leads each session."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pather Sathi hosts more of these workshops than any other place, and its sessions have run in every year from 2024 to 2026, so it is the steadiest place to see the formats in action.",
+    "Every format on this page has a single topic, from chess to menstrual health, so a teacher can borrow one without the others.",
+    "Festival sessions come back each year, so a Christmas or Children's Day workshop can be planned in advance.",
+    "English grammar sessions ran at Ektara Foundation and Ek Tara in April 2026, so grammar is among the most recent language formats here."
+  ],
+  "faqs": [
+    {
+      "q": "What workshops does AquaTerra run for children?",
+      "a": "AquaTerra's student volunteers run workshops in art, storytelling, English, maths, science, public speaking, chess, music and dance, along with health and safety awareness sessions. AquaTerra has run {count} workshops for children since {firstYear}."
+    },
+    {
+      "q": "Where does AquaTerra run children's workshops in Kolkata?",
+      "a": "{topPlace} hosts the most of them. Other places include Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep, across {placesCount} places in all."
+    },
+    {
+      "q": "Can a teacher ask AquaTerra for a workshop for their class?",
+      "a": "Yes, a teacher can write through the contact page with the kind of session they want and the dates. The sessions are planned and led by student volunteers aged fourteen to nineteen."
+    },
+    {
+      "q": "Does AquaTerra run digital safety and health workshops for children?",
+      "a": "Yes. AquaTerra ran a digital safety workshop at Pather Sathi in May 2026, a menstrual health and hygiene workshop at Helping Hands in April 2025 and a good touch and bad touch session at Calcutta Rescue in June 2025."
+    },
+    {
+      "q": "Are there festival workshops for children?",
+      "a": "Yes. AquaTerra's volunteers have run Diwali greeting card and Green Diwali poster sessions in October 2025, and Christmas card, carol and craft sessions in December 2024 and December 2025."
+    }
+  ],
+  "keywords": [
+    "workshops for children in Kolkata",
+    "teaching resources for kids in Kolkata",
+    "art workshop for children Kolkata",
+    "English grammar workshop for kids Kolkata",
+    "digital safety workshop for children",
+    "student-led workshops for kids Kolkata"
+  ]
+}

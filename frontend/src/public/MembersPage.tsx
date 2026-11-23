@@ -1,6 +1,6 @@
 import Img from '../components/Img'
 import { useState, useEffect, useRef } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { I } from '../components/v6Shared'
@@ -15,6 +15,9 @@ import { sanitizeFilterTerm } from '../lib/pgrestEscape'
 import { setAuthIntent } from '../lib/authIntent'
 import { APPROVAL_TIME } from '../lib/orgFacts'
 import './MembersPage.css'
+import CoreBadge from '../components/CoreBadge'
+import { useCoreMembers } from '../lib/coreMembers'
+import CoreTeamPage from './CoreTeamPage'
 
 interface MemberRow {
   memberId: number
@@ -39,10 +42,16 @@ const PAGE_SIZE = 30
 const MEM_CARD_H = 'var(--mem-skel-h)'
 const MEM_CARD_R = 32
 
-export default function MembersPage() {
+/** /members and /core-team share this chunk; the route picks which page renders. */
+export default function MembersRoute() {
+  return useLocation().pathname.startsWith('/core-team') ? <CoreTeamPage /> : <MembersPage />
+}
+
+function MembersPage() {
   useMeta(pageMetadata.members)
   useJsonLd('members-breadcrumb', breadcrumbLd([['Home', '/'], ['Members', '/members']]))
   const { member: currentMember } = useAuth()
+  const core = useCoreMembers()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [q, setQ] = useState(() => searchParams.get('q') ?? '')
@@ -181,6 +190,7 @@ export default function MembersPage() {
           <p className="muted mem-total">
             {total > 0 ? `${total} active member${total !== 1 ? 's' : ''}` : 'AquaTerra members'}
           </p>
+          <Link to="/core-team" className="mem-core-link">meet the core team →</Link>
         </div>
       </section>
 
@@ -268,6 +278,7 @@ export default function MembersPage() {
                     <div className="mem-name">{m.fullName}</div>
                     {m.schoolName && <div className="mono xs muted mem-school">{m.schoolName}</div>}
                     <span className={'role role-' + m.role + ' mem-role'}>{m.role}</span>
+                    {core.ids.has(m.memberId) && <CoreBadge className="mem-core" />}
                   </Link>
                 )
               })}

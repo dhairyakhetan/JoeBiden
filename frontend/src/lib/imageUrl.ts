@@ -59,8 +59,22 @@ function isPhoneViewport(): boolean {
 const MIRRORED = /^(https?:\/\/[^/?#]+\/storage\/v1\/object\/public\/project-images\/framer\/[0-9a-f]{40})-1600\.(png|jpg|webp|avif)$/
 const MIRRORED_SMALL_MAX = 720
 
+// Google profile photos (googleusercontent.com) end in =s<px>-c and Google serves whatever size is asked for, up to the original.
+// Sign-in stores the 96px one, which is soft anywhere bigger than a small avatar (a member-of-the-month poster is ~1000px).
+// Rewrite the suffix to the size the slot needs. Only the size is touched; the crop flag and everything else stay.
+const GOOGLE_PHOTO = /^(https:\/\/lh\d\.googleusercontent\.com\/[^\s?#]*?)=s\d+(-c)?$/
+const GOOGLE_SIZE: Record<ImgContext, number> = { avatar: 192, thumb: 320, card: 640, cover: 1024, full: 1024 }
+
+/** A Google profile photo at `px` (longer edge). Any other URL is returned unchanged. */
+export function googlePhotoAt(url: string, px: number): string {
+  const m = GOOGLE_PHOTO.exec(url)
+  return m ? `${m[1]}=s${Math.max(32, Math.min(1024, Math.round(px)))}${m[2] ?? ''}` : url
+}
+
 export function sized(url: string | null | undefined, ctx: ImgContext = 'card'): string {
   if (!url || typeof url !== 'string') return url ?? ''
+  const google = GOOGLE_PHOTO.exec(url)
+  if (google) return googlePhotoAt(url, GOOGLE_SIZE[ctx])
   const mirrored = MIRRORED.exec(url)
   if (mirrored) {
     const want = (isPhoneViewport() && SIZE_PHONE[ctx]) || SIZE[ctx]

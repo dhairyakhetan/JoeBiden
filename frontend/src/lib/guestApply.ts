@@ -2,76 +2,60 @@ import { supabaseCommunity } from './supabaseCommunity'
 import { isIndianMobile, normalizePhone } from './profileNudge'
 
 /**
- * Applying for a role while signed out is ONE flow in two steps (owner request, 3 Nov 2026):
- *   step 1  name, phone, email, and the usual answers
- *   step 2  "sign in to send": Google, right there, with the draft kept across the redirect
- *
- * Between the two, `guest_apply_match` (scripts/guest_apply_match_2026_11_03.sql) says whether the number or the
- * email already belongs to an account, so step 2 can say "we found an account for you" instead of silently making
- * a second one. It never returns a name or a full email; the masked email comes back only when the number matches
- * and the typed email differs. A match never attaches the application to that account: whichever account signs in
- * is the one that applies (an active member continues the form; a new or waiting member has the application kept
- * as an interest, see AuthCallbackPage).
+ * Applying for a role while signed out (owner request, 12 Nov 2026, replacing the 3 Nov two-step with email):
+ *   step 1  name and phone, and the usual answers. No email.
+ *   then    `guest_apply_submit` (scripts/applicants_one_list_2026_11_12.sql) looks at the number.
+ *             - exactly one active AquaTerra account has it: the application is linked to that account on the spot and
+ *               goes to the team. The visitor is done. The account owner is told, and the team sees it marked "linked by
+ *               phone number" because a number is not proof of identity.
+ *             - otherwise: step 2, "not part of AquaTerra yet", sign in with Google. The draft survives the redirect,
+ *               the new account is kept as an interest for HR, and approval moves it to the team on its own.
  */
-export type GuestOutcome = 'none' | 'email_match' | 'phone_match' | 'invalid' | 'limited' | 'error'
-export interface GuestMatch { outcome: GuestOutcome; maskedEmail: string | null }
+export type GuestOutcome = 'linked' | 'already' | 'closed' | 'not_member' | 'invalid' | 'limited' | 'error' | 'signin'
+export interface GuestResult { outcome: GuestOutcome; title: string | null }
 
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
-export const isEmailShape = (v: string) => EMAIL_RE.test(v.trim())
-
-export interface GuestIdentity { name: string; phone: string; email: string }
+export interface GuestIdentity { name: string; phone: string }
 
 /** Validation for step 1, as sentences. Null when the identity is good to send. */
 export function guestIdentityProblem(id: GuestIdentity): string | null {
   if (id.name.trim().length < 2) return 'tell us your name.'
   if (!isIndianMobile(id.phone)) return 'enter a 10-digit Indian mobile number (starting 6 to 9). +91 is fine.'
-  if (!isEmailShape(id.email)) return 'that email does not look right yet.'
   return null
 }
 
-/** Ask the database. Fails open to "error": step 2 then just offers plain Google sign-in. */
-export async function matchGuest(phone: string, email: string): Promise<GuestMatch> {
+const KNOWN: GuestOutcome[] = ['linked', 'already', 'closed', 'not_member', 'invalid', 'limited']
+
+/** Send the application by number. Fails open to "error": the caller then offers plain Google sign-in, so nobody is stuck. */
+export async function submitGuestApply(d: { openingId: string; name: string; phone: string; message: string; answers: Record<string, string> }): Promise<GuestResult> {
   try {
-    const { data, error } = await supabaseCommunity.rpc('guest_apply_match' as never, { p_phone: phone, p_email: email.trim() } as never)
-    if (error) return { outcome: 'error', maskedEmail: null }
-    const row = (Array.isArray(data) ? data[0] : data) as { outcome?: string; masked_email?: string | null } | undefined
-    const outcome = row?.outcome
-    if (outcome === 'none' || outcome === 'email_match' || outcome === 'phone_match' || outcome === 'invalid' || outcome === 'limited') {
-      return { outcome, maskedEmail: row?.masked_email ?? null }
-    }
-    return { outcome: 'error', maskedEmail: null }
+    const { data, error } = await supabaseCommunity.rpc('guest_apply_submit' as never, {
+      p_opening_id: d.openingId, p_name: d.name.trim(), p_phone: d.phone, p_message: d.message.trim(), p_answers: d.answers,
+    } as never)
+    if (error) return { outcome: 'error', title: null }
+    const row = (Array.isArray(data) ? data[0] : data) as { outcome?: string; opening_title?: string | null } | undefined
+    const outcome = row?.outcome as GuestOutcome | undefined
+    if (outcome && KNOWN.includes(outcome)) return { outcome, title: row?.opening_title ?? null }
+    return { outcome: 'error', title: null }
   } catch {
-    return { outcome: 'error', maskedEmail: null }
+    return { outcome: 'error', title: null }
   }
 }
 
-export interface GuestCopy { heading: string; body: string; button: string; useHint: boolean }
+export interface GuestCopy { heading: string; body: string; button: string }
 
-/** What step 2 says. `useHint`: pass the typed email to Google as a hint (not when a different email is on file). */
-export function guestCopy(m: GuestMatch, roleTitle: string): GuestCopy {
-  if (m.outcome === 'email_match') {
+/** What step 2 says. `not_member` is the real case; anything else is just "sign in to send". */
+export function guestCopy(outcome: GuestOutcome, roleTitle: string): GuestCopy {
+  if (outcome === 'not_member') {
     return {
-      heading: 'we found an account for you.',
-      body: `Sign in to continue. Your application for ${roleTitle} is saved here, and you carry on right where you left off.`,
-      button: 'Sign in and continue →',
-      useHint: true,
-    }
-  }
-  if (m.outcome === 'phone_match') {
-    return {
-      heading: 'we found an account with this number.',
-      body: m.maskedEmail
-        ? `Try signing in with ${m.maskedEmail}. Your application is saved here, and you carry on right after.`
-        : 'Try signing in with the email you used before. Your application is saved here, and you carry on right after.',
-      button: 'Sign in with Google →',
-      useHint: false,
+      heading: 'you are not part of AquaTerra yet.',
+      body: `Sign in with Google to sign up. Your application for ${roleTitle} is saved here. HR confirms you as a member first, then it goes to the team and they reach out to you.`,
+      button: 'Sign up with Google →',
     }
   }
   return {
     heading: 'one more step.',
-    body: `Continue with Google to create your account. It takes a few seconds, and your application for ${roleTitle} is saved. First HR confirms you as part of AquaTerra, then the team reaches out to you.`,
+    body: `Continue with Google to send your application for ${roleTitle}. It is saved here while you sign in. If you are new, HR confirms you first, then the team reaches out.`,
     button: 'Continue with Google →',
-    useHint: true,
   }
 }
 
@@ -84,7 +68,6 @@ export interface GuestDraft {
   openingId: string
   title: string
   name: string
-  email: string
   phone: string
   message: string
   answers: Record<string, string>
@@ -131,14 +114,13 @@ export function guestPrefill(): { name: string; phone: string } | null {
 }
 
 /** Step 2's button. Keeps the draft, then hands over to Google; returns only if Google could not be reached. */
-export async function continueWithGoogle(opts: { draft: GuestDraft; returnTo: string; loginHint?: string }): Promise<{ error?: string }> {
+export async function continueWithGoogle(opts: { draft: GuestDraft; returnTo: string }): Promise<{ error?: string }> {
   stashGuestApply(opts.draft)
   try { sessionStorage.setItem('aq_oauth_from', opts.returnTo) } catch { /* falls back to '/' */ }
   const { error } = await supabaseCommunity.auth.signInWithOAuth({
     provider: 'google',
     options: {
       redirectTo: window.location.origin + '/auth/callback',
-      ...(opts.loginHint ? { queryParams: { login_hint: opts.loginHint } } : {}),
     },
   })
   return error ? { error: error.message || 'Could not reach Google. Try again.' } : {}

@@ -16,7 +16,8 @@
 alter table public.members
   add column if not exists previously_removed boolean not null default false;
 
-grant select on public.members to authenticated;
+-- Column list on purpose: a bare table-level grant here voided the whole members lockdown (CLAUDE.md, 2026-09-14).
+grant select (previously_removed) on public.members to authenticated;
 comment on column public.members.previously_removed is
   'True once this member has ever been soft-deleted (or appealed back in) - shown as a flag on the HoD pending queue. Never cleared automatically once set.';
 

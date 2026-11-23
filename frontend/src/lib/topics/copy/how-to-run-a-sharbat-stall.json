@@ -1,0 +1,98 @@
+{
+  "slug": "how-to-run-a-sharbat-stall",
+  "title": "How to run a summer sharbat stall · AquaTerra",
+  "description": "How AquaTerra students set up a summer sharbat stall in Kolkata: where to pitch it, what to pour, how many people to bring, and how to write it up after.",
+  "h1Lead": "how to run a summer",
+  "h1Accent": "sharbat stall",
+  "lede": "A sharbat stall is a table, a large batch of chilled drink and a small team on a spot where people are already walking in the heat. AquaTerra has run {count} sharbat drives since {firstYear}, and this is how a team picks the spot, pours the drink and writes up the day.",
+  "sections": [
+    {
+      "id": "pick-the-spot",
+      "heading": "pick a spot where people are already walking",
+      "body": [
+        "Many of our sharbat drives were set up where people were already passing: a temple, a market, a footbridge, the front of a mall. The write-ups name Bagmari Market, the Bangur Shani-Kali Mandir, the Shiv Temple in Salt Lake, Ballygunge Circular Road and Acropolis Mall, and they describe the drinks going to devotees, shoppers and passersby.",
+        "A spot can come back in a later season. Sarat Bose Road was used in March 2025 and again in the same week, and an earlier drive in May 2024 was listed at Sarat Bose Road, Hazra. Check the place a few days before, and ask whoever looks after the site when the crowd usually arrives."
+      ]
+    },
+    {
+      "id": "make-the-batch",
+      "heading": "make the batch and choose the flavours",
+      "body": [
+        "The base is the same in every write-up: a batch of rooh afza sharbat for the whole stall. The 2025 drive at Teghoria notes 20 litres of rooh afza distributed, and the other drives of that run use the same batch size.",
+        "The flavours are where each team puts its own mark. The write-ups name rose and mint, citrus, herbal, red and green, a fruit-infused version, and a spiced one that was the highlight of the drive at the Bangur Shani-Kali Mandir. Pick one or two, bring the ice and the cups, and keep the colours bright so people can see them from the path."
+      ]
+    },
+    {
+      "id": "staff-the-stall",
+      "heading": "staff it with a small team",
+      "body": [
+        "Sharbat drives are run by small teams, usually between three and eight volunteers. Across {count} drives, {volunteers} volunteer turnouts have served the drink. Volunteer turnouts count every time someone showed up, so the same students may come back for several drives in one season.",
+        "Split the jobs before you arrive: one person pours, one hands out cups, and one talks to the people waiting. The write-ups say the drink was served and distributed by the volunteers themselves, which is the part a team should plan for."
+      ]
+    },
+    {
+      "id": "on-the-day",
+      "heading": "on the day: pour, hand over, say hello",
+      "body": [
+        "The write-ups describe the stall as a relief in the heat. Drinks were called cooling, sweet and icy, and the drive at Balaji Apartment was described as quenching thirst and spreading joy. A stall works best when it is friendly and quick: pour, hand over, say hello.",
+        "Some write-ups mention passersby as well as devotees and locals, so the same stall serves people who stop for a cup and people who are simply walking by. A quick hello and a cup in hand is usually enough to start a conversation about the drive."
+      ]
+    },
+    {
+      "id": "the-season",
+      "heading": "how the season ran",
+      "body": [
+        "The first sharbat drives ran in May 2024, with {year:2024} drives in that season, most of them in the second half of the month at places like Acropolis Mall, JD Birla Institute and Ballygunge Circular Road. The 2025 season began earlier, in late March, and {year:2025} drives ran through to early May, with Sarat Bose Road, Howrah and New Alipore among the places visited.",
+        "Across {placesCount} places, the stall has moved from temples and markets to malls and institutes. The series is up to Sharbat Distribution Drive 33.0, and the next team can start from the last write-up at the same spot."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up with the batch and the place",
+      "body": [
+        "Each drive goes on the AquaTerra site as a write-up: the title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, which for sharbat is the batch of drink.",
+        "Write the place and the crowd into the summary. A line such as the drive at Sarat Bose Road, Hazra, with cold rose and mint sharbat, tells the next team more than a general line about the heat."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pitch where people are already walking: temples, markets, malls and busy roads brought passersby to the table.",
+    "One batch and a clear recipe make the stall easy to repeat, and one or two flavours are enough.",
+    "A small team of three to eight is the usual size, with one person pouring and one keeping the line moving.",
+    "Start the season early: the 2025 run began in late March and went on into early May."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a summer sharbat stall?",
+      "a": "Pick a spot where people are already walking, such as a temple, market or busy road, bring a batch of chilled sharbat, cups and ice, and staff it with a small team. AquaTerra has run {count} sharbat drives since {firstYear}, and each one is written up on the site."
+    },
+    {
+      "q": "What drink does AquaTerra serve at summer stalls?",
+      "a": "AquaTerra's sharbat drives use rooh afza sharbat as the base, with flavours such as rose and mint, citrus, herbal, red and green, and fruit-infused versions named in the write-ups."
+    },
+    {
+      "q": "Where has AquaTerra run sharbat drives?",
+      "a": "AquaTerra has run sharbat drives at {placesCount} places across Kolkata, including Bagmari Market, the Bangur Shani-Kali Mandir, Acropolis Mall and Sarat Bose Road."
+    },
+    {
+      "q": "When does AquaTerra run sharbat drives?",
+      "a": "AquaTerra ran sharbat drives in May 2024 and again from late March to early May 2025. The series has {count} drives in total."
+    },
+    {
+      "q": "Are AquaTerra's sharbat drives run by students?",
+      "a": "Yes. AquaTerra is student-run, and its sharbat drives are staffed by small teams of students, usually three to eight volunteers at each stall."
+    },
+    {
+      "q": "Does AquaTerra take donations for sharbat drives?",
+      "a": "AquaTerra takes no monetary donations and is self-funded through its own student-run events. The sharbat drives are paid for that way."
+    }
+  ],
+  "keywords": [
+    "how to run a sharbat stall",
+    "summer sharbat distribution Kolkata",
+    "rooh afza sharbat drive Kolkata",
+    "student summer drink stall Kolkata",
+    "summer heat relief drive Kolkata",
+    "Sharbat Seva AquaTerra"
+  ]
+}

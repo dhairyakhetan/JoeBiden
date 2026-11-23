@@ -32,8 +32,12 @@ const CLIENT_ROUTES = ['/login', '/director', '/director/approvals', '/post/smok
 const PRERENDERED = [
   ['/about', 'About AquaTerra'],
   ['/faq', 'FAQ'],
-  ['/teams', 'Departments'],
+  // Was 'Departments' until the 15 Nov 2026 title rewrite ("8 Student-Run Teams Behind AquaTerra").
+  ['/teams', 'Student-Run Teams'],
   ['/crftd', 'Crftd'],
+  // The giving-back hub and one impact library page (prerendered since 15 and 16 Nov 2026).
+  ['/impact', 'Gives Back'],
+  ['/impact/tails-and-treats', 'Tails and Treats'],
 ]
 
 /** Static files that must survive the catch-all, with expected content-type. */

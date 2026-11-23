@@ -1,0 +1,79 @@
+{
+  "slug": "volunteering-for-teens-in-kolkata",
+  "title": "Volunteering as a teenager in Kolkata · AquaTerra",
+  "description": "Teaching, feeding stray dogs, craft days and collections: what a teenager does on an AquaTerra drive in Kolkata, run by student crews across {placesCount} places.",
+  "h1Lead": "a teen's first",
+  "h1Accent": "drive",
+  "lede": "AquaTerra is a student-run volunteer organisation in Kolkata for members aged fourteen to nineteen. Its drives are small and hands-on: helping children learn, feeding stray dogs, making cards and collecting clothes. Since {firstYear} there have been {count} drives and {volunteers} volunteer turnouts, counting every time someone showed up, so a first day is easy to picture before you sign up.",
+  "sections": [
+    {
+      "id": "what-a-teen-does",
+      "heading": "what a teen actually does",
+      "body": [
+        "Most drives are a small crew doing one clear thing. The longest running series is feeding stray dogs. Tails and Treats has gone out {count:tails-and-treats} times so far, and volunteers hand out biscuits and food on streets and in neighbourhoods across the city. Teaching is the other common format. Children at Pather Sathi have sat through art workshops, public speaking, storytelling and digital safety talks, and grammar sessions have run at Disha Foundation and Ek Tara.",
+        "Craft days are another regular format. Volunteers help children make Mother's Day cards, Valentine's Day cards, Christmas stockings and Diwali greeting cards. Smile Notes works differently: volunteers hand passersby a written note of encouragement, with a toffee.",
+        "Festival days bring their own sessions, such as a Rakhi making workshop at BSS school in August 2025 and Merry Miracles Day 2, a carol session at Pather Sathi in December 2025."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where drives happen",
+      "body": [
+        "Drives have happened in {placesCount} places, and {topPlace} is the most frequent, with {count:pather-sathi} drives there. Ek Tara and Disha Foundation come up often for teaching. Out on the streets and in neighbourhoods, drives have gone to Bangur, Salt Lake, Bhawanipore and Lake Town. Some have been held at a college, at a university in Newtown and at schools, not only at charity spaces."
+      ]
+    },
+    {
+      "id": "how-small-crews-are",
+      "heading": "how small the crews are",
+      "body": [
+        "Crews are often small, and some drives are run by one or two people. The Cookie Pass On drives in December 2025 show the scale: one volunteer at Barrackpore, one at Astitva Apartment, three at Silver Spring Apartment and four at Avani Oxford. Volunteers handed cookies to residents and asked each one to pass a cookie on to someone who needed it. A first drive does not need a big group. Joining a feeding or card drive usually means being one of a few people, not one of a crowd."
+      ]
+    },
+    {
+      "id": "what-is-not-written",
+      "heading": "what is not on the drive pages",
+      "body": [
+        "Each drive page gives the activity, the place, the date, the objective and the number of volunteer turnouts. None of them describes supervision, training, insurance or certificates, so do not assume any of those. Ask the team before you commit to a drive, and use the [contact page](/contact) if you want the answer in writing."
+      ]
+    },
+    {
+      "id": "getting-in",
+      "heading": "how to get in",
+      "body": [
+        "Membership is for students aged fourteen to nineteen. You join with a Google sign-in, and the team approves the account before it becomes active. The [join page](/join) sets out the steps. To see how the work is run day to day, read [how students run the drives](/impact/student-leadership)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most drives are small crews doing one clear task, so a first drive does not need a big group.",
+    "Teaching drives name their subject, such as subjects and predicates, conjunctions and verbs, or nouns and pronouns, so you know what you will be teaching.",
+    "Feeding and card drives repeat the same format across many places and years.",
+    "The drive pages describe the work but not the supervision, so ask about that before you sign up."
+  ],
+  "faqs": [
+    {
+      "q": "Can a teenager volunteer with AquaTerra in Kolkata?",
+      "a": "Yes, if they are a member aged fourteen to nineteen. AquaTerra is student-run, and members join with a Google sign-in and approval from the team. AquaTerra has run {count} drives from {years}, so a new member can see what the work looks like."
+    },
+    {
+      "q": "Where can a teenager volunteer in Kolkata with AquaTerra?",
+      "a": "Most often at Pather Sathi, which has hosted {count:pather-sathi} drives. Other regular places include Ek Tara, Disha Foundation, Bangur and Salt Lake. Across all drives, the work has reached {placesCount} places in total."
+    },
+    {
+      "q": "What do teen volunteers do on an AquaTerra drive?",
+      "a": "They help run teaching sessions in English grammar, art and public speaking, feed stray dogs, join card and craft days, run Smile Notes street campaigns and help with clothes and book collections. Each drive has a stated objective and a volunteer turnout."
+    },
+    {
+      "q": "Does AquaTerra charge volunteers a fee?",
+      "a": "No. AquaTerra charges no fees and takes no monetary donations. Its welfare work is paid for through its own student-run events, not through charges on members."
+    }
+  ],
+  "keywords": [
+    "volunteering for teenagers in Kolkata",
+    "volunteer work for students in Kolkata",
+    "teen volunteering Kolkata",
+    "stray dog feeding volunteer Kolkata",
+    "volunteer with children Kolkata students",
+    "student volunteer NGO Kolkata"
+  ]
+}

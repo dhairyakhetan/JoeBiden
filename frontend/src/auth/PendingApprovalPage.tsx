@@ -257,7 +257,7 @@ const PendingApprovalPage = () => {
       if (skip) { navigate('/', { replace: true }); return }
       setApprovalCountdown(APPROVAL_COUNTDOWN_SECONDS)
     } else if (member?.status === 'rejected' || member?.status === 'deleted') navigate('/rejected', { replace: true })
-  }, [member, navigate])
+  }, [member?.status, navigate])
 
   useEffect(() => {
     if (approvalCountdown === null) return

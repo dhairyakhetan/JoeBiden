@@ -73,7 +73,8 @@ export default function RootsPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, maxWidth: 640 }}>
             {[
-              ['₹4L+', 'raised for AQ'],
+              // Was '₹4L+ raised for AQ': no recorded source, so softened to a claim with no figure (owner, 20 Nov 2026, audit P-21).
+              ['every sale', 'funds a drive'],
               ['3', 'drops shipped'],
               ['100%', 'profit → mission'],
             ].map(([n, l]) => (

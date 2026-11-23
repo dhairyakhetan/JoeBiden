@@ -1,0 +1,82 @@
+{
+  "slug": "summer-and-seasonal-drives",
+  "title": "Seasonal drives: summer heat in Kolkata · AquaTerra",
+  "description": "AquaTerra's seasonal drives are mostly summer work: sharbat drives, a summer camp and children's workshops. {count} drives from {firstYear} to {lastYear}.",
+  "h1Lead": "meeting the",
+  "h1Accent": "summer heat",
+  "lede": "This page gathers AquaTerra's work that is tied to a season. Most of it is summer: the Sharbat Seva drives, a summer camp and children's workshops in the warm months. Since {firstYear} we have run {count} seasonal drives, with {volunteers} volunteer turnouts, and every one of them falls in spring or summer.",
+  "sections": [
+    {
+      "id": "what-counts-as-seasonal",
+      "heading": "what counts as seasonal",
+      "body": [
+        "This page covers drives that are tied to a season. Most are summer work: the Sharbat Seva distribution series, which has its own page, plus a small set of children's workshops and a summer camp held in the warm months. Some carry the season in their titles, such as the Origami Days summer camp.",
+        "Everything here falls between April 2023 and May 2025. None is a winter drive or a blanket distribution. The drives come in two kinds: sharbat handed out at public spots and temples, and children's workshops and camps held at places such as Pather Sathi and Gyandeepak."
+      ]
+    },
+    {
+      "id": "the-sharbat-seasons",
+      "heading": "the two sharbat seasons",
+      "body": [
+        "Most drives on this page are sharbat drives. In May 2024 AquaTerra ran {year:2024} of them, most on 24 and 26 May. In 2025 the run came back from 26 March to 3 May, with the largest cluster on 26, 27 and 28 March. The [Sharbat Seva](/impact/sharbat-seva) page covers the series in detail, and this page carries its seasonal context.",
+        "More of the seasonal drives fall in 2025 than in any other year, and most of those are sharbat drives. The children's workshops at Pather Sathi came last, in late May, closing out the season's list."
+      ]
+    },
+    {
+      "id": "the-2025-workshops",
+      "heading": "the 2025 children's workshops",
+      "body": [
+        "The children's workshops from late May 2025 sit on this page. Curtain Call was a theatre workshop at Pather Sathi on 24 May, where volunteers got goofy with the kids, acting, laughing and learning together. Warm Hours was a fun workshop at Pather Sathi on 31 May, where volunteers bonded with the children over smiles and shared moments.",
+        "Both were run by small teams of three and four students, at the same place where the children's sessions at Pather Sathi have been held before."
+      ]
+    },
+    {
+      "id": "the-2023-summer-work",
+      "heading": "the 2023 summer work",
+      "body": [
+        "The earliest seasonal drives are from April and June 2023. Our Earth, a global warming workshop at Pather Sathi on 15 April 2023, taught children how to take preventative action. Origami Days, a summer camp at Gyandeepak on 5 June 2023, turned paper into magic, one fold and one smile at a time.",
+        "The Origami Days camp had the larger of the two 2023 teams, and it is the only summer camp on this page."
+      ]
+    },
+    {
+      "id": "where-and-how-it-connects",
+      "heading": "where it happened and how it connects",
+      "body": [
+        "The seasonal drives took place at {placesCount} places. Pather Sathi comes up most often, and each of its drives here is a children's workshop, in April 2023 and May 2025. The sharbat drives were spread across public spots and temples, and Sarat Bose Road came back in 2025, with drives on 27 and 28 March. Most other places appear only once.",
+        "The seasonal work ran alongside [Food for All: food distribution](/impact/food-for-all), whose banana and meal drives ran in the same weeks of March and April 2025. Read the [Sharbat Seva](/impact/sharbat-seva) page for the full sharbat series, and the [join page](/join) for how members take part in drives like these. Each drive on this page is written up on the site, so you can see the place and the turnout before deciding."
+      ]
+    }
+  ],
+  "learnings": [
+    "Most seasonal drives are summer sharbat drives, and the Sharbat Seva series makes up most of them.",
+    "None of the seasonal work is a winter or blanket drive, so everything here is spring or summer.",
+    "Children's summer work sits at Pather Sathi and at a summer camp at Gyandeepak.",
+    "More seasonal drives fall in 2025 than in any other year, and the children's workshops closed that season."
+  ],
+  "faqs": [
+    {
+      "q": "What seasonal drives does AquaTerra run in Kolkata?",
+      "a": "The main seasonal drive is Sharbat Seva, which served chilled sharbat in May 2024 and again from late March to early May 2025. AquaTerra also runs children's summer work, including the Origami Days summer camp in 2023 and the Curtain Call and Warm Hours workshops in 2025. This page covers {count} seasonal drives from {firstYear} to {lastYear}."
+    },
+    {
+      "q": "Does AquaTerra run winter blanket drives?",
+      "a": "Not in the seasonal work on this page. Those drives run from April 2023 to May 2025, and all of them are spring or summer work, with no winter or blanket distributions."
+    },
+    {
+      "q": "When did Sharbat Seva run?",
+      "a": "Sharbat Seva ran in May 2024, with {year:2024} drives, most of them on 24 and 26 May. It ran again from 26 March to 3 May 2025, with most of its drives on 26, 27 and 28 March."
+    },
+    {
+      "q": "Where did AquaTerra's summer children's workshops take place?",
+      "a": "The children's workshops were held at Pather Sathi, where Our Earth ran in April 2023 and Curtain Call and Warm Hours ran in May 2025. The Origami Days summer camp was at Gyandeepak in June 2023."
+    }
+  ],
+  "keywords": [
+    "seasonal volunteer drives Kolkata",
+    "summer drives Kolkata NGO",
+    "summer camp for children Kolkata",
+    "summer workshops children Kolkata students",
+    "AquaTerra summer activities",
+    "summer sharbat Kolkata volunteers"
+  ]
+}

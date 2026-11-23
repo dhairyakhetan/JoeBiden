@@ -128,13 +128,15 @@ const approvalsLocation = { pathname: '/demo/hod-approve-account/director/approv
 
 const flow: DemoFlow = {
   id: 'hod-approve-account',
-  name: 'A HoD approves an account',
+  name: 'HR approves an account',
   durationLabel: 'about a minute',
-  role: 'hod',
+  // Approving sign-ups is an HR and Super Admin desk (deskAccess.ts, privilege 'super'). The flow used to borrow a HoD, whose
+  // desk refuses the page, so the walkthrough opened on "access restricted" (found by the 5 Nov 2026 design review).
+  role: 'hr',
   roleBorrowed: true,
   // Backdrop IS the HoD desk, so the public nav/footer must not show through.
   hidesPublicChrome: true,
-  buildMember: () => buildFakeMember({ fullName: 'Trina Basak', role: 'hod', classGrade: '12' }),
+  buildMember: () => buildFakeMember({ fullName: 'Trina Basak', role: 'hr', classGrade: '12' }),
   buildHandlers,
   Backdrop: () => (
     <Routes location={approvalsLocation}>

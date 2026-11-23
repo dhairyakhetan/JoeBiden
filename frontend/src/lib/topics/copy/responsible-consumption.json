@@ -1,0 +1,79 @@
+{
+  "slug": "responsible-consumption",
+  "title": "Clothes, books and reuse drives in Kolkata · AquaTerra",
+  "description": "Clothes, notebooks and books collected across Kolkata, sorted by type and condition and passed to children who need them. {count} drives since {firstYear}.",
+  "h1Lead": "clothes, books and",
+  "h1Accent": "second lives",
+  "lede": "AquaTerra's reuse drives collect clothes, notebooks and books that people no longer need, sort them by type and condition, and pass them on to children and families who do. Since {firstYear} we have run {count} of these drives across Kolkata, with {volunteers} volunteer turnouts.",
+  "sections": [
+    {
+      "id": "what-a-collection-looks-like",
+      "heading": "what a collection drive looks like",
+      "body": [
+        "A Wear and Share drive is simple. Volunteers set up at an apartment block, a park or a neighbourhood hall, ask people to bring their old clothes, and take each bag as it comes. Back at the table, every garment is sorted by type and condition, so the wearable clothes can be packed and the rest is set aside. Most drives bring in a few kilograms, and a good one brings in more.",
+        "Notebook and book drives follow the same pattern. Wear & Write adds notebooks to the bag, and Book Basket gathers storybooks to fill shelves. The sorting is the real work, because clothes, notebooks and books each need their own pile before anything is packed."
+      ]
+    },
+    {
+      "id": "how-the-series-grew",
+      "heading": "how the series grew",
+      "body": [
+        "The reuse work started small. In June 2021 the first Life in a Bottle session at Ek Tara turned used bottles into painted flower pots, and in March 2022 the first Book Basket drive asked Kolkata for storybooks. Clothes came later. By {year:2024} the reuse work had become a steady habit, with {year:2024} drives in 2024 alone.",
+        "In 2024 the clothes drives spread across the neighbourhoods, and several often ran in the same week. Wear and Share and Wear & Write visited apartment complexes and parks in Bangur, Ballygunge, Salt Lake, Park Circus and Sealdah. In 2025 Toy and Thread added toys to the clothes in March, and a long run of Book Basket drives filled June. In 2025 we ran {year:2025} reuse drives in total."
+      ]
+    },
+    {
+      "id": "reuse-as-a-lesson",
+      "heading": "reuse as a lesson for children",
+      "body": [
+        "Many of these drives teach as well as collect. Children at Ek Tara and Pather Sathi learned to make things from waste, and in August 2023 children at the South Calcutta Inner Wheel School took part in an upcycling session on plastic bottles into practical and decorative items. At Ashok Hall School a Waste Management Workshop used games, demonstrations and storytelling to build eco-conscious habits.",
+        "Ink your Tee turned plain fabric into wearable art at Pather Sathi in June 2023, and Waste to Wealth showed children at Loretto Rainbow Home on Park Street how scrap could become something useful. The Green Christmas workshop at Ek Tara in December 2021 swapped plastic decorations for plants and crafts."
+      ]
+    },
+    {
+      "id": "how-to-help",
+      "heading": "how to help",
+      "body": [
+        "Anyone can hand over clothes or books at a drive, and you do not need experience to help on the day. Bring a bag to a collection near you, or tell us if your building or school would like to host one. Both are easy starting points for the reuse work.",
+        "Members are aged 14 to 19 and run these drives themselves. To join, sign in with Google and wait for approval, then find a drive on the projects page. For a place to host a collection, use the contact page or [the collaborations page](/collaborations)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Sorting decides how much gets used, so plan the piles before the first bag arrives.",
+    "Several drives in one neighbourhood on the same weekend, as Active Acres and Bangur did in May 2024, is an easy way to reach more homes.",
+    "Reuse teaches as well as it collects: a bottle that becomes a planter in a workshop is a lesson in what waste can become.",
+    "Keep each collection to one type when you can, so clothes, books and notebooks do not get mixed in the same bag."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. AquaTerra runs clothes collections, mostly under the Wear and Share and Wear & Write names, and has run {count} reuse drives since {firstYear}. Clothes are sorted by type and condition before they are given to people who need them."
+    },
+    {
+      "q": "Does AquaTerra collect old books in Kolkata?",
+      "a": "Yes. Book Basket has been collecting storybooks and other books for children since March 2022, and it has run {count:book-basket} drives in Kolkata, including a long run in June 2025."
+    },
+    {
+      "q": "Where does AquaTerra send the clothes it collects?",
+      "a": "The clothes go to people in need after they are sorted. The clothes segregation and donation at Goonj in Kolkata in September 2025 notes 1000 kgs of clothes donated."
+    },
+    {
+      "q": "How can a student help with a clothes drive in Kolkata?",
+      "a": "Students aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. After that, pick a collection on the projects page. Volunteers sort and pack on the day, and some lead children's workshops on reuse."
+    },
+    {
+      "q": "What did AquaTerra do on reuse and recycling in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} reuse and recycling drives. They included Wear and Share and Book Basket collections, the Toy and Thread clothes and toy drives in March, and an Earth Day workshop at South City International School in April."
+    }
+  ],
+  "keywords": [
+    "old clothes donation Kolkata",
+    "book donation drive Kolkata",
+    "reuse and recycling workshops for children Kolkata",
+    "clothes collection drive for students Kolkata",
+    "upcycling workshop for kids Kolkata",
+    "UN Goal 12 responsible consumption Kolkata",
+    "Wear and Share clothes drive AquaTerra"
+  ]
+}

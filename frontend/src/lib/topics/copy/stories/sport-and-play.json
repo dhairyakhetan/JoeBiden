@@ -1,0 +1,19 @@
+{
+  "slug": "sport-and-play",
+  "title": "Sport and Play in Pictures: Football, Cricket and Yoga · AquaTerra",
+  "description": "Photos from {count} sport and play drives in Kolkata since {firstYear}: football, cricket and yoga for children, and fundraising matches run by students.",
+  "h1Lead": "kick, bat and",
+  "h1Accent": "play for a cause",
+  "lede": "Since {firstYear}, AquaTerra has run {count} sport and play drives in Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). They come in two kinds: children's workshops in football, cricket and yoga, and fundraising matches that students organise for a cause.",
+  "chapters": {
+    "2022": { "heading": "football for a cause", "text": "The series started with football. Turf Wars, a sports fundraiser at Elgin Turf in March 2022, had students playing for a cause, with goals, grit and good vibes. Score and Support in July was another football fundraiser, uniting passion, play and purpose." },
+    "2023": { "heading": "matches, games and yoga", "text": "With {year:2023} drives, 2023 was the largest year of the series. Football fundraisers at VS Arena and a FIFA gaming day on Hindustan Road were played for a cause, and Full House, a card night at Madhuvan, was an evening of cards and charity. For children there were football and cricket workshops at Pather Sathi, and a yoga session in Howrah." },
+    "2024": { "heading": "kicks, bats and a children's day", "text": "The 2024 pictures are all children's sessions. Bat Basics introduced cricket to young players in April, Kickoff Time at Pather Sathi in May let children play the sports they liked, and the Children's Day games workshop at Amader Pradakhep in November was a celebration for all the kids." }
+  },
+  "closing": "Want to play for a cause? Read [the full story](/impact/sport-and-play) for the whole series, then [join AquaTerra](/join) to help run the next match or session.",
+  "faqs": [
+    { "q": "Does AquaTerra run sports and play sessions for children in Kolkata?", "a": "Yes. AquaTerra has run {count} sport and play drives since {firstYear}, including football, cricket and yoga workshops for children and fundraising matches run by students." },
+    { "q": "Where does AquaTerra hold its football and cricket workshops?", "a": "The children's workshops have run at places such as Pather Sathi, Amader Pradakhep and Badami Devi Shishu Kalyan Kendra in Howrah." },
+    { "q": "Do AquaTerra's sports fundraisers pay for its welfare work?", "a": "AquaTerra is self-funded and takes no donations. Its student-run events, including fundraising matches, help pay for its welfare work." }
+  ]
+}

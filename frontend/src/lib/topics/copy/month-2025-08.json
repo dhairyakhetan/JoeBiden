@@ -1,0 +1,81 @@
+{
+  "slug": "month-2025-08",
+  "title": "AquaTerra in August 2025: {count} drives, mostly feeding dogs",
+  "description": "AquaTerra's August 2025: {count} drives, a run of dog feeding stops, a rakhi workshop, a plantation at Ashok Hall school and a Roots day at The Newtown School.",
+  "h1Lead": "august 2025 was",
+  "h1Accent": "dogs, rakhi and trees",
+  "lede": "In August 2025 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. Most were Tails and Treats feeding stops for stray dogs, and Salt Lake came up three times. The rest were children's workshops, including a rakhi making session, a plantation at Ashok Hall school and a Roots day at The Newtown School.",
+  "sections": [
+    {
+      "id": "a-month-of-feeding-stops",
+      "heading": "a month of feeding stops",
+      "body": [
+        "Most of August's {count} drives were [Tails and Treats](/impact/tails-and-treats) feeding stops, moving from Salt Lake and Vyom to Bangur, Bhowanipur and Howrah. Each one is written up in the same way: food for the street dogs of that neighbourhood, a team of students, and a note of the dogs fed.",
+        "On 9 August four feeding drives ran in four neighbourhoods at once: Salt Lake (45.0), Vyom (42.0), Bangur (43.0) and Bhowanipur (44.0). Bhowanipur had the largest team of the four, and the Bangur write-up says 55 dogs fed."
+      ]
+    },
+    {
+      "id": "salt-lake-came-back",
+      "heading": "salt lake, three times",
+      "body": [
+        "Salt Lake was the month's most repeated place. Tails and Treats 45.0 ran there on 9 August, 46.0 on 23 August and 48.0 on 29 August, and the 46.0 write-up says 80 dogs fed. Bangur was the other repeat, with 43.0 on 9 August and 47.0 on 23 August.",
+        "The feeding run closed on 30 August at Howrah with 49.0, which had the largest feeding team of the month. Coming back to the same neighbourhood a few weeks apart is one way a stop becomes a regular part of the [Tails and Treats](/impact/tails-and-treats) work."
+      ]
+    },
+    {
+      "id": "workshops-for-children",
+      "heading": "workshops for children",
+      "body": [
+        "Magic Makers at Pather Sathi on 2 August helped children speak up, loud and confident. Sacred Strings, a rakhi making workshop at BSS School on 4 August, gave children a festival craft to make with the team, and Art Alley at Pather Sathi on 23 August was a session on creativity and expression.",
+        "Fun Factors at Pather Sathi on 30 August closed the month's workshops, and turned multiplication into an exciting adventure. Across the month the children's sessions sat alongside the feeding stops, so the same students could move from one to the other."
+      ]
+    },
+    {
+      "id": "a-plantation-and-a-school-day",
+      "heading": "a plantation and a school day",
+      "body": [
+        "Grow Green - Plantation Drive 26.0 went to Ashok Hall school on 6 August, with the largest team of the month. The write-up says 100 saplings planted, and it describes Grow Green with Ashok Hall as a step toward the future. The [Grow Green page](/impact/grow-green) covers the wider plantation series.",
+        "Novus, a Roots day at The Newtown School on 1 August, was the first event of the month. Roots tees come from [Crftd](/crftd), AquaTerra's student streetwear label, and the write-up mentions a few hundred walk-ins across the day."
+      ]
+    },
+    {
+      "id": "how-august-compares",
+      "heading": "how august compares",
+      "body": [
+        "July ran {count:month-2025-07} drives and September ran {count:month-2025-09}, so August sat between July, with its school days and clothes, and September, with its workshops and a large clothes donation. August itself was a steady run of feeding stops, with workshops and a planting day beside them."
+      ]
+    }
+  ],
+  "learnings": [
+    "A neighbourhood can become a regular stop: Salt Lake had three feeding drives in August, a few weeks apart.",
+    "A busy feeding day can reach several areas at once, as four drives on 9 August did across four neighbourhoods.",
+    "Children's workshops run alongside the feeding drives, so one member can go from feeding dogs to teaching multiplication in the same month.",
+    "A plantation at a school can be the largest team of a month without a large event behind it, as Grow Green at Ashok Hall was."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in August 2025?",
+      "a": "In August 2025 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. Most were Tails and Treats feeding stops for stray dogs. The rest included children's workshops at Pather Sathi and BSS School, a plantation at Ashok Hall school and a Roots day at The Newtown School."
+    },
+    {
+      "q": "Where did AquaTerra feed dogs in August 2025?",
+      "a": "Tails and Treats fed stray dogs in August 2025 at Salt Lake, Bangur, Vyom, Bhowanipur and Howrah. Salt Lake had three of the stops, on 9, 23 and 29 August, and the feeding run closed at Howrah on 30 August."
+    },
+    {
+      "q": "Did AquaTerra plant trees in August 2025?",
+      "a": "Yes. Grow Green - Plantation Drive 26.0 took place at Ashok Hall school on 6 August 2025, with the largest team of the month, and its write-up says 100 saplings were planted. The Grow Green page covers the wider series."
+    },
+    {
+      "q": "What was the rakhi workshop AquaTerra ran in August 2025?",
+      "a": "Sacred Strings was a rakhi making workshop at BSS School on 4 August 2025. Students ran it with the children, who made rakhis as a festival craft."
+    }
+  ],
+  "keywords": [
+    "AquaTerra August 2025",
+    "stray dog feeding Salt Lake August 2025",
+    "rakhi making workshop Kolkata",
+    "Grow Green plantation Ashok Hall",
+    "Tails and Treats Bangur Bhowanipur",
+    "AquaTerra drives Kolkata August 2025"
+  ]
+}

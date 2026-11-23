@@ -176,6 +176,7 @@ const teamServiceImpl = {
         // this file already uses at getTeamMembers.
       .eq('team_members.is_active', true)
       .order('created_at', { ascending: false })
+      .order('team_id', { ascending: false })
       .range(offset, offset + limit - 1)
 
     if (params.category) {
@@ -350,7 +351,8 @@ const teamServiceImpl = {
   },
 
   async getTeamMembers(uuid: string): Promise<{ success: boolean; data: { members: TeamMember[] } }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data, error } = await supabaseCommunity
@@ -458,7 +460,8 @@ const teamServiceImpl = {
 
   /** Sub-departments for one team, in display order. */
   async getSubTeams(teamUuid: string): Promise<SubTeam[]> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data, error } = await supabaseCommunity
@@ -962,7 +965,8 @@ const teamServiceImpl = {
   },
 
   async addMember(uuid: string, memberId: number, role?: string): Promise<{ success: boolean; data: { membership: TeamMember }; message: string }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data, error } = await supabaseCommunity
@@ -1009,7 +1013,8 @@ const teamServiceImpl = {
   },
 
   async updateMemberRole(uuid: string, memberId: number, role: string): Promise<{ success: boolean; data: { membership: TeamMember }; message: string }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data, error } = await supabaseCommunity
@@ -1041,7 +1046,8 @@ const teamServiceImpl = {
   },
 
   async removeMember(uuid: string, memberId: number): Promise<{ success: boolean; message: string }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     // .select() + zero-row guard: PostgREST returns no error and zero rows when
@@ -1088,7 +1094,8 @@ const teamServiceImpl = {
     if (memberIds.length === 0) return { added: 0 }
     const noPermission = "Couldn't add members to this sub-team: you may not have permission."
 
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
     const { data: sub } = await supabaseCommunity
       .from('sub_teams').select('sub_team_id').eq('uuid', subTeamUuid).eq('team_id', team.team_id).maybeSingle()
@@ -1147,7 +1154,8 @@ const teamServiceImpl = {
   },
 
   async addMembersBulk(uuid: string, members: { memberId: number; role: 'member' | 'lead' }[]): Promise<any> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     // Never rewrite someone who is already active on the team. The upsert below writes `role`, so a
@@ -1203,7 +1211,8 @@ const teamServiceImpl = {
   },
 
   async getPendingPosts(uuid: string, params: { page?: number; limit?: number } = {}): Promise<PaginatedResponse<PendingTeamPost>> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id, uuid').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id, uuid').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const page = params.page || 1
@@ -1412,7 +1421,8 @@ const teamServiceImpl = {
     forceReview?: boolean
   }): Promise<{ success: boolean; data: { post: any }; message: string }> {
     const member = await this.getCurrentMember()
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', teamUuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     let subTeamId: number | undefined
@@ -1510,7 +1520,8 @@ const teamServiceImpl = {
 
   async createJoinRequest(uuid: string, message?: string): Promise<{ success: boolean; data: { request: any }; message: string }> {
     const member = await this.getCurrentMember()
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id, name').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data: request, error } = await supabaseCommunity
@@ -1558,7 +1569,8 @@ const teamServiceImpl = {
   },
 
   async getJoinRequests(uuid: string): Promise<{ success: boolean; data: { requests: JoinRequest[]; total: number } }> {
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     // email dropped from the embed below - the authenticated role no longer
@@ -1614,7 +1626,8 @@ const teamServiceImpl = {
 
   async getMyJoinRequest(uuid: string): Promise<{ success: boolean; data: { request: JoinRequest | null } }> {
     const member = await this.getCurrentMember()
-    const { data: team } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    const { data: team, error: teamErr } = await supabaseCommunity.from('teams').select('team_id').eq('uuid', uuid).single()
+    if (teamErr && teamErr.code !== 'PGRST116') throw logSupabaseError('teamService.lookup', teamErr)
     if (!team) throw new Error('Team not found')
 
     const { data, error } = await supabaseCommunity

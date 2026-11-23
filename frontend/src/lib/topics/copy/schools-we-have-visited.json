@@ -1,0 +1,85 @@
+{
+  "slug": "schools-we-have-visited",
+  "title": "Every school we have worked in · AquaTerra",
+  "description": "Every school and school site where AquaTerra has run drives since {firstYear}: {count} drives at {placesCount} places, from workshops to plantation and Roots tee days.",
+  "h1Lead": "every school we have",
+  "h1Accent": "worked in",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drives at schools across Kolkata, at {placesCount} different places, with {volunteers} volunteer turnouts along the way. Most are hands-on workshops for children, with plantation days and, in 2025, a run of Roots tee days at school fests. Below is how that list grew and the places we keep going back to.",
+  "sections": [
+    {
+      "id": "what-a-school-day-looks-like",
+      "heading": "what a school day looks like",
+      "body": [
+        "Most of our school visits are workshops built around one idea. In March 2025 a team ran Origami Time at the School On Wheels site in Park Circus, folding paper into birds and boats, and Tale Time at Belgachia, where children made up their own stories from guided prompts. Other sessions were science experiments, maths tables, diya painting before Diwali, and a first aid lesson at Shanti rani primary school in August 2022.",
+        "The sessions are built to get children talking and making things. Speak to Shine, run in two parts at School On Wheels HUHT in May and June 2023, was about confidence and public speaking, and Speak The Story that July turned shy voices into storytellers."
+      ]
+    },
+    {
+      "id": "how-the-list-grew",
+      "heading": "how the list grew",
+      "body": [
+        "We started in April 2022 with a Mini-Fete at Gandhi Vidyalaya, the wind-down of Paradox 1.0, and an acting workshop at Loretto Day School the same month. That year gave us {year:2022} school drives. In 2023 we ran {year:2023}, mostly at School On Wheels HUHT, South Calcutta Inner Wheel School and Ashok Hall School.",
+        "2024 was quiet, with {year:2024} drives: a good touch, bad touch awareness workshop at Inner Wheel School in July, and a diya painting session there in October for Diwali. Then 2025 brought {year:2025} school days, the most of any year, from March workshops at School On Wheels sites to the Roots tee days of July and August."
+      ]
+    },
+    {
+      "id": "the-places-we-keep-returning-to",
+      "heading": "the places we keep going back to",
+      "body": [
+        "South City International School has hosted {count:south-city-international-school} of our school drives. In April 2025 we ran two Grow Green plantation drives there, and an Earth Day workshop, all on 21 and 22 April. Morpheus Day 1 and 2 followed in July. Ashok Hall School has {count:ashok-hall-school}, and both of its August plantation days, in 2023 and 2025, came in the same month.",
+        "School On Wheels is the largest family on this page, with {count:school-on-wheels} drives across its sites at HUHT, Belgachia and Park Circus, in 2023 and 2025. Inner Wheel School and South Calcutta Inner Wheel School have {count:inner-wheel-school} drives between them, from origami and rakhi making to a personal safety workshop for children."
+      ]
+    },
+    {
+      "id": "the-roots-tee-days-in-2025",
+      "heading": "the roots tee days in 2025",
+      "body": [
+        "In July and August 2025 our students ran Roots tee days at school fests across Kolkata: Morpheus Day 1 and 2 at South City International School, Concord Day 1 and 2 at Calcutta Boys School, Confluence Day 1 and 2 at Calcutta International School, and Novus at The Newtown School. Students wore Roots tees at each one, and each day noted its own walk-in figure. Morpheus Day 2 notes 350 walk-ins, the highest of them.",
+        "Roots is the earlier name of Crftd, the student streetwear label. The [Crftd and ROOTS days page](/impact/crftd-and-roots-days) follows the name back to the planting workshops it first appeared on."
+      ]
+    },
+    {
+      "id": "how-a-school-can-host-us",
+      "heading": "how a school can host us",
+      "body": [
+        "Schools have hosted us in every format on this page: a workshop for one class, an Earth Day session, a plantation day that came back a year later, and a school fest with Roots tees. The [how to start a drive at your school](/impact/how-to-start-a-drive-at-your-school) page is the place to start, and the [contact page](/contact) is where to write to us.",
+        "Students who want to run the next one can [join AquaTerra](/join) and volunteer. Schools and organisations that want to work with us more widely can [partner with us](/collaborations)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Short workshops on one idea, like origami or a maths table, were the format we returned to most.",
+    "Schools that hosted us once often hosted us again: Ashok Hall School had a plantation day in August 2023 and another in August 2025.",
+    "Earth Day and school fests have been the natural hooks, from Heal The Earth at Don Bosco School in 2022 to the Roots tee days of 2025."
+  ],
+  "faqs": [
+    {
+      "q": "Which schools has AquaTerra worked in?",
+      "a": "AquaTerra has run drives at {placesCount} schools and school sites in Kolkata since {firstYear}. The most frequent are South City International School, the School On Wheels sites at HUHT, Belgachia and Park Circus, Ashok Hall School, and South Calcutta Inner Wheel School."
+    },
+    {
+      "q": "Does AquaTerra run workshops in Kolkata schools?",
+      "a": "Yes. AquaTerra has run {count} drives at schools since {firstYear}, most of them hands-on workshops for children such as origami, science, storytelling and speaking skills. The most recent school drive on this page is an art workshop at School On Wheels in October 2025."
+    },
+    {
+      "q": "Can my school host an AquaTerra drive?",
+      "a": "Yes. Schools have hosted AquaTerra workshops, Earth Day sessions, plantation days and Roots tee days at school fests. Start with the guide on how to start a drive at your school, or contact AquaTerra through its contact page."
+    },
+    {
+      "q": "What did AquaTerra do at schools in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} school drives. They included origami, science and story workshops at School On Wheels sites, Grow Green plantation days at South City International School and Ashok Hall School, and Roots tee days at school fests in July and August."
+    },
+    {
+      "q": "Where did AquaTerra's school drives begin?",
+      "a": "The first school drive on this page was the Mini-Fete at Gandhi Vidyalaya on 1 April 2022, the wind-down of Paradox 1.0. An acting workshop at Loretto Day School followed on 4 April that year."
+    }
+  ],
+  "keywords": [
+    "AquaTerra schools Kolkata",
+    "student volunteers workshops Kolkata schools",
+    "plantation drives Kolkata schools",
+    "School On Wheels Kolkata workshops",
+    "schools AquaTerra has worked with",
+    "Roots tee days school fests Kolkata"
+  ]
+}

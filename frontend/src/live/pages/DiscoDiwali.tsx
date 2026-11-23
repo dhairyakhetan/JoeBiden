@@ -14,16 +14,28 @@ import { StarField } from '../components/StarField'
 import { Sticker } from '../components/Sticker'
 import { PosterRail } from '../components/PosterRail'
 import { ContactLine, ticketHref } from '../components/ContactLine'
-import { useScrollReveal } from '../lib/hooks'
+import { PastNight } from '../components/PastNight'
+import { useEventPhase, useScrollReveal } from '../lib/hooks'
 import '../disco.css'
 
 const TBA = 'To be announced'
 
-const STEPS: { n: string; h: string; p: string; photo: string }[] = [
-  { n: '01', h: `Message ${ASK.name.split(' ')[0]}`, p: 'Say you want a Disco Diwali ticket. The button below opens the chat for you.', photo: 'drapes' },
+type Step = { n: string; h: string; p: string; photo: string }
+const FIRST = ASK.name.split(' ')[0]
+
+const STEPS: Step[] = [
+  { n: '01', h: `Message ${FIRST}`, p: 'Say you want a Disco Diwali ticket. The button below opens the chat for you.', photo: 'drapes' },
   { n: '02', h: 'Pay by UPI', p: 'The current phase and price are confirmed in the chat, so you see them before you pay.', photo: 'pinkphone' },
   { n: '03', h: 'Get your ID', p: 'Once the payment is confirmed you receive a booking ID that looks like DD26-XXXX.', photo: 'balloon' },
   { n: '04', h: 'Show it at the door', p: 'Bring the ID and a mask. That is all you need to get in.', photo: 'friends' },
+]
+
+/** The same four steps once the night is over: how booking worked, with no button to press. */
+const STEPS_PAST: Step[] = [
+  { n: '01', h: `Message ${FIRST}`, p: 'Guests asked for a Disco Diwali ticket on WhatsApp.', photo: 'drapes' },
+  { n: '02', h: 'Pay by UPI', p: 'The phase and price were confirmed in the chat before anyone paid.', photo: 'pinkphone' },
+  { n: '03', h: 'Get your ID', p: 'Once the payment was confirmed, each guest got a booking ID like DD26-XXXX.', photo: 'balloon' },
+  { n: '04', h: 'Show it at the door', p: 'The ID and a mask were all anyone needed to get in.', photo: 'friends' },
 ]
 
 export function LiveDiscoDiwali() {
@@ -40,7 +52,9 @@ export function LiveDiscoDiwali() {
     io.observe(el)
     return () => io.disconnect()
   }, [])
-  const cta = ticketHref()
+  const isPast = useEventPhase(NEXT_EVENT.date) === 'past'
+  const cta = isPast ? null : ticketHref()
+  const steps = isPast ? STEPS_PAST : STEPS
   const claim = cta && <a className="lv-btn lv-btn-gold lv-btn-lg" href={cta} target="_blank" rel="noopener noreferrer">{BOOK_LABEL}</a>
 
   return (
@@ -61,11 +75,15 @@ export function LiveDiscoDiwali() {
         <p className="dd-hero-lede">
           A masquerade night under the Diwali sky, with a mirror ball hung over it. Every ticket is for charity.
         </p>
-        <Countdown date={NEXT_EVENT.date} />
-        <div className="lv-actions dd-hero-actions">
-          {claim}
-          <a className="lv-btn lv-btn-ink lv-btn-lg" href="#dd-night">The night</a>
-        </div>
+        {isPast ? <PastNight name={NEXT_EVENT.name} dateLabel={NEXT_EVENT.dateLabel} /> : (
+          <>
+            <Countdown date={NEXT_EVENT.date} />
+            <div className="lv-actions dd-hero-actions">
+              {claim}
+              <a className="lv-btn lv-btn-ink lv-btn-lg" href="#dd-night">The night</a>
+            </div>
+          </>
+        )}
         <div className="dd-arc">
           <PhotoArc />
           <aside className="lv-paper-card is-night dd-prog" aria-label="Date and place">
@@ -97,12 +115,18 @@ export function LiveDiscoDiwali() {
         <div className="lv-cols-s">
           <p>
             <b>Date</b> {NEXT_EVENT.dateLabel}, a Tuesday. <b>Time</b> {DISCO.time ?? TBA}. <b>Place</b> {DISCO.venueName ?? TBA}, Kolkata.
-            {!DISCO.time || !DISCO.venueName ? ' Ticket holders are messaged the moment the rest is confirmed.' : ''}
+            {!isPast && (!DISCO.time || !DISCO.venueName) ? ' Ticket holders are messaged the moment the rest is confirmed.' : ''}
           </p>
-          <p>
-            <b>Tickets</b> on WhatsApp, paid by UPI and confirmed by the team with a DD26 booking ID. The current phase and price
-            are shared in the chat. <b>Dress code</b> a mask.
-          </p>
+          {isPast ? (
+            <p>
+              <b>Tickets</b> were sold on WhatsApp, paid by UPI and confirmed by the team with a DD26 booking ID. <b>Dress code</b> a mask.
+            </p>
+          ) : (
+            <p>
+              <b>Tickets</b> on WhatsApp, paid by UPI and confirmed by the team with a DD26 booking ID. The current phase and price
+              are shared in the chat. <b>Dress code</b> a mask.
+            </p>
+          )}
         </div>
         <div className="dd-collage">
           <h3 className="dd-giant" aria-label="November, Kolkata">
@@ -125,9 +149,9 @@ export function LiveDiscoDiwali() {
         <StarField lights />
         <div className="lv-section dd-above">
           <Kicker>02 / Boarding</Kicker>
-          <Headline id="dd-go-h" text="Four steps to your seat." />
+          <Headline id="dd-go-h" text={isPast ? 'How the tickets worked.' : 'Four steps to your seat.'} />
           <ol className="dd-steps">
-            {STEPS.map(s => (
+            {steps.map(s => (
               <li key={s.n}>
                 <span className="dd-step-n" aria-hidden>{s.n}</span>
                 <h3>{s.h}</h3>
@@ -136,7 +160,7 @@ export function LiveDiscoDiwali() {
               </li>
             ))}
           </ol>
-          <div className="lv-actions">{claim}</div>
+          {claim && <div className="lv-actions">{claim}</div>}
         </div>
       </section>
 
@@ -146,10 +170,10 @@ export function LiveDiscoDiwali() {
           <div>
             <Kicker>03 / Mask code</Kicker>
             <Headline id="dd-mask-h" text="Masks on." />
-            <p className="lv-lede">It is a masquerade, so wear a mask. That is the one rule.</p>
+            <p className="lv-lede">{isPast ? 'It was a masquerade, so the one rule was a mask.' : 'It is a masquerade, so wear a mask. That is the one rule.'}</p>
             <div className="lv-paper-card dd-code">
               <h3>Dress code</h3>
-              <p>A mask. That is the whole code.</p>
+              <p>{isPast ? 'A mask. That was the whole code.' : 'A mask. That is the whole code.'}</p>
             </div>
           </div>
           <div className="dd-split-art" aria-hidden>
@@ -173,8 +197,8 @@ export function LiveDiscoDiwali() {
               <circle key={i} className="dd-lineup-node" cx={x} cy={y} r={i % 3 === 0 ? 11 : 8} style={{ animationDelay: `${i * 0.4}s` }} />
             ))}
           </svg>
-          <strong>Not announced yet.</strong>
-          <p>When the lineup is confirmed, every name lands on this sky.</p>
+          <strong>{isPast ? 'Not on this page.' : 'Not announced yet.'}</strong>
+          <p>{isPast ? 'The lineup from the night was not published here. If the team shares it, every name lands on this sky.' : 'When the lineup is confirmed, every name lands on this sky.'}</p>
           <Sticker name="star" size={92} rot={12} className="dd-st-star" />
         </div>
       </section>
@@ -231,13 +255,17 @@ export function LiveDiscoDiwali() {
       <section className="lv-band lv-tone-night dd-band dd-final lv-reveal" aria-labelledby="dd-final-h">
         <StarField lights />
         <div className="lv-section dd-above dd-final-in">
-          <Headline as="h2" id="dd-final-h" text="See you under the lights." className="dd-final-h" />
+          <Headline as="h2" id="dd-final-h" text={isPast ? 'Thank you for the night.' : 'See you under the lights.'} className="dd-final-h" />
           <p className="dd-when">{NEXT_EVENT.dateLabel} · {DISCO.venueName ?? 'Kolkata'}</p>
-          {claim}
-          <ContactLine message="Hi, I have a question about Disco Diwali." />
+          {isPast ? <PastNight name={NEXT_EVENT.name} dateLabel={NEXT_EVENT.dateLabel} /> : (
+            <>
+              {claim}
+              <ContactLine message="Hi, I have a question about Disco Diwali." />
+            </>
+          )}
         </div>
       </section>
-      <div className="lv-edge-grad dd-edge dd-edge-end"><Marquee ticker items={['Disco Diwali', 'The Masquerade Sangeet Edition', '10 November 2026', 'All for charity', 'See you under the lights']} /></div>
+      <div className="lv-edge-grad dd-edge dd-edge-end"><Marquee ticker items={['Disco Diwali', 'The Masquerade Sangeet Edition', NEXT_EVENT.dateLabel, 'All for charity', isPast ? 'Thank you, Kolkata' : 'See you under the lights']} /></div>
     </main>
   )
 }

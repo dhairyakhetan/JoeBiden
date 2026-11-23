@@ -3,7 +3,6 @@ import postToFeed from './postToFeed'
 import applyForRole from './applyForRole'
 import signUpDrive from './signUpDrive'
 import wallNote from './wallNote'
-import requestCertificate from './requestCertificate'
 import generateCv from './generateCv'
 import takeABreak from './takeABreak'
 import searchDiscovery from './searchDiscovery'
@@ -11,7 +10,8 @@ import hodApproveAccount from './hodApproveAccount'
 import hodModeratePost from './hodModeratePost'
 import hodPostOpening from './hodPostOpening'
 
-/** Real, working flows - all eleven from 19.4, each built against this file's
+/** Real, working flows - the walkthroughs from 19.4 (ten since 20 Nov 2026, when "Request a certificate" was retired:
+ *  requesting moved to its own page, /certificates, which reads live HoDs and teams the demo's fake store does not model), each built against this file's
  *  own verification checklist (zero network writes, no Supabase token,
  *  ribbon on every step, both completion paths tested). See this pass's
  *  final report for the per-flow network/token verification detail and the
@@ -24,7 +24,6 @@ export const FLOWS: Record<string, DemoFlow> = {
   [applyForRole.id]: applyForRole,
   [signUpDrive.id]: signUpDrive,
   [wallNote.id]: wallNote,
-  [requestCertificate.id]: requestCertificate,
   [generateCv.id]: generateCv,
   [takeABreak.id]: takeABreak,
   [searchDiscovery.id]: searchDiscovery,
@@ -34,11 +33,11 @@ export const FLOWS: Record<string, DemoFlow> = {
 }
 
 /**
- * The full eleven from 19.4, in the spec's own priority order, with
+ * The walkthroughs from 19.4, in the spec's own priority order, with
  * duration labels from that table - step counts are copied from 19.4 EXCEPT
  * the three noted inline below, where the count was corrected downward
  * after building and testing the real screen (never upward: nothing here
- * invents a step the real UI doesn't have). All eleven are `ready` - every
+ * invents a step the real UI doesn't have). All are `ready` - every
  * one has a module in `FLOWS` above. `status` is kept on this type (rather
  * than deleted now that nothing is `soon`) since it is what lets the
  * launcher's list stay honest the next time a twelfth flow is added ahead
@@ -50,16 +49,11 @@ export const FLOW_LISTINGS: FlowListing[] = [
   { id: 'sign-up-drive', name: 'Sign up for a drive', steps: 3, durationLabel: 'under a minute', status: 'ready', hue: 'var(--lemon)' },
   { id: 'search-discovery', name: 'Search and discovery', steps: 3, durationLabel: 'under a minute', status: 'ready', hue: 'var(--sky, #3DA9FC)' },
   { id: 'wall-note', name: "Leave a note on someone's wall", steps: 3, durationLabel: 'under a minute', status: 'ready', hue: 'var(--grape, #7E5BFF)' },
-  // Spec table (19.4) says 4 steps; built and verified as 3 - the real
-  // screen (profile/HoursAndCertificateCard.tsx) only has three clickable
-  // moments, not four. See requestCertificate.tsx's header comment for why
-  // a fabricated 4th step was rejected rather than shipped.
-  { id: 'request-certificate', name: 'Request a certificate', steps: 3, durationLabel: 'about a minute', status: 'ready', hue: 'var(--welfare)' },
   { id: 'generate-cv', name: 'Generate a CV', steps: 3, durationLabel: 'under a minute', status: 'ready', hue: 'var(--tomato, #FF4D2E)' },
   { id: 'take-a-break', name: 'Take a break and come back', steps: 3, durationLabel: 'under a minute', status: 'ready', hue: 'var(--lemon)' },
   // Spec table (19.4) says 4 steps; built and verified as 3, same reasoning
-  // as request-certificate above - see hodApproveAccount.tsx's own header.
-  { id: 'hod-approve-account', name: 'A HoD approves an account', steps: 3, durationLabel: 'about a minute', status: 'ready', hue: 'var(--sky, #3DA9FC)' },
+  // as the other desk flows here - see hodApproveAccount.tsx's own header.
+  { id: 'hod-approve-account', name: 'HR approves an account', steps: 3, durationLabel: 'about a minute', status: 'ready', hue: 'var(--sky, #3DA9FC)' },
   // Spec table (19.4) says 4 steps; built and verified as 3 - see
   // hodModeratePost.tsx's own header for why (same reasoning as the other
   // AdminRow-based desk flows in this file).

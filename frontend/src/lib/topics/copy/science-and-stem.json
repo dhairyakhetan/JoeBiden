@@ -1,0 +1,87 @@
+{
+  "slug": "science-and-stem",
+  "title": "Science, maths and computer workshops · AquaTerra",
+  "description": "Science, maths, computer and quiz workshops for children by AquaTerra: {count} drives from {firstYear} to {lastYear}, mostly at Pather Sathi in Kolkata.",
+  "h1Lead": "experiments, sums",
+  "h1Accent": "and quizzes",
+  "lede": "AquaTerra has run {count} science, maths and computer workshops between {firstYear} and {lastYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). The sessions are hands-on: experiments, fractions and times tables, space lessons, quiz challenges and basic computer lessons. Most ran at {topPlace}. This page sets out what a session covers, how quizzes and computing fit in, and how the series changed over time.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a science session looks like",
+      "body": [
+        "The science sessions are built around something children can see. Wonder Lab at Pather Sathi in July 2023 went from fizzing volcanoes to floating eggs, Science Sparks at Pather Sathi in May 2023 was full of experiments and wide-eyed reactions, and Brain Lab at Lotus Rescue in November 2024 explored experiments, innovations and fun facts through hands-on learning.",
+        "Maths sessions are smaller and more personal. Math Minds at Pather Sathi in March 2025 was a one-on-one session on fractions that also helped with school work, and Table Time at School On Wheels HUHT in May 2023 made multiplication tables easier and more fun."
+      ]
+    },
+    {
+      "id": "quizzes-and-computing",
+      "heading": "quizzes and computer lessons",
+      "body": [
+        "Quizzes make up a large share of the drives on this page. Think Fast at Pather Sathi in June 2024 was an interactive quiz at Sunday School, Quick Wits at the same place in June 2024 tested knowledge through quiz challenges, and Brain Buzz at Pather Sathi later that month did the same. Several quiz sessions were paired with art, such as Brush and Buzz and Colour and Cues.",
+        "The computer lessons were Sunday School sessions in July and August 2023. Tech Time introduced children to the basics of digital literacy, Ctrl+Create covered foundational computer skills, and Code and Connect gave guided exposure to essential digital tools. Keys and Clicks at Shoishob in September 2024 added coding and digital creativity."
+      ]
+    },
+    {
+      "id": "stem-and-space",
+      "heading": "stem and space",
+      "body": [
+        "STEM sessions bring the subjects together. Brain Builders at Ek Tara in October 2023 used hands-on experiments and problem solving, and Think Lab at Shoishob Foundation in July 2024 covered science, technology, engineering and maths through activities. Innovate at AIM Foundation in June 2025 is the most recent STEM session, and its write-up says the hands-on activities ignited curiosity and critical thinking.",
+        "Space and women in science get their own sessions. Beyond the Stars at Pather Sathi in December 2024 taught children about space, and Lab Legends, held at Pather Sathi in February 2024 for Women and Science Day, used stories and STEM activities to mark the day. The ICCV science exhibition at Pather Sathi in April 2023 is the earliest drive on this page."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when they ran",
+      "body": [
+        "{topPlace} is by far the most common place, and it hosts most of the {count} drives. Lotus Rescue, School On Wheels HUHT, AIM Foundation and Shoishob each appear only a few times. Across {placesCount} places, a few names are written more than one way, so treat the place count as a close guide rather than an exact one.",
+        "2024 was the busiest year, with {year:2024} drives. That year had a cluster of science workshops in November at Lotus Rescue and Amader Pradakhep, including Science in Action and Brain Lab, and a run of Pather Sathi quiz sessions in June. The series starts in April 2023, and the most recent drive is from June 2025, so there are no drives from 2026 on this page yet."
+      ]
+    },
+    {
+      "id": "what-the-write-ups-say",
+      "heading": "what the write-ups stress",
+      "body": [
+        "The write-ups describe curiosity more than results. Science Time at School On Wheels HUHT in May 2023 built curiosity and strengthened basic science knowledge, and Skill Space at Pather Sathi in November 2023 blended fun, values and interactive learning. Brain Buzz and Quick Wits were described as quiz challenges in which students tested what they knew.",
+        "Team sizes vary with the format. The largest team on this page was for Merry Miracles, the Christmas quiz and letter writing session at Pather Sathi in December 2024, where children answered a Christmas quiz and then wrote letters. Math Minds, the one-on-one fractions session, ran with a single volunteer."
+      ]
+    }
+  ],
+  "learnings": [
+    "{topPlace} hosts most of these drives, so this topic leans heavily on one place.",
+    "Quizzes make up a large share of the drives, and several double as art sessions.",
+    "Computer lessons ran as Sunday School sessions in July and August 2023, teaching basic digital literacy.",
+    "The most recent drive here is Innovate, a STEM workshop at AIM Foundation in June 2025, and this page has no drives from 2026 yet."
+  ],
+  "faqs": [
+    {
+      "q": "Where can children join a science workshop run by students?",
+      "a": "AquaTerra has run {count} science, maths and computer workshops since {firstYear}, most of them at {topPlace} in Kolkata. Sessions include experiments, fractions, times tables, quiz challenges, space lessons and basic computer skills, and they are run by student volunteers. To see how students take part, visit the [join page](/join)."
+    },
+    {
+      "q": "What science and maths did AquaTerra teach in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} science, maths and computer drives. They included Lab Legends for Women and Science Day at Pather Sathi in February, Think Lab, a STEM workshop at Shoishob Foundation in July, a cluster of science workshops at Lotus Rescue in November, and Beyond the Stars, a space workshop at Pather Sathi in December."
+    },
+    {
+      "q": "Does AquaTerra teach coding to children?",
+      "a": "AquaTerra has run computer workshops that touch on coding. Keys and Clicks at Shoishob in September 2024 covered basic tech skills, coding and digital creativity, and the Sunday School computer sessions in July and August 2023 introduced foundational computer skills and digital tools."
+    },
+    {
+      "q": "How many science workshops has AquaTerra run?",
+      "a": "AquaTerra has run {count} science, maths and computer workshops from {firstYear} to {lastYear}, with {volunteers} volunteer turnouts in total, where a turnout counts every time someone showed up. {topPlace} hosts most of them. The count also includes quiz sessions and a few art and quiz workshops, which fall under this topic."
+    },
+    {
+      "q": "Did AquaTerra run quiz workshops for children?",
+      "a": "Yes. Quiz workshops run from May 2024, including Art Meets Quiz and Brush and Buzz in May, and a run of quiz sessions at Pather Sathi in June, such as Think Fast, Quick Wits and Brain Buzz. Several quiz sessions combined a quiz with drawing or painting."
+    }
+  ],
+  "keywords": [
+    "science workshop for children Kolkata",
+    "maths workshop for kids Kolkata",
+    "STEM workshop Kolkata students",
+    "computer workshop for children Kolkata",
+    "quiz workshop for kids Kolkata",
+    "AquaTerra science outreach",
+    "space education workshop Kolkata"
+  ]
+}

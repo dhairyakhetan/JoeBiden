@@ -1,0 +1,71 @@
+{
+  "slug": "month-2026-04",
+  "title": "AquaTerra in April 2026: {count} drives, grammar and teaching",
+  "description": "April 2026 at AquaTerra: {count} drives, four English sessions at Ek Tara and Disha Foundation, a learning day and talk at Pather Sathi, and two dog feeding drives.",
+  "h1Lead": "april was the month of",
+  "h1Accent": "the English classroom",
+  "lede": "In April 2026 AquaTerra ran {count} drives with {volunteers} volunteer turnouts across {placesCount} places. Four were English sessions on sentences and grammar at Ek Tara and Disha Foundation. The rest were a learning day and a menstrual health workshop at Pather Sathi, and two feeding drives where the team handed out biscuits to dogs.",
+  "sections": [
+    {
+      "id": "grammar-one-sentence-at-a-time",
+      "heading": "grammar, one sentence at a time",
+      "body": [
+        "The English sessions ran in two short runs. On 4 April, Build-a-Sentence Lab at Disha Foundation and Sentence Secrets at Ek Tara taught subjects and predicates, and children solved worksheets on the day. Two weeks later, on 18 and 25 April, teaching sessions at Ek Tara covered nouns, pronouns and verbs, and then conjunctions and verbs.",
+        "The order is the plan: subjects and predicates first, then the parts of speech, then how words join together. The English work is on [Reading, speaking and English](/impact/reading-speaking-and-english)."
+      ]
+    },
+    {
+      "id": "pather-sathi-and-a-health-talk",
+      "heading": "pather sathi, and a health talk",
+      "body": [
+        "On 6 April the team ran Learner's Den at Pather Sathi, fun sessions on days, weeks and months through maths, general knowledge and art. The same day a menstrual awareness workshop there covered menstrual health and hygiene.",
+        "Menstrual health is a subject we come back to, and [Good health and well-being](/impact/good-health-and-wellbeing) puts April's talk alongside the rest of the health work."
+      ]
+    },
+    {
+      "id": "biscuits-for-dogs-and-cows",
+      "heading": "biscuits for dogs and cows",
+      "body": [
+        "Two [Tails and Treats](/impact/tails-and-treats) drives ran in April. On 19 April at Jatindas Park the team fed stray dogs with biscuits, and on 25 April at Dobson Lane they fed dogs and cows. Both are short and simple: a team, a packet of biscuits and a street."
+      ]
+    },
+    {
+      "id": "april-against-march",
+      "heading": "april against march and may",
+      "body": [
+        "March was the month of the street, with Smile Notes and a stall. April was the month of the classroom, and it had the most drives of the three spring months, at {count:month-2026-04} in all. [March 2026](/impact/month-2026-03) had {count:month-2026-03} drives and [May 2026](/impact/month-2026-05) had {count:month-2026-05}, so the classroom work peaked in April and eased after."
+      ]
+    }
+  ],
+  "learnings": [
+    "A short run on one subject, taught in order, gives a team a clear plan for the next session.",
+    "A learning day and a health talk can share a place and a date. On 6 April at Pather Sathi, one visit covered two topics.",
+    "Feeding drives are short and simple, which makes them a good way for a new member to see a drive from start to finish."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in April 2026?",
+      "a": "In April 2026 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. Four were English and grammar sessions at Ek Tara and Disha Foundation, there was a learning day and a menstrual health workshop at Pather Sathi, and two Tails and Treats feeding drives gave biscuits to dogs."
+    },
+    {
+      "q": "Where did AquaTerra teach English in April 2026?",
+      "a": "English sessions ran at Disha Foundation on 4 April and at Ek Tara on 4, 18 and 25 April 2026. They covered subjects and predicates, nouns, pronouns, verbs and conjunctions, with worksheets for children to solve on the day."
+    },
+    {
+      "q": "Does AquaTerra feed dogs in Kolkata?",
+      "a": "Yes. In April 2026 Tails and Treats fed stray dogs with biscuits at Jatindas Park on 19 April, and on 25 April at Dobson Lane the team fed dogs and cows."
+    },
+    {
+      "q": "What health topic did AquaTerra cover in April 2026?",
+      "a": "Menstrual health and hygiene was the health subject in April 2026. The Menstrual Awareness Campaign ran as a community workshop at Pather Sathi on 6 April, with students teaching children about menstrual health."
+    }
+  ],
+  "keywords": [
+    "AquaTerra April 2026",
+    "English grammar workshop Kolkata children",
+    "subjects and predicates worksheets Kolkata",
+    "Ek Tara Kolkata workshops",
+    "menstrual health awareness Kolkata April 2026",
+    "Tails and Treats April 2026"
+  ]
+}

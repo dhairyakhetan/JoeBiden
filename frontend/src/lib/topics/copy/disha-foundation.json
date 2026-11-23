@@ -1,0 +1,84 @@
+{
+  "slug": "disha-foundation",
+  "title": "Working with Disha Foundation: Workshops for Kids · AquaTerra",
+  "description": "AquaTerra's {count} workshops with Disha Foundation, {firstYear} to {lastYear}: drama, speaking, storytelling, grammar and cards for children in Kolkata.",
+  "h1Lead": "kids at",
+  "h1Accent": "Disha",
+  "lede": "AquaTerra has run {count} drives with Disha Foundation between {firstYear} and {lastYear}, and nearly all of them are workshops for children in public speaking, drama, storytelling, art and English. The biggest run came in April and May 2024, when speaking, English and art sessions ran on five Tuesdays in a row. Across {years}, {volunteers} volunteer turnouts have gone into these workshops, and a student who came to several is counted each time.",
+  "sections": [
+    {
+      "id": "what-a-workshop-looks-like",
+      "heading": "what a workshop looks like",
+      "body": [
+        "Most of these are a single session run by a small team, usually four or five volunteers. The sessions are structured: a public speaking exercise or game, a grammar lesson on subjects and predicates followed by worksheets, a storytelling and singing session, or a craft table with paper and glue. These are teaching and activity sessions. None of the drives on this page is a handout, so the time goes into practice with the children."
+      ]
+    },
+    {
+      "id": "from-drama-to-speaking",
+      "heading": "from drama to speaking, year by year",
+      "body": [
+        "The first run was drama. Drama Workshops 1.0 to 5.0 took place at Disha Foundation between 29 July and 27 August 2022, with five to seven volunteers each time. The same year brought a plantation session, Bottled Greens, on 11 March, where 85 saplings were planted, and a public speaking session, Speak Skillfully, on 24 May. Merry Moments, a Christmas workshop, closed 2022 on 23 December.",
+        "Telling Tales, a story narration session on 12 July, was the only drive in 2023. In 2024 the work moved toward speaking and English: {year:2024} drives in all, starting with Say it and Speak Smart on 9 April, then Word Play on 16 April, Speak Out on 23 April, Craft Studio on 30 April and Bold Voice on 7 May. In December 2024, Tales and Tunes, a storytelling and singing session, was held at Alor Disha, a separate place from the usual centre."
+      ]
+    },
+    {
+      "id": "the-2026-drives",
+      "heading": "the 2026 drives",
+      "body": [
+        "The drives in 2026 moved toward grammar and craft. Build-a-Sentence Lab on 4 April was a session on subjects and predicates, followed by worksheets, and twenty children were taught. Two Mother's Day card-making workshops, on 9 May and 5 September, had children making handmade cards, and by September more than fifteen cards had been made."
+      ]
+    },
+    {
+      "id": "where-and-when",
+      "heading": "where and when they ran",
+      "body": [
+        "Almost every drive was held at Disha Foundation itself. The exception is Tales and Tunes, a storytelling and singing session on 19 December 2024 at Alor Disha. Most drives fell on Tuesdays and Saturdays, and the April and May 2024 run stayed on Tuesdays throughout, but Wednesday, Thursday and Friday sessions appear too, so the pattern is a regular slot rather than one fixed day.",
+        "For the wider picture of the places we keep going back to, see [the places we keep going back to](/impact/places-we-return-to). [Pather Sathi](/impact/pather-sathi) has its own page with {count:pather-sathi} drives, and [With AIM Foundation](/impact/aim-foundation) is another place where we run sessions for children."
+      ]
+    },
+    {
+      "id": "volunteers-and-results",
+      "heading": "volunteers and what the sessions did",
+      "body": [
+        "Across {count} drives AquaTerra has recorded {volunteers} volunteer turnouts. That number counts every time someone showed up, so a student who went to several drives is counted once for each one. The largest turnout was eight volunteers at the Mother's Day card workshop in September 2026, and the smallest was two, at Word Play on 16 April 2024.",
+        "Several of these sessions were about confidence. Speak Skillfully was about helping students speak up, loud and confident, Say it was about confidence and clarity in communication, Telling Tales turned shy voices into storytellers, and Drama Workshop 2.0 was about confidence, teamwork and stage presence."
+      ]
+    }
+  ],
+  "learnings": [
+    "Almost every one of the {count} drives with Disha Foundation is a workshop for children, not a handout.",
+    "The biggest burst was five Tuesdays in a row in April and May 2024, when speaking, English and craft sessions ran back to back.",
+    "Drama shaped 2022 and speaking shaped 2024, and the 2026 drives added grammar and card making.",
+    "Turnouts stayed small, usually four or five volunteers per drive, so a small team can run one of these workshops well."
+  ],
+  "faqs": [
+    {
+      "q": "Has AquaTerra worked with Disha Foundation?",
+      "a": "Yes. AquaTerra has run {count} drives with Disha Foundation from {firstYear} to {lastYear}. Most are workshops for children in public speaking, drama, storytelling, art and English, and nearly all are held at Disha Foundation itself."
+    },
+    {
+      "q": "What did AquaTerra do with Disha Foundation in 2024?",
+      "a": "AquaTerra ran {year:2024} drives with Disha Foundation in 2024. Most were speaking and English workshops, including Say it, Speak Smart, Word Play, Speak Out, Craft Studio and Bold Voice, held on Tuesdays between 9 April and 7 May."
+    },
+    {
+      "q": "Did AquaTerra plant trees with Disha Foundation?",
+      "a": "Yes, once. The Bottled Greens plantation workshop at Disha Foundation on 11 March 2022 had five volunteers, and 85 saplings were planted."
+    },
+    {
+      "q": "How many volunteers took part in Disha Foundation drives?",
+      "a": "AquaTerra has recorded {volunteers} volunteer turnouts across {count} drives at Disha Foundation. A student who went to several drives is counted once for each drive, so the figure counts turnouts, not separate people."
+    },
+    {
+      "q": "Where do AquaTerra's Disha Foundation workshops take place?",
+      "a": "Almost all take place at Disha Foundation itself. The one exception is Tales and Tunes, a storytelling and singing session held at Alor Disha on 19 December 2024."
+    }
+  ],
+  "keywords": [
+    "AquaTerra Disha Foundation",
+    "Disha Foundation Kolkata children workshops",
+    "public speaking workshop Kolkata kids",
+    "drama workshop Kolkata students",
+    "student volunteers Disha Foundation",
+    "AquaTerra workshops Kolkata children"
+  ]
+}

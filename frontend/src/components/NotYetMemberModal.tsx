@@ -31,13 +31,15 @@ export default function NotYetMemberModal({ gate, memberId, target, subject, acc
   const [already, setAlready] = useState(false)
   const panelRef = useDialog(true, onClose, { closeOnEscape: !saving })
   const pending = canRegisterInterest(gate)
+  // A role is an application that waits for HR; a team is only a reminder (team join requests are not part of this).
+  const isRole = 'openingId' in target
 
   // If they already asked to be reminded, say so instead of offering the button again.
   useEffect(() => {
     if (!pending) return
     let live = true
     openingInterestService.getMine(memberId, target)
-      .then(i => { if (live && i && (i.state === 'waiting' || i.state === 'ready')) setAlready(true) })
+      .then(i => { if (live && i && (i.state === 'waiting' || i.state === 'ready') && (i.fromApplication || !isRole)) setAlready(true) })
       .catch(() => { /* not knowing is fine: the button still works and saving twice is harmless */ })
     return () => { live = false }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +48,7 @@ export default function NotYetMemberModal({ gate, memberId, target, subject, acc
   const remind = async () => {
     setSaving(true)
     try {
-      await openingInterestService.register(memberId, target, draft)
+      await openingInterestService.register(memberId, target, isRole ? { ...draft, fromApplication: true } : draft)
       setSaved(true)
     } catch {
       toast.error('Could not save that', 'Please try again in a moment.')
@@ -56,7 +58,7 @@ export default function NotYetMemberModal({ gate, memberId, target, subject, acc
   }
 
   const title = pending
-    ? (saved || already ? 'you’re on the list.' : 'you’re not part of AquaTerra yet.')
+    ? (saved || already ? (isRole ? 'your application is in.' : 'you’re on the list.') : 'you’re not part of AquaTerra yet.')
     : 'you can’t apply right now.'
 
   return createPortal(
@@ -75,11 +77,15 @@ export default function NotYetMemberModal({ gate, memberId, target, subject, acc
           {pending ? (
             saved || already ? (
               <p style={{ margin: 0, fontFamily: 'var(--eina)', fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.6 }}>
-                We’ll remind you the moment you’re confirmed, with a note in your notifications and a card at the top of your feed asking if you still want this.
+                {isRole
+                  ? 'It is waiting for HR to confirm you as a member. The moment they do, it goes to the team and they reach out to you.'
+                  : 'We’ll remind you the moment you’re confirmed, with a note in your notifications and a card at the top of your feed asking if you still want this.'}
               </p>
             ) : (
               <p style={{ margin: 0, fontFamily: 'var(--eina)', fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.6 }}>
-                Your sign-up is waiting for approval. Once you’re confirmed, you can apply. Want us to remind you when you’re in?
+                {isRole
+                  ? 'Your sign-up is waiting for HR approval. Send your application now: it waits with HR, and the moment you’re confirmed it goes to the team.'
+                  : 'Your sign-up is waiting for approval. Once you’re confirmed, you can apply. Want us to remind you when you’re in?'}
               </p>
             )
           ) : (
@@ -92,7 +98,7 @@ export default function NotYetMemberModal({ gate, memberId, target, subject, acc
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
             {pending && !saved && !already && (
               <button type="button" className="btn btn-sm btn-primary" style={{ minHeight: 44 }} onClick={remind} disabled={saving}>
-                {saving ? 'Saving…' : 'Yes, remind me'}
+                {saving ? 'Saving…' : isRole ? 'Send my application' : 'Yes, remind me'}
               </button>
             )}
             {gate === 'rejected' && (

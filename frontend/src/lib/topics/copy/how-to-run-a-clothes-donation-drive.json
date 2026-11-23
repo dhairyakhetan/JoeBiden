@@ -1,0 +1,98 @@
+{
+  "slug": "how-to-run-a-clothes-donation-drive",
+  "title": "How to run a clothes donation drive · AquaTerra",
+  "description": "How AquaTerra students run a clothes collection drive in Kolkata: finding a building that will host it, sorting on the spot, measuring in one unit and writing it up.",
+  "h1Lead": "how to run a clothes",
+  "h1Accent": "collection drive",
+  "lede": "A clothes collection drive is a box at a building gate, a small team and a sorting table for an afternoon. AquaTerra has run {count} of them since {firstYear}, and this is how a team picks the place, collects, sorts and writes up what came in.",
+  "sections": [
+    {
+      "id": "pick-the-building",
+      "heading": "pick a place that already has clothes to give",
+      "body": [
+        "Many of our collection drives have been held at residential complexes: Raghav Residency, Ganges Garden Phase 1, Ganges Sky, Himdari Apartment in Ballygunge, Vistar Apartment in Sealdah and Urbana in Madurdaha. These buildings come up again and again in the series, so a building that said yes once is worth asking again.",
+        "Ask the building before you set up. Our teams suggest talking to the residents' association or the security desk a few days ahead, so the collection point is agreed and nobody is surprised by a box at the gate."
+      ]
+    },
+    {
+      "id": "set-up-the-collection",
+      "heading": "set up a clear collection point",
+      "body": [
+        "Say what you are collecting on the day. The Wear and Share drives asked for clothes, the Toy and Thread drives in March 2025 gathered toys and clothes together, and the drive at Rajasthali in Park Circus in May 2024 collected clothes and notebooks. A sign that names the items helps people bring the right things, and it keeps the box from filling up with items you cannot use.",
+        "Pick a spot the team can watch, with room for a table. A box, a sorting table and a few bags are enough to start."
+      ]
+    },
+    {
+      "id": "keep-the-team-small",
+      "heading": "keep the team small and the day short",
+      "body": [
+        "Collection drives are run by small teams, mostly three to five volunteers. Across {count} drives, {volunteers} volunteer turnouts have worked the collection, and the smallest drives were run by a single student. Volunteer turnouts count every time someone showed up, so the same students may be on several drives in a season.",
+        "The Alipore Road drive in November 2024 was a solo collection led by one student, and it still brought in clothes from the building. That is a useful reminder that a drive does not need a crowd, only a clear plan and a place to stand."
+      ]
+    },
+    {
+      "id": "sort-on-the-spot",
+      "heading": "sort on the spot, and measure in one unit",
+      "body": [
+        "Sorting is part of the drive, not an afterthought. The Urbana drive in October 2024 was a segregation drive that sorted donated items by type and condition, so the clothes could be handed on in good order. Do the sorting with the team on the day, and keep the good pieces separate from the ones that need a second look.",
+        "Pick one unit before you start, kilos, bags or packets, and use it all the way through. The write-ups use all three: the July 2025 drive at Bangur notes 5 kgs, the drive at Salt Lake in April 2025 notes 8 bags, and the Reserve drive in November 2024 notes 7 packets. A single unit makes the next drive comparable to this one."
+      ]
+    },
+    {
+      "id": "how-the-series-ran",
+      "heading": "how the series ran",
+      "body": [
+        "The Wear and Share series began in May 2024 at Ganges Garden Phase 1, and {year:2024} drives ran that year, spread across apartments and neighbourhoods. The 2025 run included {year:2025} drives, including a cluster in the week of 9 to 13 July 2025 at Natural City Laketown, Salt Lake, Club Town Greens, Howrah AC, Avani Oxford and Bangur.",
+        "Across {placesCount} places, the series has come back to the same buildings more than once. Raghav Residency and Ganges Garden Phase 1 each hosted two drives in 2024. The series is up to Wear and Share Clothes Collection Drive 22.0."
+      ]
+    },
+    {
+      "id": "write-it-up",
+      "heading": "write it up with the place and the weight",
+      "body": [
+        "Each drive goes on the AquaTerra site as a write-up: the title with the drive's number, the date, the place, how many people came, a short summary, the objective and one key figure, which for a collection drive is the amount collected. The write-up says who the clothes are for, which is people in need in the community.",
+        "A useful write-up names the building, the unit, the amount and the team size. That is enough for the next team to know how much to expect and how many people to bring."
+      ]
+    }
+  ],
+  "learnings": [
+    "Start at a building that already has clothes to give: residential complexes are where the series has come back again and again.",
+    "Sort on the day, not after: the Urbana drive treated sorting by type and condition as the job itself.",
+    "Use one unit, kilos, bags or packets, for the whole drive, so the write-up can be compared with the next one.",
+    "A small team can do it: one student ran a solo collection on Alipore Road in November 2024."
+  ],
+  "faqs": [
+    {
+      "q": "How do you run a clothes collection drive?",
+      "a": "Ask a building or community space to host the collection, say what you are collecting, set up a box and a sorting table, and go out with a small team. AquaTerra has run {count} clothes collection drives since {firstYear}, and each one is written up on the site."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. AquaTerra's Wear and Share drives collect old clothes, which the write-ups say go to people in need. AquaTerra takes clothes, not money: it takes no monetary donations."
+    },
+    {
+      "q": "Where does AquaTerra collect clothes?",
+      "a": "AquaTerra has held collection drives at {placesCount} places, mostly residential complexes and neighbourhoods in Kolkata, including Raghav Residency, Ganges Garden Phase 1, Salt Lake and Bangur."
+    },
+    {
+      "q": "How much clothing has AquaTerra distributed?",
+      "a": "Across all of AquaTerra's work, {clothesKg} kg of clothes have been distributed. This page covers the {count} collection drives from {firstYear} to {lastYear}."
+    },
+    {
+      "q": "Are AquaTerra's clothes drives run by students?",
+      "a": "Yes. Students run AquaTerra's clothes drives, usually in small teams of three to five volunteers, and each drive is written up on the AquaTerra site."
+    },
+    {
+      "q": "Do AquaTerra's collection drives also gather toys or notebooks?",
+      "a": "Some do. The Toy and Thread drives in March 2025 gathered toys and clothes, and the Rajasthali drive in May 2024 collected notebooks alongside clothes."
+    }
+  ],
+  "keywords": [
+    "clothes donation drive Kolkata",
+    "how to run a clothes collection drive",
+    "old clothes donation Kolkata",
+    "clothes collection drive for students",
+    "Wear and Share AquaTerra",
+    "toy and clothes collection drive Kolkata"
+  ]
+}

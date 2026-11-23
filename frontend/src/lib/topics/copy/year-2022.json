@@ -1,0 +1,95 @@
+{
+  "slug": "year-2022",
+  "title": "AquaTerra's 2022 drives: finding a rhythm · AquaTerra",
+  "description": "AquaTerra's 2022 drives: {count} drives and {volunteers} volunteer turnouts, with dog feeding, Grow Green plantings, drama workshops and Christmas sessions.",
+  "h1Lead": "the year the drives",
+  "h1Accent": "found a rhythm",
+  "lede": "In 2022 AquaTerra's drives started to repeat themselves. Across {count} drives, {volunteers} volunteer turnouts and {placesCount} places, the same formats came back again and again: dog feeding in Kolkata, Grow Green plantings, drama workshops and Christmas sessions for children. More than half the year's drives happened between January and June.",
+  "sections": [
+    {
+      "id": "dog-drives",
+      "heading": "dog drives every few weeks",
+      "body": [
+        "[Tails and Treats](/impact/tails-and-treats) is the clearest rhythm of 2022. It started as Feeding Stray Dogs 1.0 on January 28 and ran through 14.0 on September 17, with every drive held in Kolkata. The plan barely changed from one drive to the next: a small team of students, a few packets of biscuits and the dogs that live on the streets. The drive numbered 8.0 on April 16 recorded 90 dogs fed, the most of any drive that spring.",
+        "Each drive had a small team, and the summaries repeat the same warm idea: students cuddling, feeding and pampering the strays. It was the year's longest run of one format, and the series carried on into later years."
+      ]
+    },
+    {
+      "id": "planting-places",
+      "heading": "planting days and the grow green series",
+      "body": [
+        "Grow Green ran numbered plantation drives from 2.0 in January to 5.0 in June. Each One Plant One worked alongside AquaTerra on 2.0, 4.0 and 5.0. Plantation Drive 4.0 in Kolkata on April 14 planted 90 saplings, and Plantation Drive 5.0 on June 11 planted 85. Each figure belongs to its own drive.",
+        "Spring also brought planting workshops with their own names. Bottled Greens at Disha Foundation on March 11 put 85 saplings in the ground, Roots Rise at Mallickpur on April 13 had children painting saplings, and Roots and Rise at Jyotirmai on July 11 was a bottle planting session. On Earth Day, Planet First ran at Ek Tara on April 22, and Heal The Earth planted trees in bottles at Don Bosco School, Park Circus on April 21."
+      ]
+    },
+    {
+      "id": "disha-drama",
+      "heading": "a summer of drama at disha foundation",
+      "body": [
+        "Disha Foundation hosted more of the year's drives than any other named place. Most were drama workshops: Drama Workshop 1.0 on July 29, 2.0 on August 6, 3.0 on August 10, 4.0 on August 26 and 5.0 on August 27. The sessions covered acting, voice and movement, and the second one was about confidence, teamwork and stage presence.",
+        "The same site also hosted Speak Skillfully in May, Bottled Greens in March and Merry Moments on December 23. Disha Foundation was a place AquaTerra came back to all year, and that return visit is how a run of sessions turns into a series."
+      ]
+    },
+    {
+      "id": "sports-fundraisers",
+      "heading": "sport and fundraising",
+      "body": [
+        "Most of the year's fundraisers were sport. Turf Wars, a football fundraiser at Elgin Turf in March, was followed by Inception '22, a basketball tournament on June 18 that brought several school and college teams together. Score and Support, a football fundraiser on July 2, led into Terrathon 1.0 at Elgin Turf on July 22, which drew the biggest volunteer turnout of the year. Turf It Up, a football fundraiser at Sky Turf on December 16, closed the sporting calendar.",
+        "Other fundraisers were Paradox 1.0, the Dream Team edition held online on January 14, Strategia, a timed strategy challenge built around NGO scenarios on April 1, and Trick or Donate, a Halloween fundraiser at New Alipore, Kolkata on October 28. Most fundraisers brought bigger teams than the workshops did, and they were built around games, teams and a shared cause."
+      ]
+    },
+    {
+      "id": "christmas-close",
+      "heading": "how the year closed",
+      "body": [
+        "The year closed with Turf It Up on December 16 and a run of Christmas workshops after it: Season's Magic at Pather Sathi on December 17, Jolly Vibes at Ek Tara on December 22 and Merry Moments at Disha Foundation on December 23. Each one was a session for children, with carols, lights and a good deal of festive cheer.",
+        "The sessions were in the same spirit as Green Christmas at Ek Tara in 2021, which was one of the first seasonal workshops AquaTerra ran."
+      ]
+    },
+    {
+      "id": "one-off-days",
+      "heading": "the one-off days",
+      "body": [
+        "Between the series came one-off days. AquaTerra marked its first anniversary with a party on June 10. A blood donation drive, One Drop, Many Lives, at Terapanth Bhavan on September 16 gathered donors, and Breaking the Cycle, a menstrual awareness workshop on November 7, opened up conversations about hygiene and health.",
+        "Food and book drives ran alongside them. A Food Distribution Drive at Lighthouse for the Blind on November 13 handed out food packets, and Book Basket, a collection that started on March 20 in Kolkata, gathered twenty kilograms of books to fill shelves and minds with stories."
+      ]
+    }
+  ],
+  "learnings": [
+    "Recurring series, not one-off events, shaped 2022: dog drives, plantings and drama sessions each ran for weeks or months.",
+    "More than half of the year's drives happened between January and June, so the first half was the busiest stretch.",
+    "Going back to the same places, Disha Foundation above all, let a series grow one session at a time.",
+    "Fundraisers brought the biggest teams, and Terrathon 1.0 had the largest volunteer turnout of the year.",
+    "One group, Each One Plant One, worked on three of the Grow Green plantings, so a single collaborator can carry several drives in one series."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in 2022?",
+      "a": "In 2022 AquaTerra ran {count} drives and {volunteers} volunteer turnouts across {placesCount} places. The year was built on series: Tails and Treats dog feeding in Kolkata, Grow Green plantings, drama workshops at Disha Foundation and Christmas workshops in December."
+    },
+    {
+      "q": "Where did AquaTerra feed stray dogs in 2022?",
+      "a": "Every 2022 Tails and Treats drive was held in Kolkata. The series ran from Feeding Stray Dogs 1.0 on January 28 to 14.0 on September 17, and at each one students cuddled, fed and cared for the dogs."
+    },
+    {
+      "q": "Does AquaTerra run Christmas workshops for children?",
+      "a": "Yes. In December 2022 AquaTerra ran Season's Magic at Pather Sathi, Jolly Vibes at Ek Tara and Merry Moments at Disha Foundation, with carols and lights at each session. A football fundraiser, Turf It Up, was held at Sky Turf in the same fortnight."
+    },
+    {
+      "q": "What were AquaTerra's biggest fundraisers in 2022?",
+      "a": "Terrathon 1.0 at Elgin Turf on July 22 drew the largest volunteer turnout of the year, and Paradox 1.0, the Dream Team edition, was held online on January 14. Other fundraisers included Trick or Donate at New Alipore, Kolkata on October 28."
+    },
+    {
+      "q": "How did the Grow Green plantation series grow in 2022?",
+      "a": "Grow Green began in 2021 as Plantation Drive 1.0, and in 2022 it ran from 2.0 in January to 5.0 in June. Each One Plant One worked on 2.0, 4.0 and 5.0, and Plantation Drive 4.0 in Kolkata on April 14 planted 90 saplings."
+    }
+  ],
+  "keywords": [
+    "AquaTerra 2022 drives",
+    "Tails and Treats Kolkata dog feeding 2022",
+    "Grow Green plantation Kolkata 2022",
+    "Disha Foundation drama workshop Kolkata",
+    "AquaTerra fundraisers 2022 sports",
+    "student volunteer drives Kolkata 2022"
+  ]
+}

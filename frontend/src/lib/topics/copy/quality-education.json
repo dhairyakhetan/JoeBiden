@@ -1,0 +1,92 @@
+{
+  "slug": "quality-education",
+  "title": "Quality education: workshops for children in Kolkata · AquaTerra",
+  "description": "Since {firstYear}, AquaTerra has run {count} education drives in Kolkata: art, English, maths, science, storytelling and public speaking.",
+  "h1Lead": "every child deserves",
+  "h1Accent": "a good hour of learning",
+  "lede": "Quality Education is UN Sustainable Development Goal 4: inclusive and equitable quality education, and learning opportunities for all. Since {firstYear} AquaTerra's student volunteers have run {count} education drives with {volunteers} volunteer turnouts, mostly workshops for children in art, English, maths, science, storytelling and public speaking, held most often at {topPlace}.",
+  "sections": [
+    {
+      "id": "what-a-workshop-day-looks-like",
+      "heading": "what a workshop day looks like",
+      "body": [
+        "Most of these drives are themed workshops, and the name often says the theme. Tiny Tales at Pather Sathi in July 2025 mixed drawing and quizzing. Joy Jam the same month was about brightening lives through education and care, and Fun Fusion aimed to teach hope, one child at a time. A volunteer leads, and the children draw, speak, quiz each other or try a new craft.",
+        "The steps for running this kind of session are in [How to run an art workshop for kids](/impact/how-to-run-an-art-workshop-for-kids) and [How to run a reading session for kids](/impact/how-to-run-a-reading-session-for-kids)."
+      ]
+    },
+    {
+      "id": "english-maths-and-science",
+      "heading": "english, maths and science",
+      "body": [
+        "English and grammar came in short runs. On 4 April 2026 Build-a-Sentence Lab at Disha Foundation and Sentence Secrets at Ek Tara taught subjects and predicates, and children solved worksheets on the day. Teaching sessions at Ek Tara on 18 and 25 April covered nouns, pronouns, verbs and conjunctions. The full English work is on [Reading, speaking and English](/impact/reading-speaking-and-english).",
+        "Maths and science came in the same shape. Fractions and a multiplication workshop, Fun Factors, ran at Pather Sathi in March and August 2025. Think and Tinker at School On Wheels HUHT in March 2025 used experiments, Force and Fun at Shoishob in February 2025 was a physics workshop, and Innovate at AIM Foundation in June 2025 ran hands-on STEM activities. More of these are on [Science, maths and computer workshops](/impact/science-and-stem)."
+      ]
+    },
+    {
+      "id": "festivals-and-books",
+      "heading": "festivals and books",
+      "body": [
+        "Festival weeks were busy. Christmas ran at Pather Sathi in December 2024 and again in December 2025, with a carnival, carols, letter writing and the Merry Miracles days. Diwali in October 2025 brought art workshops, and at Ek Tara the Color Club made Green Diwali posters about the harm firecrackers do. Holi Hues came to Pather Sathi in March 2025.",
+        "Books came through the [Book Basket](/impact/book-basket) collections in June and July 2025, which gathered books for underprivileged children across Kolkata. In June 2025 Fable Factory and Plot Play, storytelling workshops at Newlight NGO, let children explore stories, voice and narration."
+      ]
+    },
+    {
+      "id": "speaking-up-and-staying-safe",
+      "heading": "speaking up and staying safe",
+      "body": [
+        "Public speaking ran as a thread through the years. Speech Ready at Ek Tara in May 2025 introduced children to talking in front of an audience, PowerSpeak at Pather Sathi in November 2025 taught speaking through storytelling and art, and Express More, an acting workshop at Gandhi Peace Foundation in September 2025, explored emotions and stories.",
+        "Some sessions covered safety. My Body, a good touch and bad touch workshop at Calcutta Rescue in June 2025, taught children to tell the difference. The Digital Safety Workshop at Pather Sathi in May 2026 gave children the basics of staying safe online, in the same calendar as the art and maths sessions."
+      ]
+    },
+    {
+      "id": "how-it-has-grown",
+      "heading": "how it has grown",
+      "body": [
+        "The first education drives in these records came in 2021. Since then the yearly totals have been {year:2022} drives in 2022, {year:2023} in 2023, {year:2024} in 2024 and {year:2025} in 2025, with {year:2026} so far in 2026. Sunday School sessions at Pather Sathi ran through 2023 and 2024, and the Pather Sathi workshops of 2025 took their place as a steady run of named sessions."
+      ]
+    },
+    {
+      "id": "join-in",
+      "heading": "how to join in",
+      "body": [
+        "Students who join AquaTerra run these workshops. Join by signing in with Google and waiting for approval at [join AquaTerra](/join). Teachers and schools who want to see the formats can look at [for schools](/impact/for-schools), and anyone with a question can get in touch through the [contact page](/contact)."
+      ]
+    }
+  ],
+  "learnings": [
+    "A host that comes back year after year gives a team a routine. Pather Sathi has hosted sessions in every year since 2023.",
+    "Short, named, themed workshops are easy to repeat. A session such as Happy Hands or Tiny Tales can run again at the same place with a new group of children.",
+    "Safety topics sit on the same calendar as art and maths. Digital safety and good touch sessions ran alongside craft workshops, not in place of them.",
+    "Grammar sessions used worksheets that children solved on the day, a simple way for a volunteer to check what had been understood."
+  ],
+  "faqs": [
+    {
+      "q": "What does AquaTerra teach children in Kolkata?",
+      "a": "AquaTerra's student volunteers run workshops in art, English grammar, maths, science, storytelling, public speaking, chess, music and digital safety. Since {firstYear} they have run {count} education drives, most of them at {topPlace}."
+    },
+    {
+      "q": "Where does AquaTerra run education workshops?",
+      "a": "Most of the workshops are at {topPlace}. Others ran at Ek Tara, Disha Foundation, AIM Foundation, Amader Pradakhep, and at schools and learning centres across Kolkata. In all, the education drives have been held at {placesCount} places."
+    },
+    {
+      "q": "Does AquaTerra run English sessions for children?",
+      "a": "Yes. In April 2026 AquaTerra ran grammar sessions on subjects and predicates, nouns, pronouns, verbs and conjunctions at Ek Tara and Disha Foundation, with worksheets for children to solve on the day. These are one-off workshops run by students, not a school."
+    },
+    {
+      "q": "Can I volunteer to teach children with AquaTerra?",
+      "a": "Yes, once you are a member. Sign in to AquaTerra with Google, wait for approval, and then you can help run workshops with a student team."
+    },
+    {
+      "q": "What did AquaTerra do for education in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} education drives. They included Tiny Tales, Joy Jam and Happy Hands at Pather Sathi in July, the Book Basket collections in June and July, and Merry Miracles Christmas workshops at Pather Sathi in December."
+    }
+  ],
+  "keywords": [
+    "education workshops for children Kolkata",
+    "student-run workshops Kolkata kids",
+    "UN Sustainable Development Goal 4 Kolkata",
+    "art and English workshops for kids Kolkata",
+    "Pather Sathi workshops Kolkata",
+    "book collection for children Kolkata"
+  ]
+}

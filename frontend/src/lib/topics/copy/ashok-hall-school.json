@@ -1,0 +1,62 @@
+{
+  "slug": "ashok-hall-school",
+  "title": "Waste and planting drives at Ashok Hall School · AquaTerra",
+  "description": "A waste management workshop and Grow Green plantation drives at Ashok Hall School in Kolkata, run by AquaTerra students in 2023 and again in 2025.",
+  "h1Lead": "waste and planting at",
+  "h1Accent": "Ashok Hall",
+  "lede": "AquaTerra has run {count} drives at Ashok Hall School since {firstYear}. They started with a waste management workshop for children in August 2023 and came back in August 2025 for a Grow Green plantation.",
+  "sections": [
+    {
+      "id": "what-we-did-at-ashok-hall",
+      "heading": "what we did at Ashok Hall School",
+      "body": [
+        "The first visit, on 27 August 2023, was a Waste Management Workshop for children. It used games, demonstrations and storytelling to build eco-conscious habits, and it ran on the same day as a Grow Green plantation drive at the school.",
+        "We came back in August 2025 with another Grow Green plantation, and the drive notes 100 saplings planted. Across {count} drives there were {volunteers} volunteer turnouts."
+      ]
+    },
+    {
+      "id": "why-the-environment-link-works",
+      "heading": "why waste and planting go together",
+      "body": [
+        "The workshop and the plantation are about the same idea: small habits about waste and planting in the ground add up. AquaTerra came back two years after the first visit, with a planting drive rather than a workshop, so the school's visits changed with the work."
+      ]
+    },
+    {
+      "id": "working-with-schools-like-this",
+      "heading": "working with schools like this",
+      "body": [
+        "Schools that want to host a waste or planting session can read the [for schools](/impact/for-schools) page, and students who want to run one can join AquaTerra and sign up on the projects page. See [every school we have worked in](/impact/schools-we-have-visited) for the rest."
+      ]
+    }
+  ],
+  "learnings": [
+    "A workshop and a planting drive on one day can cover both ideas: waste first, then the ground.",
+    "A return visit can be a different kind of drive, as the 2025 plantation after the 2023 workshop shows.",
+    "Environment topics suit children of many ages, since the workshop was built around games and hands-on activity."
+  ],
+  "faqs": [
+    {
+      "q": "Has AquaTerra worked at Ashok Hall School?",
+      "a": "Yes. AquaTerra has run {count} drives at Ashok Hall School, from a waste management workshop in August 2023 to a Grow Green plantation in August 2025."
+    },
+    {
+      "q": "What did AquaTerra teach at Ashok Hall School?",
+      "a": "A Waste Management Workshop for children, using games, demonstrations and storytelling to build eco-conscious habits around waste. It ran on 27 August 2023."
+    },
+    {
+      "q": "Does AquaTerra plant trees at Ashok Hall School?",
+      "a": "Yes. Grow Green plantation drives were held at the school in August 2023 and August 2025, and the 2025 drive notes 100 saplings planted."
+    },
+    {
+      "q": "How can a school host an AquaTerra session?",
+      "a": "Schools can see the options on the for-schools page or get in touch through the contact page. AquaTerra's students run the sessions, and every drive is written up on the site."
+    }
+  ],
+  "keywords": [
+    "Ashok Hall School Kolkata",
+    "waste management workshop for school children Kolkata",
+    "plantation drive Ashok Hall School",
+    "school environment workshop Kolkata",
+    "AquaTerra school sessions Kolkata"
+  ]
+}

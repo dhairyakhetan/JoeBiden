@@ -18,7 +18,7 @@ import { supabaseCommunity } from '../lib/supabaseCommunity'
 import { useToast } from '../components/Toast'
 import { useConfirm } from '../components/Confirm'
 import { useIsMobile } from '../hooks/useMobile'
-import { jobOpenings, CAT_COLORS } from '../lib/jobOpenings'
+import { jobOpenings, CAT_COLORS, type WaitingApplicant } from '../lib/jobOpenings'
 import { deptColorForTeamName, deptKindForTeamName, isDarkDepartmentFill, KIND_LABEL } from '../lib/departments'
 import { Post } from '../services/api'
 import { useMeta } from '../hooks/useMeta'
@@ -111,6 +111,8 @@ const TeamDetailPage = () => {
   // "Responses" tab - every applicant across every one of this team's
   // openings in one place, instead of expanding them one opening at a time.
   const [openingResponses, setOpeningResponses] = useState<Record<string, any[]>>({})
+  /** Applicants for this team's roles whom HR has not cleared yet (shown apart, not acceptable). */
+  const [waitingApplicants, setWaitingApplicants] = useState<WaitingApplicant[]>([])
   const [responsesLoading, setResponsesLoading] = useState(false)
   /** The responses fetch FAILED, as opposed to no one having applied yet. */
   const [responsesError, setResponsesError] = useState(false)
@@ -523,6 +525,11 @@ const TeamDetailPage = () => {
       // One batched query instead of one per opening.
       const byOpening = await jobOpenings.getApplicationsForOpenings(openings.map(o => o.id))
       setOpeningResponses(byOpening)
+      // The people HR has not cleared yet. Failing to load them must not hide the applications that did load.
+      try {
+        const ids = new Set(openings.map(o => o.id))
+        setWaitingApplicants((await jobOpenings.getWaitingApplicants()).filter(w => ids.has(w.openingId)))
+      } catch { setWaitingApplicants([]) }
     } catch (e) {
       console.error('[fetchAllResponses]', e)
       // A toast alone left the tab showing "no responses yet." - a leader
@@ -1236,6 +1243,8 @@ const TeamDetailPage = () => {
                 responsesError={responsesError}
                 onRetryResponses={fetchAllResponses}
                 totalResponses={totalResponses}
+                waiting={waitingApplicants}
+                onWaitingChanged={fetchAllResponses}
                 isMobile={isMobile}
               />
             )}

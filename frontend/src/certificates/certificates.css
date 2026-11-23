@@ -1,0 +1,74 @@
+/* The member's certificate pages (/certificates, /certificates/:id).
+   Rounded-minimal language of the rest of the site: hairline edges, soft lifts, 22/14 radii, fills with ink text.
+   Tokens only; an accent is a fill, never text on cream. */
+
+.cert-page { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 48px) var(--page-px, 20px) 96px; }
+.cert-lede { font-family: var(--eina); font-size: 15px; line-height: 1.6; color: var(--ink-2); margin: 12px 0 8px; }
+.cert-lede-small { font-family: var(--eina); font-size: 13.5px; line-height: 1.6; color: var(--ink-3); margin: 0 0 28px; }
+
+.cert-section { margin-top: 36px; }
+.cert-section > h2 { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.cert-hint { font-family: var(--eina); font-size: 13.5px; line-height: 1.5; color: var(--ink-3); margin: 0 0 12px; }
+.cert-error { font-family: var(--eina); font-size: 14px; margin-top: 8px; }
+
+/* Document cards */
+.cert-types { display: grid; gap: 10px; }
+.cert-type { background: var(--bg-2); border: var(--hair-2); border-radius: var(--r-inner); padding: 14px 16px; }
+.cert-type[data-on="true"] { background: var(--lemon); box-shadow: var(--lift-1); }
+.cert-type[data-off="true"] { opacity: 0.6; }
+.cert-type-row { display: flex; gap: 12px; align-items: flex-start; }
+.cert-type-row input { margin-top: 3px; width: 18px; height: 18px; flex: none; }
+.cert-type-name { font-family: var(--eina); font-weight: 800; font-size: 15.5px; color: var(--ink); }
+.cert-type-blurb { font-family: var(--eina); font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin-top: 2px; }
+.cert-link-btn { background: none; border: 0; padding: 6px 0 0; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); text-decoration: underline; cursor: pointer; min-height: 32px; }
+.cert-sample { margin-top: 10px; border: var(--hair-2); border-radius: var(--r-inner); overflow: hidden; background: var(--bg); }
+.cert-sample img { display: block; width: 100%; height: auto; }
+.cert-sample-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); padding: 8px 12px; border-top: var(--hair); }
+
+/* Chips for what is selected */
+.cert-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; padding: 0; list-style: none; }
+.cert-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--mint, var(--bg-2)); color: var(--ink); border: var(--hair-2); border-radius: 999px; padding: 4px 6px 4px 12px; font-family: var(--eina); font-size: 13px; font-weight: 700; }
+.cert-chip button { border: 0; background: var(--bg); color: var(--ink); width: 24px; height: 24px; border-radius: 999px; cursor: pointer; font-size: 14px; line-height: 1; }
+
+/* Pickers */
+.cert-pick { border: var(--hair-2); border-radius: var(--r-inner); background: var(--bg-2); }
+.cert-pick-search { padding: 10px; border-bottom: var(--hair); }
+.cert-pick-list { max-height: 320px; overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+.cert-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 12px; cursor: pointer; min-height: 44px; }
+.cert-row:hover { background: var(--bg); }
+.cert-row input { margin-top: 3px; width: 18px; height: 18px; flex: none; }
+.cert-row-name { font-family: var(--eina); font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.cert-row-sub { font-family: var(--eina); font-size: 12.5px; color: var(--ink-3); margin-top: 1px; }
+.cert-retired { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-left: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.cert-group-head { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; padding: 10px; cursor: pointer; text-align: left; font-family: var(--eina); font-weight: 800; font-size: 14.5px; color: var(--ink); min-height: 44px; }
+.cert-indent-1 { margin-left: 18px; }
+.cert-indent-2 { margin-left: 36px; }
+.cert-empty { padding: 16px; font-family: var(--eina); font-size: 14px; color: var(--ink-3); }
+
+/* Hours + notes */
+.cert-field { width: 100%; padding: 10px 12px; background: var(--bg-2); border: var(--hair-2); border-radius: var(--r-inner); font-family: var(--eina); font-size: 16px; color: var(--ink); box-sizing: border-box; }
+.cert-hours { max-width: 180px; }
+.cert-count { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 4px; text-align: right; }
+
+/* Requests list */
+.cert-requests { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cert-req { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-2); border-radius: var(--r-inner); border: var(--hair); }
+.cert-req-title { font-family: var(--eina); font-size: 14.5px; font-weight: 700; }
+.cert-req-meta { font-family: var(--eina); font-size: 12.5px; color: var(--ink-3); }
+.cert-status { font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; border: var(--hair-2); color: var(--ink); }
+.cert-status[data-s="pending"] { background: var(--lemon); }
+.cert-status[data-s="issued"] { background: var(--welfare); }
+.cert-status[data-s="declined"] { background: var(--bg); }
+
+/* Success */
+.cert-done { background: var(--welfare); color: var(--ink); border: var(--hair-2); border-radius: var(--r-inner); padding: 24px; text-align: center; margin: 24px 0; }
+.cert-done p { margin: 0 0 16px; font-family: var(--eina); font-size: 14.5px; line-height: 1.6; }
+
+/* One document */
+.cert-doc { margin-top: 20px; border: var(--hair-2); border-radius: var(--r-inner); overflow: hidden; background: var(--bg-2); }
+.cert-doc img { display: block; width: 100%; height: auto; }
+.cert-doc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+@media (max-width: 520px) {
+  .cert-pick-list { max-height: 260px; }
+}

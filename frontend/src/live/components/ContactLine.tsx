@@ -1,4 +1,5 @@
-import { ASK } from '../config'
+import { ASK, NEXT_EVENT } from '../config'
+import { eventPhase } from '../lib/eventPhase'
 import { waNumber } from '../../terrathon/lib/format'
 
 /**
@@ -16,9 +17,12 @@ export function ContactLine({ message }: { message?: string }) {
   )
 }
 
-/** The WhatsApp link that starts a ticket request. */
-export function ticketHref(): string | null {
+/** The message the ticket chat opens with, built from the config so a new night needs no edit here. */
+export const ticketMessage = (): string => `Hi, I would like a ticket for ${NEXT_EVENT.name} on ${NEXT_EVENT.dateLabel.replace(/\s\d{4}$/, '')}.`
+
+/** The WhatsApp link that starts a ticket request. Null once the night is over: nobody is offered a ticket for a past date. */
+export function ticketHref(now: Date = new Date()): string | null {
   if (!ASK.phone) return null
-  const msg = 'Hi, I would like a ticket for Disco Diwali on 10 November.'
-  return `https://wa.me/${waNumber(ASK.phone)}?text=${encodeURIComponent(msg)}`
+  if (eventPhase(NEXT_EVENT.date, now) === 'past') return null
+  return `https://wa.me/${waNumber(ASK.phone)}?text=${encodeURIComponent(ticketMessage())}`
 }

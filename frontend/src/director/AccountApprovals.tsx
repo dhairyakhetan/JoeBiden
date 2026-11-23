@@ -17,9 +17,11 @@ import { I } from '../components/v6Shared'
 import { ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getInitials, hashColor } from '../lib/uiHelpers'
 import DuplicatePhones from './DuplicatePhones'
+import ApplicationsByDayDialog from './ApplicationsByDayDialog'
 import { createRequestTokens } from './memberDirectoryRules'
 import {
   SEARCH_DEBOUNCE_MS, buildFilters, contactedFilterForView, headerCount, isFiltered, mergeGrades, normalizeGrade,
+  REJECTION_REASONS, composeRejectionNote, type RejectionReasonId,
 } from './accountApprovalsQuery'
 // `.adm-sort` lives here (shared admin-desk primitive, despite the filename -
 // TeamManagement/MemberOfMonth/CategoryManagement already reuse it the same
@@ -133,6 +135,8 @@ const AccountApprovals = () => {
   // grade are all applied by the server (see accountApprovalsQuery.ts).
   // `rejected` is the one genuinely different Supabase view with its own pagination.
   const [view, setView] = useState<'pending' | 'contacted' | 'all' | 'rejected' | 'duplicates'>('pending')
+  // The "applications by day" stat window (ApplicationsByDayDialog), opened from the header.
+  const [showByDay, setShowByDay] = useState(false)
   const [markingContacted, setMarkingContacted] = useState<number | null>(null)
   const [rejected, setRejected] = useState<RejectedMember[]>([])
   const [isLoadingRejected, setIsLoadingRejected] = useState(false)
@@ -147,9 +151,11 @@ const AccountApprovals = () => {
   const [rejectingMember, setRejectingMember] = useState<PendingMember | null>(null)
   const [rejectingBulk, setRejectingBulk] = useState(false)
   const [rejectionNote, setRejectionNote] = useState('')
+  const [rejectionReason, setRejectionReason] = useState<RejectionReasonId | null>(null)
   const [isRejecting, setIsRejecting] = useState(false)
   const rejectPanelRef = useRef<HTMLDivElement>(null)
-  const closeReject = () => { setRejectingMember(null); setRejectingBulk(false); setRejectionNote('') }
+  const closeReject = () => { setRejectingMember(null); setRejectingBulk(false); setRejectionNote(''); setRejectionReason(null) }
+  const composedNote = composeRejectionNote(rejectionReason, rejectionNote)
   useModalA11y(!!rejectingMember || rejectingBulk, rejectPanelRef, closeReject, isRejecting)
 
   useEffect(() => {
@@ -380,9 +386,39 @@ const AccountApprovals = () => {
     try {
       await directorService.markContacted(row.memberId)
       refreshContactedCounts()
+      // The row leaves the pending tab at once, so the undo for a mis-click
+      // has to be here too, not only on the contacted tab.
+      toast.action(`${row.fullName} marked contacted.`, {
+        label: 'undo',
+        onClick: () => { void handleUnmarkContacted({ ...row, contactedAt: now }) },
+      }, { duration: 8000 })
     } catch (e: any) {
       setMembers(prev => prev.map(m => m.memberId === row.memberId ? { ...m, contactedAt: null } : m))
       toast.error(`couldn't mark ${row.fullName} as contacted.`, e?.message)
+    } finally {
+      setMarkingContacted(null)
+    }
+  }
+
+  // Undo a mis-click (bug tracker 844347f9). Not destructive either way: the
+  // applicant is never told, so no confirm, just the toast.
+  const handleUnmarkContacted = async (row: Row) => {
+    if (!canDecide || !row.contactedAt) return
+    setMarkingContacted(row.memberId)
+    const before = row.contactedAt
+    const leaves = view === 'contacted'
+    setMembers(prev => leaves
+      ? prev.filter(m => m.memberId !== row.memberId)
+      : prev.map(m => m.memberId === row.memberId ? { ...m, contactedAt: null } : m))
+    try {
+      await directorService.unmarkContacted(row.memberId)
+      refreshContactedCounts()
+      toast.success(`${row.fullName} moved back to pending.`)
+    } catch (e: any) {
+      setMembers(prev => leaves
+        ? (prev.some(m => m.memberId === row.memberId) ? prev : [...prev, { ...row, contactedAt: before }])
+        : prev.map(m => m.memberId === row.memberId ? { ...m, contactedAt: before } : m))
+      toast.error(`couldn't move ${row.fullName} back to pending.`, e?.message)
     } finally {
       setMarkingContacted(null)
     }
@@ -396,7 +432,7 @@ const AccountApprovals = () => {
 
   const handleReject = async () => {
     if (!canDecide) return
-    const note = rejectionNote.trim()
+    const note = composedNote
     if (!note) return
     const targets = rejectingBulk ? rows.filter(r => selection.isSelected(r.id)) : rejectingMember ? [rejectingMember] : []
     if (targets.length === 0) return
@@ -486,13 +522,14 @@ const AccountApprovals = () => {
         <AdminTabHeader
           label="Approvals"
           title="Account approvals"
+          actions={<button type="button" className="btn btn-sm abd-open" onClick={() => setShowByDay(true)} aria-haspopup="dialog">applications by day</button>}
           count={view === 'duplicates'
             ? undefined
             : view === 'rejected'
             ? (search.trim() ? rejectedRows.length : (totalRejected ?? rejectedRows.length))
             : headerCount(view, contactedCounts, rows.length)}
           subtitle={
-            view === 'pending' ? 'Sign-ups nobody has reached out to yet. The menu badge also counts the ones already contacted: see the contacted tab.'
+            view === 'pending' ? 'Sign-ups nobody has reached out to yet. The menu badge is the total of both tabs: pending plus contacted.'
             : view === 'contacted' ? "Reached out, still deciding."
             : view === 'all' ? 'Every pending sign-up, contacted or not.'
             : view === 'duplicates' ? 'Live accounts that share a phone number, so HR can reach the people involved.'
@@ -504,9 +541,9 @@ const AccountApprovals = () => {
             split; rejected is a genuinely different Supabase view
             with its own pagination. Strings are unchanged. */}
         <div className="adm-seg" role="group" aria-label="Queue" style={{ marginBottom: 12 }}>
-          <button type="button" className={view === 'pending' ? 'is-active' : ''} aria-pressed={view === 'pending'} onClick={() => setView('pending')}>pending</button>
-          <button type="button" className={view === 'contacted' ? 'is-active' : ''} aria-pressed={view === 'contacted'} onClick={() => setView('contacted')}>contacted</button>
-          <button type="button" className={view === 'all' ? 'is-active' : ''} aria-pressed={view === 'all'} onClick={() => setView('all')}>all</button>
+          <button type="button" className={view === 'pending' ? 'is-active' : ''} aria-pressed={view === 'pending'} onClick={() => setView('pending')}>pending{contactedCounts ? ` ${contactedCounts.notContacted}` : ''}</button>
+          <button type="button" className={view === 'contacted' ? 'is-active' : ''} aria-pressed={view === 'contacted'} onClick={() => setView('contacted')}>contacted{contactedCounts ? ` ${contactedCounts.contacted}` : ''}</button>
+          <button type="button" className={view === 'all' ? 'is-active' : ''} aria-pressed={view === 'all'} onClick={() => setView('all')}>all{contactedCounts ? ` ${contactedCounts.notContacted + contactedCounts.contacted}` : ''}</button>
           <button type="button" className={view === 'rejected' ? 'is-active' : ''} aria-pressed={view === 'rejected'} onClick={() => setView('rejected')}>rejected</button>
           <button type="button" className={view === 'duplicates' ? 'is-active' : ''} aria-pressed={view === 'duplicates'} onClick={() => setView('duplicates')}>shared phones</button>
         </div>
@@ -672,10 +709,19 @@ const AccountApprovals = () => {
                   ) : (<>
                   {/* Marks that HR reached out to confirm this applicant's
                       membership before deciding - doesn't approve/reject on
-                      its own. Once set it's a fact, not a toggle: no undo
-                      button, and the row just moves to the "contacted" tab. */}
+                      its own. A mis-click can be undone: "undo contacted"
+                      clears it and the row goes back to the pending tab. */}
                   {row.contactedAt ? (
-                    <span className="mono xs muted" title={new Date(row.contactedAt).toLocaleString()}>contacted</span>
+                    <button
+                      onClick={() => handleUnmarkContacted(row)}
+                      disabled={markingContacted === row.memberId}
+                      className="btn btn-sm"
+                      aria-busy={markingContacted === row.memberId || undefined}
+                      aria-label={`Undo contacted for ${row.fullName}, move back to pending`}
+                      title={`Contacted ${new Date(row.contactedAt).toLocaleString()}. Click to move back to pending.`}
+                    >
+                      {markingContacted === row.memberId ? '…' : 'undo contacted'}
+                    </button>
                   ) : (
                     <button
                       onClick={() => handleMarkContacted(row)}
@@ -689,7 +735,7 @@ const AccountApprovals = () => {
                   <button onClick={() => handleApprove(row)} className="btn btn-sm adm-approve">
                     <I.check /> approve
                   </button>
-                  <button onClick={() => { setRejectingMember(row); setRejectingBulk(false); setRejectionNote('') }} className="btn btn-sm adm-reject" aria-label="reject">
+                  <button onClick={() => { setRejectingMember(row); setRejectingBulk(false); setRejectionNote(''); setRejectionReason(null) }} className="btn btn-sm adm-reject" aria-label="reject">
                     <XMarkIcon width={14} height={14} strokeWidth={2.4} aria-hidden /> <span className="adm-verdict-label">reject</span>
                   </button>
                   </>)}
@@ -710,9 +756,11 @@ const AccountApprovals = () => {
       {view !== 'rejected' && view !== 'duplicates' && (
         <BulkActionBar count={selection.count} onClear={selection.clear} busy={isRejecting}>
           {canDecide && <button className="btn btn-sm adm-approve" onClick={handleBulkApprove}>approve selected</button>}
-          {canDecide && <button className="btn btn-sm adm-reject" onClick={() => { setRejectingBulk(true); setRejectingMember(null); setRejectionNote('') }}>reject selected</button>}
+          {canDecide && <button className="btn btn-sm adm-reject" onClick={() => { setRejectingBulk(true); setRejectingMember(null); setRejectionNote(''); setRejectionReason(null) }}>reject selected</button>}
         </BulkActionBar>
       )}
+
+      {showByDay && <ApplicationsByDayDialog onClose={() => setShowByDay(false)} />}
 
       {/* Rejection modal - one note, applied to one row or the whole selection. */}
       {(rejectingMember || rejectingBulk) && (
@@ -730,18 +778,42 @@ const AccountApprovals = () => {
                   ? <>reject <strong style={{ color: 'var(--ink)' }}>{selection.count} selected applications</strong>? each applicant gets an in-app notification with the reason below.</>
                   : <>reject <strong style={{ color: 'var(--ink)' }}>{rejectingMember?.fullName}</strong>? they will see an in-app notification with the reason below.</>}
               </p>
-              <label htmlFor="rej-note" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 6 }}>rejection reason *</label>
+              <fieldset style={{ border: 0, padding: 0, margin: '0 0 14px' }}>
+                <legend className="mono xs upper muted" style={{ fontWeight: 700, marginBottom: 8, padding: 0 }}>reason *</legend>
+                <div role="radiogroup" aria-label="Rejection reason" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {REJECTION_REASONS.map(r => (
+                    <button
+                      key={r.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={rejectionReason === r.id}
+                      className={'chip' + (rejectionReason === r.id ? ' chip-active' : '')}
+                      onClick={() => setRejectionReason(r.id)}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+              <label htmlFor="rej-note" className="mono xs upper muted" style={{ fontWeight: 700, display: 'block', marginBottom: 6 }}>
+                {rejectionReason === 'other' ? 'please describe *' : 'anything to add (optional)'}
+              </label>
               <textarea
                 id="rej-note"
                 className="textarea"
                 value={rejectionNote}
                 onChange={e => setRejectionNote(e.target.value)}
                 rows={3}
-                placeholder="be specific. the applicant will see this."
+                placeholder={rejectionReason === 'other' ? 'be specific. the applicant will see this.' : 'added after the reason. the applicant will see this.'}
               />
+              {composedNote && (
+                <p className="xs" style={{ margin: '10px 0 0', color: 'var(--ink-2)' }}>
+                  <span className="mono xs upper muted" style={{ fontWeight: 700 }}>they will read: </span>{composedNote}
+                </p>
+              )}
               <div className="row gap-2" style={{ marginTop: 16, justifyContent: 'flex-end' }}>
                 <button onClick={closeReject} className="btn btn-sm" disabled={isRejecting}>cancel</button>
-                <button onClick={handleReject} disabled={!rejectionNote.trim() || isRejecting} className="btn btn-sm" style={{ background: 'var(--danger)', color: 'var(--paper)', borderRadius: 999, minHeight: 44, whiteSpace: 'nowrap' }}>
+                <button onClick={handleReject} disabled={!composedNote || isRejecting} className="btn btn-sm" style={{ background: 'var(--danger)', color: 'var(--paper)', borderRadius: 999, minHeight: 44, whiteSpace: 'nowrap' }}>
                   {isRejecting ? '...' : 'confirm rejection'}
                 </button>
               </div>

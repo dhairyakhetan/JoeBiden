@@ -1,0 +1,49 @@
+{
+  "slug": "arts-and-crafts",
+  "title": "Art and Craft Sessions in Pictures: Painting, Origami and Cards · AquaTerra",
+  "description": "Photos from {count} art and craft drives by AquaTerra students since {firstYear}: pot painting, origami, Diwali cards and Christmas stockings in Kolkata.",
+  "h1Lead": "paint, fold and",
+  "h1Accent": "make things",
+  "lede": "Art and craft sessions teach children to paint, draw, fold and make things, from pot painting and origami to Diwali cards and Christmas stockings. Since {firstYear} AquaTerra has run {count} of these drives across Kolkata, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up).",
+  "chapters": {
+    "2021": {
+      "heading": "pots, soil and saplings",
+      "text": "In 2021 we ran {year:2021} drive: a flower pot painting workshop at Ek Tara in June. The students painted their pots and then got their hands muddy planting saplings."
+    },
+    "2022": {
+      "heading": "earth day and a painted pride",
+      "text": "In 2022 we ran {year:2022} drives. Four of the photos are April workshops, three of them for Earth Day, including Heal the Earth at Don Bosco School in Park Circus, where trees were planted in bottles. In August, Paint the Pride marked Independence Day."
+    },
+    "2023": {
+      "heading": "colours of durga",
+      "text": "In 2023 we ran {year:2023} drives. Most of the photos are Colours of Durga, a Durga Puja workshop series at Pather Sathi's Sunday School, numbered 1.0 to 5.0 from late September into early October. In December, Merry Miracles crafts included Santa masks and an origami workshop."
+    },
+    "2024": {
+      "heading": "a year of art rooms",
+      "text": "In 2024 we ran {year:2024} drives. Most of the photos are from August and September at Pather Sathi: Art Flow, The Art Room and Stroke by Stroke, with painting, drawing and crafts, then Sketch and Solve and Colourful Questions, which mixed a quiz with art."
+    },
+    "2025": {
+      "heading": "diwali cards, then stockings",
+      "text": "In 2025 we ran {year:2025} drives. The autumn photos are Diwali sessions: greeting cards at Amader Pradakhep and School On Wheels, and Green Diwali posters at Ektara after kids learned how firecrackers harm the environment. December brought Christmas stockings and Santa masks."
+    },
+    "2026": {
+      "heading": "mother's day cards",
+      "text": "In 2026 we ran {year:2026} drives so far. The one in these photos is a Mother's Day card making session at Disha Foundation in early September, where handmade greeting cards were made for mothers."
+    }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every art and craft drive, with its date and place, read [the full story](/impact/arts-and-crafts).",
+  "faqs": [
+    {
+      "q": "What kinds of art and craft sessions does AquaTerra run?",
+      "a": "AquaTerra runs art and craft drives for children, including pot painting, origami, fingerpainting, Diwali greeting cards, Christmas stockings and Santa masks. AquaTerra has run {count} of these drives across Kolkata since {firstYear}."
+    },
+    {
+      "q": "Where do AquaTerra's art and craft sessions happen?",
+      "a": "The most frequent place is {topPlace}. Other sessions have been at Ek Tara, AIM Foundation, Amader Pradakhep and Disha Foundation, across {placesCount} places in all."
+    },
+    {
+      "q": "Can I volunteer at an art and craft session?",
+      "a": "Yes, if you are a member of AquaTerra aged 14 to 19. Sign in with Google on the join page and wait for approval. Students run the drives, and the full story lists where and when each one ran."
+    }
+  ]
+}

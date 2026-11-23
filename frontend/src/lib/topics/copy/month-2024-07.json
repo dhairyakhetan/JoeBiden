@@ -1,0 +1,82 @@
+{
+  "slug": "month-2024-07",
+  "title": "AquaTerra in July 2024: {count} drives, safety, careers and clothes",
+  "description": "July 2024 at AquaTerra: {count} drives, good touch and bad touch sessions for children, a career workshop, STEM and music, art and two clothes collections.",
+  "h1Lead": "july was about",
+  "h1Accent": "safety and skills",
+  "lede": "In July 2024 AquaTerra ran {count} drives across {placesCount} places. Most were art workshops and clothes collections, but the month also took up good touch and bad touch awareness sessions for children, a career workshop, a STEM session and music, so the month reached children on more subjects than art alone.",
+  "sections": [
+    {
+      "id": "good-touch-bad-touch",
+      "heading": "good touch, bad touch",
+      "body": [
+        "Safe and Strong at Inner Wheel School on 25 July and Safe Circle at Gyandeepak on 26 July were awareness workshops on good touch, bad touch and personal safety. Both taught children about these topics with care, and the same subject came back at Pather Sathi at the end of August.",
+        "The same workshop ran at two places in two consecutive days, which is a simple way to repeat a session that works. The [August 2024 page](/impact/month-2024-08) covers the Pather Sathi session, and the [health and wellbeing page](/impact/health-and-wellbeing) covers the wider topic."
+      ]
+    },
+    {
+      "id": "careers-science-and-music",
+      "heading": "careers, science and music",
+      "body": [
+        "The Next Step on 12 July at Gyandeepak was a career workshop that guided students to explore their goals, skills and future opportunities. Think Lab on 11 July at Shoishob Foundation was a STEM workshop, where participants explored science, technology, engineering and maths through activities, and the [science and STEM page](/impact/science-and-stem) has the wider picture.",
+        "Tune In on 6 July at Universal Smile was a music workshop that explored rhythm, melodies and musical creativity. Subjects as far apart as careers and music can share one month, so the children reached in July had more than one kind of session to choose from."
+      ]
+    },
+    {
+      "id": "art-at-pather-sathi-and-amader-pradakhep",
+      "heading": "art on the Sunday School calendar",
+      "body": [
+        "Art was the largest group again. At Pather Sathi, Art Zone on 6 July, Hands at Work on 13 July and Draw and Dream on 27 July used painting, drawing and crafts. Pather Sathi hosted the most drives of the month, and the art sessions were a big part of that.",
+        "Amader Pradakhep hosted Tile by Tile on 5 July, a mosaic workshop where participants designed beautiful patterns from coloured pieces, and Colour Splash on 26 July, another art workshop where students expressed creativity through painting, drawing and crafts."
+      ]
+    },
+    {
+      "id": "clothes-collections-in-july",
+      "heading": "clothes collections in july",
+      "body": [
+        "Wear and Share ran again in July, with its 8.0 collection at Raghav Residency on 14 July and its 9.0 at Vistar Apartment, Sealdah on 29 July. Its write-up for 8.0 describes warmth shared through donated clothes, and the 9.0 write-up describes a heartfelt campaign that brought the community together.",
+        "The series is covered in full on the [Wear and Share page](/impact/wear-and-share). For how a clothes drive is run from start to finish, the [clothes donation guide](/impact/how-to-run-a-clothes-donation-drive) sets it out."
+      ]
+    },
+    {
+      "id": "july-between-june-and-august",
+      "heading": "july between june and august",
+      "body": [
+        "July had {count} drives, June had {count:month-2024-06} and August had {count:month-2024-08}. July was smaller than June, which was carried by Paradox and the anniversary, and its turnouts were spread across more workshops for children.",
+        "July had {volunteers} volunteer turnouts in all. A volunteer turnout counts every time someone showed up, so the figure is places filled rather than people. {topPlace} hosted the most drives this month, and the month's drives ran at {placesCount} places."
+      ]
+    }
+  ],
+  "learnings": [
+    "Safety topics can be repeated at a new place within days, as the good touch, bad touch workshops at two places did in late July.",
+    "Topics far apart, like careers and music, can share one month and reach different children in the same few weeks.",
+    "A clothes collection can run as numbered drives across the summer: Wear and Share's 8.0 and 9.0 came about a fortnight apart.",
+    "Art can make up the largest group of a month's drives, as it did in July at Pather Sathi and Amader Pradakhep."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in July 2024?",
+      "a": "AquaTerra ran {count} drives in July 2024 across {placesCount} places. They included good touch and bad touch sessions for children, a career workshop, a STEM workshop, a music workshop, art sessions and Wear and Share clothes collections."
+    },
+    {
+      "q": "Does AquaTerra run good touch, bad touch workshops for children?",
+      "a": "Yes. In July 2024 AquaTerra ran good touch, bad touch workshops at Inner Wheel School on 25 July and at Gyandeepak on 26 July, teaching children about good touch, bad touch and personal safety. The same topic ran at Pather Sathi at the end of August 2024."
+    },
+    {
+      "q": "Where did AquaTerra run a STEM workshop in July 2024?",
+      "a": "Think Lab, a STEM workshop, ran at Shoishob Foundation on 11 July 2024. It explored science, technology, engineering and maths through activities for participants."
+    },
+    {
+      "q": "What is Wear and Share?",
+      "a": "Wear and Share is AquaTerra's clothes collection drive series. In July 2024 its drives were at Raghav Residency on 14 July and at Vistar Apartment, Sealdah on 29 July, collecting donated clothes to give to those less fortunate."
+    }
+  ],
+  "keywords": [
+    "AquaTerra July 2024",
+    "good touch bad touch workshop Kolkata children",
+    "STEM workshop for children Kolkata",
+    "Wear and Share clothes drive Kolkata",
+    "career workshop for students Kolkata",
+    "AquaTerra drives July 2024"
+  ]
+}

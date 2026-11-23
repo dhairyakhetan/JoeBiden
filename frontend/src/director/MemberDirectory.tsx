@@ -25,6 +25,10 @@ import {
 import MemberTeamsDialog from './MemberTeamsDialog'
 import MemberBreakDialog from './MemberBreakDialog'
 import BreaksOverview from './BreaksOverview'
+import CoreImportDialog from './CoreImportDialog'
+import CoreBadge from '../components/CoreBadge'
+import coreMemberService from '../services/coreMemberService'
+import { useCoreMembers, refreshCoreMembers } from '../lib/coreMembers'
 import { isCurrentlyOnBreak } from '../services/breakService'
 import { useLongPress } from '../hooks/useLongPress'
 // `Field` was only used by the deleted RedeemPointsModal and its two trigger
@@ -229,6 +233,10 @@ const MemberDirectory = () => {
    *  break status is computed (isCurrentlyOnBreak), not a `status` column the
    *  server query can `.eq()` on. */
   const [onBreakOnly, setOnBreakOnly] = useState(false)
+  // AQ Core (bug tracker 081395e9): who has the badge, the import dialog, and the row in flight.
+  const core = useCoreMembers()
+  const [coreImportOpen, setCoreImportOpen] = useState(false)
+  const [coreChanging, setCoreChanging] = useState<number | null>(null)
   /** Row multi-select for the bulk break action. A plain `Set<number>` of
    *  memberIds rather than adminKit's `useRowSelection` - that hook keys on a
    *  generic `id: string` shape DirectoryMember doesn't have, and this desk
@@ -487,6 +495,7 @@ const MemberDirectory = () => {
         ? `${member.fullName} comes off the public directory and the live member list. Nothing is deleted - their posts, drives and profile all stay, and you can restore them from the Archive filter.`
         : `${member.fullName} goes back on the public directory and the live member list.`,
       confirmLabel: goingToArchive ? 'Archive' : 'Restore',
+      neutral: goingToArchive,
     })
     if (!ok) return
     setArchiving(member.memberId)
@@ -647,6 +656,45 @@ const MemberDirectory = () => {
     finally { setRoleChanging(null) }
   }
 
+  // HR and super admin only, matching core_members' own RLS. Removing asks first; adding does not
+  // (nothing is lost and it is one click to undo).
+  const handleToggleCore = async (member: { memberId: number; fullName: string }) => {
+    if (!isSuperAdmin) return
+    const isCore = core.ids.has(member.memberId)
+    if (isCore) {
+      const ok = await confirm({
+        title: 'Remove from AQ Core?',
+        body: `${member.fullName} loses the AQ Core badge and comes off the Core Team page. You can add them back at any time.`,
+        confirmLabel: 'Remove',
+        neutral: true,
+      })
+      if (!ok) return
+    }
+    setCoreChanging(member.memberId)
+    try {
+      if (isCore) await coreMemberService.remove(member.memberId)
+      else await coreMemberService.add(member.memberId)
+      refreshCoreMembers()
+      toast.success(isCore ? `${member.fullName} removed from AQ Core.` : `${member.fullName} added to AQ Core.`)
+    } catch (e: any) {
+      toast.error(isCore ? 'couldn’t remove them from AQ Core.' : 'couldn’t add them to AQ Core.', e?.message)
+    } finally {
+      setCoreChanging(null)
+    }
+  }
+  const coreButton = (member: { memberId: number; fullName: string }) => (
+    <button
+      type="button"
+      className="mdir-teamsbtn"
+      onClick={() => handleToggleCore(member)}
+      disabled={!core.ready || coreChanging === member.memberId}
+      aria-busy={coreChanging === member.memberId || undefined}
+      aria-label={core.ids.has(member.memberId) ? `Remove ${member.fullName} from AQ Core` : `Add ${member.fullName} to AQ Core`}
+    >
+      {coreChanging === member.memberId ? '…' : core.ids.has(member.memberId) ? 'remove core' : 'make core'}
+    </button>
+  )
+
   const visibleMembers = onBreakOnly ? members.filter(m => isCurrentlyOnBreak(m.breakEnd)) : members
   const canBreakAnyone = hasLeaderAccess(currentMember?.role)
   const canTeams = hasLeaderAccess(currentMember?.role)
@@ -684,7 +732,7 @@ const MemberDirectory = () => {
           title="Member directory"
           // Item 3.1: this said "active members" unconditionally, which would
           // be a plain lie while the archive is showing.
-          subtitle={`${totalMembers.toLocaleString()} ${
+          subtitle={loadError || (isLoading && members.length === 0) ? undefined : `${totalMembers.toLocaleString()} ${
             roleFilter === 'all'
               ? statusViewNoun(statusFilter)
               : ROLE_FILTERS.find(f => f.value === roleFilter)!.label.toLowerCase()
@@ -699,12 +747,19 @@ const MemberDirectory = () => {
         searchPlaceholder="Search by name or email…"
         actionsInline
         actions={
+          <>
+          {isSuperAdmin && (
+            <button type="button" className="btn btn-sm" onClick={() => setCoreImportOpen(true)} title="Add core members from the Google Sheet by email">
+              import AQ Core list
+            </button>
+          )}
           <label className="adm-sort">
             <span>sort</span>
             <select value={sortBy} onChange={e => setSortBy(e.target.value as SortBy)} aria-label="Sort members">
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </label>
+          </>
         }
       >
         {ROLE_FILTERS.map(f => (
@@ -884,6 +939,7 @@ const MemberDirectory = () => {
                                 : getInitials(member.fullName)}
                             </div>
                             {member.fullName}
+                            {core.ids.has(member.memberId) && <CoreBadge />}
                           </Link>
                         </td>
                         <td>{renderContact(member.memberId, member.fullName, 'email', member.email)}</td>
@@ -920,6 +976,7 @@ const MemberDirectory = () => {
                         <td className="mono">{formatDate(member.createdAt)}</td>
                         <td>
                           <div className="mdir-td-actions">
+                            {isSuperAdmin && statusFilter === 'active' && coreButton(member)}
                             {/* Always-visible, matching the card grid's own
                                 break button below - previously reachable only
                                 via long-press/right-click on this row, which
@@ -1042,6 +1099,7 @@ const MemberDirectory = () => {
                     <div className="mdir-ident">
                       <div className="row gap-2" style={{ marginBottom: 3, flexWrap: 'wrap' }}>
                         <span className="mdir-name">{member.fullName}</span>
+                        {core.ids.has(member.memberId) && <CoreBadge />}
                         {/* role-hod (sky) / role-director (pink) are the shared color vocabulary
                             (v6.css) - these were previously swapped (HoD rendered pink, Director
                             rendered sky) via ad-hoc inline overrides; use the matching class per role
@@ -1172,6 +1230,7 @@ const MemberDirectory = () => {
                     >
                       teams
                     </button>
+                    {isSuperAdmin && statusFilter === 'active' && coreButton(member)}
                     {/* Item 3.1. Archiving is NOT deleting - the row, the
                         posts, the drives and the wall notes all stay; the
                         person just comes off the live lists. So it sits next
@@ -1301,6 +1360,8 @@ const MemberDirectory = () => {
           onClose={() => setTeamsTarget(null)}
         />
       )}
+
+      {coreImportOpen && <CoreImportDialog onClose={() => setCoreImportOpen(false)} />}
 
       {breakTarget && (
         <MemberBreakDialog

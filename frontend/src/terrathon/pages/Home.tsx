@@ -619,7 +619,7 @@ export function TerraThonHome({ events, loading, error, reload }: Props) {
               {ordered.length > 0 && (
                 <li><strong>One registration covers your whole team</strong>, so nobody signs up twice.</li>
               )}
-              <li><strong>12A and 80G certified</strong>, so what you pay is going somewhere accountable.</li>
+              <li><strong>A registered charitable trust</strong>, listed on NGO DARPAN, so what you pay is going somewhere accountable.</li>
             </ul>
             {/* The board's explicit "SEE THE PROJECTS" ask, missing from this
                 section before. Points at the main site's own projects listing,
@@ -638,7 +638,7 @@ export function TerraThonHome({ events, loading, error, reload }: Props) {
           {/* The four-stat strip that used to close this card is gone.
               Measured against the copy 40px above it, three of its four
               figures were already on screen: the bullets state the prize
-              total and the 12A/80G registration in words, and the hero,
+              total and the registration in words, and the hero,
               the sport cards and the schedule all say three sports. Four
               stat-sized numbers promised four facts and delivered one,
               "running since 2021", which is now the second clause of the

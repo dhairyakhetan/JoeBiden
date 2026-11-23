@@ -1,0 +1,18 @@
+{
+  "slug": "wear-and-write",
+  "title": "Wear and Write in Pictures: Clothes and Notebook Drives · AquaTerra",
+  "description": "Photos from {count} Wear and Write drives in Kolkata, where students collected clothes and notebooks and sorted them for fair distribution, mostly in spring 2024.",
+  "h1Lead": "clothes and notebooks,",
+  "h1Accent": "in pictures",
+  "lede": "Wear and Write is where AquaTerra students collect clothes and notebooks, then sort them for fair distribution. From {firstYear} to {lastYear} we ran {count} of these drives, with {volunteers} volunteer turnouts, and almost all of them came in April and May 2024.",
+  "chapters": {
+    "2024": { "heading": "a month of sorting and collecting", "text": "In 2024 we ran {year:2024} drives, between 26 April and 24 May. The captions say volunteers sorted clothes and notebooks for a smooth, fair distribution, and they link the two things we collected: clothes that bring warmth, and notebooks that make education more accessible. The photos come from Active Acres, Clubtown Greens in Bangur, Salarpuria Pearl in Gopalpur and Kolkata." },
+    "2025": { "heading": "one drive, at the end", "text": "In 2025 we ran {year:2025} drive, on 12 May, at Salarpuria Pearl in Gopalpur. Its caption says clothes and notebooks spread warmth and knowledge alike. It is the last drive in this series so far." }
+  },
+  "closing": "Members aged 14 to 19 can join on the [join page](/join) by signing in with Google and waiting for approval. For every drive with its place and details, read [the full story](/impact/wear-and-write).",
+  "faqs": [
+    { "q": "Where did AquaTerra collect clothes and notebooks in Kolkata?", "a": "Wear and Write drives collected clothes and notebooks at places including Active Acres, Clubtown Greens in Bangur and Salarpuria Pearl in Gopalpur, as well as around Kolkata. The series has reached {placesCount} places, and most of its drives ran in April and May 2024." },
+    { "q": "Does AquaTerra accept old clothes and notebooks?", "a": "Past Wear and Write drives collected donated clothes and notebooks, and volunteers sorted them before they were handed out. For how to give to a drive now, ask AquaTerra through its contact page." },
+    { "q": "What did AquaTerra do in 2024 with clothes and notebooks?", "a": "In 2024 AquaTerra ran {year:2024} Wear and Write drives between 26 April and 24 May. Volunteers collected clothes and notebooks, sorted them for fair distribution, and passed them on to young learners and communities." }
+  ]
+}

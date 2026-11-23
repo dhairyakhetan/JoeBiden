@@ -1,0 +1,78 @@
+{
+  "slug": "what-is-a-student-run-ngo",
+  "title": "What is a student-run NGO? · AquaTerra",
+  "description": "A student-run NGO is planned and run by students. AquaTerra is a registered Kolkata trust for members aged fourteen to nineteen, with {count} drives since {firstYear}.",
+  "h1Lead": "what is a",
+  "h1Accent": "student-run NGO?",
+  "lede": "A student-run NGO is a charity where students plan, run and write up the work themselves. AquaTerra is one: a registered charitable trust, founded in June 2021, whose members are aged fourteen to nineteen and who have run {count} drives since {firstYear}.",
+  "sections": [
+    {
+      "id": "what-student-run-means",
+      "heading": "what student-run means here",
+      "body": [
+        "At AquaTerra, members decide what a drive is, plan it, take it to a place in Kolkata, and write it up. Members are aged fourteen to nineteen, and students run the drives. Since {firstYear}, {volunteers} volunteer turnouts have gone into {count} drives, and every one is public on the site.",
+        "The work covers a wide range. Some drives feed stray dogs, some collect clothes and books, some run workshops for children, and a few are fundraising nights that pay for the rest. Each one is a drive that a student team planned and took on."
+      ]
+    },
+    {
+      "id": "registered-and-self-funded",
+      "heading": "registered, and self-funded",
+      "body": [
+        "AquaTerra is registered as a charitable trust through TerraRoots and listed on DARPAN, the government's NGO registry. It takes no monetary donations and charges no fees, so its welfare work is paid for by its own student-run events and by [Crftd](/crftd), its student streetwear label.",
+        "The events are where the money for the welfare work comes from, and they are a student job too. Paradox, Disco Diwali, TerraThon, The Starry Night and fundraiser matches all run this way. The [page on how student NGOs are funded](/impact/how-are-student-ngos-funded) shows how that works in practice."
+      ]
+    },
+    {
+      "id": "what-students-actually-do",
+      "heading": "what the students actually do",
+      "body": [
+        "Members teach, feed, plant and collect. The feeding work is [Tails and Treats](/impact/tails-and-treats), the clothes work is [Wear and Share](/impact/wear-and-share), and the children's sessions sit in [festival drives](/impact/festival-drives) and [reading and speaking sessions](/impact/reading-speaking-and-english).",
+        "Members also build and teach. [ShikshAQ](/shikshaq) offers free exam papers and a free way to be connected with a teacher, and it was built by students and is open to people who are not members. [Terra Notes](/terranotes) is AquaTerra's monthly digital magazine, and members are trained to use AI in daily work and in projects."
+      ]
+    },
+    {
+      "id": "if-you-want-to-join",
+      "heading": "if you want to join",
+      "body": [
+        "The work only moves when students stay with a drive from the plan to the write-up. Members of AquaTerra are aged fourteen to nineteen. To join, sign in with Google, fill in your details and wait for approval.",
+        "The [join page](/join) has the steps, and the [volunteer page](/volunteer) covers the drives you can help with. Schools and companies can work with AquaTerra too, through [collaborations](/collaborations)."
+      ]
+    }
+  ],
+  "learnings": [
+    "A student-run NGO works when students own the whole cycle: the plan, the day and the write-up.",
+    "Writing every drive up publicly lets a parent, a school or a visitor check what the charity actually did.",
+    "Paying for welfare work through events means the nights are a student job as much as the drives are.",
+    "Repeating one drive in the same places, as Tails and Treats did in 2025, gives a new team a routine to copy."
+  ],
+  "faqs": [
+    {
+      "q": "What is a student-run NGO?",
+      "a": "A student-run NGO is a non-profit that students plan, run and write up themselves. AquaTerra is one, registered as a charitable trust through TerraRoots, with members aged fourteen to nineteen. It has run {count} drives since {firstYear}."
+    },
+    {
+      "q": "Is AquaTerra a real, registered NGO?",
+      "a": "Yes. AquaTerra is a registered charitable trust, set up through TerraRoots and listed on DARPAN, the government's NGO registry. It was founded in June 2021, and its members are students aged fourteen to nineteen."
+    },
+    {
+      "q": "Does AquaTerra accept donations?",
+      "a": "No. AquaTerra takes no monetary donations and charges no fees. Its welfare work is paid for by its own student-run events, including Paradox and Disco Diwali, and by the streetwear label Crftd."
+    },
+    {
+      "q": "How old do you have to be to join AquaTerra?",
+      "a": "Members of AquaTerra are aged fourteen to nineteen. You join by signing in with Google and waiting for approval, and the join page explains the next steps."
+    },
+    {
+      "q": "What do AquaTerra's members actually do?",
+      "a": "Members run drives: feeding stray dogs, collecting clothes and books, handing out food and sharbat, running workshops for children and holding fundraising nights. Each drive is written up on the site, and ShikshAQ, built by students, is another part of the work."
+    }
+  ],
+  "keywords": [
+    "what is a student-run NGO",
+    "student-run NGO Kolkata",
+    "NGO run by teenagers India",
+    "charity run by students Kolkata",
+    "AquaTerra student NGO",
+    "registered trust run by students"
+  ]
+}

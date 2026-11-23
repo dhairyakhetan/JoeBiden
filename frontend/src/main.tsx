@@ -7,13 +7,12 @@
 import './styles/tokens.css'
 import './styles/v6.css'
 import ReactDOM from 'react-dom/client'
-import { inject } from '@vercel/analytics'
 import { injectSpeedInsights } from '@vercel/speed-insights'
 import App from './App'
 import './index.css'
+import './styles/components/tactile.css'
 import { installGlobalErrorTracking } from './lib/errorTracking'
 
-inject()
 injectSpeedInsights()
 // Catches what ErrorBoundary.tsx structurally cannot: async errors that
 // bubble to `window` instead of through React's render/commit phases.

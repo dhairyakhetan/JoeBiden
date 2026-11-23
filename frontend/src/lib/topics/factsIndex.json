@@ -1,0 +1,861 @@
+{
+ "tails-and-treats": {
+  "count": 56,
+  "volunteers": 280,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "sharbat-seva": {
+  "count": 33,
+  "volunteers": 159,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "grow-green": {
+  "count": 30,
+  "volunteers": 267,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "wear-and-share": {
+  "count": 23,
+  "volunteers": 102,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "wear-and-write": {
+  "count": 16,
+  "volunteers": 80,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "book-basket": {
+  "count": 16,
+  "volunteers": 33,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "food-for-all": {
+  "count": 22,
+  "volunteers": 86,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "respect-and-reach": {
+  "count": 8,
+  "volunteers": 42,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "smile-notes": {
+  "count": 7,
+  "volunteers": 40,
+  "firstYear": 2026,
+  "lastYear": 2026
+ },
+ "sundarbans": {
+  "count": 10,
+  "volunteers": 93,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "festival-drives": {
+  "count": 43,
+  "volunteers": 412,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "summer-and-seasonal-drives": {
+  "count": 37,
+  "volunteers": 182,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "animal-welfare": {
+  "count": 93,
+  "volunteers": 415,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "arts-and-crafts": {
+  "count": 101,
+  "volunteers": 411,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "reading-speaking-and-english": {
+  "count": 58,
+  "volunteers": 232,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "science-and-stem": {
+  "count": 31,
+  "volunteers": 108,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "drama-music-and-dance": {
+  "count": 30,
+  "volunteers": 363,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "health-and-wellbeing": {
+  "count": 18,
+  "volunteers": 61,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "environment-education": {
+  "count": 49,
+  "volunteers": 331,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "sport-and-play": {
+  "count": 15,
+  "volunteers": 133,
+  "firstYear": 2022,
+  "lastYear": 2024
+ },
+ "ai-and-digital-skills": {
+  "count": 5,
+  "volunteers": 18,
+  "firstYear": 2023,
+  "lastYear": 2026
+ },
+ "places-we-return-to": {
+  "count": 236,
+  "volunteers": 930,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "pather-sathi": {
+  "count": 123,
+  "volunteers": 455,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "ek-tara": {
+  "count": 31,
+  "volunteers": 136,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "disha-foundation": {
+  "count": 19,
+  "volunteers": 92,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "amader-pradakhep": {
+  "count": 15,
+  "volunteers": 49,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "aim-foundation": {
+  "count": 17,
+  "volunteers": 56,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "urban-poverty-and-shelters": {
+  "count": 20,
+  "volunteers": 101,
+  "firstYear": 2023,
+  "lastYear": 2026
+ },
+ "where-we-work": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "year-2021": {
+  "count": 8,
+  "volunteers": 51,
+  "firstYear": 2021,
+  "lastYear": 2021
+ },
+ "year-2022": {
+  "count": 59,
+  "volunteers": 620,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "year-2023": {
+  "count": 117,
+  "volunteers": 578,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "year-2024": {
+  "count": 153,
+  "volunteers": 1196,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "year-2025": {
+  "count": 186,
+  "volunteers": 1156,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "year-2026": {
+  "count": 24,
+  "volunteers": 124,
+  "firstYear": 2026,
+  "lastYear": 2026
+ },
+ "how-we-fund-the-work": {
+  "count": 37,
+  "volunteers": 1147,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "fundraising": {
+  "count": 40,
+  "volunteers": 1183,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-a-drive-works": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "volunteering-for-teens-in-kolkata": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "student-leadership": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "for-parents": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "free-resources-for-students": {
+  "count": 37,
+  "volunteers": 128,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "by-the-numbers": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "lessons-from-our-drives": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "salt-lake": {
+  "count": 22,
+  "volunteers": 94,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "bangur": {
+  "count": 17,
+  "volunteers": 94,
+  "firstYear": 2024,
+  "lastYear": 2026
+ },
+ "lake-town": {
+  "count": 12,
+  "volunteers": 67,
+  "firstYear": 2025,
+  "lastYear": 2026
+ },
+ "ballygunge-and-topsia": {
+  "count": 10,
+  "volunteers": 45,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "howrah": {
+  "count": 9,
+  "volunteers": 61,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "alipore": {
+  "count": 6,
+  "volunteers": 229,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "sarat-bose-road": {
+  "count": 5,
+  "volunteers": 25,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "bhawanipore": {
+  "count": 4,
+  "volunteers": 17,
+  "firstYear": 2025,
+  "lastYear": 2026
+ },
+ "your-first-drive": {
+  "count": 154,
+  "volunteers": 684,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "your-first-month": {
+  "count": 205,
+  "volunteers": 788,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "your-first-year": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "how-to-run-a-stray-dog-feeding-drive": {
+  "count": 56,
+  "volunteers": 280,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "how-to-run-a-sharbat-stall": {
+  "count": 33,
+  "volunteers": 159,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "how-to-run-a-plantation-drive": {
+  "count": 30,
+  "volunteers": 267,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-to-run-a-clothes-donation-drive": {
+  "count": 23,
+  "volunteers": 102,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "how-to-run-a-book-donation-drive": {
+  "count": 32,
+  "volunteers": 113,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "how-to-run-a-food-distribution-drive": {
+  "count": 22,
+  "volunteers": 86,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "how-to-visit-an-old-age-home": {
+  "count": 8,
+  "volunteers": 42,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "how-to-run-an-art-workshop-for-kids": {
+  "count": 91,
+  "volunteers": 362,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-to-run-a-reading-session-for-kids": {
+  "count": 53,
+  "volunteers": 215,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "how-to-celebrate-a-festival-with-kids": {
+  "count": 39,
+  "volunteers": 403,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "month-2022-03": {
+  "count": 10,
+  "volunteers": 66,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "month-2022-04": {
+  "count": 12,
+  "volunteers": 49,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "month-2022-06": {
+  "count": 5,
+  "volunteers": 81,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "month-2022-07": {
+  "count": 6,
+  "volunteers": 167,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "month-2022-08": {
+  "count": 7,
+  "volunteers": 39,
+  "firstYear": 2022,
+  "lastYear": 2022
+ },
+ "month-2023-04": {
+  "count": 6,
+  "volunteers": 24,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-05": {
+  "count": 18,
+  "volunteers": 93,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-06": {
+  "count": 30,
+  "volunteers": 155,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-07": {
+  "count": 24,
+  "volunteers": 159,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-08": {
+  "count": 8,
+  "volunteers": 35,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-10": {
+  "count": 7,
+  "volunteers": 25,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-11": {
+  "count": 5,
+  "volunteers": 19,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2023-12": {
+  "count": 10,
+  "volunteers": 33,
+  "firstYear": 2023,
+  "lastYear": 2023
+ },
+ "month-2024-04": {
+  "count": 13,
+  "volunteers": 47,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-05": {
+  "count": 53,
+  "volunteers": 234,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-06": {
+  "count": 20,
+  "volunteers": 348,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-07": {
+  "count": 12,
+  "volunteers": 60,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-08": {
+  "count": 9,
+  "volunteers": 44,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-09": {
+  "count": 5,
+  "volunteers": 17,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-10": {
+  "count": 6,
+  "volunteers": 198,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-11": {
+  "count": 14,
+  "volunteers": 62,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2024-12": {
+  "count": 17,
+  "volunteers": 169,
+  "firstYear": 2024,
+  "lastYear": 2024
+ },
+ "month-2025-01": {
+  "count": 7,
+  "volunteers": 17,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-03": {
+  "count": 42,
+  "volunteers": 189,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-04": {
+  "count": 26,
+  "volunteers": 117,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-05": {
+  "count": 11,
+  "volunteers": 41,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-06": {
+  "count": 29,
+  "volunteers": 403,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-07": {
+  "count": 21,
+  "volunteers": 96,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-08": {
+  "count": 14,
+  "volunteers": 84,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-09": {
+  "count": 11,
+  "volunteers": 66,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-10": {
+  "count": 6,
+  "volunteers": 34,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2025-12": {
+  "count": 13,
+  "volunteers": 88,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "month-2026-03": {
+  "count": 7,
+  "volunteers": 45,
+  "firstYear": 2026,
+  "lastYear": 2026
+ },
+ "month-2026-04": {
+  "count": 8,
+  "volunteers": 38,
+  "firstYear": 2026,
+  "lastYear": 2026
+ },
+ "month-2026-05": {
+  "count": 5,
+  "volunteers": 26,
+  "firstYear": 2026,
+  "lastYear": 2026
+ },
+ "zero-hunger": {
+  "count": 108,
+  "volunteers": 549,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "good-health-and-wellbeing": {
+  "count": 26,
+  "volunteers": 108,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "quality-education": {
+  "count": 327,
+  "volunteers": 1316,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "reduced-inequalities": {
+  "count": 31,
+  "volunteers": 111,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "responsible-consumption": {
+  "count": 71,
+  "volunteers": 289,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "climate-action": {
+  "count": 86,
+  "volunteers": 533,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "life-on-land": {
+  "count": 98,
+  "volunteers": 614,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "school-on-wheels": {
+  "count": 10,
+  "volunteers": 41,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "south-city-international-school": {
+  "count": 5,
+  "volunteers": 29,
+  "firstYear": 2025,
+  "lastYear": 2025
+ },
+ "inner-wheel-school": {
+  "count": 5,
+  "volunteers": 21,
+  "firstYear": 2023,
+  "lastYear": 2024
+ },
+ "ashok-hall-school": {
+  "count": 3,
+  "volunteers": 25,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "schools-we-have-visited": {
+  "count": 36,
+  "volunteers": 204,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "disco-diwali": {
+  "count": 2,
+  "volunteers": 200,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "paradox-fest": {
+  "count": 6,
+  "volunteers": 647,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "the-starry-night": {
+  "count": 4,
+  "volunteers": 85,
+  "firstYear": 2023,
+  "lastYear": 2025
+ },
+ "sport-fundraisers": {
+  "count": 7,
+  "volunteers": 207,
+  "firstYear": 2022,
+  "lastYear": 2024
+ },
+ "crftd-and-roots-days": {
+  "count": 10,
+  "volunteers": 63,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "the-nights-that-fund-the-work": {
+  "count": 43,
+  "volunteers": 1407,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "for-schools": {
+  "count": 36,
+  "volunteers": 204,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "for-companies": {
+  "count": 29,
+  "volunteers": 1314,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "for-colleges": {
+  "count": 3,
+  "volunteers": 23,
+  "firstYear": 2024,
+  "lastYear": 2026
+ },
+ "for-teachers": {
+  "count": 227,
+  "volunteers": 859,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "where-can-teenagers-volunteer-in-kolkata": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "how-to-donate-old-clothes-in-kolkata": {
+  "count": 39,
+  "volunteers": 182,
+  "firstYear": 2024,
+  "lastYear": 2025
+ },
+ "how-to-donate-books-in-kolkata": {
+  "count": 32,
+  "volunteers": 113,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "how-to-help-stray-dogs-in-kolkata": {
+  "count": 56,
+  "volunteers": 280,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "where-to-plant-trees-in-kolkata": {
+  "count": 30,
+  "volunteers": 267,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-can-students-help-the-sundarbans": {
+  "count": 10,
+  "volunteers": 93,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-to-feed-the-homeless-in-kolkata": {
+  "count": 55,
+  "volunteers": 245,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "how-to-teach-underprivileged-children-in-kolkata": {
+  "count": 227,
+  "volunteers": 859,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "is-aquaterra-a-real-ngo": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "does-volunteering-help-college-applications": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "what-is-a-student-run-ngo": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstYear": 2021,
+  "lastYear": 2026
+ },
+ "how-are-student-ngos-funded": {
+  "count": 43,
+  "volunteers": 1407,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "what-to-bring-to-your-first-drive": {
+  "count": 154,
+  "volunteers": 684,
+  "firstYear": 2022,
+  "lastYear": 2026
+ },
+ "how-to-celebrate-festivals-with-underprivileged-kids": {
+  "count": 39,
+  "volunteers": 403,
+  "firstYear": 2021,
+  "lastYear": 2025
+ },
+ "how-to-start-a-drive-at-your-school": {
+  "count": 36,
+  "volunteers": 204,
+  "firstYear": 2022,
+  "lastYear": 2025
+ },
+ "reading-growing-up": {
+  "count": 0,
+  "volunteers": 0,
+  "firstYear": null,
+  "lastYear": null
+ },
+ "reading-kindness-and-empathy": {
+  "count": 0,
+  "volunteers": 0,
+  "firstYear": null,
+  "lastYear": null
+ },
+ "reading-kolkata-and-cities": {
+  "count": 0,
+  "volunteers": 0,
+  "firstYear": null,
+  "lastYear": null
+ },
+ "reading-books-and-stories": {
+  "count": 0,
+  "volunteers": 0,
+  "firstYear": null,
+  "lastYear": null
+ },
+ "reading-society-and-change": {
+  "count": 0,
+  "volunteers": 0,
+  "firstYear": null,
+  "lastYear": null
+ },
+ "_all": {
+  "count": 547,
+  "volunteers": 3725,
+  "firstDate": "2021-06-19",
+  "lastDate": "2026-09-05",
+  "placesCount": 181
+ }
+}

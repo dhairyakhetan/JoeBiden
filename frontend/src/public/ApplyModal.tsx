@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { setAuthIntent, type GateCategory } from '../lib/authIntent'
 import { jobOpenings, JobOpening, CAT_COLORS } from '../lib/jobOpenings'
@@ -11,7 +11,7 @@ import GatedButton from '../components/GatedButton'
 import NotYetMemberModal from '../components/NotYetMemberModal'
 import { joinGate, canApplyNow } from '../lib/joinGate'
 import { MIN_GRADE_NOTE } from '../lib/classOptions'
-import { guestIdentityProblem, matchGuest, guestCopy, continueWithGoogle, type GuestMatch } from '../lib/guestApply'
+import { guestIdentityProblem, submitGuestApply, guestCopy, continueWithGoogle, type GuestOutcome } from '../lib/guestApply'
 
 type Member = Database['public']['Tables']['members']['Row']
 
@@ -33,14 +33,20 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
   const [showNote, setShowNote] = useState(false)
   // Signed-out visitors: step 1 collects who they are, step 2 (after `match`) signs them in with Google.
   const [guestName, setGuestName] = useState('')
-  const [guestEmail, setGuestEmail] = useState('')
   const [matching, setMatching] = useState(false)
-  const [match, setMatch] = useState<GuestMatch | null>(null)
+  /** Set when step 2 (sign in) is showing: why the visitor is being asked to sign in. */
+  const [match, setMatch] = useState<GuestOutcome | null>(null)
+  /** The number belonged to an AquaTerra account, so the application is already with the team. */
+  const [linked, setLinked] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
   const accent = CAT_COLORS[op.category] || 'var(--welfare)'
   const questions = op.customQuestions || []
   const { answers, setAnswer, files, setFile, phone, setPhone, phoneMissing, missingRequired, buildCustomAnswers } = useOpeningAnswers(questions)
-  const panelRef = useDialog(true, onClose, { closeOnEscape: !submitting })
+  // Every caller closes the modal the moment `onApplied` fires, which used to remove the confirmation screen before anyone
+  // could read it. So success is reported when the modal is closed, and the screen below stays up until then.
+  const appliedRef = useRef(false)
+  const close = () => { if (appliedRef.current) onApplied(); onClose() }
+  const panelRef = useDialog(true, close, { closeOnEscape: !submitting })
 
   // A visitor who filled the form, signed in and came back finds it as they left it (typed answers only, not files).
   useEffect(() => {
@@ -62,13 +68,19 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
     if (phoneMissing) { toastError('Phone number is required'); return }
     if (missingRequired) { toastError(`"${missingRequired.label}" is required`); return }
     if (!member) {
-      const problem = guestIdentityProblem({ name: guestName, phone, email: guestEmail })
+      const problem = guestIdentityProblem({ name: guestName, phone })
       if (problem) { toastError(problem); return }
+      // A file or video answer cannot be uploaded signed out, so that form goes straight to sign-in.
+      if (questions.some(q => q.type === 'file' || q.type === 'video')) { setMatch('signin'); return }
       setMatching(true)
       try {
-        const m = await matchGuest(phone, guestEmail)
-        if (m.outcome === 'limited') toastError('Too many tries just now.', 'You can still continue with Google below.')
-        setMatch(m)
+        const r = await submitGuestApply({ openingId: op.id, name: guestName, phone, message, answers })
+        if (r.outcome === 'linked') { appliedRef.current = true; setLinked(true); setDone(true); return }
+        if (r.outcome === 'already') { toastError('You already applied for this role.'); onApplied(); onClose(); return }
+        if (r.outcome === 'closed') { toastError('This role is not taking applications any more.'); onClose(); return }
+        if (r.outcome === 'invalid') { toastError('Check your name and number and try again.'); return }
+        if (r.outcome === 'limited') toastError('Too many tries just now.', 'You can still continue with Google below.')
+        setMatch(r.outcome)
       } finally { setMatching(false) }
       return
     }
@@ -78,8 +90,8 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
       const result = await jobOpenings.apply(op.id, member.member_id, member.full_name, member.email, message, customAnswers, phone)
       if (result.alreadyApplied) { toastError('You already applied for this role.'); onApplied(); onClose(); return }
       if (!result.success) { toastError(result.error || 'Something went wrong.'); return }
+      appliedRef.current = true
       setDone(true)
-      onApplied()
     } catch (e: any) {
       // buildCustomAnswers() uploads files and can reject; without this the
       // button would hang on "Submitting…" forever. Surface the error.
@@ -95,9 +107,8 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
     try { sessionStorage.setItem(draftKey, JSON.stringify({ phone, message, answers })) } catch { /* the guest draft below still carries it */ }
     setAuthIntent({ kind: 'opening', title: op.title, category: op.category as GateCategory, teamName: op.teamName || null })
     const { error } = await continueWithGoogle({
-      draft: { openingId: op.id, title: op.title, name: guestName.trim(), email: guestEmail.trim(), phone, message, answers },
+      draft: { openingId: op.id, title: op.title, name: guestName.trim(), phone, message, answers },
       returnTo: `/opportunities/${op.id}?apply=1`,
-      loginHint: guestCopy(match, op.title).useHint ? guestEmail.trim() : undefined,
     })
     if (error) { toastError('Could not reach Google', error); setSigningIn(false) }
   }
@@ -115,7 +126,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
   }
 
   return createPortal(
-    <div role="presentation" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div role="presentation" onClick={close} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       {/* Same rounded-minimalism modal shell as OpeningFormModal above. */}
       <div ref={panelRef} role="dialog" aria-modal="true" aria-label={`Apply for ${op.title}`} tabIndex={-1} onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 480, background: 'var(--card)', borderRadius: 'var(--r-outer)', overflow: 'hidden', border: 'var(--hair-2)', boxShadow: 'var(--lift-4)' }}>
         {/* Header */}
@@ -133,11 +144,13 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
               <SuccessCheck color={accent} fx="confetti" />
             </div>
-            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 30, marginBottom: 10, letterSpacing: '-0.03em' }}>you&apos;re in.</div>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 30, marginBottom: 10, letterSpacing: '-0.03em' }}>{linked ? 'sent.' : 'you\u2019re in.'}</div>
             <p style={{ fontFamily: 'var(--eina)', fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.6, marginBottom: 20 }}>
-              Application submitted. The team will review it and reach out.
+              {linked
+                ? 'We found your AquaTerra account from your number, so your application went straight to the team. You do not need to sign in. They will reach out.'
+                : 'Application submitted. The team will review it and reach out.'}
             </p>
-            <button className="btn btn-sm btn-primary" style={{ minHeight: 44 }} onClick={onClose}>Close</button>
+            <button className="btn btn-sm btn-primary" style={{ minHeight: 44 }} onClick={close}>Close</button>
           </div>
         ) : !member && match ? (
           <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -164,7 +177,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
             {/* Who is applying */}
             {/* Card-inside-a-card well: off-spine 10px -> the 14px tight step. */}
             <div style={{ background: 'var(--bg-2)', borderRadius: 'var(--r-tight)', padding: '10px 14px', fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-3)' }}>
-              {member ? <>Applying as <strong style={{ color: 'var(--ink)' }}>{member.full_name}</strong></> : <><strong style={{ color: 'var(--ink)' }}>Step 1 of 2.</strong> Tell us who you are. Step 2 is signing in with Google, right here. Your answers are kept.</>}
+              {member ? <>Applying as <strong style={{ color: 'var(--ink)' }}>{member.full_name}</strong></> : <><strong style={{ color: 'var(--ink)' }}>Your name and number.</strong> If your number is already an AquaTerra account, your application goes straight to the team. If not, you sign in with Google next, and your answers are kept.</>}
             </div>
             <div className="mono xs" style={{ color: 'var(--ink-3)', marginTop: -6 }}>{MIN_GRADE_NOTE}</div>
             {!member && (
@@ -174,13 +187,6 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
                     Your name <span style={{ color: 'var(--accent-ink)' }}>*</span>
                   </label>
                   <input id="apply-name" type="text" required autoComplete="name" value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="Full name"
-                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-2)', border: 'var(--hair-2)', borderRadius: 'var(--r-inner)', fontFamily: 'var(--eina)', fontSize: 16, color: 'var(--ink)', boxSizing: 'border-box' }} />
-                </div>
-                <div>
-                  <label htmlFor="apply-email" style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--ink-3)', display: 'block', marginBottom: 6 }}>
-                    Email <span style={{ color: 'var(--accent-ink)' }}>*</span>
-                  </label>
-                  <input id="apply-email" type="email" required autoComplete="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} placeholder="you@example.com"
                     style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-2)', border: 'var(--hair-2)', borderRadius: 'var(--r-inner)', fontFamily: 'var(--eina)', fontSize: 16, color: 'var(--ink)', boxSizing: 'border-box' }} />
                 </div>
               </div>
@@ -249,7 +255,7 @@ export default function ApplyModal({ op, member, onClose, onApplied }: {
                 {submitting && <span style={{ width: 13, height: 13, border: '2px solid rgba(10,10,10,0.3)', borderTopColor: 'var(--ink)', borderRadius: '50%', animation: 'spin 0.7s linear infinite', flexShrink: 0 }} />}
                 {submitting ? 'Submitting…' : matching ? 'Checking…' : member ? 'Submit application →' : 'Continue →'}
               </GatedButton>
-              <button className="btn btn-sm btn-ghost" style={{ minHeight: 44 }} onClick={onClose}>Cancel</button>
+              <button className="btn btn-sm btn-ghost" style={{ minHeight: 44 }} onClick={close}>Cancel</button>
             </div>
           </div>
         )}

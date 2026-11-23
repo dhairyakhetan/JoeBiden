@@ -1,0 +1,82 @@
+{
+  "slug": "month-2024-06",
+  "title": "AquaTerra in June 2024: {count} drives, Paradox and paint",
+  "description": "June 2024 at AquaTerra: {count} drives, Paradox 1.0, the 3rd anniversary celebration, art at AIM Foundation, quiz workshops and a Sundarbans plantation.",
+  "h1Lead": "june brought",
+  "h1Accent": "paradox and paint",
+  "lede": "In June 2024 AquaTerra ran {count} drives with {volunteers} volunteer turnouts, from art workshops at AIM Foundation to quiz sessions at Pather Sathi. The month launched Paradox, AquaTerra's flagship fundraising series, marked the 3rd anniversary of the NGO, and sent a team to plant saplings in the Sundarbans.",
+  "sections": [
+    {
+      "id": "paradox-and-the-third-anniversary",
+      "heading": "paradox and the third anniversary",
+      "body": [
+        "Paradox 1.0 was held in Kolkata on 7 June, and it launched AquaTerra's flagship fundraising series. It was the largest team of the month by a wide margin, made up of students, and its write-up describes interactive and engaging activities that supported the NGO's initiatives. For how the fundraising nights fit together, see the [fundraising page](/impact/fundraising).",
+        "On 14 June AquaTerra marked its 3rd anniversary at Conclave, Kolkata, with a joyful fundraiser of fun, memories and gratitude. Volunteers, supporters and the people the work reaches gathered to celebrate three years of the NGO's work, and it was one of the larger teams of the month."
+      ]
+    },
+    {
+      "id": "a-month-of-art-at-aim-foundation",
+      "heading": "a month of art at AIM Foundation",
+      "body": [
+        "[AIM Foundation](/impact/aim-foundation) hosted more drives than any other place in June, and most of them were art. From Lines to Life on 7 June and Mini Makers on 6 June were art workshops, Paint a Pot on 5 June had children painting pots, Doodle Day on 4 June was an art session with AIM 2 Foundation, and Art Hive on 4 June encouraged creative exploration.",
+        "Well Within on 21 June was the one session there that was not about art. It was an adolescence health workshop that promoted awareness of hygiene and well-being, so the month gave children a steady routine at one place and a different subject to think about."
+      ]
+    },
+    {
+      "id": "quizzes-cards-and-friendship",
+      "heading": "quizzes, cards and friendship",
+      "body": [
+        "Pather Sathi ran several quiz workshops in June. Think Fast on 8 June was an interactive quiz at Sunday School, Quick Wits on 15 June gave students a run of challenges, and Brain Buzz on 29 June ended the month with more quiz challenges. Paper and Paint on 1 June brought the Sunday School art and craft side of the month.",
+        "Ek Tara hosted Better Together on 7 June, a best friends' day workshop built around art, and Dad and Me on 14 June, where kids made gifts and cards for Father's Day. Amader Pradakhep hosted Health Over Sugar, a diabetes awareness workshop, and Build You, a personality development session, while Art Lab on 21 June explored colour and design."
+      ]
+    },
+    {
+      "id": "saplings-in-the-sundarbans",
+      "heading": "saplings in the Sundarbans",
+      "body": [
+        "On 22 June the Sundarbans Plantation Project 5.0 put saplings into the ground to restore green cover and protect wildlife. Its write-up describes more than fifty saplings planted, and the team was one of the larger groups of the month.",
+        "The [Sundarbans page](/impact/sundarbans) covers the wider trips to the Sundarbans. June's planting shows how one day of field work can sit in the same month as art and quiz workshops in the city."
+      ]
+    },
+    {
+      "id": "june-beside-may-and-july",
+      "heading": "june beside may and july",
+      "body": [
+        "June had {count} drives, May had {count:month-2024-05} and July had {count:month-2024-07}. June was a month of big moments and small workshops: Paradox and the anniversary, and art and quizzes running at the same time as the rest.",
+        "Paradox alone accounts for most of the month's {volunteers} volunteer turnouts. A volunteer turnout counts every time someone showed up, so the figure is a count of places filled rather than a count of people. {topPlace} hosted the most drives, and the month's drives ran at {placesCount} places."
+      ]
+    }
+  ],
+  "learnings": [
+    "A fundraising night can bring a very large student team to one evening, while the workshops that week still need small, steady teams.",
+    "A place that hosts a month of art, like AIM Foundation, gives children a routine they can come back to.",
+    "A single planting day can put a great many saplings in the ground when a team goes out together.",
+    "Quiz workshops suit a Sunday School room: June's quiz sessions at Pather Sathi all used the same quiz format, which made them easy to repeat."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in June 2024?",
+      "a": "AquaTerra ran {count} drives in June 2024, with {volunteers} volunteer turnouts. The biggest were Paradox 1.0 on 7 June and the 3rd anniversary fundraiser at Conclave, Kolkata on 14 June. Art and quiz workshops for children ran at AIM Foundation and Pather Sathi, and a Sundarbans plantation drive planted saplings on 22 June."
+    },
+    {
+      "q": "What was Paradox 1.0?",
+      "a": "Paradox 1.0 was AquaTerra's fundraising event in Kolkata on 7 June 2024. It launched Paradox as the flagship fundraising series, with a large team of students behind it. The money raised funds AquaTerra's welfare drives, and AquaTerra takes no monetary donations."
+    },
+    {
+      "q": "Where did AquaTerra run art workshops in June 2024?",
+      "a": "Most of June's art workshops were at AIM Foundation, including Paint a Pot, Art Hive, Doodle Day, Mini Makers and From Lines to Life. Pather Sathi, Ek Tara and Amader Pradakhep also hosted art sessions that month."
+    },
+    {
+      "q": "Did AquaTerra plant trees in June 2024?",
+      "a": "Yes. The Sundarbans Plantation Project 5.0 on 22 June 2024 planted saplings to restore green cover and protect wildlife in the Sundarbans. Its write-up describes more than fifty saplings planted."
+    }
+  ],
+  "keywords": [
+    "AquaTerra June 2024",
+    "Paradox 1.0 fundraising Kolkata",
+    "AIM Foundation art workshop Kolkata",
+    "Sundarbans plantation June 2024",
+    "AquaTerra third anniversary",
+    "quiz workshop for children Kolkata"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "slug": "month-2022-08",
+  "title": "AquaTerra in August 2022: {count} drives, mostly drama",
+  "description": "August 2022 at AquaTerra: {count} drives and workshops, most of them drama sessions for children at Disha Foundation, plus an art day, first aid and a craft workshop.",
+  "h1Lead": "the month that went",
+  "h1Accent": "on stage",
+  "lede": "In August 2022 AquaTerra ran {count} drives and workshops across {placesCount} places, with {volunteers} volunteer turnouts, where a turnout counts each time someone showed up. Most of the month went into drama: sessions for children at Disha Foundation that took a script from the page to the stage, with an art day, a first aid lesson and a scrap-to-craft workshop around them.",
+  "sections": [
+    {
+      "id": "drama-series",
+      "heading": "a drama series at Disha Foundation",
+      "body": [
+        "The drama workshops at Disha Foundation ran on August 6, 10, 26 and 27, numbered from 2.0 to 5.0. Each session took a script and worked it up into a performance. Drama Workshop 2.0 opened the month on August 6, and Drama Workshop 5.0 closed it on August 27, the same day as the scrap workshop at Loretto Rainbow Home Park Street.",
+        "The summaries describe the same outcome each time: more confidence, better teamwork and a stronger stage presence. Each drama session had between five and seven volunteers, and the children worked on acting and improvisation as well as the script."
+      ]
+    },
+    {
+      "id": "art-and-first-aid",
+      "heading": "an art day and a first aid lesson",
+      "body": [
+        "Paint The Pride was an art workshop at Ek Tara on August 10, built around Independence Day. The children made art about freedom and unity, and five volunteers ran it. The same day, Drama Workshop 3.0 ran at Disha Foundation.",
+        "Safety First came on August 18 at Shanti Rani Primary School. It was a first aid workshop that taught basic first aid for urgent situations, and it had the smallest team of the month, with three volunteers."
+      ]
+    },
+    {
+      "id": "scrap-to-craft",
+      "heading": "scrap turned into something useful",
+      "body": [
+        "Waste to Wealth ran on August 27 at Loretto Rainbow Home Park Street, where scrap was turned into creative and useful products. The lesson was in the materials: things that would otherwise have been thrown away became something a child could make and use.",
+        "Six volunteers ran the workshop. It was the one session of the month that was neither drama, art nor first aid, and it showed that a craft session can fit into a month built around stages and classrooms."
+      ]
+    },
+    {
+      "id": "how-august-compares",
+      "heading": "how August sits in the year",
+      "body": [
+        "August had {count} drives, against {count:month-2023-04} in April 2023. Both months were mostly workshops for children, but the places were different. August leaned on one drama venue, while April moved between Pather Sathi and a few other places.",
+        "Read with the year's first months, August shows what a repeated format can do. The same venue, the same format and a steady team of five to seven each time made the drama series easy to repeat across four dates in one month."
+      ]
+    }
+  ],
+  "learnings": [
+    "A repeated workshop at one venue is the easiest to run: the Disha Foundation drama series kept one format across four dates.",
+    "Most August sessions needed five to seven volunteers, and the smallest, first aid, got by with three.",
+    "A themed day, like Paint The Pride on Independence Day, gives a session a reason children can feel.",
+    "Scrap can be the lesson itself, as Waste to Wealth showed when it turned discarded material into something useful."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in August 2022?",
+      "a": "In August 2022 AquaTerra ran {count} drives and workshops across {placesCount} places, with {volunteers} volunteer turnouts. Most were drama workshops for children at Disha Foundation. The rest were an Independence Day art workshop at Ek Tara, a first aid workshop at Shanti Rani Primary School and Waste to Wealth, a scrap workshop at Loretto Rainbow Home Park Street."
+    },
+    {
+      "q": "Where did AquaTerra hold drama workshops for children in 2022?",
+      "a": "AquaTerra's drama workshops in August 2022 were held at Disha Foundation, on August 6, 10, 26 and 27. The sessions were numbered 2.0 to 5.0 and took children from a script to a stage performance, with five to seven student volunteers in each session."
+    },
+    {
+      "q": "Does AquaTerra run first aid workshops for children?",
+      "a": "Yes. AquaTerra ran a first aid workshop, Safety First, at Shanti Rani Primary School on August 18, 2022, teaching children basic first aid for urgent situations. Three volunteers ran it, and AquaTerra has run first aid sessions in other months too, including April 2023."
+    },
+    {
+      "q": "How can a student team run a drama workshop for children?",
+      "a": "Start with a venue that already welcomes children, as AquaTerra did at Disha Foundation, and keep the same format for each session. AquaTerra's drama teams were five to seven student volunteers, and they ran the series on several dates in one month."
+    }
+  ],
+  "keywords": [
+    "AquaTerra August 2022",
+    "drama workshop for children Kolkata",
+    "Disha Foundation drama workshop",
+    "first aid workshop for children Kolkata",
+    "Waste to Wealth workshop Kolkata",
+    "student volunteers Kolkata August 2022"
+  ]
+}

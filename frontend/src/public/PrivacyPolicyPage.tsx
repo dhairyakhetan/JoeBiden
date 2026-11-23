@@ -1,6 +1,7 @@
 import './EquityPolicyPage.css'
 import './PrivacyPolicyPage.css'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import TermsPage from './TermsPage'
 import { useMeta } from '../hooks/useMeta'
 import { pageMetadata } from '../lib/metaConfig'
 import { useJsonLd, breadcrumbLd } from '../hooks/useJsonLd'
@@ -15,10 +16,11 @@ import { APPROVAL_TIME } from '../lib/orgFacts'
  *   • Google OAuth + ensure_member()   → name, email, profile photo
  *   • /register                        → class/grade, phone number
  *   • posts, comments, likes, saved, follows, achievements
- *   • main.tsx inject()                → Vercel Analytics (page views)
  *   • main.tsx injectSpeedInsights()   → Vercel Speed Insights
  *   • index.html tag v8xi8sv15p        → Microsoft Clarity SESSION RECORDING
- *   • lib/funnel.ts                    → 4 named events, deliberately no PII
+ *   • lib/funnel.ts, lib/clarity.ts    → named events and tags sent to Clarity (signed-out
+ *                                        visitors only), deliberately no PII
+ *   • terranotes/lib/analytics.js      → the magazine's reader events, also to Clarity
  *
  * If any of those change, this page changes with them. A privacy policy that
  * drifts from the code is worse than none — it's a written promise the
@@ -45,13 +47,18 @@ const COLLECTED: [string, string, string][] = [
 
 const THIRD_PARTIES: [string, string, string][] = [
   ['Supabase', 'Database and sign-in', 'Everything in the table above'],
-  ['Vercel', 'Hosting, Analytics, Speed Insights', 'Pages visited and load speed. No names, no emails.'],
+  ['Vercel', 'Hosting, Speed Insights', 'Load speed of the pages you open. No names, no emails.'],
   ['Microsoft Clarity', 'Session recordings, signed-out visitors only',
    'How you move, click and scroll. Never runs once you are signed in.'],
   ['Google', 'Sign-in only', 'Confirms it is really you'],
 ]
 
-export default function PrivacyPolicyPage() {
+/** /privacy-policy and /terms share this chunk; the route picks which page renders. */
+export default function PolicyRoute() {
+  return useLocation().pathname.startsWith('/terms') ? <TermsPage /> : <PrivacyPolicyPage />
+}
+
+function PrivacyPolicyPage() {
   useMeta(pageMetadata.privacyPolicy)
   useJsonLd('privacy-breadcrumb', breadcrumbLd([
     ['Home', '/'],
@@ -59,7 +66,8 @@ export default function PrivacyPolicyPage() {
   ]))
 
   return (
-    <div className="route-enter">
+    <div className="route-enter ep-page">
+      <div className="container ep-shell">
       <section className="ep-hero">
         <span className="sticker sticker-mint ep-eyebrow sticker--diecut" style={{ ['--sticker-ground' as string]: 'var(--bg)' }}>★ privacy</span>
         <h1 className="h-display ep-title">
@@ -195,7 +203,9 @@ export default function PrivacyPolicyPage() {
         <div style={{ maxWidth: 720, margin: '28px auto 0', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Link to="/" className="btn">← back to site</Link>
           <Link to="/equity-policy" className="btn">read the equity policy →</Link>
+          <Link to="/terms" className="btn">read the terms of use →</Link>
         </div>
+      </div>
       </div>
     </div>
   )

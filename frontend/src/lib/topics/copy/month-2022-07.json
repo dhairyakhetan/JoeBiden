@@ -1,0 +1,74 @@
+{
+  "slug": "month-2022-07",
+  "title": "AquaTerra in July 2022: {count} drives and Terrathon 1.0",
+  "description": "AquaTerra in July 2022: {count} drives, including Terrathon 1.0 at Elgin Turf, a football fundraiser, a drama workshop and a bottle planting day.",
+  "h1Lead": "what we did in",
+  "h1Accent": "july 2022",
+  "lede": "In July 2022 AquaTerra ran {count} drives with {volunteers} volunteer turnouts. The largest was Terrathon 1.0, a sports fundraiser at Elgin Turf with one hundred and fifty volunteers. The rest of the month had a football fundraiser, two stray dog outings, a drama workshop at Disha Foundation and a bottle planting day at Jyotirmai, a little busier than June's {count:month-2022-06} drives.",
+  "sections": [
+    {
+      "id": "terrathon-the-big-day",
+      "heading": "terrathon, the big day",
+      "body": [
+        "Terrathon 1.0 was held on 22 July at Elgin Turf, Choudhary House, in Kolkata. It is a fundraiser where people take part in a range of sports, and the proceeds go to charity. Its one hundred and fifty volunteers made it the largest team of the month.",
+        "Sport was a common way to raise a cause in 2022. Turf Wars ran in March, Inception '22 in June, and Score and Support and Terrathon in July. For the wider picture of how these events fit into the work, see the [fundraising page](/impact/fundraising)."
+      ]
+    },
+    {
+      "id": "a-football-fundraiser",
+      "heading": "a football fundraiser",
+      "body": [
+        "Score and Support, on 2 July in Kolkata, was AquaTerra's football fundraiser. The team with the most points won, and the prize went towards its cause.",
+        "The football fundraiser ran three weeks before Terrathon, so the month had two sport events in it."
+      ]
+    },
+    {
+      "id": "dogs-drama-and-trees",
+      "heading": "dogs, drama and trees",
+      "body": [
+        "Tails and Treats 12.0 ran on 9 July with three volunteers and fed forty-five dogs. Tails and Treats 13.0 closed the month on 30 July, with fifty dogs fed. The write-up for the last one calls it an event that pampered the pups with love, food and fun.",
+        "Drama Workshop 1.0 at Disha Foundation on 29 July had seven volunteers teaching acting, voice and movement to thirty students.",
+        "Roots and Rise, a bottle planting workshop at Jyotirmai on 11 July, planted ninety-five saplings with four volunteers. It was the only planting in July."
+      ]
+    },
+    {
+      "id": "how-july-compared",
+      "heading": "how July compared",
+      "body": [
+        "July had {count} drives, against {count:month-2022-06} in June and {count:month-2022-04} in April. Half of them were in {topPlace}, with the rest at Disha Foundation, Jyotirmai and Elgin Turf.",
+        "The month mixed the kinds of work seen across the year: dog outings, planting, a drama workshop and sport fundraisers. That mix shows how the year's work was spread across a single month."
+      ]
+    }
+  ],
+  "learnings": [
+    "A sports event can carry a month: Terrathon 1.0 drew one hundred and fifty volunteers, the largest team of July 2022.",
+    "Keep the regular outings running beside the larger events: Tails and Treats ran on 9 and 30 July, either side of Terrathon.",
+    "A football fundraiser and Terrathon ran in the same month, three weeks apart."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in July 2022?",
+      "a": "AquaTerra ran {count} drives in July 2022: Terrathon 1.0 at Elgin Turf, a football fundraiser, two stray dog feeding outings, a drama workshop at Disha Foundation and a bottle planting workshop at Jyotirmai."
+    },
+    {
+      "q": "What was Terrathon?",
+      "a": "Terrathon 1.0 was AquaTerra's sports fundraiser, held on 22 July 2022 at Elgin Turf in Kolkata. People took part in a range of sports, the proceeds go to charity, and one hundred and fifty volunteers ran the day."
+    },
+    {
+      "q": "Where did AquaTerra plant trees in July 2022?",
+      "a": "At Jyotirmai on 11 July 2022, where the Roots and Rise bottle planting workshop planted ninety-five saplings with four volunteers."
+    },
+    {
+      "q": "Did AquaTerra hold a drama workshop in 2022?",
+      "a": "Yes. Drama Workshop 1.0 ran at Disha Foundation on 29 July 2022, with seven volunteers teaching acting, voice and movement to thirty students."
+    }
+  ],
+  "keywords": [
+    "AquaTerra July 2022",
+    "Terrathon Kolkata 2022",
+    "what AquaTerra did in July 2022",
+    "football fundraiser Kolkata 2022",
+    "drama workshop for students Kolkata",
+    "stray dog feeding Kolkata July 2022"
+  ]
+}

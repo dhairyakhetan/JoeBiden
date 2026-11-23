@@ -218,7 +218,7 @@ export default function ProjectManager() {
       {/* `hod-card` routes the strip through the desk's brutalist panel recipe
           (3px ink border, hard offset shadow) - its higher specificity beats
           .pm-statbar's leftover soft border/shadow without touching that sheet. */}
-      <div className="hod-card pm-statbar">
+      <div className="hod-card pm-statbar" style={loadError && projects.length === 0 ? { display: 'none' } : undefined}>
         {/* `--lemon-ink` (not a hand-picked gold hex) - the same contrast-safe
             "ink" pairing `.pm-status-pill.is-draft` already uses for this exact
             status, so the stat number and the row pill agree on what "draft"

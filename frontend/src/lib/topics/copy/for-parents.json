@@ -1,0 +1,82 @@
+{
+  "slug": "for-parents",
+  "title": "For parents: a student charity in Kolkata · AquaTerra",
+  "description": "For parents: a registered charitable trust in Kolkata for students aged fourteen to nineteen, with no fees, student-run drives and every drive listed on this site.",
+  "h1Lead": "what a parent can",
+  "h1Accent": "check first",
+  "lede": "AquaTerra is a registered charitable trust in Kolkata, run by students aged fourteen to nineteen. It charges no fees and takes no monetary donations. Every drive is listed on this site with its date, place, objective and volunteer turnout. Across {count} drives from {years}, you can check any single activity before you say yes.",
+  "sections": [
+    {
+      "id": "what-is-true",
+      "heading": "what is true about AquaTerra",
+      "body": [
+        "AquaTerra works through a registered charitable trust, TerraRoots, and is listed on DARPAN. The trust is the legal body behind the work. The drives themselves are planned and carried out by students.",
+        "AquaTerra is self-funded. It takes no monetary donations and charges no fees. Its welfare work is paid for through its own student-run events, such as Paradox, Disco Diwali and The Starry Night, and through [Crftd](/crftd), its student streetwear label."
+      ]
+    },
+    {
+      "id": "how-joining-works",
+      "heading": "how a student joins",
+      "body": [
+        "Membership is limited to students aged fourteen to nineteen. A student joins by signing in with Google, then waits for approval from the team. Once the account is approved it becomes active, and the student can take part in drives. The [join page](/join) explains the steps in order."
+      ]
+    },
+    {
+      "id": "what-a-write-up-shows",
+      "heading": "what each drive page shows",
+      "body": [
+        "Every drive has its own page with a title, date, place, objective, volunteer turnout and, in most cases, a key figure. Saturday is the most common day for drives, followed by Friday, so ask the team about timings if a drive falls near a school day. Places include Pather Sathi, Ek Tara and Disha Foundation, public spaces such as Bangur and Salt Lake, a college, a university and several schools."
+      ]
+    },
+    {
+      "id": "who-the-work-reaches",
+      "heading": "who the work reaches",
+      "body": [
+        "The drive pages say what the work reached: children taught English grammar, art, public speaking and digital safety, dogs fed on the street, residents given cookies on apartment visits, clothes and books collected, and older people supported on a visit. The pages do not name individual children, and this page does not either."
+      ]
+    },
+    {
+      "id": "what-to-ask",
+      "heading": "what to ask before you say yes",
+      "body": [
+        "The drive pages name the activity and the place, but they do not describe supervision, insurance, training or certificates, so none of those should be assumed. Ask the team through the [contact page](/contact) before a child joins a drive. A parent who wants to read the work first can start with the [projects page](/projects)."
+      ]
+    }
+  ],
+  "learnings": [
+    "AquaTerra charges no fees and takes no monetary donations, and its welfare work is paid for through its own student-run events.",
+    "Every drive is listed with a date, a place and an objective, so any single activity can be checked.",
+    "Saturday is the most common day for drives, followed by Friday, which helps when planning around school.",
+    "The drive pages do not describe supervision, insurance or certificates, so ask before a child signs up."
+  ],
+  "faqs": [
+    {
+      "q": "Is AquaTerra a registered organisation?",
+      "a": "Yes. AquaTerra works through a registered charitable trust, TerraRoots, and is listed on DARPAN. It is run by students aged fourteen to nineteen."
+    },
+    {
+      "q": "Does AquaTerra charge students a fee?",
+      "a": "No. AquaTerra charges no fees and takes no monetary donations. Its welfare work is paid for through its own student-run events."
+    },
+    {
+      "q": "What ages can join AquaTerra?",
+      "a": "Members are students aged fourteen to nineteen. A student joins by signing in with Google and then waiting for approval from the team."
+    },
+    {
+      "q": "What has AquaTerra done in Kolkata?",
+      "a": "AquaTerra has run {count} drives since {firstYear}, including {year:2025} drives in 2025 alone. The work covers teaching children, feeding stray dogs, art and craft days, clothes and book collections, and {sundarbansTrips} Sundarbans trips."
+    },
+    {
+      "q": "What activities do children take part in?",
+      "a": "Children have taken part in art and craft workshops, English grammar sessions, public speaking, digital safety talks, menstrual health sessions, and Christmas and Children's Day events, as the drive pages describe them. Ask the team about any specific drive before you sign up a child."
+    }
+  ],
+  "keywords": [
+    "is AquaTerra a registered charity in Kolkata",
+    "student charity Kolkata for parents",
+    "volunteering for my child Kolkata",
+    "AquaTerra fees and donations",
+    "student run NGO Kolkata for teenagers",
+    "DARPAN registered NGO Kolkata students"
+  ]
+}

@@ -38,7 +38,7 @@
 
 import './loadEnv.mjs'   // must precede any process.env read
 import { terraNotesSitemapPaths } from './terranotes/prerender.mjs'
-import { writeFileSync, readFileSync } from 'fs'
+import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -85,13 +85,31 @@ const FETCH_TIMEOUT_MS = 15_000
 const PAGE_SIZE = 1000
 
 // ── Static routes (verified against src/App.tsx) ─────────────────────────────
+function impactLibraryPaths() {
+  const dir = join(dirname(fileURLToPath(import.meta.url)), '../src/lib/topics')
+  try {
+    const defs = JSON.parse(readFileSync(join(dir, 'topicDefs.json'), 'utf8'))
+    const topics = defs.topics.filter(t => existsSync(join(dir, 'copy', `${t.slug}.json`))).map(t => `/impact/${t.slug}`)
+    const stories = (defs.stories || []).filter(st => existsSync(join(dir, 'copy', 'stories', `${st.slug}.json`))).map(st => `/impact/stories/${st.slug}`)
+    const explore = ['timeline', 'calculator', 'quiz', 'places', 'map', 'compare', 'surprise', 'memory'].map(x => `/impact/explore/${x}`)
+    return [...topics, '/impact/stories', ...stories, '/impact/explore', ...explore]
+  } catch { return [] }
+}
+
 const STATIC_AQ = [
   { path: '/',               changefreq: 'daily',   priority: '1.0' },
   { path: '/projects',       changefreq: 'weekly',  priority: '0.9' },
   { path: '/blog',           changefreq: 'weekly',  priority: '0.9' },
   { path: '/about',          changefreq: 'monthly', priority: '0.9' },
+  // The "giving back" pillar pages (15 Nov 2026): the hub ranks with /about,
+  // the three topic pages just under it.
+  { path: '/impact',         changefreq: 'monthly', priority: '0.9' },
+  { path: '/shikshaq',       changefreq: 'monthly', priority: '0.8' },
+  { path: '/sports',         changefreq: 'monthly', priority: '0.8' },
+  { path: '/ai',             changefreq: 'monthly', priority: '0.8' },
   { path: '/teams',          changefreq: 'weekly',  priority: '0.8' },
   { path: '/members',        changefreq: 'weekly',  priority: '0.7' },
+  { path: '/core-team',      changefreq: 'monthly', priority: '0.6' },
   { path: '/opportunities',  changefreq: 'weekly',  priority: '0.8' },
   { path: '/collaborations', changefreq: 'monthly', priority: '0.8' },
   { path: '/crftd',         changefreq: 'monthly', priority: '0.7' },
@@ -105,13 +123,14 @@ const STATIC_AQ = [
   { path: '/links',          changefreq: 'monthly', priority: '0.6' },
   { path: '/directory',      changefreq: 'weekly',  priority: '0.7' },
   { path: '/join',           changefreq: 'monthly', priority: '0.8' },
-  // Open Books. The Finance Director updates public_ledger monthly (PRD:
-  // docs/PRD-open-books.md), so 'monthly' rather than 'weekly' here.
-  { path: '/accounts',       changefreq: 'monthly', priority: '0.6' },
+  // /accounts (Open Books) was retired 15 Nov 2026 and now redirects to /impact; not listed.
   // Terra Notes, the monthly digital magazine (and, inside it, AQ Labs '26: /terranotes/articles/labs and its
   // chapters). Derived from src/terranotes/data/ through scripts/terranotes/prerender.mjs, which prerender-meta.mjs
   // also reads, so the sitemap and the prerendered set cannot disagree about which pages exist. The old /labs and
   // /labs/:slug redirect into it and are deliberately no longer listed. Checked-in data, so no honest lastmod.
+  // The impact library: /impact/<slug>, one per entry in src/lib/topics/topicDefs.json that has a copy file
+  // (prerender-meta.mjs skips the same ones, so the two cannot disagree).
+  ...impactLibraryPaths().map(path => ({ path, changefreq: 'monthly', priority: '0.7' })),
   ...terraNotesSitemapPaths().map(path => ({
     path,
     changefreq: path === '/terranotes' ? 'monthly' : 'yearly',
@@ -126,6 +145,7 @@ const STATIC_AQ = [
   // real content, orphaned from discovery. For an NGO run by minors the
   // privacy page is also a trust/E-E-A-T signal Google looks for explicitly.
   { path: '/privacy-policy', changefreq: 'yearly',  priority: '0.4' },
+  { path: '/terms',          changefreq: 'yearly',  priority: '0.3' },
 
   // ── TerraThon 2026 ────────────────────────────────────────────────────────
   // Public surfaces only. Deliberately NOT listed, and never to be added:
@@ -193,7 +213,7 @@ const PARADOX_BLOG_SLUGS_FALLBACK = [
 // verify-sitemap.mjs re-checks the built file against this same list.
 export const EXCLUDED_PREFIXES = [
   '/login', '/_login', '/register', '/auth', '/pending', '/rejected', '/welcome',
-  '/profile', '/notifications', '/saved', '/my-posts', '/bugs', '/tasks', '/settings', '/search', '/grievance',
+  '/profile', '/notifications', '/saved', '/my-posts', '/bugs', '/tasks', '/settings', '/search', '/grievance', '/certificates', '/verify',
   '/feed', '/director', '/brand', '/dev', '/member/', '/post/',
   '/paradox/admin', '/paradox/scores', '/paradox/updates', '/paradox/register',
   '/paradox/ticket',

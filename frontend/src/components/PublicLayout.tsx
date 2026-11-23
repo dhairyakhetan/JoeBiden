@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import AQNav from './AQNav'
 import MobileMenuBar, { isBottomNavHidden } from './MobileMenuBar'
 import OfflineBanner from './OfflineBanner'
-import TerraThonBanner from './TerraThonBanner'
 import { isAuthRoute } from '../lib/authRoutes'
 import { isTnPath } from '../terranotes/lib/base'
 
@@ -53,9 +52,6 @@ const PublicLayout = () => {
   const tnRoute = isTnPath(location.pathname)
   const tnDemo = tnRoute && /\/demo\/?$/.test(location.pathname)
   const chromeless = authRoute || tnDemo
-  // Exact match. '/' is the only home route, and a startsWith('/') test would
-  // match every route in the app - which is the bug this replaced.
-  const isHome = location.pathname === '/'
   const [showCompose, setShowCompose] = useState(false)
   // Once opened, stay mounted so the modal's own close animation still plays.
   const [composeMounted, setComposeMounted] = useState(false)
@@ -70,21 +66,17 @@ const PublicLayout = () => {
       {!chromeless && <AQNav onCompose={openCompose} onAchievement={openAchievement} />}
       {/* No nav means no nav-height offset to reserve; leaving the padding on
           an auth route pushes the shell down by 70px against nothing. */}
-      <main id="main-content" tabIndex={-1} style={{ outline: 'none', paddingTop: chromeless || tnRoute ? 0 : 'var(--nav-h, 70px)' }}>
+      {/* minHeight: the footer must never sit in the first screen while a page's content is still
+          arriving. Drive write-ups render a short skeleton, the footer showed under it on a phone,
+          then the real page pushed it away: a 0.29 to 0.92 layout shift on every /projects/<slug>
+          (Search Console, Nov 2026). 100vh, not svh, so it is at least the visible height. */}
+      <main id="main-content" tabIndex={-1} style={{ outline: 'none', minHeight: '100vh', paddingTop: chromeless || tnRoute ? 0 : 'var(--nav-h, 70px)' }}>
         {/* 11.5: the offline state is a BANNER at the top of the content
             column, not a toast - "a toast expires and the condition does
             not". Mounted here so it covers every public route rather than
             the single page it was first wired to. It renders nothing while
             online, so it costs an empty node. */}
         <OfflineBanner />
-        {/* TerraThon 2026 promo. Full-bleed, mobile and desktop, HOME PAGE
-            ONLY (owner, 2026-09-21). It used to run on every non-auth route,
-            which put an event advert above the HoD desk, the member
-            directory, /dev/* and the policy pages - surfaces where it is
-            noise, not a promo. Self-contained by design: it must not import
-            from src/terrathon/*, or that lazy route group joins this eager
-            chunk. Removes itself the day after the event. */}
-        {isHome && <TerraThonBanner />}
         {/* EXIT-ONLY PAGE TRANSITION: REMOVED 2026-09-17 (audit, efficiency P2).
             Deliberate, and the one user-visible trade in that audit.
 

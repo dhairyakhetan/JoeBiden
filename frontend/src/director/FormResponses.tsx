@@ -54,6 +54,7 @@ type CollabRow = {
   message: string
   created_at: string
   status: SubmissionStatus
+  notes?: string | null
 }
 type ContactRow = {
   id: number
@@ -64,6 +65,7 @@ type ContactRow = {
   message: string
   created_at: string
   status: SubmissionStatus
+  notes?: string | null
 }
 
 const STATUS_TONE: Record<SubmissionStatus, StampTone> = {
@@ -95,6 +97,7 @@ type Row = {
   message: string
   created_at: string
   status: SubmissionStatus
+  notes: string | null
 }
 
 function fmtDate(iso: string): string {
@@ -112,6 +115,38 @@ function fmtDate(iso: string): string {
  * definition list with hairline dividers and a 56px column, which is the
  * same `.adm-fields` panel the rest of the desk uses.
  */
+/** The team's own notes on one request: why it was closed, what was agreed,
+ *  who is following up. Private to the desk; the sender never sees it. */
+function NotesBox({ rowKey, initial, onSave }: { rowKey: string; initial: string | null; onSave: (text: string) => Promise<void> }) {
+  const [draft, setDraft] = useState(initial ?? '')
+  const [saving, setSaving] = useState(false)
+  const dirty = draft.trim() !== (initial ?? '').trim()
+  const id = `notes-${rowKey.replace(':', '-')}`
+  const save = async () => {
+    setSaving(true)
+    try { await onSave(draft) } catch { /* toast shown by the caller; draft kept */ } finally { setSaving(false) }
+  }
+  return (
+    <div style={{ marginTop: 16 }}>
+      <label htmlFor={id} className="mono xs upper" style={{ fontWeight: 700, display: 'block', marginBottom: 6, color: 'var(--ink-3)' }}>our notes</label>
+      <textarea
+        id={id}
+        className="textarea"
+        rows={3}
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        onClick={e => e.stopPropagation()}
+        placeholder="why it was closed, what was agreed, who is following up. only the desk sees this."
+      />
+      <div className="row gap-2" style={{ marginTop: 8, justifyContent: 'flex-end' }}>
+        <button type="button" className="btn btn-sm" disabled={!dirty || saving} aria-busy={saving || undefined} onClick={e => { e.stopPropagation(); save() }}>
+          {saving ? 'saving…' : 'save note'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function Field({ label, value, href }: { label: string; value: string; href?: string }) {
   return (
     <div className="adm-fieldrow">
@@ -294,6 +329,24 @@ export default function FormResponses() {
     }
   }
 
+  /** One notes box per request, kept whatever the status. Throws on failure so
+   *  NotesBox keeps the typed text and its own error line; the toast is here. */
+  const saveNotes = async (row: Row, text: string) => {
+    const k = kind
+    const table = k === 'collab' ? 'collaboration_submissions' : 'contact_submissions'
+    const notes = text.trim() ? text.trim() : null
+    const { data: updated, error: e } = await supabase.from(table).update({ notes }).eq('id', row.id).select('id')
+    if (e || !updated || updated.length === 0) {
+      toast.error('note not saved.', e?.message || 'You may not have permission.')
+      throw new Error(e?.message || 'not saved')
+    }
+    if (k === 'collab') setCollabs(prev => prev.map(c => c.id === row.id ? { ...c, notes } : c))
+    else setContacts(prev => prev.map(c => c.id === row.id ? { ...c, notes } : c))
+    syncCache(k)
+    logAction('enquiry_notes_saved', k === 'collab' ? 'collaboration_submission' : 'contact_submission', row.id, { cleared: notes === null })
+    toast.success(notes ? 'note saved.' : 'note cleared.')
+  }
+
   const toggleExpand = (key: string) => setExpanded(prev => {
     const next = new Set(prev)
     if (next.has(key)) next.delete(key); else next.add(key)
@@ -304,11 +357,11 @@ export default function FormResponses() {
     kind === 'collab'
       ? collabs.map(r => ({
         id: r.id, title: r.org_name, tag: r.collab_type, who: r.contact_name,
-        email: r.email, phone: r.phone, message: r.message, created_at: r.created_at, status: r.status,
+        email: r.email, phone: r.phone, message: r.message, created_at: r.created_at, status: r.status, notes: r.notes ?? null,
       }))
       : contacts.map(r => ({
         id: r.id, title: r.name, tag: r.role, who: null,
-        email: r.email, phone: r.phone, message: r.message, created_at: r.created_at, status: r.status,
+        email: r.email, phone: r.phone, message: r.message, created_at: r.created_at, status: r.status, notes: r.notes ?? null,
       }))
   ), [kind, collabs, contacts])
 
@@ -326,7 +379,8 @@ export default function FormResponses() {
       || r.title.toLowerCase().includes(term)
       || r.email.toLowerCase().includes(term)
       || (r.who || '').toLowerCase().includes(term)
-      || r.message.toLowerCase().includes(term)),
+      || r.message.toLowerCase().includes(term)
+      || (r.notes || '').toLowerCase().includes(term)),
     [allRows, statusFilter, typeFilter, kind, term])
 
   // Selection is keyed `kind:id` (collab and contact ids are separate numeric
@@ -527,6 +581,7 @@ export default function FormResponses() {
                   </dl>
                   <div className="mono xs upper" style={{ fontWeight: 700, marginBottom: 6, color: 'var(--ink-3)' }}>message</div>
                   <p style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>{r.message}</p>
+                  <NotesBox key={`${key}:${r.notes ?? ''}`} rowKey={key} initial={r.notes} onSave={text => saveNotes(r, text)} />
                 </>
               ) : undefined}
               actions={

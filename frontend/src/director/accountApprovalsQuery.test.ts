@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   contactedFilterForView, normalizeSearch, buildSearchOrFilter, normalizeGrade, buildFilters,
   sameFilters, isFiltered, mergeGrades, countForView, headerCount, SEARCH_DEBOUNCE_MS,
+  composeRejectionNote, REJECTION_REASONS,
 } from './accountApprovalsQuery'
 import { createRequestTokens } from './memberDirectoryRules'
 
@@ -73,4 +74,21 @@ describe('stale response guard', () => {
     expect(t.isLatest(b)).toBe(true)
   })
   it('debounce is about a quarter second', () => expect(SEARCH_DEBOUNCE_MS).toBe(250))
+})
+
+describe('composeRejectionNote', () => {
+  it('needs a reason', () => expect(composeRejectionNote(null, 'anything')).toBe(''))
+  it('uses the fixed text for a preset reason', () => {
+    expect(composeRejectionNote('age', '')).toBe('You do not meet our age criteria.')
+  })
+  it('appends extra words to a preset reason', () => {
+    expect(composeRejectionNote('contact', '  tried twice  ')).toBe('We could not reach you on the contact details you gave. tried twice')
+  })
+  it('"other" is only the typed words and needs them', () => {
+    expect(composeRejectionNote('other', '   ')).toBe('')
+    expect(composeRejectionNote('other', 'Applied twice')).toBe('Applied twice')
+  })
+  it('every preset reason has applicant text, other has none', () => {
+    for (const r of REJECTION_REASONS) expect(r.note === '').toBe(r.id === 'other')
+  })
 })

@@ -1,0 +1,99 @@
+{
+  "slug": "year-2025",
+  "title": "AquaTerra's 2025 drives: series that keep running · AquaTerra",
+  "description": "AquaTerra's 2025 drives: {count} drives across {placesCount} places, with Food For All, sharbat, book and dog drives, Roots tees and Paradox 3.0.",
+  "h1Lead": "the series that",
+  "h1Accent": "keep running",
+  "lede": "In 2025 a set of numbered series ran again and again through spring, summer and winter. Across {count} drives, {volunteers} volunteer turnouts and {placesCount} places, the year reached more places than any of the years from 2021 to 2024. The numbered series on this page run from late March to late December.",
+  "sections": [
+    {
+      "id": "spring-food",
+      "heading": "food and sharbat from late march",
+      "body": [
+        "Food For All and Sharbat Seva filled the spring. Food For All ran as a numbered series from 5.0 on March 28 to 17.0 on April 17, at sites across Kolkata and Howrah, including Salt Lake, Hazra, Gariahat and Northern Park. Every drive handed out bananas, and the last one, 17.0, donated five thousand four hundred of them, the largest figure in the series.",
+        "Sharbat Seva ran from 22.0 on March 28 to 33.0 on May 3, at temples, apartment complexes, markets and busy roads. Each drive handed out Rooh Afza sharbat, a cooling drink for the summer heat, and the stops ranged from New Alipore and Salt Lake to Howrah, Dakhineshwar and Teghoria. The [Sharbat Seva](/impact/sharbat-seva) page covers the series as a whole."
+      ]
+    },
+    {
+      "id": "summer-collections",
+      "heading": "books and clothes through the summer",
+      "body": [
+        "[Book Basket](/impact/book-basket) ran as a numbered collection from 2.0 on June 2 to 16.0 on July 8, at housing complexes and neighbourhoods across the city, including Emami City, Ideal Gardens, Natural City in Laketown and Ballygunge. Most drives had only one to four volunteers and collected a few kilograms of books, so these were small, steady drives rather than big events.",
+        "[Wear and Share](/impact/wear-and-share) kept running from April into July, with drives 16.0 to 22.0 at Salt Lake, Club Town Greens, Laketown, Howrah and Bangur. Wear & Write campaign 15.0 ran in May at Salarpuria Pearl in Gopalpur. Salt Lake appears in both the clothes and the book collections, which made it one of the places the summer kept returning to."
+      ]
+    },
+    {
+      "id": "roots-tees",
+      "heading": "roots tees at school festivals",
+      "body": [
+        "In July and August 2025 the Roots tee line appeared at school festivals. Roots is the streetwear line that was called ROOTS before it became [Crftd](/crftd), the student label. Morpheus Day ran on July 3 and 4 at South City International School, Concord Day on July 7 and 8 at Calcutta Boys School, Confluence Day on July 25 and 26 at Calcutta International School, and Novus at The Newtown School on August 1.",
+        "These days were different from the workshops. Visitors came and went on their own, and the festival days drew audiences in the hundreds, which makes them a different kind of drive from the sessions around them. The students wore the tees with pride."
+      ]
+    },
+    {
+      "id": "dog-drives-2025",
+      "heading": "dog feeding through the year",
+      "body": [
+        "[Tails and Treats](/impact/tails-and-treats) ran from 32.0 on April 19 to 53.0 on September 29. Its busiest stretch was August, when drives 42.0 to 49.0 ran between August 9 and August 30 at Vyom, Bangur, Bhowanipur, Salt Lake and Howrah. August carried more dog drives than any other month in the series.",
+        "Across all years the Tails and Treats drives total {count:tails-and-treats}, and AquaTerra's dog drives have served {dogMeals} meals for stray dogs. The 2025 summaries are short, usually a line about feeding and caring for the dogs, and each drive's own figure is the number of dogs fed that day."
+      ]
+    },
+    {
+      "id": "big-nights-2025",
+      "heading": "paradox, disco diwali and the starry night",
+      "body": [
+        "Paradox 3.0 ran for five days in Kolkata from June 2, with a range of events and a Punjabi Night, and it drew a turnout of 300. It is the largest turnout among this year's drives, and it is described as one of AquaTerra's biggest youth fundraisers.",
+        "Disco Diwali 2.0 on October 21 at 60 Chowrangee Banquet drew 550 registrations and a team of twenty-five volunteers, and it is described as AquaTerra's biggest Diwali fundraising success. Starry Night '25 closed the big nights on December 26 at Sky Turf, an annual winter fundraiser with music and giving back."
+      ]
+    },
+    {
+      "id": "december-2025",
+      "heading": "a december of carols and cookies",
+      "body": [
+        "December 2025 pulled several strands together. Merry Miracles Day 1 on December 13 and Day 2 on December 14 were both held at Pather Sathi, where Christmas Carols and Storytelling also took place on December 14 and had children singing carols. Santa Mask Making on December 17 was Merry Miracles 3, held at AIM Foundation.",
+        "The Cookie Pass On Drive ran between December 15 and 22 at Astitva Apartment, Avani Oxford, Silver Spring Apartment and Barrackpore, where volunteers handed out cookies, around twenty at each stop, for people to pass on. Sunderbans 8.0 on December 13 was run alongside Pather Sathi and recorded more than 120 checkups."
+      ]
+    }
+  ],
+  "learnings": [
+    "A set of numbered series, including Food For All, Sharbat Seva, Book Basket, Wear and Share and Tails and Treats, carries a large share of the year's drives.",
+    "Food For All and Sharbat Seva ran through the same spring weeks, from late March to early May, so spring was the busiest season for food and drinks.",
+    "Book Basket's numbered series ran through June and early July, with most drives led by only a few volunteers.",
+    "August carried more Tails and Treats dog drives than any other month.",
+    "Roots festival days drew walk-in audiences in the hundreds, a different kind of drive from the workshops around them."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in 2025?",
+      "a": "In 2025 AquaTerra ran {count} drives and {volunteers} volunteer turnouts across {placesCount} places. The regular strands were Food For All and Sharbat Seva in spring, Book Basket and Wear and Share in summer, and Tails and Treats dog feeding through the year, with Paradox 3.0, Disco Diwali 2.0 and Starry Night '25 as the big nights."
+    },
+    {
+      "q": "Did AquaTerra run a food drive in 2025?",
+      "a": "Yes. Food For All ran as a numbered series from 5.0 on March 28, 2025 to 17.0 on April 17, 2025, at sites across Kolkata and Howrah. Every drive donated bananas, and Food For All drive 17.0 donated five thousand four hundred of them, the largest figure in the series."
+    },
+    {
+      "q": "Where did AquaTerra collect books in 2025?",
+      "a": "Book Basket, AquaTerra's numbered book collection, ran from 2.0 on June 2 to 16.0 on July 8, 2025. The drives were held at housing complexes and neighbourhoods such as Emami City, Ideal Gardens, Natural City in Laketown and Ballygunge, and most had only a few volunteers."
+    },
+    {
+      "q": "What are Roots tees?",
+      "a": "Roots tees are the streetwear line that was called ROOTS before it became Crftd, AquaTerra's student streetwear label. In July and August 2025 the tees were shown at school festivals such as Morpheus Day, Concord Day, Confluence Day and Novus."
+    },
+    {
+      "q": "What is Paradox 3.0?",
+      "a": "Paradox 3.0 was a student-run youth fundraising event in Kolkata that began on June 2, 2025 and ran for five days. It included a Punjabi Night and drew a turnout of 300. AquaTerra is self-funded and takes no donations, so student-run events like Paradox help pay for its welfare work."
+    },
+    {
+      "q": "What was Starry Night '25?",
+      "a": "Starry Night '25 was AquaTerra's winter fundraiser at Sky Turf on December 26, 2025, an annual event with music and giving back. It followed The Starry Night, the Christmas carnival fundraiser held at Sky Turf on December 22, 2024."
+    }
+  ],
+  "keywords": [
+    "AquaTerra 2025 drives",
+    "Food For All Kolkata 2025",
+    "Book Basket book collection Kolkata",
+    "Roots tees school festival Kolkata",
+    "Paradox 3.0 Kolkata youth fundraiser",
+    "Tails and Treats dog feeding Kolkata 2025"
+  ]
+}

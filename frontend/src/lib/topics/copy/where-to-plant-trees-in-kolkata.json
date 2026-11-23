@@ -1,0 +1,79 @@
+{
+  "slug": "where-to-plant-trees-in-kolkata",
+  "title": "Where can I plant trees in Kolkata? · AquaTerra",
+  "description": "Plant saplings with a student team at schools, parks and squares in Kolkata, and once in the Sundarbans. Where Grow Green drives went and how to join.",
+  "h1Lead": "where can I plant",
+  "h1Accent": "trees in Kolkata?",
+  "lede": "You can plant trees in Kolkata with a student team at a school, a park or a public square, and AquaTerra has run {count} plantation and sapling drives since {firstYear}. Each planting day puts dozens of saplings in the ground, and each write-up states its own figure.",
+  "sections": [
+    {
+      "id": "places-we-have-planted",
+      "heading": "places we have planted",
+      "body": [
+        "Schools have been the most repeated place. Ashok Hall School hosted a planting drive in August 2023 and another in August 2025, and South City International School hosted two in April 2025. The 2025 Ashok Hall drive, with the line \"where every tree is a step toward the future\", notes 100 saplings planted.",
+        "Public parks and squares come next: Canal Side Park in June 2025, Santosh Mitra Square and Tollygunge in 2024, and Gitanjali Park and Vivekananda Park and CB Block Park in July 2023. The Canal Side Park drive notes 110 saplings planted, and the students got their hands muddy planting them.",
+        "Some drives went beyond the city. In June 2024 the Sunderbans Plantation Project 5.0 put more than 50 saplings in the Sundarbans to restore green cover and protect wildlife, and the [Sundarbans page](/impact/sundarbans) covers the wider trips."
+      ]
+    },
+    {
+      "id": "what-a-planting-day-looks-like",
+      "heading": "what a planting day looks like",
+      "body": [
+        "A planting day is hands in the soil. The write-ups describe students planting saplings, getting their hands dirty and enjoying the outdoors, with teams ranging from a handful of people to close to a dozen. The Gachtala drive of July 2023 was one of the bigger teams.",
+        "Plant with a plan for the saplings and a clear spot. Our teams suggest checking the place with the school or the park a few days ahead. Afterwards, write the drive up with the place, the date, the team and the number of saplings, because the next planting day at the same place starts from that note."
+      ]
+    },
+    {
+      "id": "how-the-planting-changed",
+      "heading": "how the planting changed",
+      "body": [
+        "The first Grow Green drive went out in July 2021, and the series ran across the city through 2022. Most of the 2023 drives fell in June and July, and the year had {year:2023} drives in total, the busiest year of the series so far.",
+        "From 2024 the drives leaned towards schools and parks. In 2025 they went to Ashok Hall School, South City International School and Canal Side Park, while the Sundarbans planting of June 2024 sits alongside the wider Sundarbans trips."
+      ]
+    },
+    {
+      "id": "how-to-plant-with-a-team",
+      "heading": "how to plant with a team",
+      "body": [
+        "Join a planting team by signing in with Google and waiting for approval. Members are students aged 14 to 19, and planting days are run by student teams. If you want to start a planting day at your own school or park, the [plantation how-to](/impact/how-to-run-a-plantation-drive) and the [Grow Green series page](/impact/grow-green) show what earlier teams did.",
+        "AquaTerra takes no monetary donations and charges no fees. Planting drives are paid for by its student-run nights, such as Paradox and Disco Diwali, whose proceeds fund the welfare work. For more of the work, see the [projects page](/projects)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Go back to the schools and parks you know. Ashok Hall School and South City International School each hosted two planting days, which makes the next one easier to plan.",
+    "Plant with a written note. The place, the date, the team and the number of saplings are what the next team needs.",
+    "Expect dozens of saplings from a small team on a single day, and check the write-up for the exact figure at each place.",
+    "Mix school grounds with public spaces. The series has done both, from school planting in April 2025 to a park in June 2025."
+  ],
+  "faqs": [
+    {
+      "q": "Where can I plant trees in Kolkata as a volunteer?",
+      "a": "Through AquaTerra, you can plant with a student team at schools, parks and squares. Its Grow Green drives have planted at Ashok Hall School, South City International School, Canal Side Park and Santosh Mitra Square, among others. AquaTerra has run {count} plantation and sapling drives since {firstYear}."
+    },
+    {
+      "q": "Does AquaTerra plant trees in schools?",
+      "a": "Yes. Schools have hosted some of the most repeated planting days, including Ashok Hall School, which had drives in August 2023 and August 2025, and South City International School, which had two in April 2025."
+    },
+    {
+      "q": "How many saplings does AquaTerra plant on one drive?",
+      "a": "It depends on the day, and each write-up gives its own figure. Most Grow Green planting days put dozens of saplings in the ground. The Canal Side Park drive in June 2025 notes 110 saplings planted."
+    },
+    {
+      "q": "Has AquaTerra planted trees in the Sundarbans?",
+      "a": "Yes. The Sunderbans Plantation Project 5.0 in June 2024 put more than 50 saplings in the Sundarbans to restore green cover and protect wildlife."
+    },
+    {
+      "q": "Can a student join a tree planting drive in Kolkata?",
+      "a": "Yes. Sign in to AquaTerra with Google and wait for approval. Members are students aged 14 to 19, and the planting days are run by student teams."
+    }
+  ],
+  "keywords": [
+    "where to plant trees in Kolkata",
+    "tree plantation drive Kolkata volunteers",
+    "plant saplings in Kolkata students",
+    "school plantation drive Kolkata",
+    "Grow Green AquaTerra",
+    "Sundarbans sapling planting volunteers"
+  ]
+}

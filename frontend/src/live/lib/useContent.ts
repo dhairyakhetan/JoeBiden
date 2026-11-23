@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { EVENTS, PROGRAMMES, type LiveEvent, type LiveProgramme } from '../data/content'
 import { fetchPublishedEvents, fetchPublishedProgrammes } from './contentApi'
 import { rowToEvent, rowToProgramme } from './content'
+import { settleStatuses } from './eventPhase'
+import { useNow } from './hooks'
 
 interface Snapshot { events: LiveEvent[]; programmes: LiveProgramme[]; source: 'static' | 'db'; ready: boolean }
 
@@ -30,7 +32,12 @@ async function load(): Promise<Snapshot> {
   }
 }
 
+/**
+ * Statuses are settled on the way out (see `effectiveStatus`): a night still marked `upcoming` after its date reads as past on every
+ * public page, whatever the row says. The admin reads the rows directly and still sees the stored value.
+ */
 export function useLiveContent(): Snapshot {
+  const now = useNow(60_000)
   const [snap, setSnap] = useState<Snapshot>(() => (cache && Date.now() - cache.at < TTL ? cache.snap : STATIC))
   useEffect(() => {
     if (cache && Date.now() - cache.at < TTL) return
@@ -39,7 +46,8 @@ export function useLiveContent(): Snapshot {
     void inflight.then(s => { cache = { at: Date.now(), snap: s }; if (alive) setSnap(s) })
     return () => { alive = false }
   }, [])
-  return snap
+  // `now` ticks once a minute, so this rebuilds at most once a minute
+  return useMemo(() => ({ ...snap, events: settleStatuses(snap.events, now) }), [snap, now])
 }
 
 /** For the admin: a save should show on the public site immediately, not after the cache expires. */

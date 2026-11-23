@@ -10,6 +10,7 @@
     { "source": "/recruitment", "destination": "/opportunities", "permanent": true },
     { "source": "/volunteer/apply", "destination": "/login", "permanent": true },
     { "source": "/roots", "destination": "/crftd", "permanent": true },
+    { "source": "/accounts", "destination": "/impact", "permanent": true },
     { "source": "/everything-we-do", "destination": "/projects", "permanent": true },
     { "source": "/volunteer-handbook", "destination": "/volunteer", "permanent": true },
     { "source": "/volunteer-handbook/edit", "destination": "/volunteer", "permanent": true },
@@ -19,9 +20,10 @@
     { "source": "/labs", "destination": "/terranotes/articles/labs", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(|(?:about|accounts|arcade|auth|blog|brand|bugs|calendar|choose-team|classes|collaborations|contact|crftd|demo|dev|director|directory|drive|equity-policy|everything-we-do|faq|feed|games|grievance|honours|invite|join|labs|links|live|login|member|members|my-posts|notifications|opportunities|paradox|pending|post|privacy-policy|profile|projects|recruitment|register|rejected|roots|saved|schools|search|settings|support|tasks|teams|terranotes|terrathon|thank-you|volunteer|volunteer-handbook|yearbook)(?:/.*)?)", "destination": "/" }
+    { "source": "/(|(?:about|accounts|ai|arcade|auth|blog|brand|bugs|calendar|certificates|choose-team|classes|collaborations|contact|core-team|crftd|demo|dev|director|directory|drive|equity-policy|everything-we-do|faq|feed|games|grievance|honours|impact|invite|join|labs|links|live|login|member|members|my-posts|notifications|opportunities|paradox|pending|post|privacy-policy|profile|projects|recruitment|register|rejected|roots|saved|schools|search|settings|shikshaq|sports|support|tasks|teams|terms|terranotes|terrathon|thank-you|verify|volunteer|volunteer-handbook|yearbook)(?:/.*)?)", "destination": "/" }
   ],
   "headers": [
+    { "source": "/member/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }] },
     {
       "source": "/((?!terranotes/editions/[^/]+/articles/[^/]+/[^/]+/demo(?:/|$)).*)",
       "headers": [

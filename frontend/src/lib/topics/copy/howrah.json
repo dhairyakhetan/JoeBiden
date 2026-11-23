@@ -1,0 +1,86 @@
+{
+  "slug": "howrah",
+  "title": "Drives in Howrah: dog feeding, food and clothes · AquaTerra",
+  "description": "What AquaTerra has done in Howrah since 2023: {count} drives, mostly Tails and Treats dog feeding in 2025, plus food, sharbat and clothes days. {years}.",
+  "h1Lead": "our drives across",
+  "h1Accent": "Howrah",
+  "lede": "In Howrah, AquaTerra's drives are mostly dog feeding sessions from Tails and Treats, with a food day, a sharbat day and a clothes collection alongside them. We have run {count} drives there since {firstYear}, with {volunteers} volunteer turnouts across {placesCount} places, and {year:2025} of them fall in 2025.",
+  "sections": [
+    {
+      "id": "the-2025-run",
+      "heading": "the 2025 run in howrah",
+      "body": [
+        "Almost everything in Howrah happened in 2025. The first drive of that year was on 4 January, and by September we had run {year:2025} drives in the area. Most were dog feeding sessions from Tails and Treats, held in Howrah itself, with one at Shibpur in March.",
+        "The dog drives each give their own figure. The January drive at Howrah reports 45 dogs fed, the drives in August and September report 65 each, and the Shibpur drive of 21 March reports 90. Those are figures for single drives, so compare them one drive at a time."
+      ]
+    },
+    {
+      "id": "the-dog-feeding-drives",
+      "heading": "the dog feeding drives",
+      "body": [
+        "Tails and Treats is the series behind most of what happens in Howrah. Its drives here ran in January, March, April, August and September 2025, and they are all titled Feeding Stray Dogs. Volunteers bring biscuits and food to the street dogs and feed them, with the drive's own notes describing it as a warm and caring evening for the animals.",
+        "The series has its own page, [Tails and Treats](/impact/tails-and-treats), with the wider story of feeding dogs across Kolkata. If you want to feed dogs with us, that is the best place to start, because the Howrah drives are the same kind of work."
+      ]
+    },
+    {
+      "id": "food-sharbat-and-clothes",
+      "heading": "food, sharbat and clothes",
+      "body": [
+        "On 28 March 2025 two drives ran in Howrah on the same day. The food drive, [Food for All](/impact/food-for-all), handed out packed meals and bananas, and its report gives 600 bananas distributed. The sharbat drive, [Sharbat Seva](/impact/sharbat-seva), gave out 20 litres of Rooh Afza to people nearby. Both had eight volunteers.",
+        "The clothes drive, Wear and Share 20.0, was held at Howrah AC on 12 July 2025, and it collected 11 kg of clothes. It is the only clothes collection in Howrah on this page, and it was run by four volunteers."
+      ]
+    },
+    {
+      "id": "the-first-drive",
+      "heading": "the first drive, a yoga workshop",
+      "body": [
+        "The first drive in Howrah was a yoga workshop on 23 June 2023, held at Badami Devi Shishu Kalyan Kendra in Howrah. Three volunteers taught twenty children, according to the drive's own report, and it was described as a calm session where the children stretched and rested.",
+        "It is the only workshop on this page, and no drive in Howrah falls in 2024. The next drive came in January 2025, which makes the yoga session stand apart from everything that followed."
+      ]
+    },
+    {
+      "id": "where-in-howrah",
+      "heading": "where in howrah",
+      "body": [
+        "Most of these drives were in {topPlace}, which is the place named most often on this page. Shibpur, Howrah AC and the Badami Devi Shishu Kalyan Kendra each hosted one drive.",
+        "If you want to see the same kind of work somewhere else, [Drives in Salt Lake](/impact/salt-lake) covers the drives in Salt Lake, which has its own run of work."
+      ]
+    }
+  ],
+  "learnings": [
+    "Howrah work came in one burst in 2025, and the 2023 yoga workshop stands alone before it.",
+    "Most Howrah drives are dog feeding sessions from Tails and Treats, so a first drive here is likely to be one of those.",
+    "On 28 March 2025 the food and sharbat drives both ran in Howrah on the same day, each with eight volunteers.",
+    "Each drive gives its own figure, whether dogs fed, bananas handed out or litres of sharbat, so compare drives one at a time."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run drives in Howrah?",
+      "a": "Yes. AquaTerra has run {count} drives in Howrah, including Shibpur, since {firstYear}, with {volunteers} volunteer turnouts. Most are dog feeding sessions from Tails and Treats, and the rest are food, sharbat and clothes drives plus one yoga workshop for children in 2023."
+    },
+    {
+      "q": "What kind of drives does AquaTerra run in Howrah?",
+      "a": "Mostly dog feeding drives in the Tails and Treats series, held from January to September 2025. AquaTerra also ran a food distribution and a sharbat drive on 28 March 2025, a clothes collection in July 2025, and a yoga workshop for children in June 2023."
+    },
+    {
+      "q": "Where in Howrah does AquaTerra hold its drives?",
+      "a": "Most of AquaTerra's Howrah drives were held in Howrah itself. Shibpur, Howrah AC and Badami Devi Shishu Kalyan Kendra in Howrah each hosted one drive on this page."
+    },
+    {
+      "q": "When did AquaTerra first run a drive in Howrah?",
+      "a": "The first drive in Howrah was a yoga workshop for children at Badami Devi Shishu Kalyan Kendra on 23 June 2023. No drive falls in 2024, and the drives since then all took place in 2025."
+    },
+    {
+      "q": "Can a 14 to 19 year old help with AquaTerra's drives in Howrah?",
+      "a": "Yes, if you are a student aged 14 to 19. Join AquaTerra by signing in with Google and waiting for an approval step. Students run the drives, so joining is the way in."
+    }
+  ],
+  "keywords": [
+    "drives in Howrah Kolkata",
+    "dog feeding drive Howrah",
+    "Shibpur dog feeding Kolkata",
+    "food distribution Howrah Kolkata",
+    "clothes collection Howrah",
+    "AquaTerra Howrah volunteers"
+  ]
+}

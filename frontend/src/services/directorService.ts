@@ -243,6 +243,28 @@ const directorServiceImpl = {
    * `fetchMembers` comment already documents having fixed once for the
    * unfiltered total - this closes the same gap for the contacted split.
    */
+  /**
+   * Every application (members row) created since `sinceIso`, with only its date and status, for the Approvals
+   * desk's "applications by day" window. Leaders may read every status under members_select (is_director()
+   * covers director, hod, super_admin and hr). Paged in thousands so a long window is never silently cut short.
+   * Throws on error, like the rest of this service.
+   */
+  async getApplicationRows(sinceIso: string): Promise<{ created_at: string; status: string | null }[]> {
+    const out: { created_at: string; status: string | null }[] = []
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await withRetry(async () => supabaseCommunity
+        .from('members')
+        .select('created_at, status')
+        .gte('created_at', sinceIso)
+        .order('created_at', { ascending: false })
+        .range(from, from + 999))
+      if (error) throw error
+      out.push(...((data || []) as { created_at: string; status: string | null }[]))
+      if (!data || data.length < 1000) break
+    }
+    return out
+  },
+
   async getPendingContactedCounts(filters?: { search?: string; classGrade?: string | null }): Promise<{ notContacted: number; contacted: number }> {
     const [notContacted, contacted] = await withRetry(async () => Promise.all([
       applyPendingFilters(supabaseCommunity.from('pending_member_approvals').select('*', { count: 'exact', head: true }), filters ?? {}).is('contacted_at', null),
@@ -280,6 +302,17 @@ const directorServiceImpl = {
       .eq('member_id', memberId)
     if (error) throw logSupabaseError('directorService.markContacted', error)
     logAction('member_marked_contacted', 'member', memberId)
+  },
+
+  /** Undo a mis-click on "contacted": clears contacted_at so the applicant goes
+   *  back to the pending tab. Same gate as markContacted. */
+  async unmarkContacted(memberId: number) {
+    const { error } = await supabaseCommunity
+      .from('members')
+      .update({ contacted_at: null })
+      .eq('member_id', memberId)
+    if (error) throw logSupabaseError('directorService.unmarkContacted', error)
+    logAction('member_unmarked_contacted', 'member', memberId)
   },
 
   /** Mirrors getPendingApprovals but reads the rejected queue - see
@@ -366,6 +399,10 @@ const directorServiceImpl = {
       .eq('status', 'pending_approval')
       .select('member_id')
 
+    if (error && String((error as { message?: string }).message ?? '').includes('phone_required')) {
+      // Database guard (members_phone_required_to_approve_2026_11_13.sql): no phone, no approval.
+      throw new Error('This applicant has not added a phone number yet, so they cannot be approved.')
+    }
     if (error) throw logSupabaseError('directorService.approveMember', error)
     if (!changed || changed.length === 0) throw await explainMemberNoop(memberId, 'pending_approval', 'application')
     logAction('member_approved', 'member', memberId)

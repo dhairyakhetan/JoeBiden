@@ -1,0 +1,73 @@
+{
+  "slug": "month-2022-06",
+  "title": "AquaTerra in June 2022: {count} drives and a first anniversary",
+  "description": "AquaTerra in June 2022: {count} drives, two stray dog outings, a sapling drive, a basketball fundraiser and a party to mark the first year.",
+  "h1Lead": "what we did in",
+  "h1Accent": "june 2022",
+  "lede": "In June 2022 AquaTerra ran {count} drives, against {count:month-2022-04} in April and {count:month-2022-03} in March. Two stray dog outings fed dogs in Kolkata, a sapling drive planted in the city, a basketball fundraiser brought teams together, and the month had a party for AquaTerra's first year.",
+  "sections": [
+    {
+      "id": "dogs-and-trees-as-usual",
+      "heading": "dogs and trees, as usual",
+      "body": [
+        "Tails and Treats 10.0 ran on 4 June with three volunteers and fed forty-five dogs. Tails and Treats 11.0 followed on 25 June, with seventy-five dogs fed, the larger of the two outings.",
+        "Grow Green 5.0 planted eighty-five saplings in Kolkata on 11 June, with a helping hand from Each One Plant One. It was the same kind of planting day as the April and March drives, and the regular series kept its shape."
+      ]
+    },
+    {
+      "id": "a-basketball-fundraiser",
+      "heading": "a basketball fundraiser",
+      "body": [
+        "Inception '22 was a fundraiser on 18 June in Kolkata. Forty volunteers ran a full basketball tournament, bringing several school and college teams together, and it was the largest team of the month.",
+        "AquaTerra's fundraisers and matches are covered on the [fundraising page](/impact/fundraising), which explains how the events support the welfare work."
+      ]
+    },
+    {
+      "id": "the-first-anniversary",
+      "heading": "the first anniversary",
+      "body": [
+        "On 10 June, twenty-five volunteers gathered to mark AquaTerra's first year with a full retrospective celebration. The write-up describes a year of impact, chaos and heart, and all the love, laughs and loud AquaTerra energy of the day.",
+        "The celebration has no place name, unlike the drives around it, which all name Kolkata."
+      ]
+    },
+    {
+      "id": "june-between-april-and-july",
+      "heading": "how June sat between April and July",
+      "body": [
+        "June had {count} drives, April had {count:month-2022-04} and July had {count:month-2022-07}. There were no Earth Day workshops in June, and the dog outings and planting carried on as usual.",
+        "Every drive in June that names a place names Kolkata, so {topPlace} is the place for the whole month."
+      ]
+    }
+  ],
+  "learnings": [
+    "A quiet month still needs its regular work: two dog outings and a planting drive kept going in June 2022.",
+    "A first anniversary is a good moment to gather the team, and twenty-five volunteers came together for the party.",
+    "A fundraiser can be a sport and a team event at once: the basketball tournament drew several school and college teams."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in June 2022?",
+      "a": "AquaTerra ran {count} drives in June 2022: two stray dog feeding outings in Kolkata, a sapling planting drive, a basketball fundraiser and a party to mark the first year."
+    },
+    {
+      "q": "When was AquaTerra's first anniversary?",
+      "a": "AquaTerra marked its first year with a party on 10 June 2022, attended by twenty-five volunteers who gathered for a full retrospective celebration. AquaTerra was founded in June 2021."
+    },
+    {
+      "q": "Did AquaTerra hold a basketball fundraiser in 2022?",
+      "a": "Yes. Inception '22 was a basketball fundraiser in Kolkata on 18 June 2022, run by forty volunteers with several school and college teams. You can read more about AquaTerra's fundraisers on the fundraising page."
+    },
+    {
+      "q": "Where did AquaTerra plant saplings in June 2022?",
+      "a": "Grow Green 5.0 planted eighty-five saplings in Kolkata on 11 June 2022, with a helping hand from Each One Plant One."
+    }
+  ],
+  "keywords": [
+    "AquaTerra June 2022",
+    "what AquaTerra did in June 2022",
+    "AquaTerra first anniversary 2022",
+    "basketball fundraiser Kolkata 2022",
+    "Tails and Treats June 2022",
+    "sapling planting Kolkata June 2022"
+  ]
+}

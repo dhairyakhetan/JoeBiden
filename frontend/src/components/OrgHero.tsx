@@ -352,10 +352,17 @@ function Panel({ id, now, hit, reduced, openMap, onGo, onClose, panelRef, headin
   const count = sub ? sub.count : holder.count
   const title = sub ? sub.name : holder.name
   const to = sub ? `/teams/${holder.uuid}/sub/${sub.slug}` : `/teams/${holder.uuid}`
-  const chips: { key: string; label: string; count: number; path: StagePath }[] = sub
+  type Chip = { key: string; label: string; count: number; path: StagePath; branches?: Chip[] }
+  const chips: Chip[] = sub
     ? []
     : [
-        ...(kid ? [] : dept.kids.map(k => ({ key: k.uuid, label: k.name, count: k.count, path: { dept: dept.uuid, kid: k.uuid } }))),
+        // A team inside the department that has sub-teams of its own (Marketing > Social Media > Reels, LinkedIn,
+        // Design) shows them as branches under its chip, so the next level is visible without opening it
+        // (bug tracker cf8589b9: a lone dot read as "there is more in here" and said nothing about what).
+        ...(kid ? [] : dept.kids.map(k => ({
+          key: k.uuid, label: k.name, count: k.count, path: { dept: dept.uuid, kid: k.uuid },
+          branches: k.subs.map(s => ({ key: s.uuid, label: s.name, count: s.count, path: { dept: dept.uuid, kid: k.uuid, sub: s.uuid } })),
+        }))),
         ...holder.subs.map(s => ({ key: s.uuid, label: s.name, count: s.count, path: kid ? { dept: dept.uuid, kid: kid.uuid, sub: s.uuid } : { dept: dept.uuid, sub: s.uuid } })),
       ]
   const crumbs: { label: string; path: StagePath | null }[] = [
@@ -404,12 +411,32 @@ function Panel({ id, now, hit, reduced, openMap, onGo, onClose, panelRef, headin
         <div className="oh-inside">
           <p className="oh-label">{kid || !dept.kids.length ? 'inside' : 'inside this department'}</p>
           <div className="oh-chips">
-            {chips.map(c => (
-              <button key={c.key} type="button" className="oh-chip" onClick={() => onGo(c.path)}>
-                {c.label}<HireDot n={openMap.get(c.key)?.length ?? 0} /><span className="oh-chip-n">{c.count}</span>
-              </button>
-            ))}
+            {chips.map(c => {
+              const chip = (
+                <button key={c.key} type="button" className="oh-chip" onClick={() => onGo(c.path)}>
+                  {c.label}<HireDot n={openMap.get(c.key)?.length ?? 0} /><span className="oh-chip-n">{c.count}</span>
+                </button>
+              )
+              if (!c.branches?.length) return chip
+              return (
+                <div key={c.key} className="oh-branch">
+                  {chip}
+                  <ul className="oh-branch-list" aria-label={`teams inside ${c.label}`}>
+                    {c.branches.map(b => (
+                      <li key={b.key}>
+                        <button type="button" className="oh-chip oh-chip-sub" onClick={() => onGo(b.path)}>
+                          {b.label}<HireDot n={openMap.get(b.key)?.length ?? 0} /><span className="oh-chip-n">{b.count}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
           </div>
+          {[...chips, ...chips.flatMap(c => c.branches ?? [])].some(c => (openMap.get(c.key)?.length ?? 0) > 0) && (
+            <p className="oh-legend"><i className="oh-hire" aria-hidden /> has open roles</p>
+          )}
         </div>
       )}
 

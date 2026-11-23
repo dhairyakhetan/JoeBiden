@@ -1,0 +1,86 @@
+{
+  "slug": "is-aquaterra-a-real-ngo",
+  "title": "Is AquaTerra a real, registered NGO? · AquaTerra",
+  "description": "AquaTerra is a registered charitable trust listed on DARPAN, run by students aged 14 to 19 in Kolkata. Here is how to check it, and how it is paid for.",
+  "h1Lead": "is AquaTerra",
+  "h1Accent": "a real, registered NGO?",
+  "lede": "Yes. AquaTerra is a registered charitable trust, set up through TerraRoots and listed on DARPAN, and its drives are run by students aged 14 to 19 in Kolkata. It has written up {drives} drives since {firstYear}, with {volunteers} volunteer turnouts across {placesCount} places.",
+  "sections": [
+    {
+      "id": "a-registered-trust",
+      "heading": "a registered trust, listed on DARPAN",
+      "body": [
+        "AquaTerra is registered as a charitable trust through TerraRoots, and it is listed on DARPAN, the national portal where registered NGOs are listed. A parent or a teacher can look for that listing, and AquaTerra's own story is on the [about page](/about).",
+        "AquaTerra was founded in June 2021, and its drives are run by students aged 14 to 19. That is the basic answer to whether it is real: a registered trust with a listing, a founding date and a public track record."
+      ]
+    },
+    {
+      "id": "every-drive-is-written-up",
+      "heading": "every drive is written up",
+      "body": [
+        "The strongest check is the record. Every drive has a dated write-up on the site, with its title, the date, the place, how many people came, a short summary and one key figure. AquaTerra has written up {drives} drives since {firstYear}, so any one of them can be checked by its title and date.",
+        "The places are named in the write-ups too. Pather Sathi, Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep appear again and again, along with neighbourhoods such as Bangur, Salt Lake and Howrah. These are the places where drives happen, and they are named so that a reader can see where the work went."
+      ]
+    },
+    {
+      "id": "who-runs-it",
+      "heading": "who runs it",
+      "body": [
+        "Members are students aged 14 to 19. To join, you sign in with Google and a member is approved before taking part. The drives are run by student teams, and the leadership side is set out on the [student leadership page](/impact/student-leadership).",
+        "AquaTerra has {members} active members. Across its drives there have been {volunteers} volunteer turnouts, which count every time someone showed up, so one student who came to five drives counts five times in that total."
+      ]
+    },
+    {
+      "id": "how-it-is-paid-for",
+      "heading": "how it is paid for",
+      "body": [
+        "AquaTerra takes no monetary donations and charges no fees. Its welfare drives are paid for by its own student-run events: Paradox, Disco Diwali, TerraThon and The Starry Night, along with fundraiser matches.",
+        "AquaTerra also runs ShikshAQ, which offers free exam papers and a free way to be connected with a teacher. It was built by students and is open to people who are not members, and you can read about it on the [ShikshAQ page](/shikshaq)."
+      ]
+    },
+    {
+      "id": "how-to-check-it-yourself",
+      "heading": "how to check it yourself",
+      "body": [
+        "Start with the [projects page](/projects), where the drive write-ups are listed with their dates and places. Then read the [FAQ](/faq), and use the [contact page](/contact) if you want to ask a question directly.",
+        "A parent can look for the listing, read a drive's write-up and ask a question before a child joins anything. The [for parents page](/impact/for-parents) sets out what the work involves and how a student joins."
+      ]
+    }
+  ],
+  "learnings": [
+    "A registered name is the first check. AquaTerra is a registered charitable trust listed on DARPAN, and that listing can be looked up.",
+    "A dated record is the second. Each of the {drives} drives has its own write-up, so the work can be checked one drive at a time.",
+    "A self-funded NGO depends on its own events. The Paradox, Disco Diwali and TerraThon nights are part of how the welfare work is paid for.",
+    "Ask before joining. Sign-in and approval happen before anyone takes part, so a parent can ask about any drive first."
+  ],
+  "faqs": [
+    {
+      "q": "Is AquaTerra a real, registered NGO?",
+      "a": "Yes. AquaTerra is a registered charitable trust, set up through TerraRoots and listed on DARPAN. It was founded in June 2021 and has written up {drives} drives since {firstYear}."
+    },
+    {
+      "q": "Does AquaTerra take donations?",
+      "a": "No. AquaTerra takes no monetary donations and charges no fees. Its welfare drives are paid for by its own student-run events, such as Paradox and Disco Diwali."
+    },
+    {
+      "q": "Who runs AquaTerra?",
+      "a": "Students aged 14 to 19 run AquaTerra's drives and teams. To join, sign in with Google and wait for approval. AquaTerra has {members} active members."
+    },
+    {
+      "q": "Where does AquaTerra work?",
+      "a": "In Kolkata, across {placesCount} places, from schools and parks to temples, ashrams and shelters, and it has also run trips to the Sundarbans."
+    },
+    {
+      "q": "How can I check AquaTerra's work?",
+      "a": "Read the drive write-ups on the projects page of the AquaTerra site. Each one is dated and names the place, the number of people who came and the work done."
+    }
+  ],
+  "keywords": [
+    "is AquaTerra a real NGO",
+    "AquaTerra registered charitable trust",
+    "AquaTerra NGO Kolkata DARPAN",
+    "student-run NGO Kolkata",
+    "is AquaTerra legitimate",
+    "AquaTerra no donations"
+  ]
+}

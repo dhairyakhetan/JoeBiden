@@ -1,0 +1,83 @@
+{
+  "slug": "reduced-inequalities",
+  "title": "Reduced inequalities: older people, shelters and books · AquaTerra",
+  "description": "Since {firstYear}, AquaTerra has run {count} drives that visit old age homes, collect books and clothes, and reach shelters and slum areas in Kolkata.",
+  "h1Lead": "making sure nobody is",
+  "h1Accent": "left behind",
+  "lede": "Reduced Inequalities is UN Sustainable Development Goal 10: reduce inequality within and among countries, so that no one is left behind. Our {count} drives on this goal visit an old age home, collect books and clothes for children and families, and bring food and sessions to people in shelters, ashrams and slum areas across Kolkata.",
+  "sections": [
+    {
+      "id": "visits-that-come-back",
+      "heading": "visits that come back",
+      "body": [
+        "[Respect and Reach](/impact/respect-and-reach) is the drive on this goal that has come back most often. Its first visit to an old age home was at Urban Shelter for the Homeless in April 2023, and the visits there ran through May and into June that year, then again in May 2024. The students spent the day with the elders, telling stories, singing, bringing essentials and simply listening.",
+        "In September 2025 the visit went to All Bengal Women's Union, a different host, with the same aim of small acts of kindness for older people. Across the whole Respect and Reach series the drive has run {count:respect-and-reach} times."
+      ]
+    },
+    {
+      "id": "books-clothes-and-school-things",
+      "heading": "books, clothes and school things",
+      "body": [
+        "Book Basket ran as a run of short collections in June and July 2025. Drives went to housing complexes such as Paymanti Housing, Dreamland Housing, Emami City and Santosh Apartments, and to places in Kolkata, Salt Lake, Laketown and Bidhannagar. Each collection brought a few kilograms of books for underprivileged children. The whole series is on [Book Basket](/impact/book-basket).",
+        "[Wear and Share](/impact/wear-and-share) gathers clothes. The Salt Lake drive in April 2025 collected eight bags of old clothes, and Wear & Write at Anandam Apartment in Bangur in May 2024 gathered clothes and notebooks for children who need them."
+      ]
+    },
+    {
+      "id": "food-and-hygiene-at-the-edges",
+      "heading": "food and hygiene at the edges of the city",
+      "body": [
+        "The Food For All drive at Shiv Temple in Salt Lake on 26 March 2025 handed out bananas to people who are underprivileged. Five days earlier, on 21 March, the Cycle of Care drive had given sanitary napkins to women near a slum area in Salt Lake Haveli. These are the small, direct stops that show what this goal looks like on a street."
+      ]
+    },
+    {
+      "id": "sessions-that-build-skills",
+      "heading": "sessions that build skills",
+      "body": [
+        "Power Within at Tetultala Ashram in January 2025 held sessions on self-worth, rights and skills for women. Her Voice at Amader Pradakhep in the same month gave talks on rights and confidence, with skill sharing. Science in Action at Amader Pradakhep in November 2024 set out to teach underprivileged children the wonders of science, and Laugh and Craft at Pather Sathi in June 2025 was a workshop for underprivileged children."
+      ]
+    },
+    {
+      "id": "how-to-help",
+      "heading": "how to help",
+      "body": [
+        "Most of these drives are short, and the kind a new member can take part in on the day: a book collection, a clothes stop or a visit. [How to run a book donation drive](/impact/how-to-run-a-book-donation-drive) and [How to run a clothes donation drive](/impact/how-to-run-a-clothes-donation-drive) set out the steps. To start, [join AquaTerra](/join) with a Google sign-in and wait for approval."
+      ]
+    }
+  ],
+  "learnings": [
+    "Visits work when they go back to the same host. The Urban Shelter visits ran across two springs, which gave the team a familiar room and familiar faces.",
+    "Book collections are small and frequent. Many short drives across June and July 2025 gathered books from different housing complexes, one stop at a time.",
+    "A goal page holds very different drives. A visit, a book collection and a food stop each reach people in a different way, and each needs its own steps.",
+    "Old clothes and books are easy to collect and easy to pass on, which makes the collection drives a simple first step for a new member."
+  ],
+  "faqs": [
+    {
+      "q": "What is UN Goal 10, Reduced Inequalities?",
+      "a": "UN Sustainable Development Goal 10 is Reduced Inequalities. It aims to reduce inequality within and among countries, so that no one is left behind. AquaTerra's work on it includes {count} drives since {firstYear}: visits to old age homes, book and clothes collections, food stops and sessions for women and children in shelters and ashrams."
+    },
+    {
+      "q": "Does AquaTerra visit old age homes?",
+      "a": "Yes. The Respect and Reach drive has visited an old age home at Urban Shelter for the Homeless several times since April 2023, and in September 2025 it visited All Bengal Women's Union."
+    },
+    {
+      "q": "Does AquaTerra collect books for children?",
+      "a": "Yes. Book Basket collects books for underprivileged children across Kolkata, Salt Lake, Laketown and Bidhannagar, and ran a series of collection drives in June and July 2025."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "Yes. Wear and Share runs clothes collection drives across the city, and the Wear & Write campaign has gathered clothes and notebooks for children who need them."
+    },
+    {
+      "q": "How can a student help with these drives?",
+      "a": "Join AquaTerra by signing in with Google and waiting for approval. Book and clothes collections are short drives, and the step-by-step guides on the site explain how to run them."
+    }
+  ],
+  "keywords": [
+    "old age home visit Kolkata students",
+    "book collection drive Kolkata children",
+    "clothes donation drive Kolkata students",
+    "UN Sustainable Development Goal 10 reduced inequalities",
+    "student NGO Kolkata shelter visit",
+    "Urban Shelter for the Homeless Kolkata"
+  ]
+}

@@ -1,3 +1,4 @@
+import { DriveTopicsCard } from '../components/ImpactLibraryLazy'
 import Img from '../components/Img'
 import './PublicProjectDetailPage.css'
 import '../styles/routes/projects.css'
@@ -15,6 +16,7 @@ import { useJsonLd, PUBLISHER_LD } from '../hooks/useJsonLd'
 import Breadcrumbs from '../components/Breadcrumbs'
 import { setAuthIntent } from '../lib/authIntent'
 import { sized } from '../lib/imageUrl'
+import { safeExternalHref } from '../lib/safeUrl'
 import { pushRecent } from '../lib/recentlyViewed'
 import { Sticker } from '../components/Sticker'
 import { heroStickerWord } from './heroStickerWord'
@@ -328,11 +330,27 @@ export default function PublicProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="route-enter container" style={{ padding: 'clamp(44px, 8vw, 80px) var(--page-px,24px) clamp(32px, 5vw, 56px)' }} aria-hidden="true">
-        <div className="v6-skeleton sk-pill" style={{ width: 90, height: 24, marginBottom: 18 }} />
-        <div className="v6-skeleton" style={{ width: '70%', height: 40, marginBottom: 12 }} />
-        <div className="v6-skeleton" style={{ width: '40%', height: 14, marginBottom: 28 }} />
-        <div className="v6-skeleton" style={{ width: '100%', height: 320, borderRadius: 'var(--r-outer)' }} />
+      // Same boxes as the loaded page (breadcrumb row, .proj-layout, a 4:3 .proj-viewer, the info
+      // column), so the content lands where the skeleton stood. The old skeleton was a generic
+      // padded block: on a phone the real photo arrived ~100px higher and taller, a 0.9 layout
+      // shift on every drive write-up (Search Console CLS, Nov 2026).
+      <div className="route-enter" aria-hidden="true">
+        <div className="container" style={{ padding: '20px 16px 0', minHeight: 56, display: 'flex', alignItems: 'center' }}>
+          <div className="v6-skeleton sk-pill" style={{ width: 160, height: 16 }} />
+        </div>
+        <div className="proj-layout">
+          <div className="proj-media-col">
+            <div className="proj-viewer v6-skeleton" style={{ boxShadow: 'none' }} />
+          </div>
+          <div className="proj-info-col">
+            <div className="v6-skeleton sk-pill" style={{ width: 90, height: 24, marginBottom: 18 }} />
+            <div className="v6-skeleton" style={{ width: '80%', height: 40, marginBottom: 12 }} />
+            <div className="v6-skeleton" style={{ width: '45%', height: 14, marginBottom: 28 }} />
+            <div className="v6-skeleton" style={{ width: '100%', height: 14, marginBottom: 10 }} />
+            <div className="v6-skeleton" style={{ width: '92%', height: 14, marginBottom: 10 }} />
+            <div className="v6-skeleton" style={{ width: '70%', height: 14 }} />
+          </div>
+        </div>
       </div>
     )
   }
@@ -628,13 +646,13 @@ export default function PublicProjectDetailPage() {
                   </Link>
                 </div>
               )}
-              {project.google_drive_link && (
-                <a href={project.google_drive_link} target="_blank" rel="noopener noreferrer" className="btn btn-sm">
+              {safeExternalHref(project.google_drive_link) && (
+                <a href={safeExternalHref(project.google_drive_link)} target="_blank" rel="noopener noreferrer" className="btn btn-sm">
                   view photos ↗
                 </a>
               )}
-              {project.instagram_link && (
-                <a href={project.instagram_link} target="_blank" rel="noopener noreferrer" className="btn btn-sm">
+              {safeExternalHref(project.instagram_link) && (
+                <a href={safeExternalHref(project.instagram_link)} target="_blank" rel="noopener noreferrer" className="btn btn-sm">
                   view on instagram ↗
                 </a>
               )}
@@ -803,8 +821,13 @@ export default function PublicProjectDetailPage() {
           <Link to="/login" className="proj-cta-action" onClick={() => setAuthIntent({ kind: 'apply' })}>Come do the work with us</Link>
         </div>
       </div>
-      <div className="container" style={{ padding: '0 16px 80px', textAlign: 'center' }}>
+      <div className="container" style={{ padding: '0 16px 8px', textAlign: 'center' }}>
         <Link to="/projects" className="btn btn-sm btn-ghost">browse all projects →</Link>
+      </div>
+      {/* End-of-page link into the impact library: the series, workshop type, partner and year pages this drive
+          belongs to (lib/topics). Last thing on the page, so nothing above it moves. */}
+      <div className="container" style={{ padding: '0 16px 80px' }}>
+        <DriveTopicsCard drive={project} />
       </div>
 
     </div>

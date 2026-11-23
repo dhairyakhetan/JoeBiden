@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useMeta } from '../../hooks/useMeta'
+import { pageMetadata } from '../../lib/metaConfig'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import type { BlogPost } from '../lib/types'
@@ -73,6 +75,15 @@ export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<BlogPost | null>(null)
   const [loading, setLoading] = useState(true)
+  // Head tags: the post's own title and excerpt once it loads, the blog's until then.
+  useMeta(post
+    ? {
+        title: `${post.title} | Paradox 2026 Blog · AquaTerra`,
+        description: post.excerpt || pageMetadata.paradoxBlog.description,
+        path: `/paradox/blog/${slug}`,
+        type: 'article',
+      }
+    : { ...pageMetadata.paradoxBlog, path: `/paradox/blog/${slug}` })
 
   useEffect(() => {
     if (!slug) return

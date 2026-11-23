@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react'
 import { sized } from '../lib/imageUrl'
 import { ORG_FACTS, displayCount } from '../lib/orgFacts'
+import { schemaForPath } from '../lib/pageSchema'
 
 /**
  * The one canonical production origin. Every deployment surface (apex
@@ -269,6 +270,23 @@ export const useMeta = ({
       document.head.appendChild(canonical)
     }
     canonical.setAttribute('href', canonicalUrl)
+
+    // Page-level structured data from lib/pageSchema.ts, keyed by the same metaConfig `path`, so every page that
+    // calls useMeta gets its schema with no code of its own. One managed tag: rewritten on each page, removed on a
+    // page with no entry, so nothing leaks from one route to the next. prerender-meta.mjs serves the same nodes.
+    const nodes = noIndex ? [] : schemaForPath(fallbackPath, { title: safeTitle, description: safeDescription })
+    let ld = document.head.querySelector('script[data-jsonld-id="page-schema"]')
+    if (nodes.length) {
+      if (!ld) {
+        ld = document.createElement('script')
+        ld.setAttribute('type', 'application/ld+json')
+        ld.setAttribute('data-jsonld-id', 'page-schema')
+        document.head.appendChild(ld)
+      }
+      ld.textContent = JSON.stringify(nodes.length === 1 ? nodes[0] : nodes)
+    } else {
+      ld?.remove()
+    }
   }, [safeTitle, safeDescription, image, imageAlt, url, path, type, author, publishDate, modifiedDate, noIndex])
 }
 

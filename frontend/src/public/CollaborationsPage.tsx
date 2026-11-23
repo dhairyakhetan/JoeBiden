@@ -159,19 +159,6 @@ export default function CollaborationsPage() {
           pale strip instead of black (see DirectorDashboard/BlogPostPage
           for the same fix). */}
       <section className="bleed-under-nav" data-nav-tint="ink" style={{ padding: 'calc(var(--nav-h, 70px) + clamp(44px, 8vw, 80px)) 0 clamp(32px, 5vw, 56px)', position: 'relative', overflow: 'hidden', background: 'var(--ink)' }}>
-        {/* Giant faint repeated background texture */}
-        <div aria-hidden style={{
-          position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <div style={{
-            fontFamily: 'var(--display)', fontWeight: 900,
-            fontSize: 'clamp(80px,20vw,260px)', color: 'rgba(255,255,255,0.045)',
-            whiteSpace: 'nowrap', letterSpacing: '-0.03em', textTransform: 'uppercase',
-          }}>
-            TOGETHER · TOGETHER · TOGETHER
-          </div>
-        </div>
         <div className="container" style={{ position: 'relative' }}>
           <span className="sticker sticker-sky wobble sticker--diecut" style={{ marginBottom: 16, display: 'inline-flex', ['--sticker-ground' as string]: 'var(--ink)' }}>★ open to partnerships</span>
           <h1 className="giant" style={{ margin: 0, lineHeight: 0.88, color: 'var(--card)', position: 'relative', display: 'inline-block' }}>

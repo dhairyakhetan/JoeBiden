@@ -1,0 +1,86 @@
+{
+  "slug": "how-to-teach-underprivileged-children-in-kolkata",
+  "title": "How can I teach children who need it in Kolkata? · AquaTerra",
+  "description": "Teach children in Kolkata through short themed workshops in art, storytelling, English and science, run by students. How the sessions work and how to join.",
+  "h1Lead": "how can I teach",
+  "h1Accent": "children who need it",
+  "lede": "You teach children in Kolkata by running a short workshop with a few students in one skill, such as art, storytelling, English or science, at a place that already hosts children. AquaTerra has run {count} children's workshops since {firstYear}, in {placesCount} places, with {volunteers} volunteer turnouts across them.",
+  "sections": [
+    {
+      "id": "what-a-session-looks-like",
+      "heading": "what a session looks like",
+      "body": [
+        "Most sessions are one short, focused workshop built around a single theme. Most write-ups give roughly twenty-five to forty children at a session, and a typical team is a few students leading a game, a painting or a quiz.",
+        "Take the Express More acting workshop in September 2025, which explored emotions and stories, or the Pebble Pop painting session in March 2025, or the Fun Factors workshop that turned multiplication into a game in August 2025. Each had a clear focus, a name that says what it is about, and a small team of volunteers."
+      ]
+    },
+    {
+      "id": "the-formats-that-come-back",
+      "heading": "the formats that come back",
+      "body": [
+        "Art and craft is the most common format, with painting, pot painting, origami, mosaic work and greeting cards running through the year. Storytelling, science, English and public speaking come next, along with chess, music, dance and theatre.",
+        "Some sessions cover life skills as well: digital safety in May 2026, financial literacy at Tiljala Shed in March 2025 and at Shoishob in November 2024, mental health sessions, and a menstrual health and hygiene session in April 2025. One session in June 2025 taught children to tell good touch from bad touch, run with Calcutta Rescue."
+      ]
+    },
+    {
+      "id": "where-the-sessions-happen",
+      "heading": "where the sessions happen",
+      "body": [
+        "Pather Sathi hosts more sessions than any other place, followed by Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep. These are places we keep going back to, where we run sessions with the children who come to them.",
+        "Schools also host. South City International School hosted an Earth Day session in April 2025, School On Wheels sites hosted science, origami and storytelling sessions in March 2025, and BSS school hosted a rakhi-making session in August 2025."
+      ]
+    },
+    {
+      "id": "how-the-sessions-grew",
+      "heading": "how the sessions grew",
+      "body": [
+        "The sessions began in {firstYear} with a few workshops. They grew to {year:2023} in 2023 and {year:2024} in 2024, the busiest year, and settled at {year:2025} in 2025, with a heavy run of art and craft sessions through the middle months of 2024.",
+        "The calendar sets the themes. In October 2025 the Diwali sessions were greeting cards and a Green Diwali poster session, in December 2024 the Christmas sessions covered crafts, carol singing and a secret Santa game, and the Earth Day sessions ran in March and April 2025."
+      ]
+    },
+    {
+      "id": "how-to-run-or-join-one",
+      "heading": "how to run or join one",
+      "body": [
+        "Pick one skill that a few students can teach well, and plan one theme around it. Our teams suggest checking the place a few days before, so the room and the children are ready for the session.",
+        "Join a teaching team by signing in with Google and waiting for approval. Members are students aged 14 to 19. Afterwards, write the session up with the place, the date, the team and how many children took part, so the next team can repeat it. For the subjects that suit schools best, see the [reading, speaking and English workshops](/impact/reading-speaking-and-english) and the [page for teachers](/impact/for-teachers)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Keep one skill per session. Art, storytelling, science, English and speaking each worked as a single focused session with a short plan.",
+    "Let the calendar pick the theme. Diwali, Christmas, Children's Day and Earth Day each produced their own sessions in the same year.",
+    "Go back to the places that host you. Pather Sathi has hosted more sessions than any other place, so a familiar room makes the next session easier to set up.",
+    "Write each session up. A plain note of the place, the date and the children taught is enough for the next team to repeat it."
+  ],
+  "faqs": [
+    {
+      "q": "How can I teach underprivileged children in Kolkata?",
+      "a": "Join an AquaTerra workshop team, or run a short session with a few students in one skill, such as art, storytelling or science. AquaTerra has run {count} children's workshops since {firstYear}, in {placesCount} places."
+    },
+    {
+      "q": "What subjects does AquaTerra teach children in Kolkata?",
+      "a": "AquaTerra's workshops cover art and craft, storytelling, English and public speaking, science, maths, music, dance, theatre and chess, along with life skills such as digital safety and financial literacy."
+    },
+    {
+      "q": "Where does AquaTerra run children's workshops in Kolkata?",
+      "a": "Most often at Pather Sathi, which has hosted more sessions than any other place. Other hosts include Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep, and schools such as South City International School."
+    },
+    {
+      "q": "How many children attend one AquaTerra workshop?",
+      "a": "Most write-ups give roughly twenty-five to forty children at a session, and each session is led by a small team of students."
+    },
+    {
+      "q": "Can a student teach a workshop with AquaTerra?",
+      "a": "Yes, if you are a member aged 14 to 19. Sign in with Google, wait for approval, then join a team for the next session."
+    }
+  ],
+  "keywords": [
+    "teach underprivileged children Kolkata",
+    "volunteer teaching children Kolkata",
+    "children's workshops Kolkata students",
+    "art workshop for kids Kolkata volunteers",
+    "teach kids in an NGO Kolkata",
+    "AquaTerra children workshops"
+  ]
+}

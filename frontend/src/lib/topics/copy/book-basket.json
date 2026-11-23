@@ -1,0 +1,93 @@
+{
+  "slug": "book-basket",
+  "title": "Book Basket: Collecting Books in Kolkata · AquaTerra",
+  "description": "Book Basket is AquaTerra's book collection series in Kolkata: {count} drives since {firstYear}, where students gather old books for underprivileged kids.",
+  "h1Lead": "old books can write",
+  "h1Accent": "new stories",
+  "lede": "Book Basket is AquaTerra's book collection series. Students go to buildings, housing complexes and neighbourhoods across Kolkata, gather old books and set them aside for underprivileged kids. Since {firstYear}, the series has run {count} drives with {volunteers} volunteer turnouts, where a turnout counts every time someone showed up.",
+  "sections": [
+    {
+      "id": "what-happens",
+      "heading": "what a book drive looks like",
+      "body": [
+        "A Book Basket drive is a short collection. Volunteers ask people for old books, gather what they are given, and make sure the books reach underprivileged kids. Each drive is a single day with its own entry on this site, and the aim is the same every time: fill the basket and pass the books on.",
+        "The crews are small. Most drives had one or two volunteers. The first drive, on 20 March 2022, had the largest crew in the series, five people, and its own entry notes 20 kilograms of books collected. Later drives report their weight in kilograms too, and each figure belongs to one drive, so add them up with care."
+      ]
+    },
+    {
+      "id": "when-it-ran",
+      "heading": "from one drive in 2022 to a summer run",
+      "body": [
+        "The series starts on 20 March 2022, with a drive that set out to gather books to fill shelves and minds with stories. There are no drives on this site between March 2022 and June 2025, so either the series paused or its earlier drives are not listed here. Ask AquaTerra before you quote a yearly trend.",
+        "The 2025 run was a summer collection. It began on 2 June with {year:2025} drives, and every one of them fell between early June and 8 July 2025. Read the 2022 drive as an early, separate event, and the 2025 run as the main body of Book Basket so far."
+      ]
+    },
+    {
+      "id": "where-the-drives-happen",
+      "heading": "housing complexes and neighbourhoods",
+      "body": [
+        "The drives went across the city. Neighbourhoods such as Ballygunge, Beleghata, Saltlake and Bidhanagar Tank each hosted a drive, and so did housing complexes including Dreamland Housing, Paymanti Housing, South City Residency, Santosh Apartments, Ideal Gardens and Emami City. Ashoka Building and Natural City in Laketown also had their own drives.",
+        "The series has reached {placesCount} different places in total. A few drives are listed only as Kolkata, so the list is a guide to where the drives went rather than a full map of every street they covered."
+      ]
+    },
+    {
+      "id": "what-volunteers-did",
+      "heading": "what the volunteers did",
+      "body": [
+        "The work is the same at every drive: ask, collect, and make sure the books reach kids who need them. The summaries use the same plain words, gathering books and filling shelves and minds with stories. The June 2025 drive called Book Basket 13.0 sums up the series in one line: your old books can write someone else's new story."
+      ]
+    },
+    {
+      "id": "what-to-check",
+      "heading": "what a figure can and cannot tell you",
+      "body": [
+        "Each drive gives its own weight in kilograms, and those weights are per drive, not totals for the series. One June 2025 drive gives its figure as clothes rather than books, so the weights are a guide, not a complete tally. Use the drive count and the per-drive figures together, and say that the figures come from each drive's own entry.",
+        "Nothing on this site says which schools or homes received the books, so this page cannot show where the books finished up. If you need that answer, or a total for the whole series, ask AquaTerra through the contact page."
+      ]
+    },
+    {
+      "id": "where-this-sits",
+      "heading": "where this sits with the rest of the work",
+      "body": [
+        "Book Basket sits beside Wear and Write: clothes and notebooks, which uses the same kind of collection drive for clothes and school notebooks. Readers who want the study side can look at the reading, speaking and English workshops, or at the free resources for students page, which brings books, notebooks and study help together."
+      ]
+    }
+  ],
+  "learnings": [
+    "Book Basket works as many small drives: one or two volunteers at a building or housing complex, then on to the next place.",
+    "The first drive, in March 2022, had the largest crew in the series, and later drives ran with smaller groups.",
+    "The 2025 run was concentrated in one summer, from early June to early July, so most of the series comes from a single season.",
+    "Several 2025 drives were held in housing complexes, so the series works as much inside buildings as on the streets.",
+    "Weights are given per drive, so add them with care, and ask AquaTerra if you need a series total."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run book collection drives in Kolkata?",
+      "a": "AquaTerra runs its book collection drives under the Book Basket name, across Kolkata. Since {firstYear} the series has run {count} drives, at places including Ashoka Building, Saltlake, Bidhanagar Tank and housing complexes such as Dreamland Housing and Paymanti Housing."
+    },
+    {
+      "q": "Does AquaTerra accept old books?",
+      "a": "Yes. Book Basket drives are how AquaTerra gathers old books for underprivileged kids. AquaTerra takes no monetary donations, so it collects books, not money. Nothing on this site gives a standing drop-off point, so contact AquaTerra before you bring books."
+    },
+    {
+      "q": "How many volunteers have taken part in Book Basket?",
+      "a": "Book Basket drives have had {volunteers} volunteer turnouts across {count} drives. A turnout counts each person each time they came to a drive, so one person who came to three drives counts three times."
+    },
+    {
+      "q": "What happens to the books after a Book Basket drive?",
+      "a": "The drives collect books for underprivileged kids, but this site does not name the schools or homes that receive them. Ask AquaTerra directly if you want to know where a particular batch of books went."
+    },
+    {
+      "q": "Can a teenager volunteer on a book drive?",
+      "a": "Yes, once they are a member. AquaTerra members are teenagers aged fourteen to nineteen who join by signing in with Google and getting approved, and students run the drives themselves."
+    }
+  ],
+  "keywords": [
+    "book collection drive Kolkata",
+    "donate old books Kolkata",
+    "book drive for underprivileged kids Kolkata",
+    "AquaTerra Book Basket",
+    "student volunteer book collection Kolkata",
+    "books for kids in Kolkata"
+  ]
+}

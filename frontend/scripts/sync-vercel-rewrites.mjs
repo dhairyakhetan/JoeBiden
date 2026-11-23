@@ -1,7 +1,7 @@
 /**
  * Keeps vercel.json's SPA rewrite in step with the router (handoff C-06, 3 Nov 2026).
  *
- * The old catch-all sent EVERY unknown path to the home page with HTTP 200 (a soft 404): /terms, /favicon.ico, /api/health.
+ * The old catch-all sent EVERY unknown path to the home page with HTTP 200 (a soft 404): /favicon.ico, /api/health.
  * Now only the top-level URLs the router actually owns reach the app; anything else gets Vercel's real 404 (public/404.html).
  * The first path segment of every `path="/..."` in src/App.tsx is the allow-list, so adding a route can never be forgotten
  * silently: `verify-routing.mjs` runs this with --check and fails the build when vercel.json is out of step.

@@ -1,0 +1,82 @@
+{
+  "slug": "where-can-teenagers-volunteer-in-kolkata",
+  "title": "Where can teenagers volunteer in Kolkata? · AquaTerra",
+  "description": "Where teenagers can volunteer in Kolkata: {count} student-run drives since {firstYear} in {placesCount} places, for members aged fourteen to nineteen.",
+  "h1Lead": "where teenagers can",
+  "h1Accent": "volunteer",
+  "lede": "Teenagers can volunteer in Kolkata with AquaTerra, a student-run charity whose members are aged fourteen to nineteen. Since {firstYear} we have run {count} drives in {placesCount} places across the city, from feeding stray dogs in Bangur and Salt Lake to workshops at Pather Sathi and Ek Tara. AquaTerra charges no fees, and you join by signing in with Google and waiting for an approval.",
+  "sections": [
+    {
+      "id": "the-main-places",
+      "heading": "the places teenagers go most",
+      "body": [
+        "{topPlace} is the place with the most drives, and it has hosted sessions in every year from 2024 to 2026. Most of its drives are workshops and craft sessions for children, from art and storytelling to Christmas carols and Children's Day games. Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep come next. They are places we keep going back to, where our volunteers run workshops for children."
+      ]
+    },
+    {
+      "id": "neighbourhood-drives",
+      "heading": "drives in the neighbourhoods",
+      "body": [
+        "Feeding drives for stray dogs have run through Salt Lake, Bangur, Howrah, Bhowanipur and Laketown. The Tails and Treats series reached Feeding Stray Dogs 53.0 at Bangur in September 2025, and the series ran in Salt Lake and Howrah in the same year.",
+        "Clothes and book collections have run through housing complexes and neighbourhoods such as Salt Lake, Ballygunge, Sealdah and Bangur. Smile Notes campaigns hand a passer-by a note of encouragement and a toffee, as they did at Bhawanipore and Lake Town in March 2026."
+      ]
+    },
+    {
+      "id": "what-a-teenager-does",
+      "heading": "what a teenager does on a drive",
+      "body": [
+        "On a feeding drive, volunteers feed stray dogs and cows biscuits, and the drive notes how many dogs were fed. Feeding is the simplest job on the list, and it is often the first drive a new volunteer joins. On a workshop, volunteers teach one topic to children. English grammar at Ek Tara in April 2026, art at Pather Sathi in January 2025 and physics at Shoishob in February 2025 show the range. On a Smile Notes drive, volunteers hand out notes and toffees on the street."
+      ]
+    },
+    {
+      "id": "how-the-work-has-grown",
+      "heading": "how the work has grown",
+      "body": [
+        "The work runs from {years}, and drives rose from {year:2022} in 2022 to {year:2025} in 2025, with {year:2026} so far this year. The mix has changed too. Feeding drives ran through 2025 at many neighbourhoods, and Smile Notes campaigns are newer, with drives in March and May 2026. Workshops have run at Pather Sathi through 2024, 2025 and 2026."
+      ]
+    },
+    {
+      "id": "how-to-join",
+      "heading": "how a teenager joins",
+      "body": [
+        "Membership is for students aged fourteen to nineteen. A student joins by signing in with Google, filling in their details and waiting for an approval. Once approved, they can take part in drives like any other member. Before signing up, you can read what a drive involves. [Your first drive](/impact/your-first-drive) and [what to bring to your first drive](/impact/what-to-bring-to-your-first-drive) explain the first steps, and every drive is written up on this site with its date, place and objective."
+      ]
+    }
+  ],
+  "learnings": [
+    "Pather Sathi is the steadiest place to start, with drives in every year from 2024 to 2026.",
+    "Feeding and clothes drives run as numbered series, so a volunteer who joins one can go on to the next drive in the run.",
+    "The work has run across {placesCount} places, from Salt Lake and Bangur to Howrah and Lake Town.",
+    "Every drive is written up on this site, so a teenager can read what a drive involved before joining one."
+  ],
+  "faqs": [
+    {
+      "q": "Where can teenagers volunteer in Kolkata?",
+      "a": "Teenagers can volunteer with AquaTerra, a student-run charity in Kolkata whose members are aged fourteen to nineteen. Drives have run in {placesCount} places since {firstYear}, including Pather Sathi, Ek Tara, Disha Foundation, Salt Lake and Bangur."
+    },
+    {
+      "q": "Can a fourteen-year-old volunteer in Kolkata?",
+      "a": "Yes, if they are a member of AquaTerra. Membership is for students aged fourteen to nineteen, and a student signs in with Google and waits for an approval before taking part in drives."
+    },
+    {
+      "q": "Does volunteering with AquaTerra cost money?",
+      "a": "No. AquaTerra charges no fees and takes no monetary donations. It is self-funded through its own student-run events and through Crftd, its student streetwear label."
+    },
+    {
+      "q": "What can a teenager do as a volunteer with AquaTerra?",
+      "a": "Teenagers can take part in feeding drives for stray dogs, clothes and book collections, plantation days, Smile Notes campaigns and workshops for children on subjects from English to digital safety."
+    },
+    {
+      "q": "How does a teenager join AquaTerra?",
+      "a": "Sign in with Google, fill in your details and wait for an approval. The [your first drive](/impact/your-first-drive) page explains what happens after that."
+    }
+  ],
+  "keywords": [
+    "volunteer in Kolkata as a teenager",
+    "teen volunteering Kolkata",
+    "volunteer opportunities for students in Kolkata",
+    "student-run charity for teenagers in Kolkata",
+    "stray dog feeding volunteer Kolkata",
+    "student volunteering Kolkata for members aged fourteen to nineteen"
+  ]
+}

@@ -15,6 +15,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -94,6 +96,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -121,6 +125,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -148,6 +154,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -175,6 +183,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -202,6 +212,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -229,6 +241,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -256,6 +270,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -283,6 +299,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -310,6 +328,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -337,6 +357,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -364,6 +386,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -391,6 +415,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -418,6 +444,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -447,6 +475,8 @@ Disallow: /saved
 Disallow: /my-posts
 Disallow: /settings
 Disallow: /grievance
+Disallow: /certificates
+Disallow: /verify
 Disallow: /search
 Disallow: /director
 Disallow: /choose-team
@@ -469,4 +499,5 @@ Allow: /
 # ── Discovery ────────────────────────────────────────────────────────────────
 Sitemap: https://www.ngoaquaterra.com/sitemap.xml
 # Structured LLM guide: https://www.ngoaquaterra.com/llms.txt
+# Full-text LLM guide:   https://www.ngoaquaterra.com/llms-full.txt
 Host: www.ngoaquaterra.com

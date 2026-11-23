@@ -11,10 +11,10 @@ describe('live content', () => {
     for (const s of slugs) expect(eventBySlug(s)?.slug).toBe(s)
     expect(eventBySlug('nope')).toBeUndefined()
   })
-  it('keeps the upcoming night in step with the config the countdown reads', () => {
-    const next = upcoming()
-    expect(next).toHaveLength(1)
-    expect(next[0].when).toBe(NEXT_EVENT.date)
+  it('keeps the night the countdown reads in the list, and leaves nothing upcoming once Disco Diwali 2026 has taken place', () => {
+    expect(EVENTS.some(e => e.when === NEXT_EVENT.date)).toBe(true)
+    expect(eventBySlug('disco-diwali-2026')?.status).toBe('past')
+    expect(upcoming()).toEqual([])
   })
   it('lists past nights newest first', () => {
     const w = past().map(e => e.when)

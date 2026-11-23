@@ -1,0 +1,65 @@
+/* The four "giving back" pages (/impact, /shikshaq, /sports, /ai). Rounded-minimal language: hairline cards, 32/22/14 radii,
+   accent hues as fills with ink text. Body copy is capped to a readable measure; the frame stays the standard .container. */
+
+.pl-hero { padding: clamp(44px, 8vw, 80px) 0 clamp(28px, 5vw, 48px); position: relative; overflow: hidden; }
+.pl-h1 { margin: 0; line-height: 0.9; max-width: 16ch; }
+.pl-accent { font-style: italic; font-family: var(--serif); font-weight: 400; }
+.pl-lede { font-family: var(--eina); font-size: 19px; line-height: 1.55; margin-top: 22px; max-width: 62ch; color: var(--ink-2); }
+
+.pl-body { padding: 0 var(--page-px, 24px) clamp(40px, 6vw, 72px); display: flex; flex-direction: column; gap: clamp(20px, 3vw, 28px); }
+
+.pl-stats { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 760px)  { .pl-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1180px) { .pl-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.pl-stats > div > .card { height: 100%; }
+.pl-stat { padding: 18px 18px 16px; }
+.pl-stat-n { font-size: clamp(26px, 3.4vw, 34px); line-height: 1; }
+.pl-stat-l { font-family: var(--eina); font-size: 14px; line-height: 1.4; color: var(--ink-2); margin-top: 8px; }
+
+.pl-toc { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl-toc-a {
+  font-family: var(--eina); font-size: 14px; color: var(--ink); text-decoration: none;
+  border: var(--hair-2); border-radius: 999px; padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center;
+  background: var(--card);
+}
+.pl-toc-a:hover { background: var(--bg-2); }
+.pl-toc-a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.pl-sections { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .pl-sections { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pl-sections > div > .card { height: 100%; }
+.pl-section { padding: clamp(20px, 3vw, 28px); scroll-margin-top: 96px; }
+.pl-kicker {
+  display: inline-flex; color: var(--ink); font-weight: 800; border-radius: 999px; padding: 6px 12px; margin-bottom: 14px;
+}
+.pl-h2 { font-size: clamp(24px, 3vw, 32px); line-height: 1.02; margin: 0 0 12px; }
+.pl-p { font-family: var(--eina); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin: 0 0 12px; max-width: 72ch; }
+.pl-points { font-family: var(--eina); font-size: 16px; line-height: 1.6; color: var(--ink-2); margin: 0 0 12px; padding-left: 20px; }
+.pl-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pl-links .btn { min-height: 44px; display: inline-flex; align-items: center; }
+
+.pl-faq-list { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .pl-faq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pl-faq-item { padding: 18px 20px; }
+.pl-faq-q { font-family: var(--eina); font-weight: 700; font-size: 17px; line-height: 1.35; margin: 0 0 8px; color: var(--ink); }
+
+.pl-more { padding: clamp(20px, 3vw, 28px); background: var(--bg-2); }
+.pl-more-h { font-weight: 700; margin: 0 0 14px; font-size: 12px; }
+.pl-more-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.pl-more-a {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border-radius: 999px;
+  background: var(--card); border: var(--hair-2); color: var(--ink); text-decoration: none; font-family: var(--eina); font-size: 15px;
+}
+.pl-more-a:hover { background: var(--bg); }
+.pl-more-a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.pl-more-dot { width: 10px; height: 10px; border-radius: 999px; flex-shrink: 0; }
+.pl-join { display: inline-flex; }
+
+/* doorway cards on the /impact hub */
+.pl-doors { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .pl-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .pl-doors { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.pl-door { display: flex; align-items: center; gap: 12px; padding: 18px; color: var(--ink); text-decoration: none; min-height: 72px; }
+.pl-door:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.pl-door-e { font-size: 28px; line-height: 1; }
+.pl-door-t { font-family: var(--eina); font-weight: 700; font-size: 16px; line-height: 1.3; }

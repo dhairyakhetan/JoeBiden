@@ -476,6 +476,26 @@ const jobOpeningsImpl = {
     })
   },
 
+  /**
+   * Applicants for a role who have not been cleared by HR yet (their AquaTerra account is still waiting for approval).
+   * The team sees who they are and what they wrote, never a phone or an email, and cannot accept them until HR approves
+   * the account, at which point the application moves into the normal list on its own. Server side:
+   * team_waiting_applicants (scripts/applicants_one_list_2026_11_12.sql), which answers only for HR, HoDs, directors and
+   * the lead of that opening's team. `canApprove` is true for HR and super admin, who get an approve button.
+   */
+  async getWaitingApplicants(): Promise<WaitingApplicant[]> {
+    return withRetry(async () => {
+      const { data, error } = await (supabaseCommunity as any).rpc('team_waiting_applicants', { p_opening_id: null })
+      if (error) throw logSupabaseError('jobOpenings.getWaitingApplicants', error)
+      return ((data || []) as any[]).map(r => ({
+        interestId: r.interest_id, memberId: r.member_id, openingId: r.opening_id, openingTitle: r.opening_title,
+        teamName: r.team_name ?? null, fullName: r.full_name || 'Applicant', classGrade: r.class_grade ?? null,
+        message: r.message ?? null, answers: (r.custom_answers ?? {}) as Record<string, string>,
+        appliedAt: r.applied_at, canApprove: !!r.can_approve,
+      }))
+    })
+  },
+
   // Batched sibling of getApplications - fetches applications for MANY openings
   // in ONE query and groups them by opening_id. Replaces the N+1 pattern of
   // mapping getApplications over an openings array (HiringResponses desk, the
@@ -625,6 +645,20 @@ const jobOpeningsImpl = {
       })()
     }
   },
+}
+
+export interface WaitingApplicant {
+  interestId: string
+  memberId: number
+  openingId: string
+  openingTitle: string
+  teamName: string | null
+  fullName: string
+  classGrade: string | null
+  message: string | null
+  answers: Record<string, string>
+  appliedAt: string
+  canApprove: boolean
 }
 
 export const jobOpenings = withFunctionLogging('jobOpenings', jobOpeningsImpl)

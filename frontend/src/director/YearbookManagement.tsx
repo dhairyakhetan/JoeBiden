@@ -162,7 +162,7 @@ export default function YearbookManagement() {
       <AdminTabHeader
         label="Yearbook"
         title={`${CURRENT_EDITION} yearbook`}
-        subtitle={`${counts.total} on the list · ${counts.waiting} waiting · ${submittedCount} submitted${counts.skipped ? ` · ${counts.skipped} skipped` : ''}`}
+        subtitle={loadError ? undefined : `${counts.total} on the list · ${counts.waiting} waiting · ${submittedCount} submitted${counts.skipped ? ` · ${counts.skipped} skipped` : ''}`}
         actions={<button className="btn btn-sm btn-primary yb-invite" onClick={() => setPickerOpen(true)}>+ invite members</button>}
       />
 

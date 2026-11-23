@@ -1,0 +1,91 @@
+{
+  "slug": "bangur",
+  "title": "Bangur drives: notebooks, dogs and smile notes · AquaTerra",
+  "description": "AquaTerra's drives in Bangur since {firstYear}: {count} drives, starting with clothes and notebooks at apartment complexes, then dog feeding and Smile Notes.",
+  "h1Lead": "from notebooks to",
+  "h1Accent": "biscuits",
+  "lede": "Since {firstYear}, AquaTerra has run {count} drives in Bangur, with {volunteers} volunteer turnouts. They began in May 2024 as clothes and notebook collections at apartment complexes, became dog feeding drives from November 2024, and in 2026 ran the Smile Notes campaign.",
+  "sections": [
+    {
+      "id": "how-the-drives-began",
+      "heading": "how the drives began in 2024",
+      "body": [
+        "The first Bangur drives were clothes and notebook collections, part of the Wear and Write campaign. Students held them on 6 and 7 May 2024 at Anandam Apartment and Sweta Apartment, and again on 14 May at Clubtown Greens. The apartments were close to home, and each drive gathered only a few kilograms of clothes and notebooks.",
+        "The first spring ended with sharbat. On 24 May 2024 the team served Rooh Afza sharbat at the Bangur Shani-Kali Mandir, and the drive's own figure for that day is twenty litres. It is the only sharbat drive in Bangur so far."
+      ]
+    },
+    {
+      "id": "from-notebooks-to-dogs",
+      "heading": "from notebooks to dog feeding",
+      "body": [
+        "From 1 November 2024 most Bangur drives became Tails and Treats dog feeding drives. The aim is the same every time, feeding dogs, and biscuits are the food the drives name. The first two were on 1 and 16 November 2024, and the team kept going into 2025.",
+        "The largest team in Bangur came out for the drive on 22 March 2025, and its write-up gives 90 dogs fed as the figure. Other dog drives followed on 19 April, 9 August, 23 August, 2 September and 29 September 2025, so the series ran through the summer and into autumn."
+      ]
+    },
+    {
+      "id": "where-it-happens",
+      "heading": "where the drives happen",
+      "body": [
+        "Bangur is the name most drives give, with Anandam Apartment, Sweta Apartment, Clubtown Greens and the Bangur Shani-Kali Mandir as the named spots. Across the neighbourhood the drives have been in {placesCount} places.",
+        "The apartments hosted the clothes and notebook drives of spring 2024, and the temple hosted the sharbat drive. The dog feeding drives mostly say Bangur without a further spot, so they are best read as drives in the neighbourhood as a whole."
+      ]
+    },
+    {
+      "id": "what-changed-in-2026",
+      "heading": "what changed in 2026",
+      "body": [
+        "Only one Bangur drive is from 2026 so far: the Smile Notes campaign on 15 May 2026. Volunteers handed affirmation notes to people passing by, and each note came with a toffee. The drive's own figure is 100 notes and 100 toffees.",
+        "The same campaign ran in Lake Town that spring, and the [Smile Notes](/impact/smile-notes) page gathers the whole series. The clothes and notebook drives of 2024 and the dog feeding drives of 2025 are the earlier chapters of the same neighbourhood work."
+      ]
+    },
+    {
+      "id": "who-takes-part",
+      "heading": "who takes part",
+      "body": [
+        "Students do the work here: collecting clothes and notebooks, feeding dogs, or talking to people as they walk past with a Smile Note. The largest team came out for dog feeding in March 2025, not for a collection.",
+        "{volunteers} volunteer turnouts across {count} drives counts every visit, so a student who came to several drives is counted for each one. It measures places filled, not separate people."
+      ]
+    },
+    {
+      "id": "how-to-get-involved",
+      "heading": "how to join or help",
+      "body": [
+        "Members aged 14 to 19 join through the usual route: sign in with Google, then wait for approval, as set out on the [join page](/join). Every Bangur drive is written up on the site, with its place, its date and what the team did, so you can see the kind of outing before you sign up for one.",
+        "If you want to start with a collection, [Wear and Share](/impact/wear-and-share) covers the clothes drives, and [Wear and Write](/impact/wear-and-write) covers the clothes and notebook campaign that ran here in spring 2024. For the dog drives, see [Tails and Treats](/impact/tails-and-treats)."
+      ]
+    }
+  ],
+  "learnings": [
+    "A neighbourhood's drives can change shape within months: clothes and notebooks in May 2024, then dog feeding from November that year.",
+    "Apartment complexes hosted the first clothes and notebook drives, so a collection can begin in a building you already know.",
+    "The largest Bangur team came out for a dog feeding drive in March 2025, not for a collection.",
+    "Dogs fed is each drive's own figure, so compare dog drives with dog drives rather than with clothes collections.",
+    "Smile Notes, the newest kind of drive here, pairs a short affirmation with a toffee for people passing by."
+  ],
+  "faqs": [
+    {
+      "q": "Where does AquaTerra run drives in Bangur?",
+      "a": "AquaTerra runs drives in Bangur itself, and at specific spots: Anandam Apartment and Sweta Apartment, Clubtown Greens and the Bangur Shani-Kali Mandir. Since {firstYear} the drives have been held in {placesCount} places across the neighbourhood."
+    },
+    {
+      "q": "What did AquaTerra do in Bangur in 2024?",
+      "a": "In 2024 AquaTerra ran {year:2024} drives in Bangur. In May, students ran Wear and Write clothes and notebook collections at apartment complexes and served sharbat at the Shani-Kali Mandir. From 1 November the drives became Tails and Treats dog feeding drives."
+    },
+    {
+      "q": "Can I volunteer for dog feeding drives in Bangur?",
+      "a": "Members aged 14 to 19 can join AquaTerra by signing in with Google and waiting for approval. Bangur has run dog feeding drives since 1 November 2024, and the most recent was on 29 September 2025."
+    },
+    {
+      "q": "How many volunteer turnouts has AquaTerra had in Bangur?",
+      "a": "AquaTerra has had {volunteers} volunteer turnouts across {count} drives in Bangur since {firstYear}. A turnout counts each time someone showed up at a drive, so one student who came to several drives is counted once for each."
+    }
+  ],
+  "keywords": [
+    "drives in Bangur Kolkata",
+    "volunteering in Bangur Kolkata",
+    "clothes collection Bangur",
+    "stray dog feeding Bangur",
+    "smile notes Bangur",
+    "AquaTerra Bangur"
+  ]
+}

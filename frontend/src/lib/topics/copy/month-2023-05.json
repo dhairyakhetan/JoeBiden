@@ -1,0 +1,82 @@
+{
+  "slug": "month-2023-05",
+  "title": "AquaTerra in May 2023: {count} drives, sport, art and elders",
+  "description": "May 2023 at AquaTerra: {count} drives, with workshops at Pather Sathi and School on Wheels, three elders visits, a FIFA fundraiser and a Sundarbans medical camp.",
+  "h1Lead": "a full month of",
+  "h1Accent": "games, art and care",
+  "lede": "In May 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most sessions were children's workshops at Pather Sathi and School on Wheels, from maths tables to cricket and origami. Around them were three visits to elders, two days of a FIFA fundraiser and a medical camp in the Sundarbans.",
+  "sections": [
+    {
+      "id": "school-on-wheels",
+      "heading": "maths, speaking and science at School on Wheels",
+      "body": [
+        "Table Time, a maths tables workshop, ran on May 4 and made learning multiplication easy and fun. Speak to Shine, Day 1, came on May 11 and built confidence and public speaking skills. Science Time on May 18 built curiosity and the basics of science, and each of these sessions was at School on Wheels HUHT.",
+        "Speak to Shine had a second day in June, so the speaking work that began in May carried over into the next month."
+      ]
+    },
+    {
+      "id": "art-and-sport-at-pather-sathi",
+      "heading": "origami, art, dance and sport at Pather Sathi",
+      "body": [
+        "Pather Sathi hosted the most drives of the month. Paper Magic on May 6 taught origami, Art Adventure on May 13 covered painting, sketching and design, and Rythm and Strokes on May 24 combined art and dance.",
+        "Bat and Ball, a cricket workshop on May 20, had the biggest team at Pather Sathi that month, with seven volunteers. Goal Bound, a football workshop, followed on May 26, and Science Sparks on May 27 closed the Pather Sathi run with experiments."
+      ]
+    },
+    {
+      "id": "respect-and-reach-visits",
+      "heading": "three visits to elders in one month",
+      "body": [
+        "Respect and Reach went to the Urban Shelter for the Homeless three times in May: drive 2.0 on May 14, 3.0 on May 19 and 4.0 on May 26. Each visit was a day of stories, songs and smiles with the elders, and the gifts and warmth the summaries describe.",
+        "Going back three times in one month, and again in June, made the visits a routine rather than a one-off. The series began in April with drive 1.0."
+      ]
+    },
+    {
+      "id": "fifa-and-dogs",
+      "heading": "a gaming fundraiser and two dog feeding days",
+      "body": [
+        "The FIFA fundraiser, Kick for a Cause, ran at Hindustan Road in Kolkata on May 25 and 26, with FIFA 23 matches for the people who came. Twelve volunteers ran the first day and ten the second. The money raised funds AquaTerra's welfare drives.",
+        "The stray dog series ran twice in May: Tails and Treats 15.0 on May 26 and 16.0 on May 27, in Kolkata, with five and three volunteers. Drive 17.0 followed in June and 18.0 in July."
+      ]
+    },
+    {
+      "id": "sundarbans-medical-camp",
+      "heading": "a medical camp in the Sundarbans",
+      "body": [
+        "The Medical Camp on May 27 was held in the Sundarbans. It checked vitals and brought healthcare closer to people who needed it most, and three volunteers ran it. Its objective was Sundarbans relief, the same kind of work that continued through June and July.",
+        "Health checks and planting went together in June, when the Sundarbans Plantation Project 4.0 combined a planting day with checkups. You can read about the wider work on the [Sundarbans page](/impact/sundarbans)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Two regular places, Pather Sathi and School on Wheels, carried most of May's workshops, which keeps planning simple.",
+    "Fundraisers and workshops can share days: the FIFA fundraiser ran on the same days as the football and shelter visits, so one stretch of days carried several kinds of work at once.",
+    "A visit repeated within a month becomes a routine: Respect and Reach went to the same shelter three times in May.",
+    "A small team of three can run a health camp, as the Sundarbans medical camp showed."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in May 2023?",
+      "a": "In May 2023 AquaTerra ran {count} drives across {placesCount} places, with {volunteers} volunteer turnouts. Most were children's workshops at Pather Sathi and School on Wheels. Alongside them were three visits to elders at the Urban Shelter for the Homeless, a FIFA fundraiser at Hindustan Road, two stray dog feeding days and a medical camp in the Sundarbans."
+    },
+    {
+      "q": "Did AquaTerra run a FIFA fundraiser in 2023?",
+      "a": "Yes. AquaTerra ran a FIFA fundraiser called Kick for a Cause on May 25 and 26, 2023, at Hindustan Road in Kolkata. The money raised funds AquaTerra's welfare drives. AquaTerra takes no monetary donations and is self-funded through its own events."
+    },
+    {
+      "q": "Where did AquaTerra visit elders in May 2023?",
+      "a": "AquaTerra's Respect and Reach visits went to the Urban Shelter for the Homeless on May 14, 19 and 26, 2023. Each visit was a day of stories, songs and smiles with the elders, and a team of five or six volunteers ran each one."
+    },
+    {
+      "q": "Does AquaTerra teach maths and science to children?",
+      "a": "Yes. In May 2023 AquaTerra ran Table Time, a maths tables workshop at School on Wheels HUHT on May 4, and Science Time, a science basics workshop at the same school on May 18. Science Sparks at Pather Sathi on May 27 covered experiments."
+    }
+  ],
+  "keywords": [
+    "AquaTerra May 2023",
+    "FIFA fundraiser Kolkata 2023",
+    "Respect and Reach elders visit Kolkata",
+    "stray dog feeding Kolkata May 2023",
+    "Sundarbans medical camp volunteers",
+    "School on Wheels HUHT workshop"
+  ]
+}

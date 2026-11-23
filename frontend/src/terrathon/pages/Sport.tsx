@@ -11,6 +11,7 @@ import { Markdown } from '../components/Markdown'
 import { WhatsAppMark } from '../components/BrandMarks'
 import { TerraThonNotFound } from './NotFound'
 import { fadeInUp } from '../../lib/motion'
+import { safeExternalHref } from '../../lib/safeUrl'
 
 interface Props {
   events: PublicEvent[]
@@ -339,8 +340,8 @@ export function TerraThonSport({ events, loading, error, reload }: Props) {
               hint={event.match_window ? `Matches run ${event.match_window}. Carry your school or college ID` : 'Carry your school or college ID'}
             />
           </div>
-          {event.venue_map_url && (
-            <a href={event.venue_map_url} target="_blank" rel="noreferrer noopener" className="tt-btn tt-btn--quiet" style={{ marginTop: 12 }}>
+          {safeExternalHref(event.venue_map_url) && (
+            <a href={safeExternalHref(event.venue_map_url)} target="_blank" rel="noreferrer noopener" className="tt-btn tt-btn--quiet" style={{ marginTop: 12 }}>
               Open in Maps
             </a>
           )}
@@ -504,7 +505,7 @@ export function TerraThonSport({ events, loading, error, reload }: Props) {
         {/* ── Contact ────────────────────────────────────────────────────────
             One person, not a row of them. Every sport page's question goes to
             the same number so nobody has to guess who owns which sport. */}
-        {ASK_CONTACT && (
+        {ASK_PHONE && ASK_CONTACT && (
           <section>
             <h2 style={{ fontSize: 26, textTransform: 'uppercase', marginBottom: 12 }}>Ask about {event.display_name}</h2>
             <a

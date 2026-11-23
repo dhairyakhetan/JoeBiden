@@ -1,0 +1,85 @@
+{
+  "slug": "good-health-and-wellbeing",
+  "title": "Good health and well-being: camps, care and talks · AquaTerra",
+  "description": "Since {firstYear}, AquaTerra has run {count} health drives in Kolkata: dental and medical camps, period care kits, and mental health talks.",
+  "h1Lead": "looking after",
+  "h1Accent": "bodies and minds",
+  "lede": "Good Health and Well-being is UN Sustainable Development Goal 3: healthy lives and well-being for everyone, at every age. Our {count} health drives since {firstYear} are mostly small and local, a dental talk, a period health session, a mental health workshop or a checkup camp, run by students for children and women in the places we visit.",
+  "sections": [
+    {
+      "id": "camps-and-checkups",
+      "heading": "camps and checkups",
+      "body": [
+        "Our earliest health work was dental and medical. Tooth Talk, a dental camp at Ek Tara in June 2023, offered checkups and tooth-care tips, and Say Cheese, another dental camp workshop at Ek Tara, followed in October 2023. In December 2023 the Merry Miracles dental checkup day at Gyan Deepak was free for children.",
+        "The Sundarbans medical camp in May 2023 brought healthcare closer to people who needed it most. Sunderbans 8.0 in December 2025 went back to the Sundarbans with medicines, stationery and more checkups. Across all our health work the total is {checkups} medical checkups. The full trips are on the [Sundarbans relief and plantation](/impact/sundarbans) page."
+      ]
+    },
+    {
+      "id": "period-health-and-dignity",
+      "heading": "period health and dignity",
+      "body": [
+        "Period health is the subject our teams have come back to most. Breaking the Cycle in November 2022 was an awareness drive on menstrual health and hygiene, with open conversation for teenagers. By 2024 the work had moved from talks to kits: Comfort Kits with AIM in May handed out 100 packets of sanitary napkins, and Cycle of Care in March 2025 gave 80 packets to women near a slum area in Salt Lake Haveli.",
+        "The awareness sessions kept running. Body Basics at Helping Hands in April 2025 and the Menstrual Awareness Campaign at Pather Sathi in April 2026 both covered menstrual health and hygiene, and the 2026 session was a community workshop, not a distribution."
+      ]
+    },
+    {
+      "id": "minds-and-mental-health",
+      "heading": "minds, not just bodies",
+      "body": [
+        "Mental health became a regular subject in 2024. Mind Matters at Pather Sathi in August and Healing Space there in September covered self-care, emotions and awareness among students. Open Minds at Universal Smile in November 2024 covered awareness and emotional well-being. The thread started earlier, with Peace Within at the Sunday School at Pather Sathi in July 2023."
+      ]
+    },
+    {
+      "id": "growing-up-and-long-term-health",
+      "heading": "growing up, and long-term health",
+      "body": [
+        "Adolescence health ran with AIM Foundation in May and June 2024. Mind and Body and Teen Talk covered hygiene and self-care, and Well Within looked at adolescence health more broadly. Pose and Peace, a yoga workshop at Badami Devi Shishu Kalyan Kendra in Howrah in June 2023, took a different route to calm.",
+        "Two sessions looked further ahead. Health Over Sugar at Amader Pradakhep in June 2024 was a diabetes awareness workshop, and a World Health Day workshop at the same place in April 2025 covered wellness, nutrition and hygiene."
+      ]
+    },
+    {
+      "id": "joining-the-health-work",
+      "heading": "joining the health work",
+      "body": [
+        "A health drive needs a clear plan and a room where the children already feel at ease. The wider picture is on [Health, hygiene and wellbeing](/impact/health-and-wellbeing), and [For parents](/impact/for-parents) explains what a parent should know before a child takes part in anything we run.",
+        "Members join by signing in with Google and waiting for approval. Start at [join AquaTerra](/join)."
+      ]
+    }
+  ],
+  "learnings": [
+    "Dental and medical camps have come back in 2023 and 2025, so they are a recurring part of the calendar, not a one-off day.",
+    "Kits and talks answer different needs. A packet of sanitary napkins is a distribution, while an awareness session is a workshop, so the two are run separately.",
+    "Pather Sathi appears more than any other place in this topic, so a new member can learn one host well and see the same team come back.",
+    "The mental health sessions at Pather Sathi came in consecutive months, August and September 2024, so one host carried a short run of its own."
+  ],
+  "faqs": [
+    {
+      "q": "Does AquaTerra run health drives for children in Kolkata?",
+      "a": "Yes. AquaTerra has run {count} health drives since {firstYear}, including dental and medical camps, period health talks and kits, and mental health and adolescence workshops for students in Kolkata."
+    },
+    {
+      "q": "Has AquaTerra held dental or medical camps?",
+      "a": "Yes. Dental camps ran with Ek Tara in June and October 2023, a dental checkup day ran in December 2023, and a medical camp ran in the Sundarbans in May 2023. Across all of AquaTerra's health work the total is {checkups} medical checkups."
+    },
+    {
+      "q": "Does AquaTerra give out sanitary napkins?",
+      "a": "Yes. AquaTerra has run sanitary napkin distributions, including Comfort Kits with AIM in May 2024 and Cycle of Care in Salt Lake Haveli in March 2025, where women near a slum area received packets."
+    },
+    {
+      "q": "What mental health sessions does AquaTerra run?",
+      "a": "AquaTerra runs student-led mental health workshops on self-care, emotions and awareness. Mind Matters and Healing Space ran at Pather Sathi in 2024, and Open Minds ran at Universal Smile in November 2024."
+    },
+    {
+      "q": "How can I join AquaTerra's health work?",
+      "a": "Sign in to AquaTerra with Google and wait for approval. Members then take part in the health drives, camps and workshops that student teams run across Kolkata."
+    }
+  ],
+  "keywords": [
+    "health drives Kolkata students",
+    "free dental checkup camp Kolkata",
+    "menstrual health workshop Kolkata students",
+    "mental health workshop students Kolkata",
+    "UN Sustainable Development Goal 3 good health Kolkata",
+    "sanitary napkin distribution Kolkata NGO"
+  ]
+}

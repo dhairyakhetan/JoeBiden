@@ -1,0 +1,1829 @@
+{
+  "_readme": "The plain-language registry behind docs/product-guide.html. One entry per thing a person can do on the site. Written for a member or a visitor, not an engineer: say what it does for them and how to get there. generate.mjs reads the real routes, desks and links from the code and fails if a page or desk has no entry here. Edit this file whenever a feature is added, changed or removed, in the same change. Roles: visitor, applicant, member, lead, hod, hr.",
+  "areas": [
+    {
+      "id": "front-door",
+      "name": "The public front door",
+      "blurb": "Everything anyone can read without signing in."
+    },
+    {
+      "id": "joining",
+      "name": "Joining AquaTerra",
+      "blurb": "From a first Google sign-in to an approved member."
+    },
+    {
+      "id": "community",
+      "name": "The member community",
+      "blurb": "What an approved member uses every day."
+    },
+    {
+      "id": "teams-work",
+      "name": "Teams, drives and hiring",
+      "blurb": "How the work gets organised and who does it."
+    },
+    {
+      "id": "leadership",
+      "name": "The HoD desk",
+      "blurb": "The leadership screens at /director. Each one is only shown to the roles that may use it."
+    },
+    {
+      "id": "events",
+      "name": "Events, magazine and play",
+      "blurb": "The fest, the tournament, the live hub, the monthly magazine, games and the product tour."
+    }
+  ],
+  "features": [
+    {
+      "id": "quick-links",
+      "area": "front-door",
+      "name": "Quick links",
+      "summary": "One page with every link AquaTerra uses.",
+      "use": "Open it to find any official channel.",
+      "reach": "Menu, Quick links",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/links"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Links page."
+      }
+    },
+    {
+      "id": "public-pages",
+      "area": "front-door",
+      "name": "About and the organisation chart",
+      "summary": "The story of AquaTerra, what it believes, and the whole organisation drawn as one picture: departments, who is in them, and how they nest.",
+      "use": "Open About, tap a department to see what is inside it and who works there, then follow the link to that team's own page.",
+      "reach": "Top menu, About",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/about",
+        "/directory"
+      ],
+      "connects": [
+        {
+          "to": "teams",
+          "why": "every department on the chart links to its team page"
+        },
+        {
+          "to": "openings",
+          "why": "the about page points people to open roles"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Public, backed by live member and team data."
+      }
+    },
+    {
+      "id": "projects",
+      "area": "front-door",
+      "name": "Projects",
+      "summary": "The archive of welfare drives and campaigns, each with photos, numbers and the story of what happened.",
+      "use": "Browse the list, open a project to read it. A photo strip of the latest welfare drives sits near the top with a button to join the next one. Narrow the list by post type (drives and workshops, member stories, articles), by date (last 30 days, 3 months, since July, this year or your own dates) and by newest or oldest first. The call to action at the bottom takes a visitor to sign in and join.",
+      "reach": "Top menu, Projects",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/projects",
+        "/projects/:slug"
+      ],
+      "connects": [
+        {
+          "to": "login",
+          "why": "the call to action on a project sends visitors to sign in"
+        },
+        {
+          "to": "desk-projects",
+          "why": "write-ups are published from the Drive Write-ups desk"
+        },
+        {
+          "to": "drives",
+          "why": "a project is the public story of a drive that was run in the field"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Public archive read from the drives table."
+      }
+    },
+    {
+      "id": "blog",
+      "area": "front-door",
+      "name": "Blog",
+      "summary": "Long essays by members, called Groundwork Diaries.",
+      "use": "Read any essay. Members write one through the composer on the home page; it goes live after a leader publishes it.",
+      "reach": "Top menu, Blog",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/blog",
+        "/blog/:slug"
+      ],
+      "connects": [
+        {
+          "to": "desk-queue",
+          "why": "drafts wait in the Blog Drafts desk before they publish"
+        },
+        {
+          "to": "home-feed",
+          "why": "a blog post is the same thing as a feed post with a headline and cover"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Public essays; scheduled essays go live automatically."
+      }
+    },
+    {
+      "id": "openings",
+      "area": "front-door",
+      "name": "Open roles",
+      "summary": "Volunteer roles that are open now, plus a band of roles that are always open. Each role has its own page with what it needs and a way to apply. If your sign-up is still waiting for approval you can't apply yet: you get a pop-up and can ask to be reminded once you're in.",
+      "use": "Pick a role and read it. Press Apply. If you are signed in, one tap sends it. If not, give your name and phone number, no email. If your number belongs to an AquaTerra member, your application goes straight to the team and you are done. If not, you are told you are not part of AquaTerra yet and sign in with Google to sign up: your application is saved, HR confirms you first, and it then goes to the team on its own. A waiting member who presses Apply can send the application too, and it waits with HR.",
+      "reach": "Top menu, Openings",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/opportunities",
+        "/opportunities/:id"
+      ],
+      "connects": [
+        {
+          "to": "desk-hiring",
+          "why": "every application lands in the Hiring desk"
+        },
+        {
+          "to": "teams",
+          "why": "each role belongs to one team and shows on that team's page"
+        },
+        {
+          "to": "login",
+          "why": "applying needs a sign-in"
+        },
+        {
+          "to": "home-feed",
+          "why": "once you're approved, a card at the top of your feed asks if you still want the role you were interested in"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Signed-out visitors apply with name and phone only (12 Nov 2026): a number that matches one active member links straight to that account, otherwise Google sign-in and HR first. The database functions are tested in rolled-back blocks and the modal is checked offline with a stubbed backend, not yet clicked live through Google."
+      }
+    },
+    {
+      "id": "members-public",
+      "area": "front-door",
+      "name": "Member directory",
+      "summary": "The list of active members and a public profile for each, showing name, photo, class, teams and what they have done with AquaTerra.",
+      "use": "Browse or search the list and open a profile. Phone numbers and emails are never shown here.",
+      "reach": "Top menu, Members",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/members",
+        "/member/:uuid"
+      ],
+      "connects": [
+        {
+          "to": "profile",
+          "why": "a signed-in member sees the fuller profile screen"
+        },
+        {
+          "to": "teams",
+          "why": "a profile lists the teams a person is on"
+        },
+        {
+          "to": "core-team",
+          "why": "the list links to the core team, and a core member's profile shows the badge"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Public list and profiles of active members."
+      }
+    },
+    {
+      "id": "core-team",
+      "area": "front-door",
+      "name": "AQ Core and the Core Team page",
+      "summary": "Core members carry an AQ Core badge on their profile, on the member list and on the HoD desk. The Core Team page lists everyone with the badge.",
+      "use": "Open the Core Team page from the member list, or tap the badge on a profile. HR and super admin add or remove people from the Members desk, one at a time or by pasting the emails from the core members sheet.",
+      "reach": "Members page, meet the core team",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/core-team"
+      ],
+      "desks": [],
+      "connects": [
+        {
+          "to": "members-public",
+          "why": "the Core Team page links back to every member, and the member list links to it"
+        }
+      ],
+      "status": {
+        "state": "unverified",
+        "note": "Built 19 Nov 2026. The database rules and the email import were tested live in a rolled-back block; the page and badges were checked offline, not with a real core list yet."
+      }
+    },
+    {
+      "id": "schools-classes",
+      "area": "front-door",
+      "name": "Schools and classes",
+      "summary": "The campus network page, which explains how student chapters work and invites a school to start one, and the student-taught classes, built from real member data so the numbers are never invented. There is no public list of chapter schools yet.",
+      "use": "Read what runs in schools and which classes exist.",
+      "reach": "About menu, Schools and Classes",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/schools",
+        "/classes"
+      ],
+      "connects": [
+        {
+          "to": "contact-collab",
+          "why": "schools get in touch through the collaboration form"
+        }
+      ],
+      "status": {
+        "state": "partial",
+        "note": "The campus network page and classes work. A public directory of chapter schools is not built yet."
+      }
+    },
+    {
+      "id": "crftd",
+      "area": "front-door",
+      "name": "CRFTD",
+      "summary": "The clothing label that raises money for the work.",
+      "use": "Read about the label and follow the links to buy.",
+      "reach": "About menu, CRFTD",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/crftd"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Static public page."
+      }
+    },
+    {
+      "id": "help-pages",
+      "area": "front-door",
+      "name": "Handbook, FAQ and support",
+      "summary": "The volunteer handbook, answers to common questions, and ways to support the work.",
+      "use": "Read the handbook before joining, or check the FAQ if something is unclear.",
+      "reach": "About menu, Handbook, FAQ and Support",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/volunteer",
+        "/faq",
+        "/support"
+      ],
+      "connects": [
+        {
+          "to": "contact-collab",
+          "why": "the FAQ ends with a way to ask a question"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Handbook, FAQ and support pages."
+      }
+    },
+    {
+      "id": "giving-back",
+      "area": "front-door",
+      "name": "How we give back, and the impact library",
+      "summary": "A hub on how AquaTerra pays for its work (its own events and Crftd, never donations) and where the money goes, a page each for ShikshAQ, sport and AI training, and the impact library: over 140 pages built from the drive records, covering every drive series and workshop type, neighbourhoods, schools, places, each month and year, the UN goals the work serves, how-to guides for running a drive yourself, the fundraising nights that pay for it, pages for schools, companies, colleges and teachers, answers to the questions people search for, and reading lists of members' blog posts. Each lists the drives it covers with their photos. Photo stories tell each series year by year, and eight explorers let you play with the data: a timeline, a calculator, a quiz, a places map, a Kolkata map, a two-year comparison, a random drive and a photo memory game.",
+      "use": "Read how a series works or what happened in a year or a neighbourhood, open any photo big and jump to that drive's write-up, scrub through every month since 2021, add up any series yourself, or answer four questions to find the drive that suits you.",
+      "reach": "Main menu and footer, How we give back; the library is at the end of the hub and of the About page; every project write-up ends with the library pages that drive belongs to.",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/impact/*",
+        "/shikshaq",
+        "/sports",
+        "/ai"
+      ],
+      "connects": [
+        {
+          "to": "projects",
+          "why": "the hub sends people to every drive's write-up as proof of the numbers"
+        },
+        {
+          "to": "crftd",
+          "why": "Crftd is one of the two ways the work is paid for"
+        },
+        {
+          "to": "join-promo",
+          "why": "every page ends with a way to join"
+        },
+        {
+          "to": "public-pages",
+          "why": "the About page ends with the library's directory"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Pages and numbers are generated from the drive records at every build; the words were drafted from those records and checked by a test for typed totals and voice."
+      }
+    },
+    {
+      "id": "contact-collab",
+      "area": "front-door",
+      "name": "Contact and collaboration forms",
+      "summary": "Two forms: one to ask AquaTerra something, one to propose working together. Both end on a thank-you page.",
+      "use": "Fill in the form and send it. Nobody needs an account.",
+      "reach": "About menu, Contact and Collaborations",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/contact",
+        "/collaborations",
+        "/thank-you"
+      ],
+      "connects": [
+        {
+          "to": "desk-enquiries",
+          "why": "every submission appears in the Enquiries desk"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Forms reach the Enquiries desk."
+      }
+    },
+    {
+      "id": "policies",
+      "area": "front-door",
+      "name": "Policies",
+      "summary": "The equity policy, the privacy policy and the terms of use, in plain words.",
+      "use": "Read them. The equity policy explains why a phone number is never passed on. The terms of use say who can join, what you can post and how to get something taken down.",
+      "reach": "Footer and the menu, More",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/equity-policy",
+        "/privacy-policy",
+        "/terms"
+      ],
+      "connects": [
+        {
+          "to": "desk-members",
+          "why": "the Members desk records every time a leader reveals a phone number, which is the promise the equity policy makes"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Equity and privacy policies."
+      }
+    },
+    {
+      "id": "join-promo",
+      "area": "front-door",
+      "name": "Join page",
+      "summary": "A short pitch for people who are not yet sure they want to apply.",
+      "use": "Read it, then tap through to sign in.",
+      "reach": "Shared links and ads",
+      "who": [
+        "visitor"
+      ],
+      "routes": [
+        "/join"
+      ],
+      "connects": [
+        {
+          "to": "login",
+          "why": "the pitch ends at sign in"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Short public pitch."
+      }
+    },
+    {
+      "id": "brand",
+      "area": "front-door",
+      "name": "Brand sheet",
+      "summary": "The live specimen of AquaTerra's fonts, colours and shapes. Not linked from the menu.",
+      "use": "Open it to see how the brand looks when it is used correctly.",
+      "reach": "Direct link only",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/brand"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Live specimen sheet, not linked from the menu."
+      }
+    },
+    {
+      "id": "login",
+      "area": "joining",
+      "name": "Sign in with Google",
+      "summary": "The only way in. A first-time sign-in is the application: there is no separate sign-up form.",
+      "use": "Tap the Google button. New people are taken to finish their profile; returning members land on the feed.",
+      "reach": "Apply or Log in buttons everywhere",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/login",
+        "/auth/callback"
+      ],
+      "connects": [
+        {
+          "to": "register",
+          "why": "a brand new account goes straight to the three profile questions"
+        },
+        {
+          "to": "home-feed",
+          "why": "an approved member goes to the feed"
+        },
+        {
+          "to": "pending",
+          "why": "a finished but unapproved account goes to the waiting page"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Google sign-in is the only way in, and the first sign-in creates the application."
+      }
+    },
+    {
+      "id": "register",
+      "area": "joining",
+      "name": "Finish your profile",
+      "summary": "Three questions, one at a time: name, class, and a phone number. One phone number belongs to one account; if the number is already registered, the screen shows the masked email to log in with and how to reach HR.",
+      "use": "Answer the three questions and submit. The application is not complete until a class and a real phone number are on file.",
+      "reach": "Automatic after the first sign-in",
+      "who": [
+        "applicant"
+      ],
+      "routes": [
+        "/register"
+      ],
+      "connects": [
+        {
+          "to": "pending",
+          "why": "submitting puts the account in the approval queue"
+        },
+        {
+          "to": "login",
+          "why": "a taken phone number tells the person which email to log in with instead"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Three questions; the one phone number rule is live and checked in the database."
+      }
+    },
+    {
+      "id": "pending",
+      "area": "joining",
+      "name": "Waiting for approval",
+      "summary": "Where an applicant waits. It checks for approval on its own, shows a sample feed, and lets them browse roles and teams. They can't apply until approved, but can ask to be reminded. A removed or suspended account can appeal from the rejected page; a rejected applicant waits 30 days to reapply. While you wait you can still browse roles and teams and ask to be reminded about the ones you want. If you were heading for a role or team when you signed in, it shows here with a button to remind you once you're approved.",
+      "use": "Wait here. The page moves on by itself when HR approves the account. If you applied for a role first, it says your application is saved and what happens next.",
+      "reach": "Automatic after the profile is finished",
+      "who": [
+        "applicant"
+      ],
+      "routes": [
+        "/pending",
+        "/rejected",
+        "/choose-team"
+      ],
+      "connects": [
+        {
+          "to": "desk-approvals",
+          "why": "HR approves or rejects from the Approvals desk"
+        },
+        {
+          "to": "openings",
+          "why": "an applicant can apply for roles while they wait"
+        },
+        {
+          "to": "teams",
+          "why": "after approval an optional screen suggests teams to browse"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Waiting page. Applying is closed until approved; reminders are offered instead."
+      }
+    },
+    {
+      "id": "home-feed",
+      "area": "community",
+      "name": "Home feed and posts",
+      "summary": "One scroll of everything happening: updates, drive recaps, blog posts and open roles. Members write posts with photos, documents, tags and stat blocks. A member's post waits for a leader; a leader's own post goes live at once. Right after you're approved, a card at the top asks if you still want the role or team you were interested in.",
+      "use": "Read, like, comment, save and share from any post. Tap the composer to write one, choose a category and attach photos.",
+      "reach": "Home",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/",
+        "/post/:uuid"
+      ],
+      "connects": [
+        {
+          "to": "desk-queue",
+          "why": "a member's post is held in the Post Queue until a leader approves it"
+        },
+        {
+          "to": "notifications",
+          "why": "likes, comments and tags notify the author"
+        },
+        {
+          "to": "saved",
+          "why": "saving a post puts it in the saved list"
+        },
+        {
+          "to": "my-posts",
+          "why": "an author follows a post's status in My posts"
+        },
+        {
+          "to": "teams",
+          "why": "a post can be tagged to teams and then also shows on each team page"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Chronological feed with moderated member posts."
+      }
+    },
+    {
+      "id": "my-posts",
+      "area": "community",
+      "name": "My posts",
+      "summary": "Every post you wrote and where it stands: waiting, live, or sent back. A sent-back post can be edited and resubmitted without making a duplicate.",
+      "use": "Open it from your avatar menu and edit anything that was sent back.",
+      "reach": "Avatar menu, My posts",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/my-posts"
+      ],
+      "connects": [
+        {
+          "to": "desk-queue",
+          "why": "the status comes from the Post Queue decision"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Shows waiting, live and sent-back posts."
+      }
+    },
+    {
+      "id": "profile",
+      "area": "community",
+      "name": "Profile",
+      "summary": "Your own record: posts, achievements, real volunteering hours, a CV built only from real records, an optional wall for notes, tasks, and a way to take a break. A phone number can only belong to one account. You can add your LinkedIn (shown to other members) and Instagram (only you see it, and it fills your CV).",
+      "use": "Edit your details, add outside achievements, see your certificate requests, generate a CV, or set a break with a start and end date.",
+      "reach": "Avatar menu, Profile",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/profile/me",
+        "/profile/edit",
+        "/profile/:uuid"
+      ],
+      "connects": [
+        {
+          "to": "certificates",
+          "why": "the certificates card shows your requests and links to the page where you ask"
+        },
+        {
+          "to": "desk-members",
+          "why": "leaders see a member's break and details in the Members desk"
+        },
+        {
+          "to": "tasks",
+          "why": "a profile has a tasks tab"
+        },
+        {
+          "to": "calendar",
+          "why": "your own breaks show on your calendar"
+        },
+        {
+          "to": "honours",
+          "why": "a Member of the Month winner's profile links to all honours"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Own and public profiles with real records only."
+      }
+    },
+    {
+      "id": "settings",
+      "area": "community",
+      "name": "Settings",
+      "summary": "Account details, a contact number (your own or a guardian's), a birthday privacy switch that starts off, and a switch for whether people who are not signed in can see your photo, bio, class and school (on by default).",
+      "use": "Change your number, choose whether your birthday is shared, or hide your profile from people who are not signed in so they see only your name.",
+      "reach": "Avatar menu, Settings",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/settings"
+      ],
+      "connects": [
+        {
+          "to": "calendar",
+          "why": "sharing your birthday puts it on the calendar"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Account details, contact number and birthday privacy."
+      }
+    },
+    {
+      "id": "search",
+      "area": "community",
+      "name": "Search",
+      "summary": "One search box across drives, posts, members, teams, openings, schools and classes, with time filters and trending posts.",
+      "use": "Press Ctrl or Cmd and K from anywhere, or open the search icon.",
+      "reach": "Search icon, or Ctrl/Cmd+K",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/search"
+      ],
+      "connects": [
+        {
+          "to": "teams",
+          "why": "results include teams"
+        },
+        {
+          "to": "profile",
+          "why": "results include members"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "One search across drives, posts, members, teams, openings, schools and classes."
+      }
+    },
+    {
+      "id": "calendar",
+      "area": "community",
+      "name": "Calendar",
+      "summary": "A read-only month and agenda view of drives, your breaks, hiring and task deadlines, and birthdays people chose to share. Tasks you're on show on the day they're due, and link to your task list.",
+      "use": "Switch between month and agenda and tap an item to open it.",
+      "reach": "Avatar menu, Calendar",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/calendar"
+      ],
+      "connects": [
+        {
+          "to": "drives",
+          "why": "drive dates come from the drives"
+        },
+        {
+          "to": "tasks",
+          "why": "a task's due date shows on the calendar and opens your task list"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Read-only calendar of drives, breaks, hiring and tasks."
+      }
+    },
+    {
+      "id": "notifications",
+      "area": "community",
+      "name": "Notifications",
+      "summary": "Everything addressed to you: likes, comments, tags, approvals, team requests and system notices. Repeats on one post roll into a single line. In-app only for now. Work now reaches you here too: a task you're added to, a drive you're asked to run, your hours once a drive is completed, and the answer to a bug or feature report you filed. Filters for Teams and Work, and a Load older button.",
+      "use": "Open the bell. Tap a line to jump to what it is about.",
+      "reach": "Bell icon",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/notifications"
+      ],
+      "connects": [
+        {
+          "to": "home-feed",
+          "why": "most notifications point back to a post"
+        }
+      ],
+      "status": {
+        "state": "partial",
+        "note": "In-app only. Push and email notifications are not built yet."
+      }
+    },
+    {
+      "id": "saved",
+      "area": "community",
+      "name": "Saved",
+      "summary": "Bookmarks for posts, drives and openings, filtered by kind. Cleared when you sign out, by design.",
+      "use": "Tap the bookmark on anything, then come back here to find it.",
+      "reach": "Avatar menu, Saved",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/saved"
+      ],
+      "connects": [
+        {
+          "to": "home-feed",
+          "why": "saved posts open on the post page"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Bookmarks, cleared on sign-out by design."
+      }
+    },
+    {
+      "id": "yearbook",
+      "area": "community",
+      "name": "Yearbook",
+      "summary": "A member who has been invited writes a short quote and adds a photo for this year's edition, or skips the year. Anyone not invited sees a clear message instead of a broken form.",
+      "use": "If you were invited, add your quote and photo before the edition closes.",
+      "reach": "Full menu, Yearbook, or the invite notification",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/yearbook"
+      ],
+      "connects": [
+        {
+          "to": "desk-yearbook",
+          "why": "leaders pick who is invited and read what comes back"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Invited members write an entry; others see a clear message."
+      }
+    },
+    {
+      "id": "invite",
+      "area": "community",
+      "name": "Invite a friend",
+      "summary": "A personal invite link and a record of what happened to each invite. A referral only counts once a director confirms the person is an active member.",
+      "use": "Copy your link and share it. The invited person never sees who sent it.",
+      "reach": "Full menu, Invite a friend, or the Profile page",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/invite"
+      ],
+      "connects": [
+        {
+          "to": "login",
+          "why": "an invite link leads the new person to sign in"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Personal link; a referral counts once a director confirms the person is active."
+      }
+    },
+    {
+      "id": "tasks",
+      "area": "community",
+      "name": "Tasks",
+      "summary": "A task tracker. Each task is a team task or a private general task, with performers, supervisors and spectators, a due date that remembers its first value, and a done circle you can tap without opening the task.",
+      "use": "Create a task, add people and a role for each, then tick it off. Add a whole team at once as spectators.",
+      "reach": "Avatar menu, Tasks",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/tasks"
+      ],
+      "connects": [
+        {
+          "to": "teams",
+          "why": "a team page has a tasks tab"
+        },
+        {
+          "to": "profile",
+          "why": "a profile lists what a person performs or supervises"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Task tracker with team and private tasks."
+      }
+    },
+    {
+      "id": "bugs",
+      "area": "community",
+      "name": "Bugs and requests",
+      "summary": "Report a bug or ask for a feature, see every other report and its plain status, and add a me too instead of filing a duplicate. A daily routine works the queue; a leader checks each fix on the live site.",
+      "use": "Press Alt+Shift+B (or hold two fingers on a phone) on any page to report, or open the page to follow a report. Say whether a fix worked.",
+      "reach": "Avatar menu, Bugs and requests",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/bugs"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Bug and feature reports with me too votes."
+      }
+    },
+    {
+      "id": "teams",
+      "area": "teams-work",
+      "name": "Teams",
+      "summary": "The departments and the teams inside them, each with a page showing its description, sub-departments, members, open roles and every post tagged to it. A member can follow a team or ask to join; a lead approves. Asking to join a team is for approved members; if you're still waiting for approval you can ask to be reminded.",
+      "use": "Open a team, read about it, and press ask to join. A request never adds you by itself. On the team map, a team with its own smaller teams (Social Media inside Marketing) shows them as branches underneath, and a yellow dot means a team has open roles.",
+      "reach": "Top menu, Teams",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/teams",
+        "/teams/:uuid",
+        "/teams/:uuid/sub/:slug"
+      ],
+      "connects": [
+        {
+          "to": "openings",
+          "why": "a team page lists its open roles"
+        },
+        {
+          "to": "desk-teams",
+          "why": "HoDs edit the team name, picture and description in the Teams desk"
+        },
+        {
+          "to": "tasks",
+          "why": "members and leaders see the team's tasks"
+        },
+        {
+          "to": "desk-hiring",
+          "why": "a lead reviews applicants for their team's roles"
+        },
+        {
+          "to": "honours",
+          "why": "a team page's Member of the Month card links to all honours"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Departments and teams with posts, members and open roles."
+      }
+    },
+    {
+      "id": "drives",
+      "area": "teams-work",
+      "name": "Drive check-in and wrap-up",
+      "summary": "The field tools for a welfare drive. Check-in works without internet and syncs when it returns. Wrap-up turns real attendance into hours and suggests the headline numbers for the drive's post.",
+      "use": "On the day, a drive lead checks people in. Afterwards they open wrap-up and confirm the numbers.",
+      "reach": "From a drive's page, for its leads",
+      "who": [
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/drive/:id/check-in",
+        "/drive/:id/wrap"
+      ],
+      "connects": [
+        {
+          "to": "profile",
+          "why": "attendance becomes the verified hours on each member's profile"
+        },
+        {
+          "to": "projects",
+          "why": "a finished drive is later written up as a public project"
+        },
+        {
+          "to": "home-feed",
+          "why": "wrap-up pushes stat blocks to the drive's post"
+        }
+      ],
+      "status": {
+        "state": "unverified",
+        "note": "Offline check-in and sync were not exercised in this review."
+      }
+    },
+    {
+      "id": "desk-home",
+      "area": "leadership",
+      "name": "Desk home",
+      "summary": "The landing page of the leadership desk. It lists only the desks the signed-in leader may open, grouped as queue, people, intake and admin.",
+      "use": "Pick a desk, or type part of its name in the jump box at the top of the side menu and press Enter. A leader never sees a desk their role cannot use.",
+      "reach": "Avatar menu, HoD desk",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/director"
+      ],
+      "desks": [],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Landing page; the Approvals count now shows only to HR and super admin."
+      }
+    },
+    {
+      "id": "desk-approvals",
+      "area": "leadership",
+      "name": "Approvals",
+      "summary": "New people trying to get in. Approving one makes them a member; rejecting one can carry a note the applicant sees. A fifth tab, shared phones, lists live accounts that use the same phone number, with full names, emails and numbers, so HR can contact the people involved.",
+      "use": "Read the application, contact them if needed, then approve or reject. Marked someone contacted by mistake? Undo contacted puts them back in pending. Rejecting asks you to pick a reason and shows the words the applicant will read. Open the shared phones tab to see accounts that share a number.",
+      "reach": "Desk, queue group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "approvals"
+      ],
+      "connects": [
+        {
+          "to": "pending",
+          "why": "the decision moves the applicant off the waiting page"
+        },
+        {
+          "to": "register",
+          "why": "applications arrive from the profile questions"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Search and the class filter now run in the database and find people on any page; checked in the offline desk harness."
+      }
+    },
+    {
+      "id": "desk-queue",
+      "area": "leadership",
+      "name": "Post Queue and Blog Drafts",
+      "summary": "Everything members wrote that is waiting to go live. A HoD sees posts tagged to their own teams plus untagged ones; approving or rejecting can be done one at a time or in bulk. Long pieces wait in Blog Drafts to publish or schedule. Live essays can be taken back to drafts.",
+      "use": "Open the queue, read, approve or reject with a reason.",
+      "reach": "Desk, queue group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "posts",
+        "blogs"
+      ],
+      "connects": [
+        {
+          "to": "home-feed",
+          "why": "approving puts the post on the feed"
+        },
+        {
+          "to": "blog",
+          "why": "publishing a draft puts it on the blog"
+        },
+        {
+          "to": "my-posts",
+          "why": "the author sees the decision there"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Scoped queue the database now enforces. Blog Drafts can now unpublish."
+      }
+    },
+    {
+      "id": "desk-members",
+      "area": "leadership",
+      "name": "Members",
+      "summary": "Every account with role, teams and contact details. Leaders can put someone on a break, filter to who is on a break now or has one booked, and see each person's dates. Revealing a phone number or email is recorded against the leader's name. Pending and suspended accounts have their own read-only views.",
+      "use": "Search a member, open their row for actions, or press On a break to see who is away and when they return. HR and super admin can make someone core or remove them, or import the core members sheet by pasting its emails.",
+      "reach": "Desk, people group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "members"
+      ],
+      "connects": [
+        {
+          "to": "core-team",
+          "why": "making someone core puts them on the Core Team page"
+        },
+        {
+          "to": "profile",
+          "why": "a member sets their own break on their profile"
+        },
+        {
+          "to": "teams",
+          "why": "team membership is managed from a member's row"
+        },
+        {
+          "to": "policies",
+          "why": "the contact audit note points at the equity policy"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Desktop actions and the Pending and Suspended views checked in the offline desk harness. For HR the table needs a sideways scroll to reach Actions on a laptop."
+      }
+    },
+    {
+      "id": "desk-recognition",
+      "area": "leadership",
+      "name": "Member of the Month",
+      "summary": "Pick one or more standouts for each team and write the note that goes with it. A shareable poster is made automatically, and a pick saved for a future month is announced on the first of that month.",
+      "use": "Choose the honoree, write the citation, publish.",
+      "reach": "Desk, people group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "member_of_month"
+      ],
+      "connects": [
+        {
+          "to": "profile",
+          "why": "the honoree gets a claim flow on their profile"
+        },
+        {
+          "to": "home-feed",
+          "why": "the poster is posted to the feed"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Any HoD or director can pick for any team; a pick queued for a future month is announced by a daily job when the month begins."
+      }
+    },
+    {
+      "id": "desk-teams",
+      "area": "leadership",
+      "name": "Teams desk",
+      "summary": "Create and edit departments: name, description, logo and the picture shown on the Teams page.",
+      "use": "Edit a team and save. The public pages update.",
+      "reach": "Desk, people group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "teams"
+      ],
+      "connects": [
+        {
+          "to": "teams",
+          "why": "edits show on the public team pages"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Create, edit and delete work; delete is HR and super admin only. The form no longer asks for a category."
+      }
+    },
+    {
+      "id": "desk-moderation",
+      "area": "leadership",
+      "name": "Moderation scope",
+      "summary": "Choose which teams a HoD or director moderates posts for. With none assigned they see the whole queue. A plain HoD sees only their own assignments, and the HoD is told when one changes.",
+      "use": "Assign or remove a team for a leader.",
+      "reach": "Desk, people group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "categories"
+      ],
+      "connects": [
+        {
+          "to": "desk-queue",
+          "why": "the assignment decides which posts a HoD sees"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Assigns teams to a HoD. The database rule now follows team scope."
+      }
+    },
+    {
+      "id": "desk-hiring",
+      "area": "leadership",
+      "name": "Hiring",
+      "summary": "Open roles and everyone who applied to them, across all teams, with message templates for reaching out. People HR has not cleared yet are listed apart under \"waiting for HR\": you can read what they sent but not accept them, and HR gets an Approve button. Once HR approves, the application moves into the main list on its own. An application linked by phone number (the visitor was not signed in) carries a mark, because a number is not proof of who applied. Rejecting needs a reason.",
+      "use": "Open a role, read applications, shortlist or reject.",
+      "reach": "Desk, intake group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "hiring"
+      ],
+      "connects": [
+        {
+          "to": "openings",
+          "why": "roles created here appear on the public openings page"
+        },
+        {
+          "to": "teams",
+          "why": "each role belongs to a team"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Accept now confirms. Scoped HoDs can still accept for openings that have no team. The waiting-for-HR group was tested against fixtures and the database function in a rolled-back block (12 Nov 2026), not with live accounts."
+      }
+    },
+    {
+      "id": "desk-enquiries",
+      "area": "leadership",
+      "name": "Enquiries",
+      "summary": "Messages from the contact and collaboration forms, moved through a status pipeline so none gets lost.",
+      "use": "Open one, reply outside the site, then update its status. Each one has a notes box for your team, for why it was closed or what was agreed. The sender never sees it.",
+      "reach": "Desk, intake group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "enquiries"
+      ],
+      "connects": [
+        {
+          "to": "contact-collab",
+          "why": "the forms feed this list"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Shows true totals with Load older; the sender is not notified of status changes."
+      }
+    },
+    {
+      "id": "certificates",
+      "area": "community",
+      "name": "Certificates",
+      "summary": "Ask for a certificate or a letter in one place. You pick the documents you want, with a sample of each, the teams and sub-teams you were part of, the HoDs who have seen your work, the least number of hours you worked, and the months you were with us. For letters you can add a few rough notes about what to mention. The HoDs you tag say whether they can vouch for you and the HR team decides. Once it is issued you open it here and download the PDF, signed and carrying a code anyone can check. You only ever see your own.",
+      "use": "Open Certificates, pick what you need, tag your teams and HoDs, enter your minimum hours and the months you were with us, and send. You get a notification when it is ready.",
+      "reach": "Profile, certificates card",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/certificates",
+        "/certificates/:id"
+      ],
+      "desks": [],
+      "connects": [
+        {
+          "to": "desk-certificates",
+          "why": "what you send lands on the Certificates desk for the HoDs you tagged and for HR"
+        },
+        {
+          "to": "profile",
+          "why": "your profile shows your latest requests and links back here"
+        },
+        {
+          "to": "verify-certificate",
+          "why": "every issued document carries a code that anyone can check"
+        }
+      ],
+      "status": {
+        "state": "unverified",
+        "note": "Built 20 Nov 2026 on AquaTerra's real templates. The database changes were applied on 21 Nov 2026 and checked by read-only queries. Exercised offline against fixtures; not yet used with real accounts."
+      }
+    },
+    {
+      "id": "verify-certificate",
+      "area": "front-door",
+      "name": "Verify a document",
+      "summary": "Anyone can check the code printed on an AquaTerra certificate or letter. It says whether the code is real and shows only who it was issued to, which document it is and the date, so a school or employer can compare it with the paper in their hand.",
+      "use": "Type the code that starts with AQ, or follow the link on the document.",
+      "reach": "The address on the document, ngoaquaterra.com/verify",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/verify",
+        "/verify/:code"
+      ],
+      "desks": [],
+      "connects": [
+        {
+          "to": "certificates",
+          "why": "the code is printed on documents issued from the certificates page"
+        }
+      ],
+      "status": {
+        "state": "unverified",
+        "note": "Built 20 Nov 2026 and applied to the database on 21 Nov 2026. The page was checked offline for a malformed code; no document has been issued yet, so no real code has been checked."
+      }
+    },
+    {
+      "id": "desk-certificates",
+      "area": "leadership",
+      "name": "Certificates",
+      "summary": "Every request for a certificate or letter, one row per member with everything they have open together and their earlier ones beneath. HoDs can read all of it. A HoD a member tagged says whether they can vouch, any HoD can add a note, and HR or a tagged HoD can write a letter's text themselves when someone needs it quickly. Certificates have fixed wording and are ready for HR at once. Only HR issues or declines, and an issued document is given a code anyone can check. Cleared requests keep who decided.",
+      "use": "HoDs: answer the ones that tag you and add notes on the rest. HR: read what the HoDs said, check the text and the preview, then issue or decline.",
+      "reach": "Desk, intake group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "certificates"
+      ],
+      "connects": [
+        {
+          "to": "certificates",
+          "why": "requests arrive from the certificates page, and issued ones are downloaded from it"
+        }
+      ],
+      "status": {
+        "state": "unverified",
+        "note": "Built 20 Nov 2026. The database changes were applied on 21 Nov 2026 and checked by read-only queries. Exercised offline against fixtures; not yet used with real accounts."
+      }
+    },
+    {
+      "id": "desk-yearbook",
+      "area": "leadership",
+      "name": "Yearbook desk",
+      "summary": "Invite members into this year's edition and read their submissions.",
+      "use": "Search members, invite them, then review what comes back.",
+      "reach": "Desk, intake group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "yearbook"
+      ],
+      "connects": [
+        {
+          "to": "yearbook",
+          "why": "invited members fill in their entry there"
+        }
+      ],
+      "status": {
+        "state": "partial",
+        "note": "Remind and remove work. The skipped filter works only if the member screen marks skips, which was not checked."
+      }
+    },
+    {
+      "id": "desk-content",
+      "area": "leadership",
+      "name": "All posts",
+      "summary": "Every post on the feed, for leaders to review and tidy: approve or reject, edit, pin, feature or delete. It is not an editor for the words on the public pages.",
+      "use": "Open it to find any post. Approving, rejecting and editing need the approve-posts switch to be on for your role.",
+      "reach": "Desk, admin group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "content"
+      ],
+      "connects": [
+        {
+          "to": "public-pages",
+          "why": "edits appear on the public pages"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "This is a list of all feed posts, not a page copy editor, and is now labelled that way."
+      }
+    },
+    {
+      "id": "desk-projects",
+      "area": "leadership",
+      "name": "Drive Write-ups",
+      "summary": "Publish the public story of a finished drive: photos, numbers and narrative. Running the drive is a separate job.",
+      "use": "Pick a finished drive, add the story and photos, publish.",
+      "reach": "Desk, admin group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "projects"
+      ],
+      "connects": [
+        {
+          "to": "projects",
+          "why": "published write-ups appear on the Projects page"
+        },
+        {
+          "to": "drives",
+          "why": "a write-up follows a drive that was run and wrapped up"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Publish toggle now follows the hero image rule. The list is cached until Refresh."
+      }
+    },
+    {
+      "id": "desk-hods",
+      "area": "leadership",
+      "name": "Manage HoDs",
+      "summary": "Promote a member to HoD or director, or step one back down. It stops anyone locking themselves out.",
+      "use": "Pick a member and change their role.",
+      "reach": "Desk, admin group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "hods"
+      ],
+      "connects": [
+        {
+          "to": "desk-access",
+          "why": "a role's reach is set in Roles and Permissions"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "One audit row per change and the person is notified."
+      }
+    },
+    {
+      "id": "desk-volunteers",
+      "area": "leadership",
+      "name": "Volunteer applications archive",
+      "summary": "The volunteer outreach list: applications with labels, a reviewed mark, a live counter and a spreadsheet export that asks first and is recorded. People now sign up through Google at the sign-in page.",
+      "use": "Look things up. Nothing new arrives here.",
+      "reach": "Desk, admin group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "volunteer_apps"
+      ],
+      "connects": [
+        {
+          "to": "login",
+          "why": "this process was replaced by signing in"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "A live outreach list with labels and an audited export, kept live by decision."
+      }
+    },
+    {
+      "id": "desk-access",
+      "area": "leadership",
+      "name": "Roles, permissions and activity log",
+      "summary": "A table of what each role can reach, where unticking takes access away and nothing can add any. Beside it, a log of who approved, rejected or changed what, and when.",
+      "use": "Untick a box to take a role's access away, or read the log to see what happened.",
+      "reach": "Desk, admin group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "roles",
+        "activity_log"
+      ],
+      "connects": [
+        {
+          "to": "desk-home",
+          "why": "the matrix decides which desks each leader sees"
+        },
+        {
+          "to": "desk-approvals",
+          "why": "approvals and rejections are written to the log"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Capability changes are audited; Activity Log hides scheduled-post noise by default."
+      }
+    },
+    {
+      "id": "paradox",
+      "area": "events",
+      "name": "Paradox",
+      "summary": "The annual cultural and fundraising fest, with its own registration, payments and event-day tools. Attendees never need an AquaTerra account.",
+      "use": "Paradox 2026 (1 to 6 June) is over. The pages now say so and point to the story, the team and the blog. Organisers still have their control screens.",
+      "reach": "Top menu, or a direct link",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/paradox/*"
+      ],
+      "connects": [],
+      "status": {
+        "state": "partial",
+        "note": "Event over (3 Nov 2026): tickets, scores and registration pages replaced by an archive page, because the separate database they read no longer exists. Control screens depend on that database and are unverified."
+      }
+    },
+    {
+      "id": "terrathon",
+      "area": "events",
+      "name": "TerraThon",
+      "summary": "The inter-school sports tournament: team registration, fixtures and gate check-in that works offline.",
+      "use": "TerraThon 2026 (2 to 4 October) is over. Registration is closed on the pages and in the database; the pages stay up as an archive. Staff check-in screens remain.",
+      "reach": "A direct link",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/terrathon/*"
+      ],
+      "connects": [],
+      "status": {
+        "state": "partial",
+        "note": "Event over (3 Nov 2026): registration closed in the pages and in the database (public register function revoked). Staff screens not exercised."
+      }
+    },
+    {
+      "id": "live",
+      "area": "events",
+      "name": "AquaTerra Live",
+      "summary": "The hub for AquaTerra events. Right now it promotes Disco Diwali on 10 November 2026 at 60 Chowringhee, with booking over WhatsApp, and it has a small admin area for the team. Once a night's date has passed, the pages switch to past tense by themselves: the countdown and ticket buttons give way to a thank-you and links to the photo vault and the list of nights.",
+      "use": "Open it from the menu while an event is on.",
+      "reach": "Menu, AquaTerra Live",
+      "who": [
+        "visitor",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/live/*"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Promotes Disco Diwali on 10 Nov 2026 and has its own small admin."
+      }
+    },
+    {
+      "id": "terranotes",
+      "area": "events",
+      "name": "Terra Notes",
+      "summary": "The monthly digital magazine, with past editions, articles, games inside it, and AQ Labs.",
+      "use": "Read the current edition or pick an older one. The old Labs addresses forward here.",
+      "reach": "Top menu, Terra Notes",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/terranotes/*",
+        "/labs",
+        "/labs/:slug"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "October edition live; September at /terranotes/sep26."
+      }
+    },
+    {
+      "id": "games",
+      "area": "events",
+      "name": "Mini games",
+      "summary": "A small hub of mini games, one page each: Drive Sorter (sort twelve things into dry, wet and e-waste), Streak Tap (a reaction test) and Sticker Match (find eight pairs).",
+      "use": "Pick a game and play.",
+      "reach": "Menu, Mini games",
+      "who": [
+        "visitor",
+        "applicant",
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/games",
+        "/games/:slug"
+      ],
+      "connects": [],
+      "status": {
+        "state": "working",
+        "note": "Three games: Drive Sorter, Streak Tap and Sticker Match."
+      }
+    },
+    {
+      "id": "demo",
+      "area": "events",
+      "name": "Product tour",
+      "summary": "A guided walkthrough for someone considering joining. It needs no account and writes nothing to the real database.",
+      "use": "Click through the tour to see what members do.",
+      "reach": "A direct link",
+      "who": [
+        "visitor"
+      ],
+      "routes": [
+        "/demo/*"
+      ],
+      "connects": [
+        {
+          "to": "login",
+          "why": "the tour ends at sign in"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Guided walkthrough that writes nothing to the real database."
+      }
+    },
+    {
+      "id": "desk-guide",
+      "area": "leadership",
+      "name": "Product guide",
+      "summary": "This guide, inside the desk. Every page and desk on the site in plain language, filtered by who you are, with a map of what connects to what. It rebuilds from the code, so it stays current. Only HoDs, directors and HR can open it.",
+      "use": "Pick who you are to see only what is yours, search for a feature, or switch to the map and tap a box to follow where it leads.",
+      "reach": "Desk, reference group",
+      "who": [
+        "hod",
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "guide"
+      ],
+      "connects": [
+        {
+          "to": "desk-home",
+          "why": "it lists every desk, including the ones each leader can open"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "This page."
+      }
+    },
+    {
+      "id": "honours",
+      "area": "community",
+      "name": "Honours",
+      "summary": "Every Member of the Month, month by month. Each card links to the person, to their team and to their wall, so you can say congratulations.",
+      "use": "Scroll back through the months. Tap a name to see their profile, a team to see what it does, or \"say congratulations\" to leave a note on their wall.",
+      "reach": "\"all honours\" link under the Member of the Month card on a team page or on the winner's profile",
+      "who": [
+        "member",
+        "lead",
+        "hod",
+        "hr"
+      ],
+      "routes": [
+        "/honours"
+      ],
+      "connects": [
+        {
+          "to": "profile",
+          "why": "each honoured person links to their profile and wall"
+        },
+        {
+          "to": "teams",
+          "why": "each pick names the team it was for, which opens that team"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Built 3 Nov 2026 and checked offline only: not yet opened as a real signed-in member."
+      }
+    },
+    {
+      "id": "grievance",
+      "area": "community",
+      "name": "Raise a concern",
+      "summary": "A private form for signed-in members to raise a concern with the HR team: harassment, discrimination, safety, misconduct by a member or by a HoD or HR, or something else. Only HR and super admins can read it, and the sender sees the status of what they sent.",
+      "use": "Open it from the equity policy page or the footer, pick what it is about, write what happened, and send it. We usually respond within seven days.",
+      "reach": "Equity policy page, footer, privacy policy",
+      "who": [
+        "member"
+      ],
+      "routes": [
+        "/grievance"
+      ],
+      "desks": [],
+      "connects": [
+        {
+          "to": "desk-grievances",
+          "why": "what a member sends lands on the HR grievances desk"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "Rules tested in the database (3 Nov 2026). Not yet exercised through the screen with real accounts."
+      }
+    },
+    {
+      "id": "desk-grievances",
+      "area": "leadership",
+      "name": "Grievances",
+      "summary": "Where HR reads and works the concerns members raise: status, who is handling it, internal notes, and a marker once one has waited seven days. Directors and HoDs cannot see it.",
+      "use": "Open a grievance, read it, assign it, add notes, and move it to resolved or closed.",
+      "reach": "Desk, intake group",
+      "who": [
+        "hr"
+      ],
+      "routes": [],
+      "desks": [
+        "grievances"
+      ],
+      "connects": [
+        {
+          "to": "grievance",
+          "why": "members send concerns from the grievance form"
+        }
+      ],
+      "status": {
+        "state": "working",
+        "note": "New 3 Nov 2026. No delete and no export by design."
+      }
+    }
+  ]
+}

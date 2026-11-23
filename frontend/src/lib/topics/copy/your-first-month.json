@@ -1,0 +1,86 @@
+{
+  "slug": "your-first-month",
+  "title": "Your first month as a new AquaTerra member · AquaTerra",
+  "description": "What a new AquaTerra member's first month is likely to involve: children's workshops in Kolkata, mostly at Pather Sathi. {count} sessions since {firstYear}.",
+  "h1Lead": "your first",
+  "h1Accent": "month of workshops",
+  "lede": "A new AquaTerra member's first month is most likely to be a children's workshop: art and craft, card making, English grammar or storytelling, usually at Pather Sathi in Kolkata. Since {firstYear} we have run {count} sessions in this strand, with {volunteers} volunteer turnouts, and nearly every one was a workshop rather than a street drive.",
+  "sections": [
+    {
+      "id": "what-a-first-month-looks-like",
+      "heading": "what a first month looks like",
+      "body": [
+        "Most of the sessions in a first month are workshops for children, not street drives. A small team of students plans a lesson or a craft, sets it up at a place we keep going back to, and runs it with the children who are there. In nearly every case the write-up names the objective as a workshop.",
+        "Some sessions come back. Learner's Den and Merry Miracles each ran more than once, so a first month can be the start of a run you keep joining."
+      ]
+    },
+    {
+      "id": "where-sessions-happen",
+      "heading": "where the sessions happen",
+      "body": [
+        "Pather Sathi is where most first-month sessions happen. Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep host the rest, and each has its own run of sessions. These are places we keep going back to, and the same few come up year after year.",
+        "Across this strand we have worked in {placesCount} places in total. Knowing the place before you go helps, and each session is written up with its date and location."
+      ]
+    },
+    {
+      "id": "what-gets-taught",
+      "heading": "what children learn and make",
+      "body": [
+        "The sessions cover a wide range. Art and craft runs through most of the list: fingerpainting, card making, Diwali posters and stocking decoration. The English sessions are structured. At Ek Tara, children learned nouns, pronouns and verbs, and in April 2026 a session at Disha Foundation and another at Ek Tara took subjects and predicates, each with worksheet activities.",
+        "Other sessions cover chess, multiplication, storytelling, public speaking, music, STEM and digital safety. A menstrual awareness session at Pather Sathi in April 2026 was run as a community workshop, and the digital safety workshop there in May 2026 taught children about staying safe online."
+      ]
+    },
+    {
+      "id": "festival-sessions",
+      "heading": "the festival sessions",
+      "body": [
+        "Festival sessions are where a first month gets busy. Children's Day in November 2025 had its own workshop at Pather Sathi, with games, bonding activities and refreshments. December brought Merry Miracles, Christmas carols and storytelling at Pather Sathi, stocking decoration at Amader Pradakhep and Santa masks at AIM Foundation.",
+        "Valentine's Day cards were made in February 2026, and Mother's Day cards in May and again in September 2026 at Disha Foundation. Many of these are craft sessions where the children make something to keep."
+      ]
+    },
+    {
+      "id": "how-to-join-in-your-first-month",
+      "heading": "how to join in",
+      "body": [
+        "You join AquaTerra with a Google sign-in, and a member of the team approves your account. AquaTerra is for students aged 14 to 19, and the sessions are run by students. The projects page lists the sessions we have written up, so you can see the kind of work before you join.",
+        "If you want to help run a session or suggest one, the contact page is the place to start."
+      ]
+    }
+  ],
+  "learnings": [
+    "A first month is mostly workshops in a few places, so it is a steady way to start, and you will see the same places more than once.",
+    "Festival sessions cluster around Christmas, Valentine's Day and Mother's Day, and the craft sessions in these months are the ones most often run.",
+    "English sessions work from worksheets, so each lesson has a clear plan the team follows with the children.",
+    "Pather Sathi hosts most first-month sessions, so it is the place a new member is most likely to end up."
+  ],
+  "faqs": [
+    {
+      "q": "What does a new AquaTerra member do in their first month?",
+      "a": "Most first-month sessions are workshops for children, such as art and craft, card making, English grammar, storytelling or digital safety. AquaTerra has run {count} sessions in this strand since {firstYear}, mostly at Pather Sathi in Kolkata."
+    },
+    {
+      "q": "Where does AquaTerra run workshops for children in Kolkata?",
+      "a": "Most of them are at Pather Sathi. Ek Tara, Disha Foundation, AIM Foundation and Amader Pradakhep host the rest, and AquaTerra has worked in {placesCount} places across this strand."
+    },
+    {
+      "q": "What did AquaTerra teach children in 2025?",
+      "a": "In 2025 AquaTerra ran {year:2025} sessions in this strand. They covered art and craft, chess, multiplication, storytelling, public speaking, music, STEM and Christmas workshops, mostly at Pather Sathi."
+    },
+    {
+      "q": "Does AquaTerra teach English to children?",
+      "a": "Yes. AquaTerra ran English grammar sessions at Ek Tara and Disha Foundation in April 2026, covering nouns, pronouns, verbs, subjects and predicates, with worksheets for the children to follow."
+    },
+    {
+      "q": "Can a 14 year old join AquaTerra?",
+      "a": "AquaTerra is for students aged 14 to 19. New members join with a Google sign-in and an approval, and the sessions we have written up are listed on the projects page."
+    }
+  ],
+  "keywords": [
+    "volunteer teaching children Kolkata",
+    "AquaTerra workshops for kids",
+    "art and craft workshops Kolkata children",
+    "English grammar workshop volunteers Kolkata",
+    "student volunteer workshops Pather Sathi",
+    "first month volunteering Kolkata teens"
+  ]
+}

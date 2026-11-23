@@ -1,3 +1,4 @@
+import { LibraryDirectory } from '../components/ImpactLibraryLazy'
 import './AboutPage.css'
 import { useLiveFacts } from '../lib/liveFacts'
 import { useNavigate } from 'react-router-dom'
@@ -190,7 +191,7 @@ export default function AboutPage() {
           Every word, the order, and the ★ rhythm are unchanged; `15,000
           BANANAS` keeps its exact wording (no "+", and never "meals"). */}
       <div className="ab-marquee" data-nav-tint="welfare">
-        <Marquee items={['★ KOLKATA BORN', `${displayCount(facts.membersTotal)} ACTIVE MEMBERS`, '★ ZERO DONATIONS EVER', `${displayCount(facts.drivesWrittenUp)} DRIVES`, '★ DARPAN CERTIFIED', `${displayCount(ORG_FACTS.saplingsPlanted)} SAPLINGS`, '★ STUDENT RUN', '15,000 BANANAS']} color="mint" />
+        <Marquee items={['★ KOLKATA BORN', `${displayCount(facts.membersTotal)} ACTIVE MEMBERS`, '★ ZERO DONATIONS EVER', `${displayCount(facts.drivesWrittenUp)} DRIVES`, '★ DARPAN REGISTERED', `${displayCount(ORG_FACTS.saplingsPlanted)} SAPLINGS`, '★ STUDENT RUN', '15,000 BANANAS']} color="mint" />
       </div>
 
       {/* ── THE MANIFESTO (changelog/09-about.md) ── */}
@@ -522,6 +523,11 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* The impact library directory, appended at the very end (owner, 15 Nov 2026). */}
+      <div className="container" style={{ padding: '0 var(--page-px) 64px' }}>
+        <LibraryDirectory heading="know more about the work" />
+      </div>
 
     </div>
   )

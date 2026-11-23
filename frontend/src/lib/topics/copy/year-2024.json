@@ -1,0 +1,99 @@
+{
+  "slug": "year-2024",
+  "title": "AquaTerra's 2024 drives: going citywide · AquaTerra",
+  "description": "AquaTerra's 2024 drives: {count} drives across {placesCount} places, from the May sharbat run and clothes campaigns to Paradox, Disco Diwali and The Starry Night.",
+  "h1Lead": "the year the drives",
+  "h1Accent": "went citywide",
+  "lede": "In 2024 AquaTerra's drives reached further across Kolkata than in any year before. Across {count} drives, {volunteers} volunteer turnouts and {placesCount} places, the year had three big nights: Paradox in June, Disco Diwali in October and The Starry Night in December. A May run of sharbat drives carried the summer.",
+  "sections": [
+    {
+      "id": "sharbat-may",
+      "heading": "a summer of sharbat across the city",
+      "body": [
+        "The Sharbat Seva drives in May 2024 were one of the year's biggest runs. It started at Elite Cinema in Esplanade on May 10 with Sharbat Distribution Drive 1.0, moved to 2.0 in Kankurgachi on May 22, then covered 3.0 to 11.0 on May 24 and 12.0 to 16.0 on May 26. The places ranged from Bagmari Market and Acropolis Mall to the swimming pool at Salt Lake and the Bhootnath Mandir in Beniatola.",
+        "Every drive handed out Rooh Afza sharbat, and the places were as varied as the city itself. Read it as one format repeated across Kolkata in a matter of days. The [Sharbat Seva](/impact/sharbat-seva) page covers the whole series."
+      ]
+    },
+    {
+      "id": "clothes-campaigns",
+      "heading": "clothes and notebooks in two series",
+      "body": [
+        "Clothes collection ran through the year in two named series. Wear & Write, the clothes and notebooks campaign, started with 1.0 on April 26 and reached 14.0 on May 24. Most of its campaigns were held in apartment complexes between May 6 and May 15, from Bangur to Clubtown Greens and Active Acres.",
+        "Wear and Share ran alongside it from 1.0 on May 3 to 15.0 on November 30, with collections at Ganges Garden, Raghav Residency, Urbana and Sealdah, and a final drive at The Reserve. Across all years AquaTerra has distributed {clothesKg} kg of clothes, and this year's drives show much of that work done in apartment complexes and neighbourhoods."
+      ]
+    },
+    {
+      "id": "health-and-safety",
+      "heading": "health and child safety sessions",
+      "body": [
+        "Health and safety sessions became a regular part of the year's workshops. Smart With Safety at Pather Sathi on August 31 covered good touch and bad touch, and the same subject came back in Safe Circle at Gyandeepak on July 26 and Safe and Strong at Inner Wheel School on July 25.",
+        "The health sessions covered more than safety. Well Within, on adolescence health at AIM Foundation on June 21, Health Over Sugar on diabetes at Amader Pradakhep on June 8, Mind Matters at Pather Sathi on August 9, Healing Space at Pather Sathi on September 14 and Open Minds, a mental health workshop at Universal Smile on November 15."
+      ]
+    },
+    {
+      "id": "aim-foundation",
+      "heading": "art sessions at aim foundation",
+      "body": [
+        "AIM Foundation hosted a run of art and health sessions between late May and late June 2024. Shape and Shade and Art Arcade were on May 28, Mind and Body and Teen Talk, both on adolescence health, on May 29, and Comfort Kits, a sanitary napkin distribution with 100 packets handed out, on May 30.",
+        "Early June was mostly painting and drawing: Doodle Day and Art Hive on June 4, Paint A Pot on June 5, Mini Makers on June 6 and From Lines to Life on June 7. Well Within on June 21 was the last health session in that run. AIM Foundation came back in December for Festive Fun, a Christmas craft workshop on December 20."
+      ]
+    },
+    {
+      "id": "flagship-nights",
+      "heading": "the three big nights",
+      "body": [
+        "Paradox, Disco Diwali and The Starry Night carried the year's largest volunteer turnouts. Paradox on June 7 in Kolkata recorded a turnout of 250, and it was AquaTerra's flagship fundraiser of the year. Disco Diwali at New Alipore on October 26 recorded a turnout of 175, and The Starry Night at Sky Turf on December 22 recorded a turnout of 50.",
+        "Disco Diwali brought together dance, decor and community giving. The Starry Night was a Christmas carnival fundraiser that raised funds and awareness for AquaTerra's ongoing welfare work. The June calendar also held a third anniversary fundraiser at Conclave, Kolkata on June 14, with a turnout of 30, supporters and beneficiaries gathered together."
+      ]
+    },
+    {
+      "id": "december-run",
+      "heading": "a december of carnivals and crafts",
+      "body": [
+        "December was the year's Christmas run. Tree Time and Deck the Tree made decorations at Ek Tara on December 13 and 20, Merry Masks made paper masks and sang carols at Amader Pradakhep on December 16, and the Christmas Carnival Workshop ran games and crafts at Pather Sathi on December 21.",
+        "Secret Cheer at Tetultala Ashram on December 17 had children make wrapping paper, and volunteers used it to wrap gifts for a secret Santa game. The Starry Night followed at Sky Turf on December 22, and Speak and Sparkle at Pather Sathi ended the year on December 28."
+      ]
+    }
+  ],
+  "learnings": [
+    "A May run of sharbat drives covered most of the city in about two weeks, which is why it stands out in the year.",
+    "Wear & Write and Wear and Share ran side by side from April to November, one as a spring campaign and one as a longer run into autumn.",
+    "Health and child safety sessions became a regular part of the year at Pather Sathi and at other sites across the city.",
+    "Paradox, Disco Diwali and The Starry Night carried the largest volunteer turnouts of the year.",
+    "In the last two months, Tails and Treats moved into neighbourhoods such as Bangur, Salt Lake and Hazra, with drives 19.0 to 24.0 between November and December."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in 2024?",
+      "a": "In 2024 AquaTerra ran {count} drives and {volunteers} volunteer turnouts across {placesCount} places. The year included a May sharbat run, clothes and notebook campaigns, art and health sessions at AIM Foundation, Paradox in June, Disco Diwali in October and The Starry Night carnival in December."
+    },
+    {
+      "q": "What was the Sharbat Seva drive in 2024?",
+      "a": "Sharbat Seva is AquaTerra's summer distribution of Rooh Afza sharbat in Kolkata. In May 2024 the series ran from Sharbat Distribution Drive 1.0 on May 10 to 16.0 on May 26, at places such as Bagmari Market, Acropolis Mall and the Bhootnath Mandir in Beniatola."
+    },
+    {
+      "q": "Does AquaTerra accept old clothes?",
+      "a": "AquaTerra collects clothes through drives such as Wear and Share and Wear & Write, held in apartment complexes and neighbourhoods such as Bangur, Ballygunge and Sealdah. The clothes collected are then distributed, and across all years AquaTerra has distributed {clothesKg} kg of clothes."
+    },
+    {
+      "q": "What is Disco Diwali?",
+      "a": "Disco Diwali is AquaTerra's Diwali fundraiser. The 2024 edition was held at New Alipore, Kolkata on October 26 with a turnout of 175, and it brought together dance, decor and community giving."
+    },
+    {
+      "q": "When is The Starry Night held?",
+      "a": "The Starry Night is AquaTerra's Christmas carnival fundraiser. The 2024 edition ran at Sky Turf on December 22 with a turnout of 50, raising funds and awareness for AquaTerra's welfare work."
+    },
+    {
+      "q": "Did AquaTerra run a Paradox event in 2024?",
+      "a": "Yes. Paradox was held in Kolkata on June 7, 2024 with a turnout of 250, and it was AquaTerra's flagship fundraiser of the year. A food distribution drive, Day 2, was also recorded under Paradox on April 5, with 80 food packets donated."
+    }
+  ],
+  "keywords": [
+    "AquaTerra 2024 drives",
+    "Sharbat Seva Kolkata summer 2024",
+    "clothes collection drive Kolkata",
+    "Disco Diwali Kolkata fundraiser",
+    "The Starry Night Christmas carnival Kolkata",
+    "AIM Foundation art workshop Kolkata"
+  ]
+}

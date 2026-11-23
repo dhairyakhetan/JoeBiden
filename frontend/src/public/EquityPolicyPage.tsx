@@ -256,7 +256,8 @@ export default function EquityPolicyPage() {
             </ul>
             {!isActiveMember && (
               <p className="ep-p">
-                <Link to="/login">Sign in to message the HR team.</Link>
+                Members can <Link to="/login">sign in to message the HR team</Link>. Not a member, or cannot sign in? Write to{' '}
+                <a href="mailto:ngo.aquaterra@gmail.com">ngo.aquaterra@gmail.com</a> and the HR team will answer.
               </p>
             )}
             <h3 className="ep-h" style={{ fontSize: '1.05em', marginTop: 20 }}>Grievances</h3>

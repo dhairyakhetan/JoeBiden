@@ -1,0 +1,73 @@
+{
+  "slug": "month-2022-04",
+  "title": "AquaTerra in April 2022: {count} drives, Earth Day and dogs",
+  "description": "AquaTerra's April 2022: {count} drives, three Earth Day workshops, dog feeding and planting, a gender equality workshop and an acting workshop.",
+  "h1Lead": "what we did in",
+  "h1Accent": "april 2022",
+  "lede": "In April 2022 AquaTerra ran {count} drives, with three Earth Day workshops in the second half of the month and the stray dog outings continuing. The rest covered planting, a gender equality workshop, an acting workshop, a fundraiser and a mini fete. That makes April the busier of the two months, since {count:month-2022-03} drives came in March.",
+  "sections": [
+    {
+      "id": "an-earth-day-month",
+      "heading": "an earth day month",
+      "body": [
+        "The Earth Day workshops ran on 21, 22 and 29 April. Heal the Earth at Don Bosco School, Park Circus, had volunteers planting trees in bottles, Planet First at Ek Tara covered sustainability, waste and action, and Green Hour at Pariwar Milan mixed green games with mindful art.",
+        "Earth Day was not the only planting. Grow Green 4.0 planted ninety saplings in Kolkata on 14 April with a helping hand from Each One Plant One, and Roots Rise had students paint saplings at Mallickpur on 13 April."
+      ]
+    },
+    {
+      "id": "the-dog-outings-carry-on",
+      "heading": "the dog outings carry on",
+      "body": [
+        "Tails and Treats 7.0, 8.0 and 9.0 ran on 9, 16 and 23 April, each in Kolkata. Fifty dogs were fed on 9 April, ninety on 16 April and eighty-five on 23 April. The team was four volunteers each time, the same as in March.",
+        "The drive numbers picked up where March left off, at 7.0, so a reader can follow the series from one month to the next."
+      ]
+    },
+    {
+      "id": "more-than-earth-and-dogs",
+      "heading": "more than earth and dogs",
+      "body": [
+        "One for All, a gender equality workshop at Hi Charitable Foundation on 16 April, had volunteers start an honest talk about gender, respect and equal chances. Forty children were taught.",
+        "Act It Out, an acting workshop at Loretto Day School on 4 April, had volunteers acting, laughing and learning with the children. Forty-five children were taught."
+      ]
+    },
+    {
+      "id": "a-fundraiser-and-a-fete",
+      "heading": "a fundraiser and a fete",
+      "body": [
+        "Strategia, a fundraiser in Kolkata on 1 April, had volunteers competing in timed strategy challenges built around real-world NGO scenarios.",
+        "The month began on 1 April with the Mini-Fete at Gandhi Vidyalaya, the wind-down of Paradox 1.0. It was a lively fete of games and snacks, with two hundred children engaged."
+      ]
+    }
+  ],
+  "learnings": [
+    "Three Earth Day workshops fell in the second half of April 2022, so a theme can give a month its shape.",
+    "Planting and painting drives suit the outdoors: Grow Green, Roots Rise and Heal the Earth all worked with saplings or trees.",
+    "A month can mix the regular dog outings with one-off workshops on gender and acting."
+  ],
+  "faqs": [
+    {
+      "q": "What did AquaTerra do in April 2022?",
+      "a": "AquaTerra ran {count} drives in April 2022: three Earth Day workshops, three stray dog feeding outings, planting and sapling drives, a gender equality workshop, an acting workshop, a fundraiser and a mini fete at Gandhi Vidyalaya."
+    },
+    {
+      "q": "Did AquaTerra run Earth Day workshops in 2022?",
+      "a": "Yes. In April 2022 AquaTerra ran Heal the Earth at Don Bosco School, Park Circus on 21 April, Planet First at Ek Tara on 22 April and Green Hour at Pariwar Milan on 29 April."
+    },
+    {
+      "q": "Where did AquaTerra feed stray dogs in April 2022?",
+      "a": "All three Tails and Treats drives in April 2022 were in Kolkata, on 9, 16 and 23 April. The dogs fed per drive were fifty, ninety and eighty-five."
+    },
+    {
+      "q": "Which places hosted AquaTerra drives in April 2022?",
+      "a": "Kolkata hosted the most drives. The month had {placesCount} places in all, including Don Bosco School, Park Circus, Ek Tara, Pariwar Milan, Hi Charitable Foundation, Mallickpur, Loretto Day School and Gandhi Vidyalaya."
+    }
+  ],
+  "keywords": [
+    "AquaTerra April 2022",
+    "Earth Day workshop Kolkata 2022",
+    "what AquaTerra did in April 2022",
+    "Tails and Treats April 2022",
+    "Earth Day workshops for children Kolkata",
+    "AquaTerra drives 2022"
+  ]
+}

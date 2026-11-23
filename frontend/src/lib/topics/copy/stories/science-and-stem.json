@@ -1,0 +1,19 @@
+{
+  "slug": "science-and-stem",
+  "title": "Science Sessions in Pictures: Experiments and Quizzes · AquaTerra",
+  "description": "Photos from {count} science, STEM and computer drives for children in Kolkata since {firstYear}: experiments, quizzes, space and digital skills.",
+  "h1Lead": "fizzing volcanoes and",
+  "h1Accent": "floating eggs",
+  "lede": "AquaTerra has run {count} science, STEM and computer sessions for children since {firstYear}, with {volunteers} volunteer turnouts (a turnout counts every time someone showed up). Most ran at {topPlace}, and this picture story follows them from experiments to space lessons, quiz and art days, and basic computer skills.",
+  "chapters": {
+    "2023": { "heading": "volcanoes and computers", "text": "The series began in April 2023. Science Sparks at Pather Sathi in May brought experiments and mind-blown faces, and Wonder Lab there in July went from fizzing volcanoes to floating eggs. That summer the Sunday School also had computer lessons, Tech Time, Ctrl+Create and Code and Connect, that introduced children to basic digital tools." },
+    "2024": { "heading": "quizzes, space and art", "text": "2024 grew the series, with {year:2024} drives in the year. Colourful Questions and Sketch and Solve at Pather Sathi in September paired a quiz with art, and Beyond the Stars in December taught children about space. Science in Action at Amader Pradakhep set out to teach underprivileged children the wonders of science, and Brain Lab at Lotus Rescue let students try experiments and fun facts." },
+    "2025": { "heading": "stem beyond the usual", "text": "In 2025 the sessions went to other places as well. Think and Tinker at School On Wheels HUHT in March used fun experiments and clear explanations, and Innovate, a STEM workshop at AIM Foundation in June, used hands-on activities to spark curiosity and critical thinking." }
+  },
+  "closing": "Good at explaining how things work? Read [the full story](/impact/science-and-stem) for every session, then [join AquaTerra](/join) to help run the next one.",
+  "faqs": [
+    { "q": "Does AquaTerra run science workshops for children in Kolkata?", "a": "Yes. AquaTerra has run {count} science, STEM and computer sessions since {firstYear}, most of them at Pather Sathi in Kolkata, with hands-on experiments and quizzes for children." },
+    { "q": "What do AquaTerra's science sessions cover?", "a": "Experiments, space lessons, quiz and art days, STEM activities and basic computer skills. Children try things themselves, such as the volcano and floating egg experiments at Pather Sathi in 2023." },
+    { "q": "Can a student volunteer for AquaTerra science workshops?", "a": "Yes, if you are between 14 and 19. AquaTerra is a student-run volunteer group, you join with Google sign-in and an approval, and then you can help with the next session." }
+  ]
+}

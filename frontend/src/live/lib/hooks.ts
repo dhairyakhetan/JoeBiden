@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { eventPhase, type EventPhase } from './eventPhase'
 
 /** The current time, ticking every `ms`, paused while the tab is hidden so a background tab does no work. */
 export function useNow(ms = 1000): Date {
@@ -37,4 +38,10 @@ export function useScrollReveal(root: { current: HTMLElement | null }): void {
     targets.forEach(t => io.observe(t))
     return () => { io.disconnect(); el.classList.remove('lv-anim') }
   }, [root])
+}
+
+/** The phase of `isoDate` (upcoming, today, past), re-checked every minute so an open tab flips at midnight IST without a reload. */
+export function useEventPhase(isoDate: string): EventPhase {
+  const now = useNow(60_000)
+  return eventPhase(isoDate, now)
 }

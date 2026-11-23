@@ -1387,7 +1387,7 @@ function improveGrammar(){
           <div class="grammar-section-label" style="margin-bottom:6px;">🎨 Style Improvements</div>
           ${renderList(styleFixes)}
         </div>`:''}
-        <button class="copy-btn" onclick="copyImproved('${encodeURIComponent(fixed)}')">📋 Copy Improved Text</button>
+        <button class="copy-btn" onclick="copyImproved('${encodeURIComponent(fixed).replace(/'/g,'%27')}')">📋 Copy Improved Text</button>
       </div>`;
     }
 
